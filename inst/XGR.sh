@@ -58,7 +58,7 @@ cp -r now.README.md ./XGR/README.md
 cp -r now.INSTALLATION.md ./XGR/inst/INSTALLATION.md
 cp -r now.CITATIONS.md ./XGR/inst/CITATIONS.md
 cp -r now.XGR.logo.png ./XGR/inst/XGR.logo.png
-cp -r now.XGR.icon.png ./XGR/inst/XGR.logo.png
+cp -r now.XGR.icon.png ./XGR/inst/XGR.icon.png
 cp -r now.XGR_user.Rnw ./XGR/vignettes/XGR_user.Rnw
 cp -r now.HTML.md ./XGR/vignettes/HTML.md
 
@@ -66,7 +66,7 @@ cp -r now.HTML.md ./XGR/vignettes/HTML.md
 cp -r XGR.sh ./XGR/inst/XGR.sh
 cp -r XGR.ppt ./XGR/inst/XGR.ppt
 cp -r XGR_talk.ppt ./XGR/inst/XGR_talk.ppt
-cp -r ~/Sites/XGR-site/xor_app ./XGR/inst
+#cp -r ~/Sites/XGR/XGR-site/xgr_app ./XGR/inst
 
 # Build the package source
 R CMD build --resave-data XGR
@@ -113,12 +113,12 @@ sudo make prefix=/usr/local install
 
 # in https://github.com/account, cat ~/.ssh/id_dsa.pub
 # in https://github.com/hfang-bristol, create XGR
-# 1. An R package for deciphering genes and SNPs identified from GWAS and eQTLs
+# 1. An R package to increase interpretability of genes and SNPs identified from GWAS and eQTLs
 # 2. check the box 'Initialize this repository with a README' and choose license 'GNU General Public License v2.0'
 
 # Then, clone into the local machine 
 cd ~/Sites/SVN/github
-git clone -b hfang git@github.com:hfang-bristol/XGR.git
+git clone git@github.com:hfang-bristol/XGR.git
 
 # Then, fill in the package source and update the package source in the github
 cd ~/Sites/SVN/github/XGR
