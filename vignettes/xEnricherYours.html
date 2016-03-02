@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given YOUR own input...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnricherYours"><tr><td>xEnricherYours</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to conduct enrichment analysis given YOUR own input data</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnricherYours</code> is supposed to conduct enrichment analysis given
+the input data and the ontology in query. It returns an object of class
+&quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact test or
+Hypergeometric test.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnricherYours(data.file, annotation.file, background.file = NULL,
+size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
+"fisher", "binomial"), p.adjust.method = c("BH", "BY", "bonferroni",
+"holm",
+"hochberg", "hommel"), verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data.file</code></td>
+<td>
+<p>an input data file, containing a list of entities
+(e.g. genes or SNPs) to test. The entities can be anything, for
+example, in this file
+<a href="http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt">http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt</a>,
+the entities are InterPro domains (InterPro). As seen in this example,
+entries in the first column must be domains. If the file also contains
+other columns, these additional columns will be ignored. Alternatively,
+the data.file can be a matrix or data frame, assuming that input file
+has been read. Note: the file should use the tab delimiter as the field
+separator between columns</p>
+</td></tr>
+<tr valign="top"><td><code>annotation.file</code></td>
+<td>
+<p>an input annotation file containing annotations
+between entities and ontology terms. For example, a file containing
+annotations between InterPro domains and GO Molecular Function (GOMF)
+terms can be found in
+<a href="http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt">http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt</a>.
+As seen in this example, the input file must contain two columns: 1st
+column for domains, 2nd column for ontology terms. If there are
+additional columns, these columns will be ignored. Alternatively, the
+annotation.file can be a matrix or data frame, assuming that input file
+has been read. Note: the file should use the tab delimiter as the field
+separator between columns</p>
+</td></tr>
+<tr valign="top"><td><code>background.file</code></td>
+<td>
+<p>an input background file containing a list of
+entities as the test background. The file format is the same as
+'data.file'. By default, it is NULL meaning all annotatable entities
+(i.g. those entities in 'annotation.file') are used as background</p>
+</td></tr>
+<tr valign="top"><td><code>size.range</code></td>
+<td>
+<p>the minimum and maximum size of members of each term
+in consideration. By default, it sets to a minimum of 10 but no more
+than 2000</p>
+</td></tr>
+<tr valign="top"><td><code>min.overlap</code></td>
+<td>
+<p>the minimum number of overlaps. Only those terms
+with members that overlap with input data at least min.overlap (3 by
+default) will be processed</p>
+</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+<p>the statistic test used. It can be &quot;fisher&quot; for using
+fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
+&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
+independence between gene group (genes belonging to a group or not) and
+gene annotation (genes annotated by a term or not), and thus compare
+sampling to the left part of background (after sampling without
+replacement). Hypergeometric test is to sample at random (without
+replacement) from the background containing annotated and non-annotated
+genes, and thus compare sampling to background. Unlike hypergeometric
+test, binomial test is to sample at random (with replacement) from the
+background with the constant probability. In terms of the ease of
+finding the significance, they are in order: hypergeometric test &gt;
+binomial test &gt; fisher's exact test. In other words, in terms of the
+calculated p-value, hypergeometric test &lt; binomial test &lt; fisher's
+exact test</p>
+</td></tr>
+<tr valign="top"><td><code>p.adjust.method</code></td>
+<td>
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;eTerm&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
+information, where nTerm is the number of terms, and the 4 columns are
+&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
+&quot;distance&quot;
+</p>
+</li>
+<li><p><code>annotation</code>: a list of terms containing annotations, each
+term storing its annotations. Always, terms are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>data</code>: a vector containing input data in consideration. It
+is not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>background</code>: a vector containing the background data. It is
+not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
+snps overlapped between a snp/gene set and the given input data (i.e.
+the snps of interest). Always, gene sets are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>zscore</code>: a vector containing z-scores
+</p>
+</li>
+<li><p><code>pvalue</code>: a vector containing p-values
+</p>
+</li>
+<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
+value but after being adjusted for multiple comparisons
+</p>
+</li>
+<li><p><code>call</code>: the call that produced this result
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>None
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricher</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+library(igraph)
+
+# Enrichment analysis using your own data
+# a) provide your own data (i.e. InterPro domains and their annotations by GO terms)
+## All InterPro domains
+input.file &lt;-
+"http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt"
+data &lt;- utils::read.delim(input.file, header=F, row.names=NULL,
+stringsAsFactors=F)[,1]
+## provide the input domains of interest (eg 100 randomly chosen domains)
+data.file &lt;- sample(data, 100)
+## InterPro domains annotated by GO Molecular Function (GOMF) terms
+annotation.file &lt;-
+"http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt"
+
+# b) perform enrichment analysis
+eTerm &lt;- xEnricherYours(data.file=data.file,
+annotation.file=annotation.file)
+
+# c) view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+
+# d) save enrichment results to the file called 'Yours_enrichments.txt'
+output &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
+sortBy="adjp", details=TRUE)
+utils::write.table(output, file="Yours_enrichments.txt", sep="\t",
+row.names=FALSE)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
