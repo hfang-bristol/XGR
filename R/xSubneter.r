@@ -3,7 +3,7 @@
 #' \code{xSubneter} is supposed to identify maximum-scoring subnetwork from an input graph with the node information on the significance (measured as p-values or fdr). It returns an object of class "igraph". 
 #'
 #' @param data a named input vector containing the sinificance level for nodes (gene symbols). For this named vector, the element names are gene symbols, the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for gene symbols, 2nd column for the significance level
-#' @param network the ontology supported currently. It can be "STRING" for human functional protein association network from the STRING database (version 10), "PCOMMONS_UN" for human protein interaction undirected network from Pathway Commons (version 7), "PCOMMONS_DN" for human protein interaction directed network from Pathway Commons (version 7)
+#' @param network the ontology supported currently. It can be "STRING" for human functional protein association network from the STRING database (version 10), "PCOMMONS_UN" for human protein interaction undirected network from Pathway Commons (version 7), "PCOMMONS_DN" for human protein interaction directed network from Pathway Commons (version 7). In order to provide source-specific directed network for "PCOMMONS_DN", it can be "PCOMMONS_DN_Reactome" for those from Reactome, "PCOMMONS_DN_KEGG" for those from KEGG, "PCOMMONS_DN_HumanCyc" for those from HumanCyc, "PCOMMONS_DN_PID" for those froom PID, "PCOMMONS_DN_PANTHER" for those from PANTHER, "PCOMMONS_DN_ReconX" for those from ReconX, "PCOMMONS_DN_TRANSFAC" for those from TRANSFAC, "PCOMMONS_DN_PhosphoSite" for those from PhosphoSite, and "PCOMMONS_DN_CTD" for those from CTD
 #' @param network.confidence the parameter used to control the level of confidence of network edges that are to be further used. When "network" is "STRING", network edges with highest confidence are those with confidence scores=900, high confidence for confidence scores=700, medium confidence for confidence scores=400. When "network" is either "PCOMMONS_UN" or "PCOMMONS_DN", network edges with highest confidence are those supported with the PubMed references plus at least 3 different data sources, high confidence for those supported with the PubMed references plus at least 2 different data sources, medium confidence for those supported with at least 2 different data sources
 #' @param subnet.significance the given significance threshold. By default, it is set to NULL, meaning there is no constraint on nodes/genes. If given, those nodes/genes with p-values below this are considered significant and thus scored positively. Instead, those p-values above this given significance threshold are considered insigificant and thus scored negatively
 #' @param subnet.size the desired number of nodes constrained to the resulting subnet. It is not nulll, a wide range of significance thresholds will be scanned to find the optimal significance threshold leading to the desired number of nodes in the resulting subnet. Notably, the given significance threshold will be overwritten by this option
@@ -50,7 +50,7 @@
 #' xCircos(g=subnet, entity="Gene")
 #' }
 
-xSubneter <- function(data, network=c("STRING","PCOMMONS_UN","PCOMMONS_DN"), network.confidence=c("highest","high","medium"), subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+xSubneter <- function(data, network=c("STRING","PCOMMONS_UN","PCOMMONS_DN","PCOMMONS_DN_Reactome","PCOMMONS_DN_Reactome","PCOMMONS_DN_KEGG","PCOMMONS_DN_HumanCyc","PCOMMONS_DN_PID","PCOMMONS_DN_PANTHER","PCOMMONS_DN_ReconX","PCOMMONS_DN_TRANSFAC","PCOMMONS_DN_PhosphoSite","PCOMMONS_DN_CTD"), network.confidence=c("highest","high","medium"), subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
 {
 
     startT <- Sys.time()
@@ -136,6 +136,19 @@ xSubneter <- function(data, network=c("STRING","PCOMMONS_UN","PCOMMONS_DN"), net
 			}else if(network.confidence=='medium'){
 				# restrict to those edges with median confidence score>=2
 				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=2 | controls_expression_of>=2 | controls_phosphorylation_of>=2 | controls_state_change_of>=2 | controls_transport_of>=2])"))
+			}
+        }else{
+        	g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN.source', RData.location=RData.location, verbose=verbose)
+        	g <- g[[ unlist(strsplit(network,"_"))[3] ]]
+			if(network.confidence=='highest'){
+				# restrict to those edges with highest confidence (score>=102)
+				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=102 | controls_expression_of>=102 | controls_phosphorylation_of>=102 | controls_state_change_of>=102 | controls_transport_of>=102])"))
+			}else if(network.confidence=='high'){
+				# restrict to those edges with high confidence score>=101
+				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=101 | controls_expression_of>=101 | controls_phosphorylation_of>=101 | controls_state_change_of>=101 | controls_transport_of>=101])"))
+			}else if(network.confidence=='medium'){
+				# restrict to those edges with median confidence score>=1
+				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=1 | controls_expression_of>=1 | controls_phosphorylation_of>=1 | controls_state_change_of>=1 | controls_transport_of>=1])"))
 			}
         }
 	

@@ -18,8 +18,13 @@ from an input graph with the node information on the significance
 <h3>Usage</h3>
 
 <pre>
-xSubneter(data, network = c("STRING", "PCOMMONS_UN", "PCOMMONS_DN"),
-network.confidence = c("highest", "high", "medium"),
+xSubneter(data, network = c("STRING", "PCOMMONS_UN", "PCOMMONS_DN",
+"PCOMMONS_DN_Reactome", "PCOMMONS_DN_Reactome", "PCOMMONS_DN_KEGG",
+"PCOMMONS_DN_HumanCyc", "PCOMMONS_DN_PID", "PCOMMONS_DN_PANTHER",
+"PCOMMONS_DN_ReconX", "PCOMMONS_DN_TRANSFAC",
+"PCOMMONS_DN_PhosphoSite",
+"PCOMMONS_DN_CTD"), network.confidence = c("highest", "high",
+"medium"),
 subnet.significance = 0.01, subnet.size = NULL, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
@@ -44,7 +49,15 @@ significance level</p>
 human functional protein association network from the STRING database
 (version 10), &quot;PCOMMONS_UN&quot; for human protein interaction undirected
 network from Pathway Commons (version 7), &quot;PCOMMONS_DN&quot; for human
-protein interaction directed network from Pathway Commons (version 7)</p>
+protein interaction directed network from Pathway Commons (version 7).
+In order to provide source-specific directed network for &quot;PCOMMONS_DN&quot;,
+it can be &quot;PCOMMONS_DN_Reactome&quot; for those from Reactome,
+&quot;PCOMMONS_DN_KEGG&quot; for those from KEGG, &quot;PCOMMONS_DN_HumanCyc&quot; for
+those from HumanCyc, &quot;PCOMMONS_DN_PID&quot; for those froom PID,
+&quot;PCOMMONS_DN_PANTHER&quot; for those from PANTHER, &quot;PCOMMONS_DN_ReconX&quot; for
+those from ReconX, &quot;PCOMMONS_DN_TRANSFAC&quot; for those from TRANSFAC,
+&quot;PCOMMONS_DN_PhosphoSite&quot; for those from PhosphoSite, and
+&quot;PCOMMONS_DN_CTD&quot; for those from CTD</p>
 </td></tr>
 <tr valign="top"><td><code>network.confidence</code></td>
 <td>

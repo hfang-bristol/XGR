@@ -687,10 +687,13 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     adjpvals <- sapply(adjpvals, function(x) min(x,1))
     adjpvals <- signif(adjpvals, digits=2)
     
+    if(0){
     # force those zeros to be miminum of non-zeros
     tmp <- as.numeric(format(.Machine)['double.xmin'])
+    tmp <- signif(tmp, digits=2)
     pvals[pvals < tmp] <- tmp
     adjpvals[adjpvals < tmp] <- tmp
+    }
     
     # scientific notations
     pvals  <- sapply(pvals, function(x){
