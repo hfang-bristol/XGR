@@ -50,7 +50,7 @@
 #' xCircos(g=subnet, entity="Gene")
 #' }
 
-xSubneter <- function(data, network=c("STRING","PCOMMONS_UN","PCOMMONS_DN","PCOMMONS_DN_Reactome","PCOMMONS_DN_Reactome","PCOMMONS_DN_KEGG","PCOMMONS_DN_HumanCyc","PCOMMONS_DN_PID","PCOMMONS_DN_PANTHER","PCOMMONS_DN_ReconX","PCOMMONS_DN_TRANSFAC","PCOMMONS_DN_PhosphoSite","PCOMMONS_DN_CTD"), network.confidence=c("highest","high","medium"), subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+xSubneter <- function(data, network=c("STRING","PCOMMONS_UN","PCOMMONS_DN","PCOMMONS_DN_Reactome","PCOMMONS_DN_KEGG","PCOMMONS_DN_HumanCyc","PCOMMONS_DN_PID","PCOMMONS_DN_PANTHER","PCOMMONS_DN_ReconX","PCOMMONS_DN_TRANSFAC","PCOMMONS_DN_PhosphoSite","PCOMMONS_DN_CTD"), network.confidence=c("high","highest","medium"), subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
 {
 
     startT <- Sys.time()
