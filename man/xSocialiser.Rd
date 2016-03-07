@@ -14,8 +14,7 @@ true.path.rule = TRUE, verbose = T)
 \arguments{
 \item{data}{an input vector containing a list of genes or SNPs of
 interest between which pair-wise semantic similarity is
-calculated/socialized. If NULL, all annotatable will be used for
-calcluation, which is very prohibitively expensive!}
+calculated/socialized}
 
 \item{annotation}{the vertices/nodes for which annotation data are
 provided. It can be a sparse Matrix of class "dgCMatrix" (with
@@ -106,7 +105,8 @@ displayed in the screen. By default, it sets to true for display}
 }
 \value{
 It returns an object of class "igraph", with nodes for input genes/SNPs
-and edges for pair-wise semantic similarity between them.
+and edges for pair-wise semantic similarity between them. If no
+similarity is calculuated, it returns NULL.
 }
 \description{
 \code{xSocialiser} is supposed to calculate pair-wise semantic

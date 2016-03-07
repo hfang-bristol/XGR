@@ -9,7 +9,7 @@
 #' @param zlim the minimum and maximum z/patttern values for which colors should be plotted, defaulting to the range of the finite values of z. Each of the given colors will be used to color an equispaced interval of this range. The midpoints of the intervals cover the range, so that values just outside the range will be plotted
 #' @param colorbar logical to indicate whether to append a colorbar. If pattern is null, it always sets to false
 #' @param newpage logical to indicate whether to open a new page. By default, it sets to true for opening a new page
-#' @param glayout either a function or a numeric matrix configuring how the vertices will be placed on the plot. If layout is a function, this function will be called with the graph as the single parameter to determine the actual coordinates. This function can be one of "layout.auto", "layout.random", "layout.circle", "layout.sphere", "layout.fruchterman.reingold", "layout.kamada.kawai", "layout.spring", "layout.reingold.tilford", "layout.fruchterman.reingold.grid", "layout.lgl", "layout.graphopt", "layout.svd" and "layout.norm". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
+#' @param glayout either a function or a numeric matrix configuring how the vertices will be placed on the plot. If layout is a function, this function will be called with the graph as the single parameter to determine the actual coordinates. This function can be one of "layout_nicely" (previously "layout.auto"), "layout_randomly" (previously "layout.random"), "layout_in_circle" (previously "layout.circle"), "layout_on_sphere" (previously "layout.sphere"), "layout_with_fr" (previously "layout.fruchterman.reingold"), "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree" (previously "layout.reingold.tilford"), "layout_with_lgl" (previously "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"), "layout_with_sugiyama" (previously "layout.kamada.kawai"), "layout_with_dh" (previously "layout.davidson.harel"), "layout_with_drl" (previously "layout.drl"), "layout_with_gem" (previously "layout.gem"), "layout_with_mds". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
 #' @param vertex.frame.color the color of the frame of the vertices. If it is NA, then there is no frame
 #' @param vertex.size the size of each vertex. If it is a vector, each vertex may differ in size
 #' @param vertex.color the fill color of the vertices. If it is NA, then there is no fill color. If the pattern is given, this setup will be ignored
@@ -27,18 +27,30 @@
 #' @seealso \code{\link{xSubneter}}
 #' @include xVisNet.r
 #' @examples
+#' # Load the library
+#' library(XGR)
+#' library(igraph)
+#' library(dnet)
+#'
 #' # 1) generate a ring graph
 #' g <-make_ring(10, directed=TRUE)
 #'
 #' # 2) visualise the graph
+#' # 2a) visualise in one go
+#' xVisNet(g=g, vertex.shape="sphere", glayout=layout_with_kk)
+#' # 2b) visualise the graph with layout first calculated
+#' glayout <- layout_(g, with_kk(), normalize(), component_wise())
+#' xVisNet(g=g, vertex.shape="sphere", glayout=glayout)
+#' # 2c) visualise the graph with layout appended to the graph itself
+#' g <- add_layout_(g, with_kk(), normalize(), component_wise())
 #' xVisNet(g=g, vertex.shape="sphere")
 #'
-#' # 3) visualise the graph with vertices being color-coded by the pattern
+#' # 4) visualise the graph with vertices being color-coded by the pattern
 #' pattern <- runif(vcount(g))
 #' names(pattern) <- V(g)$name
 #' xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
-xVisNet <- function(g, pattern=NULL, colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, glayout=layout.fruchterman.reingold, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=NULL, vertex.label.color="black", edge.arrow.size=1, ...)
+xVisNet <- function(g, pattern=NULL, colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, glayout=layout_nicely, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=NULL, vertex.label.color="black", edge.arrow.size=0.8, ...)
 {
     
     if (class(g) != "igraph"){

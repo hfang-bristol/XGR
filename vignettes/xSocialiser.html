@@ -38,8 +38,7 @@ true.path.rule = TRUE, verbose = T)
 <td>
 <p>an input vector containing a list of genes or SNPs of
 interest between which pair-wise semantic similarity is
-calculated/socialized. If NULL, all annotatable will be used for
-calcluation, which is very prohibitively expensive!</p>
+calculated/socialized</p>
 </td></tr>
 <tr valign="top"><td><code>annotation</code></td>
 <td>
@@ -158,7 +157,8 @@ displayed in the screen. By default, it sets to true for display</p>
 <h3>Value</h3>
 
 <p>It returns an object of class &quot;igraph&quot;, with nodes for input genes/SNPs
-and edges for pair-wise semantic similarity between them.
+and edges for pair-wise semantic similarity between them. If no
+similarity is calculuated, it returns NULL.
 </p>
 
 

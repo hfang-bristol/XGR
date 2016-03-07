@@ -1,4 +1,4 @@
-<a href="./README.md"><IMG src="./inst/XGR.logo.png" height="150px" id="logo"></a>
+<a href="./README.md"><IMG src="./inst/XGR.logo.png" height="100px" id="logo"></a>
 
 #### *An R package to increase interpretability of genes and SNPs (eg identified from GWAS and eQTLs)*
 

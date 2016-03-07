@@ -2,7 +2,7 @@
 #'
 #' \code{xSocialiser} is supposed to calculate pair-wise semantic similarity given the input data and the ontology direct acyclic graph (DAG) and its annotation. It returns an object of class "igraph", a network representation of socialized genes/SNPs. It first calculates semantic similarity between terms and then derives semantic similarity from term-term semantic similarity. Parallel computing is also supported for Linux or Mac operating systems.
 #'
-#' @param data an input vector containing a list of genes or SNPs of interest between which pair-wise semantic similarity is calculated/socialized. If NULL, all annotatable will be used for calcluation, which is very prohibitively expensive!
+#' @param data an input vector containing a list of genes or SNPs of interest between which pair-wise semantic similarity is calculated/socialized
 #' @param annotation the vertices/nodes for which annotation data are provided. It can be a sparse Matrix of class "dgCMatrix" (with variants/genes as rows and terms as columns), or a list of nodes/terms each containing annotation data, or an object of class 'GS' (basically a list for each node/term with annotation data)
 #' @param g an object of class "igraph" to represent DAG. It must have node/vertice attributes: "name" (i.e. "Term ID"), "term_id" (i.e. "Term ID"), "term_name" (i.e "Term Name") and "term_distance" (i.e. Term Distance: the distance to the root; always 0 for the root itself)
 #' @param measure the measure used to derive semantic similarity between genes/SNPs from semantic similarity between terms. Take the semantic similartity between SNPs as an example. It can be "average" for average similarity between any two terms (one from SNP 1, the other from SNP 2), "max" for the maximum similarity between any two terms, "BM.average" for best-matching (BM) based average similarity (i.e. for each term of either SNP, first calculate maximum similarity to any term in the other SNP, then take average of maximum similarity; the final BM-based average similiary is the pre-calculated average between two SNPs in pair), "BM.max" for BM based maximum similarity (i.e. the same as "BM.average", but the final BM-based maximum similiary is the maximum of the pre-calculated average between two SNPs in pair), "BM.complete" for BM-based complete-linkage similarity (inspired by complete-linkage concept: the least of any maximum similarity between a term of one SNP and a term of the other SNP). When comparing BM-based similarity between SNPs, "BM.average" and "BM.max" are sensitive to the number of terms invovled; instead, "BM.complete" is much robust in this aspect. By default, it uses "BM.average"
@@ -16,7 +16,7 @@
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return 
-#' It returns an object of class "igraph", with nodes for input genes/SNPs and edges for pair-wise semantic similarity between them.
+#' It returns an object of class "igraph", with nodes for input genes/SNPs and edges for pair-wise semantic similarity between them. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
 #' @import Matrix
@@ -104,14 +104,22 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     ## checking input SNPs
     SNPs <- data[!is.na(data)]
     if(is.null(SNPs) || is.na(SNPs)){
-        SNPs <- allSNPs
+        #SNPs <- allSNPs
     }else{
         flag <- SNPs %in% allSNPs
         if(sum(flag)!=0){
             SNPs <- SNPs[flag]
         }else{
-            SNPs <- allSNPs
+        	SNPs <- SNPs[flag]
+            #SNPs <- allSNPs
         }
+    }
+    
+    ## less than 2 SNPs/Genes are annotable
+    if(length(SNPs)<=1 || is.na(SNPs)){
+		res <- NULL
+    	warning("The function returns NULL as no similarity is found at all.\n")
+    	return(res)
     }
     
     ## pre-compute a sparse matrix of input SNPs x terms
@@ -429,6 +437,12 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     #sim <- signif(sim, digits=2)
 	
 	if(rescale){
+	
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Also rescale similarity into the [0,1] range (%s)", nrow(sim), as.character(now)), appendLF=T)
+		}
+	
 		# rescale to [0 1]
 		d_min <- min(sim)
 		d_max <- max(sim)
@@ -442,6 +456,12 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     
     if (class(sim) == "dgCMatrix" | class(sim) == "dsCMatrix"){
     	res <- xConverter(sim, from="dgCMatrix", to="igraph", verbose=F)
+    }
+    
+    ## no edges
+    if(ecount(res)==0){
+    	res <- NULL
+    	warning("The function returns NULL as no similarity is found at all.\n")
     }
     
     invisible(res)

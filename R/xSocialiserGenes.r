@@ -16,7 +16,7 @@
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' It returns an object of class "igraph", with nodes for input genes and edges for pair-wise semantic similarity between them.
+#' It returns an object of class "igraph", with nodes for input genes and edges for pair-wise semantic similarity between them. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
 #' @seealso \code{\link{xSocialiser}}
@@ -207,7 +207,7 @@ xSocialiserGenes <- function(data, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","
     }
     
     ## the resulting graph has gene symbols (instead of Entrez GeneIDs) as nodes
-    if(1){
+    if(!is.null(res)){
     	sim_ig <- res
     	ind <- match(V(sim_ig)$name, allGeneID)
     	V(sim_ig)$name <- allSymbol[ind]
