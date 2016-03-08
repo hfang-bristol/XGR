@@ -2,7 +2,7 @@ Package: XGR
 Type: Package
 Title: Using Ontologies to Increase Interpretability of Genes and SNPs (eg Identified from GWAS and eQTL Mappings)
 Version: 0.99.0
-Date: 2016-3-7
+Date: 2016-3-8
 Author: Julian C Knight group 
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet

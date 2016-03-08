@@ -138,7 +138,7 @@ cp -rf ~/Sites/XGR/XGR/* ./
 git status | grep 'modified' | awk '{print $2}' | xargs git add
 git status | grep 'deleted' | awk '{print $2}' | xargs git rm
 find ./ -type f -name '*.r' -o -type f -name '*.Rd' -o -type f -name '*.html'  -o -type f -name '*.ppt' | xargs git add
-git add --all # for recursively adding the entire directory 'xor_app'
+git add --all # for recursively adding the entire directory 'xgr_app'
 git commit -m 'Update to the version 0.99.0'
 git push origin master
 
