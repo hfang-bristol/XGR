@@ -82,7 +82,7 @@ xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5
 	## highlight points
 	highlight.top <- as.integer(highlight.top)
     if ( highlight.top > length(gr) ){
-        highlight.top <- length(highlight.top)
+        highlight.top <- length(gr)
     }
 	df <- data.frame(index=1:length(gr), val=mcols(gr)$priority)
 	ind_o <- df[with(df,order(-val))[1:highlight.top],1]
