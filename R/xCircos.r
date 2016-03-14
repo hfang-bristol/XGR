@@ -29,7 +29,7 @@
 #' # provide genes and SNPs reported in AS GWAS studies
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' 
-#' # SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+#' # 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 #' ## Get lead SNPs reported in AS GWAS
 #' example.snps <- names(ImmunoBase$AS$variants)
 #' SNP.g <- xSocialiserSNPs(example.snps, include.LD=NA)
@@ -39,7 +39,7 @@
 #' xCircos(g=SNP.g, entity="SNP")
 #' #dev.off()
 #'
-#' # Gene-based similarity analysis using Disease Ontology (DO)
+#' # 2) Gene-based similarity analysis using Disease Ontology (DO)
 #' ## Get genes within 10kb away from AS GWAS lead SNPs
 #' example.genes <- names(which(ImmunoBase$AS$genes_variants<=10000))
 #' gene.g <- xSocialiserGenes(example.genes, ontology=c("DO")

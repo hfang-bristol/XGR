@@ -2,11 +2,11 @@ Package: XGR
 Type: Package
 Title: Using Ontologies to Increase Interpretability of Genes and SNPs (eg Identified from GWAS and eQTL Mappings)
 Version: 0.99.0
-Date: 2016-3-8
+Date: 2016-3-14
 Author: Julian C Knight group 
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet
-Imports: Matrix, RCircos, GenomicRanges
+Imports: Matrix, GenomicRanges, RCircos, ggplot2, ggbio, MASS
 Suggests: foreach, doMC
 Description: Genome-wide association studies (GWAS) identify a wealth body of trait-associated genetic variants (largely SNPs), and expression quantitative trait mappings (eQTLs) help link genetic variants to target genes. We decipher target genes and genetic variants based on known systematic annotations by ontologies. This package supports a wide range of ontologies (covering knowledge on functions, pathways, diseases and phenotypes- in both human and mouse). With a list of genes (or SNPs) to be analysed, users are able to identify the underlying knowledge enriched within them, and to calculate the semantic similarity between their objects.
 URL: https://github.com/hfang-bristol/XGR
@@ -29,5 +29,10 @@ Collate:
     'xCircos.r'
     'xSubneter.r'
     'xVisNet.r'
+    'xPrioritiser.r'
+    'xPrioritiserGenes.r'
+    'xPrioritiserSNPs.r'
+    'xPrioritiserPathways.r'
+    'xPrioritiserManhattan.r'
 License: GPL-2
 biocViews: Bioinformatics

@@ -17,7 +17,7 @@ RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
 }
 \arguments{
-\item{data}{a named input vector containing the sinificance level for
+\item{data}{a named input vector containing the significance level for
 nodes (gene symbols). For this named vector, the element names are gene
 symbols, the element values for the significance level (measured as
 p-value or fdr). Alternatively, it can be a matrix or data frame with

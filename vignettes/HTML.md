@@ -21,6 +21,15 @@ These functions are used for network analysis:
 >
 * [`xSubneter`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneter.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xSubneter.r))
 
+### Priority functions
+These functions are used for priority analysis:
+>
+* [`xPrioritiser`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xPrioritiser.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiser.r))
+* [`xPrioritiserGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xPrioritiserGenes.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserGenes.r))
+* [`xPrioritiserSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xPrioritiserSNPs.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserSNPs.r))
+* [`xPrioritiserPathways`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xPrioritiserPathways.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserPathways.r))
+* [`xPrioritiserManhattan`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xPrioritiserManhattan.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserManhattan.r))
+
 ### Infrastructure functions
 These functions are essential as they deal with infrastructure such as built-in RData loading and ontology annotation propagation:
 >

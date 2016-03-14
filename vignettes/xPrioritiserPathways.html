@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to prioritise pathways based on GSEA analysis of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xPrioritiserPathways"><tr><td>xPrioritiserPathways</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to prioritise pathways based on GSEA analysis of prioritised genes</h2>
+
+<h3>Description</h3>
+
+<p><code>xPrioritiserPathways</code> is supposed to prioritise pathways given
+prioritised genes and the ontology in query. It returns an object of
+class &quot;eTerm&quot;. It is done via gene set enrichment analysis (GSEA).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xPrioritiserPathways(pNode, ontology = c("GOBP", "GOMF", "GOCC", "PS",
+"PS2",
+"SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH",
+"MsigdbC1",
+"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
+"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
+"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
+"MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10, 2000),
+which.distance = NULL, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = F, nperm = 1000, verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pNode</code></td>
+<td>
+<p>an object of class &quot;pNode&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>ontology</code></td>
+<td>
+<p>the ontology supported currently. It can be &quot;GOBP&quot; for
+Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
+Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PS&quot; for
+phylostratific age information, &quot;PS2&quot; for the collapsed PS version
+(inferred ancestors being collapsed into one with the known taxonomy
+information), &quot;SF&quot; for domain superfamily assignments, &quot;DO&quot; for Disease
+Ontology, &quot;HPPA&quot; for Human Phenotype Phenotypic Abnormality, &quot;HPMI&quot; for
+Human Phenotype Mode of Inheritance, &quot;HPCM&quot; for Human Phenotype
+Clinical Modifier, &quot;HPMA&quot; for Human Phenotype Mortality Aging, &quot;MP&quot; for
+Mammalian Phenotype, and Drug-Gene Interaction database (DGIdb) for
+drugable categories, and the molecular signatures database (Msigdb,
+including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;,
+&quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;,
+&quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;,
+&quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>size.range</code></td>
+<td>
+<p>the minimum and maximum size of members of each term
+in consideration. By default, it sets to a minimum of 10 but no more
+than 2000</p>
+</td></tr>
+<tr valign="top"><td><code>which.distance</code></td>
+<td>
+<p>which terms with the distance away from the
+ontology root (if any) is used to restrict terms in consideration. By
+default, it sets to 'NULL' to consider all distances</p>
+</td></tr>
+<tr valign="top"><td><code>path.mode</code></td>
+<td>
+<p>the mode of paths induced by vertices/nodes with input
+annotation data. It can be &quot;all_paths&quot; for all possible paths to the
+root, &quot;shortest_paths&quot; for only one path to the root (for each node in
+query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
+for each node, find all shortest paths with the equal lengths)</p>
+</td></tr>
+<tr valign="top"><td><code>true.path.rule</code></td>
+<td>
+<p>logical to indicate whether the true-path rule
+should be applied to propagate annotations. By default, it sets to
+false</p>
+</td></tr>
+<tr valign="top"><td><code>nperm</code></td>
+<td>
+<p>the number of random permutations. For each permutation,
+gene-score associations will be permutated so that permutation of
+gene-term associations is realised</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a data frame of nTerm x 10, where nTerm is the number of terms, and the
+10 columns:
+</p>
+
+<ul>
+<li><p><code>setID</code>: Term ID
+</p>
+</li>
+<li><p><code>setSize</code>: Number of members in Term
+</p>
+</li>
+<li><p><code>name</code>: Term Name
+</p>
+</li>
+<li><p><code>es</code>: enrichment score
+</p>
+</li>
+<li><p><code>nes</code>: normalised enrichment score. It is the version of
+enrichment score but after being normalised by gene set size
+</p>
+</li>
+<li><p><code>pvalue</code>: nominal p value
+</p>
+</li>
+<li><p><code>adjp</code>: adjusted p value. It is the p value but after being
+adjusted for multiple comparisons
+</p>
+</li>
+<li><p><code>fdr</code>: false discovery rate (FDR). It is the estimated
+probability that the normalised enrichment score represents a false
+positive finding
+</p>
+</li>
+<li><p><code>qvalue</code>: q value. It is the monotunically increasing FDR
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xPrioritiserSNPs</code>,
+<code>xPrioritiserGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+library(igraph)
+library(dnet)
+library(GenomicRanges)
+
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+# a) provide the seed nodes/genes with the weight info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get genes within 500kb away from AS GWAS lead SNPs
+seeds.genes &lt;- ImmunoBase$AS$genes_variants
+## seeds weighted according to distance away from lead SNPs
+data &lt;- 1- seeds.genes/500000
+
+# b) perform priority analysis
+pNode &lt;- xPrioritiserGenes(data=data,
+network="PCommonsDN_medium",restart=0.7, RData.location=RData.location)
+
+# c) derive pathway-level priority
+res &lt;- xPrioritiserPathways(pNode=pNode, ontology="MsigdbC2REACTOME",
+RData.location=RData.location)
+
+# d) save enrichment results to the file called 'Pathways_priority.txt'
+write.table(res, file="Pathways_priority.txt", sep="\t",
+row.names=FALSE)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

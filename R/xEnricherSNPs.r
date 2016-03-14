@@ -154,8 +154,14 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
 				ld.list <- lapply(include.LD, function(x){
 					data_ld <- ''
 					eval(parse(text=paste("data_ld <- GWAS_LD$", x, sep="")))
-					ind <- match(rownames(data_ld), data)
-					ld <- colnames(data_ld)[which(Matrix::colSums(data_ld[!is.na(ind),]>=LD.r2)>0)]
+					
+					## bugs
+					#ind <- match(rownames(data_ld), data)
+					#ld <- colnames(data_ld)[which(Matrix::colSums(data_ld[!is.na(ind),]>=LD.r2)>0)]
+					
+					ind <- match(colnames(data_ld), data)
+					ld <- rownames(data_ld)[which(Matrix::rowSums(data_ld[,!is.na(ind)]>=LD.r2)>0)]
+					
 					ld
 				})
 				

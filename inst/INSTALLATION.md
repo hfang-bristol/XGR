@@ -19,7 +19,7 @@ tar xvfz R-3.2.1.tar.gz
 cd R-3.2.1
 ./configure
 make
-make check
+make check☛
 make install
 R # start R
 ```
@@ -41,11 +41,11 @@ $HOME/R-3.2.1/bin/R # start R
 
 Notes: below are `R command lines (NOT shell command lines in Terminal)`.
 
-First, install the package `devtools` (to help install packages directly from github):
+First, install the package `devtools` (to help install packages directly from github) and other suggested packages:
 >
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("devtools","RCircos"))
+biocLite(c("devtools","RCircos","ggbio"))
 ```
 
 Second, install the package `XGR` from [GitHub](https://github.com/hfang-bristol/XGR):
