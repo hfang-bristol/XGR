@@ -191,11 +191,19 @@ cd ~/RDataCentre
 # in galahad
 mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%ankylosing spondylitis%';" > GWAS_AS.txt
 
+mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%Systemic Lupus Erythematosus%';" > GWAS_SLE.txt
+mysql -uhfang -e "use ultraDDR; SELECT snps,pvalue FROM gwas_ebi WHERE mapped_trait like '%Systemic Lupus Erythematosus%';" > GWAS_SLE.txt
+
 # in mac
 cd ~/
 scp galahad.well.ox.ac.uk:./GWAS_AS.txt ./
+scp galahad.well.ox.ac.uk:./GWAS_SLE.txt ./
 
 cat GWAS_AS.txt ImmunoBase_AS.txt | grep -E '^rs' | sort | uniq > All_AS.txt
+cat GWAS_SLE.txt ImmunoBase_SLE.txt | grep -E '^rs' | sort | uniq > All_SLE.txt
+
+cp ~/All_AS.txt ~/Sites/XGR/PI-site/app/examples/AS.txt
+cp ~/All_SLE.txt ~/Sites/XGR/PI-site/app/examples/SLE.txt
 
 # Load the library
 library(XGR)
@@ -205,6 +213,9 @@ library(GenomicRanges)
 library(ggbio)
 
 RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+
+ImmunoBase_LD <- xRDataLoader(RData.customised='ImmunoBase_LD', RData.location=RData.location)
+
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
@@ -213,13 +224,20 @@ gr <- ImmunoBase$AS$variant
 seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
 write.table(seeds.snps, file="ImmunoBase_AS.txt", sep="\t", row.names=FALSE, quote=F)
 
+gr <- ImmunoBase$SLE$variant
+seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+write.table(seeds.snps, file="ImmunoBase_SLE.txt", sep="\t", row.names=FALSE, quote=F)
 
-# b) perform priority analysis
-pNode <- xPrioritiserSNPs(data="All_AS.txt", include.LD=c('EUR'), network="PCommonsUN_medium",restart=0.75, RData.location=RData.location)
+
+
+
+############# AS
+# perform priority analysis
+pNode <- xPrioritiserSNPs(data="All_AS.txt", include.LD=c('EUR'), distance.max=500000, network="STRING_high",restart=0.75, RData.location=RData.location)
 ## save to the file called 'SNPs_priority.txt'
 write.table(pNode$priority, file="SNPs_priority.AS.txt", sep="\t", row.names=FALSE)
 
-mp <- xPrioritiserManhattan(pNode, highlight.top=10, RData.location=RData.location)
+mp <- xPrioritiserManhattan(pNode, highlight.top=30, RData.location=RData.location)
 
 pNode <- xPrioritiserSNPs(data="All_AS.txt", include.eQTL=c("JKscience_TS2B","JKscience_TS3A"), network="STRING_high",restart=0.75, RData.location=RData.location)
 mp <- xPrioritiserManhattan(pNode, highlight.top=20, RData.location=RData.location)
@@ -232,6 +250,19 @@ mp1 <- xPrioritiserManhattan(pNode1, highlight.top=10, RData.location=RData.loca
 res <- xPrioritiserPathways(pNode=pNode, ontology="MsigdbC2REACTOME", RData.location=RData.location)
 ## save to the file called 'Pathways_priority.AS.txt'
 write.table(res, file="Pathways_priority.AS.txt", sep="\t", row.names=FALSE)
+
+
+
+
+##############
+## 
+
+
+
+
+
+
+
 
 
 

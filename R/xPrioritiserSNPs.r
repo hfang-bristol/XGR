@@ -144,7 +144,26 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 		})
 		## get data frame (Lead LD R2)
 		LLR <- do.call(rbind, res_list)
-	
+		
+		## also based on ImmunoBase
+		if(1){
+			ImmunoBase_LD <- xRDataLoader(RData.customised='ImmunoBase_LD', RData.location=RData.location, verbose=verbose)
+			res_list <- lapply(include.LD, function(x){
+				data_ld <- ''
+				eval(parse(text=paste("data_ld <- ImmunoBase_LD$", x, sep="")))
+				ind <- match(rownames(data_ld), leads)
+				ind_lead <- which(!is.na(ind))
+				ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
+		
+				sLL <- data_ld[ind_lead, ind_ld]
+				summ <- summary(sLL)
+				res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+			})
+			## get data frame (Lead LD R2)
+			LLR_tmp <- do.call(rbind, res_list)
+			LLR <- rbind(LLR, LLR_tmp)
+		}
+		
 		## get data frame (LD Sig)
 		ld_list <- split(x=LLR[,-2], f=LLR[,2])
 		res_list <- lapply(ld_list, function(x){
