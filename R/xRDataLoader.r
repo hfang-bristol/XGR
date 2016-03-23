@@ -10,8 +10,8 @@
 #' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData.
 #' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment.
 #' @export
-#' @import igraph
 #' @import dnet
+#' @import igraph
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples

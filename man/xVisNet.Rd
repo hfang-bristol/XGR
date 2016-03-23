@@ -137,6 +137,6 @@ names(pattern) <- V(g)$name
 xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 }
 \seealso{
-\code{\link{xSubneter}}
+\code{\link{xSubneterGenes}}, \code{\link{xSubneterSNPs}}
 }
 

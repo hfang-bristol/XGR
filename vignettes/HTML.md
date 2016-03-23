@@ -19,7 +19,8 @@ These functions are used for similarity analysis:
 ### Network functions
 These functions are used for network analysis:
 >
-* [`xSubneter`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneter.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xSubneter.r))
+* [`xSubneterGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterGenes.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xSubneterGenes.r))
+* [`xSubneterSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterSNPs.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xSubneterSNPs.r))
 
 ### Priority functions
 These functions are used for priority analysis:

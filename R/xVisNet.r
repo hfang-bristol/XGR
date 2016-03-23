@@ -24,7 +24,7 @@
 #' invisible
 #' @note none
 #' @export
-#' @seealso \code{\link{xSubneter}}
+#' @seealso \code{\link{xSubneterGenes}}, \code{\link{xSubneterSNPs}}
 #' @include xVisNet.r
 #' @examples
 #' # Load the library

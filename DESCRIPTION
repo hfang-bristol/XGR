@@ -1,15 +1,15 @@
 Package: XGR
 Type: Package
-Title: Using Ontologies to Increase Interpretability of Genes and SNPs (eg Identified from GWAS and eQTL Mappings)
+Title: eXploring Genomic Relation to Increase Interpretability of Genes and SNPs Through Enrichment, Similarity and Network Analysis
 Version: 0.99.0
-Date: 2016-3-15
-Author: Julian C Knight group 
+Date: 2016-3-23
+Author: Hai Fang, Bogdan Knezevic, Katie Burnham, Julian C Knight
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
-Depends: R (>= 3.1.0), igraph, dnet
-Imports: Matrix, GenomicRanges, RCircos, ggplot2, ggbio, MASS
+Depends: R (>= 3.1.0), dnet
+Imports: Matrix, igraph, GenomicRanges, RCircos, ggplot2, ggbio, MASS
 Suggests: foreach, doMC
 Description: Genome-wide association studies (GWAS) identify a wealth body of trait-associated genetic variants (largely SNPs), and expression quantitative trait mappings (eQTLs) help link genetic variants to target genes. We decipher target genes and genetic variants based on known systematic annotations by ontologies. This package supports a wide range of ontologies (covering knowledge on functions, pathways, diseases and phenotypes- in both human and mouse). With a list of genes (or SNPs) to be analysed, users are able to identify the underlying knowledge enriched within them, and to calculate the semantic similarity between their objects.
-URL: https://github.com/hfang-bristol/XGR
+URL: http://galahad.well.ox.ac.uk/XGR
 Collate: 
     'xRDataLoader.r'
     'xRdWrap.r'
@@ -27,7 +27,8 @@ Collate:
     'xSocialiserGenes.r'
     'xSocialiserSNPs.r'
     'xCircos.r'
-    'xSubneter.r'
+    'xSubneterGenes.r'
+    'xSubneterSNPs.r'
     'xVisNet.r'
     'xPrioritiser.r'
     'xPrioritiserGenes.r'

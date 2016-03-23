@@ -64,7 +64,7 @@
 #' #dev.off()
 #' }
 
-xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, significance.threshold=0.01, distance.max=500000, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, significance.threshold=5e-5, distance.max=200000, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
 {
 
     startT <- Sys.time()
@@ -145,6 +145,7 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 		## get data frame (Lead LD R2)
 		LLR <- do.call(rbind, res_list)
 		
+		###########################
 		## also based on ImmunoBase
 		if(1){
 			ImmunoBase_LD <- xRDataLoader(RData.customised='ImmunoBase_LD', RData.location=RData.location, verbose=verbose)
@@ -163,12 +164,13 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 			LLR_tmp <- do.call(rbind, res_list)
 			LLR <- rbind(LLR, LLR_tmp)
 		}
-		
+		###########################
+				
 		## get data frame (LD Sig)
 		ld_list <- split(x=LLR[,-2], f=LLR[,2])
 		res_list <- lapply(ld_list, function(x){
 			ind <- match(x$Lead, leads)
-			## power transformation of p-valuesn by R2, then keep the min
+			## power transformation of p-values X by R2, then keep the min
 			min(sigs[ind] ^ x$R2)
 		})
 		vec <- unlist(res_list)

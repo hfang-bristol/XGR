@@ -24,10 +24,10 @@ base::unlink("./XGR/vignettes", recursive=T)
 base::dir.create("./XGR/vignettes")
 
 # create a skeleton for a new source package
-utils::package.skeleton(name="XGR", path=".", code_files=c("xRDataLoader.r","xRdWrap.r","xFunArgs.r","xRd2HTML.r","xDAGanno.r","xDAGsim.r","xConverter.r","xEnricher.r","xEnricherGenes.r","xEnricherSNPs.r","xEnricherYours.r","xEnrichViewer.r","xSocialiser.r","xSocialiserGenes.r","xSocialiserSNPs.r","xCircos.r","xSubneter.r","xVisNet.r","xPrioritiser.r","xPrioritiserGenes.r","xPrioritiserSNPs.r","xPrioritiserPathways.r","xPrioritiserManhattan.r"), force=T)
+utils::package.skeleton(name="XGR", path=".", code_files=c("xRDataLoader.r","xRdWrap.r","xFunArgs.r","xRd2HTML.r","xDAGanno.r","xDAGsim.r","xConverter.r","xEnricher.r","xEnricherGenes.r","xEnricherSNPs.r","xEnricherYours.r","xEnrichViewer.r","xSocialiser.r","xSocialiserGenes.r","xSocialiserSNPs.r","xCircos.r","xSubneterGenes.r","xSubneterSNPs.r","xVisNet.r","xPrioritiser.r","xPrioritiserGenes.r","xPrioritiserSNPs.r","xPrioritiserPathways.r","xPrioritiserManhattan.r"), force=T)
 
 # do roxygenizing to document a package
-devtools::document(pkg="XGR", clean=FALSE, roclets=c("collate", "namespace", "rd"), reload=TRUE)
+devtools::document(pkg="XGR", roclets=c("collate", "namespace", "rd"))
 # remove ./XGR/man/*-package.Rd
 do.call(file.remove, list(list.files(path="./XGR/man", pattern="*-package.Rd", full.names=T)))
 
@@ -66,8 +66,8 @@ cp -r now.HTML.md ./XGR/vignettes/HTML.md
 
 ## copy other staffs to ./XGR/inst
 cp -r XGR.sh ./XGR/inst/XGR.sh
-cp -r XGR.ppt ./XGR/inst/XGR.ppt
-cp -r XGR_talk.ppt ./XGR/inst/XGR_talk.ppt
+#cp -r XGR.ppt ./XGR/inst/XGR.ppt
+#cp -r XGR_talk.ppt ./XGR/inst/XGR_talk.ppt
 #cp -r ~/Sites/XGR/XGR-site/xgr_app ./XGR/inst
 
 # Build the package source
@@ -182,16 +182,148 @@ cd ~
 git clone git@github.com:hfang-bristol/RDataCentre.git
 cd ~/RDataCentre
 
+a <- read.table('aaaa.txt',stringsAsFactors=F)
+ind <- match(as.character(a[,1]), allSymbols)
+
+mat_info <- allGenes[ind,]
+priority_targets <- cbind(mat_info, pNode$priority, targets=vec_targets)
+write.table(priority_targets, file="AS.genes_priority.targets.txt", sep="\t", row.names=FALSE)
+
+
+
+############################################################################
+############################################################################
+cd /Users/hfang/Databases/grant_app/jobs/Oxford/Oxford_Wellcome_Trust_Centre_for_Human_Genetics/ULTRA-DD/TPN3rd_20160321/Data
+
+R
+library(XGR)
+library(igraph)
+library(dnet)
+library(GenomicRanges)
+library(ggbio)
+
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+EG <- xRDataLoader(RData=paste('org.Hs.eg', sep=''), RData.location=RData.location)
+allGenes <- EG$gene_info[,1]
+allSymbols <- as.vector(EG$gene_info$Symbol)
+allDes <- as.vector(EG$gene_info$description)
+allSynonyms <- as.vector(EG$gene_info$Synonyms)
+allSynonyms <- gsub("\\|", ",", allSynonyms, perl=T)
+allInfo <- cbind(allGenes, allSymbols, allDes, allSynonyms)
+
+nomi <- read.delim(file="Targets_714.txt", stringsAsFactors=F)
+ind <- match(nomi[,1], allGenes)
+nomi_match <- allInfo[ind,]
+df_nomi <- cbind(nomi_match, nomi)
+
+## AS
+AS <- read.delim(file="AS.genes_priority.txt", stringsAsFactors=F)
+ind <- match(df_nomi$allSymbols, AS$name)
+df_AS <- AS[ind,]
+
+## Spondyloarthritis
+SP <- read.delim(file="Spondyloarthritis.genes_priority.txt", stringsAsFactors=F)
+ind <- match(df_nomi$allSymbols, SP$name)
+df_SP <- SP[ind,]
+
+## SLE
+SLE <- read.delim(file="SLE.genes_priority.txt", stringsAsFactors=F)
+ind <- match(df_nomi$allSymbols, SLE$name)
+df_SLE <- SLE[ind,]
+
+## combine
+df <- cbind(AS=df_AS$rank, SP=df_SP$rank, SLE=df_SLE$rank, df_nomi)
+df$AS[df$AS>500] <- NA 
+df$SP[df$SP>500] <- NA
+df$SLE[df$SLE>500] <- NA 
+write.table(df, file="Nominated_Targets.txt", sep="\t", row.names=FALSE)
+
+
+
+############################################################################
+############################################################################
+
+
 
 
 ############################################################################
 ############################################################################
+cp ~/Desktop/AS.txt ~/Sites/XGR/PI-site/app/examples/AS.txt
+cp ~/Desktop/SLE.txt ~/Sites/XGR/PI-site/app/examples/SLE.txt
+cp ~/Desktop/Spondyloarthritis.txt ~/Sites/XGR/PI-site/app/examples/Spondyloarthritis.txt
 ############################################################################
 ############################################################################
+
+##########################
+## for SLE
+# http://www.ncbi.nlm.nih.gov/pubmed/26502338
+##########################
 # in galahad
-mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%ankylosing spondylitis%';" > GWAS_AS.txt
+mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%Systemic Lupus Erythematosus%' and pvalue is not null;" > GWAS_SLE.txt
+# in mac
+cd ~/
+scp galahad.well.ox.ac.uk:./GWAS_SLE.txt ./
 
-mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%Systemic Lupus Erythematosus%';" > GWAS_SLE.txt
+R
+# Load the library
+library(XGR)
+library(igraph)
+library(dnet)
+library(GenomicRanges)
+library(ggbio)
+
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+## load ImmunoBase
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr <- ImmunoBase$SLE$variant
+seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+write.table(seeds.snps, file="ImmunoBase_SLE.txt", sep="\t", row.names=FALSE, quote=F)
+q('no')
+
+cat GWAS_SLE.txt ImmunoBase_SLE.txt | grep -E '^rs' | sort | uniq > All_SLE.txt
+
+##########################
+## for Spondyloarthritis
+# http://www.ncbi.nlm.nih.gov/pubmed/25651891
+# http://www.ncbi.nlm.nih.gov/pubmed/26974007
+##########################
+# in galahad
+mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%psoriatic arthritis%' and pvalue is not null;;" > GWAS_PSO.txt
+# in mac
+cd ~/
+scp galahad.well.ox.ac.uk:./GWAS_PSO.txt ./
+
+R
+# Load the library
+library(XGR)
+library(igraph)
+library(dnet)
+library(GenomicRanges)
+library(ggbio)
+
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+## load ImmunoBase
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+## get lead SNPs reported in Psoriasis GWAS and their significance info (p-values)
+gr <- ImmunoBase$PSO$variant
+seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+write.table(seeds.snps, file="ImmunoBase_PSO.txt", sep="\t", row.names=FALSE, quote=F)
+
+cat GWAS_PSO.txt ImmunoBase_PSO.txt | grep -E '^rs' | sort | uniq > All_PSO.txt
+
+
+
+
+
+
+
+
+# in galahad
+mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%ankylosing spondylitis%' and pvalue is not null;" > GWAS_AS.txt
+
+mysql -uhfang -p5714fh -e "use ultraDDR; SELECT snp_id_current,pvalue FROM GWAS WHERE EF_name like '%Systemic Lupus Erythematosus%' and pvalue is not null;" > GWAS_SLE.txt
+
 mysql -uhfang -e "use ultraDDR; SELECT snps,pvalue FROM gwas_ebi WHERE mapped_trait like '%Systemic Lupus Erythematosus%';" > GWAS_SLE.txt
 
 # in mac
@@ -213,7 +345,6 @@ library(GenomicRanges)
 library(ggbio)
 
 RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
-
 ImmunoBase_LD <- xRDataLoader(RData.customised='ImmunoBase_LD', RData.location=RData.location)
 
 # a) provide the seed SNPs with the weight info
@@ -224,38 +355,105 @@ gr <- ImmunoBase$AS$variant
 seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
 write.table(seeds.snps, file="ImmunoBase_AS.txt", sep="\t", row.names=FALSE, quote=F)
 
-gr <- ImmunoBase$SLE$variant
-seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
-write.table(seeds.snps, file="ImmunoBase_SLE.txt", sep="\t", row.names=FALSE, quote=F)
 
 
 
+##########################################################################################
+##########################################################################################
+##########################################################################################
 
-############# AS
+EG <- xRDataLoader(RData=paste('org.Hs.eg', sep=''), RData.location=RData.location)
+allSymbols <- as.vector(EG$gene_info$Symbol)
+allGenes <- EG$gene_info[,c(3,2,1)]
+
+############# Ankylosing Spondylitis (AS) #############
 # perform priority analysis
-pNode <- xPrioritiserSNPs(data="All_AS.txt", include.LD=c('EUR'), distance.max=500000, network="STRING_high",restart=0.75, RData.location=RData.location)
-## save to the file called 'SNPs_priority.txt'
-write.table(pNode$priority, file="SNPs_priority.AS.txt", sep="\t", row.names=FALSE)
+pNode <- xPrioritiserSNPs(data="/Users/hfang/Sites/XGR/PI-site/app/examples/AS.txt", include.LD="EUR", include.eQTL=c("JKscience_TS2B","JKscience_TS3A"), network="STRING_high", significance.threshold=5e-5, distance.max=200000, restart=0.75, RData.location=RData.location)
+write.table(pNode$priority, file="AS.genes_priority.txt", sep="\t", row.names=FALSE)
 
-mp <- xPrioritiserManhattan(pNode, highlight.top=30, RData.location=RData.location)
+mp <- xPrioritiserManhattan(pNode, highlight.top=25, RData.location=RData.location, cex=0.4, highlight.col="deepskyblue", highlight.label.size=1.8, highlight.label.offset=0.01)
+pdf('AS.genes_priority.pdf', height=5, width=10, compress=TRUE)
+print(mp)
+dev.off()
 
-pNode <- xPrioritiserSNPs(data="All_AS.txt", include.eQTL=c("JKscience_TS2B","JKscience_TS3A"), network="STRING_high",restart=0.75, RData.location=RData.location)
-mp <- xPrioritiserManhattan(pNode, highlight.top=20, RData.location=RData.location)
+# derive pathway-level priority
+eTerm <- xPrioritiserPathways(pNode=pNode, priority.top=100, ontology="MsigdbC2CPall", RData.location=RData.location)
+res <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
+res_f <- data.frame(term=rownames(res), res)
+write.table(res_f, file="AS.pathways_priority.txt", sep="\t", row.names=FALSE)
 
-pNode1 <- xPrioritiserSNPs(data="All_AS.txt", include.LD=c('EUR'), include.eQTL=T, network="PCommonsUN_medium",restart=0.75, RData.location=RData.location)
-mp1 <- xPrioritiserManhattan(pNode1, highlight.top=10, RData.location=RData.location)
+# append targets
+targets <- read.table(file="~/Desktop/targets.txt", header=F, stringsAsFactors=F)
+ind <- match(rownames(pNode$priority), targets[,1])
+vec_targets <- rep('No', length(ind))
+vec_targets[!is.na(ind)] <- 'Yes'
+ind <- match(rownames(pNode$priority), allSymbols)
+mat_info <- allGenes[ind,]
+priority_targets <- cbind(mat_info, pNode$priority, targets=vec_targets)
+write.table(priority_targets, file="AS.genes_priority.targets.txt", sep="\t", row.names=FALSE)
 
 
-# c) derive pathway-level priority
-res <- xPrioritiserPathways(pNode=pNode, ontology="MsigdbC2REACTOME", RData.location=RData.location)
-## save to the file called 'Pathways_priority.AS.txt'
-write.table(res, file="Pathways_priority.AS.txt", sep="\t", row.names=FALSE)
+
+############# Spondyloarthritis (including AS and Psoriatic Arthritis) #############
+# perform priority analysis
+pNode <- xPrioritiserSNPs(data="/Users/hfang/Sites/XGR/PI-site/app/examples/Spondyloarthritis.txt", include.LD="EUR", include.eQTL=c("JKscience_TS2B","JKscience_TS3A"), network="STRING_high", significance.threshold=5e-5, distance.max=200000, restart=0.75, RData.location=RData.location)
+write.table(pNode$priority, file="Spondyloarthritis.genes_priority.txt", sep="\t", row.names=FALSE)
+
+mp <- xPrioritiserManhattan(pNode, highlight.top=25, RData.location=RData.location, cex=0.4, highlight.col="deepskyblue", highlight.label.size=1.8, highlight.label.offset=0.01)
+pdf('Spondyloarthritis.genes_priority.pdf', height=5, width=10, compress=TRUE)
+print(mp)
+dev.off()
+
+# derive pathway-level priority
+eTerm <- xPrioritiserPathways(pNode=pNode, priority.top=100, ontology="MsigdbC2CPall", RData.location=RData.location)
+res <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
+res_f <- data.frame(term=rownames(res), res)
+write.table(res_f, file="Spondyloarthritis.pathways_priority.txt", sep="\t", row.names=FALSE)
+
+# append targets
+targets <- read.table(file="~/Desktop/targets.txt", header=F, stringsAsFactors=F)
+ind <- match(rownames(pNode$priority), targets[,1])
+vec_targets <- rep('No', length(ind))
+vec_targets[!is.na(ind)] <- 'Yes'
+ind <- match(rownames(pNode$priority), allSymbols)
+mat_info <- allGenes[ind,]
+priority_targets <- cbind(mat_info, pNode$priority, targets=vec_targets)
+write.table(priority_targets, file="Spondyloarthritis.genes_priority.targets.txt", sep="\t", row.names=FALSE)
 
 
 
+############# Systemic Lupus Erythematosus (SLE) #############
+# perform priority analysis
+pNode <- xPrioritiserSNPs(data="/Users/hfang/Sites/XGR/PI-site/app/examples/SLE.txt", include.LD="EUR", include.eQTL=c("JKscience_TS2B","JKscience_TS3A"), network="STRING_high", significance.threshold=5e-5, distance.max=200000, restart=0.75, RData.location=RData.location)
+write.table(pNode$priority, file="SLE.genes_priority.txt", sep="\t", row.names=FALSE)
 
-##############
-## 
+mp <- xPrioritiserManhattan(pNode, highlight.top=25, RData.location=RData.location, cex=0.4, highlight.col="deepskyblue", highlight.label.size=1.8, highlight.label.offset=0.01)
+pdf('SLE.genes_priority.pdf', height=5, width=10, compress=TRUE)
+print(mp)
+dev.off()
+
+# derive pathway-level priority
+eTerm <- xPrioritiserPathways(pNode=pNode, priority.top=100, ontology="MsigdbC2CPall", RData.location=RData.location)
+res <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
+res_f <- data.frame(term=rownames(res), res)
+write.table(res_f, file="SLE.pathways_priority.txt", sep="\t", row.names=FALSE)
+
+# append targets
+targets <- read.table(file="~/Desktop/targets.txt", header=F, stringsAsFactors=F)
+ind <- match(rownames(pNode$priority), targets[,1])
+vec_targets <- rep('No', length(ind))
+vec_targets[!is.na(ind)] <- 'Yes'
+ind <- match(rownames(pNode$priority), allSymbols)
+mat_info <- allGenes[ind,]
+priority_targets <- cbind(mat_info, pNode$priority, targets=vec_targets)
+write.table(priority_targets, file="SLE.genes_priority.targets.txt", sep="\t", row.names=FALSE)
+
+##########################################################################################
+##########################################################################################
+##########################################################################################
+
+
+
 
 
 
