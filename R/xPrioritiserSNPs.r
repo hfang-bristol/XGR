@@ -2,7 +2,7 @@
 #'
 #' \code{xPrioritiserSNPs} is supposed to priorise genes given a list of seed SNPs together with the significance level. To priorise genes, it first defines seed genes and their weights that take into account the distance to and the significance of seed SNPs. With seed genes and weights, it then uses Random Walk with Restart (RWR) to calculate the affinity score of all nodes in the input graph to the seed genes. The priority score is the affinity score. Parallel computing is also supported for Linux or Mac operating systems. It returns an object of class "pNode".
 #'
-#' @param data a named input vector containing the sinificance level for nodes (gene symbols). For this named vector, the element names are gene symbols, the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for gene symbols, 2nd column for the significance level
+#' @param data a named input vector containing the sinificance level for nodes (dbSNP). For this named vector, the element names are dbSNP, the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for dbSNP, 2nd column for the significance level
 #' @param include.LD additional SNPs in LD with Lead SNPs are also included. By default, it is 'NA' to disable this option. Otherwise, LD SNPs will be included based on one or more of 26 populations and 5 super populations from 1000 Genomics Project data (phase 3). The population can be one of 5 super populations ("AFR", "AMR", "EAS", "EUR", "SAS"), or one of 26 populations ("ACB", "ASW", "BEB", "CDX", "CEU", "CHB", "CHS", "CLM", "ESN", "FIN", "GBR", "GIH", "GWD", "IBS", "ITU", "JPT", "KHV", "LWK", "MSL", "MXL", "PEL", "PJL", "PUR", "STU", "TSI", "YRI"). Explanations for population code can be found at \url{http://www.1000genomes.org/faq/which-populations-are-part-your-study}
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.8 to 1
 #' @param include.eQTL genes modulated by eQTL (also Lead SNPs or in LD with Lead SNPs) are also included. By default, it is 'NA' to disable this option. Otherwise, those genes modulated either by cis-eQTLs ('JKscience_TS2B') or trans-eQTLs ('JKscience_TS3A') will be inlcuded according to this work by Fairfax et al. Science 2014, 343(6175):1246949
@@ -215,7 +215,7 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
   		
   		## append p-value weight
   		wS <- seeds.snps[names(gr_SNP)]
-  		mcols(gr_SNP) <- data.frame(mcols(gr_SNP), wS=wS)
+  		GenomicRanges::mcols(gr_SNP) <- data.frame(mcols(gr_SNP), wS=wS)
   		
 		if(verbose){
 			now <- Sys.time()

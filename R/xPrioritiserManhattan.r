@@ -17,7 +17,6 @@
 #' @export
 #' @import ggbio
 #' @importFrom ggplot2 theme element_text element_rect Position
-#' @import GenomicRanges
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xPrioritiser}}, \code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
 #' @include xPrioritiserManhattan.r
 #' @examples
@@ -68,7 +67,7 @@ xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5
 	
 	## append genomic locations to GR object
 	gr <- p_gr
-	mcols(gr) <- cbind(mcols(gr), p_matrix[,2:4])
+	GenomicRanges::mcols(gr) <- cbind(mcols(gr), p_matrix[,2:4])
 	## for sorting
 	chrlabs <- paste('chr', as.character(c(1:22,'X','Y')), sep='')
 	eval(parse(text=paste("seqlevels(gr) <- chrlabs",sep="")))

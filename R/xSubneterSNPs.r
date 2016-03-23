@@ -37,7 +37,7 @@
 #' 
 #' # b) perform network analysis
 #' # b1) find maximum-scoring subnet based on the given significance threshold
-#' subnet <- xSubneterSNPs(data=seeds.snps, network="STRING_high", subnet.significance=0.01)
+#' subnet <- xSubneterSNPs(data=seeds.snps, network="STRING_high", seed.genes=F, subnet.significance=0.01)
 #' # b2) find maximum-scoring subnet with the desired node number=50
 #' subnet <- xSubneterSNPs(data=data, network="STRING_high", subnet.size=50)
 #'
@@ -208,7 +208,7 @@ xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_high
   		
   		## append p-value weight
   		wS <- seeds.snps[names(gr_SNP)]
-  		mcols(gr_SNP) <- data.frame(mcols(gr_SNP), wS=wS)
+  		GenomicRanges::mcols(gr_SNP) <- data.frame(mcols(gr_SNP), wS=wS)
   		
 		if(verbose){
 			now <- Sys.time()

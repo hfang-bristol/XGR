@@ -15,11 +15,11 @@ Assume you have a `ROOT (sudo)` privilege:
 sudo su
 # here enter your password
 wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.2.4.tar.gz
-tar xvfz R-3.2.3.tar.gz
-cd R-3.2.3
+tar xvfz R-3.2.4.tar.gz
+cd R-3.2.4
 ./configure
 make
-make check☛
+make check
 make install
 R # start R
 ```
@@ -28,13 +28,13 @@ Assume you do not have a `ROOT` privilege and want R installation under your hom
 >
 ```ruby
 wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.2.4.tar.gz
-tar xvfz R-3.2.3.tar.gz
-cd R-3.2.3
-./configure --prefix=$HOME/R-3.2.3
+tar xvfz R-3.2.4.tar.gz
+cd R-3.2.4
+./configure --prefix=$HOME/R-3.2.4
 make
 make check
 make install
-$HOME/R-3.2.3/bin/R # start R
+$HOME/R-3.2.4/bin/R # start R
 ```
 
 ## 2. Installation of the package
@@ -45,12 +45,12 @@ First, install the package `devtools` (to help install packages directly from gi
 >
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("devtools","RCircos","ggbio"))
+biocLite(c("devtools","dnet","RCircos","ggbio"))
 ```
 
 Second, install the package `XGR` from [GitHub](https://github.com/hfang-bristol/XGR):
 >
 ```{r}
 library(devtools)
-install_github(c("hfang-bristol/XGR","hfang-bristol/dnet"), ref="master", dependencies=T)
+install_github(c("hfang-bristol/dnet","hfang-bristol/XGR"), ref="master", dependencies=T)
 ```

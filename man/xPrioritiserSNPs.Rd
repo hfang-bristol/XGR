@@ -20,11 +20,10 @@ RData.location =
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
-nodes (gene symbols). For this named vector, the element names are gene
-symbols, the element values for the significance level (measured as
-p-value or fdr). Alternatively, it can be a matrix or data frame with
-two columns: 1st column for gene symbols, 2nd column for the
-significance level}
+nodes (dbSNP). For this named vector, the element names are dbSNP, the
+element values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for dbSNP, 2nd column for the significance level}
 
 \item{include.LD}{additional SNPs in LD with Lead SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD
