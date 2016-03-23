@@ -501,7 +501,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 
                         ## add the new GenesID to the ancestors
                         newAncestors2GenesID <- lapply(oldAncestors2GenesID, function(oldGenes){
-                            union(oldGenes, elimGenesID)
+                            base::union(oldGenes, elimGenesID)
                         })
 
                         ## update the "ancNode2gene.Hash" table

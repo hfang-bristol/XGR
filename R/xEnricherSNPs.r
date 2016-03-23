@@ -165,7 +165,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
 					ld
 				})
 				
-				data <- union(unlist(ld.list), data)
+				data <- base::union(unlist(ld.list), data)
 			}
 			
 		}

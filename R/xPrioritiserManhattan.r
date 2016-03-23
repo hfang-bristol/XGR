@@ -16,7 +16,7 @@
 #' @note none
 #' @export
 #' @import ggbio
-#' @importFrom ggplot2 theme element_text element_rect
+#' @importFrom ggplot2 theme element_text element_rect Position
 #' @import GenomicRanges
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xPrioritiser}}, \code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
 #' @include xPrioritiserManhattan.r

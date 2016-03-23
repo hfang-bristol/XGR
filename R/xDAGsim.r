@@ -222,7 +222,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
                         ## for all ancestors
                         allan_js_list <- split(ancestor_js[,2],ancestor_js[,1])
                         allan_union <- sapply(allan_js_list, function(x){
-                            ux <- union(x, ancestor_i)
+                            ux <- base::union(x, ancestor_i)
                             sum(IC[ux])
                         })
                         ## for all common ancestors
@@ -378,7 +378,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
                     ## for all ancestors
                     allan_js_list <- split(ancestor_js[,2],ancestor_js[,1])
                     allan_union <- sapply(allan_js_list, function(x){
-                        ux <- union(x, ancestor_i)
+                        ux <- base::union(x, ancestor_i)
                         sum(IC[ux])
                     })
                     ## for all common ancestors
@@ -396,7 +396,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
                         mica <- ancestors[which.max(IC[ancestors])]
                         ## graph information content similarity related to Tanimoto-Jacard index
                         ## summed information content of common ancestors divided by summed information content of all ancestors of term1 and term2
-                        allancestors <- union(ancestor_i, ancestor_j)
+                        allancestors <- base::union(ancestor_i, ancestor_j)
                         res <- sum(IC[ancestors]) / sum(IC[allancestors])
                         sim[i,j] <- res
                     }

@@ -15,7 +15,7 @@
 #' @note none
 #' @export
 #' @import RCircos
-#' @import GenomicRanges
+#' @importFrom GenomicRanges findOverlaps distance
 #' @seealso \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
 #' @include xCircos.r
 #' @examples

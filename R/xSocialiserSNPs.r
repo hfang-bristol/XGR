@@ -131,7 +131,7 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 					ld
 				})
 				
-				data <- union(unlist(ld.list), data)
+				data <- base::union(unlist(ld.list), data)
 			}
 			
 		}
