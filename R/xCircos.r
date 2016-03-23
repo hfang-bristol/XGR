@@ -140,8 +140,8 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 	flag <- complete.cases(cbind(A, B))
 	AA <- A[flag]
 	BB <- B[flag]
-	input.data.A <- as.data.frame(pos[AA], row.names=NULL)
-	input.data.B <- as.data.frame(pos[BB], row.names=NULL)
+	input.data.A <- GenomicRanges::as.data.frame(pos[AA], row.names=NULL)
+	input.data.B <- GenomicRanges::as.data.frame(pos[BB], row.names=NULL)
 	input.data <- cbind.data.frame(input.data.A[, 1:3], input.data.B[, 1:3])
 	if(is.null(df$weight)){
 		input.data$similarity <- rep(1, sum(flag))

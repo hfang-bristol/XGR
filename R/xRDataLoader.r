@@ -12,7 +12,7 @@
 #' @export
 #' @import dnet
 #' @import igraph
-#' @importFrom GenomicRanges findOverlaps distance mcols seqnames
+#' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples
