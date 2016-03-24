@@ -16,7 +16,7 @@ normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
 multicores = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -189,7 +189,7 @@ library(igraph)
 library(dnet)
 library(GenomicRanges)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',

@@ -7,7 +7,7 @@
 xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
 chr.exclude = NULL, entity.label.cex = 0.8, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 }
 \arguments{
 \item{g}{an object of class "igraph". It stores semantic similarity

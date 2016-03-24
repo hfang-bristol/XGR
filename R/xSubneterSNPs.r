@@ -15,7 +15,7 @@
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a subgraph with a maximum score, an object of class "igraph"
-#' @note The algorithm identifying a subnetwork is implemented in the dnet package (http://genomemedicine.biomedcentral.com/articles/10.1186/s13073-014-0064-8). In brief, from an input network with input node/gene information (the significant level; p-values or FDR), the way of searching for a maximum-scoring subnetwork is done as follows. Given the threshold of tolerable p-value, it gives positive scores for nodes with p-values below the threshold (nodes of interest), and negative scores for nodes with threshold-above p-values (intolerable). After score transformation, the search for a maximum scoring subnetwork is deduced to find the connected subnetwork that is enriched with positive-score nodes, allowing for a few negative-score nodes as linkers. This objective is met through minimum spanning tree finding and post-processing, previously used as a heuristic solver of prize-collecting Steiner tree problem. The solver is deterministic, only determined by the given tolerable p-value threshold. For identification of the subnetwork with a desired number of nodes, an iterative procedure is also developed to fine-tune tolerable thresholds. This explicit control over the node size may be necessary for guiding follow-up experiments.
+#' @note The algorithm identifying a gene subnetwork that is likely modulated by input SNPs and or their LD SNPs includes two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few lowly scored genes as linkers.
 #' @export
 #' @seealso \code{\link{xSubneterGenes}}
 #' @include xSubneterSNPs.r
@@ -27,7 +27,7 @@
 #' library(dnet)
 #' library(GenomicRanges)
 #'
-#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 #' # a) provide the seed SNPs with the weight info
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
@@ -59,7 +59,7 @@
 #' xCircos(g=subnet, entity="Gene")
 #' }
 
-xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, distance.max=200000, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, distance.max=200000, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 {
 
     startT <- Sys.time()

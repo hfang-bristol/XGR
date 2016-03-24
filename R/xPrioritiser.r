@@ -28,7 +28,7 @@
 #' library(igraph)
 #' library(dnet)
 #'
-#' RData.location="~/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+#' RData.location="~/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 #' # a) provide the input nodes/genes with the significance info
 #' ## load human genes
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)

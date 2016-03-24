@@ -1,0 +1,17 @@
+div#jcloud {
+    margin: 20px auto;
+    background-color: #FFFFFF;
+    border: 1px solid #CD7300;
+    border-radius: 10px;
+}
+    
+.jtag a:link, .jtag a:visited {
+    text-decoration: none;
+    padding: 2px 4px;
+    display: block;
+}
+    
+.jtag a:hover {
+    border: 2px solid #CD7300;
+    background-color: #ffffff;
+}

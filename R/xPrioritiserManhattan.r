@@ -29,7 +29,7 @@
 #' #library(qqman)
 #' library(ggbio)
 #'
-#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 #' # a) provide the seed nodes/genes with the weight info
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
@@ -48,7 +48,7 @@
 #' #dev.off()
 #' }
 
-xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=10, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=10, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 {
     if (class(pNode) != "pNode" ){
         stop("The function must apply to a 'pNode' object.\n")

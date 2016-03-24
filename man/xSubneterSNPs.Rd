@@ -14,7 +14,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 seed.genes = T, subnet.significance = 5e-05, subnet.size = NULL,
 verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -115,26 +115,13 @@ genes and their weights that take into account the distance to and the
 significance of input SNPs. It returns an object of class "igraph".
 }
 \note{
-The algorithm identifying a subnetwork is implemented in the dnet
-package
-(http://genomemedicine.biomedcentral.com/articles/10.1186/s13073-014-0064-8).
-In brief, from an input network with input node/gene information (the
-significant level; p-values or FDR), the way of searching for a
-maximum-scoring subnetwork is done as follows. Given the threshold of
-tolerable p-value, it gives positive scores for nodes with p-values
-below the threshold (nodes of interest), and negative scores for nodes
-with threshold-above p-values (intolerable). After score
-transformation, the search for a maximum scoring subnetwork is deduced
-to find the connected subnetwork that is enriched with positive-score
-nodes, allowing for a few negative-score nodes as linkers. This
-objective is met through minimum spanning tree finding and
-post-processing, previously used as a heuristic solver of
-prize-collecting Steiner tree problem. The solver is deterministic,
-only determined by the given tolerable p-value threshold. For
-identification of the subnetwork with a desired number of nodes, an
-iterative procedure is also developed to fine-tune tolerable
-thresholds. This explicit control over the node size may be necessary
-for guiding follow-up experiments.
+The algorithm identifying a gene subnetwork that is likely modulated by
+input SNPs and or their LD SNPs includes two major steps. The first
+step is to define and score nearby genes that are located within
+distance window of input and/or LD SNPs. The second step is to use
+\code{\link{xSubneterGenes}} for identifying a maximum-scoring gene
+subnetwork that contains as many highly scored genes as possible but a
+few lowly scored genes as linkers.
 }
 \examples{
 \dontrun{
@@ -144,7 +131,7 @@ library(igraph)
 library(dnet)
 library(GenomicRanges)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/0.99.0"
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',

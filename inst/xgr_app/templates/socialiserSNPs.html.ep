@@ -1,0 +1,487 @@
+% layout 'default', tab => 'socialiser/snps';
+% title 'XGR - Socialiser for SNPs';
+
+% content_for css => begin
+	
+	<link type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css" rel="stylesheet">
+	
+% end
+% content_for scripts => begin
+	
+	<!-- Flash export buttons -->
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.flash.min.js"></script>
+	
+	<!-- Visibility toggle buttons -->
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.colVis.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			// For results container
+			var jfile = '<%= $ajax_json_file %>';
+			if(jfile != ''){
+				
+				// heatmap chart
+				new heatmapChart('heatmap_chart', '<%= $ajax_json_file %>2').render();
+				
+				// show results
+				$("#results-container").addClass("in");
+				// hide input form
+				$("#form-container").removeClass("in");
+				
+				// Scrolling and Bootstrap tabs (https://datatables.net/examples/api/tabs_and_scrolling.html)
+				$('a[data-toggle="tab"]').on( 'shown.bs.tab', function(e){
+					$.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+				});
+
+				var table = $('#menu1_table').DataTable({
+					//"ajax": '/app/ajex/arrays.txt'
+					"ajax": "<%= $ajax_json_file %>",
+					// Scroll - horizontal and vertical
+					"scrollY":        "400px",
+					"scrollCollapse": true,
+					"paging":         false,
+					"scrollX": 		  true,
+					"processing": 	  true,
+					// Ajax data source (objects): telling which to use
+					"aoColumns": [
+						{
+							mData:"from",
+							sDefaultContent: "",
+						},
+						{
+							mData:"to",
+							sDefaultContent: "",
+						},
+						{
+							mData:"weight",
+							sDefaultContent: "",
+							mRender: function(data, type, full) {
+								if(data){
+									return Math.round(data*1000)/1000
+								}
+							},
+						},
+					],
+					// Hidden columns
+					"columnDefs": [
+						{
+							"targets": [2],
+							"visible": true
+						},
+						{
+							"targets": [2],
+							"searchable": false
+						}
+					],
+					// Single-column ordering
+					"order": [[2, "desc"]],
+					
+					// Flash export buttons
+					dom: 'Bfrtip',
+					buttons: [
+						'copyFlash',
+						'excelFlash',
+					]
+					
+				});
+				
+			}
+
+		});
+	</script>
+% end
+
+<%
+
+my $default_ontology='EF';
+my $i=0;
+my $obo_order;
+$obo_order->{'EF'}=$i++;
+$obo_order->{'EF_disease'}=$i++;
+$obo_order->{'EF_phenotype'}=$i++;
+$obo_order->{'EF_bp'}=$i++;
+my $ontologies={
+    EF => "Experimental Factor Ontology (EFO)",
+    EF_disease => "Disease subpart of EFO",
+    EF_phenotype => "Phenotype subpart of EFO",
+    EF_bp => "Biological Process subpart of EFO",
+};
+
+
+my $default_pop='NA';
+$i=0;
+my $pop_order;
+$pop_order->{"NA"}=$i++;
+
+$pop_order->{"AFR"}=$i++;
+$pop_order->{"AMR"}=$i++;
+$pop_order->{"EAS"}=$i++;
+$pop_order->{"EUR"}=$i++;
+$pop_order->{"SAS"}=$i++;
+
+$pop_order->{"ACB"}=$i++;
+$pop_order->{"ASW"}=$i++;
+$pop_order->{"BEB"}=$i++;
+$pop_order->{"CDX"}=$i++;
+$pop_order->{"CEU"}=$i++;
+$pop_order->{"CHB"}=$i++;
+$pop_order->{"CHS"}=$i++;
+$pop_order->{"CLM"}=$i++;
+$pop_order->{"ESN"}=$i++;
+$pop_order->{"FIN"}=$i++;
+$pop_order->{"GBR"}=$i++;
+$pop_order->{"GIH"}=$i++;
+$pop_order->{"GWD"}=$i++;
+$pop_order->{"IBS"}=$i++;
+$pop_order->{"ITU"}=$i++;
+$pop_order->{"JPT"}=$i++;
+$pop_order->{"KHV"}=$i++;
+$pop_order->{"LWK"}=$i++;
+$pop_order->{"MSL"}=$i++;
+$pop_order->{"MXL"}=$i++;
+$pop_order->{"PEL"}=$i++;
+$pop_order->{"PJL"}=$i++;
+$pop_order->{"PUR"}=$i++;
+$pop_order->{"STU"}=$i++;
+$pop_order->{"TSI"}=$i++;
+$pop_order->{"YRI"}=$i++;
+
+my $pops={
+    NA => "Don't include LD SNPs",
+    
+    AFR => "AFR: African",
+    AMR => "AMR: Admixed American",
+    EAS => "EAS: East Asian",
+    EUR => "EUR: European",
+    SAS => "SAS: South Asian",
+    
+CHB => "CHB: Han Chinese in Bejing, China",
+JPT => "JPT: Japanese in Tokyo, Japan",
+CHS => "CHS: Southern Han Chinese",
+CDX => "CDX: Chinese Dai in Xishuangbanna, China EAS",
+KHV => "KHV: Kinh in Ho Chi Minh City, Vietnam",
+CEU => "CEU: Utah Residents (CEPH) with Northern and Western European Ancestry EUR",
+TSI => "TSI: Toscani in Italia",
+FIN => "FIN: Finnish in Finland",
+GBR => "GBR: British in England and Scotland",
+IBS => "IBS: Iberian Population in Spain",
+YRI => "YRI: Yoruba in Ibadan, Nigeria",
+LWK => "LWK: Luhya in Webuye, Kenya",
+GWD => "GWD: Gambian in Western Divisions in the Gambia",
+MSL => "MSL: Mende in Sierra Leone",
+ESN => "ESN: Esan in Nigeria",
+ASW => "ASW: Americans of African Ancestry in SW USA",
+ACB => "ACB: African Caribbeans in Barbados",
+MXL => "MXL: Mexican Ancestry from Los Angeles USA",
+PUR => "PUR: Puerto Ricans from Puerto Rico",
+CLM => "CLM: Colombians from Medellin, Colombia",
+PEL => "PEL: Peruvians from Lima, Peru",
+GIH => "GIH: Gujarati Indian from Houston, Texas",
+PJL => "PJL: Punjabi from Lahore, Pakistan",
+BEB => "BEB: Bengali from Bangladesh",
+STU => "STU: Sri Lankan Tamil from the UK",
+ITU => "ITU: Indian Telugu from the UK",
+
+};
+
+my $example_snps='
+rs10045403
+rs1018326
+rs10440635
+rs10781500
+rs10865331
+rs11065898
+rs11190133
+rs11209026
+rs11249215
+rs1128905
+rs11616188
+rs11624293
+rs11657479
+rs12141575
+rs12146962
+rs12186979
+rs1250550
+rs12615545
+rs13210693
+rs1326986
+rs17095830
+rs17765610
+rs1801274
+rs1860545
+rs2075726
+rs2192752
+rs2242944
+rs2297518
+rs2297909
+rs2310173
+rs2531875
+rs27434
+rs2836883
+rs2910686
+rs30187
+rs35164067
+rs35448675
+rs378108
+rs4129267
+rs41299637
+rs4333130
+rs4349859
+rs4389526
+rs4552569
+rs4676410
+rs4851529
+rs639575
+rs6511701
+rs6556416
+rs6600247
+rs6759298
+rs6871626
+rs7282490
+rs75301646
+rs7743761
+rs7954567
+rs8070463
+rs9901869
+';
+%>
+
+<div class="container">
+	<div class="text-left">
+		<h2 class="my-fontfamily"><a href="/socialiser/snps"><img src="/app/img/Socialiser.icon.png" height="100px"></a> SNP-based Similarity Analysis</h2>
+	</div>
+</div>
+
+<!-- progress bar -->
+<div id="progress-container" class="container collapse">
+	<div class="progress progress-striped active">
+		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			<span class="glyphicon glyphicon-hourglass"></span> Running... (maybe it's time for coffee/tea)
+		</div>
+	</div>
+</div>
+
+<!-- form -->
+<div id="form-container" class="container collapse in">
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<legend>Calculate semantic similarity between your input SNPs.</legend>
+			<p><strong>Step 1</strong>: <span class="tooltip-show" data-toggle="tooltip" data-placement="auto right" title="SNPs should be provided as dbSNP rsIDs (starting with rs)">Paste your SNPs here (dbSNP rsIDs)</span>.</p>
+			<form id="submit-form" class="form-horizontal" enctype="multipart/form-data" action="/socialiser/snps" method="POST">
+			
+				<div class="form-group">
+					<div class="col-sm-12">
+						<textarea id="snplist" name="snplist" class="form-control table" rows="6" required="required"><%== $example_snps %></textarea>
+					</div>
+				</div>
+
+				<p><strong>Step 2</strong>: Choose which ontology to use.</p>
+				<div class="form-group">
+					<label class="control-label col-sm-5" for="ontology">Ontology:</label>
+					<div class="col-sm-7">
+						<select name="ontology" id="ontology" class="form-control">
+							% foreach my $ontology (sort{$obo_order->{$a} <=> $obo_order->{$b}} keys %$obo_order) {
+							% my $selected = ($ontology eq $default_ontology)? ' SELECTED':'';
+							% if ($ontology eq 'EF_disease'){
+								<OPTGROUP LABEL="EFO subparts:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }elsif ($ontology eq 'EF_bp'){
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>
+							% }else{
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }
+							%}
+						</select>
+					</div>
+				</div>
+
+				<p><strong>Step 3</strong>: Choose population (from 1000 Genomes Project) for which to include SNPs in Linkage Disequilibrium (LD) with GWAS lead SNPs.</p>
+				<div class="form-group">
+					<label class="control-label col-sm-5" for="pop">Population:</label>
+					<div class="col-sm-7">
+						<select name="pop" id="pop" class="form-control">
+							% foreach my $pop (sort{$pop_order->{$a} <=> $pop_order->{$b}} keys %$pop_order) {
+							% my $selected = ($pop eq $default_pop)? ' SELECTED':'';
+							% if ($pop eq 'AFR'){
+								<OPTGROUP LABEL="Super populations:">
+								<OPTION VALUE="<%= $pop %>"<%= $selected %>><%== $pops->{$pop} %></OPTION>
+							% }elsif ($pop eq 'SAS'){
+								<OPTION VALUE="<%= $pop %>"<%= $selected %>><%== $pops->{$pop} %></OPTION>
+								</OPTGROUP>
+							% }elsif($pop eq 'ACB'){
+								<OPTGROUP LABEL="Populations:">
+								<OPTION VALUE="<%= $pop %>"<%= $selected %>><%== $pops->{$pop} %></OPTION>
+							% }elsif($pop eq 'YRI'){
+								<OPTION VALUE="<%= $pop %>"<%= $selected %>><%== $pops->{$pop} %></OPTION>
+								</OPTGROUP>								
+							% }else{
+								<OPTION VALUE="<%= $pop %>"<%= $selected %>><%== $pops->{$pop} %></OPTION>
+							% }
+							%}
+						</select>
+					</div>
+					<label class="control-label col-sm-5" for="r2">R2 cutoff (if LD SNPs included):</label>
+					<div class="col-sm-7">
+						<select name="r2" id="r2" class="form-control">
+							<option value="0.80">0.80</a>
+							<option value="0.85">0.85</a>
+							<option value="0.90">0.90</a>
+							<option value="0.95">0.95</a>
+							<option value="1.00">1.00</a>
+						</select>
+					</div>
+				</div>	
+				
+				<!-- Advanced begin ################### -->
+				<div class="form-group" id="advanced-toggle">
+					<div class="col-md-12">
+						
+						<button type="button" class="btn btn-default btn-block" style="text-align:left" data-toggle="collapse" data-target="#more-options">
+							<span class="glyphicon glyphicon-plus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="This is intended to finetune parameters for advanced usage">Optional steps</strong></a>
+						</button>
+						
+						<div id="more-options" class="row collapse">
+							<div class="col-md-12" style="border: 1px solid #fff">
+																
+								<!-- measure & method.term -->
+								<span class="glyphicon glyphicon-hand-right"></span> <strong>Algorithm</strong> (based on annotation profiles by ontology terms).
+								<div class="form-group">
+									<label class="control-label col-sm-5">Method of calculating pairwise term similarity:</label>
+									<div class="col-sm-7">
+										<select name="method_term" class="form-control">
+											<option value="Resnik">Resnik: Information Content (IC) at Most Informative Common Ancestor (MICA)</a>
+											<option value="Lin">Lin: 2*IC at MICA divided by the sum of IC at pairs of terms</a>
+											<option value="Schlicker">Schlicker: Lin weighted by 1-prob(IC at MICA)</a>
+											<option value="Jiang">Jiang: 1 - difference between the sum of IC at pairs of terms and 2*IC at MICA</a>
+										</select>
+									</div>
+									<label class="control-label col-sm-5">Method of deriving from pairwise term similarity:</label>
+									<div class="col-sm-7">
+										<select name="measure" class="form-control">
+											<option value="BM.average">Average of average best-matches</a>
+											<option value="BM.max">Maximum of average best-matches</a>
+											<option value="BM.complete">Minimum of any best-matches</a>
+										</select>
+									</div>								
+								</div>
+								
+							</div>
+						</div>
+						
+
+						
+					</div>
+				</div>
+				<!-- Advanced end ################### -->
+				
+				<!-- Button -->
+				<div class="form-group">
+					<label class="col-md-12 control-label" for="submit"></label>
+					<div class="col-md-12">
+						<input class="btn btn-primary btn-block" id="submit" type="submit" value="Submit" />
+					</div>
+				</div>
+				
+			</form>
+		</div>
+		
+	</div>
+	
+</div>
+
+
+<div id="results-container" class="container collapse">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<legend>You can explore interactive results via:</legend>
+		</div>
+	</div>
+
+	<div class="panel-group" id="accordion">
+		
+	   <!-- panel 1 -->
+	   <div class="panel panel-success" id="panel1">
+		  <div class="panel-heading">
+			 <h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+				   <span class="glyphicon glyphicon-minus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Click me to show/hide this table">Table</strong></a>
+				</a>
+			 </h4>
+		  </div>
+		  <div id="collapseOne" class="panel-collapse collapse in">
+			 <div class = "panel-body">
+				<h4>This table lists semantic similarity.</h4>
+				<p class="help-block">(where the similarity is rescaled to the 0-1 range)</p>
+				<table id="menu1_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th><div>SNP1</div></th>
+							<th><div>SNP2</div></th>
+							<th><div>Similarity</div></th>
+						</tr>
+					</thead>
+					<tfoot>
+							<th><div>SNP1</div></th>
+							<th><div>SNP2</div></th>
+							<th><div>Similarity</div></th>
+					</tfoot>
+				</table>
+			 </div>
+		  </div>
+	   </div>
+	   
+	   <!-- panel 2 -->
+	   <div class="panel panel-success" id="panel2">
+		  <div class="panel-heading">
+			 <h4 class="panel-title">
+				<a id="barplot-button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+				   <span class="glyphicon glyphicon-plus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Click me to show/hide this heatmap">Heatmap</strong></a>
+				</a>
+			 </h4>
+		  </div>
+		  <div id="collapseTwo" class="panel-collapse collapse">
+			 <div class="panel-body">
+    			<h4>This heatmap displays semantic similarity matrix.</h4>
+    			<p class="help-block">(where the more similar profiles SNPs have, the closer they stay)</p>
+				<div class="row">
+					<div class="col-lg-12">
+						<div id="heatmap_chart" style="height:100%; width:80%;"></div>
+					</div>
+				</div>
+			 </div>
+		  </div>
+	   </div>
+	   
+	   <!-- panel 3 -->
+	   <div class="panel panel-success" id="panel3">
+		  <div class="panel-heading">
+			 <h4 class="panel-title">
+				<a id="barplot-button" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+				   <span class="glyphicon glyphicon-plus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Click me to show/hide this circos">Circos</strong></a>
+				</a>
+			 </h4>
+		  </div>
+		  <div id="collapse3" class="panel-collapse collapse">
+			 <div class="panel-body">
+    			<h4>This circos displays top semantic similarity between SNPs.</h4>
+				<div class="row">
+					<div class="col-lg-12">
+						<a class="btn btn-primary btn-sm active" role="button" href="<%= $ajax_pdf_file %>" download="SNP_circos.pdf"><span class="glyphicon glyphicon-cloud-download"></span> Download circos</a>
+						<a href="javascript:newWin('<%= $ajax_pdf_file %>', 'graph', '2000', '1000')">
+							<div class="embed-responsive embed-responsive-4by3"><iframe class="iframe-shadow" src="<%= $ajax_pdf_file %>" title="Gene Circos"></iframe></div>
+						</a>
+					</div>
+				</div>
+			 </div>
+		  </div>
+	   </div>
+	   
+	</div>
+
+	
+</div>

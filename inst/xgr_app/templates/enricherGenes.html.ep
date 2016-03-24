@@ -1,0 +1,523 @@
+% layout 'default', tab => 'enricher/genes';
+% title 'XGR - Enricher for Genes';
+
+% content_for css => begin
+	
+	<link type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css" rel="stylesheet">
+	<style>
+		td.highlight {
+			font-weight: bold;
+			color: blue;
+		}
+	</style>
+% end
+% content_for scripts => begin
+	
+	<!-- Flash export buttons -->
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.flash.min.js"></script>
+	
+	<!-- Visibility toggle buttons -->
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.colVis.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			// For results container
+			var jfile = '<%= $ajax_json_file %>';
+			if(jfile != ''){
+				
+				// bar chart
+				new barChart('bar_chart', '<%= $ajax_json_file %>').render();
+				
+				// show results
+				$("#results-container").addClass("in");
+				// hide input form
+				$("#form-container").removeClass("in");
+				
+				
+				// Scrolling and Bootstrap tabs (https://datatables.net/examples/api/tabs_and_scrolling.html)
+				$('a[data-toggle="tab"]').on( 'shown.bs.tab', function(e){
+					$.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+				});
+
+				var table = $('#menu1_table').DataTable({
+					//"ajax": '/app/ajex/arrays.txt'
+					"ajax": "<%= $ajax_json_file %>",
+					// Scroll - horizontal and vertical
+					"scrollY":        "400px",
+					"scrollCollapse": true,
+					"paging":         false,
+					"scrollX": 		  true,
+					"processing": 	  true,
+					// Ajax data source (objects): telling which to use
+					"aoColumns": [
+						{
+							mData:"term",
+							sDefaultContent: "",
+						},
+						{
+							mData:"name",
+							sDefaultContent: "",
+							mRender: function(data, type, full) {
+								if(full.adjp < 0.05){
+									return '<span class=sig>'+data+'</span>'
+								}else{
+									return data
+								}
+							},
+						},
+						{
+							mData:"nAnno",
+							sDefaultContent: "",
+						},
+						{
+							mData:"zscore",
+							sDefaultContent: "",
+						},
+						{
+							mData:"pvalue",
+							sDefaultContent: "",
+						},
+						{
+							mData:"adjp",
+							sDefaultContent: "",
+						},
+						{
+							mData:"nOverlap",
+							sDefaultContent: "",
+						},
+						{
+							mData:"members",
+							sDefaultContent: "",
+						},
+					],
+					// Hidden columns
+					"columnDefs": [
+						{
+							"targets": [0,2,7],
+							"visible": false
+						},
+						{
+							"targets": [2,3,4,5,6],
+							"searchable": false
+						}
+					],
+					// Single-column ordering
+					"order": [[4, "asc"]],
+					
+					// Flash export buttons
+					dom: 'Bfrtip',
+					buttons: [
+						'copyFlash',
+						'excelFlash',
+						{
+							extend: 'columnsToggle',
+							columns: 7
+						}
+					]
+					
+				});
+				
+			}
+
+		});
+	</script>
+% end
+
+<%
+my $info='
+<h4>User I/O</h4>
+<ul>
+<b><I>Enricher for Genes</I></b> takes as input a list of user-defined genes (<b>Step 1</b>), conducts enrichment analysis using gene annotations by an ontology (representing the known knowledge; <b>Step 2</b>), and reports ontology terms that are enriched in the input gene group, thus giving a knowledge-driven interpretation for input genes. Outputs are interactive (Table and Barplot). 
+</ul>
+
+<h4>Method</h4>
+<ul>
+<li>Enrichment analysis is based on the hypergeometric/binomial distribution or Fishers exact test (<b>Optional Steps</b>), tests the statistical significance of the observed number of genes overlapped between an input group of genes and genes annotated by an ontology term.</li>
+<li>By default, all annotatable genes are used as the test background, but the user can specify this background (<b>Optional Steps</b>).</li>
+<li>If the ontology is organised in a hierarchy-like structure, more precisely, directed acyclic graph (DAG), it is also able to account for this structure by respecting the parent-child dependency (<b>Optional Steps</b>), e.g. estimating the significance of a term after adjusting/removing those annotations that its children terms also have.</li>
+</ul>
+
+<h4>Ontology in use</h4>
+<ul>
+<li><b>Diseases</b>: Disease Ontology (DO).</li>
+<li><b>Phenotypes</b>: Human Phenotype (HP) subdivided into 4 complementary subontologies (mainly Phenotypic Abnormality, HPPA); Mouse/Mammalian Phenotype (MP).</li>
+<li><b>Functions</b>: Gene Ontology (GO) subdivided into 3 complementary subontologies including Molecular Function (GOMF), Biological Process (GOBP) and Cellular Component (GOCC).</li>
+<li><b>MsigDB</b>: Collections of non-organised gene sets including pathways, TF/miRNA targets, expression signatures, and their non-redundancy version (called "Hallmark Gene Sets").</li>
+<li><b>Others</b>: Collections of non-organised gene groups based on druggable categories, protein domains, and evolutionary origins.</li>
+</ul>
+';
+
+my $default_ontology='MsigdbC2CPall';
+
+my $i=0;
+my $obo_order;
+$obo_order->{'DO'}=$i++;
+$obo_order->{'HPPA'}=$i++;
+$obo_order->{'HPMI'}=$i++;
+$obo_order->{'HPCM'}=$i++;
+$obo_order->{'HPMA'}=$i++;
+$obo_order->{'MP'}=$i++;
+$obo_order->{'GOMF'}=$i++;
+$obo_order->{'GOBP'}=$i++;
+$obo_order->{'GOCC'}=$i++;
+$obo_order->{'MsigdbH'}=$i++;
+$obo_order->{'MsigdbC2CP'}=$i++;
+$obo_order->{'MsigdbC2KEGG'}=$i++;
+$obo_order->{'MsigdbC2REACTOME'}=$i++;
+$obo_order->{'MsigdbC2BIOCARTA'}=$i++;
+$obo_order->{'MsigdbC2CPall'}=$i++;
+$obo_order->{'MsigdbC3TFT'}=$i++;
+$obo_order->{'MsigdbC3MIR'}=$i++;
+$obo_order->{'MsigdbC6'}=$i++;
+$obo_order->{'MsigdbC7'}=$i++;
+$obo_order->{'DGIdb'}=$i++;
+$obo_order->{'SF'}=$i++;
+$obo_order->{'PS2'}=$i++;
+
+my $ontologies={
+    GOMF => "Gene Ontology (Molecular Function: GOMF)",
+    GOBP => "Gene Ontology (Biological Process: GOBP)",
+    GOCC => "Gene Ontology (Cellular Component: GOCC)",
+    DO => "Disease Ontology (DO)",
+    MP => "Mammalian Phenotype (MP)",
+    HPPA => "Human Phenotype (Phenotypic Abnormality: HPPA)",
+    HPMI => "Human Phenotype (Mode of Inheritance: HPMI)",
+    HPCM => "Human Phenotype (Clinical Modifier: HPCM)",
+    HPMA => "Human Phenotype (Mortality Aging: HPMA)",
+    DGIdb => "DGI Druggable Gene Categories",
+    PS2 => "Phylostratific Age (Taxonomy Ancestors When First Created)",
+    SF => "SCOP Domain Superfamilies",
+    MsigdbH => "Hallmark Gene Sets",
+    MsigdbC2CP => "Canonical Pathways",
+    MsigdbC2KEGG => "KEGG Pathways",
+    MsigdbC2REACTOME => "REACTOME Pathways",
+    MsigdbC2BIOCARTA => "BioCarta Pathways",
+    MsigdbC2CPall => "Canonical/KEGG/REACTOME/BioCarta Pathways",
+    MsigdbC3TFT => "Transcription Factor Targets",
+    MsigdbC3MIR => "microRNA Targets",
+    MsigdbC6 => "Oncogenic Signatures",
+	MsigdbC7 => "Immunological Signatures",
+};
+
+my $example_genes='
+IL27
+SULT1A1
+RUNX3
+NPAS3
+MTCO1P2
+ICOSLG
+MIR4425
+MIR6731
+LTBR
+TNFRSF1A
+ERAP1
+ERAP2
+MALRD1
+TYK2
+PTGER4
+LINC00603
+ZMIZ1
+ANTXR2
+GPR25
+KIF21B
+TRI-AAT7-2
+TBKBP1
+KPNB1
+RPL31P10
+NOS2
+IL12B
+TBX21
+IL23R
+NKX2-3
+IL1R1
+IL1R2
+ANO6
+B3GNT2
+BACH2
+FCGR2A
+CSF2RB
+GPR65
+SH2B3
+GPR35
+UBE2E3
+NPEPPS
+RPSAP64
+ETS2
+RPL23AP12
+MICA
+IL6R
+RPL13AP14
+EDIL3
+LOC101927156
+PTCHD3P3
+CEP57L1
+ADRA1B
+RNU4ATAC2P
+TMEM17
+MIR5192
+PSMG1
+CARD9
+';
+%>
+
+<div class="container">
+	<div class="text-left">
+		<h2 class="my-fontfamily"><a href="/enricher/genes"><img src="/app/img/Enricher.icon.png" height="100px"></a> Gene-based Enrichment Analysis</h2>
+	</div>
+</div>
+
+<!-- progress bar -->
+<div id="progress-container" class="container collapse">
+	<div class="progress progress-striped active">
+		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			<span class="glyphicon glyphicon-hourglass"></span> Running... (maybe it's time for coffee/tea)
+		</div>
+	</div>
+</div>
+
+<!-- form -->
+<div id="form-container" class="container collapse in">
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<!-- <legend>Identify enriched ontology terms for your input gene list.</legend> -->
+			<h3>Identify enriched ontology terms from your input gene list.</h3>
+			
+			<a id="displayText" href="javascript:toggle();" class="btn btn-info">Show info</a>
+			<div id="toggleText" style="display: none">
+				<p class="text_justify">
+					<%== $info %>
+				</p>
+			</div>
+			
+			<hr>
+		
+			<form id="submit-form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+				
+				<p><strong>Step 1</strong>: <span class="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Ideally, genes are provided with HGNC official symbols, but can be 'known-as' aliases">Paste your genes here (gene symbols)</span>.</p>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<textarea id="genelist" name="genelist" class="form-control table" rows="8" required="required"><%== $example_genes %></textarea>
+					</div>
+				</div>
+
+				<p><strong>Step 2</strong>: Choose which ontology to use.</p>
+				<div class="form-group">
+					<label class="control-label col-sm-5" for="ontology">Ontology:</label>
+					<div class="col-sm-7">
+						<select name="ontology" id="ontology" class="form-control">
+							% foreach my $ontology (sort{$obo_order->{$a} <=> $obo_order->{$b}} keys %$obo_order) {
+							% my $selected = ($ontology eq $default_ontology)? ' SELECTED':'';
+							% if($ontology eq 'DO'){
+								<OPTGROUP LABEL="Diseases:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>
+							% }elsif ($ontology eq 'HPPA'){
+								<OPTGROUP LABEL="Phenotypes:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }elsif ($ontology eq 'MP'){
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>
+							% }elsif($ontology eq 'GOMF'){
+								<OPTGROUP LABEL="Functions:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }elsif($ontology eq 'GOCC'){
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>								
+							% }elsif ($ontology eq 'MsigdbH'){
+								<OPTGROUP LABEL="MsigDB:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }elsif ($ontology eq 'MsigdbC7'){
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>
+							% }elsif ($ontology eq 'DGIdb'){
+								<OPTGROUP LABEL="Others:">
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }elsif ($ontology eq 'PS2'){
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+								</OPTGROUP>
+							% }else{
+								<OPTION VALUE="<%= $ontology %>"<%= $selected %>><%== $ontologies->{$ontology} %></OPTION>
+							% }
+							%}
+						</select>
+					</div>
+				</div>
+				
+				<!-- Advanced begin ################### -->
+				<div class="form-group" id="advanced-toggle">
+					<div class="col-md-12">
+						 
+						<button type="button" class="btn btn-default btn-block" style="text-align:left" data-toggle="collapse" data-target="#more-options">
+							<span class="glyphicon glyphicon-plus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="This is intended to finetune parameters for advanced usage">Optional steps</strong></a>
+						</button>
+						
+						<div id="more-options" class="row collapse">
+							<div class="col-md-12" style="border: 1px solid #fff">
+								
+								<!-- Background -->
+								<span class="glyphicon glyphicon-hand-right"></span> <strong>Test background</strong> (by default, all annotatable genes are used).
+								<div class="form-group">
+									<label class="control-label col-sm-5" for="uploaded-file">Upload the file:</label>
+									<div class="col-sm-7">
+										<input type="file" id="uploadfile" name="uploadfile" class="form-control">
+										<p class="help-block">where each line is a gene symbol</p>
+									</div>					
+								</div>
+																
+								<!-- size.range & min.overlap -->
+								<span class="glyphicon glyphicon-hand-right"></span> <strong>Term specificity</strong> (based on total number of genes annotated with a term).
+								<div class="form-group">
+									<label class="control-label col-sm-5">Min. number of genes annotated:</label>
+									<div class="col-sm-7">
+										<select name="size_range_min" class="form-control">
+											<option value="5">5</a>
+											<option value="10">10</a>
+											<option value="1">Any</a>
+										</select>
+									</div>
+									<label class="control-label col-sm-5">Max. number of genes annotated:</label>
+									<div class="col-sm-7">
+										<select name="size_range_max" class="form-control">
+											<option value="2000">2000</a>
+											<option value="5000">5000</a>
+											<option value="1000000">Any</a>
+										</select>
+									</div>	
+									<label class="control-label col-sm-5">Min. overlap with your input genes:</label>
+									<div class="col-sm-7">
+										<select name="min_overlap" class="form-control">
+											<option value="3">3</a>
+											<option value="5">5</a>
+											<option value="1">Any</a>
+										</select>
+									</div>									
+								</div>
+								
+								<!-- test & ontology.algorithm -->
+								<span class="glyphicon glyphicon-hand-right"></span> <strong>Test algorithm</strong>.
+								<div class="form-group">
+									<label class="control-label col-sm-5">Using test based on:</label>
+									<div class="col-sm-7">
+										<select name="test" class="form-control">
+											<option value="hypergeo">Hypergeometric distribution</a>
+											<option value="binomial">Binomial distribution</a>
+											<option value="fisher">Fisher's exact test</a>
+										</select>
+									</div>
+									<label class="control-label col-sm-5">Accounting for the ontology structure:</label>
+									<div class="col-sm-7">
+										<select name="ontology_algorithm" class="form-control">
+											<option value="none">Don't account for this</a>
+											<option value="pc">Consider parent-child relations</a>
+										</select>
+									</div>								
+								</div>
+								
+							</div>
+						</div>
+						
+
+						
+					</div>
+				</div>
+				<!-- Advanced end ################### -->
+				
+				<!-- Button -->
+				<div class="form-group">
+					<label class="col-md-12 control-label" for="submit"></label>
+					<div class="col-md-12">
+						<input class="btn btn-primary btn-block" id="submit" type="submit" value="Submit" />
+					</div>
+				</div>
+				
+			</form>
+			
+		</div>
+		
+	</div>
+	
+</div>
+
+
+<!-- results -->
+<div id="results-container" class="container collapse">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<legend>You can explore interactive results via:</legend>
+		</div>
+	</div>
+	
+	<div class="panel-group" id="accordion">
+		
+	   <!-- panel 1 -->
+	   <div class="panel panel-success" id="panel1">
+		  <div class="panel-heading">
+			 <h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+				   <span class="glyphicon glyphicon-minus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Click me to show/hide this table">Table</strong></a>
+				</a>
+			 </h4>
+		  </div>
+		  <div id="collapseOne" class="panel-collapse collapse in">
+			 <div class = "panel-body">
+				<h4>This table lists all enrichments.</h4>
+				<p class="help-block">(where those terms with FDR<0.05 are highlighted in dark green)</p>
+				<table id="menu1_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th><div>Term ID</div></th>
+							<th><div>Term Name</div></th>
+							<th><div># of gene annotated</div></th>
+							<th><div>Z-score</div></th>
+							<th><div>P-value</div></th>
+							<th><div>FDR</div></th>
+							<th><div># of genes overlapped</div></th>
+							<th><div>Genes</div></th>
+						</tr>
+					</thead>
+					<tfoot>
+							<th><div>Term ID</div></th>
+							<th><div>Term Name</div></th>
+							<th><div># of gene annotated</div></th>
+							<th><div>Z-score</div></th>
+							<th><div>P-value</div></th>
+							<th><div>FDR</div></th>
+							<th><div># of genes overlapped</div></th>
+							<th><div>Genes</div></th>
+					</tfoot>
+				</table>
+			 </div>
+		  </div>
+	   </div>
+	   
+	   <!-- panel 2 -->
+	   <div class="panel panel-success" id="panel2">
+		  <div class="panel-heading">
+			 <h4 class="panel-title">
+				<a id="barplot-button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+				   <span class="glyphicon glyphicon-plus-sign"></span> <strong class ="my-tooltip" data-toggle="tooltip" data-placement="auto right" title="Click me to show/hide this barplot">Barplot</strong></a>
+				</a>
+			 </h4>
+		  </div>
+		  <div id="collapseTwo" class="panel-collapse collapse">
+			 <div class="panel-body">
+				<h4>This plot displays the top enrichments.</h4>
+				<p class="help-block">(where a vertical line indicates the FDR cutoff at 0.05)</p>
+				<div class="row">
+					<div class="col-lg-12">
+						<div id="bar_chart" style="height:100%; width:80%;"></div>
+					</div>
+				</div>
+			 </div>
+		  </div>
+	   </div>
+	   
+	</div>
+	
+  	
+</div>
+

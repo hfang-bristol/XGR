@@ -22,7 +22,7 @@ xRDataLoader(RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
 "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"),
 RData.customised = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/0.99.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 }
 \arguments{
 \item{RData}{which built-in RData to load. It can be one of "GWAS2EF",
