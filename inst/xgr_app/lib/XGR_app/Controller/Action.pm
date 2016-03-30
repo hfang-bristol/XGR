@@ -133,8 +133,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -305,8 +305,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -462,8 +462,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -617,8 +617,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -800,8 +800,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -997,8 +997,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }
@@ -1220,8 +1220,8 @@ if(-e $rscript_filename){
     chmod(0755, "$rscript_filename");
     
     my $command;
-    if(-e '/home/hfang/R-3.2.1/bin/Rscript'){
-    	$command="/home/hfang/R-3.2.1/bin/Rscript $rscript_filename";
+    if(-e '/home/hfang/R-3.2.4/bin/Rscript'){
+    	$command="/home/hfang/R-3.2.4/bin/Rscript $rscript_filename";
     }else{
     	$command="/usr/local/bin/Rscript $rscript_filename";
     }

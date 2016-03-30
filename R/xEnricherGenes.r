@@ -274,7 +274,7 @@ xEnricherGenes <- function(data, background=NULL, ontology=c("GOBP","GOMF","GOCC
 	# replace EntrezGenes with gene symbols	
 	if(1 & class(eTerm)=="eTerm"){
 		overlap <- eTerm$overlap
-		overlap_symbols <- sapply(overlap,function(x){
+		overlap_symbols <- lapply(overlap,function(x){
 			ind <- match(x, allGeneID)
 			allSymbol[ind]
 		})

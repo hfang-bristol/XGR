@@ -1,0 +1,324 @@
+% layout 'default', tab => 'enricher/genes';
+% title 'XGR - Info for Genes';
+
+% content_for css => begin
+	<link type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css" rel="stylesheet">
+	
+	<style>
+		thead > tr > th {
+			font-size: 12px;
+			text-align: center;
+			border: 1px solid rgba(204,204,204,0.2);
+			background-color: transparent;
+		}
+		
+		thead > tr > th.my_style {
+			font-size: 15px;
+			text-align: center;
+			background-color: rgba(204,204,204,0.5);
+			border: 1px solid rgba(204,204,204,0.5);
+		}
+		
+		tbody > tr > td {
+			font-size: 12px;
+			text-align: center;
+			border: 1px solid #ccc;
+		}
+		tbody > tr > td:first-child {
+			text-align: right;
+			border: 1px solid rgba(204,204,204,0);
+		}
+		tbody > tr > td:nth-last-child(1) {
+			text-align: left;
+			border: 1px solid rgba(204,204,204,0);
+		}
+		
+		tbody > tr > td:hover {
+			-moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.8);
+			-webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.8);
+			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.8);
+		}
+	</style>
+% end
+
+% content_for scripts => begin
+
+	<!-- Flash export buttons -->
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.flash.min.js"></script>
+	
+	<!-- Visibility toggle buttons -->
+	<script type="text/javascript" src="//cdn.datatables.net/buttons/1.1.0/js/buttons.colVis.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var table = $('#example').DataTable({
+				"aaData": <%== $rec_genes %>,
+				// Scroll - horizontal and vertical
+				//"scrollY":        "400px",
+				//"scrollCollapse": true,
+				//"paging":         false,
+				//"scrollX": 		true,
+				//"info": 		true,
+				//"processing": 	true,
+				"lengthMenu": [[25,50,100,-1], [25,50,100,"All"]],
+				//"dom": '<"top"f>rt<"bottom"lp><"clear">',
+				
+				"aoColumns": [
+					{
+						mData:"Symbol",
+						sDefaultContent: "",
+						sWidth: "10%",
+					},
+					{
+						mData:"Overall",
+						bSortable: true,
+						bSearchable: true,
+						bVisible: true,
+						sWidth: "5%",
+						mRender: function(data, type, full) {
+							//return '<span style="color:transparent">'+Math.round(data*100)/100+'</span>'
+							return '<span style="color:blue">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*20,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*20,10)*2);
+    						var b=0;
+    						//var r = 100;
+    						//var g = Math.min(100, 100-parseInt(sData*20,10));
+    						//var b = Math.min(100, 100-parseInt(sData*20,10));
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+          					//nTd.setAttribute('title', "Priority score for "+oData.Symbol+": "+sData);
+          					
+        				}
+					},
+					{
+						mData:"GWAS",
+						bSortable: true,
+						bSearchable: true,
+						bVisible: true,
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"eQTL",
+						bSortable: true,
+						bSearchable: true,
+						bVisible: true,
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"Variant",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"Disease",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"OMIM",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"Phenotype",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"Function",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"Pathway",
+						mRender: function(data, type, full) {
+							return '<span style="color:transparent" class="my-tooltip" data-toggle="tooltip" data-placement="auto" title="'+full.Symbol+': '+Math.round(data*100)/100+'">'+Math.round(data*100)/100+'</span>'
+						},
+						//This can be used as a compliment to mRender allowing you to modify the DOM element (add background colour for example) when the element is available.
+						"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+							var r = Math.min(100, parseInt(sData*500,10)*2);
+    						var g = Math.min(100, 200-parseInt(sData*500,10)*2);
+    						var b=0;
+          					$(nTd).css('background-color', "rgba("+r+"%,"+g+"%,"+b+"%,1)");
+        				}
+					},
+					{
+						mData:"description",
+						sDefaultContent: "",
+						sWidth: "20%",
+					},
+					{
+						mData:"Synonyms",
+						sDefaultContent: "",
+						sWidth: "10%",
+					},
+				],
+				// Hidden columns
+				"columnDefs": [
+					{
+						"targets": [10,11],
+						"visible": false
+					},
+					{
+						"targets": [2-9],
+						"searchable": false
+					},	
+				],
+				// Single-column ordering
+				"order": [[1, "desc"]],
+				// Flash export buttons
+				dom: 'Bfrtlp',
+				buttons: [
+					'copyFlash',
+					'excelFlash',
+					{
+						extend: 'columnsToggle',
+						columns: [10,11],
+					}
+				],
+
+			});
+	
+			//$('[id^=example]').find("thead tr th").css('background-color', 'rgba(204,204,204,0.5)');
+			$('[id^=example] thead tr th').addClass('rotate');
+			
+	
+			$('[id^=example] tbody').on('mouseover', 'td', function(){
+			
+				$(this).closest('tr').css("background-color", "#ccc");
+				
+				//$(this).css("background-color", "#ccc");
+				var nTds = $('td', $(this).closest('tr'));
+				var sSymbol = $(nTds[0]).text();
+				var sOverall = $(nTds[1]).text();
+				var sTitle = "Priority score for "+sSymbol+": "+sOverall+" ("+$(this).text()+")";
+				this.setAttribute( 'title', sTitle);
+			});
+			$('[id^=example] tbody').on('mouseout', 'tr', function(){
+				$(this).css("background-color", "transparent");
+			});
+			
+			/*
+			$('[id^=example] tbody tr').each( function() {
+				var nTds = $('td', this);
+				var sSymbol = $(nTds[0]).text();
+				var sOverall = $(nTds[1]).text();
+				var sTitle = "Priority score for "+sSymbol+": "+sOverall;
+		
+				this.setAttribute( 'title', sTitle);
+			} );
+			*/
+			
+			table.$('td').tooltip({
+			//$('[id^=example] tbody tr td').tooltip({
+				"delay": 0,
+				"track": true,
+				"fade": 100
+			});
+			
+
+		});
+	</script>
+% end
+
+<%
+my $gene='TP53';
+%>
+
+<!-- results -->
+<div id="results-container" class="container collapse in">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<legend>Table</legend>
+		</div>
+	</div>
+	
+	<table id="example" class="compact nowrap" cellpadding="5px" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th rowspan="2"></th>
+				<th rowspan="2">Priority Scores</th>
+				<th colspan="3" class="my_style">Genetic Predictors</th>
+				<th colspan="5" class="my_style">Annotation Predictors</th>
+				<th rowspan="2">Gene Full Names</th>
+				<th rowspan="2">Gene Synonyms</th>
+			</tr>
+			<tr>
+				<th><div>GWAS</div></th>
+				<th><div>eQTL</div></th>
+				<th><div>Variant</div></th>
+				<th><div>Disease</div></th>
+				<th><div>OMIM</div></th>
+				<th><div>Phenotype</div></th>
+				<th><div>Function</div></th>
+				<th><div>Pathway</div></th>
+			</tr>
+		</thead>
+	</table>
+
+</div>
+
+
+

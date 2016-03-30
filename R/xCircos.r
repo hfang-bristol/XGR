@@ -4,7 +4,7 @@
 #'
 #' @param g an object of class "igraph". It stores semantic similarity results with nodes for genes/SNPs and edges for pair-wise semantic similarity between them 
 #' @param entity the entity of similarity analysis for which results are being plotted. It can be either "SNP" or "Gene"
-#' @param top_num the top number of simiarity edges to be plotted
+#' @param top_num the top number of similarity edges to be plotted
 #' @param ideogram logical to indicate whether chromosome banding is plotted
 #' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). Default is NULL
 #' @param entity.label.cex the font size of genes/SNPs labels. Default is 0.8
@@ -78,9 +78,9 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 		message(sprintf("Loading positional information for %s (%s) ...", entity, as.character(now)), appendLF=T)
 	}
   	if(entity=="SNP") {
-    	pos <- xRDataLoader(RData.customised="RegulomeDB_SNPs", RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised="RegulomeDB_SNPs", verbose=verbose, RData.location=RData.location)
   	}else if(entity == "Gene") {
-    	pos <- xRDataLoader(RData.customised="UCSC_genes", RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised="UCSC_genes", verbose=verbose, RData.location=RData.location)
   	}else{
     	stop("Please indicate whether your analysis entity was SNPs or genes.\n")
   	}
@@ -169,7 +169,11 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
   	side <- "out"
   	track.num <- 1
   	label.data <- label.data[!duplicated(label.data$Name), ]
-  	RCircos.Gene.Name.Plot(label.data, name.col, track.num, side)
+  	if(verbose){
+  		RCircos.Gene.Name.Plot(label.data, name.col, track.num, side)
+  	}else{
+  		suppressMessages(RCircos.Gene.Name.Plot(label.data, name.col, track.num, side))
+  	}
   	
   	invisible()
 }

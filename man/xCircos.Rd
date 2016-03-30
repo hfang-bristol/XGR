@@ -17,7 +17,7 @@ similarity between them}
 \item{entity}{the entity of similarity analysis for which results are
 being plotted. It can be either "SNP" or "Gene"}
 
-\item{top_num}{the top number of simiarity edges to be plotted}
+\item{top_num}{the top number of similarity edges to be plotted}
 
 \item{ideogram}{logical to indicate whether chromosome banding is
 plotted}

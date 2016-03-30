@@ -1,0 +1,377 @@
+---
+title: "XGR: eXploring Genomic Relations at gene and SNP level through enrichment analysis, similarity analysis and network analysis"
+author: | 
+ | `Hai Fang`, `Bogdan Knezevic`, `Katie L Burnham`, `Julian C Knight`
+ |
+ | Wellcome Trust Centre for Human Genetics, University of Oxford, UK
+date: "`r Sys.Date()`"
+package: "`r packageVersion('XGR')`"
+output:
+    html_document:
+        toc: true
+        toc_depth: 3
+        number_sections: true
+        theme: journal
+        highlight: tango
+        toc_float: true
+bibliography: XGR.bib
+vignette: >
+ %\VignetteIndexEntry{XGR User Manual}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+ %\VignettePackage{XGR}
+ %\VignetteKeywords{Bioinformatics}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, comment=">")
+library(XGR)
+RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi = 100)
+knitr::opts_chunk$set(cache=FALSE)
+```
+
+# Abstract
+
+We introduce an R package called *XGR* [^1]. This package is designed to reveal the underlying knowledge for a list of user-input genes or SNPs, via comprehensively utilising ontologies and networks. XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly tutorials), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identify gene subnetwork given your query list of (significant) genes or SNPs.
+
+[^1]: <http://galahad.well.ox.ac.uk/XGR>
+
+# Installation
+
+We assume [R](http://www.r-project.org), a language and environment for statistical computing and graphics, has been installed. For installation of the XGR package itself (now hosted in [GitHub](https://github.com/hfang-bristol/XGR)), there are two steps:
+
+* First, install the dependent packages:
+```{r eval=F}
+source("http://bioconductor.org/biocLite.R")
+biocLite(c("devtools","dnet","RCircos","ggbio"))
+```
+
+* Second, install the `XGR` package:
+```{r eval=F}
+library(devtools)
+install_github(c("hfang-bristol/dnet","hfang-bristol/XGR"), dependencies=T)
+```
+
+# Functionality
+
+The functions in the package `XGR` are categorised into five groups according to tasks it completes. They are summarised below.
+
+## Enrichment functions
+
+Enrichment functions are supposed to do enrichment analysis based on several statistical tests (either Fisher's exact test or hypergeometric/binomial test). The test is to estimate significance of overlaps between, for example, an input group of genes and a group of genes annotated by an ontology term. By default, all annotatable are used but can be specified by the user. If ontology terms are organised as a tree-like structure, this ontology structure can be also taken into account. 
+
+### xEnricherGenes
+*[`xEnricherGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherGenes.html)*: conducts gene-based enrichment analysis given a list of genes and the ontology in query. It supports a dozen ontologies: structured ontologies including Gene Ontology [@Ashburner2000], Disease Ontology [@Schriml2012], and Phenotype Ontologies in human and mouse [@Kohler2013; @Smith2009], and non-structured ontologies/categories, for example, a collection of pathways, gene expression signatures, transcription factor targets, and gene druggable categories. 
+
+### xEnricherSNPs
+*[`xEnricherSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherSNPs.html)*: conducts SNP-based enrichment analysis using GWAS Catalog traits mapped to Experimental Factor Ontology [@Welter2014]. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for enrichment analysis.
+
+### xEnricherYours
+*[`xEnricherYours`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherYours.html)*: conducts custom-based enrichment analysis provided with an entity file and an annotation file. 
+
+### xEnrichViewer
+*[`xEnrichViewer`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnrichViewer.html)*: views enrichment results as a data frame that is also useful for the subsequent file saving.
+
+### xEnricher
+*[`xEnricher`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricher.html)*: acts as a template for enrichment analysis. It is an internal function upon which high-level functions (ie `xEnricherGenes`, `xEnricherSNPs` and `xEnricherYours`) rely.
+
+## Similarity functions
+
+Similarity functions are supposed to do similarity analysis calculating semantic similarity - a type of comparison to assess the degree of relatedness between two entities (eg genes) in meaning of annotation profiles (by ontology terms). To do so, information content (IC) of a term is first defined to
+measure how informative a term is to annotate genes: –log10(frequency of genes annotated to this term). Similarity between two terms are then measured based on IC, usually at most informative common ancester (MICA). Finally, similarity between two entities (eg genes) are derived from pairwise term similarity using best-matching based methods: average, maximum, and complete. 
+
+### xSocialiserGenes
+*[`xSocialiserGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiserGenes.html)*: conducts gene-based similarity analysis given a list of genes and the ontology in query. It supports several structured ontologies including Gene Ontology, Disease Ontology, and Phenotype Ontologies (in human and mouse), and returns socialised genes represented as a network with nodes for input genes and edges for pair-wise semantic similarity between them. 
+
+### xSocialiserSNPs
+*[`xSocialiserSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiserSNPs.html)*: 
+conducts SNP-based similarity analysis using GWAS Catalog traits mapped to Experimental Factor Ontology. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for similarity analysis. It returns socialised SNPs represented as a network with nodes for input SNPs and edges for pair-wise semantic similarity between them.
+
+### xSocialiser
+*[`xSocialiser`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiser.html)*: acts as a template for similarity analysis. It is an internal function upon which high-level functions (ie `xSocialiserGenes` and `xSocialiserSNPs`) rely.
+
+## Network functions
+
+Network functions are supposed to identity a gene subnetwork from an gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From gene interaction network with node/gene information, the search for a maximum-scoring gene subnetwork is done as follows. Given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable). After score transformation, the search for a maximum scoring subnetwork is deduced to find the connected gene subnetwork that is enriched with positive-score nodes, allowing for a few negative-score nodes as linkers. An iterative procedure is also provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes. For details, please see our previous publication [@Fang2014c].
+
+### xSubneterGenes
+*[`xSubneterGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but a few less significant (lowly scored) genes as linkers.
+
+### xSubneterSNPs
+*[`xSubneterSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few lowly scored genes as linkers.
+
+## Infrastructure functions
+
+Infrastructure functions are essential as they deal with infrastructure such as built-in data loading, ontology annotation propagation, calculation of term-term semantic similarity, and graph conversions and visualisations. 
+
+* *[`xRDataLoader`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
+* *[`xDAGanno`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
+* *[`xDAGsim`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xDAGsim.html)*: calculates semantic similarity between terms, and returns a network with nodes for terms and edges for pair-wise semantic similarity between them.
+* *[`xConverter`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xConverter.html)*: converts an object between graph classes. 
+* *[`xCircos`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
+* *[`xVisNet`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xVisNet.html)*: visualises the graph in different layouts. 
+
+## Auxiliary functions
+
+Auxiliary functions provide supplementary support during the package development such as function debugging and documentation creating. 
+
+* *[`xFunArgs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
+* *[`xRdWrap`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
+* *[`xRd2HTML`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRd2HTML.html)*: converts Rd files to HTML files. 
+
+# Applications
+
+Essential step of data analysis is how to make sense of a list of genes (or SNPs) in a biologically meaningful way. These genes and/or SNPs may be identified from GWAS and eQTL mapping. In this section, we showcase the applications using several datasets published previously. The users are encouraged to adapt the provided codes to analyse their own datasets. 
+
+## Analysing genes and SNPs identified from eQTL mapping
+
+The first dataset we use is based on an immune-stimulated eQTL mapping study in monocytes [@Fairfax2014]. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after exposure to IFN (`IFN`). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called `cis-eQTLs` and `trans-eQTLs`. Genes whose expression is modulated by eQTLs are called `eGenes`. 
+
+**Extract eGenes and cis-eQTLs in stimulus-specific state (not in the naive state)**
+
+```{r, eval=F}
+# Load cis-eQTL mapping results
+cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)
+# FDR in the naive state
+FDR_naive <- cis[,9]
+# Keep minimum FDR across three stimulus states
+FDR_stimulus <- apply(cis[,c(10:12)], 1, min, na.rm=T) 
+FDR_stimulus[is.infinite(FDR_stimulus)] <- NA
+# Create a data frame containing eGenes and cis-eQTLs
+cis_df <- data.frame(eQTL=cis[,1], eGene=cis[,4], FDR_naive=FDR_naive, FDR_stimulus=FDR_stimulus, stringsAsFactors=F)
+# Subset to extract eGenes and cis-eQTLs in stimulus-specific state (not in the naive state)
+flag <- which(FDR_naive>=0.05 & FDR_stimulus<0.05)
+cis_df <- cis_df[flag,]
+```
+
+The first 5 rows of the data frame `cis_df` are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(cis_df[1:5,], digits=5, caption="", row.names=F)
+```
+
+### Gene-based enrichment analysis
+
+> Using Disease Ontology (DO)
+
+```{r, eval=F}
+eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="DO", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'DO_enrichments.txt'
+res_DO <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
+output <- data.frame(term=rownames(res_DO), res_DO)
+write.table(output, file="DO_enrichments.txt", sep="\t", row.names=F)
+```
+Enrichment results for the top 5 significant terms are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_DO[1:5,], caption="", row.names=F)
+```
+
+> Using Mammalian Phenotype (MP)
+
+```{r, eval=F}
+eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="MP", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'MP_enrichments.txt'
+res_MP <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_MP), res_MP)
+write.table(output, file="MP_enrichments.txt", sep="\t", row.names=F)
+```
+Enrichment results for the top 10 significant terms are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_MP[1:10,], caption="", row.names=F)
+```
+
+> Using a collection of canonical pathways
+
+```{r, eval=F}
+eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="MsigdbC2CP", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'Pathway_enrichments.txt'
+res_PW <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_PW), res_PW)
+write.table(output, file="Pathway_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 10 significant pathways are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_PW[1:10,], caption="", row.names=F)
+```
+
+### SNP-based enrichment analysis
+
+> Only for input SNPs reported in GWAS Catalog traits mapped to Experimental Factor Ontology (EFO)
+
+```{r, eval=F}
+eTerm <- xEnricherSNPs(data=cis_df$eQTL, ontology="EF", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'EF_enrichments.txt'
+res_EF <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=T)
+output <- data.frame(term=rownames(res_EF), res_EF)
+write.table(output, file="EF_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 5 significant terms are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_EF[1:5,], caption="", row.names=F)
+```
+
+> For input SNPs plus their LD SNPs reported in GWAS Catalog traits mapped to EFO
+
+```{r, eval=F}
+eTerm <- xEnricherSNPs(data=cis_df$eQTL, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'EF_LD_enrichments.txt'
+res_EF_LD <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_EF_LD), res_EF_LD)
+write.table(output, file="EF_LD_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 10 significant terms are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_EF_LD[1:10,], caption="", row.names=F)
+```
+
+### SNP-based similarity analysis
+
+> Only for input SNPs
+
+```{r, eval=F}
+ig_SNP <- xSocialiserSNPs(data=cis_df[,c("eGene","FDR_stimulus")], ontology="EF", RData.location=RData.location)
+# save similarity results to the file 'EF_similarity.txt'
+output <- igraph::get.data.frame(ig_SNP, what="edges")
+write.table(output, file="EF_similarity.txt", sep="\t", row.names=F)
+```
+
+Circos plot of the most similar edges is shown below:
+
+```{r, fig.width=9, fig.height=9, eval=T, echo=T}
+library(RCircos)
+xCircos(g=ig_SNP, entity="SNP", verbose=F, RData.location=RData.location)
+```
+
+> For input SNPs plus their LD SNPs
+
+```{r, eval=F}
+ig_SNP_LD <- xSocialiserSNPs(data=cis_df$eQTL, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+# save similarity results to the file 'EF_LD_similarity.txt'
+output <- igraph::get.data.frame(ig_SNP_LD, what="edges")
+write.table(output, file="EF_LD_similarity.txt", sep="\t", row.names=F)
+```
+
+Circos plot of the most similar edges is shown below:
+
+```{r, fig.width=9, fig.height=9, eval=T, echo=T}
+library(RCircos)
+xCircos(g=ig_SNP_LD, entity="SNP", verbose=F, RData.location=RData.location)
+```
+
+### Gene-based network analysis
+
+> Identify a gene subnetwork from an input list of (significant) eGenes
+
+```{r, eval=F}
+# find maximum-scoring gene subnetwork with the desired node number=50
+data <- cis_df[,c("eGene","FDR_stimulus")]
+subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=50, RData.location=RData.location)
+```
+
+The identified gene subnetwork with nodes colored according to FDR is shown below:
+
+```{r, fig.width=8, fig.height=8, eval=T, echo=T}
+pattern <- -log10(as.numeric(V(subnet)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+vmax <- ceiling(stats::quantile(pattern, 0.75))
+vmin <- floor(min(pattern))
+xVisNet(g=subnet, pattern=pattern, glayout=layout_(subnet, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+```
+
+> Identify pathways enriched with genes in the identified subnetwork
+
+```{r, eval=F}
+data <- V(subnet)$name
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CP", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'Subnet_Pathway_enrichments.txt'
+res_subnet_PW <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_subnet_PW), res_subnet_PW)
+write.table(output, file="Subnet_Pathway_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 10 significant pathways are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_subnet_PW[1:10,], caption="", row.names=F)
+```
+
+### SNP-based network analysis
+
+> Identify a gene subnetwork from an input list of (significant) eQTLs
+
+```{r, eval=F}
+# find maximum-scoring gene subnetwork with the desired node number=50
+data <- cis_df[,c("eQTL","FDR_stimulus")]
+subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=50, RData.location=RData.location)
+```
+
+The identified gene subnetwork with nodes colored according to scores is shown below:
+
+```{r, fig.width=8, fig.height=8, eval=T, echo=T}
+pattern <- -log10(as.numeric(V(subnet_SNP)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+vmax <- ceiling(stats::quantile(pattern, 0.75))
+vmin <- floor(min(pattern))
+xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+```
+
+> Identify enriched pathways for the identified subnetwork
+
+```{r, eval=F}
+data <- V(subnet_SNP)$name
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall", RData.location=RData.location)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'Subnet_SNP_Pathway_enrichments.txt'
+res_subnet_SNP_PW <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_subnet_SNP_PW), res_subnet_SNP_PW)
+write.table(output, file="Subnet_SNP_Pathway_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 10 significant pathways are shown below:
+
+```{r, eval=T, echo=F}
+library(stringr)
+knitr::kable(res_subnet_SNP_PW[1:10,], caption="", row.names=F)
+```
+
+
+
+# Session Info
+
+Here is the output of `sessionInfo()` on the system on which this vignette was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```

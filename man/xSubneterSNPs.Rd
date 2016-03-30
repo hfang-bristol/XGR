@@ -116,7 +116,7 @@ significance of input SNPs. It returns an object of class "igraph".
 }
 \note{
 The algorithm identifying a gene subnetwork that is likely modulated by
-input SNPs and or their LD SNPs includes two major steps. The first
+input SNPs and/or their LD SNPs includes two major steps. The first
 step is to define and score nearby genes that are located within
 distance window of input and/or LD SNPs. The second step is to use
 \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene

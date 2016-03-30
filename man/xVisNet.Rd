@@ -4,9 +4,9 @@
 \alias{xVisNet}
 \title{Function to visualise a graph object of class "igraph"}
 \usage{
-xVisNet(g, pattern = NULL, colormap = c("bwr", "jet", "gbr", "wyr",
+xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
 "br",
-"yr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
+"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
 newpage = T, glayout = layout_nicely, vertex.frame.color = NA,
 vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
 vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = NULL,

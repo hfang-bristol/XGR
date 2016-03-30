@@ -113,7 +113,7 @@ is calculuated, it returns NULL.
 }
 \description{
 \code{xSocialiserGenes} is supposed to calculate pair-wise semantic
-similarity between a list of input SNPs and the ontology in query. It
+similarity between a list of input genes and the ontology in query. It
 returns an object of class "igraph", a network representation of
 socialized genes. Now it supports enrichment analysis using a wide
 variety of ontologies such as Gene Ontology and Phenotype Ontologies.

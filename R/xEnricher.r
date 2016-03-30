@@ -629,7 +629,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 	####################################################################################
 	####################################################################################
 
-    overlaps <- sapply(names(gs), function(term){
+    overlaps <- lapply(names(gs), function(term){
         genes.term <- unique(unlist(gs[term]))
         x <- intersect(genes.group, genes.term)
         x
