@@ -4,7 +4,7 @@ author: |
  | `Hai Fang`, `Bogdan Knezevic`, `Katie L Burnham`, `Julian C Knight`
  |
  | Wellcome Trust Centre for Human Genetics, University of Oxford, UK
-date: "`r date()`"
+date: "`r Sys.Date()`"
 package: "`r packageVersion('XGR')`"
 output:
     html_document:
@@ -14,7 +14,6 @@ output:
         theme: journal
         highlight: tango
         toc_float: true
-        fig_caption: true
 bibliography: XGR.bib
 vignette: >
  %\VignetteIndexEntry{XGR User Manual}
@@ -24,17 +23,18 @@ vignette: >
  %\VignetteKeywords{Bioinformatics}
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(collapse=TRUE, comment=">")
-knitr::opts_chunk$set(dpi=100)
-knitr::opts_chunk$set(cache=F)
-knitr::opts_chunk$set(echo=T)
-knitr::opts_chunk$set(warning=F)
-knitr::opts_chunk$set(message=F)
-knitr::opts_chunk$set(fig_cap="yes")
+library(XGR)
+RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 ```
 
-# Summary
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi = 100)
+knitr::opts_chunk$set(cache=FALSE)
+```
+
+# Abstract
 
 We introduce an R package called *XGR* [^1]. This package is designed to reveal the underlying knowledge for a list of user-input genes or SNPs, via comprehensively utilising ontologies and networks. XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly tutorials), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identify gene subnetwork given your query list of (significant) genes or SNPs.
 
@@ -127,22 +127,13 @@ Auxiliary functions provide supplementary support during the package development
 
 Essential step of data analysis is how to make sense of a list of genes (or SNPs) in a biologically meaningful way. These genes and/or SNPs may be identified from GWAS and eQTL mapping. In this section, we showcase the applications using several datasets published previously. The users are encouraged to adapt the provided codes to analyse their own datasets. 
 
-**First of all, load the package `XGR`:**
-
-```{r, eval=T, include=T}
-library(XGR)
-# optionally, specify the local location of built-in RData
-RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-# by default, RData.location <- "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0"
-```
-
 ## Analysing genes and SNPs identified from eQTL mapping
 
 The first dataset we use is based on an immune-stimulated eQTL mapping study in monocytes [@Fairfax2014]. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after exposure to IFN (`IFN`). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called `cis-eQTLs` and `trans-eQTLs`. Genes whose expression is modulated by eQTLs are called `eGenes`. 
 
 **Extract eGenes and cis-eQTLs in stimulus-specific state (not in the naive state)**
 
-```{r, eval=T, cache=T}
+```{r, eval=F}
 # Load cis-eQTL mapping results
 cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)
 # FDR in the naive state
@@ -160,6 +151,7 @@ cis_df <- cis_df[flag,]
 The first 5 rows of the data frame `cis_df` are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(cis_df[1:5,], digits=5, caption="", row.names=F)
 ```
 
@@ -167,7 +159,7 @@ knitr::kable(cis_df[1:5,], digits=5, caption="", row.names=F)
 
 > Using Disease Ontology (DO)
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="DO", RData.location=RData.location)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -178,13 +170,14 @@ write.table(output, file="DO_enrichments.txt", sep="\t", row.names=F)
 ```
 Enrichment results for the top 5 significant terms are shown below:
 
-```{r, eval=T, echo=F, results='asis'}
+```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_DO[1:5,], caption="", row.names=F)
 ```
 
 > Using Mammalian Phenotype (MP)
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="MP", RData.location=RData.location)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -196,12 +189,13 @@ write.table(output, file="MP_enrichments.txt", sep="\t", row.names=F)
 Enrichment results for the top 10 significant terms are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_MP[1:10,], caption="", row.names=F)
 ```
 
 > Using a collection of canonical pathways
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 eTerm <- xEnricherGenes(data=cis_df$eGene, ontology="MsigdbC2CP", RData.location=RData.location)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -214,6 +208,7 @@ write.table(output, file="Pathway_enrichments.txt", sep="\t", row.names=F)
 Enrichment results for the top 10 significant pathways are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_PW[1:10,], caption="", row.names=F)
 ```
 
@@ -221,7 +216,7 @@ knitr::kable(res_PW[1:10,], caption="", row.names=F)
 
 > Only for input SNPs reported in GWAS Catalog traits mapped to Experimental Factor Ontology (EFO)
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 eTerm <- xEnricherSNPs(data=cis_df$eQTL, ontology="EF", RData.location=RData.location)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -234,12 +229,13 @@ write.table(output, file="EF_enrichments.txt", sep="\t", row.names=F)
 Enrichment results for the top 5 significant terms are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_EF[1:5,], caption="", row.names=F)
 ```
 
 > For input SNPs plus their LD SNPs reported in GWAS Catalog traits mapped to EFO
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 eTerm <- xEnricherSNPs(data=cis_df$eQTL, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -252,6 +248,7 @@ write.table(output, file="EF_LD_enrichments.txt", sep="\t", row.names=F)
 Enrichment results for the top 10 significant terms are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_EF_LD[1:10,], caption="", row.names=F)
 ```
 
@@ -259,9 +256,8 @@ knitr::kable(res_EF_LD[1:10,], caption="", row.names=F)
 
 > Only for input SNPs
 
-```{r, eval=T, cache=T}
-data <- cis_df$eQTL
-ig_SNP <- xSocialiserSNPs(data=data, ontology="EF", RData.location=RData.location)
+```{r, eval=F}
+ig_SNP <- xSocialiserSNPs(data=cis_df[,c("eGene","FDR_stimulus")], ontology="EF", RData.location=RData.location)
 # save similarity results to the file 'EF_similarity.txt'
 output <- igraph::get.data.frame(ig_SNP, what="edges")
 write.table(output, file="EF_similarity.txt", sep="\t", row.names=F)
@@ -269,15 +265,15 @@ write.table(output, file="EF_similarity.txt", sep="\t", row.names=F)
 
 Circos plot of the most similar edges is shown below:
 
-```{r, fig.width=9, fig.height=9, eval=T, cache=T, echo=T}
+```{r, fig.width=9, fig.height=9, eval=T, echo=T}
+library(RCircos)
 xCircos(g=ig_SNP, entity="SNP", verbose=F, RData.location=RData.location)
 ```
 
 > For input SNPs plus their LD SNPs
 
-```{r, eval=T, cache=T}
-data <- cis_df$eQTL
-ig_SNP_LD <- xSocialiserSNPs(data=data, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+```{r, eval=F}
+ig_SNP_LD <- xSocialiserSNPs(data=cis_df$eQTL, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 # save similarity results to the file 'EF_LD_similarity.txt'
 output <- igraph::get.data.frame(ig_SNP_LD, what="edges")
 write.table(output, file="EF_LD_similarity.txt", sep="\t", row.names=F)
@@ -285,7 +281,8 @@ write.table(output, file="EF_LD_similarity.txt", sep="\t", row.names=F)
 
 Circos plot of the most similar edges is shown below:
 
-```{r, fig.width=9, fig.height=9, eval=T, cache=T, echo=T}
+```{r, fig.width=9, fig.height=9, eval=T, echo=T}
+library(RCircos)
 xCircos(g=ig_SNP_LD, entity="SNP", verbose=F, RData.location=RData.location)
 ```
 
@@ -293,7 +290,7 @@ xCircos(g=ig_SNP_LD, entity="SNP", verbose=F, RData.location=RData.location)
 
 > Identify a gene subnetwork from an input list of (significant) eGenes
 
-```{r, eval=T, cache=T}
+```{r, eval=F}
 # find maximum-scoring gene subnetwork with the desired node number=50
 data <- cis_df[,c("eGene","FDR_stimulus")]
 subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=50, RData.location=RData.location)
@@ -301,7 +298,7 @@ subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=50, RData
 
 The identified gene subnetwork with nodes colored according to FDR is shown below:
 
-```{r, fig.width=8, fig.height=8, fig.cap="", eval=T, cache=T, echo=T}
+```{r, fig.width=8, fig.height=8, eval=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet)$significance))
 pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
 vmax <- ceiling(stats::quantile(pattern, 0.75))
@@ -311,7 +308,7 @@ xVisNet(g=subnet, pattern=pattern, glayout=layout_(subnet, with_kk()), vertex.sh
 
 > Identify pathways enriched with genes in the identified subnetwork
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 data <- V(subnet)$name
 eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CP", RData.location=RData.location)
 # view enrichment results for the top significant terms
@@ -324,7 +321,8 @@ write.table(output, file="Subnet_Pathway_enrichments.txt", sep="\t", row.names=F
 
 Enrichment results for the top 10 significant pathways are shown below:
 
-```{r, eval=T, cache=T, echo=F}
+```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_subnet_PW[1:10,], caption="", row.names=F)
 ```
 
@@ -332,7 +330,7 @@ knitr::kable(res_subnet_PW[1:10,], caption="", row.names=F)
 
 > Identify a gene subnetwork from an input list of (significant) eQTLs
 
-```{r, eval=T, cache=T}
+```{r, eval=F}
 # find maximum-scoring gene subnetwork with the desired node number=50
 data <- cis_df[,c("eQTL","FDR_stimulus")]
 subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=50, RData.location=RData.location)
@@ -340,7 +338,7 @@ subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=20000
 
 The identified gene subnetwork with nodes colored according to scores is shown below:
 
-```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
+```{r, fig.width=8, fig.height=8, eval=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet_SNP)$significance))
 pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
 vmax <- ceiling(stats::quantile(pattern, 0.75))
@@ -350,7 +348,7 @@ xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP, with_kk()), v
 
 > Identify enriched pathways for the identified subnetwork
 
-```{r, eval=T, cache=T, results="hide"}
+```{r, eval=F}
 data <- V(subnet_SNP)$name
 eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall", RData.location=RData.location)
 # view enrichment results for the top significant terms
@@ -364,12 +362,15 @@ write.table(output, file="Subnet_SNP_Pathway_enrichments.txt", sep="\t", row.nam
 Enrichment results for the top 10 significant pathways are shown below:
 
 ```{r, eval=T, echo=F}
+library(stringr)
 knitr::kable(res_subnet_SNP_PW[1:10,], caption="", row.names=F)
 ```
 
+
+
 # Session Info
 
-Here is the output of `sessionInfo()` on the system on which this vignette was built:
+Here is the output of `sessionInfo()` on the system on which this vignette was compiled:
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()

@@ -124,16 +124,15 @@
 				  </ul>
 				</li>
 				
+				<li <%== ($tab=~/package/i)? 'class="active"':'' %>>
+					<a href="/XGR_vignettes.html" class="my-tooltip" data-toggle="tooltip" data-placement="auto bottom" title="Jump to the R package tutorials"><span class="glyphicon glyphicon-registration-mark"></span> Package</a>
+				</li>
+				-->
+				
 				<!--
 				<li <%== ($tab=~/subneter/i)? 'class="active"':'' %>>
 					<a href="/subneter" class="my-tooltip" data-toggle="tooltip" data-placement="auto bottom" title="Gene-based network analysis"><span class="glyphicon glyphicon-scissors"></span> Subneter</a>
 				</li>
-				
-				
-				<li <%== ($tab=~/package/i)? 'class="active"':'' %>>
-					<a href="https://github.com/hfang-bristol/XGR/blob/master/README.md" class="my-tooltip" data-toggle="tooltip" data-placement="auto bottom" title="Find more at GitHub"><span class="glyphicon glyphicon-registration-mark"></span> Package</a>
-				</li>
-				-->
 				
 				<!--
 				<li <%== ($tab=~/demo/i)? 'class="active"':'' %>>
