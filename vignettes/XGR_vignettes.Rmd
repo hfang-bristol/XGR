@@ -1,5 +1,5 @@
 ---
-title: "XGR: eXploring Genomic Relations at gene and SNP level through enrichment analysis, similarity analysis and network analysis"
+title: "XGR: eXploring Genomic Relations at gene and SNP levels through enrichment analysis, similarity analysis and network analysis"
 author: | 
  | `Hai Fang`, `Bogdan Knezevic`, `Katie L Burnham`, `Julian C Knight`
  |
