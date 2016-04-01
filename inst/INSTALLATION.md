@@ -41,16 +41,16 @@ $HOME/R-3.2.4/bin/R # start R
 
 Notes: below are `R command lines (NOT shell command lines in Terminal)`.
 
-First, install the package `devtools` (to help install packages directly from github) and other suggested packages:
+First, install the package `devtools` (to help install packages directly from github) and other dependent packages:
 >
 ```{r}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("devtools","dnet","RCircos","ggbio"))
+biocLite(c("devtools","dnet","RCircos","ggbio"), siteRepos=c("http://cran.r-project.org"))
 ```
 
 Second, install the package `XGR` from [GitHub](https://github.com/hfang-bristol/XGR):
 >
 ```{r}
 library(devtools)
-install_github(c("hfang-bristol/dnet","hfang-bristol/XGR"), ref="master", dependencies=T)
+install_github(c("hfang-bristol/XGR"), dependencies=T)
 ```

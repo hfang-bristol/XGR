@@ -26,7 +26,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse=TRUE, comment=">")
-knitr::opts_chunk$set(dpi=80)
+knitr::opts_chunk$set(dpi=100)
 knitr::opts_chunk$set(cache=F)
 knitr::opts_chunk$set(echo=T)
 knitr::opts_chunk$set(warning=F)
@@ -65,19 +65,19 @@ The functions in the package `XGR` are categorised into five groups according to
 Enrichment functions are supposed to do enrichment analysis based on several statistical tests (either Fisher's exact test or hypergeometric/binomial test). The test is to estimate significance of overlaps between, for example, an input group of genes and a group of genes annotated by an ontology term. By default, all annotatable genes are used as the test background but can be specified by the user. If ontology terms are organised as a tree-like structure, this ontology structure can also be taken into account. 
 
 ### xEnricherGenes
-*[`xEnricherGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherGenes.html)*: conducts gene-based enrichment analysis given a list of genes and the ontology in query. It supports two types of ontologies: 1) structured ontologies including Gene Ontology [@Ashburner2000], Disease Ontology [@Schriml2012], and Phenotype Ontologies in human and mouse [@Kohler2013; @Smith2009], and 2) non-structured ontologies/categories; for example, a collection of pathways, gene expression signatures, transcription factor targets, and gene druggable categories. 
+*[`xEnricherGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherGenes.html)*: conducts gene-based enrichment analysis given a list of genes and the ontology in query. It supports two types of ontologies: 1) structured ontologies including Gene Ontology [@Ashburner2000], Disease Ontology [@Schriml2012], and Phenotype Ontologies in human and mouse [@Kohler2013; @Smith2009], and 2) non-structured ontologies/categories; for example, a collection of pathways, gene expression signatures, transcription factor targets, and gene druggable categories. 
 
 ### xEnricherSNPs
-*[`xEnricherSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherSNPs.html)*: conducts SNP-based enrichment analysis using GWAS Catalog traits mapped to Experimental Factor Ontology [@Welter2014]. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for enrichment analysis.
+*[`xEnricherSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherSNPs.html)*: conducts SNP-based enrichment analysis using GWAS Catalog traits mapped to Experimental Factor Ontology [@Welter2014]. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for enrichment analysis.
 
 ### xEnricherYours
-*[`xEnricherYours`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricherYours.html)*: conducts custom-based enrichment analysis provided with an entity file and an annotation file. 
+*[`xEnricherYours`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherYours.html)*: conducts custom-based enrichment analysis provided with an entity file and an annotation file. 
 
 ### xEnrichViewer
-*[`xEnrichViewer`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnrichViewer.html)*: views enrichment results as a data frame that is also useful for the subsequent file saving.
+*[`xEnrichViewer`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnrichViewer.html)*: views enrichment results as a data frame that is also useful for the subsequent file saving.
 
 ### xEnricher
-*[`xEnricher`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xEnricher.html)*: acts as a template for enrichment analysis. It is an internal function upon which high-level functions (ie `xEnricherGenes`, `xEnricherSNPs` and `xEnricherYours`) rely.
+*[`xEnricher`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricher.html)*: acts as a template for enrichment analysis. It is an internal function upon which high-level functions (ie `xEnricherGenes`, `xEnricherSNPs` and `xEnricherYours`) rely.
 
 ## Similarity functions
 
@@ -85,43 +85,43 @@ Similarity functions serve to conduct similarity analysis calculating semantic s
 measure how informative a term is to being used for annotating genes: –log10(frequency of genes annotated to this term). Similarity between two terms are then measured based on IC, usually at the most informative common ancester (MICA). Finally, similarity between two entities (eg genes) are derived from pairwise term similarity using best-matching based methods: average, maximum, and complete. 
 
 ### xSocialiserGenes
-*[`xSocialiserGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiserGenes.html)*: conducts gene-based similarity analysis given a list of genes and the ontology in query. It supports several structured ontologies including Gene Ontology, Disease Ontology, and Phenotype Ontologies (in human and mouse), and returns socialised genes represented as a network with nodes for input genes and edges for pair-wise semantic similarity between them. 
+*[`xSocialiserGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserGenes.html)*: conducts gene-based similarity analysis given a list of genes and the ontology in query. It supports several structured ontologies including Gene Ontology, Disease Ontology, and Phenotype Ontologies (in human and mouse), and returns socialised genes represented as a network with nodes for input genes and edges for pair-wise semantic similarity between them. 
 
 ### xSocialiserSNPs
-*[`xSocialiserSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiserSNPs.html)*: 
+*[`xSocialiserSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserSNPs.html)*: 
 conducts SNP-based similarity analysis using GWAS Catalog traits mapped to Experimental Factor Ontology. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for similarity analysis. It returns socialised SNPs represented as a network with nodes for input SNPs and edges for pair-wise semantic similarity between them.
 
 ### xSocialiser
-*[`xSocialiser`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSocialiser.html)*: acts as a template for similarity analysis. It is an internal function upon which high-level functions (ie `xSocialiserGenes` and `xSocialiserSNPs`) rely.
+*[`xSocialiser`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiser.html)*: acts as a template for similarity analysis. It is an internal function upon which high-level functions (ie `xSocialiserGenes` and `xSocialiserSNPs`) rely.
 
 ## Network functions
 
 Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication [@Fang2014c]), briefed as follows: 1) `score transformation`, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) `controlling the subnetwork size`, that is, an iterative procedure is also provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.
 
 ### xSubneterGenes
-*[`xSubneterGenes`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
+*[`xSubneterGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
 
 ### xSubneterSNPs
-*[`xSubneterSNPs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork.
+*[`xSubneterSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork.
 
 ## Infrastructure functions
 
 Infrastructure functions are essential as they deal with infrastructure including built-in data loading, ontology annotation propagation, calculation of term-term semantic similarity, and graph conversions and visualisations. 
 
-* *[`xRDataLoader`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
-* *[`xDAGanno`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
-* *[`xDAGsim`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xDAGsim.html)*: calculates semantic similarity between terms, and returns a network with nodes for terms and edges for pair-wise semantic similarity between them.
-* *[`xConverter`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xConverter.html)*: converts an object between graph classes. 
-* *[`xCircos`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
-* *[`xVisNet`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xVisNet.html)*: visualises the graph in different layouts. 
+* *[`xRDataLoader`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
+* *[`xDAGanno`](https://rawgit.com/hfang-bristol/XGR/master/inst/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
+* *[`xDAGsim`](https://rawgit.com/hfang-bristol/XGR/master/inst/xDAGsim.html)*: calculates semantic similarity between terms, and returns a network with nodes for terms and edges for pair-wise semantic similarity between them.
+* *[`xConverter`](https://rawgit.com/hfang-bristol/XGR/master/inst/xConverter.html)*: converts an object between graph classes. 
+* *[`xCircos`](https://rawgit.com/hfang-bristol/XGR/master/inst/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
+* *[`xVisNet`](https://rawgit.com/hfang-bristol/XGR/master/inst/xVisNet.html)*: visualises the graph in different layouts. 
 
 ## Auxiliary functions
 
 Auxiliary functions provide supplementary support during the package development, such as code debugging and documentation creating. 
 
-* *[`xFunArgs`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
-* *[`xRdWrap`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
-* *[`xRd2HTML`](https://rawgit.com/hfang-bristol/XGR/master/vignettes/xRd2HTML.html)*: converts Rd files to HTML files. 
+* *[`xFunArgs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
+* *[`xRdWrap`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
+* *[`xRd2HTML`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRd2HTML.html)*: converts Rd files to HTML files. 
 
 # Applications
 
