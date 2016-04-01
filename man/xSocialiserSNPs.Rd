@@ -159,7 +159,7 @@ data
 # b) perform similarity analysis
 sim <- xSocialiserSNPs(data=data)
 
-# b') optionally, enrichment analysis for input SNPs plus additional SNPs that are in LD with input SNPs
+# b') optionally, enrichment analysis for input SNPs plus their LD SNPs
 ## LD based on European population (EUR) with r2>=0.8
 #sim <- xSocialiserSNPs(data=data, include.LD="EUR", LD.r2=0.8)
 

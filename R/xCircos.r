@@ -90,7 +90,10 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 		now <- Sys.time()
 		message(sprintf("Loading human chromosome banding information (hg19) (%s) ...", as.character(now)), appendLF=T)
 	}
-	data(UCSC.HG19.Human.CytoBandIdeogram, package="RCircos")
+	
+	#data(UCSC.HG19.Human.CytoBandIdeogram, package="RCircos")
+	eval(parse(text="data(UCSC.HG19.Human.CytoBandIdeogram)"))
+	
   	cyto.info <- ""
   	eval(parse(text=paste("cyto.info <- UCSC.HG19.Human.CytoBandIdeogram", sep="")))
   	if(ideogram==F) {

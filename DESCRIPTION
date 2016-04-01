@@ -1,6 +1,6 @@
 Package: XGR
 Type: Package
-Title: Exploring Genomic Relations to Increase Interpretability of Genes and SNPs Through Enrichment, Similarity and Network Analysis
+Title: Exploring Genomic Relations at Gene and SNP Levels Through Enrichment, Similarity and Network Analysis
 Version: 1.0.0
 Date: 2016-3-30
 Author: Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight
@@ -8,8 +8,8 @@ Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet
 Imports: Matrix, GenomicRanges, RCircos, ggplot2, ggbio, MASS
 Suggests: foreach, doMC
-Description: Genome-wide association studies (GWAS) identify a wealth body of trait-associated genetic variants (largely SNPs), and expression quantitative trait mappings (eQTLs) help link genetic variants to target genes. We decipher target genes and genetic variants based on known systematic annotations by ontologies. This package supports a wide range of ontologies (covering knowledge on functions, pathways, diseases and phenotypes- in both human and mouse). With a list of genes (or SNPs) to be analysed, users are able to identify the underlying knowledge enriched within them, and to calculate the semantic similarity between their objects.
-URL: http://galahad.well.ox.ac.uk/XGR
+Description: The central goal of the XGR is to provide a data interpretation system revealing the hidden knowledge for a list of user-defined genes or SNPs. It is achieved by comprehensively utilising ontologies and networks. The XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). There are two core elements of the XGR. The first is basic infrastructures for access to built-in ontologies and networks. The second is extensible functions, now including 1) enrichment analysis using either built-in or custom ontologies, 2) similarity analysis for calculating semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identification of gene subnetworks given a query list of (significant) genes or SNPs.
+URL: http://galahad.well.ox.ac.uk/XGR, http://xgr.r-forge.r-project.org
 Collate: 
     'xRDataLoader.r'
     'xRdWrap.r'

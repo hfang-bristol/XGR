@@ -9,7 +9,7 @@
 > Instructions can be found at [INSTALLATION](./inst/INSTALLATION.md).
 
 ## @ Manual
-> Reference Manual can be found at [PDF](./vignettes/XGR_reference.pdf) and [HTML](./vignettes/HTML.md).
+> Reference Manual can be found at [PDF](./vignettes/XGR_reference.pdf) and [HTML](./inst/HTML.md).
 
 ## @ Citation
 > How to cite can be found at [CITATION](./inst/CITATIONS.md).

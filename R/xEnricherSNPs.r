@@ -64,7 +64,7 @@
 #' # b) perform enrichment analysis
 #' eTerm <- xEnricherSNPs(data=data, ontology="EF", path.mode=c("all_paths"))
 #'
-#' # b') optionally, enrichment analysis for input SNPs plus additional SNPs that are in LD with input SNPs
+#' # b') optionally, enrichment analysis for input SNPs plus their LD SNPs
 #' ## LD based on European population (EUR) with r2>=0.8
 #' #eTerm <- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8)
 #' 

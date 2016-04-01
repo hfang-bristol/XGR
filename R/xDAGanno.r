@@ -70,7 +70,8 @@
 #' annotation <- anno[sample(1:length(anno),5)]
 #' 
 #' # 2d) obtain the induced subgraph according to the input annotation data
-#' # based on shortest paths (i.e. the most concise subgraph induced) but without applying true-path rule
+#' # based on shortest paths (i.e. the most concise subgraph induced) 
+#' # but without applying true-path rule
 #' dag <- xDAGanno(g, annotation, path.mode="shortest_paths", true.path.rule=TRUE, verbose=TRUE)
 #'
 #' # 2e) color-code nodes/terms according to the number of annotations
