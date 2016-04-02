@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an object between graph classes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xConverter"><tr><td>xConverter</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to convert an object between graph classes</h2>
+
+<h3>Description</h3>
+
+<p><code>xConverter</code> is supposed to convert an object between classes
+'dgCMatrix' and 'igraph'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xConverter(obj, from = c("dgCMatrix", "igraph"), to = c("igraph",
+"dgCMatrix"), verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>an object of class &quot;dgCMatrix&quot; or &quot;igraph&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>from</code></td>
+<td>
+<p>a character specifying the class converted from. It can be
+one of &quot;dgCMatrix&quot; and &quot;igraph&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>to</code></td>
+<td>
+<p>a character specifying the class converted to. It can be one
+of &quot;dgCMatrix&quot; and &quot;igraph&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;dgCMatrix&quot; or &quot;igraph&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>Conversion is also supported between classes 'dgCMatrix' and 'igraph'
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Conversion between 'dgCMatrix' and 'igraph'
+# ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+g
+
+# convert the object from 'igraph' to 'dgCMatrix' class
+s &lt;- xConverter(g, from='igraph', to='dgCMatrix')
+s[1:10,1:10]
+
+# convert the object from 'dgCMatrix' to 'igraph' class
+ig &lt;- xConverter(s, from="dgCMatrix", to="igraph")
+ig
+
+## End(Not run)
+</pre>
+
+
+</body></html>

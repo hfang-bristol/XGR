@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a gene network from an input network...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSubneterSNPs"><tr><td>xSubneterSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to identify a gene network from an input network given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)</h2>
+
+<h3>Description</h3>
+
+<p><code>xSubneterSNPs</code> is supposed to identify maximum-scoring gene
+subnetwork from an input graph with the node information on the
+significance (measured as p-values or fdr). To do so, it defines seed
+genes and their weights that take into account the distance to and the
+significance of input SNPs. It returns an object of class &quot;igraph&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSubneterSNPs(data, include.LD = NA, LD.r2 = 0.8,
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD"), network.customised = NULL, distance.max = 2e+05,
+seed.genes = T, subnet.significance = 5e-05, subnet.size = NULL,
+verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a named input vector containing the sinificance level for
+nodes (dbSNP). For this named vector, the element names are dbSNP, the
+element values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for dbSNP, 2nd column for the significance level</p>
+</td></tr>
+<tr valign="top"><td><code>include.LD</code></td>
+<td>
+<p>additional SNPs in LD with Lead SNPs are also
+included. By default, it is 'NA' to disable this option. Otherwise, LD
+SNPs will be included based on one or more of 26 populations and 5
+super populations from 1000 Genomics Project data (phase 3). The
+population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
+&quot;EUR&quot;, &quot;SAS&quot;), or one of 26 populations (&quot;ACB&quot;, &quot;ASW&quot;, &quot;BEB&quot;, &quot;CDX&quot;,
+&quot;CEU&quot;, &quot;CHB&quot;, &quot;CHS&quot;, &quot;CLM&quot;, &quot;ESN&quot;, &quot;FIN&quot;, &quot;GBR&quot;, &quot;GIH&quot;, &quot;GWD&quot;, &quot;IBS&quot;,
+&quot;ITU&quot;, &quot;JPT&quot;, &quot;KHV&quot;, &quot;LWK&quot;, &quot;MSL&quot;, &quot;MXL&quot;, &quot;PEL&quot;, &quot;PJL&quot;, &quot;PUR&quot;, &quot;STU&quot;,
+&quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
+<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
+</td></tr>
+<tr valign="top"><td><code>LD.r2</code></td>
+<td>
+<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
+in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
+be any value from 0.8 to 1</p>
+</td></tr>
+<tr valign="top"><td><code>network</code></td>
+<td>
+<p>the built-in network. Currently two sources of network
+information are supported: the STRING database (version 10) and the
+Pathways Commons database (version 7). STRING is a meta-integration of
+undirect interactions from the functional aspect, while Pathways
+Commons mainly contains both undirect and direct interactions from the
+physical/pathway aspect. Both have scores to control the confidence of
+interactions. Therefore, the user can choose the different quality of
+the interactions. In STRING, &quot;STRING_highest&quot; indicates interactions
+with highest confidence (confidence scores&gt;=900), &quot;STRING_high&quot; for
+interactions with high confidence (confidence scores&gt;=700), and
+&quot;STRING_medium&quot; for interactions with medium confidence (confidence
+scores&gt;=400). For undirect/physical interactions from Pathways Commons,
+&quot;PCommonsUN_high&quot; indicates undirect interactions with high confidence
+(supported with the PubMed references plus at least 2 different
+sources), &quot;PCommonsUN_medium&quot; for undirect interactions with medium
+confidence (supported with the PubMed references). For direct
+(pathway-merged) interactions from Pathways Commons, &quot;PCommonsDN_high&quot;
+indicates direct interactions with high confidence (supported with the
+PubMed references plus at least 2 different sources), and
+&quot;PCommonsUN_medium&quot; for direct interactions with medium confidence
+(supported with the PubMed references). In addtion to pooled version of
+pathways from all data sources, the user can also choose the
+pathway-merged network from individual sources, that is,
+&quot;PCommonsDN_Reactome&quot; for those from Reactome, &quot;PCommonsDN_KEGG&quot; for
+those from KEGG, &quot;PCommonsDN_HumanCyc&quot; for those from HumanCyc,
+&quot;PCommonsDN_PID&quot; for those froom PID, &quot;PCommonsDN_PANTHER&quot; for those
+from PANTHER, &quot;PCommonsDN_ReconX&quot; for those from ReconX,
+&quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC, &quot;PCommonsDN_PhosphoSite&quot;
+for those from PhosphoSite, and &quot;PCommonsDN_CTD&quot; for those from CTD</p>
+</td></tr>
+<tr valign="top"><td><code>network.customised</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;. By default, it
+is NULL. It is designed to allow the user analysing their customised
+network data that are not listed in the above argument 'network'. This
+customisation (if provided) has the high priority over built-in
+network</p>
+</td></tr>
+<tr valign="top"><td><code>distance.max</code></td>
+<td>
+<p>the maximum distance between genes and SNPs. Only
+those genes no far way from this distance will be considered as seed
+genes. This parameter will influence the distance-component weights
+calculated for nearby SNPs per gene</p>
+</td></tr>
+<tr valign="top"><td><code>seed.genes</code></td>
+<td>
+<p>logical to indicate whether the identified network is
+restricted to seed genes (ie nearby genes that are located within
+defined distance window centred on lead or LD SNPs). By default, it
+sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>subnet.significance</code></td>
+<td>
+<p>the given significance threshold. By
+default, it is set to NULL, meaning there is no constraint on
+nodes/genes. If given, those nodes/genes with p-values below this are
+considered significant and thus scored positively. Instead, those
+p-values above this given significance threshold are considered
+insigificant and thus scored negatively</p>
+</td></tr>
+<tr valign="top"><td><code>subnet.size</code></td>
+<td>
+<p>the desired number of nodes constrained to the
+resulting subnet. It is not nulll, a wide range of significance
+thresholds will be scanned to find the optimal significance threshold
+leading to the desired number of nodes in the resulting subnet.
+Notably, the given significance threshold will be overwritten by this
+option</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>The algorithm identifying a gene subnetwork that is likely modulated by
+input SNPs and/or their LD SNPs includes two major steps. The first
+step is to define and score nearby genes that are located within
+distance window of input and/or LD SNPs. The second step is to use
+<code>xSubneterGenes</code> for identifying a maximum-scoring gene
+subnetwork that contains as many highly scored genes as possible but a
+few lowly scored genes as linkers.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSubneterGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+library(igraph)
+library(dnet)
+library(GenomicRanges)
+
+RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
+# a) provide the seed SNPs with the weight info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+seeds.snps &lt;- as.matrix(mcols(gr)[,c(1,3)])
+
+# b) perform network analysis
+# b1) find maximum-scoring subnet based on the given significance threshold
+subnet &lt;- xSubneterSNPs(data=seeds.snps, network="STRING_high",
+seed.genes=F, subnet.significance=0.01)
+# b2) find maximum-scoring subnet with the desired node number=50
+subnet &lt;- xSubneterSNPs(data=data, network="STRING_high",
+subnet.size=50)
+
+# c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
+output &lt;- igraph::get.data.frame(subnet, what="edges")
+utils::write.table(output, file="subnet_edges.txt", sep="\t",
+row.names=FALSE)
+output &lt;- igraph::get.data.frame(subnet, what="vertices")
+utils::write.table(output, file="subnet_nodes.txt", sep="\t",
+row.names=FALSE)
+
+# d) visualise the identified subnet
+## do visualisation with nodes colored according to the significance (you provide)
+xVisNet(g=subnet, pattern=-log10(as.numeric(V(subnet)$significance)),
+vertex.shape="sphere", colormap="wyr")
+## do visualisation with nodes colored according to transformed scores
+xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
+
+# e) visualise the identified subnet as a circos plot
+library(RCircos)
+library(GenomicRanges)
+xCircos(g=subnet, entity="Gene")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
