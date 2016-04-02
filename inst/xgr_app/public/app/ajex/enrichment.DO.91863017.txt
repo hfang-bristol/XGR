@@ -1,1 +1,0 @@
-{"data":[{"term":"DOID:1123","name":"spondyloarthropathy","_row":"DOID:1123"},{"term":"DOID:381","name":"arthropathy","_row":"DOID:381"},{"term":"DOID:7147","name":"ankylosing spondylitis","_row":"DOID:7147"},{"term":"DOID:6590","name":"spondylitis","_row":"DOID:6590"}]
