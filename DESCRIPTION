@@ -2,13 +2,13 @@ Package: XGR
 Type: Package
 Title: Exploring Genomic Relations at Gene and SNP Levels Through Enrichment, Similarity and Network Analysis
 Version: 1.0.0
-Date: 2016-3-30
+Date: 2016-4-2
 Author: Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet
 Imports: Matrix, GenomicRanges, RCircos, ggplot2, ggbio, MASS
 Suggests: foreach, doMC
-Description: The central goal of the XGR is to provide a data interpretation system revealing the hidden knowledge for a list of user-defined genes or SNPs. It is achieved by comprehensively utilising ontologies and networks. The XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). There are two core elements of the XGR. The first is basic infrastructures for access to built-in ontologies and networks. The second is extensible functions, now including 1) enrichment analysis using either built-in or custom ontologies, 2) similarity analysis for calculating semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identification of gene subnetworks given a query list of (significant) genes or SNPs.
+Description: The central goal of the XGR is to provide a data interpretation system revealing the hidden knowledge for a list of user-defined genes or SNPs. It is achieved by comprehensively utilising ontologies and networks. The XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). There are two core functionalities of the XGR. The first is basic infrastructures for easy access to built-in ontologies and networks. The second is extensible functions, now including 1) enrichment analysis using either built-in or custom ontologies, 2) similarity analysis for calculating semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identification of gene subnetworks given a query list of (significant) genes or SNPs. Together with its web app, the XGR aims to provide a user-friendly tool.
 URL: http://galahad.well.ox.ac.uk/XGR, http://xgr.r-forge.r-project.org
 Collate: 
     'xRDataLoader.r'
