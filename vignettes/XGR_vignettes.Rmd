@@ -36,13 +36,13 @@ knitr::opts_chunk$set(fig_cap="yes")
 
 # Summary
 
-We introduce an R package called *XGR* [^1]. This package is designed to reveal the underlying knowledge for a list of user-input genes or SNPs, by comprehensively utilising ontologies and networks. XGR is unique in supporting a wide range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly applications in real cases), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or SNPs) based on their ontology annotation profiles, and 3) identify gene subnetwork given your query list of (significant) genes or SNPs.
+We introduce an R package called *XGR* [^1]. This package is designed to make a user-defined gene list (or SNP list) more interpretable and discoverable: able to reveal the underlying knowledge by comprehensively utilising ontology annotations and network information. XGR is unique in supporting a broad range of ontologies (covering knowledge on functions, pathways, diseases, and phenotypes- in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the section `Applications` for the demo with real cases), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app available [here](http://galahad.well.ox.ac.uk/XGR).
 
 [^1]: <http://galahad.well.ox.ac.uk/XGR>
 
 # Installation
 
-We assume [R](http://www.r-project.org), a language and environment for statistical computing and graphics, has been installed. For installation of the XGR package itself (now hosted in [GitHub](https://github.com/hfang-bristol/XGR)), there are two steps:
+We assume [R](http://www.r-project.org), a language and environment for statistical computing and graphics, has been installed. For installation of the XGR package itself (now hosted in *GitHub* [^2]), there are two steps:
 
 * First, install the dependent packages:
 ```{r eval=F}
@@ -56,6 +56,8 @@ library(devtools)
 install_github(c("hfang-bristol/XGR"), dependencies=T)
 ```
 
+[^2]: <https://github.com/hfang-bristol/XGR>
+
 # Functionality
 
 The functions in the package `XGR` are categorised into five groups according to the tasks they complete. They are summarised below.
@@ -65,19 +67,19 @@ The functions in the package `XGR` are categorised into five groups according to
 Enrichment functions are supposed to do enrichment analysis based on several statistical tests (either Fisher's exact test or hypergeometric/binomial test). The test is to estimate significance of overlaps between, for example, an input group of genes and a group of genes annotated by an ontology term. By default, all annotatable genes are used as the test background but can be specified by the user. If ontology terms are organised as a tree-like structure, this ontology structure can also be taken into account. 
 
 ### xEnricherGenes
-*[`xEnricherGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherGenes.html)*: conducts gene-based enrichment analysis given a list of genes and the ontology in query. It supports two types of ontologies: 1) structured ontologies including Gene Ontology [@Ashburner2000], Disease Ontology [@Schriml2012], and Phenotype Ontologies in human and mouse [@Kohler2013; @Smith2009], and 2) non-structured ontologies/categories; for example, a collection of pathways, gene expression signatures, transcription factor targets, and gene druggable categories. 
+*[`xEnricherGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherGenes.html)*: conducts gene-based enrichment analysis given a list of genes and the ontology in query. It supports two types of ontologies: 1) structured ontologies including Gene Ontology [@Ashburner2000], Disease Ontology [@Schriml2012], and Phenotype Ontologies in human and mouse [@Kohler2013; @Smith2009], and 2) non-structured ontologies/categories; for example, a collection of pathways, gene expression signatures, transcription factor targets, and gene druggable categories. 
 
 ### xEnricherSNPs
-*[`xEnricherSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherSNPs.html)*: conducts SNP-based enrichment analysis using GWAS Catalog traits mapped to Experimental Factor Ontology [@Welter2014]. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for enrichment analysis.
+*[`xEnricherSNPs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherSNPs.html)*: conducts SNP-based enrichment analysis using GWAS Catalog traits mapped to Experimental Factor Ontology [@Welter2014]. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for enrichment analysis.
 
 ### xEnricherYours
-*[`xEnricherYours`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherYours.html)*: conducts custom-based enrichment analysis provided with an entity file and an annotation file. 
+*[`xEnricherYours`](http://rawgit.com/hfang-bristol/XGR/master/inst/xEnricherYours.html)*: conducts custom-based enrichment analysis provided with an entity file and an annotation file. 
 
 ### xEnrichViewer
-*[`xEnrichViewer`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnrichViewer.html)*: views enrichment results as a data frame that is also useful for the subsequent file saving.
+*[`xEnrichViewer`](http://rawgit.com/hfang-bristol/XGR/master/inst/xEnrichViewer.html)*: views enrichment results as a data frame that is also useful for the subsequent file saving.
 
 ### xEnricher
-*[`xEnricher`](https://rawgit.com/hfang-bristol/XGR/master/inst/xEnricher.html)*: acts as a template for enrichment analysis. It is an internal function upon which high-level functions (ie `xEnricherGenes`, `xEnricherSNPs` and `xEnricherYours`) rely.
+*[`xEnricher`](http://rawgit.com/hfang-bristol/XGR/master/inst/xEnricher.html)*: acts as a template for enrichment analysis. It is an internal function upon which high-level functions (ie `xEnricherGenes`, `xEnricherSNPs` and `xEnricherYours`) rely.
 
 ## Similarity functions
 
@@ -85,43 +87,43 @@ Similarity functions serve to conduct similarity analysis calculating semantic s
 measure how informative a term is to being used for annotating genes: –log10(frequency of genes annotated to this term). Similarity between two terms are then measured based on IC, usually at the most informative common ancester (MICA). Finally, similarity between two entities (eg genes) are derived from pairwise term similarity using best-matching based methods: average, maximum, and complete. 
 
 ### xSocialiserGenes
-*[`xSocialiserGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserGenes.html)*: conducts gene-based similarity analysis given a list of genes and the ontology in query. It supports several structured ontologies including Gene Ontology, Disease Ontology, and Phenotype Ontologies (in human and mouse), and returns socialised genes represented as a network with nodes for input genes and edges for pair-wise semantic similarity between them. 
+*[`xSocialiserGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserGenes.html)*: conducts gene-based similarity analysis given a list of genes and the ontology in query. It supports several structured ontologies including Gene Ontology, Disease Ontology, and Phenotype Ontologies (in human and mouse), and returns socialised genes represented as a network with nodes for input genes and edges for pair-wise semantic similarity between them. 
 
 ### xSocialiserSNPs
-*[`xSocialiserSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserSNPs.html)*: 
+*[`xSocialiserSNPs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiserSNPs.html)*: 
 conducts SNP-based similarity analysis using GWAS Catalog traits mapped to Experimental Factor Ontology. Inclusion of additional SNPs that are in linkage disequilibrium (LD) with input SNPs are also allowed for similarity analysis. It returns socialised SNPs represented as a network with nodes for input SNPs and edges for pair-wise semantic similarity between them.
 
 ### xSocialiser
-*[`xSocialiser`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiser.html)*: acts as a template for similarity analysis. It is an internal function upon which high-level functions (ie `xSocialiserGenes` and `xSocialiserSNPs`) rely.
+*[`xSocialiser`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSocialiser.html)*: acts as a template for similarity analysis. It is an internal function upon which high-level functions (ie `xSocialiserGenes` and `xSocialiserSNPs`) rely.
 
 ## Network functions
 
 Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication [@Fang2014c]), briefed as follows: 1) `score transformation`, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) `controlling the subnetwork size`, that is, an iterative procedure is also provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.
 
 ### xSubneterGenes
-*[`xSubneterGenes`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
+*[`xSubneterGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
 
 ### xSubneterSNPs
-*[`xSubneterSNPs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork.
+*[`xSubneterSNPs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork.
 
 ## Infrastructure functions
 
 Infrastructure functions are essential as they deal with infrastructure including built-in data loading, ontology annotation propagation, calculation of term-term semantic similarity, and graph conversions and visualisations. 
 
-* *[`xRDataLoader`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
-* *[`xDAGanno`](https://rawgit.com/hfang-bristol/XGR/master/inst/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
-* *[`xDAGsim`](https://rawgit.com/hfang-bristol/XGR/master/inst/xDAGsim.html)*: calculates semantic similarity between terms, and returns a network with nodes for terms and edges for pair-wise semantic similarity between them.
-* *[`xConverter`](https://rawgit.com/hfang-bristol/XGR/master/inst/xConverter.html)*: converts an object between graph classes. 
-* *[`xCircos`](https://rawgit.com/hfang-bristol/XGR/master/inst/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
-* *[`xVisNet`](https://rawgit.com/hfang-bristol/XGR/master/inst/xVisNet.html)*: visualises the graph in different layouts. 
+* *[`xRDataLoader`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
+* *[`xDAGanno`](http://rawgit.com/hfang-bristol/XGR/master/inst/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
+* *[`xDAGsim`](http://rawgit.com/hfang-bristol/XGR/master/inst/xDAGsim.html)*: calculates semantic similarity between terms, and returns a network with nodes for terms and edges for pair-wise semantic similarity between them.
+* *[`xConverter`](http://rawgit.com/hfang-bristol/XGR/master/inst/xConverter.html)*: converts an object between graph classes. 
+* *[`xCircos`](http://rawgit.com/hfang-bristol/XGR/master/inst/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
+* *[`xVisNet`](http://rawgit.com/hfang-bristol/XGR/master/inst/xVisNet.html)*: visualises the graph in different layouts. 
 
 ## Auxiliary functions
 
 Auxiliary functions provide supplementary support during the package development, such as code debugging and documentation creating. 
 
-* *[`xFunArgs`](https://rawgit.com/hfang-bristol/XGR/master/inst/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
-* *[`xRdWrap`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
-* *[`xRd2HTML`](https://rawgit.com/hfang-bristol/XGR/master/inst/xRd2HTML.html)*: converts Rd files to HTML files. 
+* *[`xFunArgs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
+* *[`xRdWrap`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
+* *[`xRd2HTML`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRd2HTML.html)*: converts Rd files to HTML files. 
 
 # Applications
 
@@ -131,6 +133,7 @@ An essential step of data analysis is how to make sense of a list of genes (or S
 
 ```{r, eval=T, include=T}
 library(XGR)
+library(GenomicRanges)
 library(RCircos)
 # optionally, specify the local location of built-in RData
 RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
@@ -367,6 +370,73 @@ Enrichment results for the top 10 significant pathways are shown below:
 ```{r, eval=T, echo=F}
 knitr::kable(res_subnet_SNP_PW[1:10,], caption="", row.names=F)
 ```
+
+## Analysing SNPs identified from GWAS
+
+The second dataset we use is GWAS lead SNPs associated with immunologically related human diseases, obtained from [`ImmunoBase`](http://www.immunobase.org). 
+
+```{r, eval=T, cache=T, results="hide"}
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+# get info about diseases
+disease_list <- lapply(ImmunoBase, function(x) x$disease)
+# get the number of disease associated variants/SNPs
+variants_list <- lapply(ImmunoBase, function(x) length(names(x$variants)))
+# get the number of genes that are located within 500kb distance window of SNPs
+genes_list <- lapply(ImmunoBase, function(x) length(x$genes_variants))
+# create a data frame
+df <- data.frame(code=names(ImmunoBase), disease=unlist(disease_list), num_SNPs=unlist(variants_list), num_nearby_genes=unlist(genes_list), stringsAsFactors=F)
+```
+
+A summary of diseases and their GWAS lead SNPs plus nearby genes:
+
+```{r, eval=T, echo=F}
+knitr::kable(df, caption="", row.names=F)
+```
+
+In the following subsections, we focus on two inflammatory diseases, Ankylosing Spondylitis (AS) and Systemic Lupus Erythematosus (SLE), to compare putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the rest diseases can be done similarly.
+
+### SNP-modulated gene network in Ankylosing Spondylitis (AS)
+
+```{r, eval=T, cache=T}
+# get SNPs reported in AS GWAS and their significance info (p-values)
+gr <- ImmunoBase$AS$variant
+data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
+
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_AS <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30, RData.location=RData.location)
+```
+
+The identified gene network with nodes colored according to -log10(p-values) is shown below:
+
+```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
+pattern <- -log10(as.numeric(V(subnet_AS)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+vmax <- ceiling(stats::quantile(pattern, 0.75))
+vmin <- floor(min(pattern))
+xVisNet(g=subnet_AS, pattern=pattern, glayout=layout_(subnet_AS, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+```
+
+### SNP-modulated gene network in Systemic Lupus Erythematosus (SLE)
+
+```{r, eval=T, cache=T}
+# get SNPs reported in SLE GWAS and their significance info (p-values)
+gr <- ImmunoBase$SLE$variant
+data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
+
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_SLE <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30, RData.location=RData.location)
+```
+
+The identified gene network with nodes colored according to -log10(p-values) is shown below:
+
+```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
+pattern <- -log10(as.numeric(V(subnet_SLE)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+vmax <- ceiling(stats::quantile(pattern, 0.75))
+vmin <- floor(min(pattern))
+xVisNet(g=subnet_SLE, pattern=pattern, glayout=layout_(subnet_SLE, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+```
+
 
 # Session Info
 
