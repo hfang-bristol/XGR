@@ -260,6 +260,11 @@ xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_high
     pval <- 10^(-1*seeds.genes)
     ################################
     
+	if(verbose){
+		now <- Sys.time()
+		message(sprintf("\t\t minimum p-value: %1.2e; maximum p-value: %1.2e", min(pval), max(pval)), appendLF=T)
+	}
+    
     #############################################################################################
     
     if(verbose){
