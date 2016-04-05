@@ -228,7 +228,7 @@ div.tocify {
 <h1 class="title">XGR: eXploring Genomic Relations at the gene and SNP level through enrichment, similarity and network analysis</h1>
 <h4 class="author"><em><p><a href="http://www.well.ox.ac.uk/dr-hai-fang"><code>Hai Fang</code></a>, <a href="http://www.well.ox.ac.uk/bogdan-knezevic"><code>Bogdan Knezevic</code></a>, <a href="http://www.well.ox.ac.uk/katie-burnham"><code>Katie L Burnham</code></a>, <a href="http://www.well.ox.ac.uk/julian-knight"><code>Julian C Knight</code></a></p>
 <p>Wellcome Trust Centre for Human Genetics, University of Oxford, UK</p></em></h4>
-<h4 class="date"><em>Tue Apr 5 13:21:41 2016</em></h4>
+<h4 class="date"><em>Tue Apr 5 15:31:08 2016</em></h4>
 
 </div>
 
@@ -336,18 +336,18 @@ div.tocify {
 <span class="kw">library</span>(GenomicRanges)
 <span class="kw">library</span>(RCircos)
 <span class="co"># optionally, specify the local location of built-in RData</span>
-RData.location &lt;-<span class="st"> &quot;/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0&quot;</span>
-<span class="co"># by default, RData.location &lt;- &quot;https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0&quot;</span></code></pre></div>
+<span class="co"># by default</span>
+RData.location &lt;-<span class="st"> &quot;https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0&quot;</span></code></pre></div>
 <div id="analysing-differential-genes" class="section level2">
 <h2><span class="header-section-number">4.1</span> Analysing differential genes</h2>
-<p>The first dataset we use is based on expression data in monocytes <span class="citation">(Fairfax et al. 2014)</span>. This dataset <em><a href="http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS1A.html"><code>JKscience_TS1A</code></a></em> involves 228 individuals with expression data at four conditions: in the naive state (<code>Naive</code>), after 2-hour LPS (<code>LPS2</code>), after 24-hour LPS (<code>LPS24</code>), and after 24-hour exposure to IFN (<code>IFN</code>). Differential expression analysis was performed using the limma package to identify genes that are differentially expressed between two conditions.</p>
+<p>The first dataset we use is based on expression data in monocytes <span class="citation">(Fairfax et al. 2014)</span>. This dataset <em><a href="http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS1A.html"><code>JKscience_TS1A</code></a></em> involves 228 individuals with expression data at four conditions: in the naive state (<code>Naive</code>), after 2-hour LPS (<code>LPS2</code>), after 24-hour LPS (<code>LPS24</code>), and after 24-hour exposure to interferon gamma (<code>IFN</code>). Differential expression analysis was performed using the limma package to identify genes that are differentially expressed between two conditions.</p>
 <p><strong>Extract genes that are significantly induced by IFN compared to the naive state</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load differential expression analysis results</span>
 res &lt;-<span class="st"> </span><span class="kw">xRDataLoader</span>(<span class="dt">RData.customised=</span><span class="st">'JKscience_TS1A'</span>, <span class="dt">RData.location=</span>RData.location)
 <span class="co"># Create a data frame for genes significantly induced by IFN</span>
 flag &lt;-<span class="st"> </span>res$logFC_INF24_Naive &lt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>res$fdr_INF24_Naive &lt;<span class="st"> </span><span class="fl">0.01</span>
 df &lt;-<span class="st"> </span>res[flag, <span class="kw">c</span>(<span class="st">'Symbol'</span>,<span class="st">'logFC_INF24_Naive'</span>,<span class="st">'fdr_INF24_Naive'</span>)]</code></pre></div>
-<p>The first 5 rows of the data frame <code>df</code> are shown below, and the column <code>logFC_INF24_Naive</code> tells the log2-transformed fold change of <code>naive</code> expression divided by <code>IFN</code> expression (thus the induced genes with negative values).</p>
+<p>The first 5 rows of the data frame <code>df</code> are shown below, with the column <code>logFC_INF24_Naive</code> telling the log2-transformed fold change of <code>naive</code> expression divided by <code>IFN</code> expression (thus the induced genes with negative values).</p>
 <table>
 <thead>
 <tr class="header">
@@ -826,7 +826,106 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 </div>
 <div id="gene-based-network-analysis" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Gene-based network analysis</h3>
-<p>In this section, we demonstrate how to identify a gene network from an input list of genes with the significant info, in this case, the gene network induced by <code>INF</code>.</p>
+<p>Network analysis at the gene level requires choosing a pre-defined gene networks as a whole network (called <code>whole-network</code>). Generally speaking, two sources of whole-network information are supported: the STRING database <span class="citation">(Szklarczyk et al. 2015)</span> and the Pathways Commons database <span class="citation">(Cerami et al. 2011)</span>. STRING is a meta-integration of undirect interactions from the functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from the physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the different quality of the interactions:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Category</th>
+<th align="left">Name</th>
+<th align="left">Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">STRING</td>
+<td align="left">Functional interactions (with highest confidence scores&gt;=900)</td>
+<td align="left">STRING_highest</td>
+</tr>
+<tr class="even">
+<td align="left">STRING</td>
+<td align="left">Functional interactions (with high confidence scores&gt;=700)</td>
+<td align="left">STRING_high</td>
+</tr>
+<tr class="odd">
+<td align="left">STRING</td>
+<td align="left">Functional interactions (with medium confidence scores&gt;=400)</td>
+<td align="left">STRING_medium</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Physical/undirect interactions (with references and &gt;=2 sources)</td>
+<td align="left">PCommonsUN_high</td>
+</tr>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Physical/undirect interactions (with references and &gt;=1 sources)</td>
+<td align="left">PCommonsUN_medium</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (with references and &gt;=2 sources)</td>
+<td align="left">PCommonsDN_high</td>
+</tr>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (with references and &gt;=1 sources)</td>
+<td align="left">PCommonsUN_medium</td>
+</tr>
+</tbody>
+</table>
+<p>For the pathway-merged direct interactions, the user can also choose network from the individual sources:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Category</th>
+<th align="left">Name</th>
+<th align="left">Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from Reactome)</td>
+<td align="left">PCommonsDN_Reactome</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from KEGG)</td>
+<td align="left">PCommonsDN_KEGG</td>
+</tr>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from HumanCyc)</td>
+<td align="left">PCommonsDN_HumanCyc</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from PID)</td>
+<td align="left">PCommonsDN_PID</td>
+</tr>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from PANTHER)</td>
+<td align="left">PCommonsDN_PANTHER</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from ReconX)</td>
+<td align="left">PCommonsDN_ReconX</td>
+</tr>
+<tr class="odd">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from PhosphoSite)</td>
+<td align="left">PCommonsDN_PhosphoSite</td>
+</tr>
+<tr class="even">
+<td align="left">Pathways Commons</td>
+<td align="left">Pathway/direct interactions (only sourced from CTD)</td>
+<td align="left">PCommonsDN_CTD</td>
+</tr>
+</tbody>
+</table>
+<p>In this subsection, from a pre-defined whole-network we demonstrate how to identify a gene network from an input list of genes with the significant info, in this case, the gene network induced by interferon gamma <code>INF</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># find maximum-scoring gene subnetwork with the desired node number=75</span>
 data &lt;-<span class="st"> </span>df[,<span class="kw">c</span>(<span class="st">&quot;Symbol&quot;</span>,<span class="st">&quot;fdr_INF24_Naive&quot;</span>)]
 subnet &lt;-<span class="st"> </span><span class="kw">xSubneterGenes</span>(<span class="dt">data=</span>data, <span class="dt">network=</span><span class="st">&quot;STRING_high&quot;</span>, <span class="dt">subnet.size=</span><span class="dv">75</span>, <span class="dt">RData.location=</span>RData.location)</code></pre></div>
@@ -841,8 +940,8 @@ vmin &lt;-<span class="st"> </span><span class="kw">floor</span>(<span class="kw
 </div>
 <div id="analysing-eqtl-snps" class="section level2">
 <h2><span class="header-section-number">4.2</span> Analysing eQTL SNPs</h2>
-<p>The second dataset we use is based on an immune-stimulated eQTL mapping study in monocytes <span class="citation">(Fairfax et al. 2014)</span>. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (<code>Naive</code>), after 2-hour LPS (<code>LPS2</code>), after 24-hour LPS (<code>LPS24</code>), and after exposure to IFN (<code>IFN</code>). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called <code>cis-eQTLs</code> and <code>trans-eQTLs</code>. Genes whose expression is modulated by eQTLs are called <code>eGenes</code>. The significant cis-eQTLs are stored in <em><a href="http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS2A.html"><code>JKscience_TS2A</code></a></em>.</p>
-<p><strong>Extract cis-eQTLs induced after 24-hour exposure to IFN</strong></p>
+<p>The second dataset we use is based on an immune-stimulated eQTL mapping study in monocytes <span class="citation">(Fairfax et al. 2014)</span>. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (<code>Naive</code>), after 2-hour LPS (<code>LPS2</code>), after 24-hour LPS (<code>LPS24</code>), and after exposure to interferon gamma (<code>IFN</code>). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called <code>cis-eQTLs</code> and <code>trans-eQTLs</code>. Genes whose expression is modulated by eQTLs are called <code>eGenes</code>. The significant cis-eQTLs are stored in <em><a href="http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS2A.html"><code>JKscience_TS2A</code></a></em>.</p>
+<p><strong>Extract cis-eQTLs induced after 24-hour exposure to interferon gamma</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load cis-eQTL mapping results</span>
 cis &lt;-<span class="st"> </span><span class="kw">xRDataLoader</span>(<span class="dt">RData.customised=</span><span class="st">'JKscience_TS2A'</span>, <span class="dt">RData.location=</span>RData.location)
 <span class="co"># Create a data frame for cis-eQTLs significantly induced by IFN</span>
@@ -1133,7 +1232,7 @@ output &lt;-<span class="st"> </span>igraph::<span class="kw">get.data.frame</sp
 </div>
 <div id="snp-based-network-analysis" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> SNP-based network analysis</h3>
-<p>In this section, we demonstrate how to identify a gene network from an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-included cis-eQTLs.</p>
+<p>In this section, from a pre-defined whole-network (see above) we demonstrate how to identify a gene network from an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-induced cis-eQTLs.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># find maximum-scoring gene subnetwork with the desired node number=60</span>
 data &lt;-<span class="st"> </span>df_cis[,<span class="kw">c</span>(<span class="st">&quot;variant&quot;</span>,<span class="st">&quot;IFN_fdr&quot;</span>)]
 subnet_SNP &lt;-<span class="st"> </span><span class="kw">xSubneterSNPs</span>(<span class="dt">data=</span>data, <span class="dt">network=</span><span class="st">&quot;STRING_high&quot;</span>, <span class="dt">distance.max=</span><span class="dv">200000</span>, <span class="dt">seed.genes=</span>T, <span class="dt">subnet.significance=</span><span class="fl">1e-1</span>, <span class="dt">subnet.size=</span><span class="dv">60</span>, <span class="dt">RData.location=</span>RData.location)</code></pre></div>
@@ -1600,6 +1699,9 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 <div id="ref-Ashburner2000">
 <p>Ashburner, M, C A Ball, J A Blake, D Botstein, H Butler, J M Cherry, A P Davis, et al. 2000. “Gene ontology: tool for the unification of biology. The Gene Ontology Consortium.” <em>Nat Genet</em> 25 (1): 25–29. doi:<a href="https://doi.org/10.1038/75556">10.1038/75556</a>.</p>
 </div>
+<div id="ref-Cerami2011">
+<p>Cerami, E. G., B. E. Gross, E. Demir, I. Rodchenkov, O. Babur, N. Anwar, N. Schultz, G. D. Bader, and C. Sander. 2011. “Pathway Commons, a web resource for biological pathway data.” <em>Nucleic Acids Research</em> 39 (Database): D685–D690. doi:<a href="https://doi.org/10.1093/nar/gkq1039">10.1093/nar/gkq1039</a>.</p>
+</div>
 <div id="ref-Fairfax2014">
 <p>Fairfax, Benjamin P, Peter Humburg, Seiko Makino, Vivek Naranbhai, Daniel Wong, Evelyn Lau, Luke Jostins, et al. 2014. “Innate immune activity conditions the effect of regulatory variants upon monocyte gene expression.” <em>Science (New York, N.Y.)</em> 343 (March): 1246949. doi:<a href="https://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
 </div>
@@ -1614,6 +1716,9 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 </div>
 <div id="ref-Smith2009">
 <p>Smith, C L, and J T Eppig. 2009. “The Mammalian Phenotype Ontology: enabling robust annotation and comparative analysis.” <em>Wiley Interdiscip Rev Syst Biol Med</em> 1 (3): 390–99. doi:<a href="https://doi.org/10.1002/wsbm.44">10.1002/wsbm.44</a>.</p>
+</div>
+<div id="ref-Szklarczyk2015">
+<p>Szklarczyk, Damian, Andrea Franceschini, Stefan Wyder, Kristoffer Forslund, Davide Heller, Jaime Huerta-cepas, Milan Simonovic, et al. 2015. “STRING v10 : protein – protein interaction networks , integrated over the tree of life.” <em>Nucleic Acids Res</em> 43 (Database): D447–D452. doi:<a href="https://doi.org/10.1093/nar/gku1003">10.1093/nar/gku1003</a>.</p>
 </div>
 <div id="ref-Welter2014">
 <p>Welter, Danielle, Jacqueline MacArthur, Joannella Morales, Tony Burdett, Peggy Hall, Heather Junkins, Alan Klemm, et al. 2014. “The NHGRI GWAS Catalog, a curated resource of SNP-trait associations.” <em>Nucleic Acids Research</em> 42 (D1): 1001–6. doi:<a href="https://doi.org/10.1093/nar/gkt1229">10.1093/nar/gkt1229</a>.</p>

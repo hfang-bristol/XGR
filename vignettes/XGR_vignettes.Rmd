@@ -136,13 +136,13 @@ library(XGR)
 library(GenomicRanges)
 library(RCircos)
 # optionally, specify the local location of built-in RData
-RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-# by default, RData.location <- "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0"
+# by default
+RData.location <- "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0"
 ```
 
 ## Analysing differential genes
 
-The first dataset we use is based on expression data in monocytes [@Fairfax2014]. This dataset *[`JKscience_TS1A`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS1A.html)* involves 228 individuals with expression data at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after 24-hour exposure to IFN (`IFN`). Differential expression analysis was performed using the limma package to identify genes that are differentially expressed between two conditions.
+The first dataset we use is based on expression data in monocytes [@Fairfax2014]. This dataset *[`JKscience_TS1A`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS1A.html)* involves 228 individuals with expression data at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after 24-hour exposure to interferon gamma (`IFN`). Differential expression analysis was performed using the limma package to identify genes that are differentially expressed between two conditions.
 
 **Extract genes that are significantly induced by IFN compared to the naive state**
 
@@ -154,7 +154,7 @@ flag <- res$logFC_INF24_Naive < 0 & res$fdr_INF24_Naive < 0.01
 df <- res[flag, c('Symbol','logFC_INF24_Naive','fdr_INF24_Naive')]
 ```
 
-The first 5 rows of the data frame `df` are shown below, and the column `logFC_INF24_Naive` tells the log2-transformed fold change of `naive` expression divided by `IFN` expression (thus the induced genes with negative values).
+The first 5 rows of the data frame `df` are shown below, with the column `logFC_INF24_Naive` telling the log2-transformed fold change of `naive` expression divided by `IFN` expression (thus the induced genes with negative values).
 
 ```{r, eval=T, echo=F}
 knitr::kable(df[1:5,], caption="", row.names=F)
@@ -263,7 +263,40 @@ knitr::kable(res_MP[1:10,], caption="", row.names=F)
 
 ### Gene-based network analysis
 
-In this section, we demonstrate how to identify a gene network from an input list of genes with the significant info, in this case, the gene network induced by `INF`.
+Network analysis at the gene level requires choosing a pre-defined gene networks as a whole network (called `whole-network`). Generally speaking, two sources of whole-network information are supported: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from the functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from the physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the different quality of the interactions: 
+
+```{r, eval=T, echo=F}
+net <- list()
+net[['STRING_highest']] <- c('STRING', 'Functional interactions (with highest confidence scores>=900)', 'STRING_highest')
+net[['STRING_high']] <- c('STRING', 'Functional interactions (with high confidence scores>=700)', 'STRING_high')
+net[['STRING_medium']] <- c('STRING', 'Functional interactions (with medium confidence scores>=400)', 'STRING_medium')
+net[['PCommonsUN_high']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=2 sources)', 'PCommonsUN_high')
+net[['PCommonsUN_medium']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=1 sources)', 'PCommonsUN_medium')
+net[['PCommonsDN_high']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=2 sources)', 'PCommonsDN_high')
+net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=1 sources)', 'PCommonsUN_medium')
+df_net <- do.call(rbind, net)
+colnames(df_net) <- c('Category', 'Name', 'Code')
+knitr::kable(df_net, caption="", row.names=F)
+```
+
+For the pathway-merged direct interactions, the user can also choose network from the individual sources:
+
+```{r, eval=T, echo=F}
+net <- list()
+net[['PCommonsDN_Reactome']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from Reactome)', 'PCommonsDN_Reactome')
+net[['PCommonsDN_KEGG']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from KEGG)', 'PCommonsDN_KEGG')
+net[['PCommonsDN_HumanCyc']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from HumanCyc)', 'PCommonsDN_HumanCyc')
+net[['PCommonsDN_PID']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PID)', 'PCommonsDN_PID')
+net[['PCommonsDN_PANTHER']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PANTHER)', 'PCommonsDN_PANTHER')
+net[['PCommonsDN_ReconX']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from ReconX)', 'PCommonsDN_ReconX')
+net[['PCommonsDN_PhosphoSite']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PhosphoSite)', 'PCommonsDN_PhosphoSite')
+net[['PCommonsDN_CTD']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from CTD)', 'PCommonsDN_CTD')
+df_net <- do.call(rbind, net)
+colnames(df_net) <- c('Database', 'Interaction', 'Code')
+knitr::kable(df_net, caption="", row.names=F)
+```
+
+In this subsection, from a pre-defined whole-network we demonstrate how to identify a gene network from an input list of genes with the significant info, in this case, the gene network induced by interferon gamma `INF`.
 
 ```{r, eval=T, cache=T}
 # find maximum-scoring gene subnetwork with the desired node number=75
@@ -283,9 +316,9 @@ xVisNet(g=subnet, pattern=pattern, glayout=layout_(subnet, with_kk()), vertex.sh
 
 ## Analysing eQTL SNPs
 
-The second dataset we use is based on an immune-stimulated eQTL mapping study in monocytes [@Fairfax2014]. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after exposure to IFN (`IFN`). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called `cis-eQTLs` and `trans-eQTLs`. Genes whose expression is modulated by eQTLs are called `eGenes`. The significant cis-eQTLs are stored in *[`JKscience_TS2A`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS2A.html)*.
+The second dataset we use is based on an immune-stimulated eQTL mapping study in monocytes [@Fairfax2014]. In this study, eQTLs were defined as SNPs showing significant association with gene expression at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after exposure to interferon gamma (`IFN`). The eQTL association with gene expression is either in a cis- or trans-acting manner; accordingly they are called `cis-eQTLs` and `trans-eQTLs`. Genes whose expression is modulated by eQTLs are called `eGenes`. The significant cis-eQTLs are stored in *[`JKscience_TS2A`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS2A.html)*.
 
-**Extract cis-eQTLs induced after 24-hour exposure to IFN**
+**Extract cis-eQTLs induced after 24-hour exposure to interferon gamma**
 
 ```{r, eval=T, cache=T}
 # Load cis-eQTL mapping results
@@ -377,7 +410,7 @@ xCircos(g=ig_SNP_LD, entity="SNP", verbose=F, RData.location=RData.location)
 
 ### SNP-based network analysis
 
-In this section, we demonstrate how to identify a gene network from an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-included cis-eQTLs.
+In this section, from a pre-defined whole-network (see above) we demonstrate how to identify a gene network from an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-induced cis-eQTLs.
 
 ```{r, eval=T, cache=T}
 # find maximum-scoring gene subnetwork with the desired node number=60
