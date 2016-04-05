@@ -36,7 +36,7 @@ knitr::opts_chunk$set(fig_cap="yes")
 
 # Summary
 
-We introduce an R package called *XGR* [^1]. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the `Applications` section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app available [here](http://galahad.well.ox.ac.uk/XGR).
+We introduce an R package called *XGR*. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the `Applications` section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app [^1].
 
 [^1]: <http://galahad.well.ox.ac.uk/XGR>
 
@@ -98,7 +98,7 @@ conducts SNP-based similarity analysis using GWAS Catalog traits mapped to Exper
 
 ## Network functions
 
-Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication [@Fang2014c]), briefed as follows: 1) `score transformation`, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) `controlling the subnetwork size`, that is, an iterative procedure is also provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.
+Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication [@Fang2014c]), briefed as follows: 1) `score transformation`, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) `controlling the subnetwork size`, that is, an iterative procedure is provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.
 
 ### xSubneterGenes
 *[`xSubneterGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
@@ -273,13 +273,13 @@ net[['STRING_medium']] <- c('STRING', 'Functional interactions (with medium conf
 net[['PCommonsUN_high']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=2 sources)', 'PCommonsUN_high')
 net[['PCommonsUN_medium']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=1 sources)', 'PCommonsUN_medium')
 net[['PCommonsDN_high']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=2 sources)', 'PCommonsDN_high')
-net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=1 sources)', 'PCommonsUN_medium')
+net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=1 sources)', 'PCommonsDN_medium')
 df_net <- do.call(rbind, net)
-colnames(df_net) <- c('Category', 'Name', 'Code')
+colnames(df_net) <- c('Database', 'Interaction', 'Code')
 knitr::kable(df_net, caption="", row.names=F)
 ```
 
-For the pathway-merged direct interactions, the user can also choose network from the individual sources:
+For the pathway-merged direct interactions, the user can also choose network sourced individually:
 
 ```{r, eval=T, echo=F}
 net <- list()
@@ -450,7 +450,7 @@ A summary of diseases, GWAS lead SNPs and their nearby genes:
 knitr::kable(df_ib, caption="", row.names=F)
 ```
 
-In the following subsections, we focus on two inflammatory diseases, Crohn's Disease (CRO) and Celiac Disease (CEL), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.
+In the following subsections, we focus on two diseases, Crohn's Disease (CRO) and Celiac Disease (CEL), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.
 
 ### SNP-modulated gene network in Crohn's Disease
 

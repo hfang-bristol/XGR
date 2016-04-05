@@ -228,14 +228,14 @@ div.tocify {
 <h1 class="title">XGR: eXploring Genomic Relations at the gene and SNP level through enrichment, similarity and network analysis</h1>
 <h4 class="author"><em><p><a href="http://www.well.ox.ac.uk/dr-hai-fang"><code>Hai Fang</code></a>, <a href="http://www.well.ox.ac.uk/bogdan-knezevic"><code>Bogdan Knezevic</code></a>, <a href="http://www.well.ox.ac.uk/katie-burnham"><code>Katie L Burnham</code></a>, <a href="http://www.well.ox.ac.uk/julian-knight"><code>Julian C Knight</code></a></p>
 <p>Wellcome Trust Centre for Human Genetics, University of Oxford, UK</p></em></h4>
-<h4 class="date"><em>Tue Apr 5 15:31:08 2016</em></h4>
+<h4 class="date"><em>Tue Apr 5 17:37:39 2016</em></h4>
 
 </div>
 
 
 <div id="summary" class="section level1">
 <h1><span class="header-section-number">1</span> Summary</h1>
-<p>We introduce an R package called <em>XGR</em>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the <code>Applications</code> section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app available <a href="http://galahad.well.ox.ac.uk/XGR">here</a>.</p>
+<p>We introduce an R package called <em>XGR</em>. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the <code>Applications</code> section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 </div>
 <div id="installation" class="section level1">
 <h1><span class="header-section-number">2</span> Installation</h1>
@@ -296,7 +296,7 @@ div.tocify {
 </div>
 <div id="network-functions" class="section level2">
 <h2><span class="header-section-number">3.3</span> Network functions</h2>
-<p>Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication <span class="citation">(Fang and Gough 2014)</span>), briefed as follows: 1) <code>score transformation</code>, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) <code>subnetwork identification</code>, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) <code>controlling the subnetwork size</code>, that is, an iterative procedure is also provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.</p>
+<p>Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication <span class="citation">(Fang and Gough 2014)</span>), briefed as follows: 1) <code>score transformation</code>, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) <code>subnetwork identification</code>, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) <code>controlling the subnetwork size</code>, that is, an iterative procedure is provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.</p>
 <div id="xsubnetergenes" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> xSubneterGenes</h3>
 <p><em><a href="http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html"><code>xSubneterGenes</code></a></em>: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.</p>
@@ -830,8 +830,8 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 <table>
 <thead>
 <tr class="header">
-<th align="left">Category</th>
-<th align="left">Name</th>
+<th align="left">Database</th>
+<th align="left">Interaction</th>
 <th align="left">Code</th>
 </tr>
 </thead>
@@ -869,16 +869,16 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 <tr class="odd">
 <td align="left">Pathways Commons</td>
 <td align="left">Pathway/direct interactions (with references and &gt;=1 sources)</td>
-<td align="left">PCommonsUN_medium</td>
+<td align="left">PCommonsDN_medium</td>
 </tr>
 </tbody>
 </table>
-<p>For the pathway-merged direct interactions, the user can also choose network from the individual sources:</p>
+<p>For the pathway-merged direct interactions, the user can also choose network sourced individually:</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Category</th>
-<th align="left">Name</th>
+<th align="left">Database</th>
+<th align="left">Interaction</th>
 <th align="left">Code</th>
 </tr>
 </thead>
@@ -1390,7 +1390,7 @@ df_ib &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cla
 </tr>
 </tbody>
 </table>
-<p>In the following subsections, we focus on two inflammatory diseases, Crohn’s Disease (CRO) and Celiac Disease (CEL), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.</p>
+<p>In the following subsections, we focus on two diseases, Crohn’s Disease (CRO) and Celiac Disease (CEL), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.</p>
 <div id="snp-modulated-gene-network-in-crohns-disease" class="section level3">
 <h3><span class="header-section-number">4.3.1</span> SNP-modulated gene network in Crohn’s Disease</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get SNPs reported in CRO GWAS and their significance info (p-values)</span>
@@ -1652,49 +1652,46 @@ output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 &gt; [8] methods   base     
 &gt; 
 &gt; other attached packages:
-&gt;  [1] BiocInstaller_1.18.5 stringr_1.0.0        rmarkdown_0.9.5     
-&gt;  [4] RCircos_1.1.3        GenomicRanges_1.20.8 GenomeInfoDb_1.4.3  
-&gt;  [7] IRanges_2.2.9        S4Vectors_0.6.6      BiocGenerics_0.14.0 
-&gt; [10] XGR_1.0.0            dnet_1.0.8           supraHex_1.7.3      
-&gt; [13] hexbin_1.27.1        igraph_1.0.1        
+&gt;  [1] RCircos_1.1.3        GenomicRanges_1.20.8 GenomeInfoDb_1.4.3  
+&gt;  [4] IRanges_2.2.9        S4Vectors_0.6.6      BiocGenerics_0.14.0 
+&gt;  [7] XGR_1.0.0            dnet_1.0.8           supraHex_1.7.3      
+&gt; [10] hexbin_1.27.1        igraph_1.0.1        
 &gt; 
 &gt; loaded via a namespace (and not attached):
-&gt;  [1] Biobase_2.28.0            foreach_1.4.3            
-&gt;  [3] splines_3.2.4             Formula_1.2-1            
-&gt;  [5] highr_0.5.1               latticeExtra_0.6-28      
-&gt;  [7] RBGL_1.44.0               BSgenome_1.36.3          
-&gt;  [9] Rsamtools_1.20.4          yaml_2.1.13              
-&gt; [11] RSQLite_1.0.0             lattice_0.20-33          
-&gt; [13] biovizBase_1.16.0         digest_0.6.9             
-&gt; [15] RColorBrewer_1.1-2        XVector_0.8.0            
-&gt; [17] colorspace_1.2-6          ggbio_1.16.1             
-&gt; [19] htmltools_0.3             Matrix_1.2-4             
-&gt; [21] plyr_1.8.3                OrganismDbi_1.10.0       
-&gt; [23] XML_3.98-1.3              biomaRt_2.24.0           
-&gt; [25] zlibbioc_1.14.0           scales_0.4.0             
-&gt; [27] BiocParallel_1.2.18       ggplot2_2.1.0            
-&gt; [29] GenomicFeatures_1.20.1    nnet_7.3-12              
-&gt; [31] survival_2.38-3           magrittr_1.5             
-&gt; [33] evaluate_0.8.3            GGally_1.0.1             
-&gt; [35] nlme_3.1-125              MASS_7.3-45              
-&gt; [37] foreign_0.8-66            graph_1.46.0             
-&gt; [39] tools_3.2.4               doMC_1.3.4               
-&gt; [41] formatR_1.3               munsell_0.4.3            
-&gt; [43] cluster_2.0.3             AnnotationDbi_1.30.1     
-&gt; [45] lambda.r_1.1.7            Biostrings_2.36.1        
-&gt; [47] compiler_3.2.4            futile.logger_1.4.1      
-&gt; [49] grid_3.2.4                RCurl_1.95-4.7           
-&gt; [51] iterators_1.0.8           dichromat_2.0-0          
-&gt; [53] VariantAnnotation_1.14.13 bitops_1.0-6             
-&gt; [55] gtable_0.2.0              codetools_0.2-14         
-&gt; [57] DBI_0.3.1                 reshape_0.8.5            
-&gt; [59] reshape2_1.4.1            GenomicAlignments_1.4.1  
-&gt; [61] gridExtra_2.2.1           knitr_1.12.3             
-&gt; [63] rtracklayer_1.28.6        Hmisc_3.17-2             
-&gt; [65] futile.options_1.0.0      Rgraphviz_2.12.0         
-&gt; [67] ape_3.4                   stringi_1.0-1            
-&gt; [69] Rcpp_0.12.4               rpart_4.1-10             
-&gt; [71] acepack_1.3-3.3</code></pre>
+&gt;  [1] Rcpp_0.12.4               ape_3.4                  
+&gt;  [3] biovizBase_1.16.0         lattice_0.20-33          
+&gt;  [5] Rsamtools_1.20.4          Biostrings_2.36.1        
+&gt;  [7] digest_0.6.9              plyr_1.8.3               
+&gt;  [9] futile.options_1.0.0      acepack_1.3-3.3          
+&gt; [11] RSQLite_1.0.0             evaluate_0.8.3           
+&gt; [13] highr_0.5.1               ggplot2_2.1.0            
+&gt; [15] GenomicFeatures_1.20.1    zlibbioc_1.14.0          
+&gt; [17] Rgraphviz_2.12.0          rpart_4.1-10             
+&gt; [19] Matrix_1.2-4              rmarkdown_0.9.5          
+&gt; [21] ggbio_1.16.1              splines_3.2.4            
+&gt; [23] BiocParallel_1.2.18       stringr_1.0.0            
+&gt; [25] foreign_0.8-66            biomaRt_2.24.0           
+&gt; [27] RCurl_1.95-4.7            munsell_0.4.3            
+&gt; [29] rtracklayer_1.28.6        htmltools_0.3            
+&gt; [31] nnet_7.3-12               gridExtra_2.2.1          
+&gt; [33] Hmisc_3.17-2              XML_3.98-1.3             
+&gt; [35] reshape_0.8.5             GenomicAlignments_1.4.1  
+&gt; [37] MASS_7.3-45               bitops_1.0-6             
+&gt; [39] RBGL_1.44.0               grid_3.2.4               
+&gt; [41] nlme_3.1-125              GGally_1.0.1             
+&gt; [43] gtable_0.2.0              DBI_0.3.1                
+&gt; [45] magrittr_1.5              formatR_1.3              
+&gt; [47] scales_0.4.0              graph_1.46.0             
+&gt; [49] stringi_1.0-1             XVector_0.8.0            
+&gt; [51] reshape2_1.4.1            latticeExtra_0.6-28      
+&gt; [53] futile.logger_1.4.1       Formula_1.2-1            
+&gt; [55] lambda.r_1.1.7            RColorBrewer_1.1-2       
+&gt; [57] tools_3.2.4               dichromat_2.0-0          
+&gt; [59] OrganismDbi_1.10.0        BSgenome_1.36.3          
+&gt; [61] Biobase_2.28.0            survival_2.38-3          
+&gt; [63] yaml_2.1.13               AnnotationDbi_1.30.1     
+&gt; [65] colorspace_1.2-6          cluster_2.0.3            
+&gt; [67] VariantAnnotation_1.14.13 knitr_1.12.3</code></pre>
 <div id="refs" class="references">
 <div id="ref-Ashburner2000">
 <p>Ashburner, M, C A Ball, J A Blake, D Botstein, H Butler, J M Cherry, A P Davis, et al. 2000. “Gene ontology: tool for the unification of biology. The Gene Ontology Consortium.” <em>Nat Genet</em> 25 (1): 25–29. doi:<a href="https://doi.org/10.1038/75556">10.1038/75556</a>.</p>
