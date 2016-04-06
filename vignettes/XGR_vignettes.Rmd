@@ -11,7 +11,7 @@ output:
         toc: true
         toc_depth: 3
         number_sections: true
-        theme: journal
+        theme: default
         highlight: tango
         toc_float: true
         fig_caption: true
@@ -47,7 +47,7 @@ We assume [R](http://www.r-project.org), a language and environment for statisti
 * First, install the dependent packages:
 ```{r eval=F}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("devtools","dnet","RCircos","ggbio"), siteRepos=c("http://cran.r-project.org"))
+biocLite(c("devtools","dnet","RCircos","GenomicRanges","ggplot2","ggbio"), siteRepos=c("http://cran.r-project.org"))
 ```
 
 * Second, install the `XGR` package:
@@ -119,7 +119,7 @@ Infrastructure functions are essential as they deal with infrastructure includin
 
 ## Auxiliary functions
 
-Auxiliary functions provide supplementary support during the package development, such as code debugging and documentation creating. 
+Auxiliary functions provide supplementary supports during the package development, such as code debugging and documentation creating. 
 
 * *[`xFunArgs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xFunArgs.html)*: assigns arguments with default values for a given function, useful for code debugging. 
 * *[`xRdWrap`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRdWrap.html)*: wraps long texts onto the next line for Rd files.
@@ -127,37 +127,35 @@ Auxiliary functions provide supplementary support during the package development
 
 # Applications
 
-An essential step of data analysis is how to make sense of a gene (or SNP) list in a biologically-meaningful way. These genes (and/or SNPs) may be identified from differential expression analysis, eQTL mapping and GWAS. In this section, we showcase the applications using several published datasets. The users are encouraged to adapt the provided codes to analyse their own datasets. 
+An essential step of data analysis is how to make sense of a gene (or SNP) list in a biologically-meaningful way. Genes (and/or SNPs) may be identified from differential expression analysis, eQTL mapping and GWAS. In this section, we showcase the applications using several published datasets. The users are encouraged to adapt the provided codes to analyse their own datasets. 
 
 **First of all, load the package `XGR`:**
 
 ```{r, eval=T, include=T}
 library(XGR)
+# the following packages are needed for visualisation
 library(GenomicRanges)
 library(RCircos)
-# optionally, specify the local location of built-in RData
-# by default
-RData.location <- "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0"
 ```
 
 ## Analysing differential genes
 
 The first dataset we use is based on expression data in monocytes [@Fairfax2014]. This dataset *[`JKscience_TS1A`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/JKscience_TS1A.html)* involves 228 individuals with expression data at four conditions: in the naive state (`Naive`), after 2-hour LPS (`LPS2`), after 24-hour LPS (`LPS24`), and after 24-hour exposure to interferon gamma (`IFN`). Differential expression analysis was performed using the limma package to identify genes that are differentially expressed between two conditions.
 
-**Extract genes that are significantly induced by IFN compared to the naive state**
+**Extract genes that are significantly induced by interferon gamma as compared to the naive state**
 
 ```{r, eval=T, cache=T}
 # Load differential expression analysis results
-res <- xRDataLoader(RData.customised='JKscience_TS1A', RData.location=RData.location)
+res <- xRDataLoader(RData.customised='JKscience_TS1A')
 # Create a data frame for genes significantly induced by IFN
 flag <- res$logFC_INF24_Naive < 0 & res$fdr_INF24_Naive < 0.01
 df <- res[flag, c('Symbol','logFC_INF24_Naive','fdr_INF24_Naive')]
 ```
 
-The first 5 rows of the data frame `df` are shown below, with the column `logFC_INF24_Naive` telling the log2-transformed fold change of `naive` expression divided by `IFN` expression (thus the induced genes with negative values).
+The first 5 rows of the data frame `df` are shown below, with the column `logFC_INF24_Naive` telling the log2-transformed fold change: `naive` expression divided by `IFN` expression (thus the induced genes with negative values).
 
 ```{r, eval=T, echo=F}
-knitr::kable(df[1:5,], caption="", row.names=F)
+knitr::kable(df[1:5,], digits=200, caption="", row.names=F)
 ```
 
 ### Gene-based enrichment analysis
@@ -166,15 +164,18 @@ Enrichment analysis at the gene level can be done by choosing one of ontologies 
 
 ```{r, eval=T, echo=F}
 obo <- list()
-obo[['DO']] <- c('Diseases', 'Disease Ontology', 'DO')
-obo[['GOMF']] <- c('Functions', 'Gene Ontology Molecular Function', 'GOMF')
-obo[['GOBP']] <- c('Functions', 'Gene Ontology Biological Process', 'GOBP')
-obo[['GOCC']] <- c('Functions', 'Gene Ontology Cellular Component', 'GOCC')
-obo[['HPPA']] <- c('Phenotypes', 'Human Phenotype Phenotypic Abnormality', 'HPPA')
-obo[['HPMI']] <- c('Phenotypes', 'Human Phenotype Mode of Inheritance', 'HPMI')
-obo[['HPCM']] <- c('Phenotypes', 'Human Phenotype Clinical Modifier', 'HPCM')
-obo[['HPMA']] <- c('Phenotypes', 'Human Phenotype Mortality Aging', 'HPMA')
-obo[['MP']] <- c('Phenotypes', 'Mammalian/Mouse Phenotype', 'MP')
+obo[['DO']] <- c('Disease', 'Disease Ontology', 'DO')
+obo[['GOMF']] <- c('Function', 'Gene Ontology Molecular Function', 'GOMF')
+obo[['GOBP']] <- c('Function', 'Gene Ontology Biological Process', 'GOBP')
+obo[['GOCC']] <- c('Function', 'Gene Ontology Cellular Component', 'GOCC')
+obo[['HPPA']] <- c('Phenotype', 'Human Phenotype Phenotypic Abnormality', 'HPPA')
+obo[['HPMI']] <- c('Phenotype', 'Human Phenotype Mode of Inheritance', 'HPMI')
+obo[['HPCM']] <- c('Phenotype', 'Human Phenotype Clinical Modifier', 'HPCM')
+obo[['HPMA']] <- c('Phenotype', 'Human Phenotype Mortality Aging', 'HPMA')
+obo[['MP']] <- c('Phenotype', 'Mammalian/Mouse Phenotype', 'MP')
+obo[['DGIdb']] <- c('Druggable', 'DGI druggable gene categories', 'DGIdb')
+obo[['SF']] <- c('Domain', 'SCOP domain superfamilies', 'SF')
+obo[['PS2']] <- c('Evolution', 'phylostratific age information (our ancestors)', 'PS2')
 obo[['MsigdbH']] <- c('MsigDB', 'Hallmark gene sets', 'MsigdbH')
 obo[['MsigdbC1']] <- c('MsigDB', 'Chromosome and cytogenetic band positional gene sets', 'MsigdbC1')
 obo[['MsigdbC2CGP']] <- c('MsigDB', 'Chemical and genetic perturbation gene sets', 'MsigdbC2CGP')
@@ -192,15 +193,12 @@ obo[['MsigdbC5MF']] <- c('MsigDB', 'GO molecular function gene sets', 'MsigdbC5M
 obo[['MsigdbC5CC']] <- c('MsigDB', 'GO cellular component gene sets', 'MsigdbC5CC')
 obo[['MsigdbC6']] <- c('MsigDB', 'Oncogenic signature gene sets', 'MsigdbC6')
 obo[['MsigdbC7']] <- c('MsigDB', 'Immunologic signature gene sets', 'MsigdbC7')
-obo[['DGIdb']] <- c('Druggable', 'DGI druggable gene categories', 'DGIdb')
-obo[['SF']] <- c('Domain', 'SCOP domain superfamilies', 'SF')
-obo[['PS2']] <- c('Evolution', 'phylostratific age information (our ancestors)', 'PS2')
 df_obo <- do.call(rbind, obo)
-colnames(df_obo) <- c('Category', 'Name', 'Code')
-knitr::kable(df_obo, caption="", row.names=F)
+colnames(df_obo) <- c('Category', 'Ontology', 'Code')
+knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=F)
 ```
 
-Optionally, the test background can be provided by the user. By default, all annotatable genes will be used as the test background. In this case, genes under differential expression analysis will be used as the background.
+Optionally, the test background can be provided by the user. By default, all annotatable genes will be used. In this case, genes under differential expression analysis will be used as the test background.
 
 ```{r, eval=T, cache=T}
 background <- res$Symbol
@@ -210,7 +208,7 @@ background <- res$Symbol
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- df$Symbol
-eTerm <- xEnricherGenes(data=data, background=background, ontology="MsigdbC2CPall", RData.location=RData.location)
+eTerm <- xEnricherGenes(data=data, background=background, ontology="MsigdbC2CPall")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'Pathway_enrichments.txt'
@@ -229,7 +227,7 @@ knitr::kable(res_PW[1:10,], digits=12, caption="", row.names=F)
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- df$Symbol
-eTerm <- xEnricherGenes(data=data, background=background, ontology="DO", RData.location=RData.location)
+eTerm <- xEnricherGenes(data=data, background=background, ontology="DO")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'DO_enrichments.txt'
@@ -247,7 +245,7 @@ knitr::kable(res_DO[1:5,1:6], caption="", row.names=F)
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- df$Symbol
-eTerm <- xEnricherGenes(data=data, background=background, ontology="MP", RData.location=RData.location)
+eTerm <- xEnricherGenes(data=data, background=background, ontology="MP")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'MP_enrichments.txt'
@@ -263,37 +261,37 @@ knitr::kable(res_MP[1:10,], caption="", row.names=F)
 
 ### Gene-based network analysis
 
-Network analysis at the gene level requires choosing a pre-defined gene networks as a whole network (called `whole-network`). Generally speaking, two sources of whole-network information are supported: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from the functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from the physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the different quality of the interactions: 
+Network analysis at the gene level requires choosing a pre-defined gene networks as a whole network (called `whole-network`). Generally speaking, two sources of whole-network information are supported: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from a functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from a physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the interactions of varying quality in addition to interaction types: 
 
 ```{r, eval=T, echo=F}
 net <- list()
 net[['STRING_highest']] <- c('STRING', 'Functional interactions (with highest confidence scores>=900)', 'STRING_highest')
 net[['STRING_high']] <- c('STRING', 'Functional interactions (with high confidence scores>=700)', 'STRING_high')
 net[['STRING_medium']] <- c('STRING', 'Functional interactions (with medium confidence scores>=400)', 'STRING_medium')
-net[['PCommonsUN_high']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=2 sources)', 'PCommonsUN_high')
-net[['PCommonsUN_medium']] <- c('Pathways Commons', 'Physical/undirect interactions (with references and >=1 sources)', 'PCommonsUN_medium')
-net[['PCommonsDN_high']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=2 sources)', 'PCommonsDN_high')
-net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references and >=1 sources)', 'PCommonsDN_medium')
+net[['PCommonsUN_high']] <- c('Pathways Commons', 'Physical/undirect interactions (with references & >=2 sources)', 'PCommonsUN_high')
+net[['PCommonsUN_medium']] <- c('Pathways Commons', 'Physical/undirect interactions (with references & >=1 sources)', 'PCommonsUN_medium')
+net[['PCommonsDN_high']] <- c('Pathways Commons', 'Pathway/direct interactions (with references & >=2 sources)', 'PCommonsDN_high')
+net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references & >=1 sources)', 'PCommonsDN_medium')
 df_net <- do.call(rbind, net)
 colnames(df_net) <- c('Database', 'Interaction', 'Code')
-knitr::kable(df_net, caption="", row.names=F)
+knitr::kable(df_net[,c(3,2,1)], caption="", row.names=F)
 ```
 
 For the pathway-merged direct interactions, the user can also choose network sourced individually:
 
 ```{r, eval=T, echo=F}
 net <- list()
-net[['PCommonsDN_Reactome']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from Reactome)', 'PCommonsDN_Reactome')
-net[['PCommonsDN_KEGG']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from KEGG)', 'PCommonsDN_KEGG')
-net[['PCommonsDN_HumanCyc']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from HumanCyc)', 'PCommonsDN_HumanCyc')
-net[['PCommonsDN_PID']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PID)', 'PCommonsDN_PID')
-net[['PCommonsDN_PANTHER']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PANTHER)', 'PCommonsDN_PANTHER')
-net[['PCommonsDN_ReconX']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from ReconX)', 'PCommonsDN_ReconX')
-net[['PCommonsDN_PhosphoSite']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from PhosphoSite)', 'PCommonsDN_PhosphoSite')
-net[['PCommonsDN_CTD']] <- c('Pathways Commons', 'Pathway/direct interactions (only sourced from CTD)', 'PCommonsDN_CTD')
+net[['PCommonsDN_Reactome']] <- c('Pathways Commons', 'Pathway/direct interactions (only from Reactome)', 'PCommonsDN_Reactome')
+net[['PCommonsDN_KEGG']] <- c('Pathways Commons', 'Pathway/direct interactions (only from KEGG)', 'PCommonsDN_KEGG')
+net[['PCommonsDN_HumanCyc']] <- c('Pathways Commons', 'Pathway/direct interactions (only from HumanCyc)', 'PCommonsDN_HumanCyc')
+net[['PCommonsDN_PID']] <- c('Pathways Commons', 'Pathway/direct interactions (only from PID)', 'PCommonsDN_PID')
+net[['PCommonsDN_PANTHER']] <- c('Pathways Commons', 'Pathway/direct interactions (only from PANTHER)', 'PCommonsDN_PANTHER')
+net[['PCommonsDN_ReconX']] <- c('Pathways Commons', 'Pathway/direct interactions (only from ReconX)', 'PCommonsDN_ReconX')
+net[['PCommonsDN_PhosphoSite']] <- c('Pathways Commons', 'Pathway/direct interactions (only from PhosphoSite)', 'PCommonsDN_PhosphoSite')
+net[['PCommonsDN_CTD']] <- c('Pathways Commons', 'Pathway/direct interactions (only from CTD)', 'PCommonsDN_CTD')
 df_net <- do.call(rbind, net)
 colnames(df_net) <- c('Database', 'Interaction', 'Code')
-knitr::kable(df_net, caption="", row.names=F)
+knitr::kable(df_net[,c(3,2,1)], caption="", row.names=F)
 ```
 
 In this subsection, from a pre-defined whole-network we demonstrate how to identify a gene network from an input list of genes with the significant info, in this case, the gene network induced by interferon gamma `INF`.
@@ -301,7 +299,7 @@ In this subsection, from a pre-defined whole-network we demonstrate how to ident
 ```{r, eval=T, cache=T}
 # find maximum-scoring gene subnetwork with the desired node number=75
 data <- df[,c("Symbol","fdr_INF24_Naive")]
-subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=75, RData.location=RData.location)
+subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=75)
 ```
 
 The identified gene network with nodes colored according to FDR is shown below:
@@ -322,7 +320,7 @@ The second dataset we use is based on an immune-stimulated eQTL mapping study in
 
 ```{r, eval=T, cache=T}
 # Load cis-eQTL mapping results
-cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)
+cis <- xRDataLoader(RData.customised='JKscience_TS2A')
 # Create a data frame for cis-eQTLs significantly induced by IFN
 ind <- which(cis$IFN_t > 0 & cis$IFN_fdr < 0.05)
 df_cis <- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
@@ -340,7 +338,7 @@ knitr::kable(df_cis[1:5,], digits=12, caption="", row.names=F)
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- df_cis$variant
-eTerm <- xEnricherSNPs(data=data, ontology="EF", RData.location=RData.location)
+eTerm <- xEnricherSNPs(data=data, ontology="EF")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'EF_enrichments.txt'
@@ -359,7 +357,7 @@ knitr::kable(res_EF[1:10, 1:6], caption="", row.names=F)
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- df_cis$variant
-eTerm <- xEnricherSNPs(data=data, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+eTerm <- xEnricherSNPs(data=data, ontology="EF", include.LD="EUR", LD.r2=0.8)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'EF_LD_enrichments.txt'
@@ -380,7 +378,7 @@ knitr::kable(res_EF_LD[1:10, 1:6], digits=12, caption="", row.names=F)
 
 ```{r, eval=T, cache=T}
 data <- df_cis$variant
-ig_SNP <- xSocialiserSNPs(data=data, ontology="EF", RData.location=RData.location)
+ig_SNP <- xSocialiserSNPs(data=data, ontology="EF")
 # save similarity results to the file 'EF_similarity.txt'
 output <- igraph::get.data.frame(ig_SNP, what="edges")
 write.table(output, file="EF_similarity.txt", sep="\t", row.names=F)
@@ -389,14 +387,14 @@ write.table(output, file="EF_similarity.txt", sep="\t", row.names=F)
 Circos plot of the most similar edges is shown below:
 
 ```{r, fig.width=9, fig.height=9, eval=T, cache=T, echo=T}
-xCircos(g=ig_SNP, entity="SNP", verbose=F, RData.location=RData.location)
+xCircos(g=ig_SNP, entity="SNP", verbose=F)
 ```
 
 > For input SNPs plus their LD SNPs
 
 ```{r, eval=T, cache=T}
 data <- df_cis$variant
-ig_SNP_LD <- xSocialiserSNPs(data=data, ontology="EF", include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+ig_SNP_LD <- xSocialiserSNPs(data=data, ontology="EF", include.LD="EUR", LD.r2=0.8)
 # save similarity results to the file 'EF_LD_similarity.txt'
 output <- igraph::get.data.frame(ig_SNP_LD, what="edges")
 write.table(output, file="EF_LD_similarity.txt", sep="\t", row.names=F)
@@ -405,7 +403,7 @@ write.table(output, file="EF_LD_similarity.txt", sep="\t", row.names=F)
 Circos plot of the most similar edges is shown below:
 
 ```{r, fig.width=9, fig.height=9, eval=T, cache=T, echo=T}
-xCircos(g=ig_SNP_LD, entity="SNP", verbose=F, RData.location=RData.location)
+xCircos(g=ig_SNP_LD, entity="SNP", verbose=F)
 ```
 
 ### SNP-based network analysis
@@ -415,7 +413,7 @@ In this section, from a pre-defined whole-network (see above) we demonstrate how
 ```{r, eval=T, cache=T}
 # find maximum-scoring gene subnetwork with the desired node number=60
 data <- df_cis[,c("variant","IFN_fdr")]
-subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=60, RData.location=RData.location)
+subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=60)
 ```
 
 The identified gene network with nodes colored according to scores is shown below:
@@ -433,7 +431,7 @@ xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP, with_kk()), v
 The third dataset *[`ImmunoBase`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/ImmunoBase.html)* is GWAS lead SNPs associated with immunologically related human diseases, obtained from [`ImmunoBase`](http://www.immunobase.org). 
 
 ```{r, eval=T, cache=T, results="hide"}
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 # get info about diseases
 disease_list <- lapply(ImmunoBase, function(x) x$disease)
 # get the number of disease associated variants/SNPs
@@ -441,7 +439,7 @@ variants_list <- lapply(ImmunoBase, function(x) length(names(x$variants)))
 # get the number of genes that are located within 500kb distance window of SNPs
 genes_list <- lapply(ImmunoBase, function(x) length(x$genes_variants))
 # create a data frame
-df_ib <- data.frame(code=names(ImmunoBase), disease=unlist(disease_list), num_SNPs=unlist(variants_list), num_nearby_genes=unlist(genes_list), stringsAsFactors=F)
+df_ib <- data.frame(Code=names(ImmunoBase), Disease=unlist(disease_list), num_SNPs=unlist(variants_list), num_nearby_genes=unlist(genes_list), stringsAsFactors=F)
 ```
 
 A summary of diseases, GWAS lead SNPs and their nearby genes:
@@ -460,7 +458,7 @@ gr <- ImmunoBase$CRO$variant
 data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 
 # find maximum-scoring gene subnetwork with the desired node number=30
-subnet_CRO <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30, RData.location=RData.location)
+subnet_CRO <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
 ```
 
 The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below:
@@ -477,7 +475,7 @@ xVisNet(g=subnet_CRO, pattern=pattern, glayout=layout_(subnet_CRO, with_kk()), v
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- V(subnet_CRO)$name
-eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall", RData.location=RData.location)
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'CRO_Pathway_enrichments.txt'
@@ -500,7 +498,7 @@ gr <- ImmunoBase$CEL$variant
 data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 
 # find maximum-scoring gene subnetwork with the desired node number=30
-subnet_CEL <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30, RData.location=RData.location)
+subnet_CEL <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
 ```
 
 The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below:
@@ -517,7 +515,7 @@ xVisNet(g=subnet_CEL, pattern=pattern, glayout=layout_(subnet_CEL, with_kk()), v
 
 ```{r, eval=T, cache=T, results="hide"}
 data <- V(subnet_CEL)$name
-eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall", RData.location=RData.location)
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall")
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 # save enrichment results to the file 'CEL_Pathway_enrichments.txt'
@@ -535,7 +533,7 @@ knitr::kable(res_CEL_PW[1:10,], digits=20, caption="", row.names=F)
 
 # Session Info
 
-Here is the output of `sessionInfo()` on the system on which this vignette was built:
+Here is the output of `sessionInfo()` on the system on which this user manual was built:
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
