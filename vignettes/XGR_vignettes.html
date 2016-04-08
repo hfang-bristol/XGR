@@ -228,7 +228,7 @@ div.tocify {
 <h1 class="title">XGR: eXploring Genomic Relations at the gene and SNP level through enrichment, similarity and network analysis</h1>
 <h4 class="author"><em><p><a href="http://www.well.ox.ac.uk/dr-hai-fang"><code>Hai Fang</code></a>, <a href="http://www.well.ox.ac.uk/bogdan-knezevic"><code>Bogdan Knezevic</code></a>, <a href="http://www.well.ox.ac.uk/katie-burnham"><code>Katie L Burnham</code></a>, <a href="http://www.well.ox.ac.uk/julian-knight"><code>Julian C Knight</code></a></p>
 <p>Wellcome Trust Centre for Human Genetics, University of Oxford, UK</p></em></h4>
-<h4 class="date"><em>Thu Apr 7 13:56:52 2016</em></h4>
+<h4 class="date"><em>Fri Apr 8 13:52:46 2016</em></h4>
 
 </div>
 
@@ -248,7 +248,7 @@ div.tocify {
 <ul>
 <li>Optionally, install the development version of <code>XGR</code> package (now hosted in <em>GitHub</em><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>):</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">biocLite</span>(<span class="st">&quot;devtools&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if(!(<span class="st">&quot;devtools&quot;</span> %in%<span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))) <span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>, <span class="dt">repos=</span><span class="st">&quot;http://cran.r-project.org&quot;</span>)
 <span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="kw">c</span>(<span class="st">&quot;hfang-bristol/XGR&quot;</span>), <span class="dt">dependencies=</span>T)</code></pre></div>
 </div>
