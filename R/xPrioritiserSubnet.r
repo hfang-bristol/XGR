@@ -78,7 +78,7 @@ xPrioritiserSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STR
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("The 'pNode' object contains %d prioritised genes", length(pval)), appendLF=T)
+		message(sprintf("The 'pNode' object contains %d prioritised genes", length(priority)), appendLF=T)
 	}
     
     ## scale to the range [0 100] and then convert to pvalue-like signficant level
