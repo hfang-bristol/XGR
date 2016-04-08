@@ -20,8 +20,9 @@
 #' @return
 #' an object of class "pNode", a list with following components:
 #' \itemize{
-#'  \item{\code{priority}: a matrix of nNode X 4 containing node priority information, where nNode is the number of nodes in the input graph, and the 4 columns are "name" (node names), "seed" (1 for seeds, 0 for non-seeds), "weight" (weight values),  "priority" (the priority scores that are rescaled to the range [0,1]), "rank" (ranks of the priority scores)}
+#'  \item{\code{priority}: a matrix of nNode X 4 containing node priority information, where nNode is the number of nodes in the input graph, and the 4 columns are "name" (node names), "seed" (1 for seeds, 0 for non-seeds), "weight" (weight values for seeds),  "priority" (the priority scores that are rescaled to the range [0,1]), "rank" (ranks of the priority scores)}
 #'  \item{\code{g}: an input "igraph" object}
+#'  \item{\code{SNP}: a data frame of nSNP X 3 containing input SNPs and/or LD SNPs info, where nSNP is the number of input SNPs and/or LD SNPs, and the 3 columns are "SNP" (dbSNP), "Pval" (the SNP p-value), "Score" (the SNP score)}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note The search procedure is heuristic to find the subgraph with the maximum score:
@@ -41,24 +42,20 @@
 #' library(XGR)
 #' library(igraph)
 #' library(dnet)
-#' library(GenomicRanges)
+#' library(ggbio)
 #'
-#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-#' # a) provide the seed SNPs with the weight info
-#' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+#' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' gr <- ImmunoBase$AS$variant
-#' seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+#' AS <- read.delim(file.path(path.package("XGR"),"AS.txt"), stringsAsFactors=FALSE)
 #'
 #' # b) perform priority analysis
-#' pNode <- xPrioritiserSNPs(data=seeds.snps, network="PCommonsUN_medium",restart=0.7, RData.location=RData.location)
+#' pNode <- xPrioritiserSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
 #'
 #' # c) save to the file called 'SNPs_priority.txt'
 #' write.table(pNode$priority, file="SNPs_priority.txt", sep="\t", row.names=FALSE)
 #' 
 #' # d) manhattan plot
-#' mp <- xPrioritiserManhattan(pNode, highlight.top=10, RData.location=RData.location)
+#' mp <- xPrioritiserManhattan(pNode, highlight.top=10)
 #' #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 #' print(mp)
 #' #dev.off()
@@ -197,6 +194,11 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 	scores <- log10(2) * dFDRscore(pval, fdr.threshold=significance.threshold, scatter=F)
 	scores[scores<0] <- 0
 	seeds.snps <- scores
+    
+    #########
+    # get a data frame: SNPs pvalue score
+    df_snp <- data.frame(SNP=names(pval), Pval=pval, Score=seeds.snps, row.names=NULL, stringsAsFactors=F)
+    #########
     
     ######################################################
     # Link to targets based on genomic distance
@@ -339,6 +341,8 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
     ######################################################################################
     
     pNode <- suppressMessages(xPrioritiserGenes(data=seeds.genes, network=network, network.customised=network.customised, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
+    
+    pNode[['SNP']] <- df_snp
     
     ####################################################################################
     endT <- Sys.time()

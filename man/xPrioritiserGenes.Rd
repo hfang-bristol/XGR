@@ -135,11 +135,9 @@ library(igraph)
 library(dnet)
 library(GenomicRanges)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 ## get genes within 500kb away from AS GWAS lead SNPs
 seeds.genes <- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
@@ -147,7 +145,7 @@ data <- 1- seeds.genes/500000
 
 # b) perform priority analysis
 pNode <- xPrioritiserGenes(data=data,
-network="PCommonsDN_medium",restart=0.7, RData.location=RData.location)
+network="PCommonsDN_medium",restart=0.7)
 
 # c) save to the file called 'Genes_priority.txt'
 write.table(pNode$priority, file="Genes_priority.txt", sep="\\t",

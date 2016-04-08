@@ -140,7 +140,8 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
     }
     A <- match(df$from, allnames)
 	B <- match(df$to, allnames)
-	flag <- complete.cases(cbind(A, B))
+	#flag <- complete.cases(cbind(A, B))
+	flag <- !is.na(A) & !is.na(B)
 	AA <- A[flag]
 	BB <- B[flag]
 	input.data.A <- GenomicRanges::as.data.frame(pos[AA], row.names=NULL)

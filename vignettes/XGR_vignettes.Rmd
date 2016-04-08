@@ -36,22 +36,23 @@ knitr::opts_chunk$set(fig_cap="yes")
 
 # Summary
 
-We introduce an R package called *XGR*. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the `Applications` section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app [^1].
+We introduce an R package called *XGR*, publicly available at http://cran.r-project.org/package=XGR. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the `Applications` section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app [^1].
 
 [^1]: <http://galahad.well.ox.ac.uk/XGR>
 
 # Installation
 
-We assume [R](http://www.r-project.org), a language and environment for statistical computing and graphics, has been installed. For installation of the XGR package itself (now hosted in *GitHub* [^2]), there are two steps:
+We assume [R](http://cran.r-project.org), a language and environment for statistical computing and graphics, has been installed. For installation of the `XGR` package, please follow the instructions below:
 
-* First, install the dependent packages:
+* Install the the `XGR` package and its dependencies:
 ```{r eval=F}
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("devtools","dnet","RCircos","GenomicRanges","ggplot2","ggbio"), siteRepos=c("http://cran.r-project.org"))
+biocLite("XGR")
 ```
 
-* Second, install the `XGR` package:
+* Optionally, install the development version of `XGR` package (now hosted in *GitHub* [^2]):
 ```{r eval=F}
+if(!("devtools" %in% rownames(installed.packages()))) install.packages("devtools", repos="http://cran.r-project.org")
 library(devtools)
 install_github(c("hfang-bristol/XGR"), dependencies=T)
 ```
@@ -302,7 +303,7 @@ data <- df[,c("Symbol","fdr_INF24_Naive")]
 subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=75)
 ```
 
-The identified gene network with nodes colored according to FDR is shown below:
+The identified gene network with nodes colored according to FDR is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
 
 ```{r, fig.width=8, fig.height=8, fig.cap="", eval=T, cache=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet)$significance))
@@ -408,7 +409,7 @@ xCircos(g=ig_SNP_LD, entity="SNP", verbose=F)
 
 ### SNP-based network analysis
 
-In this section, from a pre-defined whole-network (see above) we demonstrate how to identify a gene network from an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-induced cis-eQTLs.
+In this section, from a pre-defined whole-network (see above) we demonstrate how to identify a gene network given an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-induced cis-eQTLs.
 
 ```{r, eval=T, cache=T}
 # find maximum-scoring gene subnetwork with the desired node number=60
@@ -416,7 +417,7 @@ data <- df_cis[,c("variant","IFN_fdr")]
 subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=60)
 ```
 
-The identified gene network with nodes colored according to scores is shown below:
+The identified gene network with nodes colored according to scores is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
 
 ```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet_SNP)$significance))
@@ -461,7 +462,7 @@ data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 subnet_CRO <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
 ```
 
-The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below:
+The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
 
 ```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet_CRO)$significance))
@@ -501,7 +502,7 @@ data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 subnet_CEL <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
 ```
 
-The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below:
+The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
 
 ```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
 pattern <- -log10(as.numeric(V(subnet_CEL)$significance))

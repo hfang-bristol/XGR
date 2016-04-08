@@ -14,7 +14,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a subgraph with a maximum score, an object of class "igraph"
+#' a subgraph with a maximum score, an object of class "igraph". It has ndoe attributes: signficance, score
 #' @note The algorithm identifying a gene subnetwork that is likely modulated by input SNPs and/or their LD SNPs includes two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few lowly scored genes as linkers.
 #' @export
 #' @seealso \code{\link{xSubneterGenes}}
@@ -27,10 +27,9 @@
 #' library(dnet)
 #' library(GenomicRanges)
 #'
-#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 #' # a) provide the seed SNPs with the weight info
 #' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
 #' seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
@@ -55,7 +54,6 @@
 #' 
 #' # e) visualise the identified subnet as a circos plot
 #' library(RCircos)
-#' library(GenomicRanges)
 #' xCircos(g=subnet, entity="Gene")
 #' }
 

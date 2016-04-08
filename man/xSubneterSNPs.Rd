@@ -105,7 +105,8 @@ displayed in the screen. By default, it sets to true for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a subgraph with a maximum score, an object of class "igraph"
+a subgraph with a maximum score, an object of class "igraph". It has
+ndoe attributes: signficance, score
 }
 \description{
 \code{xSubneterSNPs} is supposed to identify maximum-scoring gene
@@ -131,11 +132,9 @@ library(igraph)
 library(dnet)
 library(GenomicRanges)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
 seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
@@ -165,7 +164,6 @@ xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
-library(GenomicRanges)
 xCircos(g=subnet, entity="Gene")
 }
 }

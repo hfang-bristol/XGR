@@ -27,13 +27,8 @@
 #' @seealso \code{\link{xSubneterGenes}}, \code{\link{xSubneterSNPs}}
 #' @include xVisNet.r
 #' @examples
-#' # Load the library
-#' library(XGR)
-#' library(igraph)
-#' library(dnet)
-#'
 #' # 1) generate a ring graph
-#' g <-make_ring(10, directed=TRUE)
+#' g <- make_ring(10, directed=TRUE)
 #'
 #' # 2) visualise the graph
 #' # 2a) visualise in one go

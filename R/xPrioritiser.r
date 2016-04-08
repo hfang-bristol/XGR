@@ -28,15 +28,14 @@
 #' library(igraph)
 #' library(dnet)
 #'
-#' RData.location="~/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 #' # a) provide the input nodes/genes with the significance info
 #' ## load human genes
-#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
+#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
 #' sig <- rbeta(500, shape1=0.5, shape2=1)
 #' data <- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
 #' 
 #' # b) provide the network
-#' g <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location)
+#' g <- xRDataLoader(RData.customised='org.Hs.string')
 #'
 #' # c) perform priority analysis
 #' pNode <- xPrioritiser(seeds=data, g=g, restart=0.75)

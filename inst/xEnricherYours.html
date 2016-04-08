@@ -181,7 +181,7 @@ library(XGR)
 library(igraph)
 
 # Enrichment analysis using your own data
-# a) provide your own data (i.e. InterPro domains and their annotations by GO terms)
+# a) provide your own data (eg ImmunoBase SNPs and associations/annotations with disease traits)
 ## All InterPro domains
 input.file &lt;-
 "http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt"
@@ -207,6 +207,26 @@ utils::write.table(output, file="Yours_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 ## End(Not run)
+
+# Using ImmunoBase SNPs and associations/annotations with disease traits
+## get ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+## get disease associated variants/SNPs
+variants_list &lt;- lapply(ImmunoBase, function(x)
+cbind(SNP=names(x$variants),
+Disease=rep(x$disease,length(x$variants))))
+## extract annotations as a data frame: Variant Disease_Name
+annotation.file &lt;- do.call(rbind, variants_list)
+head(annotation.file)
+## provide the input SNPs of interest
+## for example, cis-eQTLs induced by interferon gamma
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A')
+data.file &lt;- matrix(cis[which(cis$IFN_t&gt;0),c('variant')], ncol=1)
+# perform enrichment analysis
+eTerm &lt;- xEnricherYours(data.file=data.file,
+annotation.file=annotation.file)
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
 </pre>
 
 

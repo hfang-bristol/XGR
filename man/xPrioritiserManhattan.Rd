@@ -6,7 +6,7 @@
 \usage{
 xPrioritiserManhattan(pNode, color = c("darkred", "darkgreen"), cex =
 0.5,
-highlight.top = 10, highlight.col = "deepskyblue",
+highlight.top = 20, highlight.col = "deepskyblue",
 highlight.label.size = 2, highlight.label.offset = 0.02,
 highlight.label.col = "darkblue", verbose = T,
 RData.location =
@@ -40,7 +40,8 @@ an object of class "ggplot"
 }
 \description{
 \code{xPrioritiserManhattan} is supposed to visualise prioritised genes
-using manhattan plot.
+using manhattan plot. Genes with the top priority are highlighed. It
+returns an object of class "ggplot".
 }
 \note{
 none
@@ -51,27 +52,19 @@ none
 library(XGR)
 library(igraph)
 library(dnet)
-library(GenomicRanges)
-#library(qqman)
 library(ggbio)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-# a) provide the seed nodes/genes with the weight info
-## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get genes within 500kb away from AS GWAS lead SNPs
-seeds.genes <- ImmunoBase$AS$genes_variants
-## seeds weighted according to distance away from lead SNPs
-data <- 1- seeds.genes/500000
+# a) provide the SNPs with the significance info
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+AS <- read.delim(file.path(path.package("XGR"),"AS.txt"),
+stringsAsFactors=FALSE)
 
 # b) perform priority analysis
-pNode <- xPrioritiserGenes(data=data,
-network="PCommonsDN_medium",restart=0.7, RData.location=RData.location)
+pNode <- xPrioritiserSNPs(data=AS,
+network="PCommonsUN_medium",restart=0.7)
 
 # c) manhattan plot
-mp <- xPrioritiserManhattan(pNode, highlight.top=10,
-RData.location=RData.location)
+mp <- xPrioritiserManhattan(pNode, highlight.top=10)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()

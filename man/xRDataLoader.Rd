@@ -77,6 +77,7 @@ of the assigement sign '<-', then no RData will be loaded onto the
 working environment.
 }
 \examples{
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 \dontrun{
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
 ig.HPPA <- xRDataLoader(RData='ig.HPPA')

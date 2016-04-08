@@ -151,7 +151,8 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;
+<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;. It has
+ndoe attributes: signficance, score
 </p>
 
 
@@ -183,11 +184,9 @@ library(igraph)
 library(dnet)
 library(GenomicRanges)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
 seeds.snps &lt;- as.matrix(mcols(gr)[,c(1,3)])
@@ -217,7 +216,6 @@ xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
-library(GenomicRanges)
 xCircos(g=subnet, entity="Gene")
 
 ## End(Not run)

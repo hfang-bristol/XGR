@@ -1,6 +1,6 @@
 #' Function to visualise prioritised genes using manhattan plot
 #'
-#' \code{xPrioritiserManhattan} is supposed to visualise prioritised genes using manhattan plot. 
+#' \code{xPrioritiserManhattan} is supposed to visualise prioritised genes using manhattan plot. Genes with the top priority are highlighed. It returns an object of class "ggplot".
 #'
 #' @param pNode an object of class "pNode"
 #' @param color a character vector for point colors to alternate
@@ -25,30 +25,23 @@
 #' library(XGR)
 #' library(igraph)
 #' library(dnet)
-#' library(GenomicRanges)
-#' #library(qqman)
 #' library(ggbio)
 #'
-#' RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-#' # a) provide the seed nodes/genes with the weight info
-#' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
-#' ## get genes within 500kb away from AS GWAS lead SNPs
-#' seeds.genes <- ImmunoBase$AS$genes_variants
-#' ## seeds weighted according to distance away from lead SNPs
-#' data <- 1- seeds.genes/500000
+#' # a) provide the SNPs with the significance info
+#' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
+#' AS <- read.delim(file.path(path.package("XGR"),"AS.txt"), stringsAsFactors=FALSE)
 #'
 #' # b) perform priority analysis
-#' pNode <- xPrioritiserGenes(data=data, network="PCommonsDN_medium",restart=0.7, RData.location=RData.location)
-#' 
+#' pNode <- xPrioritiserSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
+#'
 #' # c) manhattan plot
-#' mp <- xPrioritiserManhattan(pNode, highlight.top=10, RData.location=RData.location)
+#' mp <- xPrioritiserManhattan(pNode, highlight.top=10)
 #' #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 #' print(mp)
 #' #dev.off()
 #' }
 
-xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=10, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 {
     if (class(pNode) != "pNode" ){
         stop("The function must apply to a 'pNode' object.\n")
@@ -58,7 +51,7 @@ xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5
 		now <- Sys.time()
 		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
 	}
-  	gr_Gene <- xRDataLoader(RData.customised="UCSC_genes", RData.location=RData.location)
+  	gr_Gene <- xRDataLoader(RData.customised="UCSC_genes", verbose=verbose, RData.location=RData.location)
     
     ## ONLY restricted to genes with genomic locations
 	ind <- match(rownames(pNode$priority), mcols(gr_Gene)$Symbol)
@@ -92,21 +85,6 @@ xPrioritiserManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5
     suppressWarnings(
     mp <- plotGrandLinear(gr, eval(parse(text=paste("aes(y=priority)",sep=""))), color=color, spaceline=T, cex=cex, ylab='Priority', highlight.gr=gro, highlight.col=highlight.col, highlight.label=F, highlight.label.size=highlight.label.size, highlight.label.offset=highlight.label.offset, highlight.label.col=highlight.label.col) + theme(axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
     )
-	
-	## use qqman
-	if(0){
-	## prepare data.frame for qqman
-	Gene <- mcols(gr)$Symbol
-	CHR <- as.character(seqnames(gr))
-	CHR <- gsub('X', '23', CHR, perl=T)
-	CHR <- gsub('Y', '24', CHR, perl=T)
-	CHR <- as.numeric(gsub('^chr', '', CHR, perl=T))
-	BP <- start(gr)
-	P <- mcols(gr)$priority
-	df <- data.frame(Gene=Gene, CHR=CHR, BP=BP, P=P, stringsAsFactors=F)
-	chrlabs <- c(1:22,"X","Y")
-	#manhattan(df, snp='Gene', chrlabs=NULL, suggestiveline=F, genomewideline=F, logp=F, ylim=c(0,max(df$P)), ylab='Priority', cex=0.5, cex.axis=0.6, col=c("blue4","orange3"))
-	}
 	
     invisible(mp)
 }

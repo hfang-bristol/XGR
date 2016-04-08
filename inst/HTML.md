@@ -30,6 +30,7 @@ These functions are used for priority analysis:
 * [`xPrioritiserSNPs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xPrioritiserSNPs.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserSNPs.r))
 * [`xPrioritiserPathways`](http://rawgit.com/hfang-bristol/XGR/master/inst/xPrioritiserPathways.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserPathways.r))
 * [`xPrioritiserManhattan`](http://rawgit.com/hfang-bristol/XGR/master/inst/xPrioritiserManhattan.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserManhattan.r))
+* [`xPrioritiserSubnet`](http://rawgit.com/hfang-bristol/XGR/master/inst/xPrioritiserSubnet.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xPrioritiserSubnet.r))
 
 ### Infrastructure functions
 These functions are essential as they deal with infrastructure such as built-in RData loading and ontology annotation propagation:

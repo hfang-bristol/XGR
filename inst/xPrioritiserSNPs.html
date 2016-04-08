@@ -202,12 +202,18 @@ RData files. See <code>xRDataLoader</code> for details</p>
 <li><p><code>priority</code>: a matrix of nNode X 4 containing node priority
 information, where nNode is the number of nodes in the input graph, and
 the 4 columns are &quot;name&quot; (node names), &quot;seed&quot; (1 for seeds, 0 for
-non-seeds), &quot;weight&quot; (weight values), &quot;priority&quot; (the priority scores
-that are rescaled to the range [0,1]), &quot;rank&quot; (ranks of the priority
-scores)
+non-seeds), &quot;weight&quot; (weight values for seeds), &quot;priority&quot; (the
+priority scores that are rescaled to the range [0,1]), &quot;rank&quot; (ranks of
+the priority scores)
 </p>
 </li>
 <li><p><code>g</code>: an input &quot;igraph&quot; object
+</p>
+</li>
+<li><p><code>SNP</code>: a data frame of nSNP X 3 containing input SNPs and/or
+LD SNPs info, where nSNP is the number of input SNPs and/or LD SNPs,
+and the 3 columns are &quot;SNP&quot; (dbSNP), &quot;Pval&quot; (the SNP p-value), &quot;Score&quot;
+(the SNP score)
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result
@@ -264,28 +270,23 @@ the seeds.
 library(XGR)
 library(igraph)
 library(dnet)
-library(GenomicRanges)
+library(ggbio)
 
-RData.location="/Users/hfang/Sites/SVN/github/RDataCentre/XGR/1.0.0"
-# a) provide the seed SNPs with the weight info
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
+# a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-seeds.snps &lt;- as.matrix(mcols(gr)[,c(1,3)])
+AS &lt;- read.delim(file.path(path.package("XGR"),"AS.txt"),
+stringsAsFactors=FALSE)
 
 # b) perform priority analysis
-pNode &lt;- xPrioritiserSNPs(data=seeds.snps,
-network="PCommonsUN_medium",restart=0.7, RData.location=RData.location)
+pNode &lt;- xPrioritiserSNPs(data=AS,
+network="PCommonsUN_medium",restart=0.7)
 
 # c) save to the file called 'SNPs_priority.txt'
 write.table(pNode$priority, file="SNPs_priority.txt", sep="\t",
 row.names=FALSE)
 
 # d) manhattan plot
-mp &lt;- xPrioritiserManhattan(pNode, highlight.top=10,
-RData.location=RData.location)
+mp &lt;- xPrioritiserManhattan(pNode, highlight.top=10)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()

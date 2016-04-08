@@ -12,6 +12,12 @@
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xConverter.r
 #' @examples
+#' # generate a ring graph
+#' g <- make_ring(10, directed=TRUE)
+#' 
+#' # convert the object from 'igraph' to 'dgCMatrix' class
+#' xConverter(g, from='igraph', to='dgCMatrix')
+#' 
 #' \dontrun{
 #' # Conversion between 'dgCMatrix' and 'igraph'
 #' # ig.EF (an object of class "igraph" storing as a directed graph)
