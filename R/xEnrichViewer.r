@@ -51,7 +51,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
     top_num <- as.integer(top_num)
     
     if(dim(eTerm$term_info)[1]==1){
-        tab <- data.frame( name         = eTerm$term_info$name,
+        tab <- data.frame( name         = as.character(eTerm$term_info$name),
                            nAnno        = as.numeric(sapply(eTerm$annotation,length)),
                            nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
                            zscore       = as.numeric(eTerm$zscore),
@@ -63,7 +63,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
                           )
     }else{
     
-        tab <- data.frame( name         = eTerm$term_info$name,
+        tab <- data.frame( name         = as.character(eTerm$term_info$name),
                            nAnno        = as.numeric(sapply(eTerm$annotation,length)),
                            nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
                            zscore       = as.numeric(eTerm$zscore),

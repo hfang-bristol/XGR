@@ -15,7 +15,7 @@
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
-#' @import ggbio
+#' @importFrom ggbio plotGrandLinear
 #' @importFrom ggplot2 theme element_text element_rect Position
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xPrioritiser}}, \code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
 #' @include xPrioritiserManhattan.r
