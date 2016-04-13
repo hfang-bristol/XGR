@@ -47,7 +47,7 @@
 #' utils::write.table(output, file="subnet_nodes.txt", sep="\t", row.names=FALSE)
 #'
 #' # d) visualise the identified subnet
-#' ## do visualisation with nodes colored according to the significance (you provide)
+#' ## do visualisation with nodes colored according to the significance
 #' xVisNet(g=subnet, pattern=-log10(as.numeric(V(subnet)$significance)), vertex.shape="sphere", colormap="wyr")
 #' ## do visualisation with nodes colored according to transformed scores
 #' xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")

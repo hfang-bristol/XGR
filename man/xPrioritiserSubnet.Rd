@@ -97,7 +97,9 @@ The priority score will be first scaled to the range x=[0 100] and then
 is converted to pvalue-like significant level: 10^(-x). Next,
 \code{\link{xSubneterGenes}} is used to identify a maximum-scoring gene
 subnetwork that contains as many highly prioritised genes as possible
-but a few lowly prioritised genes as linkers.
+but a few lowly prioritised genes as linkers. By choosing different
+significant cutoff, an iterative procedure is also used to identify the
+network with a desired number of nodes.
 }
 \examples{
 \dontrun{
