@@ -133,11 +133,19 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 			eval(parse(text=paste("data_ld <- GWAS_LD$", x, sep="")))
 			ind <- match(rownames(data_ld), leads)
 			ind_lead <- which(!is.na(ind))
-			ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
-		
-			sLL <- data_ld[ind_lead, ind_ld]
-			summ <- summary(sLL)
-			res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+			
+			if(length(ind_lead) > 2){
+				ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
+				sLL <- data_ld[ind_lead, ind_ld]
+				summ <- summary(sLL)
+				res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+			}else if(length(ind_lead) == 1){
+				ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
+				sLL <- data_ld[ind_lead, ind_ld]
+				res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=names(sLL), R2=sLL, stringsAsFactors=F)
+			}else{
+				NULL
+			}
 		})
 		## get data frame (Lead LD R2)
 		LLR <- do.call(rbind, res_list)
@@ -152,14 +160,19 @@ xPrioritiserSNPs <- function(data, include.LD=NA, LD.r2=0.8, include.eQTL=NA, ne
 				ind <- match(rownames(data_ld), leads)
 				ind_lead <- which(!is.na(ind))
 				
-				if(length(ind_lead) > 0){
+				if(length(ind_lead) > 2){
 					ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
 					sLL <- data_ld[ind_lead, ind_ld]
 					summ <- summary(sLL)
 					res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+				}else if(length(ind_lead) == 1){
+					ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
+					sLL <- data_ld[ind_lead, ind_ld]
+					res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=names(sLL), R2=sLL, stringsAsFactors=F)
 				}else{
 					NULL
 				}
+				
 			})
 			## get data frame (Lead LD R2)
 			LLR_tmp <- do.call(rbind, res_list)
