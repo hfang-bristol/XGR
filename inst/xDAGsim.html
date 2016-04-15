@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity between...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xDAGsim"><tr><td>xDAGsim</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to calculate pair-wise semantic similarity between input terms based on a direct acyclic graph (DAG) with annotated data</h2>
+
+<h3>Description</h3>
+
+<p><code>xDAGsim</code> is supposed to calculate pair-wise semantic similarity
+between input terms based on a direct acyclic graph (DAG) with
+annotated data. It returns an object of class &quot;igraph&quot;, a network
+representation of input terms. Parallel computing is also supported for
+Linux or Mac operating systems.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xDAGsim(g, terms = NULL, method.term = c("Resnik", "Lin", "Schlicker",
+"Jiang", "Pesquita"), fast = T, parallel = TRUE, multicores = NULL,
+verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;. It must contain a vertex
+attribute called 'anno' for storing annotation data (see example for
+howto)</p>
+</td></tr>
+<tr valign="top"><td><code>terms</code></td>
+<td>
+<p>the terms/nodes between which pair-wise semantic
+similarity is calculated. If NULL, all terms in the input DAG will be
+used for calcluation, which is very prohibitively expensive!</p>
+</td></tr>
+<tr valign="top"><td><code>method.term</code></td>
+<td>
+<p>the method used to measure semantic similarity
+between input terms. It can be &quot;Resnik&quot; for information content (IC) of
+most informative common ancestor (MICA) (see
+<a href="http://arxiv.org/pdf/cmp-lg/9511007.pdf">http://arxiv.org/pdf/cmp-lg/9511007.pdf</a>), &quot;Lin&quot; for 2*IC at MICA
+divided by the sum of IC at pairs of terms (see
+<a href="https://www.cse.iitb.ac.in/~cs626-449/Papers/WordSimilarity/3.pdf">https://www.cse.iitb.ac.in/~cs626-449/Papers/WordSimilarity/3.pdf</a>),
+&quot;Schlicker&quot; for weighted version of 'Lin' by the 1-prob(MICA) (see
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16776819">http://www.ncbi.nlm.nih.gov/pubmed/16776819</a>), &quot;Jiang&quot; for 1 -
+difference between the sum of IC at pairs of terms and 2*IC at MICA
+(see <a href="http://arxiv.org/pdf/cmp-lg/9709008.pdf">http://arxiv.org/pdf/cmp-lg/9709008.pdf</a>), &quot;Pesquita&quot; for
+graph information content similarity related to Tanimoto-Jacard index
+(ie. summed information content of common ancestors divided by summed
+information content of all ancestors of term1 and term2 (see
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>)). By default, it
+uses &quot;Schlicker&quot; method</p>
+</td></tr>
+<tr valign="top"><td><code>fast</code></td>
+<td>
+<p>logical to indicate whether a vectorised fast computation
+is used. By default, it sets to true. It is always advisable to use
+this vectorised fast computation; since the conventional computation is
+just used for understanding scripts</p>
+</td></tr>
+<tr valign="top"><td><code>parallel</code></td>
+<td>
+<p>logical to indicate whether parallel computation with
+multicores is used. By default, it sets to true, but not necessarily
+does so. Partly because parallel backends available will be
+system-specific (now only Linux or Mac OS). Also, it will depend on
+whether these two packages &quot;foreach&quot; and &quot;doMC&quot; have been installed. It
+can be installed via:
+<code>source("http://bioconductor.org/biocLite.R");
+biocLite(c("foreach","doMC"))</code>. If not yet installed, this option will
+be disabled</p>
+</td></tr>
+<tr valign="top"><td><code>multicores</code></td>
+<td>
+<p>an integer to specify how many cores will be
+registered as the multicore parallel backend to the 'foreach' package.
+If NULL, it will use a half of cores available in a user's computer.
+This option only works when parallel computation is enabled</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>It returns an object of class &quot;igraph&quot;, with nodes for input terms and
+edges for pair-wise semantic similarity between terms.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xDAGanno</code>, <code>xConverter</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# 1) SNP-based ontology
+# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+g
+
+# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+anno &lt;- xRDataLoader(RData='GWAS2EF')
+
+# 1c) prepare for ontology and its annotation information
+dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
+true.path.rule=TRUE, verbose=TRUE)
+
+# 1d) calculate pair-wise semantic similarity between 5 randomly chosen terms
+terms &lt;- sample(V(dag)$name, 5)
+sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
+parallel=FALSE)
+sim
+
+###########################################################
+# 2) Gene-based ontology
+# 2a) ig.MP (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.MP')
+
+# 2b) load human genes annotated by MP (an object of class "GS" containing the 'gs' component)
+GS &lt;- xRDataLoader(RData='org.Hs.egMP')
+anno &lt;- GS$gs # notes: This is a list
+
+# 2c) prepare for annotation data
+dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
+true.path.rule=TRUE, verbose=TRUE)
+
+# 2d) calculate pair-wise semantic similarity between 5 randomly chosen terms
+terms &lt;- sample(V(dag)$name, 5)
+sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
+parallel=FALSE)
+sim
+
+## End(Not run)
+</pre>
+
+
+</body></html>

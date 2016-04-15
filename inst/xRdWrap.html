@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to wrap texts from Rd files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xRdWrap"><tr><td>xRdWrap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to wrap texts from Rd files</h2>
+
+<h3>Description</h3>
+
+<p><code>xRdWrap</code> is supposed to wrap texts from Rd files under a given
+directory.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xRdWrap(path = "./XGR/man", remove.dontrun = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>a directory containing Rd files</p>
+</td></tr>
+<tr valign="top"><td><code>remove.dontrun</code></td>
+<td>
+<p>logical to indicate whether to remove the
+restriction of not running examples. By default, it sets to FALSE
+without any modefications</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>none
+</p>
+
+
+<h3>Note</h3>
+
+<p>This auxiliary function helps create a new package. The orignal Rd
+files will be replaced with new ones.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRdWrap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# xRdWrap(path="./XGR/man", remove.dontrun=FALSE)
+</pre>
+
+
+</body></html>

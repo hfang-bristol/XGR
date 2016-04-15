@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise semantic similarity results as a circos...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xCircos"><tr><td>xCircos</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise semantic similarity results as a circos plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xCircos</code> is used to visualise the results of similarity analysis
+as a circos plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
+chr.exclude = NULL, entity.label.cex = 0.8, verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;. It stores semantic similarity
+results with nodes for genes/SNPs and edges for pair-wise semantic
+similarity between them</p>
+</td></tr>
+<tr valign="top"><td><code>entity</code></td>
+<td>
+<p>the entity of similarity analysis for which results are
+being plotted. It can be either &quot;SNP&quot; or &quot;Gene&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>top_num</code></td>
+<td>
+<p>the top number of similarity edges to be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>ideogram</code></td>
+<td>
+<p>logical to indicate whether chromosome banding is
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>chr.exclude</code></td>
+<td>
+<p>a character vector of chromosomes to exclude from
+the plot, e.g. c(&quot;chrX&quot;, &quot;chrY&quot;). Default is NULL</p>
+</td></tr>
+<tr valign="top"><td><code>entity.label.cex</code></td>
+<td>
+<p>the font size of genes/SNPs labels. Default is
+0.8</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a circos plot with the semantic similarity between input snps/genes
+represented by the colour of the links
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+library(igraph)
+library(RCircos)
+library(GenomicRanges)
+
+# provide genes and SNPs reported in AS GWAS studies
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+
+# 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+## Get lead SNPs reported in AS GWAS
+example.snps &lt;- names(ImmunoBase$AS$variants)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA)
+# Circos plot of the EF-based SNP similarity network
+#out.file &lt;- "SNP_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=SNP.g, entity="SNP")
+#dev.off()
+
+# 2) Gene-based similarity analysis using Disease Ontology (DO)
+## Get genes within 10kb away from AS GWAS lead SNPs
+example.genes &lt;- names(which(ImmunoBase$AS$genes_variants&lt;=10000))
+gene.g &lt;- xSocialiserGenes(example.genes, ontology=c("DO")
+# Circos plot of the DO-based gene similarity network
+#out.file &lt;- "Gene_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=gene.g, entity="Gene", chr.exclude="chrY")
+#dev.off()
+
+## End(Not run)
+</pre>
+
+
+</body></html>

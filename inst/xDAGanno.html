@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a subgraph of a direct acyclic graph...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xDAGanno"><tr><td>xDAGanno</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to generate a subgraph of a direct acyclic graph (DAG) induced by the input annotation data</h2>
+
+<h3>Description</h3>
+
+<p><code>xDAGanno</code> is supposed to produce a subgraph induced by the input
+annotation data, given a direct acyclic graph (DAG; an ontology). The
+input is a graph of &quot;igraph&quot;, a list of the vertices containing
+annotation data, and the mode defining the paths to the root of DAG.
+The induced subgraph contains vertices (with annotation data) and their
+ancestors along with the defined paths to the root of DAG. The
+annotations at these vertices (including their ancestors) can also be
+updated according to the true-path rule: those annotated to a term
+should also be annotated by its all ancestor terms.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xDAGanno(g, annotation, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = TRUE, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; to represent DAG</p>
+</td></tr>
+<tr valign="top"><td><code>annotation</code></td>
+<td>
+<p>the vertices/nodes for which annotation data are
+provided. It can be a sparse Matrix of class &quot;dgCMatrix&quot; (with
+variants/genes as rows and terms as columns), or a list of nodes/terms
+each containing annotation data, or an object of class 'GS' (basically
+a list for each node/term with annotation data)</p>
+</td></tr>
+<tr valign="top"><td><code>path.mode</code></td>
+<td>
+<p>the mode of paths induced by vertices/nodes with input
+annotation data. It can be &quot;all_paths&quot; for all possible paths to the
+root, &quot;shortest_paths&quot; for only one path to the root (for each node in
+query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
+for each node, find all shortest paths with the equal lengths)</p>
+</td></tr>
+<tr valign="top"><td><code>true.path.rule</code></td>
+<td>
+<p>logical to indicate whether the true-path rule
+should be applied to propagate annotations. By default, it sets to
+true</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+
+<ul>
+<li><p><code>subg</code>: an induced subgraph, an object of class &quot;igraph&quot;. In
+addition to the original attributes to nodes and edges, the return
+subgraph is also appended by two node attributes: 1) &quot;anno&quot; containing
+a list of variants/genes either as original annotations (and inherited
+annotations; 2) &quot;IC&quot; standing for information content defined as
+negative 10-based log-transformed frequency of variants/genes annotated
+to that term.
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>For the mode &quot;shortest_paths&quot;, the induced subgraph is the most
+concise, and thus informative for visualisation when there are many
+nodes in query, while the mode &quot;all_paths&quot; results in the complete
+subgraph.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# 1) SNP-based ontology
+# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+
+# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+anno &lt;- xRDataLoader(RData='GWAS2EF')
+
+# 1c) prepare for annotation data
+# randomly select 5 terms/vertices (and their annotation data)
+annotation &lt;- anno[, sample(1:dim(anno)[2],5)]
+
+# 1d) obtain the induced subgraph according to the input annotation data
+# based on shortest paths (i.e. the most concise subgraph induced)
+dag &lt;- xDAGanno(g, annotation, path.mode="shortest_paths",
+verbose=TRUE)
+
+# 1e) color-code nodes/terms according to the number of annotations
+data &lt;- sapply(V(dag)$anno, length)
+names(data) &lt;- V(dag)$name
+dnet::visDAG(g=dag, data=data, node.info="both")
+
+####################
+# Below is for those SNPs annotated by the term called 'ankylosing spondylitis'
+# The steps 1a) and 1b) are the same as above
+# 1c') prepare for annotation data
+# select a term 'ankylosing spondylitis'
+terms &lt;- V(g)$term_id[grep('ankylosing spondylitis',V(g)$term_name,
+perl=TRUE)]
+ind &lt;- which(colnames(anno) %in% terms)
+annotation &lt;- lapply(ind, function(x){names(which(anno[,x]!=0))})
+names(annotation) &lt;- colnames(anno)[ind]
+
+# 1d') obtain the induced subgraph according to the input annotation data
+# based on all possible paths (i.e. the complete subgraph induced)
+dag &lt;- xDAGanno(g, annotation, path.mode="all_paths", verbose=TRUE)
+
+# 1e') color-code nodes/terms according to the number of annotations
+data &lt;- sapply(V(dag)$anno, length)
+names(data) &lt;- V(dag)$name
+dnet::visDAG(g=dag, data=data, node.info="both")
+
+###########################################################
+# 2) Gene-based ontology
+# 2a) ig.MP (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.MP')
+
+# 2b) load human genes annotated by MP (an object of class "GS" containing the 'gs' component)
+GS &lt;- xRDataLoader(RData='org.Hs.egMP')
+anno &lt;- GS$gs # notes: This is a list
+
+# 2c) prepare for annotation data
+# randomly select 5 terms/vertices (and their annotation data)
+annotation &lt;- anno[sample(1:length(anno),5)]
+
+# 2d) obtain the induced subgraph according to the input annotation data
+# based on shortest paths (i.e. the most concise subgraph induced)
+# but without applying true-path rule
+dag &lt;- xDAGanno(g, annotation, path.mode="shortest_paths",
+true.path.rule=TRUE, verbose=TRUE)
+
+# 2e) color-code nodes/terms according to the number of annotations
+data &lt;- sapply(V(dag)$anno, length)
+names(data) &lt;- V(dag)$name
+dnet::visDAG(g=dag, data=data, node.info="both")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
