@@ -4,7 +4,7 @@
 \title{Immune-disease associated variants, regions and genes from ImmunoBase (hg19)}
 
 \usage{
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+data(ImmunoBase)
 }
 
 \description{

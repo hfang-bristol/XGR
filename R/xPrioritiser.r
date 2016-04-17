@@ -19,7 +19,7 @@
 #' }
 #' @note The input graph will treat as an unweighted graph if there is no 'weight' edge attribute associated with
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
+#' @seealso \code{\link{xRDataLoader}}, \code{\link{xRWR}}, \code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
 #' @include xPrioritiser.r
 #' @examples
 #' \dontrun{
@@ -105,17 +105,17 @@ xPrioritiser <- function(seeds, g, normalise=c("laplacian","row","column","none"
     if(verbose){
         now <- Sys.time()
         message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("start to prioritise targets (%s):", as.character(now)), appendLF=T)
+        message(sprintf("'xRWR' is being called (%s):", as.character(now)), appendLF=T)
         message(sprintf("#######################################################", appendLF=T))
     }
     
-    PTmatrix <- suppressWarnings(dRWR(g=ig, normalise=normalise, setSeeds=setSeeds, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose))
+    PTmatrix <- suppressWarnings(xRWR(g=ig, normalise=normalise, setSeeds=setSeeds, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose))
 	rownames(PTmatrix) <- V(g)$name
 	
 	if(verbose){
         now <- Sys.time()
         message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("targets has been prioritised (%s)!", as.character(now)), appendLF=T)
+        message(sprintf("'xRWR' has been finished (%s)!", as.character(now)), appendLF=T)
         message(sprintf("#######################################################\n", appendLF=T))
     }
     

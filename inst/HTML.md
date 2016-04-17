@@ -41,6 +41,7 @@ These functions are essential as they deal with infrastructure such as built-in 
 * [`xConverter`](http://rawgit.com/hfang-bristol/XGR/master/inst/xConverter.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xConverter.r))
 * [`xCircos`](http://rawgit.com/hfang-bristol/XGR/master/inst/xCircos.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xCircos.r))
 * [`xVisNet`](http://rawgit.com/hfang-bristol/XGR/master/inst/xVisNet.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xVisNet.r))
+* [`xRWR`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRWR.html) (see [`Source Code`](https://github.com/hfang-bristol/XGR/blob/master/R/xRWR.r))
 
 ### Auxiliary functions
 These functions provide supplementary help and support:

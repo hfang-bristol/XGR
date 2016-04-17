@@ -4,7 +4,7 @@
 \title{Table S2A for cis-eQTLs among shared datasets from Benjamin et al. (2014)}
 
 \usage{
-JKscience_TS2A <- xRDataLoader(RData.customised='JKscience_TS2A')
+data(JKscience_TS2A)
 }
 
 \description{

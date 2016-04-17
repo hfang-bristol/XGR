@@ -49,7 +49,7 @@ this option. Otherwise, those genes modulated by eQTL will be included:
 immune stimulation in monocytes ('JKscience_TS1A' and 'JKscience_TS2B'
 for cis-eQTLs or 'JKscience_TS3A' for trans-eQTLs) from Science 2014,
 343(6175):1246949; cis- and trans-eQTL in B cells ('JKng_bcell') and in
-monocytes ('JKng_mono') from Nature Genetics 2012, 44(5):502–510;}
+monocytes ('JKng_mono') from Nature Genetics 2012, 44(5):502-510.}
 
 \item{network}{the built-in network. Currently two sources of network
 information are supported: the STRING database (version 10) and the

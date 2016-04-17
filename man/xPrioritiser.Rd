@@ -103,7 +103,8 @@ pNode <- xPrioritiser(seeds=data, g=g, restart=0.75)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xPrioritiserSNPs}},
-\code{\link{xPrioritiserGenes}}, \code{\link{xPrioritiserPathways}}
+\code{\link{xRDataLoader}}, \code{\link{xRWR}},
+\code{\link{xPrioritiserSNPs}}, \code{\link{xPrioritiserGenes}},
+\code{\link{xPrioritiserPathways}}
 }
 

@@ -19,7 +19,7 @@ class &quot;igraph&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPrioritiserSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
+xPrioritiserSubnet(pNode, priority.quantite = 0.1, network = c(NA,
 "STRING_highest", "STRING_high", "STRING_medium", "PCommonsUN_high",
 "PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",
 "PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
@@ -47,7 +47,7 @@ analysis. If NULL or NA, all prioritised genes will be used</p>
 </td></tr>
 <tr valign="top"><td><code>network</code></td>
 <td>
-<p>the built-in network. If NULL, the network used for
+<p>the built-in network. If NA, the network used for
 prioritisation will be used, which is part of the object of class
 &quot;pNode&quot;. Otherwise, choose the other network of interest. Currently two
 sources of network information are supported: the STRING database

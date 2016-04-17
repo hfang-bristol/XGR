@@ -4,7 +4,7 @@
 \alias{xPrioritiserSubnet}
 \title{Function to identify a gene network from top prioritised genes}
 \usage{
-xPrioritiserSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
+xPrioritiserSubnet(pNode, priority.quantite = 0.1, network = c(NA,
 "STRING_highest", "STRING_high", "STRING_medium", "PCommonsUN_high",
 "PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",
 "PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
@@ -22,7 +22,7 @@ RData.location =
 default, 10% of top prioritised genes will be used for network
 analysis. If NULL or NA, all prioritised genes will be used}
 
-\item{network}{the built-in network. If NULL, the network used for
+\item{network}{the built-in network. If NA, the network used for
 prioritisation will be used, which is part of the object of class
 "pNode". Otherwise, choose the other network of interest. Currently two
 sources of network information are supported: the STRING database
