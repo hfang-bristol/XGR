@@ -1,16 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise semantic similarity results as a circos...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a network as a circos plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xCircos"><tr><td>xCircos</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise semantic similarity results as a circos plot</h2>
+<h2>Function to visualise a network as a circos plot</h2>
 
 <h3>Description</h3>
 
-<p><code>xCircos</code> is used to visualise the results of similarity analysis
-as a circos plot.
+<p><code>xCircos</code> is used to visualise a network as a circos plot. The
+network must be a 'igraph' object.
 </p>
 
 
@@ -18,7 +18,7 @@ as a circos plot.
 
 <pre>
 xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
-chr.exclude = NULL, entity.label.cex = 0.8, verbose = T,
+chr.exclude = "auto", entity.label.cex = 0.8, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 </pre>
@@ -29,9 +29,9 @@ RData.location =
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;. It stores semantic similarity
-results with nodes for genes/SNPs and edges for pair-wise semantic
-similarity between them</p>
+<p>an object of class &quot;igraph&quot;. For example, it stores semantic
+similarity results with nodes for genes/SNPs and edges for pair-wise
+semantic similarity between them</p>
 </td></tr>
 <tr valign="top"><td><code>entity</code></td>
 <td>
@@ -50,7 +50,9 @@ plotted</p>
 <tr valign="top"><td><code>chr.exclude</code></td>
 <td>
 <p>a character vector of chromosomes to exclude from
-the plot, e.g. c(&quot;chrX&quot;, &quot;chrY&quot;). Default is NULL</p>
+the plot, e.g. c(&quot;chrX&quot;, &quot;chrY&quot;). By defautl, it is 'auto' meaning
+those chromosomes without data will be excluded. If NULL, no chromosome
+is excluded</p>
 </td></tr>
 <tr valign="top"><td><code>entity.label.cex</code></td>
 <td>
@@ -72,8 +74,8 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a circos plot with the semantic similarity between input snps/genes
-represented by the colour of the links
+<p>a circos plot with edge weights between input snps/genes represented by
+the colour of the links
 </p>
 
 

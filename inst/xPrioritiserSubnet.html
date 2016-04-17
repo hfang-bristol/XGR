@@ -133,9 +133,14 @@ object)
 is converted to pvalue-like significant level: 10^(-x). Next,
 <code>xSubneterGenes</code> is used to identify a maximum-scoring gene
 subnetwork that contains as many highly prioritised genes as possible
-but a few lowly prioritised genes as linkers. By choosing different
-significant cutoff, an iterative procedure is also used to identify the
-network with a desired number of nodes.
+but a few lowly prioritised genes as linkers. An iterative procedure of
+scanning different priority thresholds is also used to identify the
+network with a desired number of nodes/genes. Notably, the preferential
+use of the same network as used in gene-level prioritisation is due to
+the fact that gene-level affinity/priority scores are smoothly
+distributed over the network after being walked. In other words, the
+chance of identifying such a gene network enriched with top prioritised
+genes is much higher.
 </p>
 
 

@@ -2,17 +2,17 @@
 % Please edit documentation in R/xCircos.r
 \name{xCircos}
 \alias{xCircos}
-\title{Function to visualise semantic similarity results as a circos plot}
+\title{Function to visualise a network as a circos plot}
 \usage{
 xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
-chr.exclude = NULL, entity.label.cex = 0.8, verbose = T,
+chr.exclude = "auto", entity.label.cex = 0.8, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 }
 \arguments{
-\item{g}{an object of class "igraph". It stores semantic similarity
-results with nodes for genes/SNPs and edges for pair-wise semantic
-similarity between them}
+\item{g}{an object of class "igraph". For example, it stores semantic
+similarity results with nodes for genes/SNPs and edges for pair-wise
+semantic similarity between them}
 
 \item{entity}{the entity of similarity analysis for which results are
 being plotted. It can be either "SNP" or "Gene"}
@@ -23,7 +23,9 @@ being plotted. It can be either "SNP" or "Gene"}
 plotted}
 
 \item{chr.exclude}{a character vector of chromosomes to exclude from
-the plot, e.g. c("chrX", "chrY"). Default is NULL}
+the plot, e.g. c("chrX", "chrY"). By defautl, it is 'auto' meaning
+those chromosomes without data will be excluded. If NULL, no chromosome
+is excluded}
 
 \item{entity.label.cex}{the font size of genes/SNPs labels. Default is
 0.8}
@@ -35,12 +37,12 @@ displayed in the screen. By default, it sets to true for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a circos plot with the semantic similarity between input snps/genes
-represented by the colour of the links
+a circos plot with edge weights between input snps/genes represented by
+the colour of the links
 }
 \description{
-\code{xCircos} is used to visualise the results of similarity analysis
-as a circos plot.
+\code{xCircos} is used to visualise a network as a circos plot. The
+network must be a 'igraph' object.
 }
 \note{
 none

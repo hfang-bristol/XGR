@@ -1,17 +1,17 @@
-#' Function to visualise semantic similarity results as a circos plot
+#' Function to visualise a network as a circos plot
 #'
-#' \code{xCircos} is used to visualise the results of similarity analysis as a circos plot. 
+#' \code{xCircos} is used to visualise a network as a circos plot. The network must be a 'igraph' object. 
 #'
-#' @param g an object of class "igraph". It stores semantic similarity results with nodes for genes/SNPs and edges for pair-wise semantic similarity between them 
+#' @param g an object of class "igraph". For example, it stores semantic similarity results with nodes for genes/SNPs and edges for pair-wise semantic similarity between them 
 #' @param entity the entity of similarity analysis for which results are being plotted. It can be either "SNP" or "Gene"
 #' @param top_num the top number of similarity edges to be plotted
 #' @param ideogram logical to indicate whether chromosome banding is plotted
-#' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). Default is NULL
+#' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). By defautl, it is 'auto' meaning those chromosomes without data will be excluded. If NULL, no chromosome is excluded
 #' @param entity.label.cex the font size of genes/SNPs labels. Default is 0.8
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' a circos plot with the semantic similarity between input snps/genes represented by the colour of the links
+#' a circos plot with edge weights between input snps/genes represented by the colour of the links
 #' @note none
 #' @export
 #' @import RCircos
@@ -49,7 +49,7 @@
 #' #dev.off()
 #' } 
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclude=NULL, entity.label.cex=0.8, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclude="auto", entity.label.cex=0.8, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
 {
   
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -85,6 +85,40 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
     	stop("Please indicate whether your analysis entity was SNPs or genes.\n")
   	}
   
+  	## Convert into format required for Circos plot
+  	if(entity == "SNP"){
+		allnames <- names(pos)
+    }else if(entity == "Gene"){
+    	allnames <- mcols(pos)$Symbol
+    }
+    A <- match(df$from, allnames)
+	B <- match(df$to, allnames)
+	#flag <- complete.cases(cbind(A, B))
+	flag <- !is.na(A) & !is.na(B)
+	AA <- A[flag]
+	BB <- B[flag]
+	input.data.A <- GenomicRanges::as.data.frame(pos[AA], row.names=NULL)
+	input.data.B <- GenomicRanges::as.data.frame(pos[BB], row.names=NULL)
+	input.data <- cbind.data.frame(input.data.A[, 1:3], input.data.B[, 1:3])
+	if(is.null(df$weight)){
+		input.data$similarity <- rep(1, sum(flag))
+	}else{
+		input.data$similarity <- as.numeric(as.character(df$weight[flag]))
+	}
+	label.data <- rbind(input.data.A[, 1:3], input.data.B[, 1:3])
+	label.data$Name <- c(df$from[flag], df$to[flag])
+  	
+  	## decide on which chromosomes will be excluded
+  	if(!is.null(chr.exclude)){
+  		chr.exclude <- chr.exclude[!is.na(chr.exclude)]
+		if(length(chr.exclude)==0){
+			chr.exclude <- NULL
+		}else if(sum(chr.exclude=='auto')>0){
+			flag <- levels(label.data$seqnames) %in% as.character(unique(label.data$seqnames))
+			chr.exclude <- levels(label.data$seqnames)[!flag]
+		}
+  	}
+  	
   	## Load human chromosome ideogram
 	if(verbose){
 		now <- Sys.time()
@@ -131,29 +165,6 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 	}
   	RCircos.Set.Plot.Area()
   	RCircos.Chromosome.Ideogram.Plot()
-
-  	## Convert Socialiser output into format required for Circos plot
-  	if(entity == "SNP"){
-		allnames <- names(pos)
-    }else if(entity == "Gene"){
-    	allnames <- mcols(pos)$Symbol
-    }
-    A <- match(df$from, allnames)
-	B <- match(df$to, allnames)
-	#flag <- complete.cases(cbind(A, B))
-	flag <- !is.na(A) & !is.na(B)
-	AA <- A[flag]
-	BB <- B[flag]
-	input.data.A <- GenomicRanges::as.data.frame(pos[AA], row.names=NULL)
-	input.data.B <- GenomicRanges::as.data.frame(pos[BB], row.names=NULL)
-	input.data <- cbind.data.frame(input.data.A[, 1:3], input.data.B[, 1:3])
-	if(is.null(df$weight)){
-		input.data$similarity <- rep(1, sum(flag))
-	}else{
-		input.data$similarity <- as.numeric(as.character(df$weight[flag]))
-	}
-	label.data <- rbind(input.data.A[, 1:3], input.data.B[, 1:3])
-	label.data$Name <- c(df$from[flag], df$to[flag])
   
   	## Plot link data coloured according to the similarity output
 	if(verbose){
