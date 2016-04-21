@@ -1,0 +1,13 @@
+CHANGES IN VERSION 1.0.0
+-----------------------
+
+NEW FEATURES
+
+    o A new data interpretation system by comprehensively utilising ontology and network information to make a user-defined gene or SNP list more interpretable
+
+    o Enrichment analysis using either built-in or custom ontologies
+
+    o Similarity analysis for calculating semantic similarity between genes (or SNPs) based on their ontology annotation profiles
+    
+    o Network analysis for identifying gene networks given a query list of (significant) genes or SNPs
+    
