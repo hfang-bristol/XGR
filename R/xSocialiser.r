@@ -140,7 +140,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     }
     
     ## a list of SNPs, each containing terms annotated by
-    SNPs2terms <- sapply(1:length(SNPs), function(x){
+    SNPs2terms <- lapply(1:length(SNPs), function(x){
         res <- names(which(sGT[x,]==1))
         if(force){
             subg <- dnet::dDAGinduce(ig, nodes_query=res, path.mode="all_paths")
@@ -152,7 +152,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     terms <- unique(unlist(SNPs2terms))
     
     ## also instore index for terms (in SNPs2terms)
-    SNPs2terms_index <- sapply(SNPs2terms, function(x){
+    SNPs2terms_index <- lapply(SNPs2terms, function(x){
         match(x, terms)
     })
     
