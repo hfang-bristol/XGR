@@ -52,7 +52,7 @@ biocLite("XGR")
 
 * Optionally, install the development version of `XGR` package (now hosted in *GitHub* [^2]):
 ```{r eval=F}
-if(!("devtools" %in% rownames(installed.packages()))) install.packages("devtools", repos="http://cran.r-project.org")
+if(!("devtools" %in% rownames(installed.packages()))) install.packages("devtools")
 library(devtools)
 install_github(c("hfang-bristol/XGR"), dependencies=T)
 ```
@@ -262,7 +262,7 @@ knitr::kable(res_MP[1:10,], caption="", row.names=F)
 
 ### Gene-based network analysis
 
-Network analysis at the gene level requires choosing a pre-defined gene networks as a whole network (called `whole-network`). Generally speaking, two sources of whole-network information are supported: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from a functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from a physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the interactions of varying quality in addition to interaction types: 
+Network analysis at the gene level requires choosing a pre-defined gene network as a whole network (called `whole-network`). Generally speaking, two sources of whole-network information are supported: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from a functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from a physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the interactions of varying quality in addition to interaction types: 
 
 ```{r, eval=T, echo=F}
 net <- list()
@@ -449,7 +449,7 @@ A summary of diseases, GWAS lead SNPs and their nearby genes:
 knitr::kable(df_ib, caption="", row.names=F)
 ```
 
-In the following subsections, we focus on two diseases, Crohn's Disease (CRO) and Celiac Disease (CEL), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.
+In the following subsections, we focus on 3 diseases, Crohn's Disease (CRO), Celiac Disease (CEL) and Inflammatory Bowel Disease (IBD), identifying putative gene networks that are likely modulated by their corresponding lead (or LD) SNPs. The applications in the other diseases can be similarly done.
 
 ### SNP-modulated gene network in Crohn's Disease
 
@@ -529,6 +529,47 @@ Enrichment results for the top 10 significant pathways are shown below:
 
 ```{r, eval=T, echo=F}
 knitr::kable(res_CEL_PW[1:10,], digits=20, caption="", row.names=F)
+```
+
+
+### SNP-modulated gene network in Inflammatory Bowel Disease
+
+```{r, eval=T, cache=T}
+# get SNPs reported in IBD GWAS and their significance info (p-values)
+gr <- ImmunoBase$IBD$variant
+data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
+
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_IBD <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
+```
+
+The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
+
+```{r, fig.width=8, fig.height=8, eval=T, cache=T, echo=T}
+pattern <- -log10(as.numeric(V(subnet_IBD)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+vmax <- ceiling(stats::quantile(pattern, 0.75))
+vmin <- floor(min(pattern))
+xVisNet(g=subnet_IBD, pattern=pattern, glayout=layout_(subnet_IBD, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+```
+
+> Identify pathways enriched with genes in the identified network
+
+```{r, eval=T, cache=T, results="hide"}
+data <- V(subnet_IBD)$name
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2CPall")
+# view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+# save enrichment results to the file 'IBD_Pathway_enrichments.txt'
+res_IBD_PW <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=F)
+output <- data.frame(term=rownames(res_IBD_PW), res_IBD_PW)
+write.table(output, file="IBD_Pathway_enrichments.txt", sep="\t", row.names=F)
+```
+
+Enrichment results for the top 10 significant pathways are shown below:
+
+```{r, eval=T, echo=F}
+knitr::kable(res_IBD_PW[1:10,], digits=20, caption="", row.names=F)
 ```
 
 
