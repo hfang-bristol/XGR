@@ -47,9 +47,9 @@ without extension), plus specify your file RData path in
 genomic locations) based on human genome assembly hg19. Even the user
 can specify the customised input. To do so, first save your RData file
 (containing an GR object) into your local computer, and make sure the
-GR object content names refer to Gene Symbols. Then, tell "GR.SNP" with
-your RData file name (with or without extension), plus specify your
-file RData path in "RData.location"}
+GR object content names refer to Gene Symbols. Then, tell "GR.Gene"
+with your RData file name (with or without extension), plus specify
+your file RData path in "RData.location"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

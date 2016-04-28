@@ -50,11 +50,11 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("XGR")
 ```
 
-* Optionally, install the development version of `XGR` package (now hosted in *GitHub* [^2]):
+* Highly recommend to install the development version of `XGR` package (now hosted in *GitHub* [^2]):
 ```{r eval=F}
 if(!("devtools" %in% rownames(installed.packages()))) install.packages("devtools")
 library(devtools)
-install_github(c("hfang-bristol/XGR"), dependencies=T)
+install_github(c("hfang-bristol/XGR", "hfang-bristol/dnet"), dependencies=T)
 ```
 
 [^2]: <https://github.com/hfang-bristol/XGR>
@@ -459,7 +459,7 @@ gr <- ImmunoBase$CRO$variant
 data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 
 # find maximum-scoring gene subnetwork with the desired node number=30
-subnet_CRO <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
+subnet_CRO <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.size=25)
 ```
 
 The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
@@ -499,7 +499,7 @@ gr <- ImmunoBase$CEL$variant
 data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 
 # find maximum-scoring gene subnetwork with the desired node number=30
-subnet_CEL <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
+subnet_CEL <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.size=25)
 ```
 
 The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
@@ -540,7 +540,7 @@ gr <- ImmunoBase$IBD$variant
 data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 
 # find maximum-scoring gene subnetwork with the desired node number=30
-subnet_IBD <- xSubneterSNPs(data=data, network="STRING_high", distance.max=500000, seed.genes=T, subnet.size=30)
+subnet_IBD <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.size=25)
 ```
 
 The identified gene network with nodes colored according to scores (the higher the more signficant) is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
