@@ -12,7 +12,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
 "PCommonsDN_CTD"), network.customised = NULL, distance.max = 2e+05,
 seed.genes = T, subnet.significance = 5e-05, subnet.size = NULL,
-verbose = T,
+GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -97,6 +97,26 @@ thresholds will be scanned to find the optimal significance threshold
 leading to the desired number of nodes in the resulting subnet.
 Notably, the given significance threshold will be overwritten by this
 option}
+
+\item{GR.SNP}{the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
+without extension), plus specify your file RData path in
+"RData.location"}
+
+\item{GR.Gene}{the genomic regions of genes. By default, it is
+'UCSC_genes', that is, UCSC known canonical genes (together with
+genomic locations) based on human genome assembly hg19. Even the user
+can specify the customised input. To do so, first save your RData file
+(containing an GR object) into your local computer, and make sure the
+GR object content names refer to Gene Symbols. Then, tell "GR.SNP" with
+your RData file name (with or without extension), plus specify your
+file RData path in "RData.location"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

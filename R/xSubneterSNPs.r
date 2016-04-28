@@ -11,6 +11,8 @@
 #' @param seed.genes logical to indicate whether the identified network is restricted to seed genes (ie nearby genes that are located within defined distance window centred on lead or LD SNPs). By default, it sets to true
 #' @param subnet.significance the given significance threshold. By default, it is set to NULL, meaning there is no constraint on nodes/genes. If given, those nodes/genes with p-values below this are considered significant and thus scored positively. Instead, those p-values above this given significance threshold are considered insigificant and thus scored negatively
 #' @param subnet.size the desired number of nodes constrained to the resulting subnet. It is not nulll, a wide range of significance thresholds will be scanned to find the optimal significance threshold leading to the desired number of nodes in the resulting subnet. Notably, the given significance threshold will be overwritten by this option
+#' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_genes', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Even the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
@@ -57,7 +59,7 @@
 #' xCircos(g=subnet, entity="Gene")
 #' }
 
-xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, distance.max=200000, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, distance.max=200000, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     startT <- Sys.time()
@@ -198,7 +200,14 @@ xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_high
 		now <- Sys.time()
 		message(sprintf("Load positional information for SNPs (%s) ...", as.character(now)), appendLF=T)
 	}
-  	pos_SNP <- xRDataLoader(RData.customised="RegulomeDB_SNPs", RData.location=RData.location, verbose=verbose)
+    pos_SNP <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+    if(is.null(pos_SNP)){
+    	GR.SNP <- "dbSNP_GWAS"
+		if(verbose){
+			message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
+		}
+    	pos_SNP <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+    }
   	ind <- match(names(seeds.snps), names(pos_SNP))
   	ind <- ind[!is.na(ind)]
   	if(length(ind)){
@@ -218,7 +227,14 @@ xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_high
 		now <- Sys.time()
 		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
 	}
-  	gr_Gene <- xRDataLoader(RData.customised="UCSC_genes", RData.location=RData.location, verbose=verbose)
+    gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+    if(is.null(gr_Gene)){
+    	GR.Gene <- "UCSC_genes"
+		if(verbose){
+			message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+		}
+    	gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+    }
     
 	# genes: get all UCSC genes within 500k away from variants
 	maxgap <- distance.max
@@ -242,7 +258,7 @@ xSubneterSNPs <- function(data, include.LD=NA, LD.r2=0.8, network=c("STRING_high
 		
 		## seeds weights according to wD and WP
 		res <- max(wD * wS)
-		names(res) <- mcols(x)$Symbol
+		names(res) <- names(x)
 		res
 	})
 	dist.seeds.genes <- unlist(res_list)
