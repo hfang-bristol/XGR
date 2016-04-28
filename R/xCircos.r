@@ -8,6 +8,8 @@
 #' @param ideogram logical to indicate whether chromosome banding is plotted
 #' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). By defautl, it is 'auto' meaning those chromosomes without data will be excluded. If NULL, no chromosome is excluded
 #' @param entity.label.cex the font size of genes/SNPs labels. Default is 0.8
+#' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_genes', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Even the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -49,7 +51,7 @@
 #' #dev.off()
 #' } 
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclude="auto", entity.label.cex=0.8, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclude="auto", entity.label.cex=0.8, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
   
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -77,20 +79,32 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 		now <- Sys.time()
 		message(sprintf("Loading positional information for %s (%s) ...", entity, as.character(now)), appendLF=T)
 	}
+
   	if(entity=="SNP") {
-    	pos <- xRDataLoader(RData.customised="RegulomeDB_SNPs", verbose=verbose, RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+    	if(is.null(pos)){
+    		GR.SNP <- "dbSNP_GWAS"
+			if(verbose){
+				message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
+			}
+    		pos <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+    	}
   	}else if(entity == "Gene") {
-    	pos <- xRDataLoader(RData.customised="UCSC_genes", verbose=verbose, RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+    	if(is.null(pos)){
+    		GR.Gene <- "UCSC_genes"
+			if(verbose){
+				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+			}
+    		pos <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+    	}
   	}else{
     	stop("Please indicate whether your analysis entity was SNPs or genes.\n")
   	}
   
   	## Convert into format required for Circos plot
-  	if(entity == "SNP"){
-		allnames <- names(pos)
-    }else if(entity == "Gene"){
-    	allnames <- mcols(pos)$Symbol
-    }
+  	allnames <- names(pos)
+
     A <- match(df$from, allnames)
 	B <- match(df$to, allnames)
 	#flag <- complete.cases(cbind(A, B))

@@ -5,9 +5,9 @@
 #' @param RData which built-in RData to load. It can be one of "GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"
 #' @param RData.customised a file name for RData-formatted file. By default, it is NULL. It is designed when the user wants to import customised RData that are not listed in the above argument 'RData'. However, this argument can be always used even for those RData that are listed in the argument 'RData' 
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
-#' @param RData.location the characters to tell the location of built-in RData files. By default, it remotely locates at \url{https://github.com/hfang-bristol/RDataCentre/blob/master/XGR}. For the user equipped with fast internet connection, this option can be just left as default. But it is always advisable to download these files locally. Especially when the user needs to run this function many times, there is no need to ask the function to remotely download every time (also it will unnecessarily increase the runtime). For examples, these files (as a whole or part of them) can be first downloaded into your current working directory, and then set this option as: \eqn{RData.location="."}. Surely, the location can be anywhere as long as the user provides the correct path pointing to (otherwise, the script will have to remotely download each time)
+#' @param RData.location the characters to tell the location of built-in RData files. By default, it remotely locates at \url{https://github.com/hfang-bristol/RDataCentre/blob/master/Portal}. For the user equipped with fast internet connection, this option can be just left as default. But it is always advisable to download these files locally. Especially when the user needs to run this function many times, there is no need to ask the function to remotely download every time (also it will unnecessarily increase the runtime). For examples, these files (as a whole or part of them) can be first downloaded into your current working directory, and then set this option as: \eqn{RData.location="."}. Surely, the location can be anywhere as long as the user provides the correct path pointing to (otherwise, the script will have to remotely download each time)
 #' @return 
-#' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData.
+#' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData. If the data cannot be loaded, it returns NULL.
 #' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment.
 #' @export
 #' @import dnet
@@ -25,7 +25,7 @@
 #' org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
 #' }
 
-xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -83,8 +83,15 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 		}
 	
 		if(file.exists(destfile) & file.info(destfile)$size!=0){
-			res_RData <- get(load(destfile))
-			res_flag <- T
+		
+			if(class(suppressWarnings(try(load(destfile), T)))=="try-error"){
+				res_RData <- NULL
+				res_flag <- F				
+			}else{
+				res_RData <- get(load(destfile))
+				res_flag <- T	
+			}
+			
 		}else{
 			res_RData <- NULL
 			res_flag <- F
@@ -112,7 +119,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
     ## make sure there is no "/" at the end
     path_host <- gsub("/$", "", RData.location)
     if(path_host=="" || length(path_host)==0 || is.na(path_host)){
-        path_host <- "https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0"
+        path_host <- "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal"
     }
     
     ## load 
@@ -150,30 +157,36 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
         	}
         	
 			if(flag_failed){
-				load_remote <- paste("https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0/", RData, ".RData?raw=true", sep="")
+				load_remote <- paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep="")
 				
 				res <- my_https_downloader(load_remote, mode="wb")
 				if(res$flag==F){
-					stop("Built-in Rdata files cannot be loaded. Please check your internet connection or their location in your local machine.\n")
+					warnings("Built-in Rdata files cannot be loaded. Please check your internet connection or their location in your local machine.\n")
+					eval(parse(text=paste(RData, " <- res$RData", sep="")))
 				}else{
 					eval(parse(text=paste(RData, " <- res$RData", sep="")))
 				}
 			}
 		
 			load_RData <- load_remote
+			out <- base::get(RData)
+			
         }else{
             load_RData <- RData_local[load_flag]
-            load(load_RData)
+            out <- base::get(load(load_RData))
         }
     }else{
         load_RData <- sprintf("package 'XGR' version %s", utils::packageVersion("XGR"))
+        out <- base::get(RData)
     }
-    
-	out <- base::get(RData)
 	
     if(verbose){
         now <- Sys.time()
-        message(sprintf("'%s' (from %s) has been loaded into the working environment (at %s)", RData, load_RData, as.character(now)), appendLF=T)
+        if(!is.null(out)){
+			message(sprintf("'%s' (from %s) has been loaded into the working environment (at %s)", RData, load_RData, as.character(now)), appendLF=T)
+		}else{
+			message(sprintf("'%s' CANNOT be loaded (at %s)", RData, as.character(now)), appendLF=T)
+		}
     }
     
     invisible(out)

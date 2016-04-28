@@ -50,7 +50,7 @@
 #' xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width, edge.label=x, edge.label.cex=0.7)
 #' }
 
-xSocialiserGenes <- function(data, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+xSocialiserGenes <- function(data, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)

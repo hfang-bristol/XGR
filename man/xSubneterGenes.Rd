@@ -13,7 +13,7 @@ xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_CTD"), network.customised = NULL, seed.genes = T,
 subnet.significance = 0.01, subnet.size = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for

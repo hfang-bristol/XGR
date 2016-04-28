@@ -22,7 +22,7 @@ xRDataLoader(RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
 "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"),
 RData.customised = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{RData}{which built-in RData to load. It can be one of "GWAS2EF",
@@ -52,8 +52,8 @@ displayed in the screen. By default, it sets to TRUE for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. By default, it remotely locates at
-\url{https://github.com/hfang-bristol/RDataCentre/blob/master/XGR}. For
-the user equipped with fast internet connection, this option can be
+\url{https://github.com/hfang-bristol/RDataCentre/blob/master/Portal}.
+For the user equipped with fast internet connection, this option can be
 just left as default. But it is always advisable to download these
 files locally. Especially when the user needs to run this function many
 times, there is no need to ask the function to remotely download every
@@ -66,7 +66,8 @@ script will have to remotely download each time)}
 }
 \value{
 any use-specified variable that is given on the right side of the
-assigement sign '<-', which contains the loaded RData.
+assigement sign '<-', which contains the loaded RData. If the data
+cannot be loaded, it returns NULL.
 }
 \description{
 \code{xRDataLoader} is supposed to load the package built-in RData.

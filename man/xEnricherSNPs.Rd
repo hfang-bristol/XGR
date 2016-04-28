@@ -14,7 +14,7 @@ ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
 lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
 "all_shortest_paths"), true.path.rule = T, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{data}{an input vector. It contains a list of SNPs of interest}

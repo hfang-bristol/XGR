@@ -5,9 +5,10 @@
 \title{Function to visualise a network as a circos plot}
 \usage{
 xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
-chr.exclude = "auto", entity.label.cex = 0.8, verbose = T,
+chr.exclude = "auto", entity.label.cex = 0.8, GR.SNP = "dbSNP_GWAS",
+GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{g}{an object of class "igraph". For example, it stores semantic
@@ -29,6 +30,26 @@ is excluded}
 
 \item{entity.label.cex}{the font size of genes/SNPs labels. Default is
 0.8}
+
+\item{GR.SNP}{the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
+without extension), plus specify your file RData path in
+"RData.location"}
+
+\item{GR.Gene}{the genomic regions of genes. By default, it is
+'UCSC_genes', that is, UCSC known canonical genes (together with
+genomic locations) based on human genome assembly hg19. Even the user
+can specify the customised input. To do so, first save your RData file
+(containing an GR object) into your local computer, and make sure the
+GR object content names refer to Gene Symbols. Then, tell "GR.SNP" with
+your RData file name (with or without extension), plus specify your
+file RData path in "RData.location"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
