@@ -41,7 +41,7 @@ xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=T)
         }else{
             input <- input.file
         }
-    }else if(is.character(input.file) & input.file!=''){
+    }else if(is.character(input.file) & sum(input.file!='')){
         if(verbose){
             message(sprintf("Read the input file '%s' ...", input.file), appendLF=T)
         }       
