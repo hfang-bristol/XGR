@@ -36,7 +36,9 @@ knitr::opts_chunk$set(fig_cap="yes")
 
 # Summary
 
-We introduce an R package called *XGR*, publicly available at http://cran.r-project.org/package=XGR. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). After going through this user manual (particularly the `Applications` section which includes the demo with published data), you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app [^1].
+We introduce an R package called *XGR*, publicly available at http://cran.r-project.org/package=XGR. This package is designed to make a user-defined gene or SNP list more interpretable by comprehensively utilising ontology and network information to reveal relationships and enhance opportunities for biological discovery. XGR is unique in supporting a broad range of ontologies (including knowledge of biological and molecular functions, pathways, diseases and phenotypes - in both human and mouse) and different types of networks (including functional, physical and pathway interactions). 
+
+In this user manual, you will be guided through the steps necessary to use this tool. After going through particularly the `Applications` section which includes the demo with published data, you will be able to: 1) perform enrichment analysis using either built-in or custom ontologies, 2) calculate semantic similarity between genes (or between SNPs) based on their ontology annotation profiles, and 3) identify a gene subnetwork given your query list of (significant) genes or SNPs. For end-users who are unfamiliar with R, please refer to our user-friendly web app [^1].
 
 [^1]: <http://galahad.well.ox.ac.uk/XGR>
 
@@ -412,9 +414,9 @@ xCircos(g=ig_SNP_LD, entity="SNP", verbose=F)
 In this section, from a pre-defined whole-network (see above) we demonstrate how to identify a gene network given an input list of SNPs with the significant info, in this case, the gene network likely modulated by INF-induced cis-eQTLs.
 
 ```{r, eval=T, cache=T}
-# find maximum-scoring gene subnetwork with the desired node number=60
+# find maximum-scoring gene subnetwork with the desired node number=50
 data <- df_cis[,c("variant","IFN_fdr")]
-subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=60)
+subnet_SNP <- xSubneterSNPs(data=data, network="STRING_high", distance.max=200000, seed.genes=T, subnet.significance=1e-1, subnet.size=50)
 ```
 
 The identified gene network with nodes colored according to scores is shown below. Notably, if nodes appear abnormally, please remove `vertex.shape="sphere"` when running the function `xVisNet`.
@@ -424,7 +426,7 @@ pattern <- -log10(as.numeric(V(subnet_SNP)$significance))
 pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
 vmax <- ceiling(stats::quantile(pattern, 0.75))
 vmin <- floor(min(pattern))
-xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP, with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
+xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP,with_kk()), vertex.shape="sphere", colormap="yr", zlim=c(vmin,vmax), newpage=F, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2)
 ```
 
 ## Analysing GWAS SNPs

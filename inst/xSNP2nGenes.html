@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define nearby genes given a list of SNPs</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSNP2nGenes"><tr><td>xSNP2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to define nearby genes given a list of SNPs</h2>
+
+<h3>Description</h3>
+
+<p><code>xSNP2nGenes</code> is supposed to define nearby genes given a list of
+SNPs within certain distance window. The distance weight is calcualted
+as a decaying function of the gene-to-SNP distance.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("slow",
+"linear",
+"rapid"), decay.exponent = 2, GR.SNP = "dbSNP_GWAS",
+GR.Gene = "UCSC_genes", verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a input vector containing SNPs</p>
+</td></tr>
+<tr valign="top"><td><code>distance.max</code></td>
+<td>
+<p>the maximum distance between genes and SNPs. Only
+those genes no far way from this distance will be considered as seed
+genes. This parameter will influence the distance-component weights
+calculated for nearby SNPs per gene</p>
+</td></tr>
+<tr valign="top"><td><code>decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel function. It
+can be one of 'slow' for slow decay, 'linear' for linear decay, and
+'rapid' for rapid decay</p>
+</td></tr>
+<tr valign="top"><td><code>decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
+</td></tr>
+<tr valign="top"><td><code>GR.SNP</code></td>
+<td>
+<p>the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>GR.Gene</code></td>
+<td>
+<p>the genomic regions of genes. By default, it is
+'UCSC_genes', that is, UCSC known canonical genes (together with
+genomic locations) based on human genome assembly hg19. Even the user
+can specify the customised input. To do so, first save your RData file
+(containing an GR object) into your local computer, and make sure the
+GR object content names refer to Gene Symbols. Then, tell &quot;GR.Gene&quot;
+with your RData file name (with or without extension), plus specify
+your file RData path in &quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>Gene</code>: nearby genes
+</p>
+</li>
+<li><p><code>SNP</code>: SNPs
+</p>
+</li>
+<li><p><code>Dist</code>: the genomic distance between the gene and the SNP
+</p>
+</li>
+<li><p><code>Weight</code>: the distance weight based on the gnomic distance
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>For details on the decay kernels, please refer to
+<code>xVisKernels</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xVisKernels</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(Pi)
+library(GenomicRanges)
+
+# a) provide the SNPs with the significance info
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+AS &lt;- read.delim(file.path(path.package("Pi"),"AS.txt"),
+stringsAsFactors=FALSE)
+
+# b) define nearby genes
+df_nGenes &lt;- xSNP2nGenes(data=AS$SNP, distance.max=200000,
+decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

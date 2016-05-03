@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise distance kernel functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xVisKernels"><tr><td>xVisKernels</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise distance kernel functions</h2>
+
+<h3>Description</h3>
+
+<p><code>xVisKernels</code> is supposed to visualise distance kernels, each of
+which is a decaying function of: i) the relative distance <i>d_{gs}</i>
+between the gene <i>g</i> and the SNP <i>s</i>, and ii) the decay
+exponent <i>&lambda;</i>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xVisKernels(exponent = 2, newpage = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>exponent</code></td>
+<td>
+<p>an integer specifying decay exponent. By default, it
+sets to 2</p>
+</td></tr>
+<tr valign="top"><td><code>newpage</code></td>
+<td>
+<p>logical to indicate whether to open a new page. By
+default, it sets to true for opening a new page</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>invisible
+</p>
+
+
+<h3>Note</h3>
+
+<p>There are five kernels that are currently supported:
+</p>
+
+<ul>
+<li><p>For &quot;slow decay&quot; kernel,
+<i>h_{ds}(t)={1-{d_{gs}/D}&lambda;}*(d_{gs} &le; D)</i>
+</p>
+</li>
+<li><p>For &quot;linear decay&quot; kernel, <i>h_{ds}(t)={1-d_{gs}/D}*(d_{gs}
+&le; D)</i>
+</p>
+</li>
+<li><p>For &quot;rapid decay&quot; kernel,
+<i>h_{ds}(t)={{1-d_{gs}/D}^&lambda;}*(d_{gs} &le; D)</i>
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xSNP2nGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# visualise distance kernels
+xVisKernels(exponent=2)
+xVisKernels(exponent=3)
+</pre>
+
+
+</body></html>

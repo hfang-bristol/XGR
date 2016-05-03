@@ -2,7 +2,7 @@ Package: XGR
 Type: Package
 Title: Exploring Genomic Relations at the Gene and SNP Level Through Enrichment, Similarity and Network Analysis
 Version: 1.0.1
-Date: 2016-4-28
+Date: 2016-5-3
 Author: Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet
@@ -30,5 +30,10 @@ Collate:
     'xSubneterGenes.r'
     'xSubneterSNPs.r'
     'xVisNet.r'
+    'xVisKernels.r'
+    'xSNPscores.r'
+    'xSNP2nGenes.r'
+    'xSparseMatrix.r'
+    'xSNP2GeneScores.r'
 License: GPL-2
 biocViews: Bioinformatics
