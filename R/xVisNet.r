@@ -34,10 +34,10 @@
 #' # 2a) visualise in one go
 #' xVisNet(g=g, vertex.shape="sphere", glayout=layout_with_kk)
 #' # 2b) visualise the graph with layout first calculated
-#' glayout <- layout_(g, with_kk(), normalize(), component_wise())
+#' glayout <- layout_(g, with_kk(), component_wise())
 #' xVisNet(g=g, vertex.shape="sphere", glayout=glayout)
 #' # 2c) visualise the graph with layout appended to the graph itself
-#' g <- add_layout_(g, with_kk(), normalize(), component_wise())
+#' g <- add_layout_(g, with_kk(), component_wise())
 #' xVisNet(g=g, vertex.shape="sphere")
 #'
 #' # 4) visualise the graph with vertices being color-coded by the pattern

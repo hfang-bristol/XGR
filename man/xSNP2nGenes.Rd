@@ -12,7 +12,10 @@ RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
-\item{data}{a input vector containing SNPs}
+\item{data}{a input vector containing SNPs. SNPs should be provided as
+dbSNP ID (ie starting with rs). Alternatively, they can be in the
+format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for
+example, 'chr16:28525386'}
 
 \item{distance.max}{the maximum distance between genes and SNPs. Only
 those genes no far way from this distance will be considered as seed
@@ -73,8 +76,7 @@ For details on the decay kernels, please refer to
 \examples{
 \dontrun{
 # Load the library
-library(Pi)
-library(GenomicRanges)
+library(XGR)
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)

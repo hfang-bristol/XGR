@@ -40,7 +40,7 @@ xVisKernels <-function(exponent=2, newpage=T)
     y3 <- (1-x)^exponent
     
     plot(0,0, xlim = c(0,1),ylim = c(0,1), type = "n",
-        xlab=expression(paste("Relative distance of ", d[gs], " between gene g and SNP s in terms of distance window D", collapse=" ")), 
+        xlab=expression(paste("Relative distance of ", d[gs], " (within window D) between gene g and SNP s", collapse=" ")), 
         ylab=expression(paste("Distance kernel function ", h[gs], collapse=" ")),
         main=bquote("Decay exponent is" ~ lambda == .(exponent))
     )

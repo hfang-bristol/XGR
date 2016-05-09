@@ -1,4 +1,4 @@
-#' Function to score input SNPs from the given significance level
+#' Function to score lead or LD SNPs based on the given significance level
 #'
 #' \code{xSNPscores} is supposed to score a list of Lead SNPs together with the significance level. It can consider LD SNPs and the given threshold of the significant level.
 #'

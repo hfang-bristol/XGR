@@ -104,14 +104,14 @@ conducts SNP-based similarity analysis using GWAS Catalog traits mapped to Exper
 Network functions are supposed to identity a gene subnetwork from a gene interaction network with node/gene significant information. The node/gene information can be either directly provided (eg user-defined genes with the significance level; p-values or FDR) or indirectly provided (eg nearby genes of user-defined SNPs with the significance level; GWAS reported p-values). From a gene interaction network with nodes labelled with gene information, the algorithm searching for a maximum-scoring gene subnetwork has been reported in our previous publication [@Fang2014c]), briefed as follows: 1) `score transformation`, that is, given the threshold of tolerable p-value, nodes with p-values below this threshold (nodes of interest) are scored positively, and negative scores for nodes with threshold-above p-values (intolerable), 2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes, but allowing for a few negative-score nodes as linkers, and 3) `controlling the subnetwork size`, that is, an iterative procedure is provided to finetune tolerable thresholds for identifying the gene subnetwork with a desired number of nodes.
 
 ### xSubneterGenes
-*[`xSubneterGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few less significant (lowly scored) genes as linkers.
+*[`xSubneterGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterGenes.html)*: takes as input a list of user-defined genes with the significance level (p-values), superposes these genes onto a gene interaction network, and outputs a maximum-scoring gene subnetwork that contains as many most significant (highly scored) genes as possible but also a few lesser significant (scored) genes as linkers.
 
 ### xSubneterSNPs
 *[`xSubneterSNPs`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSubneterSNPs.html)*: identifies a gene subnetwork that is likely modulated by input SNPs and/or their Linkage Disequilibrium (LD) SNPs, including two major steps. The first step is to define and score nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use `xSubneterGenes` for identifying a maximum-scoring gene subnetwork.
 
 ## Infrastructure functions
 
-Infrastructure functions are essential as they deal with infrastructure including built-in data loading, ontology annotation propagation, calculation of term-term semantic similarity, and graph conversions and visualisations. 
+Infrastructure functions are essential as they deal with infrastructure including built-in data loading, ontology annotation propagation, calculation of term-term semantic similarity, graph conversions and visualisations, and define and score genes likely modulated by SNPs. 
 
 * *[`xRDataLoader`](http://rawgit.com/hfang-bristol/XGR/master/inst/xRDataLoader.html)*: serves as hub for loading built-in data about genes, SNPs, ontologies and annotations. 
 * *[`xDAGanno`](http://rawgit.com/hfang-bristol/XGR/master/inst/xDAGanno.html)*: propagates annotations to the ontology root according to the true-path rule. 
@@ -119,6 +119,11 @@ Infrastructure functions are essential as they deal with infrastructure includin
 * *[`xConverter`](http://rawgit.com/hfang-bristol/XGR/master/inst/xConverter.html)*: converts an object between graph classes. 
 * *[`xCircos`](http://rawgit.com/hfang-bristol/XGR/master/inst/xCircos.html)*: visualises the semantic similarity between genes (or SNPs) by the colour of links in a circos plot.
 * *[`xVisNet`](http://rawgit.com/hfang-bristol/XGR/master/inst/xVisNet.html)*: visualises the graph in different layouts. 
+* *[`xVisKernels`](http://rawgit.com/hfang-bristol/XGR/master/inst/xVisKernels.html)*: visualises distance kernel functions. 
+* *[`xSNPscores`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSNPscores.html)*: calculates scores for lead or LD SNPs. 
+* *[`xSNP2nGenes`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSNP2nGenes.html)*: defines nearby genes from SNPs. 
+* *[`xSNP2GeneScores`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSNP2GeneScores.html)*: scores nearby genes from a list of SNPs.
+* *[`xSparseMatrix`](http://rawgit.com/hfang-bristol/XGR/master/inst/xSparseMatrix.html)*: creates a sparse matrix for an input file.
 
 ## Auxiliary functions
 
@@ -573,6 +578,98 @@ Enrichment results for the top 10 significant pathways are shown below:
 ```{r, eval=T, echo=F}
 knitr::kable(res_IBD_PW[1:10,], digits=20, caption="", row.names=F)
 ```
+
+<!---
+
+RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/Portal"
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+
+res_SNP <- list()
+res_Gene <- list()
+
+gr <- ImmunoBase$AS$variant
+data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
+mSeed <- xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location=RData.location)
+
+
+res_name <- lapply(ImmunoBase, function(x){
+	x$disease
+})
+res_fullname <- unlist(res_name)
+
+
+res_seed <- lapply(ImmunoBase, function(x){
+	gr <- x$variant
+	data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
+	mSeed <- xSNP2GeneScores(data, include.LD="EUR", LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location=RData.location)
+	mSeed
+})
+
+res_SNP <- lapply(res_seed, function(x){
+	x$SNP$SNP
+})
+allSNPs <- unique(unlist(res_SNP))
+
+res_Gene <- lapply(res_seed, function(x){
+	x$Gene$Gene
+})
+allGenes <- unique(unlist(res_Gene))
+
+## for SNP x Disease matrix
+nm <- res_fullname
+mat_SNP <- 0
+for(i in 1:length(res_seed)){
+	x <- res_seed[[i]]
+	df <- x$SNP
+	df$Disease <- rep(nm[i], nrow(df))
+	mat <- xSparseMatrix(df[,c("SNP","Disease","Score")], rows=allSNPs, columns=nm, verbose=verbose)
+	mat_SNP <- mat_SNP + mat
+}
+mat_SNP <- as.matrix(mat_SNP)
+
+## for Gene x Disease matrix
+nm <- res_fullname
+mat_Gene <- 0
+for(i in 1:length(res_seed)){
+	x <- res_seed[[i]]
+	df <- x$Gene
+	df$Disease <- rep(nm[i], nrow(df))
+	mat <- xSparseMatrix(df[,c("Gene","Disease","Score")], rows=allGenes, columns=nm, verbose=verbose)
+	mat_Gene <- mat_Gene + mat
+}
+mat_Gene <- as.matrix(mat_Gene)
+
+## 
+data <- mat_SNP
+visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric=c("euclidean","pearson","spearman","kendall","manhattan","cos","mi")[1], colormap="wyr", labRow=NA, KeyValueName="SNP score", add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,5), lwid=c(1,3), srtCol=30, margins=c(8,2))
+
+visTreeBootstrap(data=t(mat_SNP), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=F, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.2))
+      
+
+## 
+data <- mat_Gene
+visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric=c("euclidean","pearson","spearman","kendall","manhattan","cos","mi")[1], colormap="wyr", labRow=NA, KeyValueName="Gene score", add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,5), lwid=c(1,3), srtCol=30, margins=c(8,2))
+
+visTreeBootstrap(data=t(mat_Gene), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+
+
+tree_SNPs <- visTreeBootstrap(data=t(mat_SNP), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=T, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+
+tree_Genes <- visTreeBootstrap(data=t(mat_Gene), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=T, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+
+tree_cons <- tree_Genes
+
+library(ape)
+library(igraph)
+g <- as.igraph(tree_cons)
+vertex.label <- V(g)$name
+vertex.label <- gsub("Node.*", "", vertex.label)
+vertex.color <- rep("red", vcount(g))
+vertex.color[vertex.label==''] <- 'yellow'
+xVisNet(g=g, glayout=layout_with_kk, vertex.shape="sphere", vertex.label.dist=0.2, vertex.label.color="black", vertex.label=vertex.label, vertex.color=vertex.color)
+
+--->
+
 
 
 # Session Info

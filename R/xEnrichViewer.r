@@ -32,51 +32,63 @@
 xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","nAnno","nOverlap","none"), decreasing=NULL, details=F) 
 {
     
+    sortBy <- match.arg(sortBy)
+    
     if(is.logical(eTerm)){
         stop("There is no enrichment in the 'eTerm' object.\n")
     }
     
-    if (class(eTerm) != "eTerm" ){
-        stop("The function must apply to a 'eTerm' object.\n")
-    }
-    
-    sortBy <- match.arg(sortBy)
-    
-    if( is.null(top_num) ){
-        top_num <- length(eTerm$term_info$id)
-    }
-    if ( top_num > length(eTerm$term_info$id) ){
-        top_num <- length(eTerm$term_info$id)
-    }
-    top_num <- as.integer(top_num)
-    
-    if(dim(eTerm$term_info)[1]==1){
-        tab <- data.frame( name         = as.character(eTerm$term_info$name),
-                           nAnno        = as.numeric(sapply(eTerm$annotation,length)),
-                           nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
-                           zscore       = as.numeric(eTerm$zscore),
-                           pvalue       = as.numeric(eTerm$pvalue),
-                           adjp         = as.numeric(eTerm$adjp),
-                           distance     = as.numeric(eTerm$term_info$distance),
-                           members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
-                           stringsAsFactors=F
-                          )
-    }else{
-    
-        tab <- data.frame( name         = as.character(eTerm$term_info$name),
-                           nAnno        = as.numeric(sapply(eTerm$annotation,length)),
-                           nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
-                           zscore       = as.numeric(eTerm$zscore),
-                           pvalue       = as.numeric(eTerm$pvalue),
-                           adjp         = as.numeric(eTerm$adjp),
-                           distance     = as.numeric(eTerm$term_info$distance),
-                           members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
-                           stringsAsFactors=F
-                          )
-    }
-    
-    rownames(tab) <- eTerm$term_info$id
-    
+    if(class(eTerm) == "data.frame" ){
+        warnings("The function apply to a 'data.frame' object.\n")
+        
+		if( is.null(top_num) ){
+			top_num <- nrow(eTerm)
+		}
+		if ( top_num > nrow(eTerm) ){
+			top_num <- nrow(eTerm)
+		}
+		top_num <- as.integer(top_num)
+        
+        tab <- eTerm
+        
+    }else if(class(eTerm) == "eTerm" ){
+	
+		if( is.null(top_num) ){
+			top_num <- length(eTerm$term_info$id)
+		}
+		if ( top_num > length(eTerm$term_info$id) ){
+			top_num <- length(eTerm$term_info$id)
+		}
+		top_num <- as.integer(top_num)
+	
+		if(dim(eTerm$term_info)[1]==1){
+			tab <- data.frame( name         = as.character(eTerm$term_info$name),
+							   nAnno        = as.numeric(sapply(eTerm$annotation,length)),
+							   nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
+							   zscore       = as.numeric(eTerm$zscore),
+							   pvalue       = as.numeric(eTerm$pvalue),
+							   adjp         = as.numeric(eTerm$adjp),
+							   distance     = as.numeric(eTerm$term_info$distance),
+							   members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
+							   stringsAsFactors=F
+							  )
+		}else{
+	
+			tab <- data.frame( name         = as.character(eTerm$term_info$name),
+							   nAnno        = as.numeric(sapply(eTerm$annotation,length)),
+							   nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
+							   zscore       = as.numeric(eTerm$zscore),
+							   pvalue       = as.numeric(eTerm$pvalue),
+							   adjp         = as.numeric(eTerm$adjp),
+							   distance     = as.numeric(eTerm$term_info$distance),
+							   members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
+							   stringsAsFactors=F
+							  )
+		}
+	
+		rownames(tab) <- eTerm$term_info$id
+	}
+	    
     if(details == T){
         res <- tab[,c(1:8)]
     }else{

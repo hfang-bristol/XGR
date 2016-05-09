@@ -2,7 +2,7 @@
 % Please edit documentation in R/xSNPscores.r
 \name{xSNPscores}
 \alias{xSNPscores}
-\title{Function to score input SNPs from the given significance level}
+\title{Function to score lead or LD SNPs based on the given significance level}
 \usage{
 xSNPscores(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, verbose = T,

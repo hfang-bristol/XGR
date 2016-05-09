@@ -121,7 +121,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     }else{
     	background <- unique(input[,1])
     }
-
+	
     #############################################################################################
     
     if(verbose){
