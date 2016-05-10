@@ -34,7 +34,7 @@
 #' library(igraph)
 #' 
 #' # Enrichment analysis using your own data
-#' # a) provide your own data (eg ImmunoBase SNPs and associations/annotations with disease traits)
+#' # a) provide your own data (eg InterPro domains and their annotations by GO terms)
 #' ## All InterPro domains
 #' input.file <- "http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt"
 #' data <- utils::read.delim(input.file, header=F, row.names=NULL, stringsAsFactors=F)[,1]

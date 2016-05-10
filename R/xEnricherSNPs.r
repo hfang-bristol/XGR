@@ -48,7 +48,6 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' library(igraph)
 #' 
 #' # SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 #' # a) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')

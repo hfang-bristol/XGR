@@ -29,8 +29,7 @@ developers from specifying default values for all arguments except
 those arguments of interest
 }
 \examples{
-fun <- "xRDataLoader"
-xFunArgs(fun)
+xFunArgs(fun="xRDataLoader")
 }
 \seealso{
 \code{\link{xFunArgs}}

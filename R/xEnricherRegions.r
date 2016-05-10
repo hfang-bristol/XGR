@@ -32,13 +32,14 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
+#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data
 #' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' # b) perform enrichment analysis using FANTOM expressed enhancers
-#' eTerm <- xEnricherRegions(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell")
+#' eTerm <- xEnricherRegions(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
 #'
 #' # c) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)
@@ -138,7 +139,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 				stop("Your input 'annotation.file' is not as expected!\n")
 			}
 			anno_ls <- split(x=annotation[,-4], f=annotation[,4])
-			aGR <- lapply(anno_ls, function(x){
+			aGR <- base::lapply(anno_ls, function(x){
 				## make sure positions are numeric
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
@@ -215,7 +216,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 				stop("Your input 'annotation.file' does not meet the format 'chr:start-end'!\n")
 			}
 			anno_ls <- split(x=annotation[,-4], f=annotation[,4])
-			aGR <- lapply(anno_ls, function(x){
+			aGR <- base::lapply(anno_ls, function(x){
 				## make sure positions are numeric
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
@@ -276,7 +277,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		if(!is.null(annotation)){
 			## construct annotation GR
 			anno_ls <- split(x=annotation[,-4], f=annotation[,4])
-			aGR <- lapply(anno_ls, function(x){
+			aGR <- base::lapply(anno_ls, function(x){
 				## make sure positions are numeric
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
@@ -321,11 +322,11 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
 	mergeOverlaps <- function(qGR, sGR, maxgap=0L, minoverlap=1L){
 		hits <- GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-		qhits <- qGR[GenomicRanges::queryHits(hits)]
-		shits <- sGR[GenomicRanges::subjectHits(hits)]
+		qhits <- qGR[S4Vectors::queryHits(hits)]
+		shits <- sGR[S4Vectors::subjectHits(hits)]
 
-		oGR <- GenomicRanges::pintersect(qhits, shits)
-		GenomicRanges::reduce(oGR)
+		oGR <- IRanges::pintersect(qhits, shits)
+		IRanges::reduce(oGR)
 	}
 	
     ## Binomial test: sampling at random from the background with the constant probability of having annotated genes (with replacement)
@@ -373,10 +374,10 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
     
     ## get reduced ranges (ie non-overlapping regions)
     ### data GR
-    dGR_reduced <- GenomicRanges::reduce(dGR)
+    dGR_reduced <- IRanges::reduce(dGR)
     ### annotation GR
-	aGR_reduced <- lapply(aGR, function(x){
-		GenomicRanges::reduce(x)
+	aGR_reduced <- base::lapply(aGR, function(x){
+		IRanges::reduce(x)
 	})
 	### define background GR
 	if(is.null(bGR)){
@@ -386,12 +387,12 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		}
 	
 		aGRL <- GenomicRanges::GRangesList(aGR_reduced)
-		bGR_reduced <- GenomicRanges::reduce(unlist(aGRL))
+		bGR_reduced <- IRanges::reduce(GenomicRanges::unlist(aGRL))
 	}else{
-		bGR_reduced <- GenomicRanges::reduce(bGR)
+		bGR_reduced <- IRanges::reduce(bGR)
 	
 		## update annotation GR after considering background
-		aGR_reduced <- lapply(aGR_reduced, function(gr){
+		aGR_reduced <- base::lapply(aGR_reduced, function(gr){
 			mergeOverlaps(qGR=gr, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
 		})
 	
@@ -404,7 +405,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		
 			## update background GR
 			aGRL <- GenomicRanges::GRangesList(aGR_reduced)
-			bGR_reduced <- GenomicRanges::reduce(unlist(aGRL))
+			bGR_reduced <- IRanges::reduce(GenomicRanges::unlist(aGRL))
 		}else{
 			if(verbose){
 				now <- Sys.time()
@@ -417,7 +418,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
 
 	## find overlap GR between annotation GR and data GR
-	oGR_reduced <- lapply(aGR_reduced, function(gr){
+	oGR_reduced <- base::lapply(aGR_reduced, function(gr){
 		mergeOverlaps(qGR=gr, sGR=dGR_reduced, maxgap=0L, minoverlap=1L)
 	})
 	
@@ -428,13 +429,13 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 	}
 	
 	## prepare enrichment analysis
-	data_nBases <- sum(GenomicRanges::width(dGR_reduced))
-	annotation_nBases <- sapply(aGR_reduced, function(gr){
-		sum(GenomicRanges::width(gr))
+	data_nBases <- sum(IRanges::width(dGR_reduced))
+	annotation_nBases <- base::sapply(aGR_reduced, function(gr){
+		sum(IRanges::width(gr))
 	})
-	background_nBases <- sum(GenomicRanges::width(bGR_reduced))
-	overlap_nBases <- sapply(oGR_reduced, function(gr){
-		sum(GenomicRanges::width(gr))
+	background_nBases <- sum(IRanges::width(bGR_reduced))
+	overlap_nBases <- base::sapply(oGR_reduced, function(gr){
+		sum(IRanges::width(gr))
 	})
 
 	if(verbose){
@@ -445,7 +446,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 	}
 
 	## perform enrichment analysis based on the binomial distribution
-	res_ls <- lapply(1:length(overlap_nBases), function(i){
+	res_ls <- base::lapply(1:length(overlap_nBases), function(i){
 		X <- as.numeric(overlap_nBases[i])
 		K <- data_nBases
 		M <- as.numeric(annotation_nBases[i])
@@ -493,7 +494,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 	adjpvals <- signif(adjpvals, digits=2)
 	
 	# scientific notations
-	pvals  <- sapply(pvals, function(x){
+	pvals  <- base::sapply(pvals, function(x){
 		if(x < 0.1 & x!=0){
 			as.numeric(format(x,scientific=T))
 		}else{
@@ -501,7 +502,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		}
 	})
 	
-	adjpvals <- sapply(adjpvals, function(x){
+	adjpvals <- base::sapply(adjpvals, function(x){
 		if(x < 0.1 & x!=0){
 			as.numeric(format(x,scientific=T))
 		}else{

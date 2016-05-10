@@ -147,7 +147,7 @@ subgraph.
 \dontrun{
 # Load the library
 library(XGR)
-library(igraph)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
 # SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 # a) provide the input SNPs of interest (eg 8 randomly chosen SNPs)
@@ -157,11 +157,11 @@ data <- sample(allSNPs,8)
 data
 
 # b) perform similarity analysis
-sim <- xSocialiserSNPs(data=data)
+sim <- xSocialiserSNPs(data=data, RData.location=RData.location)
 
 # b') optionally, enrichment analysis for input SNPs plus their LD SNPs
 ## LD based on European population (EUR) with r2>=0.8
-#sim <- xSocialiserSNPs(data=data, include.LD="EUR", LD.r2=0.8)
+#sim <- xSocialiserSNPs(data=data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 
 # c) save similarity results to the file called 'EF_similarity.txt'
 output <- igraph::get.data.frame(sim, what="edges")

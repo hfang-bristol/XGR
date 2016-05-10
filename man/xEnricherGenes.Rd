@@ -177,7 +177,6 @@ maximum of both p-values in these two calculations.}
 \dontrun{
 # Load the library
 library(XGR)
-library(igraph)
 
 # Gene-based enrichment analysis using Mammalian Phenotype Ontology (MP)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)

@@ -30,17 +30,17 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' library(GenomicRanges)
+#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
-#' seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+#' data <- GenomicRanges::mcols(gr)[,c(1,3)]
 #' 
 #' # b) define and score seed geens
-#' mSeed <- xSNP2GeneScores(data=seeds.snps)
+#' mSeed <- xSNP2GeneScores(data=data, RData.location=RData.location)
 #'
 #' # c) extract SNP info
 #' head(mSeed$SNP)

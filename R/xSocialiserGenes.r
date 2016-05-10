@@ -25,7 +25,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' library(igraph)
+#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 #' 
 #' # Gene-based similarity analysis using Mammalian Phenotype Ontology (MP)
 #' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
@@ -35,7 +35,7 @@
 #' data
 #' 
 #' # b) perform similarity analysis
-#' sim <- xSocialiserGenes(data=data, ontology="MP")
+#' sim <- xSocialiserGenes(data=data, ontology="MP", RData.location=RData.location)
 #'
 #' # c) save similarity results to the file called 'MP_similarity.txt'
 #' output <- igraph::get.data.frame(sim, what="edges")

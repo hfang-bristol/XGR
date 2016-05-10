@@ -2,7 +2,7 @@
 #'
 #' \code{xSNPscores} is supposed to score a list of Lead SNPs together with the significance level. It can consider LD SNPs and the given threshold of the significant level.
 #'
-#' @param data a named input vector containing the sinificance level for nodes (dbSNP). For this named vector, the element names are dbSNP, the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for dbSNP, 2nd column for the significance level
+#' @param data a named input vector containing the sinificance level for nodes (dbSNP). For this named vector, the element names are dbSNP (starting with rs or in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for example, 'chr16:28525386'), the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for dbSNP, 2nd column for the significance level. 
 #' @param include.LD additional SNPs in LD with Lead SNPs are also included. By default, it is 'NA' to disable this option. Otherwise, LD SNPs will be included based on one or more of 26 populations and 5 super populations from 1000 Genomics Project data (phase 3). The population can be one of 5 super populations ("AFR", "AMR", "EAS", "EUR", "SAS"), or one of 26 populations ("ACB", "ASW", "BEB", "CDX", "CEU", "CHB", "CHS", "CLM", "ESN", "FIN", "GBR", "GIH", "GWD", "IBS", "ITU", "JPT", "KHV", "LWK", "MSL", "MXL", "PEL", "PJL", "PUR", "STU", "TSI", "YRI"). Explanations for population code can be found at \url{http://www.1000genomes.org/faq/which-populations-are-part-your-study}
 #' @param LD.customised a user-input matrix or data frame with 3 columns: 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2 value. It is designed to allow the user analysing their precalcuated LD info. This customisation (if provided) has the high priority over built-in LD SNPs
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.8 to 1
@@ -23,17 +23,21 @@
 #' @examples
 #' \dontrun{
 #' # Load the library
-#' library(Pi)
+#' library(XGR)
+#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 #'
-#' # a) provide the SNPs with the significance info
+#' # a) provide the seed SNPs with the significance info
+#' ## load ImmunoBase
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' AS <- read.delim(file.path(path.package("Pi"),"AS.txt"), stringsAsFactors=FALSE)
+#' gr <- ImmunoBase$AS$variant
+#' data <- GenomicRanges::mcols(gr)[,c(1,3)]
 #'
 #' # b) calculate SNP scores (considering significant cutoff 5e-5)
 #' ## without inclusion of LD SNPs
-#' df_SNP <- xSNPscores(data=AS, significance.threshold=5e-5)
+#' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, RData.location=RData.location)
 #' ## include LD SNPs (calculated based on European populations)
-#' df_SNP <- xSNPscores(data=AS, significance.threshold=5e-5, include.LD="EUR")
+#' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, include.LD="EUR", RData.location=RData.location)
 #' }
 
 xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
@@ -42,6 +46,11 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     if(is.null(data)){
         stop("The input data must be not NULL.\n")
     }else{
+    	
+    	if(class(data)=='DataFrame'){
+    		data <- S4Vectors::as.matrix(data)
+    	}
+    
 		if (is.vector(data)){
 			if(length(data)>1){
 				# assume a vector
@@ -76,6 +85,12 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 		tmp <- min(pval[pval!=0])
 		pval[pval < tmp] <- tmp
 	}
+	
+	## replace '_' with ':'
+	tmp <- names(pval)
+	tmp <- gsub("_", ":", tmp, perl=T)
+	## replace 'imm:' with 'chr'
+	names(pval) <- gsub("imm:", "chr", tmp, perl=T)
 	
 	Lead_Sig <- data.frame(SNP=names(pval), Sig=pval, row.names=NULL, stringsAsFactors=F)
 	leads <- Lead_Sig[,1]

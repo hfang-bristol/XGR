@@ -77,14 +77,17 @@ For details on the decay kernels, please refer to
 \dontrun{
 # Load the library
 library(XGR)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
-# a) provide the SNPs with the significance info
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-AS <- read.delim(file.path(path.package("Pi"),"AS.txt"),
-stringsAsFactors=FALSE)
+gr <- ImmunoBase$AS$variant
+data <- names(gr)
 
 # b) define nearby genes
-df_nGenes <- xSNP2nGenes(data=AS$SNP, distance.max=200000,
+df_nGenes <- xSNP2nGenes(data=data, distance.max=200000,
 decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 }
 }

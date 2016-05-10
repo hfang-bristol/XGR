@@ -13,8 +13,7 @@
 #' @seealso \code{\link{xFunArgs}}
 #' @include xFunArgs.r
 #' @examples
-#' fun <- "xRDataLoader"
-#' xFunArgs(fun)
+#' xFunArgs(fun="xRDataLoader")
 
 xFunArgs <- function(fun, action=F, verbose=TRUE)
 {

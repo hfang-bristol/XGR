@@ -179,24 +179,22 @@ highly scored genes as possible but a few less scored genes as linkers.
 \dontrun{
 # Load the library
 library(XGR)
-library(igraph)
-library(dnet)
-library(GenomicRanges)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
-seeds.snps <- as.matrix(mcols(gr)[,c(1,3)])
+data <- GenomicRanges::mcols(gr)[,c(1,3)]
 
 # b) perform network analysis
 # b1) find maximum-scoring subnet based on the given significance threshold
-subnet <- xSubneterSNPs(data=seeds.snps, network="STRING_high",
-seed.genes=F, subnet.significance=0.01)
+subnet <- xSubneterSNPs(data=data, network="STRING_high", seed.genes=F,
+subnet.significance=0.01, RData.location=RData.location)
 # b2) find maximum-scoring subnet with the desired node number=30
-subnet <- xSubneterSNPs(data=seeds.snps, network="STRING_high",
-seed.genes=F, subnet.size=30)
+subnet <- xSubneterSNPs(data=data, network="STRING_high", seed.genes=F,
+subnet.size=30)
 
 # c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
 output <- igraph::get.data.frame(subnet, what="edges")
@@ -215,7 +213,7 @@ xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
-xCircos(g=subnet, entity="Gene")
+xCircos(g=subnet, entity="Gene", RData.location=RData.location)
 }
 }
 \seealso{

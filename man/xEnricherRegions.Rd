@@ -160,6 +160,7 @@ None
 \dontrun{
 # Load the library
 library(XGR)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
@@ -167,7 +168,7 @@ data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xEnricherRegions(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell")
+GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)

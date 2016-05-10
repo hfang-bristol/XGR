@@ -26,7 +26,6 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' library(igraph)
 #' 
 #' # 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 #' # 1a) ig.EF (an object of class "igraph" storing as a directed graph)

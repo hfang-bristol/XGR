@@ -122,9 +122,8 @@ the colour of the links
 ## Not run: 
 # Load the library
 library(XGR)
-library(igraph)
 library(RCircos)
-library(GenomicRanges)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
 # provide genes and SNPs reported in AS GWAS studies
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
@@ -132,21 +131,24 @@ ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
 # 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 ## Get lead SNPs reported in AS GWAS
 example.snps &lt;- names(ImmunoBase$AS$variants)
-SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA,
+RData.location=RData.location)
 # Circos plot of the EF-based SNP similarity network
 #out.file &lt;- "SNP_Circos.pdf"
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
-xCircos(g=SNP.g, entity="SNP")
+xCircos(g=SNP.g, entity="SNP", RData.location=RData.location)
 #dev.off()
 
 # 2) Gene-based similarity analysis using Disease Ontology (DO)
 ## Get genes within 10kb away from AS GWAS lead SNPs
 example.genes &lt;- names(which(ImmunoBase$AS$genes_variants&lt;=10000))
-gene.g &lt;- xSocialiserGenes(example.genes, ontology=c("DO")
+gene.g &lt;- xSocialiserGenes(example.genes, ontology="DO",
+RData.location=RData.location)
 # Circos plot of the DO-based gene similarity network
 #out.file &lt;- "Gene_Circos.pdf"
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
-xCircos(g=gene.g, entity="Gene", chr.exclude="chrY")
+xCircos(g=gene.g, entity="Gene", chr.exclude="chrY",
+RData.location=RData.location)
 #dev.off()
 
 ## End(Not run)

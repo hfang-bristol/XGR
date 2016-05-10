@@ -12,9 +12,9 @@
 #' @export
 #' @import dnet
 #' @import igraph
-#' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame queryHits subjectHits pintersect reduce GRangesList width GRanges
-#' @importFrom IRanges IRanges
-#' @importFrom S4Vectors Rle
+#' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges
+#' @importFrom IRanges IRanges width pintersect reduce
+#' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
 #' @importFrom grDevices colorRampPalette dev.cur rgb
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r

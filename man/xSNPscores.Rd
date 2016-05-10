@@ -11,10 +11,12 @@ RData.location =
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
-nodes (dbSNP). For this named vector, the element names are dbSNP, the
-element values for the significance level (measured as p-value or fdr).
+nodes (dbSNP). For this named vector, the element names are dbSNP
+(starting with rs or in the format of 'chrN:xxx', where N is either
+1-22 or X, xxx is number; for example, 'chr16:28525386'), the element
+values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
-column for dbSNP, 2nd column for the significance level}
+column for dbSNP, 2nd column for the significance level.}
 
 \item{include.LD}{additional SNPs in LD with Lead SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD
@@ -71,19 +73,23 @@ None
 \examples{
 \dontrun{
 # Load the library
-library(Pi)
+library(XGR)
+RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 
-# a) provide the SNPs with the significance info
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-AS <- read.delim(file.path(path.package("Pi"),"AS.txt"),
-stringsAsFactors=FALSE)
+gr <- ImmunoBase$AS$variant
+data <- GenomicRanges::mcols(gr)[,c(1,3)]
 
 # b) calculate SNP scores (considering significant cutoff 5e-5)
 ## without inclusion of LD SNPs
-df_SNP <- xSNPscores(data=AS, significance.threshold=5e-5)
+df_SNP <- xSNPscores(data=data, significance.threshold=5e-5,
+RData.location=RData.location)
 ## include LD SNPs (calculated based on European populations)
-df_SNP <- xSNPscores(data=AS, significance.threshold=5e-5,
-include.LD="EUR")
+df_SNP <- xSNPscores(data=data, significance.threshold=5e-5,
+include.LD="EUR", RData.location=RData.location)
 }
 }
 \seealso{
