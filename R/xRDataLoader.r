@@ -169,7 +169,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 					load_remote <- load_remotes[i]
 					if(verbose){
 						now <- Sys.time()
-						message(sprintf("Try %s (at %s)", load_remote, as.character(now)), appendLF=T)
+						message(sprintf("Attempt to download from %s (at %s)", load_remote, as.character(now)), appendLF=T)
 					}
 					res <- my_https_downloader(load_remote, mode="wb")
 					if(res$flag==T){

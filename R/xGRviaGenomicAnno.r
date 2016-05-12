@@ -1,6 +1,6 @@
 #' Function to conduct region-based enrichment analysis using genomic annotations
 #'
-#' \code{xEnricherRegions} is supposed to conduct region-based enrichment analysis for the input genomic region dataan, using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is based on either Fisher's exact test or Hypergeometric test for estimating the significance of overlaps at the single base-pair resolution. Test background can be provided; by default, the annotatable bases will be used. 
+#' \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment analysis for the input genomic region dataan, using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is based on either Fisher's exact test or Hypergeometric test for estimating the significance of overlaps at the single base-pair resolution. Test background can be provided; by default, the annotatable bases will be used. 
 #'
 #' @param data.file an input data file, containing a list of genomic regions to test. If the input file is formatted as a 'data.frame' (specified by the parameter 'format.file' below), the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. If the format is indicated as "chr:start-end", instead of using the first 3 columns, only the first column will be used and processed. If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns
 #' @param annotation.file an input annotation file containing genomic annotations for genomic regions. If the input file is formatted as a 'data.frame', the first four columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), the ending chromosome position (3rd column), and the genomic annotations (eg transcription factors and histones; 4th column). If the format is indicated as 'bed', the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the format is indicated as "chr:start-end", the first two columns correspond to the chromosome:start-end (1st column) and the genomic annotations (eg transcription factors and histones; 2nd column). If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns
@@ -9,7 +9,7 @@
 #' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false. 
 #' @param test the statistic test used. It can be "fisher" for using fisher's exact test, "hypergeo" for using hypergeometric test, or "binomial" for using binomial test. Fisher's exact test is to test the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not), and thus compare sampling to the left part of background (after sampling without replacement). Hypergeometric test is to sample at random (without replacement) from the background containing annotated and non-annotated genes, and thus compare sampling to background. Unlike hypergeometric test, binomial test is to sample at random (with replacement) from the background with the constant probability. In terms of the ease of finding the significance, they are in order: hypergeometric test > binomial test > fisher's exact test. In other words, in terms of the calculated p-value, hypergeometric test < binomial test < fisher's exact test
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
-#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Predefined annotation data include: ENCODE Transcription Factor ChIP-seq Uniform Peaks data ("Uniform_TFBS"), ENCODE DNaseI Hypersensitivity Uniform Peaks data ("Uniform_DNaseI_HS"), ENCODE Histone Modification ChIP-seq data from different sources ("Broad_Histone","SYDH_Histone","UW_Histone"), FANTOM5 expressed enhancer altas ("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer"), ENCODE combined Genome Segmentation data (ChromHMM and Segway) in 6 cell lines ("Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562"), the human/mouse/rat conserved TFBS ("TFBS_Conserved"), TargetScan miRNA regulatory sites ("TS_miRNA"), TCGA exome mutation data across 12 tumor types ("TCGA"). Beyond these predefined data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -24,22 +24,78 @@
 #'  \item{\code{expProb}: the probability of expecting nucleotides/bases overlapped between background regions and annotation regions}
 #'  \item{\code{obsProb}: the probability of observing nucleotides/bases overlapped between input regions and annotation regions}
 #' }
-#' @note None
+#' @note
+#' The genomic annotation data are described below according to the data sources and data types.
+#' 1. ENCODE Transcription Factor ChIP-seq data
+#' \itemize{
+#'  \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and transcription factors) of GenomicRanges objects; each is an GR object containing uniformly identified peaks per cell type per transcription factor.}
+#'  \item{\code{ENCODE_TFBS_ClusteredV3}: a list (161 transcription factors) of GenomicRanges objects; each is an GR object containing clustered peaks per transcription factor, along with a meta-column 'cells' telling cell types associtated with a clustered peak.}
+#'  \item{\code{ENCODE_TFBS_ClusteredV3_CellTypes}: a list (91 cell types) of a list (transcription factors) of GenomicRanges objects. Each cell type is a list (transcription factor) of GenomicRanges objects; each is an GR object containing clustered peaks per transcription factor.}
+#' }
+#' 2. ENCODE DNaseI Hypersensitivity site data
+#' \itemize{
+#'  \item{\code{Uniform_DNaseI_HS}: a list (125 cell types) of GenomicRanges objects; each is an GR object containing uniformly identified peaks per cell type.}
+#'  \item{\code{ENCODE_DNaseI_ClusteredV3}: an GR object containing clustered peaks, along with a meta-column 'num_cells' telling how many cell types associtated with a clustered peak.}
+#'  \item{\code{ENCODE_DNaseI_ClusteredV3_CellTypes}: a list (125 cell types) of GenomicRanges objects; each is an GR object containing clustered peaks per cell type.}
+#' }
+#' 3. ENCODE Histone Modification ChIP-seq data from different sources
+#' \itemize{
+#'  \item{\code{Broad_Histone}: a list (156 combinations of cell types and histone modifications) of GenomicRanges objects; each is an GR object containing identified peaks per cell type and per histone modification.}
+#'  \item{\code{SYDH_Histone}: a list (29 combinations of cell types and histone modifications) of GenomicRanges objects; each is an GR object containing identified peaks per cell type and per histone modification.}
+#'  \item{\code{UW_Histone}: a list (172 combinations of cell types and histone modifications) of GenomicRanges objects; each is an GR object containing identified peaks per cell type and per histone modification.}
+#' }
+#' 4. FANTOM5 expressed enhancer atlas
+#' \itemize{
+#'  \item{\code{FANTOM5_Enhancer_Cell}: a list (71 cell types) of GenomicRanges objects; each is an GR object containing enhancers specifically expressed in a cell type.}
+#'  \item{\code{FANTOM5_Enhancer_Tissue}: a list (41 tissues) of GenomicRanges objects; each is an GR object containing enhancers specifically expressed in a tissue.}
+#'  \item{\code{FANTOM5_Enhancer_Extensive}: a list (5 categories of extensitive enhancers) of GenomicRanges objects; each is an GR object containing extensitive enhancers. They are: "Extensive_ubiquitous_enhancers_cells" for ubiquitous enhancers expressed over the entire set of cell types; "Extensive_ubiquitous_enhancers_organs" for ubiquitous enhancers expressed over the entire set of tissues; "Extensive_enhancers_tss_associations" for TSS-enhancer associations(RefSeq promoters only); "Extensive_permissive_enhancers" and "Extensive_robust_enhancers" for permissive and robust enhancer sets.}
+#'  \item{\code{FANTOM5_Enhancer}: a list (117 cell types/tissues/categories) of GenomicRanges objects; each is an GR object.}
+#' }
+#' 5. ENCODE combined (ChromHMM and Segway) Genome Segmentation data
+#' \itemize{
+#'  \item{\code{Segment_Combined_Gm12878}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line GM12878 (a lymphoblastoid cell line).}
+#'  \item{\code{Segment_Combined_H1hesc}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line H1-hESC (H1 human embryonic stem cells).}
+#'  \item{\code{Segment_Combined_Helas3}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line HeLa S3.}
+#'  \item{\code{Segment_Combined_Hepg2}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line HepG2 (liver hepatocellular carcinoma).}
+#'  \item{\code{Segment_Combined_Huvec}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line HUVEC (Human Umbilical Vein Endothelial Cells).}
+#'  \item{\code{Segment_Combined_K562}: a list (7 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the cell line K562 (human erythromyeloblastoid leukemia cell line).}
+#' }
+#' 6. Conserved TFBS
+#' \itemize{
+#'  \item{\code{TFBS_Conserved}: a list (245 PWM) of GenomicRanges objects; each is an GR object containing human/mouse/rat conserved TFBS for each PWM.}
+#' }
+#' 7. TargetScan miRNA regulatory sites
+#' \itemize{
+#'  \item{\code{TS_miRNA}: a list (153 miRNA) of GenomicRanges objects; each is an GR object containing miRNA regulatory sites for each miRNA.}
+#' }
+#' 8. TCGA exome mutation data
+#' \itemize{
+#'  \item{\code{TCGA}: a list (11 tumor types) of GenomicRanges objects; each is an GR object containing exome mutation across tumor patients of the same tumor type.}
+#' }
+#' 9. ReMap integration of transcription factor ChIP-seq data (publicly available and ENCODE)
+#' \itemize{
+#'  \item{\code{ReMap_Public_TFBS}: a list (395 combinations of GSE studies and transcription factors and cell types) of GenomicRanges objects; each is an GR object containing identified peaks per GSE study per transcripton factor per cell type.}
+#'  \item{\code{ReMap_Public_mergedTFBS}: a list (131 transcription factors under GSE studies) of GenomicRanges objects; each is an GR object containing merged peaks per transcripton factor.}
+#'  \item{\code{ReMap_PublicAndEncode_mergedTFBS}: a list (237 transcription factors under GSE studies and ENCODE) of GenomicRanges objects; each is an GR object containing merged peaks per transcripton factor.}
+#'  \item{\code{ReMap_Encode_TFBS}: a list (155 transcription factors under ENCODE) of GenomicRanges objects; each is an GR object containing identified peaks per transcripton factor.}
+#' }
 #' @export
 #' @seealso \code{\link{xEnrichViewer}}
-#' @include xEnricherRegions.r
+#' @include xGRviaGenomicAnno.r
 #' @examples
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
 #' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location="~/Sites/SVN/github/bigdata"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data
 #' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
+#' data.file <- ~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' # b) perform enrichment analysis using FANTOM expressed enhancers
-#' eTerm <- xEnricherRegions(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+#' eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
 #'
 #' # c) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)
@@ -49,7 +105,7 @@
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
 
-xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end"), background.annotatable.only=T, test=c("hypergeo","fisher","binomial"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","Uniform_DNaseI_HS", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), background.annotatable.only=T, test=c("hypergeo","fisher","binomial"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -72,7 +128,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		message(sprintf("\timport the data file (%s) ...", as.character(now)), appendLF=T)
 	}
     ## import data file
-    if(is.matrix(data.file) | is.data.frame(data.file)){
+    if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
         data <- data.file
     }else if(!is.null(data.file) & !is.na(data.file)){
 		data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
@@ -85,7 +141,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		message(sprintf("\timport the annotation file (%s) ...", as.character(now)), appendLF=T)
 	}
     ## import annotation file
-    if(is.matrix(annotation.file) | is.data.frame(annotation.file)){
+    if(is.matrix(annotation.file) | is.data.frame(annotation.file) | class(annotation.file)=="GRanges"){
         annotation <- annotation.file
     }else if(!is.null(annotation.file)){
 		annotation <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
@@ -99,7 +155,7 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 		message(sprintf("\timport the background file (%s) ...", as.character(now)), appendLF=T)
 	}
 	## import background file
-    if(is.matrix(background.file) | is.data.frame(background.file)){
+    if(is.matrix(background.file) | is.data.frame(background.file) | class(background.file)=="GRanges"){
         background <- background.file
     }else if(!is.null(background.file)){
 		background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
@@ -312,6 +368,35 @@ xEnricherRegions <- function(data.file, annotation.file=NULL, background.file=NU
 				ranges = IRanges::IRanges(start=as.numeric(background[,2])+1, end=as.numeric(background[,3])),
 				strand = S4Vectors::Rle(rep('*',nrow(data)))
 			)
+		}else{
+			bGR <- NULL
+		}
+		
+	}else if(format.file=="GRanges"){
+		## construct data GR
+		dGR <- data
+		
+		if(!is.null(annotation)){
+			## construct annotation GR
+			aGR <- annotation
+		}else{
+			if(is.na(GR.annotation)){
+				stop("Please specify annotation RData!\n")
+			}else{
+				if(length(GR.annotation)>1){
+					message("\tONLY the first specified annotation RData will be used!\n")
+					GR.annotation <- GR.annotation[1]
+				}
+				aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+				if(is.null(aGR)){
+					stop("Your specified annotation RData does not exist!\n")
+				}
+			}
+		}
+		
+		if(!is.null(background)){
+			## construct background GR
+			bGR <- background
 		}else{
 			bGR <- NULL
 		}

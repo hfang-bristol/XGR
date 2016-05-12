@@ -4,9 +4,9 @@
 \alias{xSNP2nGenes}
 \title{Function to define nearby genes given a list of SNPs}
 \usage{
-xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("slow",
-"linear",
-"rapid"), decay.exponent = 2, GR.SNP = "dbSNP_GWAS",
+xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
+"slow",
+"linear"), decay.exponent = 2, GR.SNP = "dbSNP_GWAS",
 GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")

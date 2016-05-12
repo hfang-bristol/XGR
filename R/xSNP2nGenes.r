@@ -39,7 +39,7 @@
 #' df_nGenes <- xSNP2nGenes(data=data, distance.max=200000, decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 #' }
 
-xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -154,7 +154,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("slow","linear
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window", length(unique(df_nGenes$Gene)), distance.max), appendLF=T)
+			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel", length(unique(df_nGenes$Gene)), distance.max, decay.kernel), appendLF=T)
 		}
 	
 	}else{
