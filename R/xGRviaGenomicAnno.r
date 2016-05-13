@@ -26,6 +26,7 @@
 #' }
 #' @note
 #' The genomic annotation data are described below according to the data sources and data types.
+#'
 #' 1. ENCODE Transcription Factor ChIP-seq data
 #' \itemize{
 #'  \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and transcription factors) of GenomicRanges objects; each is an GR object containing uniformly identified peaks per cell type per transcription factor.}
@@ -86,7 +87,6 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 #' RData.location="~/Sites/SVN/github/bigdata"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
@@ -141,7 +141,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		message(sprintf("\timport the annotation file (%s) ...", as.character(now)), appendLF=T)
 	}
     ## import annotation file
-    if(is.matrix(annotation.file) | is.data.frame(annotation.file) | class(annotation.file)=="GRanges"){
+    if(is.matrix(annotation.file) | is.data.frame(annotation.file) | class(annotation.file)=="list"){
         annotation <- annotation.file
     }else if(!is.null(annotation.file)){
 		annotation <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)

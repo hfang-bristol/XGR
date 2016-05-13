@@ -149,6 +149,7 @@ default, the annotatable bases will be used.
 \note{
 The genomic annotation data are described below according to the data
 sources and data types.
+
 1. ENCODE Transcription Factor ChIP-seq data
 \itemize{
 \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and
@@ -278,7 +279,6 @@ identified peaks per transcripton factor.}
 \dontrun{
 # Load the library
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
 RData.location="~/Sites/SVN/github/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
