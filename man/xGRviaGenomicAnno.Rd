@@ -127,6 +127,7 @@ this}
 \item{\code{nOverlap}: the number of nucleotides/bases overlapped
 between input regions and annotation regions. If the background is
 provided, they are also restricted by this}
+\item{\code{fc}: fold change}
 \item{\code{zscore}: z-score}
 \item{\code{pvalue}: p-value}
 \item{\code{adjp}: adjusted p-value. It is the p value but after being

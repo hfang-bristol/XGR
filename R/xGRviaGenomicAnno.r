@@ -18,6 +18,7 @@
 #'  \item{\code{name}: the annotation name}
 #'  \item{\code{nAnno}: the number of nucleotides/bases covered by that annotation. If the background is provided, they are also restricted by this}
 #'  \item{\code{nOverlap}: the number of nucleotides/bases overlapped between input regions and annotation regions. If the background is provided, they are also restricted by this}
+#'  \item{\code{fc}: fold change}
 #'  \item{\code{zscore}: z-score}
 #'  \item{\code{pvalue}: p-value}
 #'  \item{\code{adjp}: adjusted p-value. It is the p value but after being adjusted for multiple comparisons}
@@ -605,7 +606,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
     
-	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "zscore", "pvalue", "adjp", "expProb", "obsProb")]
+	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "expProb", "obsProb")]
 	
 	invisible(res_df)
 }

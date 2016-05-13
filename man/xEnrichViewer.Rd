@@ -6,7 +6,7 @@
 \usage{
 xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 "zscore",
-"nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
+"fc", "nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -16,9 +16,9 @@ xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 
 \item{sortBy}{which statistics will be used for sorting and viewing
 gene sets (terms). It can be "adjp" for adjusted p value, "pvalue" for
-p value, "zscore" for enrichment z-score, "nAnno" for the number of
-sets (terms), "nOverlap" for the number in overlaps, and "none" for
-ordering according to ID of terms}
+p value, "zscore" for enrichment z-score, "fc" for enrichment fold
+change, "nAnno" for the number of sets (terms), "nOverlap" for the
+number in overlaps, and "none" for ordering according to ID of terms}
 
 \item{decreasing}{logical to indicate whether to sort in a decreasing
 order. If it is null, it would be true for "zscore", "nAnno" or
@@ -35,6 +35,7 @@ a data frame with following components:
 \item{\code{name}: term name}
 \item{\code{nAnno}: number in members annotated by a term}
 \item{\code{nOverlap}: number in overlaps}
+\item{\code{fc}: enrichment fold changes}
 \item{\code{zscore}: enrichment z-score}
 \item{\code{pvalue}: nominal p value}
 \item{\code{adjp}: adjusted p value}

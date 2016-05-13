@@ -117,6 +117,7 @@ retained}
 snps/genes overlapped between a snp/gene set and the given input data
 (i.e. the snps/genes of interest). Always, gene sets are identified by
 "id"}
+\item{\code{fc}: a vector containing fold changes}
 \item{\code{zscore}: a vector containing z-scores}
 \item{\code{pvalue}: a vector containing p-values}
 \item{\code{adjp}: a vector containing adjusted p-values. It is the p

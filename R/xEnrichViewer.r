@@ -4,7 +4,7 @@
 #'
 #' @param eTerm an object of class "eTerm"
 #' @param top_num the number of the top terms (sorted according to 'sortBy' below) will be viewed
-#' @param sortBy which statistics will be used for sorting and viewing gene sets (terms). It can be "adjp" for adjusted p value, "pvalue" for p value, "zscore" for enrichment z-score, "nAnno" for the number of sets (terms), "nOverlap" for the number in overlaps, and "none" for ordering according to ID of terms
+#' @param sortBy which statistics will be used for sorting and viewing gene sets (terms). It can be "adjp" for adjusted p value, "pvalue" for p value, "zscore" for enrichment z-score, "fc" for enrichment fold change, "nAnno" for the number of sets (terms), "nOverlap" for the number in overlaps, and "none" for ordering according to ID of terms
 #' @param decreasing logical to indicate whether to sort in a decreasing order. If it is null, it would be true for "zscore", "nAnno" or "nOverlap"; otherwise it would be false
 #' @param details logical to indicate whether the detailed information of gene sets (terms) is also viewed. By default, it sets to false for no inclusion
 #' @return
@@ -14,6 +14,7 @@
 #'  \item{\code{name}: term name}
 #'  \item{\code{nAnno}: number in members annotated by a term}
 #'  \item{\code{nOverlap}: number in overlaps}
+#'  \item{\code{fc}: enrichment fold changes}
 #'  \item{\code{zscore}: enrichment z-score}
 #'  \item{\code{pvalue}: nominal p value}
 #'  \item{\code{adjp}: adjusted p value}
@@ -29,7 +30,7 @@
 #' xEnrichViewer(eTerm)
 #' }
 
-xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","nAnno","nOverlap","none"), decreasing=NULL, details=F) 
+xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","fc","nAnno","nOverlap","none"), decreasing=NULL, details=F) 
 {
     
     sortBy <- match.arg(sortBy)
@@ -65,6 +66,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
 			tab <- data.frame( name         = as.character(eTerm$term_info$name),
 							   nAnno        = as.numeric(sapply(eTerm$annotation,length)),
 							   nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
+							   fc         	= as.numeric(eTerm$fc),
 							   zscore       = as.numeric(eTerm$zscore),
 							   pvalue       = as.numeric(eTerm$pvalue),
 							   adjp         = as.numeric(eTerm$adjp),
@@ -77,6 +79,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
 			tab <- data.frame( name         = as.character(eTerm$term_info$name),
 							   nAnno        = as.numeric(sapply(eTerm$annotation,length)),
 							   nOverlap     = as.numeric(sapply(eTerm$overlap,length)),
+							   fc         	= as.numeric(eTerm$fc),
 							   zscore       = as.numeric(eTerm$zscore),
 							   pvalue       = as.numeric(eTerm$pvalue),
 							   adjp         = as.numeric(eTerm$adjp),
@@ -90,9 +93,9 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
 	}
 	    
     if(details == T){
-        res <- tab[,c(1:8)]
+        res <- tab[,c(1:9)]
     }else{
-        res <- tab[,c(1:6)]
+        res <- tab[,c(1:7)]
     }
     
     if(is.null(decreasing)){
@@ -107,6 +110,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","pvalue","zscore","
     	adjp={res <- res[with(res,order(adjp,-zscore))[1:top_num],]},
     	pvalue={res <- res[with(res,order(pvalue,-zscore))[1:top_num],]},
     	zscore={res <- res[with(res,order(-zscore,adjp))[1:top_num],]},
+    	zscore={res <- res[with(res,order(-fc,adjp))[1:top_num],]},
     	nAnno={res <- res[with(res,order(-nAnno,adjp,-zscore))[1:top_num],]},
     	nOverlap={res <- res[with(res,order(-nOverlap,adjp,-zscore))[1:top_num],]},
         none={res <- res[order(rownames(res), decreasing=decreasing)[1:top_num],]}

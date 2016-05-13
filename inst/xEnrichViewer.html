@@ -19,7 +19,7 @@ analysis.
 <pre>
 xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 "zscore",
-"nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
+"fc", "nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
 </pre>
 
 
@@ -39,9 +39,9 @@ xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 <td>
 <p>which statistics will be used for sorting and viewing
 gene sets (terms). It can be &quot;adjp&quot; for adjusted p value, &quot;pvalue&quot; for
-p value, &quot;zscore&quot; for enrichment z-score, &quot;nAnno&quot; for the number of
-sets (terms), &quot;nOverlap&quot; for the number in overlaps, and &quot;none&quot; for
-ordering according to ID of terms</p>
+p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for enrichment fold
+change, &quot;nAnno&quot; for the number of sets (terms), &quot;nOverlap&quot; for the
+number in overlaps, and &quot;none&quot; for ordering according to ID of terms</p>
 </td></tr>
 <tr valign="top"><td><code>decreasing</code></td>
 <td>
@@ -74,6 +74,9 @@ inclusion</p>
 </p>
 </li>
 <li><p><code>nOverlap</code>: number in overlaps
+</p>
+</li>
+<li><p><code>fc</code>: enrichment fold changes
 </p>
 </li>
 <li><p><code>zscore</code>: enrichment z-score
