@@ -110,6 +110,8 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
         stop("The input data must be a vector.\n")
     }
     
+    data <- as.character(data)
+    
     if(!is.na(ontology)){
 	
 		if(verbose){

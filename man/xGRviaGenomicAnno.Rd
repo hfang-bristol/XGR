@@ -7,21 +7,23 @@
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-background.annotatable.only = T, test = c("hypergeo", "fisher",
-"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), GR.annotation = c(NA, "Uniform_TFBS",
-"ENCODE_TFBS_ClusteredV3", "ENCODE_TFBS_ClusteredV3_CellTypes",
-"Uniform_DNaseI_HS", "ENCODE_DNaseI_ClusteredV3",
-"ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone", "SYDH_Histone",
-"UW_Histone", "FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
-"FANTOM5_Enhancer_Extensive", "FANTOM5_Enhancer",
-"Segment_Combined_Gm12878",
-"Segment_Combined_H1hesc", "Segment_Combined_Helas3",
-"Segment_Combined_Hepg2", "Segment_Combined_Huvec",
-"Segment_Combined_K562",
-"TFBS_Conserved", "TS_miRNA", "TCGA", "ReMap_Public_TFBS",
-"ReMap_Public_mergedTFBS", "ReMap_PublicAndEncode_mergedTFBS",
-"ReMap_Encode_TFBS"), verbose = T,
+resolution = c("regions", "bases", "auto"),
+background.annotatable.only = T, test = c("binomial", "hypergeo",
+"fisher"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg",
+"hommel"), GR.annotation = c(NA, "Uniform_TFBS",
+"ENCODE_TFBS_ClusteredV3",
+"ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
+"ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
+"Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
+"FANTOM5_Enhancer_Tissue", "FANTOM5_Enhancer_Extensive",
+"FANTOM5_Enhancer",
+"Segment_Combined_Gm12878", "Segment_Combined_H1hesc",
+"Segment_Combined_Helas3", "Segment_Combined_Hepg2",
+"Segment_Combined_Huvec",
+"Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
+"ReMap_Public_TFBS", "ReMap_Public_mergedTFBS",
+"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -68,7 +70,11 @@ factor) is provided in 'annotation.file', the background must be
 provided.}
 
 \item{format.file}{the format for input files. It can be one of
-"data.frame", "chr:start-end", "bed"}
+"data.frame", "chr:start-end", "bed" and "GRanges"}
+
+\item{resolution}{the resolution of testing overlap. It can be one of
+"regions" at the region resolution, "bases" at the base resolution, and
+"auto" at the region-base hybrid resolution.}
 
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
@@ -121,31 +127,31 @@ RData files. See \code{\link{xRDataLoader}} for details}
 a data frame with 8 columns:
 \itemize{
 \item{\code{name}: the annotation name}
-\item{\code{nAnno}: the number of nucleotides/bases covered by that
+\item{\code{nAnno}: the number of regions/bases covered by that
 annotation. If the background is provided, they are also restricted by
 this}
-\item{\code{nOverlap}: the number of nucleotides/bases overlapped
-between input regions and annotation regions. If the background is
-provided, they are also restricted by this}
+\item{\code{nOverlap}: the number of regions/bases overlapped between
+input regions and annotation regions. If the background is provided,
+they are also restricted by this}
 \item{\code{fc}: fold change}
 \item{\code{zscore}: z-score}
 \item{\code{pvalue}: p-value}
 \item{\code{adjp}: adjusted p-value. It is the p value but after being
 adjusted for multiple comparisons}
-\item{\code{expProb}: the probability of expecting nucleotides/bases
+\item{\code{expProb}: the probability of expecting regions/bases
 overlapped between background regions and annotation regions}
-\item{\code{obsProb}: the probability of observing nucleotides/bases
+\item{\code{obsProb}: the probability of observing regions/bases
 overlapped between input regions and annotation regions}
 }
 }
 \description{
 \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment
-analysis for the input genomic region dataan, using genomic annotations
+analysis for the input genomic region data, using genomic annotations
 (eg active chromatin, transcription factor binding sites/motifs,
 conserved sites). Enrichment analysis is based on either Fisher's exact
 test or Hypergeometric test for estimating the significance of overlaps
-at the single base-pair resolution. Test background can be provided; by
-default, the annotatable bases will be used.
+(either at the region resolution or at the base resolution. Test
+background can be provided; by default, the annotatable will be used.
 }
 \note{
 The genomic annotation data are described below according to the data
@@ -285,7 +291,7 @@ RData.location="~/Sites/SVN/github/bigdata"
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file <- ~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",

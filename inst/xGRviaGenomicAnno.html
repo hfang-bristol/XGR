@@ -10,12 +10,12 @@
 <h3>Description</h3>
 
 <p><code>xGRviaGenomicAnno</code> is supposed to conduct region-based enrichment
-analysis for the input genomic region dataan, using genomic annotations
+analysis for the input genomic region data, using genomic annotations
 (eg active chromatin, transcription factor binding sites/motifs,
 conserved sites). Enrichment analysis is based on either Fisher's exact
 test or Hypergeometric test for estimating the significance of overlaps
-at the single base-pair resolution. Test background can be provided; by
-default, the annotatable bases will be used.
+(either at the region resolution or at the base resolution. Test
+background can be provided; by default, the annotatable will be used.
 </p>
 
 
@@ -25,21 +25,23 @@ default, the annotatable bases will be used.
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-background.annotatable.only = T, test = c("hypergeo", "fisher",
-"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), GR.annotation = c(NA, "Uniform_TFBS",
-"ENCODE_TFBS_ClusteredV3", "ENCODE_TFBS_ClusteredV3_CellTypes",
-"Uniform_DNaseI_HS", "ENCODE_DNaseI_ClusteredV3",
-"ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone", "SYDH_Histone",
-"UW_Histone", "FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
-"FANTOM5_Enhancer_Extensive", "FANTOM5_Enhancer",
-"Segment_Combined_Gm12878",
-"Segment_Combined_H1hesc", "Segment_Combined_Helas3",
-"Segment_Combined_Hepg2", "Segment_Combined_Huvec",
-"Segment_Combined_K562",
-"TFBS_Conserved", "TS_miRNA", "TCGA", "ReMap_Public_TFBS",
-"ReMap_Public_mergedTFBS", "ReMap_PublicAndEncode_mergedTFBS",
-"ReMap_Encode_TFBS"), verbose = T,
+resolution = c("regions", "bases", "auto"),
+background.annotatable.only = T, test = c("binomial", "hypergeo",
+"fisher"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg",
+"hommel"), GR.annotation = c(NA, "Uniform_TFBS",
+"ENCODE_TFBS_ClusteredV3",
+"ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
+"ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
+"Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
+"FANTOM5_Enhancer_Tissue", "FANTOM5_Enhancer_Extensive",
+"FANTOM5_Enhancer",
+"Segment_Combined_Gm12878", "Segment_Combined_H1hesc",
+"Segment_Combined_Helas3", "Segment_Combined_Hepg2",
+"Segment_Combined_Huvec",
+"Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
+"ReMap_Public_TFBS", "ReMap_Public_mergedTFBS",
+"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -98,7 +100,13 @@ provided.</p>
 <tr valign="top"><td><code>format.file</code></td>
 <td>
 <p>the format for input files. It can be one of
-&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot;</p>
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; and &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>resolution</code></td>
+<td>
+<p>the resolution of testing overlap. It can be one of
+&quot;regions&quot; at the region resolution, &quot;bases&quot; at the base resolution, and
+&quot;auto&quot; at the region-base hybrid resolution.</p>
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
@@ -171,14 +179,14 @@ RData files. See <code>xRDataLoader</code> for details</p>
 <li><p><code>name</code>: the annotation name
 </p>
 </li>
-<li><p><code>nAnno</code>: the number of nucleotides/bases covered by that
+<li><p><code>nAnno</code>: the number of regions/bases covered by that
 annotation. If the background is provided, they are also restricted by
 this
 </p>
 </li>
-<li><p><code>nOverlap</code>: the number of nucleotides/bases overlapped
-between input regions and annotation regions. If the background is
-provided, they are also restricted by this
+<li><p><code>nOverlap</code>: the number of regions/bases overlapped between
+input regions and annotation regions. If the background is provided,
+they are also restricted by this
 </p>
 </li>
 <li><p><code>fc</code>: fold change
@@ -194,11 +202,11 @@ provided, they are also restricted by this
 adjusted for multiple comparisons
 </p>
 </li>
-<li><p><code>expProb</code>: the probability of expecting nucleotides/bases
+<li><p><code>expProb</code>: the probability of expecting regions/bases
 overlapped between background regions and annotation regions
 </p>
 </li>
-<li><p><code>obsProb</code>: the probability of observing nucleotides/bases
+<li><p><code>obsProb</code>: the probability of observing regions/bases
 overlapped between input regions and annotation regions
 </p>
 </li></ul>
@@ -423,7 +431,7 @@ RData.location="~/Sites/SVN/github/bigdata"
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file &lt;- ~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm &lt;- xGRviaGenomicAnno(data.file=data.file, format.file="bed",

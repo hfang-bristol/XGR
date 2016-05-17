@@ -102,6 +102,8 @@ xEnricherGenes <- function(data, background=NULL, ontology=c("GOBP","GOMF","GOCC
         stop("The input data must be a vector.\n")
     }
     
+    data <- as.character(data)
+    
     if(!is.na(ontology)){
 	
 		if(verbose){
@@ -273,12 +275,17 @@ xEnricherGenes <- function(data, background=NULL, ontology=c("GOBP","GOMF","GOCC
 	
 	# replace EntrezGenes with gene symbols	
 	if(1 & class(eTerm)=="eTerm"){
+		## overlap
 		overlap <- eTerm$overlap
 		overlap_symbols <- lapply(overlap,function(x){
 			ind <- match(x, allGeneID)
 			allSymbol[ind]
 		})
 		eTerm$overlap <- overlap_symbols
+		## data
+		eTerm$data <- allSymbol[match(eTerm$data,allGeneID)]
+		## background
+		eTerm$background <- allSymbol[match(eTerm$background,allGeneID)]		
 	}
 	
 	if(verbose){
