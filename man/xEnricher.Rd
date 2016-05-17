@@ -137,14 +137,14 @@ The interpretation of the algorithms used to account for the hierarchy
 of the ontology is:
 \itemize{
 \item{"none": does not consider the ontology hierarchy at all.}
-\item{"lea": computers the significance of a term in terms of the
+\item{"lea": estimates the significance of a term in terms of the
 significance of its children at the maximum depth (e.g. 2). Precisely,
 once snps/genes are already annotated to any children terms with a more
 signficance than itself, then all these snps/genes are eliminated from
 the use for the recalculation of the signifance at that term. The final
 p-values takes the maximum of the original p-value and the recalculated
 p-value.}
-\item{"elim": computers the significance of a term in terms of the
+\item{"elim": estimates the significance of a term in terms of the
 significance of its all children. Precisely, once snps/genes are
 already annotated to a signficantly enriched term under the cutoff of
 e.g. pvalue<1e-2, all these snps/genes are eliminated from the

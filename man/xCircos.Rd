@@ -4,9 +4,11 @@
 \alias{xCircos}
 \title{Function to visualise a network as a circos plot}
 \usage{
-xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
-chr.exclude = "auto", entity.label.cex = 0.8, GR.SNP = "dbSNP_GWAS",
-GR.Gene = "UCSC_genes", verbose = T,
+xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
+"bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"),
+ideogram = T, chr.exclude = "auto", entity.label.cex = 0.8,
+GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -19,6 +21,17 @@ semantic similarity between them}
 being plotted. It can be either "SNP" or "Gene"}
 
 \item{top_num}{the top number of similarity edges to be plotted}
+
+\item{colormap}{short name for the colormap. It can be one of "jet"
+(jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
+colormap), "wyr" (white-yellow-red colormap), "br" (black-red
+colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and
+"rainbow" (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. "lightyellow-orange" (by
+default), "blue-black-yellow", "royalblue-white-sandybrown",
+"darkgreen-white-darkviolet". A list of standard color names can be
+found in \url{http://html-color-codes.info/color-names}}
 
 \item{ideogram}{logical to indicate whether chromosome banding is
 plotted}

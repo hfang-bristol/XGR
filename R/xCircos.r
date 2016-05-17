@@ -5,6 +5,7 @@
 #' @param g an object of class "igraph". For example, it stores semantic similarity results with nodes for genes/SNPs and edges for pair-wise semantic similarity between them 
 #' @param entity the entity of similarity analysis for which results are being plotted. It can be either "SNP" or "Gene"
 #' @param top_num the top number of similarity edges to be plotted
+#' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ideogram logical to indicate whether chromosome banding is plotted
 #' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). By defautl, it is 'auto' meaning those chromosomes without data will be excluded. If NULL, no chromosome is excluded
 #' @param entity.label.cex the font size of genes/SNPs labels. Default is 0.8
@@ -50,7 +51,7 @@
 #' #dev.off()
 #' } 
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclude="auto", entity.label.cex=0.8, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ideogram=T, chr.exclude="auto", entity.label.cex=0.8, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
   
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -170,7 +171,7 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
   	
   	params$text.size <- entity.label.cex
   	RCircos.Reset.Plot.Parameters(params)
-  
+
   	## Initialise graphic device, plot chromosome ideogram
 	if(verbose){
 		now <- Sys.time()
@@ -178,13 +179,26 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, ideogram=T, chr.exclu
 	}
   	RCircos.Set.Plot.Area()
   	RCircos.Chromosome.Ideogram.Plot()
-  
+
   	## Plot link data coloured according to the similarity output
 	if(verbose){
 		now <- Sys.time()
 		message(sprintf("Plotting link data (%s) ...", as.character(now)), appendLF=T)
 	}
-  	input.data$PlotColor <- colorRampPalette(c("gray", "red"))(10)[as.numeric(cut(input.data$similarity, breaks=seq(0, 1, 0.1)))]
+	
+	## Also rescale similarity into the [0,1] range
+	if(1){
+		sim <- input.data$similarity
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Also rescale similarity into the [0,1] range (%s)", as.character(now)), appendLF=T)
+		}
+		# rescale to [0 1]
+		input.data$similarity <- (sim - min(sim))/(max(sim) - min(sim))
+	}
+	
+	palette.name <- supraHex::visColormap(colormap=colormap)
+  	input.data$PlotColor <- palette.name(20)[as.numeric(cut(input.data$similarity, breaks=seq(0, 1, 0.05)))]
   	input.data <- input.data[order(input.data$similarity, decreasing=F), ]
   	RCircos.Link.Plot(input.data, track.num=1, FALSE)
 

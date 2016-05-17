@@ -17,9 +17,11 @@ network must be a 'igraph' object.
 <h3>Usage</h3>
 
 <pre>
-xCircos(g, entity = c("SNP", "Gene"), top_num = 50, ideogram = T,
-chr.exclude = "auto", entity.label.cex = 0.8, GR.SNP = "dbSNP_GWAS",
-GR.Gene = "UCSC_genes", verbose = T,
+xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
+"bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"),
+ideogram = T, chr.exclude = "auto", entity.label.cex = 0.8,
+GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -42,6 +44,19 @@ being plotted. It can be either &quot;SNP&quot; or &quot;Gene&quot;</p>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
 <p>the top number of similarity edges to be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;lightyellow-orange&quot; (by
+default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
+&quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
+found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>ideogram</code></td>
 <td>

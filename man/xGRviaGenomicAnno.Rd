@@ -43,7 +43,7 @@ first column will be used and processed. If the file also contains
 other columns, these additional columns will be ignored. Alternatively,
 the input file can be the content itself assuming that input file has
 been read. Note: the file should use the tab delimiter as the field
-separator between columns}
+separator between columns.}
 
 \item{annotation.file}{an input annotation file containing genomic
 annotations for genomic regions. If the input file is formatted as a
@@ -59,7 +59,7 @@ transcription factors and histones; 2nd column). If the file also
 contains other columns, these additional columns will be ignored.
 Alternatively, the input file can be the content itself assuming that
 input file has been read. Note: the file should use the tab delimiter
-as the field separator between columns}
+as the field separator between columns.}
 
 \item{background.file}{an input background file containing a list of
 genomic regions as the test background. The file format is the same as

@@ -439,7 +439,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Also rescale similarity into the [0,1] range (%s)", nrow(sim), as.character(now)), appendLF=T)
+			message(sprintf("Also rescale similarity into the [0,1] range (%s)", as.character(now)), appendLF=T)
 		}
 	
 		# rescale to [0 1]
