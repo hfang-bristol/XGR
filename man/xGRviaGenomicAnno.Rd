@@ -7,23 +7,22 @@
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-resolution = c("regions", "bases", "auto"),
-background.annotatable.only = T, test = c("binomial", "hypergeo",
-"fisher"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg",
-"hommel"), GR.annotation = c(NA, "Uniform_TFBS",
-"ENCODE_TFBS_ClusteredV3",
-"ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
-"ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
-"Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
-"FANTOM5_Enhancer_Tissue", "FANTOM5_Enhancer_Extensive",
-"FANTOM5_Enhancer",
-"Segment_Combined_Gm12878", "Segment_Combined_H1hesc",
-"Segment_Combined_Helas3", "Segment_Combined_Hepg2",
-"Segment_Combined_Huvec",
-"Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
-"ReMap_Public_TFBS", "ReMap_Public_mergedTFBS",
-"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), verbose = T,
+background.annotatable.only = F, num.samples = 100, gap.max = 50000,
+max.distance = NULL, p.adjust.method = c("BH", "BY", "bonferroni",
+"holm",
+"hochberg", "hommel"), GR.annotation = c(NA, "Uniform_TFBS",
+"ENCODE_TFBS_ClusteredV3", "ENCODE_TFBS_ClusteredV3_CellTypes",
+"Uniform_DNaseI_HS", "ENCODE_DNaseI_ClusteredV3",
+"ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone", "SYDH_Histone",
+"UW_Histone", "FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
+"FANTOM5_Enhancer_Extensive", "FANTOM5_Enhancer",
+"Segment_Combined_Gm12878",
+"Segment_Combined_H1hesc", "Segment_Combined_Helas3",
+"Segment_Combined_Hepg2", "Segment_Combined_Huvec",
+"Segment_Combined_K562",
+"TFBS_Conserved", "TS_miRNA", "TCGA", "ReMap_Public_TFBS",
+"ReMap_Public_mergedTFBS", "ReMap_PublicAndEncode_mergedTFBS",
+"ReMap_Encode_TFBS"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -72,10 +71,6 @@ provided.}
 \item{format.file}{the format for input files. It can be one of
 "data.frame", "chr:start-end", "bed" and "GRanges"}
 
-\item{resolution}{the resolution of testing overlap. It can be one of
-"regions" at the region resolution, "bases" at the base resolution, and
-"auto" at the region-base hybrid resolution.}
-
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
 'annotation.file'). In other words, if the background is provided, the
@@ -83,21 +78,17 @@ background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
 is provided in 'annotation.file', it should be false.}
 
-\item{test}{the statistic test used. It can be "fisher" for using
-fisher's exact test, "hypergeo" for using hypergeometric test, or
-"binomial" for using binomial test. Fisher's exact test is to test the
-independence between gene group (genes belonging to a group or not) and
-gene annotation (genes annotated by a term or not), and thus compare
-sampling to the left part of background (after sampling without
-replacement). Hypergeometric test is to sample at random (without
-replacement) from the background containing annotated and non-annotated
-genes, and thus compare sampling to background. Unlike hypergeometric
-test, binomial test is to sample at random (with replacement) from the
-background with the constant probability. In terms of the ease of
-finding the significance, they are in order: hypergeometric test >
-binomial test > fisher's exact test. In other words, in terms of the
-calculated p-value, hypergeometric test < binomial test < fisher's
-exact test}
+\item{num.samples}{the number of samples randomly generated}
+
+\item{gap.max}{the maximum distance of background islands to be
+considered away from data regions. Only background islands no far way
+from this distance will be considered. For example, if it is 0, meaning
+that only background islands that overlapp with genomic regions will be
+considered. By default, it is 50000}
+
+\item{max.distance}{the maximum distance away from data regions that is
+allowed when generating random samples. By default, it is NULl meaning
+no such restriction}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
@@ -127,21 +118,18 @@ RData files. See \code{\link{xRDataLoader}} for details}
 a data frame with 8 columns:
 \itemize{
 \item{\code{name}: the annotation name}
-\item{\code{nAnno}: the number of regions/bases covered by that
-annotation. If the background is provided, they are also restricted by
-this}
-\item{\code{nOverlap}: the number of regions/bases overlapped between
-input regions and annotation regions. If the background is provided,
-they are also restricted by this}
+\item{\code{nAnno}: the number of bases covered by that annotation. If
+the background is provided, they are also restricted by this}
+\item{\code{nOverlap}: the number of bases overlapped between input
+regions and annotation regions. If the background is provided, they are
+also restricted by this}
 \item{\code{fc}: fold change}
 \item{\code{zscore}: z-score}
 \item{\code{pvalue}: p-value}
 \item{\code{adjp}: adjusted p-value. It is the p value but after being
 adjusted for multiple comparisons}
-\item{\code{expProb}: the probability of expecting regions/bases
-overlapped between background regions and annotation regions}
-\item{\code{obsProb}: the probability of observing regions/bases
-overlapped between input regions and annotation regions}
+\item{\code{nData}: the number of bases covered by input regions}
+\item{\code{nBG}: the number of bases covered by background regions}
 }
 }
 \description{

@@ -20,8 +20,9 @@ network must be a 'igraph' object.
 xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
 "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"),
-ideogram = T, chr.exclude = "auto", entity.label.cex = 0.8,
-GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
+rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
+entity.label.cex = 0.8, GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes",
+verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -57,6 +58,16 @@ hyphen-separated HTML color names, e.g. &quot;lightyellow-orange&quot; (by
 default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
 &quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
 found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>rescale</code></td>
+<td>
+<p>logical to indicate whether the edge values are rescaled
+to the range [0,1]. By default, it sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>nodes.query</code></td>
+<td>
+<p>nodes in query for which edges attached to them will
+be displayed. By default, it sets to NULL meaning no such restriction</p>
 </td></tr>
 <tr valign="top"><td><code>ideogram</code></td>
 <td>
@@ -153,6 +164,9 @@ RData.location=RData.location)
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
 xCircos(g=SNP.g, entity="SNP", RData.location=RData.location)
 #dev.off()
+# Circos plot involving nodes 'rs6871626'
+xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626",
+RData.location=RData.location)
 
 # 2) Gene-based similarity analysis using Disease Ontology (DO)
 ## Get genes within 10kb away from AS GWAS lead SNPs

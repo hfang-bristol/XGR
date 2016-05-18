@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate random samples for data genomic regions...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGRsampling"><tr><td>xGRsampling</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to generate random samples for data genomic regions from background genomic regions</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRsampling</code> is supposed to randomly generate samples for data
+genomic regions from background genomic regions. To do so, we first
+identify background islands, that is, non-overlapping regions. Then, we
+keep only parts of data genomic regions that fall into these background
+islands. For each kept genomic region, a randomised region of the same
+length is sampled from the corresponding background islands. If
+required, the randomised region can be restricted to be no more than
+(eg 10000bp) away from data genomic regions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGRsampling(GR.data, GR.background, num.samples = 100, gap.max = 50000,
+max.distance = NULL, verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>GR.data</code></td>
+<td>
+<p>an input data GR object, containing a set of genomic
+regions based on which to generate a null distribution</p>
+</td></tr>
+<tr valign="top"><td><code>GR.background</code></td>
+<td>
+<p>an input background GR object, containing a set of
+genomic regions to randomly sample from. It can be a GR list object or
+a list of GR objects</p>
+</td></tr>
+<tr valign="top"><td><code>num.samples</code></td>
+<td>
+<p>the number of samples randomly generated</p>
+</td></tr>
+<tr valign="top"><td><code>gap.max</code></td>
+<td>
+<p>the maximum distance of background islands to be
+considered away from data regions. Only background islands no far way
+from this distance will be considered. For example, if it is 0, meaning
+that only background islands that overlapp with genomic regions will be
+considered. By default, it is 50000</p>
+</td></tr>
+<tr valign="top"><td><code>max.distance</code></td>
+<td>
+<p>the maximum distance away from data regions that is
+allowed when generating random samples. By default, it is NULl meaning
+no such restriction</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a list of GR ojects, each containing an GR oject storing a sample.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRsampling</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
+
+# Enrichment analysis for GWAS SNPs from ImmunoBase
+# a) provide input data GR object storing GWAS SNPs
+dbSNP_GWAS &lt;- xRDataLoader(RData.customised='dbSNP_GWAS',
+RData.location=RData.location)
+
+# b) provide backgorund data GR object storing FANTOM5 cell-specific enhancers
+FANTOM5_Enhancer_Cell &lt;-
+xRDataLoader(RData.customised='FANTOM5_Enhancer_Cell',
+RData.location=RData.location)
+
+# c) generate random samples as a list of GR objects
+sGR_List &lt;- xGRsampling(GR.data=dbSNP_GWAS,
+GR.background=FANTOM5_Enhancer_Cell, num.samples=1000,
+RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

@@ -6,6 +6,8 @@
 #' @param entity the entity of similarity analysis for which results are being plotted. It can be either "SNP" or "Gene"
 #' @param top_num the top number of similarity edges to be plotted
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param rescale logical to indicate whether the edge values are rescaled to the range [0,1]. By default, it sets to true
+#' @param nodes.query nodes in query for which edges attached to them will be displayed. By default, it sets to NULL meaning no such restriction
 #' @param ideogram logical to indicate whether chromosome banding is plotted
 #' @param chr.exclude a character vector of chromosomes to exclude from the plot, e.g. c("chrX", "chrY"). By defautl, it is 'auto' meaning those chromosomes without data will be excluded. If NULL, no chromosome is excluded
 #' @param entity.label.cex the font size of genes/SNPs labels. Default is 0.8
@@ -39,6 +41,8 @@
 #' #pdf(file=out.file, height=12, width=12, compress=TRUE)
 #' xCircos(g=SNP.g, entity="SNP", RData.location=RData.location)
 #' #dev.off()
+#' # Circos plot involving nodes 'rs6871626'
+#' xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626", RData.location=RData.location)
 #'
 #' # 2) Gene-based similarity analysis using Disease Ontology (DO)
 #' ## Get genes within 10kb away from AS GWAS lead SNPs
@@ -51,7 +55,7 @@
 #' #dev.off()
 #' } 
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ideogram=T, chr.exclude="auto", entity.label.cex=0.8, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.8, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
   
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -61,10 +65,36 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
   	if (class(g) != "igraph") {
     	stop("The function must apply to a 'igraph' object.\n")
   	}
-  
+
 	## Convert from igraph into data.frame
   	df <- igraph::get.data.frame(g, what="edges")
-
+	
+	## check the weight and sort the weight
+	if(is.null(df$weight)){
+		df$weight <- rep(1, nrow(df))
+	}else{
+		df$weight <- as.numeric(df$weight)
+	}
+	df <- df[with(df,order(-weight)), ]
+	
+	## restrict to nodes in query
+	if(!is.null(nodes.query)){
+		ind_from <- which(!is.na(match(df[,1], nodes.query)))
+		ind_to <- which(!is.na(match(df[,2], nodes.query)))
+		ind <- union(ind_from, ind_to)
+		if(length(ind)>0){
+			df <- df[ind,]
+			
+			if(verbose){
+				ind <- match(nodes.query, union(df[,1], df[,2]))
+				nodes.query <- nodes.query[!is.na(ind)]
+				now <- Sys.time()
+				message(sprintf("Circos plot restricted to nodes '%s' (%s) ...", paste(nodes.query,collapse=','), as.character(now)), appendLF=T)
+			}
+		}
+	}
+	
+	## keep the top edges
   	if(is.null(top_num)){
     	top_num <- nrow(df)
   	}
@@ -187,7 +217,7 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
 	}
 	
 	## Also rescale similarity into the [0,1] range
-	if(1){
+	if(rescale){
 		sim <- input.data$similarity
 		if(verbose){
 			now <- Sys.time()

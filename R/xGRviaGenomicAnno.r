@@ -6,9 +6,10 @@
 #' @param annotation.file an input annotation file containing genomic annotations for genomic regions. If the input file is formatted as a 'data.frame', the first four columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), the ending chromosome position (3rd column), and the genomic annotations (eg transcription factors and histones; 4th column). If the format is indicated as 'bed', the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the format is indicated as "chr:start-end", the first two columns correspond to the chromosome:start-end (1st column) and the genomic annotations (eg transcription factors and histones; 2nd column). If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns.
 #' @param background.file an input background file containing a list of genomic regions as the test background. The file format is the same as 'data.file'. By default, it is NULL meaning all annotatable bases (ig non-redundant bases covered by 'annotation.file') are used as background. However, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', the background must be provided.
 #' @param format.file the format for input files. It can be one of "data.frame", "chr:start-end", "bed" and "GRanges"
-#' @param resolution the resolution of testing overlap. It can be one of "regions" at the region resolution, "bases" at the base resolution, and "auto" at the region-base hybrid resolution.
-#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false. 
-#' @param test the statistic test used. It can be "fisher" for using fisher's exact test, "hypergeo" for using hypergeometric test, or "binomial" for using binomial test. Fisher's exact test is to test the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not), and thus compare sampling to the left part of background (after sampling without replacement). Hypergeometric test is to sample at random (without replacement) from the background containing annotated and non-annotated genes, and thus compare sampling to background. Unlike hypergeometric test, binomial test is to sample at random (with replacement) from the background with the constant probability. In terms of the ease of finding the significance, they are in order: hypergeometric test > binomial test > fisher's exact test. In other words, in terms of the calculated p-value, hypergeometric test < binomial test < fisher's exact test
+#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false.
+#' @param num.samples the number of samples randomly generated
+#' @param gap.max the maximum distance of background islands to be considered away from data regions. Only background islands no far way from this distance will be considered. For example, if it is 0, meaning that only background islands that overlapp with genomic regions will be considered. By default, it is 50000
+#' @param max.distance the maximum distance away from data regions that is allowed when generating random samples. By default, it is NULl meaning no such restriction
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
@@ -17,14 +18,14 @@
 #' a data frame with 8 columns:
 #' \itemize{
 #'  \item{\code{name}: the annotation name}
-#'  \item{\code{nAnno}: the number of regions/bases covered by that annotation. If the background is provided, they are also restricted by this}
-#'  \item{\code{nOverlap}: the number of regions/bases overlapped between input regions and annotation regions. If the background is provided, they are also restricted by this}
+#'  \item{\code{nAnno}: the number of bases covered by that annotation. If the background is provided, they are also restricted by this}
+#'  \item{\code{nOverlap}: the number of bases overlapped between input regions and annotation regions. If the background is provided, they are also restricted by this}
 #'  \item{\code{fc}: fold change}
 #'  \item{\code{zscore}: z-score}
 #'  \item{\code{pvalue}: p-value}
 #'  \item{\code{adjp}: adjusted p-value. It is the p value but after being adjusted for multiple comparisons}
-#'  \item{\code{expProb}: the probability of expecting regions/bases overlapped between background regions and annotation regions}
-#'  \item{\code{obsProb}: the probability of observing regions/bases overlapped between input regions and annotation regions}
+#'  \item{\code{nData}: the number of bases covered by input regions}
+#'  \item{\code{nBG}: the number of bases covered by background regions}
 #' }
 #' @note
 #' The genomic annotation data are described below according to the data sources and data types.
@@ -107,7 +108,7 @@
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
 
-xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), resolution=c("regions","bases","auto"), background.annotatable.only=T, test=c("binomial","hypergeo","fisher"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), background.annotatable.only=F, num.samples=100, gap.max=50000, max.distance=NULL, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -417,41 +418,13 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		IRanges::reduce(oGR)
 	}
 	
-    ## Binomial test: sampling at random from the background with the constant probability of having annotated genes (with replacement)
-    doBinomialTest <- function(X, K, M, N){
-        # X: num of success in sampling
-        # K: num of sampling
-        # M: num of success in background
-        # N: num in background
-        p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=F, log.p=F))
-        return(p.value)
-    }
-    
-    ## Fisher's exact test: testing the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not); thus compare sampling to the left part of background (after sampling without replacement)
-    doFisherTest <- function(X, K, M, N){
-        # X: num of success in sampling
-        # K: num of sampling
-        # M: num of success in background
-        # N: num in background
-        ## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
-        cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
-        p.value <- ifelse(all(cTab==0), 1, stats::fisher.test(cTab, alternative="greater")$p.value)
-        return(p.value)
-    }
-    
-    ## Hypergeometric test: sampling at random from the background containing annotated and non-annotated genes (without replacement); thus compare sampling to background
-    doHypergeoTest <- function(X, K, M, N){
-        # X: num of success in sampling
-        # K: num of sampling
-        # M: num of success in background
-        # N: num in background
-        
-        x <- X
-        m <- M
-        n <- N-M # num of failure in background
-        k <- K
-        p.value <- ifelse(m==0 || k==0, 1, stats::phyper(x,m,n,k, lower.tail=F, log.p=F))
-        return(p.value)
+    # A function to indicate the running progress
+    progress_indicate <- function(i, B, step, flag=F){
+        if(i %% ceiling(B/step) == 0 | i==B | i==1){
+            if(flag & verbose){
+                message(sprintf("\t%d out of %d (%s)", i, B, as.character(Sys.time())), appendLF=T)
+            }
+        }
     }
 	#####################################
     
@@ -509,119 +482,83 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	oGR_reduced <- base::lapply(aGR_reduced, function(gr){
 		mergeOverlaps(qGR=gr, sGR=dGR_reduced, maxgap=0L, minoverlap=1L)
 	})
+
+	#######################################################
+	if(verbose){
+		now <- Sys.time()
+		message(sprintf("Forth, generate null distribution via doing %d sampling (%s) ...", num.samples, as.character(now)), appendLF=T)
+	}
+	
+    if(verbose){
+        now <- Sys.time()
+        message(sprintf("\n#######################################################", appendLF=T))
+        message(sprintf("'xGRsampling' is being called (%s):", as.character(now)), appendLF=T)
+        message(sprintf("#######################################################", appendLF=T))
+    }
+	sGR_list <- xGRsampling(GR.data=dGR_reduced, GR.background=bGR_reduced, num.samples=num.samples, gap.max=gap.max, max.distance=max.distance, verbose=verbose, RData.location=RData.location)
+	if(verbose){
+        now <- Sys.time()
+        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("'xGRsampling' has been finished (%s)!", as.character(now)), appendLF=T)
+        message(sprintf("#######################################################\n", appendLF=T))
+    }
 	
 	#######################################################
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Forth, perform region-based enrichment analysis (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Fifth, perform enrichment analysis (%s) ...", as.character(now)), appendLF=T)
 	}
-	
-	if(resolution=="bases"){
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tat the single base resolution (%s) ...", as.character(now)), appendLF=T)
-		}
-		
-		## prepare enrichment analysis
-		data_nBases <- sum(IRanges::width(dGR_reduced))
-		annotation_nBases <- base::sapply(aGR_reduced, function(gr){
-			sum(IRanges::width(gr))
-		})
-		background_nBases <- sum(IRanges::width(bGR_reduced))
-		overlap_nBases <- base::sapply(oGR_reduced, function(gr){
-			sum(IRanges::width(gr))
-		})
-
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tthe number of nucleotides/bases: data (%d), background (%d)", data_nBases, background_nBases), appendLF=T)
-			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
-			message(sprintf("\tusing '%s' test", test), appendLF=T)
-		}
-
-
-	}else if(resolution=="regions"){
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tat the region resolution (%s) ...", as.character(now)), appendLF=T)
-		}
-		
-		## prepare enrichment analysis
-		data_nBases <- length(dGR_reduced)
-		annotation_nBases <- base::sapply(aGR_reduced, length)
-		background_nBases <- length(bGR_reduced)
-		overlap_nBases <- base::sapply(oGR_reduced, length)
-
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tthe number of regions: data (%d), background (%d)", data_nBases, background_nBases), appendLF=T)
-			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
-			message(sprintf("\tusing '%s' test", test), appendLF=T)
-		}
-		
-	}else if(resolution=="auto"){
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tat the region-base-hybrid resolution (%s) ...", as.character(now)), appendLF=T)
-		}
-		
-		## prepare enrichment analysis
-		### at the base resolution
-		annotation_nBases <- base::sapply(aGR_reduced, function(gr){
-			sum(IRanges::width(gr))
-		})
-		background_nBases <- sum(IRanges::width(bGR_reduced))
-		### at the region resolution		
-		data_nBases <- length(dGR_reduced)
-		overlap_nBases <- base::sapply(oGR_reduced, length)
-			
-		## in this case, only bionomial test is appropriate
-		test <- "binomial"
-		
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\tthe number of regions: data (%d)", data_nBases), appendLF=T)
-			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
-			message(sprintf("\tusing '%s' test", test), appendLF=T)
-		}
-		
-	}
-	
-	## perform enrichment analysis based on the binomial distribution
-	res_ls <- base::lapply(1:length(overlap_nBases), function(i){
-		X <- as.numeric(overlap_nBases[i])
-		K <- data_nBases
-		M <- as.numeric(annotation_nBases[i])
-		N <- background_nBases
-
-        p.value <- switch(test,
-        	fisher =  doFisherTest(X, K, M, N),
-            hypergeo = doHypergeoTest(X, K, M, N),
-            binomial = doBinomialTest(X, K, M, N)
-        )
- 
-        ## Z-score based on theoretical calculation
-        x.exp <- K*M/N
-        var.exp <- K*M/N*(N-M)/N*(N-K)/(N-1)
-        if(is.na(var.exp)){
-        	z.score <- 0
-        }else{
-			if(var.exp!=0){
-				suppressWarnings(z.score <- (X-x.exp)/sqrt(var.exp))
-			}else{
-				z.score <- 0
-			}
-		}
-		
-		## output
-		c(X, K, M, N, X/K, M/N, (X/K)/(M/N), z.score, p.value)
+	## prepare enrichment analysis
+	data_nBases <- sum(IRanges::width(dGR_reduced))
+	annotation_nBases <- base::sapply(aGR_reduced, function(gr){
+		sum(IRanges::width(gr))
 	})
-	res_df <- do.call(rbind, res_ls)
-	enrichment_df <- data.frame(names(overlap_nBases), res_df, stringsAsFactors=F)
-	colnames(enrichment_df) <- c("name", "nOverlap", "nData", "nAnno", "nBG", "obsProb", "expProb", "fc", "zscore", "pvalue")
+	background_nBases <- sum(IRanges::width(bGR_reduced))
+	overlap_nBases <- base::sapply(oGR_reduced, function(gr){
+		sum(IRanges::width(gr))
+	})
+
+	if(verbose){
+		now <- Sys.time()
+		message(sprintf("\tthe number of nucleotides/bases: data (%d), background (%d)", data_nBases, background_nBases), appendLF=T)
+		message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
+	}
+
+	## find overlap GR between annotation GR and sample GR
+	b_overlap_nBases <- base::lapply(1:length(sGR_list), function(i){
+		progress_indicate(i, length(sGR_list), 10, flag=T)
+		base::sapply(aGR_reduced, function(gr){
+			res <- mergeOverlaps(qGR=gr, sGR=sGR_list[[i]], maxgap=0L, minoverlap=1L)
+			sum(IRanges::width(res))
+		})
+	})
+	b2f <- do.call(rbind, b_overlap_nBases)
+	
+	####################
+    obs <- overlap_nBases	
+	exp_mean <- apply(b2f, 2, mean)
+	exp_std <- apply(b2f, 2, sd)
+	
+	## ratio
+	ratio <- obs/exp_mean
+	
+    ## for zscore
+    zscore <- (obs-exp_mean)/exp_std
+
+    ## for pvalue
+    obs_matrix <- matrix(rep(obs,each=num.samples), nrow=num.samples)
+    pvalue <- apply((obs_matrix - b2f)<=0, 2, sum) / num.samples
+	####################
+	
+    zscore[is.na(zscore)] <- 0
+    zscore[is.infinite(zscore)] <- max(zscore[!is.infinite(zscore)])
+    pval[is.na(ratio)] <- 1
+    ratio[is.na(ratio)] <- 1
+ 
+	enrichment_df <- data.frame(names(overlap_nBases), annotation_nBases, data_nBases, background_nBases, obs, exp_mean, ratio, zscore, pvalue, row.names=NULL, stringsAsFactors=F)
+	colnames(enrichment_df) <- c("name", "nAnno", "nData", "nBG", "nOverlap", "nExpect", "fc", "zscore", "pvalue")
 
 	## Adjust P-values for multiple comparisons
-	p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel")[1]
 	pvals <- enrichment_df$pvalue
 	adjpvals <- stats::p.adjust(pvals, method=p.adjust.method)
 	enrichment_df$adjp <- adjpvals
@@ -662,7 +599,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
     
-	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "expProb", "obsProb")]
+	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "nData", "nBG")]
 	
 	invisible(res_df)
 }
