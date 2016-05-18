@@ -283,7 +283,8 @@ data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+GR.annotation="FANTOM5_Enhancer_Cell", num.samples=1000, gap.max=50000,
+RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
