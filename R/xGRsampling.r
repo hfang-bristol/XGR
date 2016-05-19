@@ -34,6 +34,12 @@
 xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, max.distance=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
+	if(is.null(max.distance)){
+		max.distance <- gap.max
+	}else if(max.distance > gap.max){
+		max.distance <- gap.max
+	}
+	
   	## Check input GR.data and GR.background
   	if (class(GR.data) != "GRanges") {
     	stop("The function must apply to a 'GRanges' object for input data.\n")

@@ -12,6 +12,7 @@
 #' @export
 #' @import dnet
 #' @import igraph
+#' @import ggplot2
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix

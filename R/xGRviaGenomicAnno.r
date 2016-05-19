@@ -12,6 +12,8 @@
 #' @param max.distance the maximum distance away from data regions that is allowed when generating random samples. By default, it is NULl meaning no such restriction
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param parallel logical to indicate whether parallel computation with multicores is used. By default, it sets to true, but not necessarily does so. Partly because parallel backends available will be system-specific (now only Linux or Mac OS). Also, it will depend on whether these two packages "foreach" and "doMC" have been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("foreach","doMC"))}. If not yet installed, this option will be disabled
+#' @param multicores an integer to specify how many cores will be registered as the multicore parallel backend to the 'foreach' package. If NULL, it will use a half of cores available in a user's computer. This option only works when parallel computation is enabled
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -95,7 +97,7 @@
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data
 #' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#' data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+#' #data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' # b) perform enrichment analysis using FANTOM expressed enhancers
 #' eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", num.samples=1000, gap.max=50000, RData.location=RData.location)
@@ -108,7 +110,7 @@
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
 
-xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), background.annotatable.only=F, num.samples=100, gap.max=50000, max.distance=NULL, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), background.annotatable.only=F, num.samples=1000, gap.max=50000, max.distance=NULL, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS"), parallel=TRUE, multicores=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -407,13 +409,63 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	
 	#####################################
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
-	mergeOverlaps <- function(qGR, sGR, maxgap=0L, minoverlap=1L){
+	mergeOverlaps <- function(qGR, sGR, out.format=c("GR","counts"), maxgap=0L, minoverlap=1L){
+		out.format <- match.arg(out.format)
+		
 		hits <- GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
 		qhits <- qGR[S4Vectors::queryHits(hits)]
 		shits <- sGR[S4Vectors::subjectHits(hits)]
-
-		oGR <- IRanges::pintersect(qhits, shits)
-		IRanges::reduce(oGR)
+		gr <- IRanges::pintersect(qhits, shits)
+		if(out.format=='GR'){
+			gr
+		}else{
+			sum(IRanges::width(gr))
+		}
+	}
+	
+	## A function to return a list of GR objects storing overlapped regions (ie only overlapped regions!)
+	mergeOverlaps_GRL <- function(qGR, sGRL, maxgap=0L, minoverlap=1L, out.format=c("GR", "counts")){
+		out.format <- match.arg(out.format)
+		
+		hits_GRL <- GenomicRanges::findOverlaps(query=qGR, subject=sGRL, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
+		qhits_GRL <- S4Vectors::queryHits(hits_GRL)
+		shits_GRL <- S4Vectors::subjectHits(hits_GRL)
+		
+		res_ls <- split(x=qhits_GRL, f=shits_GRL)
+		names_ls <- as.numeric(names(res_ls))
+		if(1){
+			res <- lapply(1:length(res_ls), function(i){
+				s_ind <- names_ls[i]
+				sGR <- sGRL[[s_ind]]
+				#q_ind <- res_ls[[i]]
+				#qGR_sub <- qGR[q_ind]
+			
+				mergeOverlaps(qGR=qGR, sGR=sGR, out.format=out.format, maxgap=maxgap, minoverlap=minoverlap)
+			})
+		}else{
+			sGRL_o <- sGRL[names_ls]
+			res <- lapply(sGRL_o, function(x){
+				mergeOverlaps(qGR=qGR, sGR=x, out.format=out.format, maxgap=maxgap, minoverlap=minoverlap)
+			})
+		}
+		
+		if(out.format=='GR'){
+			out <- vector('list', length(sGRL))
+			names(out) <- names(sGRL)
+			out[names_ls] <- res
+			out <- lapply(out, function(x){
+				if(is.null(x)){
+					x <- GenomicRanges::GRanges()
+				}else{
+					x
+				}
+			})
+		}else{
+			out <- as.list(rep(0, length(sGRL)))
+			names(out) <- names(sGRL)
+			out[names_ls] <- res
+		}
+		out
 	}
 	
     # A function to indicate the running progress
@@ -475,12 +527,10 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	
 	## update data GR after considering background
 	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
-
+	
 	## find overlap GR between annotation GR and data GR
-	oGR_reduced <- base::lapply(aGR_reduced, function(gr){
-		mergeOverlaps(qGR=gr, sGR=dGR_reduced, maxgap=0L, minoverlap=1L)
-	})
-
+	aGRL <- GenomicRanges::GRangesList(aGR_reduced)
+	oGR_reduced <- mergeOverlaps_GRL(qGR=dGR_reduced, sGRL=aGRL, maxgap=0L, minoverlap=1L)
 	#######################################################
 	if(verbose){
 		now <- Sys.time()
@@ -522,17 +572,31 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
 	}
 
-	## find overlap GR between annotation GR and sample GR
-	b_overlap_nBases <- base::lapply(1:length(sGR_list), function(i){
-		progress_indicate(i, length(sGR_list), 10, flag=T)
-		base::sapply(aGR_reduced, function(gr){
-			res <- mergeOverlaps(qGR=gr, sGR=sGR_list[[i]], maxgap=0L, minoverlap=1L)
-			sum(IRanges::width(res))
+    ###### parallel computing
+    flag_parallel <- F
+    if(parallel==TRUE){
+        flag_parallel <- dnet::dCheckParallel(multicores=multicores, verbose=verbose)
+        if(flag_parallel){
+            i <- 1
+            b2f <- foreach::`%dopar%` (foreach::foreach(i=1:length(sGR_list), .inorder=T, .combine=rbind), {
+				progress_indicate(i, length(sGR_list), 10, flag=T)
+				res <- mergeOverlaps_GRL(qGR=sGR_list[[i]], sGRL=aGRL, out.format="counts")
+				unlist(res)
+            })
+        }
+    }
+    ###### non-parallel computing
+    if(flag_parallel==F){
+		## find overlap GR between annotation GR and sample GR
+		b_overlap_nBases <- base::lapply(1:length(sGR_list), function(i){
+			progress_indicate(i, length(sGR_list), 10, flag=T)
+			res <- mergeOverlaps_GRL(qGR=sGR_list[[i]], sGRL=aGRL, out.format="counts")
+			unlist(res)
 		})
-	})
-	b2f <- do.call(rbind, b_overlap_nBases)
+		b2f <- do.call(rbind, b_overlap_nBases)
+    }
 	
-	####################
+	############################################################
     obs <- overlap_nBases	
 	exp_mean <- apply(b2f, 2, mean)
 	exp_std <- apply(b2f, 2, sd)
@@ -550,7 +614,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	
     zscore[is.na(zscore)] <- 0
     zscore[is.infinite(zscore)] <- max(zscore[!is.infinite(zscore)])
-    pval[is.na(ratio)] <- 1
+    pvalue[is.na(ratio)] <- 1
     ratio[is.na(ratio)] <- 1
  
 	enrichment_df <- data.frame(names(overlap_nBases), annotation_nBases, data_nBases, background_nBases, obs, exp_mean, ratio, zscore, pvalue, row.names=NULL, stringsAsFactors=F)

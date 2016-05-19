@@ -7,7 +7,7 @@
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-background.annotatable.only = F, num.samples = 100, gap.max = 50000,
+background.annotatable.only = F, num.samples = 1000, gap.max = 50000,
 max.distance = NULL, p.adjust.method = c("BH", "BY", "bonferroni",
 "holm",
 "hochberg", "hommel"), GR.annotation = c(NA, "Uniform_TFBS",
@@ -22,7 +22,7 @@ max.distance = NULL, p.adjust.method = c("BH", "BY", "bonferroni",
 "Segment_Combined_K562",
 "TFBS_Conserved", "TS_miRNA", "TCGA", "ReMap_Public_TFBS",
 "ReMap_Public_mergedTFBS", "ReMap_PublicAndEncode_mergedTFBS",
-"ReMap_Encode_TFBS"), verbose = T,
+"ReMap_Encode_TFBS"), parallel = TRUE, multicores = NULL, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -107,6 +107,21 @@ first save your RData file (a list of GR objects, each is an GR object
 correponding to an annotation) into your local computer. Then, tell
 "GR.annotation" with your RData file name (with or without extension),
 plus specify your file RData path in "RData.location"}
+
+\item{parallel}{logical to indicate whether parallel computation with
+multicores is used. By default, it sets to true, but not necessarily
+does so. Partly because parallel backends available will be
+system-specific (now only Linux or Mac OS). Also, it will depend on
+whether these two packages "foreach" and "doMC" have been installed. It
+can be installed via:
+\code{source("http://bioconductor.org/biocLite.R");
+biocLite(c("foreach","doMC"))}. If not yet installed, this option will
+be disabled}
+
+\item{multicores}{an integer to specify how many cores will be
+registered as the multicore parallel backend to the 'foreach' package.
+If NULL, it will use a half of cores available in a user's computer.
+This option only works when parallel computation is enabled}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -279,7 +294,7 @@ RData.location="~/Sites/SVN/github/bigdata"
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+#data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
