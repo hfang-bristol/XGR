@@ -3,31 +3,33 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGRviaGenomicAnno"><tr><td>xGRviaGenomicAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGRviaGenomicAnnoAdv"><tr><td>xGRviaGenomicAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to conduct region-based enrichment analysis using genomic annotations</h2>
 
 <h3>Description</h3>
 
-<p><code>xGRviaGenomicAnno</code> is supposed to conduct region-based enrichment
-analysis for the input genomic region data, using genomic annotations
-(eg active chromatin, transcription factor binding sites/motifs,
-conserved sites). Enrichment analysis is based on either Fisher's exact
-test or Hypergeometric test for estimating the significance of overlaps
-(either at the region resolution or at the base resolution. Test
-background can be provided; by default, the annotatable will be used.
+<p><code>xGRviaGenomicAnnoAdv</code> is supposed to conduct region-based
+enrichment analysis for the input genomic region data, using genomic
+annotations (eg active chromatin, transcription factor binding
+sites/motifs, conserved sites). Enrichment analysis is based on either
+Fisher's exact test or Hypergeometric test for estimating the
+significance of overlaps (either at the region resolution or at the
+base resolution. Test background can be provided; by default, the
+annotatable will be used.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
-NULL,
-format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-background.annotatable.only = T, p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
-"Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
+xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL,
+background.file = NULL, format.file = c("data.frame", "bed",
+"chr:start-end", "GRanges"), background.annotatable.only = F,
+num.samples = 1000, gap.max = 50000, max.distance = NULL,
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
 "ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
 "Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
@@ -38,7 +40,9 @@ background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "Segment_Combined_Huvec",
 "Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
 "ReMap_Public_TFBS", "ReMap_Public_mergedTFBS",
-"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), verbose = T,
+"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), parallel =
+TRUE,
+multicores = NULL, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -108,6 +112,24 @@ background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
 is provided in 'annotation.file', it should be false.</p>
 </td></tr>
+<tr valign="top"><td><code>num.samples</code></td>
+<td>
+<p>the number of samples randomly generated</p>
+</td></tr>
+<tr valign="top"><td><code>gap.max</code></td>
+<td>
+<p>the maximum distance of background islands to be
+considered away from data regions. Only background islands no far way
+from this distance will be considered. For example, if it is 0, meaning
+that only background islands that overlapp with genomic regions will be
+considered. By default, it is 50000</p>
+</td></tr>
+<tr valign="top"><td><code>max.distance</code></td>
+<td>
+<p>the maximum distance away from data regions that is
+allowed when generating random samples. By default, it is NULl meaning
+no such restriction</p>
+</td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
 <p>the method used to adjust p-values. It can be
@@ -129,6 +151,25 @@ first save your RData file (a list of GR objects, each is an GR object
 correponding to an annotation) into your local computer. Then, tell
 &quot;GR.annotation&quot; with your RData file name (with or without extension),
 plus specify your file RData path in &quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>parallel</code></td>
+<td>
+<p>logical to indicate whether parallel computation with
+multicores is used. By default, it sets to true, but not necessarily
+does so. Partly because parallel backends available will be
+system-specific (now only Linux or Mac OS). Also, it will depend on
+whether these two packages &quot;foreach&quot; and &quot;doMC&quot; have been installed. It
+can be installed via:
+<code>source("http://bioconductor.org/biocLite.R");
+biocLite(c("foreach","doMC"))</code>. If not yet installed, this option will
+be disabled</p>
+</td></tr>
+<tr valign="top"><td><code>multicores</code></td>
+<td>
+<p>an integer to specify how many cores will be
+registered as the multicore parallel backend to the 'foreach' package.
+If NULL, it will use a half of cores available in a user's computer.
+This option only works when parallel computation is enabled</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -156,7 +197,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 the background is provided, they are also restricted by this
 </p>
 </li>
-<li><p><code>nOverlap</code>: the number of regions overlapped between input
+<li><p><code>nOverlap</code>: the number of bases overlapped between input
 regions and annotation regions. If the background is provided, they are
 also restricted by this
 </p>
@@ -174,12 +215,10 @@ also restricted by this
 adjusted for multiple comparisons
 </p>
 </li>
-<li><p><code>expProb</code>: the probability of expecting bases overlapped
-between background regions and annotation regions
+<li><p><code>nData</code>: the number of bases covered by input regions
 </p>
 </li>
-<li><p><code>obsProb</code>: the probability of observing regions overlapped
-between input regions and annotation regions
+<li><p><code>nBG</code>: the number of bases covered by background regions
 </p>
 </li></ul>
 
@@ -403,11 +442,12 @@ RData.location="~/Sites/SVN/github/bigdata"
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+#data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
-eTerm &lt;- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+eTerm &lt;- xGRviaGenomicAnnoAdv(data.file=data.file, format.file="bed",
+GR.annotation="FANTOM5_Enhancer_Cell", num.samples=1000, gap.max=50000,
+RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)

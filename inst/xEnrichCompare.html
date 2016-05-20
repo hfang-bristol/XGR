@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to compare enrichment results using side-by-side...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichCompare"><tr><td>xEnrichCompare</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to compare enrichment results using side-by-side barplots</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichCompare</code> is supposed to compare enrichment results using
+side-by-side barplots. It returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "zscore",
+"pvalue"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>list_eTerm</code></td>
+<td>
+<p>a list of &quot;eTerm&quot; objects</p>
+</td></tr>
+<tr valign="top"><td><code>displayBy</code></td>
+<td>
+<p>which statistics will be used for comparison. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; for adjusted p
+value, &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
+
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
+df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data &lt;- df_cis$variant
+
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# 2a) Without considering LD SNPs and without respecting ontology tree
+eTerm_noLD_noTree &lt;- xEnricherSNPs(data, ontology="EF", include.LD=NA,
+ontology.algorithm="none", RData.location=RData.location)
+# 2b) Without considering LD SNPs but respecting ontology tree
+eTerm_noLD_Tree &lt;- xEnricherSNPs(data, ontology="EF", include.LD=NA,
+ontology.algorithm="lea", RData.location=RData.location)
+# 2c) Considering LD SNPs but without respecting ontology tree
+eTerm_LD_noTree &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="none", RData.location=RData.location)
+# 2d) Considering LD SNPs and respecting ontology tree
+eTerm_LD_Tree &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) Compare enrichment results
+list_eTerm &lt;- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree,
+eTerm_LD_Tree)
+names(list_eTerm) &lt;- c('LD (-) &amp; Tree (-)', 'LD (-) &amp; Tree (+)', 'LD
+(+) &amp; Tree (-)', 'LD (+) &amp; Tree (+)')
+## side-by-side comparisons
+bp &lt;- xEnrichCompare(list_eTerm, displayBy="fc")
+#pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
+print(bp)
+#dev.off()
+
+## End(Not run)
+</pre>
+
+
+</body></html>

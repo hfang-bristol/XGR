@@ -19,7 +19,7 @@ a barplot. It returns an object of class &quot;ggplot&quot;.
 <pre>
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
 "zscore",
-"pvalue"))
+"pvalue"), wrap.width = NULL)
 </pre>
 
 
@@ -39,8 +39,12 @@ displayed</p>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
-be &quot;adjp&quot; for adjusted p value, &quot;pvalue&quot; for p value, &quot;zscore&quot; for
-enrichment z-score, &quot;fc&quot; for enrichment fold change</p>
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; for adjusted p
+value, &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of name</p>
 </td></tr>
 </table>
 
@@ -68,7 +72,27 @@ enrichment z-score, &quot;fc&quot; for enrichment fold change</p>
 
 <pre>
 ## Not run: 
-xEnrichBarplot(eTerm)
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
+
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
+df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data &lt;- df_cis$variant
+
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# Considering LD SNPs and respecting ontology tree
+eTerm &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) Barplot of enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
+#pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
+print(bp)
+#dev.off()
 
 ## End(Not run)
 </pre>

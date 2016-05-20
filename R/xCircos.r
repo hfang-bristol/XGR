@@ -1,6 +1,6 @@
 #' Function to visualise a network as a circos plot
 #'
-#' \code{xCircos} is used to visualise a network as a circos plot. The network must be a 'igraph' object. 
+#' \code{xCircos} is used to visualise a network as a circos plot. The network must be a 'igraph' object.
 #'
 #' @param g an object of class "igraph". For example, it stores semantic similarity results with nodes for genes/SNPs and edges for pair-wise semantic similarity between them 
 #' @param entity the entity of similarity analysis for which results are being plotted. It can be either "SNP" or "Gene"

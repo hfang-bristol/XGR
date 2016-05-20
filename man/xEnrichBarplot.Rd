@@ -6,7 +6,7 @@
 \usage{
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
 "zscore",
-"pvalue"))
+"pvalue"), wrap.width = NULL)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -16,8 +16,10 @@ xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
 displayed}
 
 \item{displayBy}{which statistics will be used for displaying. It can
-be "adjp" for adjusted p value, "pvalue" for p value, "zscore" for
-enrichment z-score, "fc" for enrichment fold change}
+be "fc" for enrichment fold change (by default), "adjp" for adjusted p
+value, "pvalue" for p value, "zscore" for enrichment z-score}
+
+\item{wrap.width}{a positive integer specifying wrap width of name}
 }
 \value{
 an object of class "ggplot"
@@ -31,7 +33,27 @@ none
 }
 \examples{
 \dontrun{
-xEnrichBarplot(eTerm)
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
+
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis <- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind <- which(cis$IFN_t > 0 & cis$IFN_fdr < 0.05)
+df_cis <- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data <- df_cis$variant
+
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# Considering LD SNPs and respecting ontology tree
+eTerm <- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) Barplot of enrichment results
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
+#pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
+print(bp)
+#dev.off()
 }
 }
 \seealso{
