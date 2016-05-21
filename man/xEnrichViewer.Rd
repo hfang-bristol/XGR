@@ -4,9 +4,9 @@
 \alias{xEnrichViewer}
 \title{Function to view enrichment results}
 \usage{
-xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
-"zscore",
-"fc", "nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
+xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
+"zscore", "fc", "nAnno", "nOverlap", "none"), decreasing = NULL,
+details = F)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -15,10 +15,11 @@ xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 'sortBy' below) will be viewed}
 
 \item{sortBy}{which statistics will be used for sorting and viewing
-gene sets (terms). It can be "adjp" for adjusted p value, "pvalue" for
-p value, "zscore" for enrichment z-score, "fc" for enrichment fold
-change, "nAnno" for the number of sets (terms), "nOverlap" for the
-number in overlaps, and "none" for ordering according to ID of terms}
+gene sets (terms). It can be "adjp" or "fdr" for adjusted p value
+(FDR), "pvalue" for p value, "zscore" for enrichment z-score, "fc" for
+enrichment fold change, "nAnno" for the number of sets (terms),
+"nOverlap" for the number in overlaps, and "none" for ordering
+according to ID of terms}
 
 \item{decreasing}{logical to indicate whether to sort in a decreasing
 order. If it is null, it would be true for "zscore", "nAnno" or
@@ -38,7 +39,7 @@ a data frame with following components:
 \item{\code{fc}: enrichment fold changes}
 \item{\code{zscore}: enrichment z-score}
 \item{\code{pvalue}: nominal p value}
-\item{\code{adjp}: adjusted p value}
+\item{\code{adjp}: adjusted p value (FDR)}
 \item{\code{distance}: term distance; optional, it is only appended
 when "details" is true}
 \item{\code{members}: members (represented as Gene Symbols) in

@@ -3,8 +3,10 @@
 #' \code{xEnrichBarplot} is supposed to visualise enrichment results using a barplot. It returns an object of class "ggplot".
 #'
 #' @param eTerm an object of class "eTerm"
-#' @param top_num the number of the top terms (sorted according to 'displayBy' below). If it is 'auto', only the signficant terms will be displayed
-#' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" for adjusted p value, "pvalue" for p value, "zscore" for enrichment z-score
+#' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (FDR < 0.05) will be displayed
+#' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
+#' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
+#' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
 #' @return an object of class "ggplot"
 #' @note none
@@ -32,9 +34,13 @@
 #' #pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
 #' print(bp)
 #' #dev.off()
+#' ## modify y axis text
+#' bp + theme(axis.text.y=element_text(size=10,color="blue"))
+#' ## modify x axis title
+#' bp + theme(axis.title.x=element_text(color="blue"))
 #' }
 
-xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","zscore","pvalue"), wrap.width=NULL) 
+xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -44,7 +50,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","zscore","
     }
     
     ## when 'auto', will keep the significant terms
-	df <- xEnrichViewer(eTerm, top_num="all", sortBy=displayBy)
+	df <- xEnrichViewer(eTerm, top_num="all")
 	if(top_num=='auto'){
 		top_num <- sum(df$adjp<0.05)
 		if(top_num<=1){
@@ -54,16 +60,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","zscore","
 			top_num <- 10
 		}
 	}
-	df <- xEnrichViewer(eTerm, top_num=top_num, sortBy=displayBy)
-	
-	## get text label
-	to_scientific_notation <- function(x) {
-	  	res <- format(x, scientific=T)
-	  	res <- sub("\\+0?", "", res)
-	  	sub("-0?", "-", res)
-	}
-    label <- to_scientific_notation(df$adjp)
-	label <- paste('FDR', as.character(label), sep='=')
+	df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
 	
 	## text wrap
 	if(!is.null(wrap.width)){
@@ -80,7 +77,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","zscore","
 		df$name <- unlist(res_list)
 	}
 	
-	if(displayBy=='adjp'){
+	if(displayBy=='adjp' | displayBy=='fdr'){
 		df <- df[with(df,order(-adjp,zscore)),]
 		df$name <- factor(df$name, levels=df$name)
 		p <- ggplot(df, aes(x=df$name, y=-1*log10(df$adjp))) 
@@ -102,7 +99,20 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","zscore","
 		p <- p + ylab("Enrichment z-scores")
 	}
 	
-	bp <- p + geom_bar(stat="identity", fill="deepskyblue") + geom_text(aes(label=label),hjust=1,size=3) + theme_bw() + theme(axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	bp <- p + geom_bar(stat="identity", fill="orange") + theme_bw() + theme(axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	
+	if(bar.label){
+		## get text label
+		to_scientific_notation <- function(x) {
+			res <- format(x, scientific=T)
+			res <- sub("\\+0?", "", res)
+			sub("-0?", "-", res)
+		}
+		label <- to_scientific_notation(df$adjp)
+		label <- paste('FDR', as.character(label), sep='=')
+		
+		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size)
+	}
 	
 	invisible(bp)
 }

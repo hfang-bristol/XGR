@@ -124,6 +124,7 @@ information, where nTerm is the number of terms, and the 4 columns are
 "distance"}
 \item{\code{annotation}: a list of terms containing annotations, each
 term storing its annotations. Always, terms are identified by "id"}
+\item{\code{g}: an igraph object to represent DAG}
 \item{\code{data}: a vector containing input data in consideration. It
 is not always the same as the input data as only those mappable are
 retained}
@@ -202,21 +203,17 @@ output <- data.frame(term=rownames(res), res)
 utils::write.table(output, file="MP_enrichments.txt", sep="\\t",
 row.names=FALSE)
 
-# e) visualise the top 10 significant terms in the ontology hierarchy
-## load ig.MP (an object of class "igraph" storing as a directed graph)
-g <- xRDataLoader(RData='ig.MP')
-g
-nodes_query <- names(sort(eTerm$adjp)[1:10])
-nodes.highlight <- rep("red", length(nodes_query))
-names(nodes.highlight) <- nodes_query
-subg <- dnet::dDAGinduce(g, nodes_query)
+# e) barplot of significant enrichment results
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
+
+# f) visualise the top 10 significant terms in the ontology hierarchy
 # color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
-dnet::visDAG(g=subg, data=-1*log10(eTerm$adjp[V(subg)$name]),
-node.info="both", zlim=c(0,2), node.attrs=list(color=nodes.highlight))
+xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
+node.info=c("full_term_name"))
 # color-code terms according to the z-scores
-dnet::visDAG(g=subg, data=eTerm$zscore[V(subg)$name], node.info="both",
-colormap="darkblue-white-darkorange",
-node.attrs=list(color=nodes.highlight))
+xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
+node.info=c("full_term_name"))
 }
 }
 \seealso{

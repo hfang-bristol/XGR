@@ -333,6 +333,10 @@ sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions2genes_enrichments.txt",
 sep="\t", row.names=FALSE)
 
+# e) barplot of significant enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
+
 ## End(Not run)
 </pre>
 

@@ -84,6 +84,7 @@ information, where nTerm is the number of terms, and the 4 columns are
 "distance"}
 \item{\code{annotation}: a list of terms containing annotations, each
 term storing its annotations. Always, terms are identified by "id"}
+\item{\code{g}: an igraph object to represent DAG}
 \item{\code{data}: a vector containing input data in consideration. It
 is not always the same as the input data as only those mappable are
 retained}
@@ -141,6 +142,10 @@ output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Yours_enrichments.txt", sep="\\t",
 row.names=FALSE)
+
+# e) barplot of significant enrichment results
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
 }
 
 # Using ImmunoBase SNPs and associations/annotations with disease traits
@@ -162,6 +167,9 @@ eTerm <- xEnricherYours(data.file=data.file,
 annotation.file=annotation.file)
 # view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
+# barplot of significant enrichment results
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
 }
 \seealso{
 \code{\link{xEnricher}}

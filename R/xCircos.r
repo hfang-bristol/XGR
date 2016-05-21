@@ -61,6 +61,21 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
 	entity <- match.arg(entity)
 	
+	flag_package <- F
+    pkgs <- c("RCircos")
+    if(all(pkgs %in% rownames(utils::installed.packages()))){
+        tmp <- sapply(pkgs, function(pkg) {
+            #suppressPackageStartupMessages(require(pkg, character.only=T))
+            requireNamespace(pkg, quietly=T)
+        })
+        if(all(tmp)){
+        	flag_package <- T
+        }
+    }
+	if(!flag_package){
+		stop("The package 'RCircos' is not available.\n")
+	}
+	
   	## Check input g
   	if (class(g) != "igraph") {
     	stop("The function must apply to a 'igraph' object.\n")
@@ -72,6 +87,8 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
 	## check the weight and sort the weight
 	if(is.null(df$weight)){
 		df$weight <- rep(1, nrow(df))
+		## force NOT to rescale weight
+		rescale <- F
 	}else{
 		df$weight <- as.numeric(df$weight)
 	}

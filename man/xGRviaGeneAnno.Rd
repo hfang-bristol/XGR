@@ -234,6 +234,10 @@ output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions2genes_enrichments.txt",
 sep="\\t", row.names=FALSE)
+
+# e) barplot of significant enrichment results
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
 }
 }
 \seealso{

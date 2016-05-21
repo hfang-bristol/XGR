@@ -1,50 +1,76 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a graph object of class &quot;igraph&quot;</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using different...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xVisNet"><tr><td>xVisNet</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xEnrichNetplot"><tr><td>xEnrichNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise a graph object of class &quot;igraph&quot;</h2>
+<h2>Function to visualise enrichment results using different network layouts</h2>
 
 <h3>Description</h3>
 
-<p><code>xVisNet</code> is supposed to visualise a graph object of class
-&quot;igraph&quot;. It also allows vertices/nodes color-coded according to the
-input pattern.
+<p><code>xEnrichNetplot</code> is supposed to visualise enrichment results using
+different network layouts. It returns an object of class 'igraph'.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
-"br",
-"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, glayout = layout_with_kk, vertex.frame.color = NA,
-vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
-vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = 0.3,
-vertex.label.color = "blue", edge.arrow.size = 0.3, ...)
+xEnrichNetplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
+"zscore", "pvalue"), path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), node.info = c("none", "term_id", "term_name",
+"both",
+"full_term_name"), wrap.width = 15, colormap = c("yr", "jet", "gbr",
+"wyr", "br", "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL,
+colorbar = T, newpage = T, glayout = layout_as_tree,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.dist = 0.3, vertex.label.color = "blue",
+edge.arrow.size = 0.3, ...)
 </pre>
 
 
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;</p>
+<p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>pattern</code></td>
+<tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>a numeric vector used to color-code vertices/nodes.
-Notably, if the input vector contains names, then these names should
-include all node names of input graph, i.e. V(g)$name, since there is a
-mapping operation. After mapping, the length of the patern vector
-should be the same as the number of nodes of input graph; otherwise,
-this input pattern will be ignored. The way of how to color-code is to
-map values in the pattern onto the whole colormap (see the next
-arguments: colormap, ncolors, zlim and colorbar)</p>
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
+0.05) will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>displayBy</code></td>
+<td>
+<p>which statistics will be used for displaying. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
+adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
+enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>path.mode</code></td>
+<td>
+<p>the mode of paths induced by nodes in query. It can be
+&quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
+only one path to the root (for each node in query),
+&quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
+node, find all shortest paths with the equal lengths)</p>
+</td></tr>
+<tr valign="top"><td><code>node.info</code></td>
+<td>
+<p>tells the ontology term information used to label
+nodes. It can be one of &quot;none&quot; for no node labeling, &quot;term_id&quot; for
+using Term ID, &quot;term_name&quot; for using Term Name, &quot;both&quot; for using both
+of Term ID and Name (the first 15 characters), and &quot;full_term_name&quot; for
+using the full Term Name</p>
+</td></tr>
+<tr valign="top"><td><code>wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of Term
+Name. By default, first 15 characters</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -160,7 +186,8 @@ The default value is 1.</p>
 
 <h3>Value</h3>
 
-<p>invisible
+<p>an igraph object to represent DAG, appended with a node attribute
+called 'enrichment'
 </p>
 
 
@@ -172,30 +199,36 @@ The default value is 1.</p>
 
 <h3>See Also</h3>
 
-<p><code>xSubneterGenes</code>, <code>xSubneterSNPs</code>
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-# 1) generate a ring graph
-g &lt;- make_ring(10, directed=TRUE)
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
 
-# 2) visualise the graph
-# 2a) visualise in one go
-xVisNet(g=g, vertex.shape="sphere", glayout=layout_with_kk)
-# 2b) visualise the graph with layout first calculated
-glayout &lt;- layout_(g, with_kk(), component_wise())
-xVisNet(g=g, vertex.shape="sphere", glayout=glayout)
-# 2c) visualise the graph with layout appended to the graph itself
-g &lt;- add_layout_(g, with_kk(), component_wise())
-xVisNet(g=g, vertex.shape="sphere")
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
+df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data &lt;- df_cis$variant
 
-# 4) visualise the graph with vertices being color-coded by the pattern
-pattern &lt;- runif(vcount(g))
-names(pattern) &lt;- V(g)$name
-xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# Considering LD SNPs and respecting ontology tree
+eTerm &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) Net plot of enrichment results
+subg &lt;- xEnrichNetplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("none"), vertex.label=NA, wrap.width=30)
+
+## End(Not run)
 </pre>
 
 

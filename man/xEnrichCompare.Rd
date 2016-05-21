@@ -5,14 +5,28 @@
 \title{Function to compare enrichment results using side-by-side barplots}
 \usage{
 xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "zscore",
-"pvalue"))
+"pvalue"),
+FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
+wrap.width = NULL)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects}
 
 \item{displayBy}{which statistics will be used for comparison. It can
-be "fc" for enrichment fold change (by default), "adjp" for adjusted p
-value, "pvalue" for p value, "zscore" for enrichment z-score}
+be "fc" for enrichment fold change (by default), "adjp" or "fdr" for
+adjusted p value (or FDR), "pvalue" for p value, "zscore" for
+enrichment z-score}
+
+\item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05}
+
+\item{bar.label}{logical to indicate whether to label each bar with
+FDR. By default, it sets to true for bar labelling}
+
+\item{bar.label.size}{an integer specifying the bar labelling text
+size. By default, it sets to 3}
+
+\item{wrap.width}{a positive integer specifying wrap width of name}
 }
 \value{
 an object of class "ggplot"
@@ -39,17 +53,20 @@ data <- df_cis$variant
 
 # 2) Enrichment analysis using Experimental Factor Ontology (EFO)
 # 2a) Without considering LD SNPs and without respecting ontology tree
-eTerm_noLD_noTree <- xEnricherSNPs(data, ontology="EF", include.LD=NA,
-ontology.algorithm="none", RData.location=RData.location)
+eTerm_noLD_noTree <- xEnricherSNPs(data, ontology="EF_disease",
+include.LD=NA, ontology.algorithm="none",
+RData.location=RData.location)
 # 2b) Without considering LD SNPs but respecting ontology tree
-eTerm_noLD_Tree <- xEnricherSNPs(data, ontology="EF", include.LD=NA,
-ontology.algorithm="lea", RData.location=RData.location)
+eTerm_noLD_Tree <- xEnricherSNPs(data, ontology="EF_disease",
+include.LD=NA, ontology.algorithm="lea", RData.location=RData.location)
 # 2c) Considering LD SNPs but without respecting ontology tree
-eTerm_LD_noTree <- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
-LD.r2=0.8, ontology.algorithm="none", RData.location=RData.location)
+eTerm_LD_noTree <- xEnricherSNPs(data, ontology="EF_disease",
+include.LD="EUR", LD.r2=0.8, ontology.algorithm="none",
+RData.location=RData.location)
 # 2d) Considering LD SNPs and respecting ontology tree
-eTerm_LD_Tree <- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
-LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+eTerm_LD_Tree <- xEnricherSNPs(data, ontology="EF_disease",
+include.LD="EUR", LD.r2=0.8, ontology.algorithm="lea",
+RData.location=RData.location)
 
 # 3) Compare enrichment results
 list_eTerm <- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree,
@@ -61,6 +78,14 @@ bp <- xEnrichCompare(list_eTerm, displayBy="fc")
 #pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
 print(bp)
 #dev.off()
+## modify y axis text
+bp + theme(axis.text.y=element_text(size=10,color="blue"))
+## modify x axis title
+bp + theme(axis.title.x=element_text(color="blue"))
+## modify fill colors
+bp + scale_fill_manual(values=c("black","#888888"))
+## show legend title but hide strip
+bp + theme(legend.position="right", strip.text = element_blank())
 }
 }
 \seealso{

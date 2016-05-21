@@ -17,9 +17,9 @@ analysis.
 <h3>Usage</h3>
 
 <pre>
-xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
-"zscore",
-"fc", "nAnno", "nOverlap", "none"), decreasing = NULL, details = F)
+xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
+"zscore", "fc", "nAnno", "nOverlap", "none"), decreasing = NULL,
+details = F)
 </pre>
 
 
@@ -38,10 +38,11 @@ xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "pvalue",
 <tr valign="top"><td><code>sortBy</code></td>
 <td>
 <p>which statistics will be used for sorting and viewing
-gene sets (terms). It can be &quot;adjp&quot; for adjusted p value, &quot;pvalue&quot; for
-p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for enrichment fold
-change, &quot;nAnno&quot; for the number of sets (terms), &quot;nOverlap&quot; for the
-number in overlaps, and &quot;none&quot; for ordering according to ID of terms</p>
+gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
+(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
+enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
+&quot;nOverlap&quot; for the number in overlaps, and &quot;none&quot; for ordering
+according to ID of terms</p>
 </td></tr>
 <tr valign="top"><td><code>decreasing</code></td>
 <td>
@@ -85,7 +86,7 @@ inclusion</p>
 <li><p><code>pvalue</code>: nominal p value
 </p>
 </li>
-<li><p><code>adjp</code>: adjusted p value
+<li><p><code>adjp</code>: adjusted p value (FDR)
 </p>
 </li>
 <li><p><code>distance</code>: term distance; optional, it is only appended

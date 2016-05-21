@@ -4,20 +4,27 @@
 \alias{xEnrichBarplot}
 \title{Function to visualise enrichment results using a barplot}
 \usage{
-xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
-"zscore",
-"pvalue"), wrap.width = NULL)
+xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
+"zscore", "pvalue"), bar.label = TRUE, bar.label.size = 3,
+wrap.width = NULL)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
 
-\item{top_num}{the number of the top terms (sorted according to
-'displayBy' below). If it is 'auto', only the signficant terms will be
-displayed}
+\item{top_num}{the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (FDR <
+0.05) will be displayed}
 
 \item{displayBy}{which statistics will be used for displaying. It can
-be "fc" for enrichment fold change (by default), "adjp" for adjusted p
-value, "pvalue" for p value, "zscore" for enrichment z-score}
+be "fc" for enrichment fold change (by default), "adjp" or "fdr" for
+adjusted p value (or FDR), "pvalue" for p value, "zscore" for
+enrichment z-score}
+
+\item{bar.label}{logical to indicate whether to label each bar with
+FDR. By default, it sets to true for bar labelling}
+
+\item{bar.label.size}{an integer specifying the bar labelling text
+size. By default, it sets to 3}
 
 \item{wrap.width}{a positive integer specifying wrap width of name}
 }
@@ -54,6 +61,10 @@ bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
 #pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
 print(bp)
 #dev.off()
+## modify y axis text
+bp + theme(axis.text.y=element_text(size=10,color="blue"))
+## modify x axis title
+bp + theme(axis.title.x=element_text(color="blue"))
 }
 }
 \seealso{

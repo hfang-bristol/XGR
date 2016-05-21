@@ -3,7 +3,11 @@
 #' \code{xEnrichCompare} is supposed to compare enrichment results using side-by-side barplots. It returns an object of class "ggplot".
 #'
 #' @param list_eTerm a list of "eTerm" objects
-#' @param displayBy which statistics will be used for comparison. It can be "fc" for enrichment fold change (by default), "adjp" for adjusted p value, "pvalue" for p value, "zscore" for enrichment z-score
+#' @param displayBy which statistics will be used for comparison. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
+#' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
+#' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
+#' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
+#' @param wrap.width a positive integer specifying wrap width of name
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -23,13 +27,13 @@
 #' 
 #' # 2) Enrichment analysis using Experimental Factor Ontology (EFO)
 #' # 2a) Without considering LD SNPs and without respecting ontology tree
-#' eTerm_noLD_noTree <- xEnricherSNPs(data, ontology="EF", include.LD=NA, ontology.algorithm="none", RData.location=RData.location)
+#' eTerm_noLD_noTree <- xEnricherSNPs(data, ontology="EF_disease", include.LD=NA, ontology.algorithm="none", RData.location=RData.location)
 #' # 2b) Without considering LD SNPs but respecting ontology tree
-#' eTerm_noLD_Tree <- xEnricherSNPs(data, ontology="EF", include.LD=NA, ontology.algorithm="lea", RData.location=RData.location)
+#' eTerm_noLD_Tree <- xEnricherSNPs(data, ontology="EF_disease", include.LD=NA, ontology.algorithm="lea", RData.location=RData.location)
 #' # 2c) Considering LD SNPs but without respecting ontology tree
-#' eTerm_LD_noTree <- xEnricherSNPs(data, ontology="EF", include.LD="EUR", LD.r2=0.8, ontology.algorithm="none", RData.location=RData.location)
+#' eTerm_LD_noTree <- xEnricherSNPs(data, ontology="EF_disease", include.LD="EUR", LD.r2=0.8, ontology.algorithm="none", RData.location=RData.location)
 #' # 2d) Considering LD SNPs and respecting ontology tree
-#' eTerm_LD_Tree <- xEnricherSNPs(data, ontology="EF", include.LD="EUR", LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+#' eTerm_LD_Tree <- xEnricherSNPs(data, ontology="EF_disease", include.LD="EUR", LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
 #'
 #' # 3) Compare enrichment results
 #' list_eTerm <- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree, eTerm_LD_Tree)
@@ -39,9 +43,17 @@
 #' #pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
 #' print(bp)
 #' #dev.off()
+#' ## modify y axis text
+#' bp + theme(axis.text.y=element_text(size=10,color="blue"))
+#' ## modify x axis title
+#' bp + theme(axis.title.x=element_text(color="blue"))
+#' ## modify fill colors
+#' bp + scale_fill_manual(values=c("black","#888888"))
+#' ## show legend title but hide strip
+#' bp + theme(legend.position="right", strip.text = element_blank())
 #' }
 
-xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue")) 
+xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -50,27 +62,34 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	list_names <- names(list_eTerm)
 	res_ls <- lapply(1:length(list_eTerm), function(i){
 		df <- xEnrichViewer(list_eTerm[[i]], top_num="all", sortBy="none")
-		cbind(group=rep(list_names[i],nrow(df)), df)
+		cbind(group=rep(list_names[i],nrow(df)), id=rownames(df), df, stringsAsFactors=F)
 	})
 	df_all <- do.call(rbind, res_ls)
+	rownames(df_all) <- NULL
 
 	## extract the columns: name fc adjp group
-	ind <- which(df_all$adjp<0.05)
-	d <- df_all[ind, c("name","fc","adjp","zscore","pvalue","group")]
+	ind <- which(df_all$adjp < FDR.cutoff)
+	d <- df_all[ind, c("id","name","fc","adjp","zscore","pvalue","group")]
+
+	## text wrap
+	if(!is.null(wrap.width)){
+		width <- as.integer(wrap.width)
+		res_list <- lapply(d$name, function(x){
+			x <- gsub('_', ' ', x)
+			y <- strwrap(x, width=width)
+			if(length(y)>1){
+				paste0(y[1], '...')
+			}else{
+				y
+			}
+		})
+		d$name <- unlist(res_list)
+	}
 
 	## append the number of sharings per significant term: nSig
 	nSig <- base::table(d$name)
 	ind <- match(d$name, names(nSig))
 	d$nSig <- nSig[ind]
-
-	## append the flag to indicate the enrichment significant level: 
-	## * (<0.05)
-	## ** (<0.01)
-	## ** (<0.001)
-	d$flag <- rep('', nrow(d))
-	d$flag[d$adjp < 0.05] <- '*'
-	d$flag[d$adjp < 0.01] <- '**'
-	d$flag[d$adjp < 0.001] <- '***'
 	
 	## draw side-by-side barplot
 	if(displayBy=='fc'){
@@ -85,7 +104,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		#p <- ggplot(d, aes(x=name,y=d$fc,fill=group))
 		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=d$fc,fill=group)",sep=""))))
 		p <- p + ylab("Enrichment changes")
-	}else if(displayBy=='adjp'){
+	}else if(displayBy=='adjp' | displayBy=='fdr'){
 		## sort by: nSig group adjp (zscore)
 		d <- d[with(d, order(nSig,group,-adjp,zscore)), ]
 		## define levels
@@ -120,11 +139,33 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		## ggplot
 		#p <- ggplot(d, aes(x=name,y=-1*log10(d$pvalue),fill=group))
 		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(d$pvalue),fill=group)",sep=""))))
-		p <- ggplot(d, aes(x=name, y=-1*log10(d$pvalue), fill=group))
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}
 	
-	bp <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none", axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=14,color="black")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip() + facet_grid(~group) + geom_text(aes(label=d$flag),hjust=1,vjust=1,size=4)
+	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=14,color="black")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
+	
+	## title
+	p <- p + ggtitle(paste0('Enrichments under FDR < ', FDR.cutoff))
+	
+	## strip
+	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
+	
+	#bp <- p + facet_grid(~group)
+	bp <- p + eval(parse(text=paste("facet_grid(~group)",sep="")))
+
+	if(bar.label){
+		## get text label
+		to_scientific_notation <- function(x) {
+			res <- format(x, scientific=T)
+			res <- sub("\\+0?", "", res)
+			sub("-0?", "-", res)
+		}
+		label <- to_scientific_notation(d$adjp)
+		label <- paste('FDR', as.character(label), sep='=')
+		
+		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size)
+	}
+	bp
 	
 	invisible(bp)
 }

@@ -17,9 +17,9 @@ a barplot. It returns an object of class &quot;ggplot&quot;.
 <h3>Usage</h3>
 
 <pre>
-xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
-"zscore",
-"pvalue"), wrap.width = NULL)
+xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
+"zscore", "pvalue"), bar.label = TRUE, bar.label.size = 3,
+wrap.width = NULL)
 </pre>
 
 
@@ -32,15 +32,26 @@ xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp",
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to
-'displayBy' below). If it is 'auto', only the signficant terms will be
-displayed</p>
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
+0.05) will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
-be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; for adjusted p
-value, &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score</p>
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
+adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
+enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>bar.label</code></td>
+<td>
+<p>logical to indicate whether to label each bar with
+FDR. By default, it sets to true for bar labelling</p>
+</td></tr>
+<tr valign="top"><td><code>bar.label.size</code></td>
+<td>
+<p>an integer specifying the bar labelling text
+size. By default, it sets to 3</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
@@ -93,6 +104,10 @@ bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
 #pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
 print(bp)
 #dev.off()
+## modify y axis text
+bp + theme(axis.text.y=element_text(size=10,color="blue"))
+## modify x axis title
+bp + theme(axis.title.x=element_text(color="blue"))
 
 ## End(Not run)
 </pre>
