@@ -105,7 +105,8 @@ displayed in the screen. By default, it sets to true for display}
 }
 \value{
 It returns an object of class "igraph", with nodes for input genes/SNPs
-and edges for pair-wise semantic similarity between them. If no
+and edges for pair-wise semantic similarity between them. Also added
+graph attribute is 'dag' storing the annotated ontology DAG used. If no
 similarity is calculuated, it returns NULL.
 }
 \description{

@@ -1,60 +1,53 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using different...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise terms used to annotate an input SNP or...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xEnrichNetplot"><tr><td>xEnrichNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xSocialiserNetplot"><tr><td>xSocialiserNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using different network layouts</h2>
+<h2>Function to visualise terms used to annotate an input SNP or gene using different network layouts</h2>
 
 <h3>Description</h3>
 
-<p><code>xEnrichNetplot</code> is supposed to visualise enrichment results using
-different network layouts. Also supported is to visualise the
-comparative enrichment results (see the function
-<code>xEnrichCompare</code>)) with nodes/terms colored according to
-how many times being called significant. It returns an object of class
-'igraph'.
+<p><code>xSocialiserNetplot</code> is supposed to visualise terms used to
+annotate an input SNP or gene using different network layouts. It
+returns an object of class 'igraph'.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichNetplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), node.info = c("none", "term_id", "term_name",
-"both",
-"full_term_name"), wrap.width = 15, colormap = c("yr", "jet", "gbr",
-"wyr", "br", "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL,
-colorbar = T, newpage = T, glayout = layout_as_tree,
-vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
-vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
-vertex.label.dist = 0.3, vertex.label.color = "blue",
-edge.arrow.size = 0.3, ...)
+xSocialiserNetplot(g, query, displayBy = c("IC", "none"),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+node.info = c("none", "term_id", "term_name", "both",
+"full_term_name"),
+wrap.width = 15, colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr",
+"rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
+newpage = T, glayout = layout_as_tree, vertex.frame.color = NA,
+vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
+vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = 0.3,
+vertex.label.color = "blue", edge.arrow.size = 0.3, ...)
 </pre>
 
 
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot; or an object &quot;ggplot&quot;
-(resulting from <code>xEnrichCompare</code>)</p>
+<p>an object of class &quot;igraph&quot; (resulting from similarity
+analysis)</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr valign="top"><td><code>query</code></td>
 <td>
-<p>the number of the top terms (sorted according to FDR or
-adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
-0.05) will be displayed</p>
+<p>an object in query (for example, an SNP or Gene)</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
-be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
-adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
-enrichment z-score</p>
+be &quot;IC&quot; for information content (by default), &quot;none&quot; for no
+color-coding on nodes/terms</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
@@ -192,7 +185,7 @@ The default value is 1.</p>
 <h3>Value</h3>
 
 <p>an igraph object to represent DAG, appended with a node attribute
-called 'enrichment'
+called 'inherited' indicative of whether terms are inherited or not
 </p>
 
 
@@ -204,8 +197,7 @@ called 'enrichment'
 
 <h3>See Also</h3>
 
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichViewer</code>
+<p><code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>
 </p>
 
 
@@ -217,20 +209,20 @@ called 'enrichment'
 library(XGR)
 RData.location="~/Sites/SVN/github/bigdata"
 
-# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
-cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+# 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+# provide genes and SNPs reported in AS GWAS studies
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+## get lead SNPs reported in AS GWAS
+example.snps &lt;- names(ImmunoBase$AS$variants)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA,
 RData.location=RData.location)
-ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
-df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
-data &lt;- df_cis$variant
 
-# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
-# Considering LD SNPs and respecting ontology tree
-eTerm &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
-LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+# 2) Circos plot involving nodes 'rs6871626'
+xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626",
+RData.location=RData.location)
 
-# 3) Net plot of enrichment results
-subg &lt;- xEnrichNetplot(eTerm, top_num="auto", displayBy="fc",
+# 3) Net plot visualising terms used to annotate an SNP 'rs6871626'
+dag &lt;- xSocialiserNetplot(g=SNP.g, query='rs6871626', displayBy="IC",
 node.info=c("none"), vertex.label=NA, wrap.width=30)
 
 ## End(Not run)

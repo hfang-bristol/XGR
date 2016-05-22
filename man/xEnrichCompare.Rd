@@ -29,7 +29,8 @@ size. By default, it sets to 3}
 \item{wrap.width}{a positive integer specifying wrap width of name}
 }
 \value{
-an object of class "ggplot"
+an object of class "ggplot", but appended with a 'g' (an igraph object
+to represent DAG after being unionised)
 }
 \description{
 \code{xEnrichCompare} is supposed to compare enrichment results using
@@ -79,13 +80,21 @@ bp <- xEnrichCompare(list_eTerm, displayBy="fc")
 print(bp)
 #dev.off()
 ## modify y axis text
-bp + theme(axis.text.y=element_text(size=10,color="blue"))
+bp + theme(axis.text.y=element_text(size=10,color="black"))
 ## modify x axis title
-bp + theme(axis.title.x=element_text(color="blue"))
+bp + theme(axis.title.x=element_text(color="black"))
 ## modify fill colors
 bp + scale_fill_manual(values=c("black","#888888"))
 ## show legend title but hide strip
 bp + theme(legend.position="right", strip.text = element_blank())
+
+# 4) Visualise comparative enrichment results in the context of ontology tree
+## 4a) via DAGplot
+xEnrichDAGplot(bp, colormap="wyr", node.info=c("full_term_name"),
+graph.node.attrs=list(fontsize=20))
+## 4b) via Netplot
+xEnrichNetplot(bp, colormap="wyr", node.info=c("full_term_name"),
+wrap.width=30)
 }
 }
 \seealso{

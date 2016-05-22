@@ -8,7 +8,7 @@
 #' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
-#' @return an object of class "ggplot"
+#' @return an object of class "ggplot", but appended with a 'g' (an igraph object to represent DAG after being unionised)
 #' @note none
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
@@ -44,13 +44,19 @@
 #' print(bp)
 #' #dev.off()
 #' ## modify y axis text
-#' bp + theme(axis.text.y=element_text(size=10,color="blue"))
+#' bp + theme(axis.text.y=element_text(size=10,color="black"))
 #' ## modify x axis title
-#' bp + theme(axis.title.x=element_text(color="blue"))
+#' bp + theme(axis.title.x=element_text(color="black"))
 #' ## modify fill colors
 #' bp + scale_fill_manual(values=c("black","#888888"))
 #' ## show legend title but hide strip
 #' bp + theme(legend.position="right", strip.text = element_blank())
+#'
+#' # 4) Visualise comparative enrichment results in the context of ontology tree
+#' ## 4a) via DAGplot
+#' xEnrichDAGplot(bp, colormap="wyr", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=20))
+#' ## 4b) via Netplot
+#' xEnrichNetplot(bp, colormap="wyr", node.info=c("full_term_name"), wrap.width=30)
 #' }
 
 xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
@@ -60,6 +66,9 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
     
 	## Combine into a data frame called 'df_all'
 	list_names <- names(list_eTerm)
+	if(is.null(list_names)){
+		list_names <- paste('Enrichment', 1:length(list_eTerm), sep=' ')
+	}
 	res_ls <- lapply(1:length(list_eTerm), function(i){
 		df <- xEnrichViewer(list_eTerm[[i]], top_num="all", sortBy="none")
 		cbind(group=rep(list_names[i],nrow(df)), id=rownames(df), df, stringsAsFactors=F)
@@ -70,6 +79,9 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	## extract the columns: name fc adjp group
 	ind <- which(df_all$adjp < FDR.cutoff)
 	d <- df_all[ind, c("id","name","fc","adjp","zscore","pvalue","group")]
+
+	## group factor
+	d$group <- factor(d$group, levels=list_names)
 
 	## text wrap
 	if(!is.null(wrap.width)){
@@ -87,8 +99,8 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	}
 
 	## append the number of sharings per significant term: nSig
-	nSig <- base::table(d$name)
-	ind <- match(d$name, names(nSig))
+	nSig <- base::table(d$id)
+	ind <- match(d$id, names(nSig))
 	d$nSig <- nSig[ind]
 	
 	## draw side-by-side barplot
@@ -98,7 +110,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		## define levels
 		d$name <- factor(d$name, levels=unique(d$name))
 		## define horizontal lines: separating terms according to their sharings
-		ind <- match(unique(d$name), names(nSig))
+		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
 		#p <- ggplot(d, aes(x=name,y=d$fc,fill=group))
@@ -110,7 +122,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		## define levels
 		d$name <- factor(d$name, levels=unique(d$name))
 		## define horizontal lines: separating terms according to their sharings
-		ind <- match(unique(d$name), names(nSig))
+		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
 		#p <- ggplot(d, aes(x=name,y=-1*log10(d$adjp),fill=group))
@@ -122,7 +134,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		## define levels
 		d$name <- factor(d$name, levels=unique(d$name))
 		## define horizontal lines: separating terms according to their sharings
-		ind <- match(unique(d$name), names(nSig))
+		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
 		#p <- ggplot(d, aes(x=name,y=d$zscore,fill=group))
@@ -134,7 +146,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		## define levels
 		d$name <- factor(d$name, levels=unique(d$name))
 		## define horizontal lines: separating terms according to their sharings
-		ind <- match(unique(d$name), names(nSig))
+		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
 		#p <- ggplot(d, aes(x=name,y=-1*log10(d$pvalue),fill=group))
@@ -142,7 +154,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}
 	
-	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=14,color="black")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
+	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="blue"), axis.title.x=element_text(size=14,color="blue")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
 	
 	## title
 	p <- p + ggtitle(paste0('Enrichments under FDR < ', FDR.cutoff))
@@ -150,6 +162,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	## strip
 	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
 	
+	## group
 	#bp <- p + facet_grid(~group)
 	bp <- p + eval(parse(text=paste("facet_grid(~group)",sep="")))
 
@@ -166,6 +179,24 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size)
 	}
 	bp
+	
+	## append 'g' to 'bp'
+	### edges
+	ls_edges <- lapply(list_eTerm, function(x){
+		df_edge <- igraph::get.data.frame(x$g, what="edges")
+	})
+	relations <- do.call(rbind, ls_edges)
+	relations <- relations[!duplicated(relations), ]
+	### nodes
+	ls_nodes <- lapply(list_eTerm, function(x){
+		df_nodes <- igraph::get.data.frame(x$g, what="vertices")
+	})
+	nodes <- do.call(rbind, ls_nodes)
+	nodes <- nodes[!duplicated(nodes), ]
+	### igraph
+	ig <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+	
+	bp$g <- ig
 	
 	invisible(bp)
 }

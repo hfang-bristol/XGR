@@ -16,7 +16,7 @@
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return 
-#' It returns an object of class "igraph", with nodes for input genes/SNPs and edges for pair-wise semantic similarity between them. If no similarity is calculuated, it returns NULL.
+#' It returns an object of class "igraph", with nodes for input genes/SNPs and edges for pair-wise semantic similarity between them. Also added graph attribute is 'dag' storing the annotated ontology DAG used. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
 #' @import Matrix
@@ -455,6 +455,9 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     
     if (class(sim) == "dgCMatrix" | class(sim) == "dsCMatrix"){
     	res <- xConverter(sim, from="dgCMatrix", to="igraph", verbose=F)
+    	
+		## append a graph attribute 'dag' storing the underlying annotated ontology DAG
+		res$dag <- ig
     }
     
     ## no edges

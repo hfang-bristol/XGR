@@ -18,7 +18,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' It returns an object of class "igraph", with nodes for input SNPs and edges for pair-wise semantic similarity between them. If no similarity is calculuated, it returns NULL.
+#' It returns an object of class "igraph", with nodes for input SNPs and edges for pair-wise semantic similarity between them. Also added graph attribute is 'dag' storing the annotated ontology DAG used. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
 #' @importFrom Matrix colSums
@@ -153,6 +153,8 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
     
     ## the resulting graph has gene symbols (instead of Entrez GeneIDs) as nodes
     if(!is.null(res)){
+    	dag <- res$dag
+    
     	sim_ig <- res
     	## sort (by weight) and order (from and to)
 		tEdges <- igraph::get.data.frame(sim_ig, what="edges")
@@ -167,6 +169,8 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 		relations <- t(relations)
 		colnames(relations) <- c("from","to","weight")
 		res <- igraph::graph.data.frame(d=relations, directed=F)
+		
+		res$dag <- dag
     }
     
 

@@ -122,8 +122,9 @@ RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 It returns an object of class "igraph", with nodes for input SNPs and
-edges for pair-wise semantic similarity between them. If no similarity
-is calculuated, it returns NULL.
+edges for pair-wise semantic similarity between them. Also added graph
+attribute is 'dag' storing the annotated ontology DAG used. If no
+similarity is calculuated, it returns NULL.
 }
 \description{
 \code{xSocialiserSNPs} is supposed to calculate pair-wise semantic

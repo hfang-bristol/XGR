@@ -1,8 +1,8 @@
 #' Function to visualise enrichment results using a direct acyclic graph (DAG)
 #'
-#' \code{xEnrichDAGplot} is supposed to visualise enrichment results using a direct acyclic graph (DAG) with node colorings. It returns an object of class 'Ragraph'.
+#' \code{xEnrichDAGplot} is supposed to visualise enrichment results using a direct acyclic graph (DAG) with node colorings. Also supported is to visualise the comparative enrichment results (see the function \code{\link{xEnrichCompare}})) with nodes/terms colored according to how many times being called significant. By default, significant terms (of interest) are highlighted by box-shaped nodes, the others by ellipse nodes. It returns an object of class 'Ragraph'.
 #'
-#' @param eTerm an object of class "eTerm"
+#' @param eTerm an object of class "eTerm" or an object "ggplot" (resulting from \code{\link{xEnrichCompare}})
 #' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (FDR < 0.05) will be displayed
 #' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
 #' @param path.mode the mode of paths induced by nodes in query. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
@@ -17,6 +17,7 @@
 #' @param newpage logical to indicate whether to open a new page. By default, it sets to true for opening a new page
 #' @param layout.orientation the orientation of the DAG layout. It can be one of "left_right" for the left-right layout (viewed from the DAG root point), "top_bottom" for the top-bottom layout, "bottom_top" for the bottom-top layout, and "right_left" for the right-left layout
 #' @param node.info tells the ontology term information used to label nodes. It can be one of "none" for no node labeling, "term_id" for using Term ID, "term_name" for using Term Name (the first 15 characters), "both" for using both of Term ID and Name (the first 15 characters), and "full_term_name" for using the full Term Name
+#' @param wrap.width a positive integer specifying wrap width of Term Name
 #' @param graph.node.attrs a list of global node attributes. These node attributes will be changed globally. See 'Note' below for details on the attributes
 #' @param graph.edge.attrs a list of global edge attributes. These edge attributes will be changed globally. See 'Note' below for details on the attributes
 #' @param node.attrs a list of local edge attributes. These node attributes will be changed locally; as such, for each attribute, the input value must be a named vector (i.e. using Term ID as names). See 'Note' below for details on the attributes
@@ -76,9 +77,9 @@
 #' # 3) DAG plot of enrichment results
 #' agDAG <- xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"))
 #' ## modify node labels
-#' xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
+#' xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25,fontcolor="blue",color="transparent"))
 #' ## modify node shapes
-#' xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"), graph.node.attrs=list(fixedsize=FALSE,shape="box"))
+#' xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"), graph.node.attrs=list(fixedsize=FALSE,shape=c("ellipse","box","circle","plaintext")[2]))
 #' ## further modify edge color
 #' xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25), graph.edge.attrs=list(color="black"))
 #'
@@ -94,57 +95,73 @@
 #' 
 #' }
 
-xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("top_bottom","left_right","bottom_top","right_left"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
+xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("top_bottom","left_right","bottom_top","right_left"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
 {
     
     displayBy <- match.arg(displayBy)
     path.mode <- match.arg(path.mode)
     layout.orientation <- match.arg(layout.orientation)
-    node.info<- match.arg(node.info)    
+    node.info<- match.arg(node.info)
     
     if(is.logical(eTerm)){
         stop("There is no enrichment in the 'eTerm' object.\n")
     }
     
-    ## when 'auto', will keep the significant terms
-	df <- xEnrichViewer(eTerm, top_num="all")
-	if(top_num=='auto'){
-		top_num <- sum(df$adjp<0.05)
-		if(top_num<=1){
-			top_num <- sum(df$adjp<0.1)
+    if(class(eTerm)[1]=="eTerm"){
+	
+		## when 'auto', will keep the significant terms
+		df <- xEnrichViewer(eTerm, top_num="all")
+		if(top_num=='auto'){
+			top_num <- sum(df$adjp<0.05)
+			if(top_num<=1){
+				top_num <- sum(df$adjp<0.1)
+			}
+			if(top_num <= 1){
+				top_num <- 10
+			}
 		}
-		if(top_num <= 1){
-			top_num <- 10
+		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
+	
+		g <- eTerm$g
+		nodes_query <- rownames(df)
+		subg <- dnet::dDAGinduce(g, nodes_query, path.mode=path.mode)
+	
+		if(displayBy=='adjp' | displayBy=='fdr'){
+			data <- -1*log10(df$adjp)
+		}else if(displayBy=='fc'){
+			data <- df$fc
+		}else if(displayBy=='pvalue'){
+			data <- -1*log10(df$pvalue)
+		}else if(displayBy=='zscore'){
+			data <- df$zscore
 		}
+	
+		## for data
+		names(data) <- rownames(df)
+		data <- data[V(subg)$name]
+	
+	}else if(any(class(eTerm) %in% c("gg","ggplot"))){
+		bp <- eTerm
+		if(!is.null(bp$g)){
+			bp_ig <- bp$g
+			bp_data <- bp$data
+			nodes_query <- unique(bp_data$id)
+			subg <- dDAGinduce(g=bp_ig, nodes_query=nodes_query, path.mode=path.mode)
+			data <- bp_data$nSig
+			if(is.null(zlim)){
+				zlim <- c(0, max(data))
+			}
+		}else{
+			stop("No 'igraph' object can not be found in the input 'ggplot' object.\n")
+		}
+	}else{
+		stop("Cannot find either an 'eTerm' object or an 'ggplot' object.\n")
 	}
-	df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
 	
-	g <- eTerm$g
-	nodes_query <- rownames(df)
-	subg <- dnet::dDAGinduce(g, nodes_query, path.mode=path.mode)
-	
-	if(displayBy=='adjp' | displayBy=='fdr'){
-		data <- -1*log10(df$adjp)
-	}else if(displayBy=='fc'){
-		data <- df$fc
-	}else if(displayBy=='pvalue'){
-		data <- -1*log10(df$pvalue)
-	}else if(displayBy=='zscore'){
-		data <- df$zscore
-	}
-	
-	## for data
-	names(data) <- rownames(df)
-	data <- data[V(subg)$name]
 	
 	## for globally graph.edge.attrs
 	if(is.null(graph.edge.attrs)){
 		graph.edge.attrs <- list(color="black",weight=1,style="solid")
-	}
-	
-	## for globally graph.node.attrs
-	if(is.null(graph.node.attrs)){
-		graph.node.attrs <- list(fontcolor="blue")
 	}
 	
 	## for locally node.attrs
@@ -154,7 +171,11 @@ xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		node.attrs <- list(shape=hightlighted.shape)
 	}
 	
-	agDAG <- dnet::visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
+	if(is.null(wrap.width)){
+		agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
+	}else{
+		agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, numChar=wrap.width, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
+	}
 	
 	#slotNames(agDAG)
 	#str(agDAG@AgNode[[1]])

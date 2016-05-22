@@ -1,10 +1,10 @@
-#' Function to visualise enrichment results using different network layouts
+#' Function to visualise terms used to annotate an input SNP or gene using different network layouts
 #'
-#' \code{xEnrichNetplot} is supposed to visualise enrichment results using different network layouts. Also supported is to visualise the comparative enrichment results (see the function \code{\link{xEnrichCompare}})) with nodes/terms colored according to how many times being called significant. It returns an object of class 'igraph'.
+#' \code{xSocialiserNetplot} is supposed to visualise terms used to annotate an input SNP or gene using different network layouts. It returns an object of class 'igraph'.
 #'
-#' @param eTerm an object of class "eTerm" or an object "ggplot" (resulting from \code{\link{xEnrichCompare}})
-#' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (FDR < 0.05) will be displayed
-#' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
+#' @param g an object of class "igraph" (resulting from similarity analysis)
+#' @param query an object in query (for example, an SNP or Gene)
+#' @param displayBy which statistics will be used for displaying. It can be "IC" for information content (by default), "none" for no color-coding on nodes/terms
 #' @param path.mode the mode of paths induced by nodes in query. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param node.info tells the ontology term information used to label nodes. It can be one of "none" for no node labeling, "term_id" for using Term ID, "term_name" for using Term Name, "both" for using both of Term ID and Name (the first 15 characters), and "full_term_name" for using the full Term Name
 #' @param wrap.width a positive integer specifying wrap width of Term Name. By default, first 15 characters
@@ -25,95 +25,101 @@
 #' @param edge.arrow.size the size of the arrows for the directed edge. The default value is 1.
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
 #' @return 
-#' an igraph object to represent DAG, appended with a node attribute called 'enrichment'
+#' an igraph object to represent DAG, appended with a node attribute called 'inherited' indicative of whether terms are inherited or not
 #' @note none
 #' @export
-#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
-#' @include xEnrichNetplot.r
+#' @seealso \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
+#' @include xSocialiserNetplot.r
 #' @examples
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
 #' RData.location="~/Sites/SVN/github/bigdata"
 #' 
-#' # 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
-#' cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)
-#' ind <- which(cis$IFN_t > 0 & cis$IFN_fdr < 0.05)
-#' df_cis <- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
-#' data <- df_cis$variant
+#' # 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+#' # provide genes and SNPs reported in AS GWAS studies
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' ## get lead SNPs reported in AS GWAS
+#' example.snps <- names(ImmunoBase$AS$variants)
+#' SNP.g <- xSocialiserSNPs(example.snps, include.LD=NA, RData.location=RData.location)
 #' 
-#' # 2) Enrichment analysis using Experimental Factor Ontology (EFO)
-#' # Considering LD SNPs and respecting ontology tree
-#' eTerm <- xEnricherSNPs(data, ontology="EF", include.LD="EUR", LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+#' # 2) Circos plot involving nodes 'rs6871626'
+#' xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626", RData.location=RData.location)
 #'
-#' # 3) Net plot of enrichment results
-#' subg <- xEnrichNetplot(eTerm, top_num="auto", displayBy="fc", node.info=c("none"), vertex.label=NA, wrap.width=30)
+#' # 3) Net plot visualising terms used to annotate an SNP 'rs6871626'
+#' dag <- xSocialiserNetplot(g=SNP.g, query='rs6871626', displayBy="IC", node.info=c("none"), vertex.label=NA, wrap.width=30)
 #' }
 
-xEnrichNetplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width=15, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, glayout=layout_as_tree, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", edge.arrow.size=0.3, ...)
+xSocialiserNetplot <- function(g, query, displayBy=c("IC","none"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width=15, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, glayout=layout_as_tree, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", edge.arrow.size=0.3, ...)
 {
     
     displayBy <- match.arg(displayBy)
     path.mode <- match.arg(path.mode)
     node.info<- match.arg(node.info)
     
-    if(is.logical(eTerm)){
-        stop("There is no enrichment in the 'eTerm' object.\n")
+    if(is.logical(g)){
+        stop("There is no similarity in the 'igraph' object.\n")
     }
     
-    if(class(eTerm)[1]=="eTerm"){
-	
-		## when 'auto', will keep the significant terms
-		df <- xEnrichViewer(eTerm, top_num="all")
-		if(top_num=='auto'){
-			top_num <- sum(df$adjp<0.05)
-			if(top_num<=1){
-				top_num <- sum(df$adjp<0.1)
-			}
-			if(top_num <= 1){
-				top_num <- 10
-			}
-		}
-		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
-	
-		g <- eTerm$g
-		nodes_query <- rownames(df)
-		subg <- dnet::dDAGinduce(g, nodes_query, path.mode=path.mode)
-	
-		## for data (pattern)
-		if(displayBy=='adjp' | displayBy=='fdr'){
-			data <- -1*log10(df$adjp)
-		}else if(displayBy=='fc'){
-			data <- df$fc
-		}else if(displayBy=='pvalue'){
-			data <- -1*log10(df$pvalue)
-		}else if(displayBy=='zscore'){
-			data <- df$zscore
-		}
-		names(data) <- rownames(df)
-		ind <- match(V(subg)$name, names(data))
-		data <- data[ind]
-		names(data) <- V(subg)$name
+    if (class(g) != "igraph"){
+        stop("The function must apply to the 'igraph' object.\n")
+    }
+    
+    if(is.null(g$dag)){
+    	dag <- g
+    }else{
+    	dag <- g$dag
+    }
+    
+    if(is.null(V(dag)$anno) | is.null(V(dag)$IC)){
+        stop("The function requires that input graph has already contained annotation data and also information content (IC).\n")
+    }
+    
 
-	}else if(any(class(eTerm) %in% c("gg","ggplot"))){
-		bp <- eTerm
-		if(!is.null(bp$g)){
-			bp_ig <- bp$g
-			bp_data <- bp$data
-			nodes_query <- unique(bp_data$id)
-			subg <- dDAGinduce(g=bp_ig, nodes_query=nodes_query, path.mode=path.mode)
-			data <- bp_data$nSig
-			if(is.null(zlim)){
-				zlim <- c(0, max(data))
-			}
+	## get terms used to annotate an object in query
+	flag <- sapply(V(dag)$anno, function(x){
+		ind <- match(query, x)
+		if(is.na(ind)){
+			0
 		}else{
-			stop("No 'igraph' object can not be found in the input 'ggplot' object.\n")
+			if(is.null(names(x[ind]))){
+				1
+			}else if(names(x[ind])=="o"){
+				1
+			}else if(names(x[ind])=="i"){
+				2
+			}
 		}
-	}else{
-		stop("Cannot find either an 'eTerm' object or an 'ggplot' object.\n")
+	})
+	terms <- V(dag)$name[flag>0]
+	terms_origin <- V(dag)$name[flag==1]
+	
+	## return NULL if no terms are found
+	if(length(terms)==0){
+		stop("No terms are found to annotate the entity in query!")
+		
 	}
 	
+	## get a subgraph induced by terms
+	subg <- dnet::dDAGinduce(g=dag, nodes_query=terms, path.mode=path.mode)
 	
+	## append a node attribute 'inherited' to subg
+	inherited <- rep(1, length(V(subg)$name))
+	names(inherited) <- V(subg)$name
+	if(length(terms_origin)>0){
+		inherited[terms_origin] <- 0
+	}
+	V(subg)$inherited <- inherited
+	
+	## how to color nodes/terms
+	if(displayBy=='IC'){
+		data <- V(subg)$IC
+		names(data) <- V(subg)$name
+	}else{
+		data <- NULL
+	}
+	
+	#####################################################################################
 	## for vertex.label
     if(is.null(vertex.label)){
 		## define node labels
@@ -205,11 +211,6 @@ xEnrichNetplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
     }
     
     ######################################################################################
-	
-	########################################
-	## append pattern data into igraph
-	V(subg)$enrichment <- pattern
-	########################################
 	
 	par_old <- graphics::par()
 	

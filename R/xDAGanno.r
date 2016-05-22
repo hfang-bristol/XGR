@@ -128,7 +128,7 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
 		e <- new.env(hash=T, parent=emptyenv())
 		if(node %in% originNodes){
 			sapply(originAnnos[[node]], function(x){
-				assign(as.character(x), "origin", envir=e)
+				assign(as.character(x), "o", envir=e)
 			})
 		}
 		assign(node, e, envir=node2domain.HoH)
@@ -161,7 +161,7 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
 				lapply(adjNodesList[[node]], function(adjNode){
 					adjEnv <- get(adjNode, envir=node2domain.HoH, mode='environment')
 					sapply(domainsID, function(domainID){
-						assign(domainID, "inherit", envir=adjEnv)
+						assign(domainID, "i", envir=adjEnv)
 					})
 				})
 			})
@@ -176,7 +176,11 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
 	node2domains <- as.list(node2domain.HoH)[allNodes]
 	domain_annotation <- lapply(node2domains, function(node){
 		#unlist(as.list(node))
-		names(unlist(as.list(node)))
+		#names(unlist(as.list(node)))
+		vec <- unlist(as.list(node))
+		res <- names(vec)
+		names(res) <- vec
+		res
 	})
 	
     ## append 'anno' attributes to the graph
