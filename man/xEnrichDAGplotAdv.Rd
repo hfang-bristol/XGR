@@ -12,9 +12,9 @@ colormap = c("white-lightcyan-cyan", "yr", "bwr", "jet", "gbr", "wyr",
 "rainbow", "wb", "lightyellow-orange"), ncolors = 40, zlim = NULL,
 colorbar = T, colorbar.fraction = 0.1, newpage = T,
 layout.orientation = c("left_right", "top_bottom", "bottom_top",
-"right_left"), node.info = c("term_name", "term_id"), wrap.width =
-NULL,
-graph.node.attrs = NULL, graph.edge.attrs = NULL, node.attrs = NULL)
+"right_left"), node.info = c("term_name", "term_id", "none"),
+wrap.width = NULL, graph.node.attrs = NULL, graph.edge.attrs = NULL,
+node.attrs = NULL)
 }
 \arguments{
 \item{ggplot}{an object "ggplot" (resulting from
@@ -71,7 +71,7 @@ bottom-top layout, and "right_left" for the right-left layout}
 
 \item{node.info}{tells the ontology term information used to label
 nodes. It can be "term_id" for using Term ID, "term_name" for using
-Term Name}
+Term Name, 'none' for no labellings}
 
 \item{wrap.width}{a positive integer specifying wrap width of Term
 Name}

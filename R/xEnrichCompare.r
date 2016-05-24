@@ -201,7 +201,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	ls_nodes <- lapply(list_eTerm, function(x){
 		df_nodes <- igraph::get.data.frame(x$g, what="vertices")
 	})
-	nodes <- do.call(rbind, ls_nodes)
+	nodes <- do.call(rbind, ls_nodes)[,1:4]
 	nodes <- nodes[!duplicated(nodes), ]
 	### igraph
 	ig <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)

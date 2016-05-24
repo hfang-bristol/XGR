@@ -15,7 +15,7 @@
 #' @param colorbar.fraction the relative fraction of colorbar block against the device size
 #' @param newpage logical to indicate whether to open a new page. By default, it sets to true for opening a new page
 #' @param layout.orientation the orientation of the DAG layout. It can be one of "left_right" for the left-right layout (viewed from the DAG root point), "top_bottom" for the top-bottom layout, "bottom_top" for the bottom-top layout, and "right_left" for the right-left layout
-#' @param node.info tells the ontology term information used to label nodes. It can be "term_id" for using Term ID, "term_name" for using Term Name
+#' @param node.info tells the ontology term information used to label nodes. It can be "term_id" for using Term ID, "term_name" for using Term Name, 'none' for no labellings
 #' @param wrap.width a positive integer specifying wrap width of Term Name
 #' @param graph.node.attrs a list of global node attributes. These node attributes will be changed globally. See 'Note' below for details on the attributes
 #' @param graph.edge.attrs a list of global edge attributes. These edge attributes will be changed globally. See 'Note' below for details on the attributes
@@ -92,7 +92,7 @@
 #' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
-xEnrichDAGplotAdv <- function(ggplot, displayBy=c("nSig","none"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("white-lightcyan-cyan","yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("left_right","top_bottom","bottom_top","right_left"), node.info=c("term_name","term_id"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
+xEnrichDAGplotAdv <- function(ggplot, displayBy=c("nSig","none"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("white-lightcyan-cyan","yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("left_right","top_bottom","bottom_top","right_left"), node.info=c("term_name","term_id","none"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
 {
     
     displayBy <- match.arg(displayBy)
@@ -119,7 +119,7 @@ xEnrichDAGplotAdv <- function(ggplot, displayBy=c("nSig","none"), path.mode=c("a
 	names(code) <- bp_data$id
 	ind <- match(V(subg)$name, names(code))
 	code_in_subg <- code[ind]
-	names(code_in_subg) <- V(subg)$id
+	names(code_in_subg) <- V(subg)$name
 	V(subg)$code <- code_in_subg
 
 	## add 'nSig' to subg

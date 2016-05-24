@@ -32,9 +32,9 @@ colormap = c("white-lightcyan-cyan", "yr", "bwr", "jet", "gbr", "wyr",
 "rainbow", "wb", "lightyellow-orange"), ncolors = 40, zlim = NULL,
 colorbar = T, colorbar.fraction = 0.1, newpage = T,
 layout.orientation = c("left_right", "top_bottom", "bottom_top",
-"right_left"), node.info = c("term_name", "term_id"), wrap.width =
-NULL,
-graph.node.attrs = NULL, graph.edge.attrs = NULL, node.attrs = NULL)
+"right_left"), node.info = c("term_name", "term_id", "none"),
+wrap.width = NULL, graph.node.attrs = NULL, graph.edge.attrs = NULL,
+node.attrs = NULL)
 </pre>
 
 
@@ -123,7 +123,7 @@ bottom-top layout, and &quot;right_left&quot; for the right-left layout</p>
 <td>
 <p>tells the ontology term information used to label
 nodes. It can be &quot;term_id&quot; for using Term ID, &quot;term_name&quot; for using
-Term Name</p>
+Term Name, 'none' for no labellings</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
