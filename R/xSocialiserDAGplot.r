@@ -160,7 +160,7 @@ xSocialiserDAGplot <- function(g, query, displayBy=c("IC","none"), path.mode=c("
 	
 		## for globally graph.edge.attrs
 		if(is.null(graph.edge.attrs)){
-			graph.edge.attrs <- list(color="black",weight=1,style="solid")
+			#graph.edge.attrs <- list(color="black",weight=1,style="solid")
 		}
 	
 		## for locally node.attrs
@@ -173,11 +173,7 @@ xSocialiserDAGplot <- function(g, query, displayBy=c("IC","none"), path.mode=c("
 			}
 		}
 	
-		if(is.null(wrap.width)){
-			agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
-		}else{
-			agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, numChar=wrap.width, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
-		}
+		agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, numChar=wrap.width, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
 	
 		#slotNames(agDAG)
 		#str(agDAG@AgNode[[1]])

@@ -11,7 +11,7 @@
 #' @return an object of class "ggplot", but appended with a 'g' (an igraph object to represent DAG after being unionised)
 #' @note none
 #' @export
-#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
+#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichDAGplotAdv}}
 #' @include xEnrichCompare.r
 #' @examples
 #' \dontrun{
@@ -52,11 +52,8 @@
 #' ## show legend title but hide strip
 #' bp + theme(legend.position="right", strip.text = element_blank())
 #'
-#' # 4) Visualise comparative enrichment results in the context of ontology tree
-#' ## 4a) via DAGplot
-#' xEnrichDAGplot(bp, colormap="wyr", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=20))
-#' ## 4b) via Netplot
-#' xEnrichNetplot(bp, colormap="wyr", node.info=c("full_term_name"), wrap.width=30)
+#' # 4) DAGplot of comparative enrichment results in the context of ontology tree
+#' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
 xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
@@ -98,11 +95,24 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		d$name <- unlist(res_list)
 	}
 
-	## append the number of sharings per significant term: nSig
-	nSig <- base::table(d$id)
-	ind <- match(d$id, names(nSig))
-	d$nSig <- nSig[ind]
-	
+	## append 'nSig' and 'code' to the data frame 'd'
+	### nSig: the number of sharings per significant term
+	### code: indicative of being present/absent for each eTerm (the same order as the input)
+	id_ls <- split(x=d$group, f=d$id)
+	ind <- match(d$id, names(id_ls))
+	id_full_ls <- id_ls[ind]
+	#### for nSig
+	nSig <- unlist(lapply(id_full_ls, length))
+	d$nSig <- nSig
+	#### for code
+	code <- lapply(id_full_ls, function(x){
+		res <- rep(0, length(levels(x)))
+		ind <- match(x, levels(x))
+		res[ind] <- 1
+		paste(res, collapse='-')
+	})
+	d$code <- unlist(code)
+		
 	## draw side-by-side barplot
 	if(displayBy=='fc'){
 		## sort by: nSig group fc (adjp)

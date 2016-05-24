@@ -76,7 +76,7 @@ to represent DAG after being unionised)
 <h3>See Also</h3>
 
 <p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichViewer</code>
+<code>xEnrichDAGplotAdv</code>
 </p>
 
 
@@ -131,13 +131,8 @@ bp + scale_fill_manual(values=c("black","#888888"))
 ## show legend title but hide strip
 bp + theme(legend.position="right", strip.text = element_blank())
 
-# 4) Visualise comparative enrichment results in the context of ontology tree
-## 4a) via DAGplot
-xEnrichDAGplot(bp, colormap="wyr", node.info=c("full_term_name"),
-graph.node.attrs=list(fontsize=20))
-## 4b) via Netplot
-xEnrichNetplot(bp, colormap="wyr", node.info=c("full_term_name"),
-wrap.width=30)
+# 4) DAGplot of comparative enrichment results in the context of ontology tree
+xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 
 ## End(Not run)
 </pre>

@@ -1,10 +1,11 @@
 #' Function to draw DAG plot for comparing two sets of terms used to annotate two SNPs or genes in query
 #'
-#' \code{xSocialiserCompare} is supposed to use DAG plot for comparing two sets of terms used to annotate two SNPs or genes in query. Per term, comparative results are coded in the form of 'x1-x2', where x1 is for query 1 and x2 for query 2 (the value for x1 or x2 can be '0' encoding for no anntation, '1' for inherited annotation, '2' for direct annotation). It returns an object of class 'Ragraph' or class 'igraph'.
+#' \code{xSocialiserDAGplotAdv} is supposed to use DAG plot for comparing two sets of terms used to annotate two SNPs or genes in query. Per term, comparative results are coded in the form of 'x1-x2', where x1 is for query 1 and x2 for query 2 (the value for x1 or x2 can be '0' encoding for no anntation, '1' for inherited annotation, '2' for direct annotation). It returns an object of class 'Ragraph' or class 'igraph'.
 #'
 #' @param g an object of class "igraph" (resulting from similarity analysis)
 #' @param query1 the first object in query (for example, an SNP or Gene)
 #' @param query2 the second object in query (for example, an SNP or Gene)
+#' @param displayBy which statistics will be used for displaying. It can be "IC" for information content (by default), "none" for no color-coding on nodes/terms
 #' @param path.mode the mode of paths induced by nodes/terms. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param height a numeric value specifying the height of device
 #' @param width a numeric value specifying the width of device
@@ -58,7 +59,7 @@
 #' }
 #' @export
 #' @seealso \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}, \code{\link{xSocialiserDAGplot}}
-#' @include xSocialiserCompare.r
+#' @include xSocialiserDAGplotAdv.r
 #' @examples
 #' \dontrun{
 #' # Load the library
@@ -82,13 +83,13 @@
 #' xSocialiserDAGplot(g=SNP.g, query='rs1250550', displayBy="IC", node.info=c("term_name"), graph.node.attrs=list(fontsize=20,fontcolor="blue",color="transparent"))
 #'
 #' # 4) DAG plot comparing two sets of terms used to annotate two queried SNPs
-#' xSocialiserCompare(g=SNP.g, query1='rs6871626', query2='rs1250550', node.info=c("term_name"), graph.node.attrs=list(fontsize=25,fontcolor="blue",color="transparent"))
+#' xSocialiserDAGplotAdv(g=SNP.g, query1='rs6871626', query2='rs1250550', node.info=c("term_name"), graph.node.attrs=list(fontsize=25,fontcolor="blue",color="transparent"))
 #'
 #' # 5) Return an igraph object storing ontology terms used to annotate an SNP 'rs6871626'
-#' dag <- xSocialiserCompare(g=SNP.g, query1='rs6871626', query2='rs1250550', output.format="igraph")
+#' dag <- xSocialiserDAGplotAdv(g=SNP.g, query1='rs6871626', query2='rs1250550', output.format="igraph")
 #' }
 
-xSocialiserCompare <- function(g, query1, query2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("top_bottom","left_right","bottom_top","right_left"), node.info=c("term_name","term_id"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL, output.format=c("Ragraph","igraph")) 
+xSocialiserDAGplotAdv <- function(g, query1, query2, displayBy=c("IC","none"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("white-lightcyan-cyan","yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("left_right","top_bottom","bottom_top","right_left"), node.info=c("term_name","term_id"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL, output.format=c("Ragraph","igraph")) 
 {
     path.mode <- match.arg(path.mode)
     layout.orientation <- match.arg(layout.orientation)
@@ -142,8 +143,12 @@ xSocialiserCompare <- function(g, query1, query2, path.mode=c("all_paths","short
 	V(subg)$term_name <- paste(V(subg)$code, V(subg)$term_name, sep="\\\n")
 	
 	## how to color nodes/terms
-	data <- V(subg)$IC
-	names(data) <- V(subg)$name
+	if(displayBy=='IC'){
+		data <- V(subg)$IC
+		names(data) <- V(subg)$name
+	}else{
+		data <- NULL
+	}
 	
 	if(output.format=="igraph"){
 		invisible(ig)
@@ -151,7 +156,7 @@ xSocialiserCompare <- function(g, query1, query2, path.mode=c("all_paths","short
 	
 		## for globally graph.edge.attrs
 		if(is.null(graph.edge.attrs)){
-			graph.edge.attrs <- list(color="black",weight=1,style="solid")
+			#graph.edge.attrs <- list(color="black",weight=1,style="solid")
 		}
 	
 		agDAG <- visDAG(g=subg, data=data, height=height, width=width, margin=margin, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, colorbar.fraction=colorbar.fraction, newpage=newpage, layout.orientation=layout.orientation, node.info=node.info, numChar=wrap.width, graph.node.attrs=graph.node.attrs, graph.edge.attrs=graph.edge.attrs, node.attrs=node.attrs)
