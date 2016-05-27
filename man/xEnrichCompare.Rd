@@ -4,9 +4,8 @@
 \alias{xEnrichCompare}
 \title{Function to compare enrichment results using side-by-side barplots}
 \usage{
-xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "zscore",
-"pvalue"),
-FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
+xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
+"pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
 wrap.width = NULL)
 }
 \arguments{

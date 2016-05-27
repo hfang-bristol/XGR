@@ -439,13 +439,13 @@ xVisNet(g=subnet_SNP, pattern=pattern, glayout=layout_(subnet_SNP,with_kk()), ve
 The third dataset *[`ImmunoBase`](http://rawgit.com/hfang-bristol/RDataCentre/master/XGR/1.0.0/man/ImmunoBase.html)* is GWAS lead SNPs associated with immunologically related human diseases, obtained from [`ImmunoBase`](http://www.immunobase.org). 
 
 ```{r, eval=T, cache=T, results="hide"}
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 # get info about diseases
 disease_list <- lapply(ImmunoBase, function(x) x$disease)
 # get the number of disease associated variants/SNPs
-variants_list <- lapply(ImmunoBase, function(x) length(names(x$variants)))
-# get the number of genes that are located within 500kb distance window of SNPs
-genes_list <- lapply(ImmunoBase, function(x) length(x$genes_variants))
+variants_list <- lapply(ImmunoBase, function(x) length(unique(names(x$variants))))
+# get the number of genes that are located within 50kb distance window of SNPs
+genes_list <- lapply(ImmunoBase, function(x) length(x$genes_variants<=50000))
 # create a data frame
 df_ib <- data.frame(Code=names(ImmunoBase), Disease=unlist(disease_list), num_SNPs=unlist(variants_list), num_nearby_genes=unlist(genes_list), stringsAsFactors=F)
 ```
@@ -581,7 +581,8 @@ knitr::kable(res_IBD_PW[1:10,], digits=20, caption="", row.names=F)
 
 <!---
 
-RData.location <- "/Users/hfang/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+RData.location <- "~/Sites/SVN/github/bigdata"
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 
 res_SNP <- list()
@@ -592,27 +593,33 @@ data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
 mSeed <- xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location=RData.location)
 
 
-res_name <- lapply(ImmunoBase, function(x){
-	x$disease
-})
+
+#########################################################
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+RData.location <- "~/Sites/SVN/github/bigdata"
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+
+ind <- match(c('SLE','ATD','CEL','T1D','RA','PSO','AS','IBD','CRO','UC'), names(ImmunoBase))
+IB_selected <- ImmunoBase[ind]
+
+res_name <- lapply(IB_selected, function(x) x$disease)
 res_fullname <- unlist(res_name)
 
-
-res_seed <- lapply(ImmunoBase, function(x){
+res_seed <- lapply(IB_selected, function(x){
+	if(T){
+		now <- Sys.time()
+		message(sprintf("Analysing %s (%s) ...", x$disease, as.character(now)), appendLF=T)
+	}
 	gr <- x$variant
-	data <- as.matrix(mcols(gr)[, c('Variant','Pvalue')])
-	mSeed <- xSNP2GeneScores(data, include.LD="EUR", LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location=RData.location)
-	mSeed
+	data <- GenomicRanges::mcols(gr)[, c('Variant','Pvalue')]
+	xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location)
 })
 
-res_SNP <- lapply(res_seed, function(x){
-	x$SNP$SNP
-})
+## all SNPs
+res_SNP <- lapply(res_seed, function(x) x$SNP$SNP)
 allSNPs <- unique(unlist(res_SNP))
-
-res_Gene <- lapply(res_seed, function(x){
-	x$Gene$Gene
-})
+## all Genes
+res_Gene <- lapply(res_seed, function(x) x$Gene$Gene)
 allGenes <- unique(unlist(res_Gene))
 
 ## for SNP x Disease matrix
@@ -639,26 +646,36 @@ for(i in 1:length(res_seed)){
 }
 mat_Gene <- as.matrix(mat_Gene)
 
-## 
+## bootstrap tree
+### for SNP
 data <- mat_SNP
-visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric=c("euclidean","pearson","spearman","kendall","manhattan","cos","mi")[1], colormap="wyr", labRow=NA, KeyValueName="SNP score", add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,5), lwid=c(1,3), srtCol=30, margins=c(8,2))
-
-visTreeBootstrap(data=t(mat_SNP), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=F, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.2))
-      
-
-## 
+colnames(data) <- gsub('.*\\(', '', colnames(data))
+colnames(data) <- gsub('\\)', '', colnames(data))
+visTreeBootstrap(data=t(data), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=10000, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+### for Gene
 data <- mat_Gene
-visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric=c("euclidean","pearson","spearman","kendall","manhattan","cos","mi")[1], colormap="wyr", labRow=NA, KeyValueName="Gene score", add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,5), lwid=c(1,3), srtCol=30, margins=c(8,2))
+colnames(data) <- gsub('.*\\(', '', colnames(data))
+colnames(data) <- gsub('\\)', '', colnames(data))
+tree_bs <- visTreeBootstrap(data=t(data), algorithm="nj", metric="euclidean", num.bootstrap=10000, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+tree_bs_ind <- match(tree_bs$tip.label, colnames(data))
 
-visTreeBootstrap(data=t(mat_Gene), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+## heatmap
+### for Gene
+data <- mat_Gene[, rev(tree_bs_ind)]
+visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric="euclidean", colormap="lightblue-blue", labRow=NA, KeyValueName="Gene score", zlim=c(0,6), add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,4), lwid=c(1,3), margins=c(12,2), srtCol=30, cexCol=0.8)
+### for SNP
+data <- mat_SNP[, rev(tree_bs_ind)]
+visHeatmapAdv(data, Rowv=T, Colv=F, dendrogram="none", dist.metric="euclidean", linkage.method="average", colormap="lightblue-blue", labRow=NA, KeyValueName="SNP score", zlim=c(0,6), add.expr=abline(v=(1:(ncol(data)+1))-0.5,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,4), lwid=c(1,3), margins=c(10,2), srtCol=30, cexCol=0.8)
 
 
-tree_SNPs <- visTreeBootstrap(data=t(mat_SNP), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=T, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
-
-tree_Genes <- visTreeBootstrap(data=t(mat_Gene), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=2000, consensus=T, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
-
+## consensus tree
+### for SNP
+tree_SNPs <- visTreeBootstrap(data=t(mat_SNP), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=5000, consensus=T, consensus.majority=0.5, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.8))
+tree_cons <- tree_SNPs
+### for Gene
+tree_Genes <- visTreeBootstrap(data=t(mat_Gene), algorithm="nj", metric=c("euclidean","pearson","spearman","cos","manhattan","kendall","mi")[1], num.bootstrap=5000, consensus=T, consensus.majority=0.8, reroot="min.bootstrap", visTree=T, nodelabels.arg=list(cex=0.5))
 tree_cons <- tree_Genes
-
+### visualisation
 library(ape)
 library(igraph)
 g <- as.igraph(tree_cons)
@@ -667,6 +684,155 @@ vertex.label <- gsub("Node.*", "", vertex.label)
 vertex.color <- rep("red", vcount(g))
 vertex.color[vertex.label==''] <- 'yellow'
 xVisNet(g=g, glayout=layout_with_kk, vertex.shape="sphere", vertex.label.dist=0.2, vertex.label.color="black", vertex.label=vertex.label, vertex.color=vertex.color)
+
+
+############################################################################
+######################################
+## polygenic autoinflammatory diseases
+######################################
+
+autoinfl <- c('IBD','CRO','UC')
+ind <- match(autoinfl, names(ImmunoBase))
+ls_gr <- lapply(ImmunoBase[ind], function(x){
+	gr <- x$variant
+})
+GRL <- GenomicRanges::GRangesList(ls_gr)
+inGR <- GenomicRanges::unlist(GRL)
+
+data <- GenomicRanges::mcols(inGR)[, c('Variant','Pvalue')]
+mSeed <- xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location=RData.location)
+
+data <- GenomicRanges::mcols(inGR)[, c('Variant','Pvalue')]
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_in <- xSubneterSNPs(data=data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, network="STRING_high", decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location, seed.genes=T, subnet.size=20)
+
+# visualise network
+subnet <- subnet_in
+pattern <- -log10(as.numeric(V(subnet)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+xVisNet(g=subnet, pattern=pattern, vertex.shape="sphere", colormap="white-green-darkgreen", zlim=c(0,6), newpage=F, vertex.size=12, vertex.label.color="blue", vertex.label.dist=0.5, vertex.label.font=3, glayout=layout_with_kk)
+
+
+######################################
+## polygenic autoimmune diseases
+######################################
+autoimmu <- c('SLE','ATD','CEL','T1D','RA')
+ind <- match(autoimmu, names(ImmunoBase))
+ls_gr <- lapply(ImmunoBase[ind], function(x){
+	gr <- x$variant
+})
+GRL <- GenomicRanges::GRangesList(ls_gr)
+imGR <- GenomicRanges::unlist(GRL)
+
+data <- GenomicRanges::mcols(imGR)[, c('Variant','Pvalue')]
+mSeed <- xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location)
+
+data <- GenomicRanges::mcols(imGR)[, c('Variant','Pvalue')]
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_im <- xSubneterSNPs(data=data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, network="STRING_high", decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location, seed.genes=T, subnet.size=20)
+
+subnet <- subnet_im
+pattern <- -log10(as.numeric(V(subnet)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+xVisNet(g=subnet, pattern=pattern, vertex.shape="sphere", colormap="white-red-darkred", zlim=c(0,6), newpage=F, vertex.size=12, vertex.label.color="blue", vertex.label.dist=0.5, vertex.label.font=3, glayout=layout_with_kk)
+
+
+######################################
+## mixture pattern disease
+######################################
+mix <- c('AS','PSO')
+ind <- match(mix, names(ImmunoBase))
+ls_gr <- lapply(ImmunoBase[ind], function(x){
+	gr <- x$variant
+})
+GRL <- GenomicRanges::GRangesList(ls_gr)
+mxGR <- GenomicRanges::unlist(GRL)
+
+data <- GenomicRanges::mcols(mxGR)[, c('Variant','Pvalue')]
+mSeed <- xSNP2GeneScores(data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location)
+
+data <- GenomicRanges::mcols(mxGR)[, c('Variant','Pvalue')]
+# find maximum-scoring gene subnetwork with the desired node number=30
+subnet_mx <- xSubneterSNPs(data=data, include.LD=NA, LD.r2=0.8, significance.threshold=5e-8, distance.max=50000, network="STRING_high", decay.kernel="rapid", decay.exponent=2, GR.SNP="dbSNP_Common", GR.Gene="UCSC_genes", scoring.scheme="max", verbose=T, RData.location=RData.location, seed.genes=T, subnet.size=20)
+
+subnet <- subnet_mx
+pattern <- -log10(as.numeric(V(subnet)$significance))
+pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
+xVisNet(g=subnet, pattern=pattern, vertex.shape="sphere", colormap="white-peru", zlim=c(0,6), newpage=F, vertex.size=12, vertex.label.color="blue", vertex.label.dist=0.5, vertex.label.font=3, glayout=layout_with_kk)
+
+####################################
+# identify common genes beween autoinflammatory and autoimmune
+net_in_im <- graph.intersection(subnet_in, subnet_im, keep.all.vertices=T)
+allnodes <- V(net_in_im)$name
+df_id <- cbind(match(allnodes, V(subnet_in)$name), match(allnodes, V(subnet_im)$name))
+pattern <- apply(!is.na(df_id), 1, sum)
+names(pattern) <- allnodes
+g <- net_in_im
+xVisNet(g, pattern=pattern, colormap="wyr", zlim=c(0,2), vertex.shape="sphere", vertex.label.font=2, newpage=F)
+
+# identify common genes beween autoinflammatory and mixed
+net_in_mx <- graph.intersection(subnet_in, subnet_mx, keep.all.vertices=T)
+allnodes <- V(net_in_mx)$name
+df_id <- cbind(match(allnodes, V(subnet_in)$name), match(allnodes, V(subnet_mx)$name))
+pattern <- apply(!is.na(df_id), 1, sum)
+names(pattern) <- allnodes
+g <- net_in_mx
+xVisNet(g, pattern=pattern, colormap="wyr", zlim=c(0,2), vertex.shape="sphere", vertex.label.font=2, newpage=F)
+
+# identify common genes beween autoimmune and mixed
+net_im_mx <- graph.intersection(subnet_im, subnet_mx, keep.all.vertices=T)
+allnodes <- V(net_im_mx)$name
+df_id <- cbind(match(allnodes, V(subnet_im)$name), match(allnodes, V(subnet_mx)$name))
+pattern <- apply(!is.na(df_id), 1, sum)
+names(pattern) <- allnodes
+g <- net_im_mx
+xVisNet(g, pattern=pattern, colormap="wyr", zlim=c(0,2), vertex.shape="sphere", vertex.label.font=2, newpage=F)
+
+# venn diagram of network genes
+library(VennDiagram)
+data <- list()
+data$inf <- V(subnet_in)$name
+data$imm <- V(subnet_im)$name
+data$mix <- V(subnet_mx)$name
+vp <- venn.diagram(x=data, filename=NULL, fill=c("skyblue","pink1","green"), category.names=names(data))
+grid.draw(vp)
+
+## gene info
+ig <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location)
+allGenes <- igraph::get.data.frame(ig, what="vertices")
+iGenes <- allGenes[, 3:5]
+colnames(iGenes) <- c("GeneID","Symbol","Description")
+
+### merge
+allnodes <- unique(unlist(data))
+mat_merged <- matrix(0, nrow=length(allnodes), ncol=3)
+colnames(mat_merged) <- c('Autoimmune', 'Mixed', 'Autoinflammatory')
+rownames(mat_merged) <- allnodes
+mat_merged[match(data$imm,allnodes), 1] <- 1
+mat_merged[match(data$mix,allnodes), 2] <- 1
+mat_merged[match(data$inf,allnodes), 3] <- 1
+code <- apply(mat_merged, 1, function(x) paste(x,collapse=''))
+count <- apply(mat_merged, 1, sum)
+df_merged <- data.frame(mat_merged, count=count, stringsAsFactors=F)
+### order
+ind <- with(df_merged, order(-count, -Autoimmune, -Mixed, -Autoinflammatory, rownames(df_merged)))
+df_merged_order <- df_merged[ind, ]
+### add gene info
+ind <- match(rownames(df_merged_order), iGenes$Symbol)
+df_info <- iGenes[ind,]
+df_all <- cbind(df_info, df_merged_order)
+rownames(df_all) <- rownames(df_merged_order)
+write.table(df_all, file="network.genes.txt", sep="\t", row.names=F)
+
+## ggplot
+data <- df_all[,c(6,5,4)]
+visHeatmapAdv(data, Rowv=F, Colv=F, dendrogram="none", key=F, zlim=c(0,1), colormap="grey-steelblue", add.expr=abline(v=(1:(ncol(data)+1))-0.5,h=(1:(nrow(data)+1))-0.5,,col="white"), lmat=rbind(c(4,3), c(2,1)), lhei=c(1,9), lwid=c(1,9), margins=c(4,8), cexCol=1, srtRow=-30, offsetRow=0.1, adjRow=0.2)
+
+
+##########################################
+
+
+
 
 --->
 

@@ -56,7 +56,7 @@
 #' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
-xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
+xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -112,7 +112,21 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		paste(res, collapse='-')
 	})
 	d$code <- unlist(code)
-		
+	
+	## append 'label' (FDR) to the data frame 'd'
+	d$label <- rep('',nrow(d))
+	if(bar.label){
+		## get text label
+		to_scientific_notation <- function(x) {
+			res <- format(x, scientific=T)
+			res <- sub("\\+0?", "", res)
+			sub("-0?", "-", res)
+		}
+		label <- to_scientific_notation(d$adjp)
+		label <- paste('FDR', as.character(label), sep='=')
+		d$label <- label
+	}
+	
 	## draw side-by-side barplot
 	if(displayBy=='fc'){
 		## sort by: nSig group fc (adjp)
@@ -123,8 +137,8 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=d$fc,fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=d$fc,fill=group)",sep=""))))
+		#p <- ggplot(d, aes(x=name,y=fc,fill=group))
+		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=fc,fill=group)",sep=""))))
 		p <- p + ylab("Enrichment changes")
 	}else if(displayBy=='adjp' | displayBy=='fdr'){
 		## sort by: nSig group adjp (zscore)
@@ -135,8 +149,8 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=-1*log10(d$adjp),fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(d$adjp),fill=group)",sep=""))))
+		#p <- ggplot(d, aes(x=name,y=-1*log10(adjp),fill=group))
+		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(adjp),fill=group)",sep=""))))
 		p <- p + ylab("Enrichment significance: -log10(FDR)")
 	}else if(displayBy=='zscore'){
 		## sort by: nSig group zcore (adjp)
@@ -147,8 +161,8 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=d$zscore,fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=d$zscore,fill=group)",sep=""))))
+		#p <- ggplot(d, aes(x=name,y=zscore,fill=group))
+		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=zscore,fill=group)",sep=""))))
 		p <- p + ylab("Enrichment z-scores")
 	}else if(displayBy=='pvalue'){
 		## sort by: nSig group pvalue (zscore)
@@ -159,8 +173,8 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=-1*log10(d$pvalue),fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(d$pvalue),fill=group)",sep=""))))
+		#p <- ggplot(d, aes(x=name,y=-1*log10(pvalue),fill=group))
+		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(pvalue),fill=group)",sep=""))))
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}
 	
@@ -172,23 +186,14 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","zscore","pvalue"
 	## strip
 	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
 	
+	if(bar.label){
+		#p <- p + geom_text(aes(label=label),hjust=1,size=bar.label.size)
+		p <- p + geom_text(eval(parse(text=paste("aes(label=label)",sep=""))) ,hjust=1,size=bar.label.size)
+	}
+	
 	## group
 	#bp <- p + facet_grid(~group)
 	bp <- p + eval(parse(text=paste("facet_grid(~group)",sep="")))
-
-	if(bar.label){
-		## get text label
-		to_scientific_notation <- function(x) {
-			res <- format(x, scientific=T)
-			res <- sub("\\+0?", "", res)
-			sub("-0?", "-", res)
-		}
-		label <- to_scientific_notation(d$adjp)
-		label <- paste('FDR', as.character(label), sep='=')
-		
-		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size)
-	}
-	bp
 	
 	## append 'g' to 'bp'
 	### edges

@@ -21,7 +21,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a subgraph with a maximum score, an object of class "igraph". It has ndoe attributes: signficance, score
+#' a subgraph with a maximum score, an object of class "igraph". It has ndoe attributes: significance, score
 #' @note The algorithm identifying a gene subnetwork that is likely modulated by input SNPs and/or their LD SNPs includes two major steps. The first step is to use \code{\link{xSNP2GeneScores}} for defining and scoring nearby genes that are located within distance window of input and/or LD SNPs. The second step is to use \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few less scored genes as linkers.
 #' @export
 #' @seealso \code{\link{xSNP2GeneScores}}, \code{\link{xSubneterGenes}}

@@ -74,6 +74,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
   	ind <- ind[!is.na(ind)]
   	if(length(ind)){
   		gr_SNP <- pos_SNP[ind,]
+  		GenomicRanges::mcols(gr_SNP) <- NULL
   	}else{
   		gr_SNP <- NULL
   	}
