@@ -419,7 +419,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		if(out.format=='GR'){
 			gr
 		}else{
-			sum(IRanges::width(gr))
+			sum(as.numeric(IRanges::width(gr)))
 		}
 	}
 	
@@ -557,13 +557,13 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		message(sprintf("Fifth, perform enrichment analysis (%s) ...", as.character(now)), appendLF=T)
 	}
 	## prepare enrichment analysis
-	data_nBases <- sum(IRanges::width(dGR_reduced))
+	data_nBases <- sum(as.numeric(IRanges::width(dGR_reduced)))
 	annotation_nBases <- base::sapply(aGR_reduced, function(gr){
-		sum(IRanges::width(gr))
+		sum(as.numeric(IRanges::width(gr)))
 	})
-	background_nBases <- sum(IRanges::width(bGR_reduced))
+	background_nBases <- sum(as.numeric(IRanges::width(bGR_reduced)))
 	overlap_nBases <- base::sapply(oGR_reduced, function(gr){
-		sum(IRanges::width(gr))
+		sum(as.numeric(IRanges::width(gr)))
 	})
 
 	if(verbose){

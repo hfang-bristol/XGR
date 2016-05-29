@@ -489,9 +489,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		## prepare enrichment analysis
 		### at the base resolution
 		annotation_nBases <- base::sapply(aGR_reduced, function(gr){
-			sum(IRanges::width(gr))
+			sum(as.numeric(IRanges::width(gr)))
 		})
-		background_nBases <- sum(IRanges::width(bGR_reduced))
+		background_nBases <- sum(as.numeric(IRanges::width(bGR_reduced)))
 		### at the region resolution		
 		data_nBases <- length(dGR_reduced)
 		overlap_nBases <- base::sapply(oGR_reduced, length)

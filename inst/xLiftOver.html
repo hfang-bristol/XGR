@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to lift genomic intervals from one genome build to...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xLiftOver"><tr><td>xLiftOver</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to lift genomic intervals from one genome build to another.</h2>
+
+<h3>Description</h3>
+
+<p><code>xLiftOver</code> is supposed to lift genomic intervals from one genome
+build to another. Supported are the conversion between genom builds
+'hg38' (GRCh38), 'hg19' (GRCh37) and 'h18'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xLiftOver(data.file, format.file = c("data.frame", "bed",
+"chr:start-end",
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
+"hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), verbose = T,
+RData.location =
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data.file</code></td>
+<td>
+<p>an input data file, containing a list of genomic
+regions to test. If the input file is formatted as a 'data.frame'
+(specified by the parameter 'format.file' below), the first three
+columns correspond to the chromosome (1st column), the starting
+chromosome position (2nd column), and the ending chromosome position
+(3rd column). If the format is indicated as 'bed' (browser extensible
+data), the same as 'data.frame' format but the position is 0-based
+offset from chromomose position. If the genomic regions provided are
+not ranged but only the single position, the ending chromosome position
+(3rd column) is allowed not to be provided. If the format is indicated
+as &quot;chr:start-end&quot;, instead of using the first 3 columns, only the
+first column will be used and processed. If the file also contains
+other columns, these additional columns will be ignored. Alternatively,
+the input file can be the content itself assuming that input file has
+been read. Note: the file should use the tab delimiter as the field
+separator between columns</p>
+</td></tr>
+<tr valign="top"><td><code>format.file</code></td>
+<td>
+<p>the format for input files. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot;, &quot;hg19.to.hg38&quot;,
+&quot;hg19.to.hg18&quot;, &quot;hg18.to.hg38&quot; and &quot;hg18.to.hg19&quot;. By default it is NA,
+forcing the user to specify the corrent one.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an GR oject storing converted genomic intervals.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xLiftOver</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
+
+# Provide UCSC genes (hg19)
+UCSC_genes &lt;- xRDataLoader(RData.customised='UCSC_genes',
+RData.location=RData.location)
+UCSC_genes
+
+# Lift over to hg38
+gr &lt;- xLiftOver(UCSC_genes, format.file="GRanges",
+build.conversion="hg19.to.hg38", RData.location=RData.location)
+gr
+
+## End(Not run)
+</pre>
+
+
+</body></html>
