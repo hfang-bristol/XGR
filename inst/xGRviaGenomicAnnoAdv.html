@@ -40,8 +40,10 @@ GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "Segment_Combined_Huvec",
 "Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
 "ReMap_Public_TFBS", "ReMap_Public_mergedTFBS",
-"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS"), parallel =
-TRUE,
+"ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS",
+"Blueprint_BoneMarrow_Histone", "Blueprint_CellLine_Histone",
+"Blueprint_CordBlood_Histone", "Blueprint_Thymus_Histone",
+"Blueprint_VenousBlood_Histone", "Blueprint_DNaseI"), parallel = TRUE,
 multicores = NULL, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
@@ -420,6 +422,65 @@ factor.
 <li><p><code>ReMap_Encode_TFBS</code>: a list (155 transcription factors under
 ENCODE) of GenomicRanges objects; each is an GR object containing
 identified peaks per transcripton factor.
+</p>
+</li></ul>
+
+<p>10. Blueprint Histone Modification ChIP-seq data from bone marrow
+</p>
+
+<ul>
+<li><p><code>Blueprint_BoneMarrow_Histone</code>: a list (132 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample.
+</p>
+</li></ul>
+
+<p>11. Blueprint Histone Modification ChIP-seq data from cell lines
+</p>
+
+<ul>
+<li><p><code>Blueprint_CellLine_Histone</code>: a list (38 combinations of
+histone modifications and cell lines) of GenomicRanges objects; each is
+an GR object containing identified peaks per histone per cell line.
+</p>
+</li></ul>
+
+<p>12. Blueprint Histone Modification ChIP-seq data from cord blood
+</p>
+
+<ul>
+<li><p><code>Blueprint_CordBlood_Histone</code>: a list (126 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample.
+</p>
+</li></ul>
+
+<p>13. Blueprint Histone Modification ChIP-seq data from thymus
+</p>
+
+<ul>
+<li><p><code>Blueprint_Thymus_Histone</code>: a list (5 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample.
+</p>
+</li></ul>
+
+<p>14. Blueprint Histone Modification ChIP-seq data from venous blood
+</p>
+
+<ul>
+<li><p><code>Blueprint_VenousBlood_Histone</code>: a list (296 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample.
+</p>
+</li></ul>
+
+<p>15. Blueprint DNaseI Hypersensitivity site data
+</p>
+
+<ul>
+<li><p><code>Blueprint_DNaseI</code>: a list (36 samples) of GenomicRanges
+objects; each is an GR object containing identified peaks per sample.
 </p>
 </li></ul>
 

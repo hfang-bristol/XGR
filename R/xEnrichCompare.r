@@ -195,23 +195,28 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	#bp <- p + facet_grid(~group)
 	bp <- p + eval(parse(text=paste("facet_grid(~group)",sep="")))
 	
-	## append 'g' to 'bp'
-	### edges
-	ls_edges <- lapply(list_eTerm, function(x){
-		df_edge <- igraph::get.data.frame(x$g, what="edges")
-	})
-	relations <- do.call(rbind, ls_edges)
-	relations <- relations[!duplicated(relations), ]
-	### nodes
-	ls_nodes <- lapply(list_eTerm, function(x){
-		df_nodes <- igraph::get.data.frame(x$g, what="vertices")
-	})
-	nodes <- do.call(rbind, ls_nodes)[,1:4]
-	nodes <- nodes[!duplicated(nodes), ]
-	### igraph
-	ig <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+	##############################
+	## append 'g' to 'bp' (if DAG)
+	flag <- sapply(list_eTerm, function(x) !is.null(x$g))
+	if(all(flag)){
+		### edges
+		ls_edges <- lapply(list_eTerm, function(x){
+			df_edge <- igraph::get.data.frame(x$g, what="edges")
+		})
+		relations <- do.call(rbind, ls_edges)
+		relations <- relations[!duplicated(relations), ]
+		### nodes
+		ls_nodes <- lapply(list_eTerm, function(x){
+			df_nodes <- igraph::get.data.frame(x$g, what="vertices")
+		})
+		nodes <- do.call(rbind, ls_nodes)[,1:4]
+		nodes <- nodes[!duplicated(nodes), ]
+		### igraph
+		ig <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
 	
-	bp$g <- ig
-	
+		bp$g <- ig
+	}
+	##############################
+		
 	invisible(bp)
 }
