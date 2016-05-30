@@ -5,6 +5,7 @@
 #' @param data.file an input data file, containing a list of genomic regions to test. If the input file is formatted as a 'data.frame' (specified by the parameter 'format.file' below), the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. If the format is indicated as "chr:start-end", instead of using the first 3 columns, only the first column will be used and processed. If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns
 #' @param format.file the format for input files. It can be one of "data.frame", "chr:start-end", "bed"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19", "hg19.to.hg38", "hg19.to.hg18", "hg18.to.hg38" and "hg18.to.hg19". By default it is NA, forcing the user to specify the corrent one.
+#' @param merged logical to indicate whether multiple ranges should be merged into the one per a range in query. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -27,7 +28,7 @@
 #' gr
 #' }
 
-xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     startT <- Sys.time()
@@ -125,38 +126,47 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		message(sprintf("Third, lift intervals between genome builds '%s' (%s) ...", build.conversion, as.character(now)), appendLF=T)
 	}
     
-    mcols_data <- GenomicRanges::mcols(dGR)
-    if(is.null(names(dGR))){
-    	names(dGR) <- 1:length(dGR)
-    }
-    names_data <- names(dGR)
-    
     chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, verbose=verbose)
 	chain <- ''
 	eval(parse(text=paste("chain <- chains$", build.conversion, sep="")))
-	res_GRL <- rtracklayer::liftOver(dGR, chain)
+	suppressMessages(res_GRL <- rtracklayer::liftOver(dGR, chain))
 	res_GR <- GenomicRanges::unlist(res_GRL)
 	
-	## keep only the first range (if multiple)
-	res_df <- GenomicRanges::as.data.frame(res_GR, row.names=NULL)
-	uid <- names(res_GR)
-	res_ls <- split(x=res_df[,c(1:3,5)], f=uid)
-	ls_df <- lapply(res_ls, function(x){
-		c(as.character(unique(x$seqnames))[1],min(x$start), max(x$end), as.character(unique(x$strand))[1])
-	})
-	df <- do.call(rbind, ls_df)
+	if(merged){	
+		mcols_data <- GenomicRanges::mcols(dGR)
+		if(is.null(names(dGR))){
+			names(dGR) <- 1:length(dGR)
+		}
+		names_data <- names(dGR)
 	
-	## construct GR object
-	gr <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(df[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(df[,2]), end=as.numeric(df[,3])),
-			strand = S4Vectors::Rle(df[,4])
-		)
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Finally, keep the first range if multiple found (%s) ...", as.character(now)), appendLF=T)
+		}
 	
-	## append back meta data
-	ind <- as.numeric(rownames(df))
-	names(gr) <- names_data[ind]
-	GenomicRanges::mcols(gr) <- mcols_data[ind,]
+		## keep only the first range (if multiple)
+		res_df <- GenomicRanges::as.data.frame(res_GR, row.names=NULL)
+		uid <- names(res_GR)
+		res_ls <- split(x=res_df[,c(1:3,5)], f=uid)
+		ls_df <- lapply(res_ls, function(x){
+			c(as.character(unique(x$seqnames))[1],min(x$start), max(x$end), as.character(unique(x$strand))[1])
+		})
+		df <- do.call(rbind, ls_df)
+	
+		## construct GR object
+		gr <- GenomicRanges::GRanges(
+				seqnames=S4Vectors::Rle(df[,1]),
+				ranges = IRanges::IRanges(start=as.numeric(df[,2]), end=as.numeric(df[,3])),
+				strand = S4Vectors::Rle(df[,4])
+			)
+	
+		## append back meta data
+		ind <- as.numeric(rownames(df))
+		names(gr) <- names_data[ind]
+		GenomicRanges::mcols(gr) <- mcols_data[ind,]
+		
+		res_GR <- gr
+	}
 	
 ####################################################################################
     endT <- Sys.time()
@@ -165,5 +175,5 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
 	
-	invisible(gr)
+	invisible(res_GR)
 }

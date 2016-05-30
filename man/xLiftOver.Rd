@@ -7,7 +7,8 @@
 xLiftOver(data.file, format.file = c("data.frame", "bed",
 "chr:start-end",
 "GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
-"hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), verbose = T,
+"hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), merged = T, verbose =
+T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -36,6 +37,9 @@ separator between columns}
 another. The conversions supported are "hg38.to.hg19", "hg19.to.hg38",
 "hg19.to.hg18", "hg18.to.hg38" and "hg18.to.hg19". By default it is NA,
 forcing the user to specify the corrent one.}
+
+\item{merged}{logical to indicate whether multiple ranges should be
+merged into the one per a range in query. By default, it sets to true}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
