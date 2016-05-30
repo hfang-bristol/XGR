@@ -128,9 +128,8 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     mcols_data <- GenomicRanges::mcols(dGR)
     if(is.null(names(dGR))){
     	names(dGR) <- 1:length(dGR)
-    }else{
-    	names_data <- names(dGR)
     }
+    names_data <- names(dGR)
     
     chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, verbose=verbose)
 	chain <- ''
