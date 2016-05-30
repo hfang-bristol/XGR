@@ -30,6 +30,11 @@
 xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
+    startT <- Sys.time()
+    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
+    message("", appendLF=T)
+    ####################################################################################
+
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format.file <- match.arg(format.file)
     build.conversion <- match.arg(build.conversion)
@@ -121,7 +126,11 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	}
     
     mcols_data <- GenomicRanges::mcols(dGR)
-    names_data <- names(dGR)
+    if(is.null(names(dGR))){
+    	names(dGR) <- 1:length(dGR)
+    }else{
+    	names_data <- names(dGR)
+    }
     
     chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, verbose=verbose)
 	chain <- ''
@@ -149,6 +158,13 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	ind <- as.numeric(rownames(df))
 	names(gr) <- names_data[ind]
 	GenomicRanges::mcols(gr) <- mcols_data[ind,]
+	
+####################################################################################
+    endT <- Sys.time()
+    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
+    
+    runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
 	
 	invisible(gr)
 }
