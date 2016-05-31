@@ -4,7 +4,7 @@
 \alias{xEnrichConciser}
 \title{Function to make enrichment results conciser by removing redundant terms}
 \usage{
-xEnrichConciser(eTerm, cutoff = c(0.95, 0.5))
+xEnrichConciser(eTerm, cutoff = c(0.95, 0.5), verbose = T)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -15,6 +15,9 @@ means, for a term (less significant; called 'B'), if there is a more
 significant term (called 'A'), their overlapped members cover at least
 95% of the B's members but less than 50% of the A's members , then this
 term B will be defined as redundant and thus being removed}
+
+\item{verbose}{logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display}
 }
 \value{
 an object of class "eTerm", after redundant terms being removed.

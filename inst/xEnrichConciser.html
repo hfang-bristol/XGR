@@ -19,7 +19,7 @@ meeting both criteria: 1) |A&amp;B| &gt; 0.95*|B|; and 2) |A&amp;B| &lt; 0.5*|A|
 <h3>Usage</h3>
 
 <pre>
-xEnrichConciser(eTerm, cutoff = c(0.95, 0.5))
+xEnrichConciser(eTerm, cutoff = c(0.95, 0.5), verbose = T)
 </pre>
 
 
@@ -38,6 +38,11 @@ means, for a term (less significant; called 'B'), if there is a more
 significant term (called 'A'), their overlapped members cover at least
 95
 term B will be defined as redundant and thus being removed</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 </table>
 

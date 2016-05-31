@@ -4,6 +4,7 @@
 #'
 #' @param eTerm an object of class "eTerm"
 #' @param cutoff a cutoff vector used to remove redunant terms. By default, it has the first element 0.95 and the second element 0.5. It means, for a term (less significant; called 'B'), if there is a more significant term (called 'A'), their overlapped members cover at least 95% of the B's members but less than 50% of the A's members , then this term B will be defined as redundant and thus being removed
+#' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @return
 #' an object of class "eTerm", after redundant terms being removed.
 #' @note none
@@ -15,7 +16,7 @@
 #' eTerm_concise <- xEnrichConciser(eTerm)
 #' }
 
-xEnrichConciser <- function(eTerm, cutoff=c(0.95,0.5)) 
+xEnrichConciser <- function(eTerm, cutoff=c(0.95,0.5), verbose=T) 
 {
     
     if(is.logical(eTerm)){
@@ -46,6 +47,12 @@ xEnrichConciser <- function(eTerm, cutoff=c(0.95,0.5))
 		
 		## update eTerm by removing redundant terms
 		flag <- nRedundant == 0
+		
+        if(verbose){
+            now <- Sys.time()
+            message(sprintf("\tAmong %d terms, there are %d non-redundant terms", length(flag), sum(flag)), appendLF=T)
+        }
+		
 		eTerm$term_info <- eTerm$term_info[flag, ]
 		eTerm$annotation <- eTerm$annotation[flag]
 		eTerm$overlap <- eTerm$overlap[flag]
