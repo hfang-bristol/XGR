@@ -4,22 +4,26 @@
 \alias{xEnrichConciser}
 \title{Function to make enrichment results conciser by removing redundant terms}
 \usage{
-xEnrichConciser(eTerm, cutoff = 0.95)
+xEnrichConciser(eTerm, cutoff = c(0.95, 0.5))
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
 
-\item{cutoff}{the cutoff used to remove redunant terms. For a term
-(less significant), if there is a more significant term having members
-that cover at least the cutoff percentage (0.95 by default) of its
-members, then this term will be removed}
+\item{cutoff}{a cutoff vector used to remove redunant terms. By
+default, it has the first element 0.95 and the second element 0.5. It
+means, for a term (less significant; called 'B'), if there is a more
+significant term (called 'A'), their overlapped members cover at least
+95% of the B's members but less than 50% of the A's members , then this
+term B will be defined as redundant and thus being removed}
 }
 \value{
 an object of class "eTerm", after redundant terms being removed.
 }
 \description{
 \code{xEnrichConciser} is supposed to make enrichment results conciser
-by removing redundant terms.
+by removing redundant terms. A redundant term (called 'B') is defined
+as its overlapped part (A&B) with a more significant term (called 'A')
+meeting both criteria: 1) |A&B| > 0.95*|B|; and 2) |A&B| < 0.5*|A|.
 }
 \note{
 none

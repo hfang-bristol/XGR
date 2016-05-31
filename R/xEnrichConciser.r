@@ -1,9 +1,9 @@
 #' Function to make enrichment results conciser by removing redundant terms
 #'
-#' \code{xEnrichConciser} is supposed to make enrichment results conciser by removing redundant terms. 
+#' \code{xEnrichConciser} is supposed to make enrichment results conciser by removing redundant terms. A redundant term (called 'B') is defined as its overlapped part (A&B) with a more significant term (called 'A') meeting both criteria: 1) |A&B| > 0.95*|B|; and 2) |A&B| < 0.5*|A|.
 #'
 #' @param eTerm an object of class "eTerm"
-#' @param cutoff the cutoff used to remove redunant terms. For a term (less significant), if there is a more significant term having members that cover at least the cutoff percentage (0.95 by default) of its members, then this term will be removed
+#' @param cutoff a cutoff vector used to remove redunant terms. By default, it has the first element 0.95 and the second element 0.5. It means, for a term (less significant; called 'B'), if there is a more significant term (called 'A'), their overlapped members cover at least 95% of the B's members but less than 50% of the A's members , then this term B will be defined as redundant and thus being removed
 #' @return
 #' an object of class "eTerm", after redundant terms being removed.
 #' @note none
@@ -15,7 +15,7 @@
 #' eTerm_concise <- xEnrichConciser(eTerm)
 #' }
 
-xEnrichConciser <- function(eTerm, cutoff=0.95) 
+xEnrichConciser <- function(eTerm, cutoff=c(0.95,0.5)) 
 {
     
     if(is.logical(eTerm)){
@@ -30,11 +30,15 @@ xEnrichConciser <- function(eTerm, cutoff=0.95)
 		ind <- match(rownames(df), rownames(cross))
 		cross <- cross[ind, ind]
 		
-		nRedundant <- rep(0, ncol(cross))
+		nRedundant_1 <- matrix(0, nrow=ncol(cross), ncol=ncol(cross))
+		nRedundant_2 <- matrix(0, nrow=ncol(cross), ncol=ncol(cross))
 		for(j in seq(2, ncol(cross))){
-			i <- seq(1, j-1)
-			nRedundant[j] <- sum(cross[i, j] >= cross[j,j]*cutoff)
+			for(i in seq(1, j-1)){
+				nRedundant_1[i,j] <- cross[i,j] >= cross[j,j]*cutoff[1]
+				nRedundant_2[i,j] <- cross[i,j] >= cross[i,i]*cutoff[2]
+			}
 		}
+		nRedundant <- apply(nRedundant_1 & nRedundant_2, 2, sum)
 		names(nRedundant) <- colnames(cross)
 		
 		ind <- match(names(eTerm$adjp), names(nRedundant))
