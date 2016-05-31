@@ -79,7 +79,6 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   stringsAsFactors=F
 							  )
 		}else{
-	
 			tab <- data.frame( name         = as.character(eTerm$term_info$name),
 							   nAnno        = as.numeric(sapply(eTerm$annotation,length)),
 							   nOverlap     = as.numeric(sapply(eTerm$overlap,length)),

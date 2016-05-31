@@ -30,6 +30,7 @@
 #'  \item{\code{zscore}: a vector containing z-scores}
 #'  \item{\code{pvalue}: a vector containing p-values}
 #'  \item{\code{adjp}: a vector containing adjusted p-values. It is the p value but after being adjusted for multiple comparisons}
+#'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared betwene two terms}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note The interpretation of the algorithms used to account for the hierarchy of the ontology is:
@@ -680,6 +681,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         x <- intersect(genes.group, genes.term)
         x
     })
+    names(overlaps) <- names(gs)
     ## for those with "min.overlap" overlaps will be processed and reported
     flag_filter <- sapply(overlaps, function(x) ifelse(length(x)>=min.overlap,T,F))
     
@@ -761,6 +763,19 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     	}
     })
     
+    ################################
+    cross <- matrix(0, nrow=length(overlaps), ncol=length(overlaps))
+    for(i in seq(1,length(overlaps)-1)){
+    	x1 <- overlaps[[i]]
+    	for(j in seq(i+1,length(overlaps))){
+    		x2 <- overlaps[[j]]
+    		cross[i,j] <- length(intersect(x1, x2))
+    		cross[j,i] <- length(intersect(x1, x2))
+    	}
+    }
+    colnames(cross) <- rownames(cross) <- names(overlaps)
+    diag(cross) <- sapply(overlaps, length)
+    
     ####################################################################################
     
     eTerm <- list(term_info	 = set_info,
@@ -773,6 +788,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                   zscore   = zscores,
                   pvalue   = pvals,
                   adjp     = adjpvals,
+                  cross	   = cross,
                   call     = match.call()
                  )
     class(eTerm) <- "eTerm"

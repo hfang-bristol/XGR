@@ -439,7 +439,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		hits <- GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
 		qhits <- qGR[S4Vectors::queryHits(hits)]
 		shits <- sGR[S4Vectors::subjectHits(hits)]
-		gr <- IRanges::pintersect(qhits, shits)
+		gr <- IRanges::pintersect(qhits, shits, ignore.strand=T)
 		if(out.format=='GR'){
 			gr
 		}else{

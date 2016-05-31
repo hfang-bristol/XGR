@@ -433,7 +433,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		qhits <- qGR[S4Vectors::queryHits(hits)]
 		shits <- sGR[S4Vectors::subjectHits(hits)]
 
-		oGR <- IRanges::pintersect(qhits, shits)
+		oGR <- IRanges::pintersect(qhits, shits, ignore.strand=T)
 		IRanges::reduce(oGR)
 	}
 	
