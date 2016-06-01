@@ -6,13 +6,15 @@
 \usage{
 xGRviaGeneAnno(data.file, background.file = NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-gap.max = 0, GR.Gene = "UCSC_genes", ontology = c("GOBP", "GOMF",
-"GOCC", "PS", "PS2", "SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10,
-2000),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
+GR.Gene = "UCSC_genes", ontology = c("GOBP", "GOMF", "GOCC", "PS",
+"PS2",
+"SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH",
+"MsigdbC1",
+"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
+"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
+"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
+"MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10, 2000),
 min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
 "binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
@@ -50,7 +52,11 @@ factor) is provided in 'annotation.file', the background must be
 provided.}
 
 \item{format.file}{the format for input files. It can be one of
-"data.frame", "chr:start-end", "bed"}
+"data.frame", "chr:start-end", "bed" or "GRanges"}
+
+\item{build.conversion}{the conversion from one genome build to
+another. The conversions supported are "hg38.to.hg19" and
+"hg18.to.hg19". By default it is NA (no need to do so).}
 
 \item{gap.max}{the maximum distance to nearby genes. Only those genes
 no far way from this distance will be considered as nearby genes. By
@@ -181,13 +187,13 @@ off-diagnal cell for the overlapped-members shared betwene two terms}
 }
 \description{
 \code{xGRviaGeneAnno} is supposed to conduct region-based enrichment
-analysis for the input genomic region data, using nearby gene
-annotations. To do so, nearby genes are first defined within the
-maximum gap between genomic regions and gene location. Enrichment
-analysis is based on either Fisher's exact test or Hypergeometric test
-for estimating the significance of overlapped nearby genes. Test
-background can be provided; by default, the annotatable genes will be
-used.
+analysis for the input genomic region data (genome build h19), using
+nearby gene annotations. To do so, nearby genes are first defined
+within the maximum gap between genomic regions and gene location.
+Enrichment analysis is based on either Fisher's exact test or
+Hypergeometric test for estimating the significance of overlapped
+nearby genes. Test background can be provided; by default, the
+annotatable genes will be used.
 }
 \note{
 The interpretation of the algorithms used to account for the hierarchy

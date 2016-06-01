@@ -6,11 +6,11 @@
 \usage{
 xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL,
 background.file = NULL, format.file = c("data.frame", "bed",
-"chr:start-end", "GRanges"), background.annotatable.only = F,
-num.samples = 1000, gap.max = 50000, max.distance = NULL,
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
+"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
+"hg18.to.hg19"), background.annotatable.only = F, num.samples = 1000,
+gap.max = 50000, max.distance = NULL, p.adjust.method = c("BH", "BY",
+"bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
+"Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
 "ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
 "Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
@@ -73,6 +73,10 @@ provided.}
 
 \item{format.file}{the format for input files. It can be one of
 "data.frame", "chr:start-end", "bed" and "GRanges"}
+
+\item{build.conversion}{the conversion from one genome build to
+another. The conversions supported are "hg38.to.hg19" and
+"hg18.to.hg19". By default it is NA (no need to do so).}
 
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
@@ -152,13 +156,13 @@ adjusted for multiple comparisons}
 }
 \description{
 \code{xGRviaGenomicAnnoAdv} is supposed to conduct region-based
-enrichment analysis for the input genomic region data, using genomic
-annotations (eg active chromatin, transcription factor binding
-sites/motifs, conserved sites). Enrichment analysis is based on either
-Fisher's exact test or Hypergeometric test for estimating the
-significance of overlaps (either at the region resolution or at the
-base resolution. Test background can be provided; by default, the
-annotatable will be used.
+enrichment analysis for the input genomic region data (genome build
+h19), using genomic annotations (eg active chromatin, transcription
+factor binding sites/motifs, conserved sites). Enrichment analysis is
+based on either Fisher's exact test or Hypergeometric test for
+estimating the significance of overlaps (either at the region
+resolution or at the base resolution. Test background can be provided;
+by default, the annotatable will be used.
 }
 \note{
 The genomic annotation data are described below according to the data

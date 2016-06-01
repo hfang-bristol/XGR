@@ -52,7 +52,7 @@ an GR oject storing converted genomic intervals.
 }
 \description{
 \code{xLiftOver} is supposed to lift genomic intervals from one genome
-build to another. Supported are the conversion between genom builds
+build to another. Supported are the conversions between genome builds
 'hg38' (GRCh38), 'hg19' (GRCh37) and 'h18'.
 }
 \examples{

@@ -7,6 +7,7 @@
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
 "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
@@ -72,6 +73,10 @@ provided.}
 \item{format.file}{the format for input files. It can be one of
 "data.frame", "chr:start-end", "bed" and "GRanges"}
 
+\item{build.conversion}{the conversion from one genome build to
+another. The conversions supported are "hg38.to.hg19" and
+"hg18.to.hg19". By default it is NA (no need to do so).}
+
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
 'annotation.file'). In other words, if the background is provided, the
@@ -125,11 +130,12 @@ between input regions and annotation regions}
 }
 \description{
 \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment
-analysis for the input genomic region data, using genomic annotations
-(eg active chromatin, transcription factor binding sites/motifs,
-conserved sites). Enrichment analysis is based on bionomial test for
-estimating the significance of overlaps at the base resolution. Test
-background can be provided; by default, the annotatable will be used.
+analysis for the input genomic region data (genome build h19), using
+genomic annotations (eg active chromatin, transcription factor binding
+sites/motifs, conserved sites). Enrichment analysis is based on
+binomial test for estimating the significance of overlaps at the base
+resolution. Test background can be provided; by default, the
+annotatable will be used.
 }
 \note{
 The genomic annotation data are described below according to the data
@@ -204,27 +210,29 @@ object.}
 \itemize{
 \item{\code{Segment_Combined_Gm12878}: a list (7 categories of
 segments) of GenomicRanges objects; each is an GR object containing
-segments per category in the cell line GM12878 (a lymphoblastoid cell
-line).}
+segments per category in the cell line GM12878 (human lymphoblastoid
+cell line).}
 \item{\code{Segment_Combined_H1hesc}: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line H1-hESC (H1 human embryonic stem cells).}
+category in the cell line H1-hESC (H1 human embryonic stem cell line).}
 \item{\code{Segment_Combined_Helas3}: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HeLa S3.}
+category in the cell line HeLa S3 (human epithelial carcinoma cell
+line).}
 \item{\code{Segment_Combined_Hepg2}: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HepG2 (liver hepatocellular carcinoma).}
+category in the cell line HepG2 (human liver hepatocellular carcinoma
+cell line).}
 \item{\code{Segment_Combined_Huvec}: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HUVEC (Human Umbilical Vein Endothelial
-Cells).}
+category in the cell line HUVEC (human umbilical vein endothelial cell
+line).}
 \item{\code{Segment_Combined_K562}: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
 category in the cell line K562 (human erythromyeloblastoid leukemia
 cell line).}
 }
-6. Conserved TFBS
+6. UCSC Conserved TFBS
 \itemize{
 \item{\code{TFBS_Conserved}: a list (245 PWM) of GenomicRanges objects;
 each is an GR object containing human/mouse/rat conserved TFBS for each
@@ -259,37 +267,37 @@ factor.}
 ENCODE) of GenomicRanges objects; each is an GR object containing
 identified peaks per transcripton factor.}
 }
-10. Blueprint Histone Modification ChIP-seq data from bone marrow
+10. BLUEPRINT Histone Modification ChIP-seq data from bone marrow
 \itemize{
 \item{\code{Blueprint_BoneMarrow_Histone}: a list (132 combinations of
 histone modifications and samples) of GenomicRanges objects; each is an
 GR object containing identified peaks per histone per sample.}
 }
-11. Blueprint Histone Modification ChIP-seq data from cell lines
+11. BLUEPRINT Histone Modification ChIP-seq data from cell lines
 \itemize{
 \item{\code{Blueprint_CellLine_Histone}: a list (38 combinations of
 histone modifications and cell lines) of GenomicRanges objects; each is
 an GR object containing identified peaks per histone per cell line.}
 }
-12. Blueprint Histone Modification ChIP-seq data from cord blood
+12. BLUEPRINT Histone Modification ChIP-seq data from cord blood
 \itemize{
 \item{\code{Blueprint_CordBlood_Histone}: a list (126 combinations of
 histone modifications and samples) of GenomicRanges objects; each is an
 GR object containing identified peaks per histone per sample.}
 }
-13. Blueprint Histone Modification ChIP-seq data from thymus
+13. BLUEPRINT Histone Modification ChIP-seq data from thymus
 \itemize{
 \item{\code{Blueprint_Thymus_Histone}: a list (5 combinations of
 histone modifications and samples) of GenomicRanges objects; each is an
 GR object containing identified peaks per histone per sample.}
 }
-14. Blueprint Histone Modification ChIP-seq data from venous blood
+14. BLUEPRINT Histone Modification ChIP-seq data from venous blood
 \itemize{
 \item{\code{Blueprint_VenousBlood_Histone}: a list (296 combinations of
 histone modifications and samples) of GenomicRanges objects; each is an
 GR object containing identified peaks per histone per sample.}
 }
-15. Blueprint DNaseI Hypersensitivity site data
+15. BLUEPRINT DNaseI Hypersensitivity site data
 \itemize{
 \item{\code{Blueprint_DNaseI}: a list (36 samples) of GenomicRanges
 objects; each is an GR object containing identified peaks per sample.}

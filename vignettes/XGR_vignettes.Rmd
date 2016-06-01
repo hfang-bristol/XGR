@@ -139,12 +139,21 @@ An essential step of data analysis is how to make sense of a gene (or SNP) list 
 
 **First of all, load the package `XGR`:**
 
-```{r, eval=T, include=T}
+```{r, eval=T, include=T, echo=T}
 library(XGR)
+
 # the following packages are needed for visualisation
-library(GenomicRanges)
 library(RCircos)
+
+# Specify the locations of built-in data
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 ```
+
+```{r, eval=T, cache=T, echo=F}
+# This intends to use the local version of data
+RData.location <- "~/Sites/SVN/github/bigdata"
+```
+
 
 ## Analysing differential genes
 

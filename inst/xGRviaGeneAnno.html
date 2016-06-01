@@ -10,13 +10,13 @@
 <h3>Description</h3>
 
 <p><code>xGRviaGeneAnno</code> is supposed to conduct region-based enrichment
-analysis for the input genomic region data, using nearby gene
-annotations. To do so, nearby genes are first defined within the
-maximum gap between genomic regions and gene location. Enrichment
-analysis is based on either Fisher's exact test or Hypergeometric test
-for estimating the significance of overlapped nearby genes. Test
-background can be provided; by default, the annotatable genes will be
-used.
+analysis for the input genomic region data (genome build h19), using
+nearby gene annotations. To do so, nearby genes are first defined
+within the maximum gap between genomic regions and gene location.
+Enrichment analysis is based on either Fisher's exact test or
+Hypergeometric test for estimating the significance of overlapped
+nearby genes. Test background can be provided; by default, the
+annotatable genes will be used.
 </p>
 
 
@@ -25,13 +25,15 @@ used.
 <pre>
 xGRviaGeneAnno(data.file, background.file = NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-gap.max = 0, GR.Gene = "UCSC_genes", ontology = c("GOBP", "GOMF",
-"GOCC", "PS", "PS2", "SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10,
-2000),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
+GR.Gene = "UCSC_genes", ontology = c("GOBP", "GOMF", "GOCC", "PS",
+"PS2",
+"SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH",
+"MsigdbC1",
+"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
+"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
+"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
+"MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10, 2000),
 min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
 "binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
@@ -79,7 +81,13 @@ provided.</p>
 <tr valign="top"><td><code>format.file</code></td>
 <td>
 <p>the format for input files. It can be one of
-&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot;</p>
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so).</p>
 </td></tr>
 <tr valign="top"><td><code>gap.max</code></td>
 <td>

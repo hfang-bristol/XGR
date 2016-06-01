@@ -10,11 +10,12 @@
 <h3>Description</h3>
 
 <p><code>xGRviaGenomicAnno</code> is supposed to conduct region-based enrichment
-analysis for the input genomic region data, using genomic annotations
-(eg active chromatin, transcription factor binding sites/motifs,
-conserved sites). Enrichment analysis is based on bionomial test for
-estimating the significance of overlaps at the base resolution. Test
-background can be provided; by default, the annotatable will be used.
+analysis for the input genomic region data (genome build h19), using
+genomic annotations (eg active chromatin, transcription factor binding
+sites/motifs, conserved sites). Enrichment analysis is based on
+binomial test for estimating the significance of overlaps at the base
+resolution. Test background can be provided; by default, the
+annotatable will be used.
 </p>
 
 
@@ -24,6 +25,7 @@ background can be provided; by default, the annotatable will be used.
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
 "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
@@ -100,6 +102,12 @@ provided.</p>
 <td>
 <p>the format for input files. It can be one of
 &quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; and &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so).</p>
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
@@ -297,29 +305,31 @@ object.
 <ul>
 <li><p><code>Segment_Combined_Gm12878</code>: a list (7 categories of
 segments) of GenomicRanges objects; each is an GR object containing
-segments per category in the cell line GM12878 (a lymphoblastoid cell
-line).
+segments per category in the cell line GM12878 (human lymphoblastoid
+cell line).
 </p>
 </li>
 <li><p><code>Segment_Combined_H1hesc</code>: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line H1-hESC (H1 human embryonic stem cells).
+category in the cell line H1-hESC (H1 human embryonic stem cell line).
 </p>
 </li>
 <li><p><code>Segment_Combined_Helas3</code>: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HeLa S3.
+category in the cell line HeLa S3 (human epithelial carcinoma cell
+line).
 </p>
 </li>
 <li><p><code>Segment_Combined_Hepg2</code>: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HepG2 (liver hepatocellular carcinoma).
+category in the cell line HepG2 (human liver hepatocellular carcinoma
+cell line).
 </p>
 </li>
 <li><p><code>Segment_Combined_Huvec</code>: a list (7 categories of segments)
 of GenomicRanges objects; each is an GR object containing segments per
-category in the cell line HUVEC (Human Umbilical Vein Endothelial
-Cells).
+category in the cell line HUVEC (human umbilical vein endothelial cell
+line).
 </p>
 </li>
 <li><p><code>Segment_Combined_K562</code>: a list (7 categories of segments)
@@ -329,7 +339,7 @@ cell line).
 </p>
 </li></ul>
 
-<p>6. Conserved TFBS
+<p>6. UCSC Conserved TFBS
 </p>
 
 <ul>
@@ -386,7 +396,7 @@ identified peaks per transcripton factor.
 </p>
 </li></ul>
 
-<p>10. Blueprint Histone Modification ChIP-seq data from bone marrow
+<p>10. BLUEPRINT Histone Modification ChIP-seq data from bone marrow
 </p>
 
 <ul>
@@ -396,7 +406,7 @@ GR object containing identified peaks per histone per sample.
 </p>
 </li></ul>
 
-<p>11. Blueprint Histone Modification ChIP-seq data from cell lines
+<p>11. BLUEPRINT Histone Modification ChIP-seq data from cell lines
 </p>
 
 <ul>
@@ -406,7 +416,7 @@ an GR object containing identified peaks per histone per cell line.
 </p>
 </li></ul>
 
-<p>12. Blueprint Histone Modification ChIP-seq data from cord blood
+<p>12. BLUEPRINT Histone Modification ChIP-seq data from cord blood
 </p>
 
 <ul>
@@ -416,7 +426,7 @@ GR object containing identified peaks per histone per sample.
 </p>
 </li></ul>
 
-<p>13. Blueprint Histone Modification ChIP-seq data from thymus
+<p>13. BLUEPRINT Histone Modification ChIP-seq data from thymus
 </p>
 
 <ul>
@@ -426,7 +436,7 @@ GR object containing identified peaks per histone per sample.
 </p>
 </li></ul>
 
-<p>14. Blueprint Histone Modification ChIP-seq data from venous blood
+<p>14. BLUEPRINT Histone Modification ChIP-seq data from venous blood
 </p>
 
 <ul>
@@ -436,7 +446,7 @@ GR object containing identified peaks per histone per sample.
 </p>
 </li></ul>
 
-<p>15. Blueprint DNaseI Hypersensitivity site data
+<p>15. BLUEPRINT DNaseI Hypersensitivity site data
 </p>
 
 <ul>
