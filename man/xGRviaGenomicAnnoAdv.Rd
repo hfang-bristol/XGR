@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGRviaGenomicAnnoAdv.r
 \name{xGRviaGenomicAnnoAdv}
 \alias{xGRviaGenomicAnnoAdv}
-\title{Function to conduct region-based enrichment analysis using genomic annotations}
+\title{Function to conduct region-based enrichment analysis using genomic annotations via sampling}
 \usage{
 xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL,
 background.file = NULL, format.file = c("data.frame", "bed",
@@ -159,10 +159,12 @@ adjusted for multiple comparisons}
 enrichment analysis for the input genomic region data (genome build
 h19), using genomic annotations (eg active chromatin, transcription
 factor binding sites/motifs, conserved sites). Enrichment analysis is
-based on either Fisher's exact test or Hypergeometric test for
-estimating the significance of overlaps (either at the region
-resolution or at the base resolution. Test background can be provided;
-by default, the annotatable will be used.
+achieved by comparing the observed overalps against the expected
+overlaps which are estimated from the null distribution. The null
+distribution is generated via sampling, that is, randomly generating
+samples for data genomic regions from background genomic regions.
+Background genomic regions can be provided by the user; by default, the
+annotatable genomic regions will be used.
 }
 \note{
 The genomic annotation data are described below according to the data

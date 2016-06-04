@@ -107,11 +107,12 @@ to two queries (in the form of 'x1-x2', x1 for query 1 and x2 for query
 }
 \description{
 \code{xSocialiserDAGplotAdv} is supposed to use DAG plot for comparing
-two sets of terms used to annotate two SNPs or genes in query. Per
-term, comparative results are coded in the form of 'x1-x2', where x1 is
-for query 1 and x2 for query 2 (the value for x1 or x2 can be '0'
-encoding for no anntation, '1' for inherited annotation, '2' for direct
-annotation). It returns an object of class 'Ragraph' or class 'igraph'.
+two sets of terms used to annotate two queried SNPs or genes (usually
+predicted to be similar). Per term, comparative results are coded in
+the form of 'x1-x2', where x1 is for query 1 and x2 for query 2 (the
+value for x1 or x2 can be '0' encoding for no anntation, '1' for
+inherited annotation, '2' for direct annotation). It returns an object
+of class 'Ragraph' or class 'igraph'.
 }
 \note{
 A list of global node attributes used in "graph.node.attrs":

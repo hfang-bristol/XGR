@@ -107,9 +107,11 @@ inherited or not.
 }
 \description{
 \code{xSocialiserDAGplot} is supposed to draw DAG plot for visualising
-terms used to annotate an input SNP or gene. By default, original terms
-are highlighted by box-shaped nodes, inherited terms by ellipse nodes.
-It returns an object of class 'Ragraph' or class 'igraph'.
+terms used to annotate an input SNP or gene. By default, terms used for
+direct/original annotations by box-shaped nodes, and terms for
+indirect/inherited annotations by ellipse nodes. This function is part
+of utilities in understanding calculated similarity. It returns an
+object of class 'Ragraph' or class 'igraph'.
 }
 \note{
 A list of global node attributes used in "graph.node.attrs":

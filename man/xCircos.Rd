@@ -83,7 +83,10 @@ the colour of the links
 }
 \description{
 \code{xCircos} is used to visualise a network as a circos plot. The
-network must be a 'igraph' object.
+network must be a 'igraph' object. The degree of similarity between
+SNPs (or genes) is visualised by the colour of links. This function can
+be used either to visualise the most similar links or to plot links
+involving an input SNP (or gene).
 }
 \note{
 none

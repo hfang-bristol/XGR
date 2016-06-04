@@ -1,4 +1,4 @@
-#' Function to conduct region-based enrichment analysis using genomic annotations
+#' Function to conduct region-based enrichment analysis using genomic annotations via binomial test
 #'
 #' \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is based on binomial test for estimating the significance of overlaps at the base resolution. Test background can be provided; by default, the annotatable will be used. 
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGRviaGenomicAnno.r
 \name{xGRviaGenomicAnno}
 \alias{xGRviaGenomicAnno}
-\title{Function to conduct region-based enrichment analysis using genomic annotations}
+\title{Function to conduct region-based enrichment analysis using genomic annotations via binomial test}
 \usage{
 xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,

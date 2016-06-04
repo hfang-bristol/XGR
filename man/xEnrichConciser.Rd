@@ -24,9 +24,9 @@ an object of class "eTerm", after redundant terms being removed.
 }
 \description{
 \code{xEnrichConciser} is supposed to make enrichment results conciser
-by removing redundant terms. A redundant term (called 'B') is defined
-as its overlapped part (A&B) with a more significant term (called 'A')
-meeting both criteria: 1) |A&B| > 0.95*|B|; and 2) |A&B| < 0.5*|A|.
+by removing redundant terms. A redundant term (called 'B') is claimed
+if its overlapped part (A&B) with a more significant term (called 'A')
+meets both criteria: 1) |A&B| > 0.95*|B|; and 2) |A&B| < 0.5*|A|.
 }
 \note{
 none

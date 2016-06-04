@@ -43,7 +43,7 @@ maximum of the pre-calculated average between two SNPs in pair),
 complete-linkage concept: the least of any maximum similarity between a
 term of one SNP and a term of the other SNP). When comparing BM-based
 similarity between SNPs, "BM.average" and "BM.max" are sensitive to the
-number of terms invovled; instead, "BM.complete" is much robust in this
+number of terms involved; instead, "BM.complete" is much robust in this
 aspect. By default, it uses "BM.average"}
 
 \item{method.term}{the method used to measure semantic similarity
