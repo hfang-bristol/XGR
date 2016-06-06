@@ -24,8 +24,9 @@ xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
 "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"),
 rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
-entity.label.cex = 0.7, GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes",
-verbose = T,
+entity.label.cex = 0.7, entity.label.side = c("out", "in"),
+entity.label.track = 1, entity.label.query = NULL,
+GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -88,6 +89,22 @@ is excluded</p>
 <td>
 <p>the font size of genes/SNPs labels. Default is
 0.8</p>
+</td></tr>
+<tr valign="top"><td><code>entity.label.side</code></td>
+<td>
+<p>the position of genes/SNPs labels relative to
+chromosome ideogram. It can be &quot;out&quot; (by default) or &quot;in&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>entity.label.track</code></td>
+<td>
+<p>an integer specifying the plot track for
+genes/SNPs labels. Default is 1</p>
+</td></tr>
+<tr valign="top"><td><code>entity.label.query</code></td>
+<td>
+<p>which genes/SNPs labels in query will be
+displayed. By default, it sets to NULL meaning all will be displayed.
+If labes in query can not be found, then all will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>GR.SNP</code></td>
 <td>

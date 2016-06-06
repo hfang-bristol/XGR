@@ -8,8 +8,9 @@ xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
 "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"),
 rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
-entity.label.cex = 0.7, GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes",
-verbose = T,
+entity.label.cex = 0.7, entity.label.side = c("out", "in"),
+entity.label.track = 1, entity.label.query = NULL,
+GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -50,6 +51,16 @@ is excluded}
 
 \item{entity.label.cex}{the font size of genes/SNPs labels. Default is
 0.8}
+
+\item{entity.label.side}{the position of genes/SNPs labels relative to
+chromosome ideogram. It can be "out" (by default) or "in"}
+
+\item{entity.label.track}{an integer specifying the plot track for
+genes/SNPs labels. Default is 1}
+
+\item{entity.label.query}{which genes/SNPs labels in query will be
+displayed. By default, it sets to NULL meaning all will be displayed.
+If labes in query can not be found, then all will be displayed}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS

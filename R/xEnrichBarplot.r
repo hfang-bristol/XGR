@@ -3,8 +3,9 @@
 #' \code{xEnrichBarplot} is supposed to visualise enrichment results using a barplot. It returns an object of class "ggplot".
 #'
 #' @param eTerm an object of class "eTerm"
-#' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (FDR < 0.05) will be displayed
+#' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (see below FDR.cutoff) will be displayed
 #' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
+#' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05. This option only works when setting top_num (see above) is 'auto'
 #' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
@@ -40,7 +41,7 @@
 #' bp + theme(axis.title.x=element_text(color="blue"))
 #' }
 
-xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
+xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -52,10 +53,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
     ## when 'auto', will keep the significant terms
 	df <- xEnrichViewer(eTerm, top_num="all")
 	if(top_num=='auto'){
-		top_num <- sum(df$adjp<0.05)
-		if(top_num<=1){
-			top_num <- sum(df$adjp<0.1)
-		}
+		top_num <- sum(df$adjp<FDR.cutoff)
 		if(top_num <= 1){
 			top_num <- 10
 		}

@@ -12,14 +12,14 @@
 <p><code>xEnrichConciser</code> is supposed to make enrichment results conciser
 by removing redundant terms. A redundant term (called 'B') is claimed
 if its overlapped part (A&amp;B) with a more significant term (called 'A')
-meets both criteria: 1) |A&amp;B| &gt; 0.95*|B|; and 2) |A&amp;B| &lt; 0.5*|A|.
+meets both criteria: 1) |A&amp;B| &gt; 0.9*|B|; and 2) |A&amp;B| &lt; 0.5*|A|.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichConciser(eTerm, cutoff = c(0.95, 0.5), verbose = T)
+xEnrichConciser(eTerm, cutoff = c(0.9, 0.5), verbose = T)
 </pre>
 
 
@@ -33,10 +33,10 @@ xEnrichConciser(eTerm, cutoff = c(0.95, 0.5), verbose = T)
 <tr valign="top"><td><code>cutoff</code></td>
 <td>
 <p>a cutoff vector used to remove redunant terms. By
-default, it has the first element 0.95 and the second element 0.5. It
+default, it has the first element 0.9 and the second element 0.5. It
 means, for a term (less significant; called 'B'), if there is a more
 significant term (called 'A'), their overlapped members cover at least
-95
+90
 term B will be defined as redundant and thus being removed</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>

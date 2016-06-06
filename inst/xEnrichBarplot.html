@@ -18,8 +18,8 @@ a barplot. It returns an object of class &quot;ggplot&quot;.
 
 <pre>
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), bar.label = TRUE, bar.label.size = 3,
-wrap.width = NULL)
+"zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
+bar.label.size = 3, wrap.width = NULL)
 </pre>
 
 
@@ -33,8 +33,8 @@ wrap.width = NULL)
 <tr valign="top"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to FDR or
-adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
-0.05) will be displayed</p>
+adjusted p-values). If it is 'auto', only the significant terms (see
+below FDR.cutoff) will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
@@ -42,6 +42,12 @@ adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
 be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
 adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
 enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05. This option only works when setting top_num
+(see above) is 'auto'</p>
 </td></tr>
 <tr valign="top"><td><code>bar.label</code></td>
 <td>

@@ -5,20 +5,24 @@
 \title{Function to visualise enrichment results using a barplot}
 \usage{
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), bar.label = TRUE, bar.label.size = 3,
-wrap.width = NULL)
+"zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
+bar.label.size = 3, wrap.width = NULL)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
 
 \item{top_num}{the number of the top terms (sorted according to FDR or
-adjusted p-values). If it is 'auto', only the significant terms (FDR <
-0.05) will be displayed}
+adjusted p-values). If it is 'auto', only the significant terms (see
+below FDR.cutoff) will be displayed}
 
 \item{displayBy}{which statistics will be used for displaying. It can
 be "fc" for enrichment fold change (by default), "adjp" or "fdr" for
 adjusted p value (or FDR), "pvalue" for p value, "zscore" for
 enrichment z-score}
+
+\item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05. This option only works when setting top_num
+(see above) is 'auto'}
 
 \item{bar.label}{logical to indicate whether to label each bar with
 FDR. By default, it sets to true for bar labelling}
