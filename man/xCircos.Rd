@@ -10,7 +10,8 @@ xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
 rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
 entity.label.cex = 0.7, entity.label.side = c("out", "in"),
 entity.label.track = 1, entity.label.query = NULL,
-GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", verbose = T,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -74,13 +75,16 @@ without extension), plus specify your file RData path in
 "RData.location"}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
-'UCSC_genes', that is, UCSC known canonical genes (together with
-genomic locations) based on human genome assembly hg19. Even the user
-can specify the customised input. To do so, first save your RData file
-(containing an GR object) into your local computer, and make sure the
-GR object content names refer to Gene Symbols. Then, tell "GR.Gene"
-with your RData file name (with or without extension), plus specify
-your file RData path in "RData.location"}
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell "GR.Gene" with your RData file name (with or
+without extension), plus specify your file RData path in
+"RData.location"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

@@ -15,7 +15,7 @@
 #' @param entity.label.track an integer specifying the plot track for genes/SNPs labels. Default is 1
 #' @param entity.label.query which genes/SNPs labels in query will be displayed. By default, it sets to NULL meaning all will be displayed. If labes in query can not be found, then all will be displayed
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
-#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_genes', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Even the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -58,7 +58,7 @@
 #' #dev.off()
 #' } 
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("out","in"), entity.label.track=1, entity.label.query=NULL, GR.SNP="dbSNP_GWAS", GR.Gene="UCSC_genes", verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("out","in"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -132,7 +132,7 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
 	}
 
   	if(entity=="SNP") {
-    	pos <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location)
     	if(is.null(pos)){
     		GR.SNP <- "dbSNP_GWAS"
 			if(verbose){
@@ -141,9 +141,9 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
     		pos <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
     	}
   	}else if(entity == "Gene") {
-    	pos <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+    	pos <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
     	if(is.null(pos)){
-    		GR.Gene <- "UCSC_genes"
+    		GR.Gene <- "UCSC_knownGene"
 			if(verbose){
 				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
 			}

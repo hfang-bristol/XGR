@@ -7,14 +7,15 @@
 xGRviaGeneAnno(data.file, background.file = NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
-GR.Gene = "UCSC_genes", ontology = c("GOBP", "GOMF", "GOCC", "PS",
-"PS2",
-"SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH",
-"MsigdbC1",
-"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
-"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
-"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10, 2000),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), ontology =
+c("GOBP",
+"GOMF", "GOCC", "PS", "PS2", "SF", "DO", "HPPA", "HPMI", "HPCM",
+"HPMA", "MP",
+"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
+"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
+"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10,
+2000),
 min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
 "binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
@@ -64,13 +65,16 @@ default, it is 0 meaning that nearby genes are those overlapping with
 genomic regions}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
-'UCSC_genes', that is, UCSC known canonical genes (together with
-genomic locations) based on human genome assembly hg19. Even the user
-can specify the customised input. To do so, first save your RData file
-(containing an GR object) into your local computer, and make sure the
-GR object content names refer to Gene Symbols. Then, tell "GR.Gene"
-with your RData file name (with or without extension), plus specify
-your file RData path in "RData.location"}
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell "GR.Gene" with your RData file name (with or
+without extension), plus specify your file RData path in
+"RData.location"}
 
 \item{ontology}{the ontology supported currently. It can be "GOBP" for
 Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular

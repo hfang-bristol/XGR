@@ -55,7 +55,7 @@ In this user manual, you will be guided through the steps necessary to use this 
 [^1]: <http://galahad.well.ox.ac.uk/XGR>
 
 
-# [Web-app](http://galahad.well.ox.ac.uk/XGR)
+# Web-app ([linkto](http://galahad.well.ox.ac.uk/XGR))
 
 # Installation
 
