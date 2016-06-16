@@ -8,6 +8,7 @@
 #' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
+#' @param sharings a numeric vector specifying whether only shared terms will be displayed. For example, when comparing three groups of enrichment results, it can be set into c(2,3) to display only shared terms by any two or all three. By default, it is NULL meaning no such restriction
 #' @return an object of class "ggplot", but appended with a 'g' (an igraph object to represent DAG after being unionised)
 #' @note none
 #' @export
@@ -56,7 +57,7 @@
 #' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
-xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
+xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, sharings=NULL) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -76,7 +77,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	## extract the columns: name fc adjp group
 	ind <- which(df_all$adjp < FDR.cutoff)
 	d <- df_all[ind, c("id","name","fc","adjp","zscore","pvalue","group")]
-
+	
 	## group factor
 	d$group <- factor(d$group, levels=list_names)
 
@@ -112,6 +113,19 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		paste(res, collapse='-')
 	})
 	d$code <- unlist(code)
+	
+	## restrict to sharings?
+	if(!is.null(sharings)){
+		sharings <- as.numeric(sharings)
+		ind <- match(sharings, unique(d$nSig))
+		found <- sharings[!is.na(ind)]
+		if(length(found)>0){
+			flag <- match(d$nSig, found)
+			d <- d[!is.na(flag), ]
+			
+			nSig <- nSig[!is.na(flag)]
+		}
+	}
 	
 	## append 'label' (FDR) to the data frame 'd'
 	d$label <- rep('',nrow(d))

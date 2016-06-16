@@ -19,7 +19,7 @@ side-by-side barplots. It returns an object of class &quot;ggplot&quot;.
 <pre>
 xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
 "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
-wrap.width = NULL)
+wrap.width = NULL, sharings = NULL)
 </pre>
 
 
@@ -55,6 +55,14 @@ size. By default, it sets to 3</p>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of name</p>
+</td></tr>
+<tr valign="top"><td><code>sharings</code></td>
+<td>
+<p>a numeric vector specifying whether only shared terms
+will be displayed. For example, when comparing three groups of
+enrichment results, it can be set into c(2,3) to display only shared
+terms by any two or all three. By default, it is NULL meaning no such
+restriction</p>
 </td></tr>
 </table>
 

@@ -6,7 +6,7 @@
 \usage{
 xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
 0.8,
-significance.threshold = 5e-05, distance.max = 2e+05,
+significance.threshold = 5e-05, distance.max = 50000,
 decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),

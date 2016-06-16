@@ -6,7 +6,7 @@
 \usage{
 xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
 "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
-wrap.width = NULL)
+wrap.width = NULL, sharings = NULL)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects}
@@ -26,6 +26,12 @@ FDR. By default, it sets to true for bar labelling}
 size. By default, it sets to 3}
 
 \item{wrap.width}{a positive integer specifying wrap width of name}
+
+\item{sharings}{a numeric vector specifying whether only shared terms
+will be displayed. For example, when comparing three groups of
+enrichment results, it can be set into c(2,3) to display only shared
+terms by any two or all three. By default, it is NULL meaning no such
+restriction}
 }
 \value{
 an object of class "ggplot", but appended with a 'g' (an igraph object

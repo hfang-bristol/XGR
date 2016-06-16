@@ -241,8 +241,10 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	
 	if(is.null(significance.threshold)){
         scores <- log10((1-pval)/pval)
+        #scores <- log10(1/pval)
     }else{
 		scores <- log10((1-pval)/pval) - log10((1-significance.threshold)/significance.threshold)
+		#scores <- log10(1/pval) - log10(1/significance.threshold)
 	}
     ## replace those infinite values with the next finite ones
     tmp_max <- max(scores[!is.infinite(scores)])
