@@ -3,9 +3,14 @@ CHANGES IN VERSION 1.0.2
 
 NEW FEATURES
 
-    o Add new functions ('xVisKernels', 'xSNPscores', 'xSNP2nGenes', 'xSparseMatrix' and 'xSNP2GeneScores') to control how to define and score modulated seed genes from a list of GWAS SNPs
+    o Add new functions ('xEnrichConciser', 'xEnrichBarplot', 'xEnrichDAGplot', 'xEnrichCompare' and 'xEnrichDAGplotAdv') to visualise and compare enrichment analysis results
     
-    o Add a new function 'xGRviaGenomicAnno' to conduct region-based enrichment analysis using genomic annotations
+    o Add new functions ('xSocialiserDAGplot' and 'xSocialiserDAGplotAdv') to visualise and compare similarity analysis results
+    
+    o Add new functions ('xVisKernels', 'xSNPscores', 'xSNP2nGenes', 'xSparseMatrix' and 'xSNP2GeneScores') to control how to define and score seed genes from a list of GWAS SNPs
+    
+    o Add annotation functions ('xGRviaGeneAnno', 'xGRviaGenomicAnno' and 'xGRviaGenomicAnnoAdv') to interpret user-defined list of genomic regions either via looking at nearby gene annotations by ontologies or via looking at co-localised functional genomic annotations
+
 
 CHANGES IN VERSION 1.0.0
 -----------------------
