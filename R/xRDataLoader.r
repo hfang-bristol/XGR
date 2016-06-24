@@ -13,12 +13,14 @@
 #' @import dnet
 #' @import igraph
 #' @import ggplot2
-#' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges
+#' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges unlist
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
-#' @importFrom grDevices colorRampPalette dev.cur rgb
+#' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow
+#' @importFrom graphics plot lines legend
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
+#' @importFrom stats sd
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples

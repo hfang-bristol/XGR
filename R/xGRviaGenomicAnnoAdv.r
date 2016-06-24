@@ -654,7 +654,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	############################################################
     obs <- overlap_nBases	
 	exp_mean <- apply(b2f, 2, mean)
-	exp_std <- apply(b2f, 2, sd)
+	exp_std <- apply(b2f, 2, stats::sd)
 	
 	## ratio
 	ratio <- obs/exp_mean
