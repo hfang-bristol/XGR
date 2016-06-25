@@ -553,7 +553,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		}
 	
 		aGRL <- GenomicRanges::GRangesList(aGR_reduced)
-		bGR_reduced <- IRanges::reduce(GenomicRanges::unlist(aGRL))
+		bGR_reduced <- IRanges::reduce(BiocGenerics::unlist(aGRL))
 	}else{
 		bGR_reduced <- IRanges::reduce(bGR)
 	
@@ -571,7 +571,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		
 			## update background GR
 			aGRL <- GenomicRanges::GRangesList(aGR_reduced)
-			bGR_reduced <- IRanges::reduce(GenomicRanges::unlist(aGRL))
+			bGR_reduced <- IRanges::reduce(BiocGenerics::unlist(aGRL))
 		}else{
 			if(verbose){
 				now <- Sys.time()
