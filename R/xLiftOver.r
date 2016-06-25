@@ -130,7 +130,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	chain <- ''
 	eval(parse(text=paste("chain <- chains$", build.conversion, sep="")))
 	suppressMessages(res_GRL <- rtracklayer::liftOver(dGR, chain))
-	res_GR <- GenomicRanges::unlist(res_GRL)
+	res_GR <- BiocGenerics::unlist(res_GRL)
 	
 	if(merged){	
 		mcols_data <- GenomicRanges::mcols(dGR)
