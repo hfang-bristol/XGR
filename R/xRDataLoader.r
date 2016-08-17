@@ -167,10 +167,10 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 			if(flag_failed){
 			
 				load_remotes <- c(
-				paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep=""),
 				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep="")
 				)
-
+				#paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep="")
+				
 				for(i in 1:length(load_remotes)){
 					load_remote <- load_remotes[i]
 					if(verbose){
