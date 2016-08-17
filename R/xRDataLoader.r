@@ -68,7 +68,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 					}
 					method <- "internal"
 				}
-				suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
+				#suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
 			}else{
 				if(isR32 && capabilities("libcurl")){
 					method <- "libcurl"
@@ -84,12 +84,17 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 				}else{
 					stop("no download method found")
 				}
-				suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
+				#suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
 			}
 		}else{
-			suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
+			#suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
 		}
-	
+		
+		if(class(suppressWarnings(try(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra), T)))=="try-error"){
+			res_RData <- NULL
+			res_flag <- F
+		}
+		
 		if(file.exists(destfile) & file.info(destfile)$size!=0){
 		
 			if(class(suppressWarnings(try(load(destfile), T)))=="try-error"){
@@ -167,9 +172,9 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 			if(flag_failed){
 			
 				load_remotes <- c(
+				paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep=""),
 				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep="")
 				)
-				#paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep="")
 				
 				for(i in 1:length(load_remotes)){
 					load_remote <- load_remotes[i]
