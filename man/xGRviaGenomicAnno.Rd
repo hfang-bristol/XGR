@@ -307,16 +307,16 @@ objects; each is an GR object containing identified peaks per sample.}
 \dontrun{
 # Load the library
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+#RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
+#data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+GR.annotation="FANTOM5_Enhancer_Cell")
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
