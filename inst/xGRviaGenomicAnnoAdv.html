@@ -506,12 +506,10 @@ objects; each is an GR object containing identified peaks per sample.
 ## Not run: 
 # Load the library
 library(XGR)
-#RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm1 &lt;- xGRviaGenomicAnnoAdv(data.file=data.file, format.file="bed",

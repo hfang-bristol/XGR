@@ -1,13 +1,14 @@
 #' Function to conduct region-based enrichment analysis using genomic annotations via binomial test
 #'
-#' \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is based on binomial test for estimating the significance of overlaps at the base resolution. Test background can be provided; by default, the annotatable will be used. 
+#' \code{xGRviaGenomicAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is based on binomial test for estimating the significance of overlaps either at the base resolution, at the region resolution or at the hybrid resolution. Test background can be provided; by default, the annotatable will be used. 
 #'
 #' @param data.file an input data file, containing a list of genomic regions to test. If the input file is formatted as a 'data.frame' (specified by the parameter 'format.file' below), the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. If the format is indicated as "chr:start-end", instead of using the first 3 columns, only the first column will be used and processed. If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns.
 #' @param annotation.file an input annotation file containing genomic annotations for genomic regions. If the input file is formatted as a 'data.frame', the first four columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), the ending chromosome position (3rd column), and the genomic annotations (eg transcription factors and histones; 4th column). If the format is indicated as 'bed', the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the format is indicated as "chr:start-end", the first two columns correspond to the chromosome:start-end (1st column) and the genomic annotations (eg transcription factors and histones; 2nd column). If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns.
 #' @param background.file an input background file containing a list of genomic regions as the test background. The file format is the same as 'data.file'. By default, it is NULL meaning all annotatable bases (ig non-redundant bases covered by 'annotation.file') are used as background. However, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', the background must be provided.
 #' @param format.file the format for input files. It can be one of "data.frame", "chr:start-end", "bed" and "GRanges"
-#' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so).
-#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false.
+#' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
+#' @param resolution the resolution of overlaps being tested. It can be one of "bases" at the base resolution (by default), "regions" at the region resolution, and "hybrid" at the base-region hybrid resolution (that is, data at the region resolution but annotation/background at the base resolution). If regions being analysed are SNPs themselves, then the results are the same when choosing this parameter as 'bases' or 'hybrid'
+#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
@@ -112,12 +113,10 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' #RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data
 #' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#' #data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' # b) perform enrichment analysis using FANTOM expressed enhancers
 #' eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell")
@@ -130,7 +129,7 @@
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
 
-xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS", "Blueprint_BoneMarrow_Histone","Blueprint_CellLine_Histone","Blueprint_CordBlood_Histone","Blueprint_Thymus_Histone","Blueprint_VenousBlood_Histone","Blueprint_DNaseI"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), resolution=c("bases","regions","hybrid"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS", "Blueprint_BoneMarrow_Histone","Blueprint_CellLine_Histone","Blueprint_CordBlood_Histone","Blueprint_Thymus_Histone","Blueprint_VenousBlood_Histone","Blueprint_DNaseI"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -140,6 +139,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format.file <- match.arg(format.file)
     build.conversion <- match.arg(build.conversion)
+    resolution <- match.arg(resolution)
     p.adjust.method <- match.arg(p.adjust.method)
     
     ###################
@@ -536,28 +536,35 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	#######################################################
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Forth, perform region-based enrichment analysis (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Forth, perform enrichment analysis at '%s' resolution (%s) ...", resolution, as.character(now)), appendLF=T)
 	}
 	
-	if(1){
+	
+	if(resolution=="bases"){
+
 		## prepare enrichment analysis
-		### at the base resolution
+		data_nBases <- sum(as.numeric(IRanges::width(dGR_reduced)))
+		overlap_nBases <- base::sapply(oGR_reduced, function(gr){
+			sum(as.numeric(IRanges::width(gr)))
+		})
 		annotation_nBases <- base::sapply(aGR_reduced, function(gr){
 			sum(as.numeric(IRanges::width(gr)))
 		})
 		background_nBases <- sum(as.numeric(IRanges::width(bGR_reduced)))
-		
-		if(0){
-			## at the region resolution
-			data_nBases <- length(dGR_reduced)
-			overlap_nBases <- base::sapply(oGR_reduced, length)
-		}else{
-			### at the base resolution
-			data_nBases <- sum(as.numeric(IRanges::width(dGR_reduced)))
-			overlap_nBases <- base::sapply(oGR_reduced, function(gr){
-				sum(as.numeric(IRanges::width(gr)))
-			})
+
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("\tthe number of bases: data (%d)", data_nBases), appendLF=T)
+			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
 		}
+		
+	}else if(resolution=="regions"){
+	
+		## prepare enrichment analysis
+		data_nBases <- length(dGR_reduced)
+		overlap_nBases <- base::sapply(oGR_reduced, length)
+		annotation_nBases <- base::sapply(aGR_reduced, length)
+		background_nBases <- length(bGR_reduced)
 		
 		if(verbose){
 			now <- Sys.time()
@@ -565,6 +572,22 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
 		}
 		
+	}else if(resolution=="hybrid"){
+	
+		## prepare enrichment analysis
+		data_nBases <- length(dGR_reduced)
+		overlap_nBases <- base::sapply(oGR_reduced, length)
+		annotation_nBases <- base::sapply(aGR_reduced, function(gr){
+			sum(as.numeric(IRanges::width(gr)))
+		})
+		background_nBases <- sum(as.numeric(IRanges::width(bGR_reduced)))
+	
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("\tthe number of regions: data (%d)", data_nBases), appendLF=T)
+			message(sprintf("\tthe number of annotations: %d", length(annotation_nBases)), appendLF=T)
+		}
+	
 	}
 	
 	## perform enrichment analysis based on the binomial distribution

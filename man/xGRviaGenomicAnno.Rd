@@ -8,6 +8,7 @@ xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+resolution = c("bases", "regions", "hybrid"),
 background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
 "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
@@ -75,14 +76,22 @@ provided.}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
-"hg18.to.hg19". By default it is NA (no need to do so).}
+"hg18.to.hg19". By default it is NA (no need to do so)}
+
+\item{resolution}{the resolution of overlaps being tested. It can be
+one of "bases" at the base resolution (by default), "regions" at the
+region resolution, and "hybrid" at the base-region hybrid resolution
+(that is, data at the region resolution but annotation/background at
+the base resolution). If regions being analysed are SNPs themselves,
+then the results are the same when choosing this parameter as 'bases'
+or 'hybrid'}
 
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
 'annotation.file'). In other words, if the background is provided, the
 background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
-is provided in 'annotation.file', it should be false.}
+is provided in 'annotation.file', it should be false}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
@@ -133,9 +142,10 @@ between input regions and annotation regions}
 analysis for the input genomic region data (genome build h19), using
 genomic annotations (eg active chromatin, transcription factor binding
 sites/motifs, conserved sites). Enrichment analysis is based on
-binomial test for estimating the significance of overlaps at the base
-resolution. Test background can be provided; by default, the
-annotatable will be used.
+binomial test for estimating the significance of overlaps either at the
+base resolution, at the region resolution or at the hybrid resolution.
+Test background can be provided; by default, the annotatable will be
+used.
 }
 \note{
 The genomic annotation data are described below according to the data
@@ -307,12 +317,10 @@ objects; each is an GR object containing identified peaks per sample.}
 \dontrun{
 # Load the library
 library(XGR)
-#RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",

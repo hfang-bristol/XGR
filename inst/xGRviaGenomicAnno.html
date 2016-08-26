@@ -13,9 +13,10 @@
 analysis for the input genomic region data (genome build h19), using
 genomic annotations (eg active chromatin, transcription factor binding
 sites/motifs, conserved sites). Enrichment analysis is based on
-binomial test for estimating the significance of overlaps at the base
-resolution. Test background can be provided; by default, the
-annotatable will be used.
+binomial test for estimating the significance of overlaps either at the
+base resolution, at the region resolution or at the hybrid resolution.
+Test background can be provided; by default, the annotatable will be
+used.
 </p>
 
 
@@ -26,6 +27,7 @@ xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
 NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+resolution = c("bases", "regions", "hybrid"),
 background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
 "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
@@ -107,7 +109,17 @@ provided.</p>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
-&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so).</p>
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>resolution</code></td>
+<td>
+<p>the resolution of overlaps being tested. It can be
+one of &quot;bases&quot; at the base resolution (by default), &quot;regions&quot; at the
+region resolution, and &quot;hybrid&quot; at the base-region hybrid resolution
+(that is, data at the region resolution but annotation/background at
+the base resolution). If regions being analysed are SNPs themselves,
+then the results are the same when choosing this parameter as 'bases'
+or 'hybrid'</p>
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
@@ -116,7 +128,7 @@ background is further restricted to annotatable bases (covered by
 'annotation.file'). In other words, if the background is provided, the
 background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
-is provided in 'annotation.file', it should be false.</p>
+is provided in 'annotation.file', it should be false</p>
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
@@ -469,12 +481,10 @@ objects; each is an GR object containing identified peaks per sample.
 ## Not run: 
 # Load the library
 library(XGR)
-#RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data
 data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
 # b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm &lt;- xGRviaGenomicAnno(data.file=data.file, format.file="bed",

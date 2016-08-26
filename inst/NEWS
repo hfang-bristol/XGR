@@ -1,3 +1,13 @@
+CHANGES IN VERSION 1.0.3
+-----------------------
+
+NEW FEATURES
+
+    o Fix bugs in the function 'xRDataLoader' for Windows users
+    
+    o Enable the choosing analysis resolution done by 'xGRviaGenomicAnno'
+    
+    
 CHANGES IN VERSION 1.0.2
 -----------------------
 

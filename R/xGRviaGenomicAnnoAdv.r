@@ -117,12 +117,10 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' #RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data
 #' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-#' #data.file <- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' # b) perform enrichment analysis using FANTOM expressed enhancers
 #' eTerm1 <- xGRviaGenomicAnnoAdv(data.file=data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", num.samples=1000, gap.max=50000)
