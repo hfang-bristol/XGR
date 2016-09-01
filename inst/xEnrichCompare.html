@@ -124,7 +124,7 @@ list_eTerm &lt;- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree,
 eTerm_LD_Tree)
 names(list_eTerm) &lt;- c('LD (-) &amp; Tree (-)', 'LD (-) &amp; Tree (+)', 'LD
 (+) &amp; Tree (-)', 'LD (+) &amp; Tree (+)')
-## side-by-side comparisons
+## side-by-side comparisons 
 bp &lt;- xEnrichCompare(list_eTerm, displayBy="fc")
 #pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
 print(bp)

@@ -230,7 +230,7 @@ ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
 variants_list &lt;- lapply(ImmunoBase, function(x)
 cbind(SNP=names(x$variants),
 Disease=rep(x$disease,length(x$variants))))
-## extract annotations as a data frame: Variant Disease_Name
+## extract annotations as a data frame: Variant Disease_Name 
 annotation.file &lt;- do.call(rbind, variants_list)
 head(annotation.file)
 ## provide the input SNPs of interest

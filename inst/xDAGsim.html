@@ -123,11 +123,11 @@ g
 # 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
 anno &lt;- xRDataLoader(RData='GWAS2EF')
 
-# 1c) prepare for ontology and its annotation information
+# 1c) prepare for ontology and its annotation information 
 dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
 true.path.rule=TRUE, verbose=TRUE)
 
-# 1d) calculate pair-wise semantic similarity between 5 randomly chosen terms
+# 1d) calculate pair-wise semantic similarity between 5 randomly chosen terms 
 terms &lt;- sample(V(dag)$name, 5)
 sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
 parallel=FALSE)
@@ -146,7 +146,7 @@ anno &lt;- GS$gs # notes: This is a list
 dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
 true.path.rule=TRUE, verbose=TRUE)
 
-# 2d) calculate pair-wise semantic similarity between 5 randomly chosen terms
+# 2d) calculate pair-wise semantic similarity between 5 randomly chosen terms 
 terms &lt;- sample(V(dag)$name, 5)
 sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
 parallel=FALSE)
