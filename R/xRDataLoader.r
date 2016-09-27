@@ -164,9 +164,16 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
         			eval(parse(text=paste(RData, " <- res$RData", sep="")))
         		}
         	}else{
-        		if(class(suppressWarnings(try(load(url(load_remote)), T)))=="try-error"){
+        		res <- my_https_downloader(load_remote, mode="wb")
+        		if(res$flag==F){
         			flag_failed <- T
+        		}else{
+        			eval(parse(text=paste(RData, " <- res$RData", sep="")))
         		}
+        	
+        		#if(class(suppressWarnings(try(load(url(load_remote)), T)))=="try-error"){
+        		#	flag_failed <- T
+        		#}
         	}
         	
 			if(flag_failed){
