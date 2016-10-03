@@ -15,8 +15,8 @@ RData.location =
 \arguments{
 \item{data}{a input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
-format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for
-example, 'chr16:28525386'}
+format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
+positional number; for example, 'chr16:28525386'}
 
 \item{distance.max}{the maximum distance between genes and SNPs. Only
 those genes no far way from this distance will be considered as seed
@@ -39,7 +39,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -51,7 +52,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
@@ -65,7 +67,7 @@ a data frame with following columns:
 \item{\code{Gene}: nearby genes}
 \item{\code{SNP}: SNPs}
 \item{\code{Dist}: the genomic distance between the gene and the SNP}
-\item{\code{Weight}: the distance weight based on the gnomic distance}
+\item{\code{Weight}: the distance weight based on the genomic distance}
 }
 }
 \description{

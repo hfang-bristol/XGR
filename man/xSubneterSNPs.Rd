@@ -7,11 +7,10 @@
 xSubneterSNPs(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, distance.max = 2e+05,
 decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
-GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", scoring.scheme =
-c("max",
-"sum", "sequential"), network = c("STRING_highest", "STRING_high",
-"STRING_medium", "PCommonsUN_high", "PCommonsUN_medium",
-"PCommonsDN_high",
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
 "PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
@@ -77,16 +76,21 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
-'UCSC_genes', that is, UCSC known canonical genes (together with
-genomic locations) based on human genome assembly hg19. Even the user
-can specify the customised input. To do so, first save your RData file
-(containing an GR object) into your local computer, and make sure the
-GR object content names refer to Gene Symbols. Then, tell "GR.Gene"
-with your RData file name (with or without extension), plus specify
-your file RData path in "RData.location"}
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell "GR.Gene" with your RData file name (with or
+without extension), plus specify your file RData path in
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{scoring.scheme}{the method used to calculate seed gene scores
 under a set of SNPs. It can be one of "sum" for adding up, "max" for

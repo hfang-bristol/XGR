@@ -1,8 +1,8 @@
 Package: XGR
 Type: Package
 Title: Exploring Genomic Relations for Precision Interpretation Through Enrichment, Similarity, Network and Annotation Analysis
-Version: 1.0.4
-Date: 2016-9-27
+Version: 1.0.5
+Date: 2016-10-2
 Author: Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
 Depends: R (>= 3.1.0), igraph, dnet, ggplot2
@@ -40,8 +40,10 @@ Collate:
     'xVisNet.r'
     'xVisKernels.r'
     'xSNPscores.r'
+    'xSNPlocations.r'
     'xSNP2nGenes.r'
     'xSparseMatrix.r'
+    'xSM2DF.r'
     'xSNP2GeneScores.r'
     'xGRviaGeneAnno.r'
     'xGRviaGenomicAnno.r'

@@ -35,8 +35,8 @@ RData.location =
 <td>
 <p>a input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
-format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for
-example, 'chr16:28525386'</p>
+format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
+positional number; for example, 'chr16:28525386'</p>
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>
@@ -67,7 +67,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
@@ -81,7 +82,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -111,7 +113,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 <li><p><code>Dist</code>: the genomic distance between the gene and the SNP
 </p>
 </li>
-<li><p><code>Weight</code>: the distance weight based on the gnomic distance
+<li><p><code>Weight</code>: the distance weight based on the genomic distance
 </p>
 </li></ul>
 

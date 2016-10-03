@@ -71,7 +71,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -83,7 +84,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{scoring.scheme}{the method used to calculate seed gene scores
 under a set of SNPs. It can be one of "sum" for adding up, "max" for
@@ -105,7 +107,7 @@ where nSNP is the number of SNPs, and the 3 columns are "SNP" (Lead
 and/or LD SNPs), "Score" (the scores for SNPs calculated based on
 p-values taking into account the given threshold of the significant
 level), "Pval" (the input p-values for Lead SNPs or R2-adjusted
-p-values for LD SNPs)}
+p-values for LD SNPs), "Flag" (indicating as Lead or LD SNPs)}
 \item{\code{Gene}: a matrix of nGene X 3 containing Gene information,
 where nGene is the number of seed genes, and the 3 columns are "Gene"
 (gene symbol), "Score" (the scores for seed genes), "Pval" (pvalue-like

@@ -4,14 +4,13 @@
 \alias{xCircos}
 \title{Function to visualise a network as a circos plot}
 \usage{
-xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
-"bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
-"lightyellow-orange"),
-rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
-entity.label.cex = 0.7, entity.label.side = c("out", "in"),
-entity.label.track = 1, entity.label.query = NULL,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), verbose = T,
+xCircos(g, entity = c("SNP", "Gene", "Both"), top_num = 50,
+colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"), rescale = T, nodes.query = NULL, ideogram = T,
+chr.exclude = "auto", entity.label.cex = 0.7,
+entity.label.side = c("out", "in"), entity.label.track = 1,
+entity.label.query = NULL, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -72,7 +71,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -84,7 +84,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
@@ -139,6 +140,24 @@ RData.location=RData.location)
 #out.file <- "Gene_Circos.pdf"
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
 xCircos(g=gene.g, entity="Gene", chr.exclude="chrY",
+RData.location=RData.location)
+#dev.off()
+
+# 3) Gene-SNP pairs from trans-eQTL mapping
+JKscience_TS3A <- xRDataLoader(RData.customised='JKscience_TS3A',
+RData.location=RData.location)
+## extract the significant trans-eQTL in IFN
+ind <- -1*log10(JKscience_TS3A$IFN_fdr)
+ind <- which(!is.na(ind) & ind>2)
+relations <- JKscience_TS3A[ind, c("Symbol","variant","IFN_fdr")]
+relations <- data.frame(from=relations$Symbol, to=relations$variant,
+weight=-log10(relations$IFN_fdr))
+ig_Gene2SNP <- igraph::graph.data.frame(d=relations, directed=TRUE)
+# Circos plot of the DO-based gene similarity network
+#out.file <- "eQTL_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=ig_Gene2SNP, entity="Both", top_num=50,
+nodes.query=c("GAD1","TNFRSF1B"), chr.exclude=NULL,
 RData.location=RData.location)
 #dev.off()
 }

@@ -60,6 +60,8 @@ a data frame with following columns:
 taking into account the given threshold of the significant level}
 \item{\code{Pval}: the input p-values for Lead SNPs or R2-adjusted
 p-values for LD SNPs}
+\item{\code{Flag}: the flag to indicate whether the resulting SNPs are
+Lead SNPs or LD SNPs}
 }
 }
 \description{

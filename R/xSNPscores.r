@@ -15,6 +15,7 @@
 #'  \item{\code{SNP}: Lead and/or LD SNPs}
 #'  \item{\code{Score}: the scores for SNPs calculated based on p-values taking into account the given threshold of the significant level}
 #'  \item{\code{Pval}: the input p-values for Lead SNPs or R2-adjusted p-values for LD SNPs}
+#'  \item{\code{Flag}: the flag to indicate whether the resulting SNPs are Lead SNPs or LD SNPs}
 #' }
 #' @note None
 #' @export
@@ -211,10 +212,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 		## merge Lead and LD
 		df <- rbind(Lead_Sig, as.matrix(LD_Sig))
 		res_list <- split(x=df$Sig, f=df$SNP)
-		res <- lapply(res_list, function(x){
-			min(x)
-		})
-		vec <- unlist(res)
+		vec <- unlist(lapply(res_list, min))
 		SNP_Sig <- data.frame(SNP=names(vec), FDR=vec, row.names=NULL, stringsAsFactors=F)
 	}else{
 		if(verbose){
@@ -237,7 +235,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	# transformed into scores according to log-likelihood ratio between the true positives and the false positivies
     ## also take into account the given threshold of the significant level
     ## SNPs with p-value below this are considered significant and thus scored positively
-    ## Instead, SNPs with p-values fdr above this are considered insigificant and thus scored negatively (zero-out)
+    ## Instead, SNPs with p-values above this are considered insigificant and thus scored negatively (zero-out)
 	
 	if(is.null(significance.threshold)){
         scores <- log10((1-pval)/pval)
@@ -252,8 +250,9 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     scores[scores>tmp_max] <- tmp_max
     scores[scores<tmp_min] <- tmp_min
 	## zero-out SNPs with negative scores
-	scores[scores<0] <- 0
-	seeds.snps <- scores
+	ind_remained <- which(scores>0)
+	seeds.snps <- scores[ind_remained]
+	pval <- pval[ind_remained]
     
 	if(verbose){
 		now <- Sys.time()
@@ -261,7 +260,12 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	}
     
     #########
-    df_SNP <- data.frame(SNP=names(pval), Score=seeds.snps, Pval=pval, row.names=NULL, stringsAsFactors=F)
+    flag <- rep('Lead', length(pval))
+    ind <- match(names(pval), Lead_Sig$SNP)
+    flag[is.na(ind)] <- 'LD'
+    
+    df_SNP <- data.frame(SNP=names(pval), Score=seeds.snps, Pval=pval, Flag=flag, row.names=NULL, stringsAsFactors=F)
+    df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,df_SNP$SNP,decreasing=TRUE),]
     #########
     
     invisible(df_SNP)

@@ -20,14 +20,13 @@ involving an input SNP (or gene).
 <h3>Usage</h3>
 
 <pre>
-xCircos(g, entity = c("SNP", "Gene"), top_num = 50, colormap = c("yr",
-"bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
-"lightyellow-orange"),
-rescale = T, nodes.query = NULL, ideogram = T, chr.exclude = "auto",
-entity.label.cex = 0.7, entity.label.side = c("out", "in"),
-entity.label.track = 1, entity.label.query = NULL,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), verbose = T,
+xCircos(g, entity = c("SNP", "Gene", "Both"), top_num = 50,
+colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"), rescale = T, nodes.query = NULL, ideogram = T,
+chr.exclude = "auto", entity.label.cex = 0.7,
+entity.label.side = c("out", "in"), entity.label.track = 1,
+entity.label.query = NULL, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -118,7 +117,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
@@ -132,7 +132,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -201,6 +202,24 @@ RData.location=RData.location)
 #out.file &lt;- "Gene_Circos.pdf"
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
 xCircos(g=gene.g, entity="Gene", chr.exclude="chrY",
+RData.location=RData.location)
+#dev.off()
+
+# 3) Gene-SNP pairs from trans-eQTL mapping
+JKscience_TS3A &lt;- xRDataLoader(RData.customised='JKscience_TS3A',
+RData.location=RData.location)
+## extract the significant trans-eQTL in IFN
+ind &lt;- -1*log10(JKscience_TS3A$IFN_fdr)
+ind &lt;- which(!is.na(ind) &amp; ind&gt;2)
+relations &lt;- JKscience_TS3A[ind, c("Symbol","variant","IFN_fdr")]
+relations &lt;- data.frame(from=relations$Symbol, to=relations$variant,
+weight=-log10(relations$IFN_fdr))
+ig_Gene2SNP &lt;- igraph::graph.data.frame(d=relations, directed=TRUE)
+# Circos plot of the DO-based gene similarity network
+#out.file &lt;- "eQTL_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=ig_Gene2SNP, entity="Both", top_num=50,
+nodes.query=c("GAD1","TNFRSF1B"), chr.exclude=NULL,
 RData.location=RData.location)
 #dev.off()
 

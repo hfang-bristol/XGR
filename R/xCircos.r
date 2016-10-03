@@ -14,8 +14,8 @@
 #' @param entity.label.side the position of genes/SNPs labels relative to chromosome ideogram. It can be "out" (by default) or "in"
 #' @param entity.label.track an integer specifying the plot track for genes/SNPs labels. Default is 1
 #' @param entity.label.query which genes/SNPs labels in query will be displayed. By default, it sets to NULL meaning all will be displayed. If labes in query can not be found, then all will be displayed
-#' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
-#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
+#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -56,9 +56,23 @@
 #' #pdf(file=out.file, height=12, width=12, compress=TRUE)
 #' xCircos(g=gene.g, entity="Gene", chr.exclude="chrY", RData.location=RData.location)
 #' #dev.off()
-#' } 
+#'
+#' # 3) Gene-SNP pairs from trans-eQTL mapping
+#' JKscience_TS3A <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location)
+#' ## extract the significant trans-eQTL in IFN
+#' ind <- -1*log10(JKscience_TS3A$IFN_fdr)
+#' ind <- which(!is.na(ind) & ind>2)
+#' relations <- JKscience_TS3A[ind, c("Symbol","variant","IFN_fdr")]
+#' relations <- data.frame(from=relations$Symbol, to=relations$variant, weight=-log10(relations$IFN_fdr))
+#' ig_Gene2SNP <- igraph::graph.data.frame(d=relations, directed=TRUE)
+#' # Circos plot of the DO-based gene similarity network
+#' #out.file <- "eQTL_Circos.pdf"
+#' #pdf(file=out.file, height=12, width=12, compress=TRUE)
+#' xCircos(g=ig_Gene2SNP, entity="Both", top_num=50, nodes.query=c("GAD1","TNFRSF1B"), chr.exclude=NULL, RData.location=RData.location)
+#' #dev.off()
+#' }
 
-xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("out","in"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("out","in"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -131,28 +145,47 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
 		message(sprintf("Loading positional information for %s (%s) ...", entity, as.character(now)), appendLF=T)
 	}
 
-  	if(entity=="SNP") {
-    	pos <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location)
-    	if(is.null(pos)){
-    		GR.SNP <- "dbSNP_GWAS"
-			if(verbose){
-				message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
-			}
-    		pos <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
-    	}
-  	}else if(entity == "Gene") {
-    	pos <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
-    	if(is.null(pos)){
-    		GR.Gene <- "UCSC_knownGene"
-			if(verbose){
-				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
-			}
-    		pos <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
-    	}
-  	}else{
-    	stop("Please indicate whether your analysis entity was SNPs or genes.\n")
+  	if(entity=="SNP" | entity=="Both"){
+		if(class(GR.SNP) == "GRanges"){
+			pos_snp <- GR.SNP
+		}else{
+			pos_snp <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location)
+			if(is.null(pos_snp)){
+				GR.SNP <- "dbSNP_GWAS"
+				if(verbose){
+					message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
+				}
+				pos_snp <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+			}		
+		}
   	}
-  
+  	
+  	if(entity == "Gene" | entity=="Both"){
+		if(class(GR.Gene) == "GRanges"){
+			pos_gene <- GR.Gene
+		}else{
+			pos_gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
+			if(is.null(pos_gene)){
+				GR.Gene <- "UCSC_knownGene"
+				if(verbose){
+					message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+				}
+				pos_gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+			}
+		}
+  	}
+  	
+  	if(entity=="SNP"){
+  		pos <- pos_snp
+  	}else if(entity=="Gene"){
+  		pos <- pos_gene
+  	}else if(entity=="Both"){
+    	## Combined both
+    	GenomicRanges::mcols(pos_gene) <- NULL
+    	GenomicRanges::mcols(pos_snp) <- NULL
+    	pos <- c(pos_gene, pos_snp)
+  	}
+
   	## Convert into format required for Circos plot
   	allnames <- names(pos)
 
@@ -206,20 +239,21 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
 	}
   	num.inside <- 1
   	num.outside <- 1
-  	RCircos.Set.Core.Components(cyto.info, chr.exclude, num.inside, num.outside)
-  
+  	suppressMessages(RCircos.Set.Core.Components(cyto.info, chr.exclude, num.inside, num.outside))
+
   	## Reset parameters
-  	params <- RCircos.Get.Plot.Parameters()
+  	params <- RCircos.Get.Plot.Parameters()  
+  	if(0){
   	params$track.padding <- 0 # 0.02
   	params$track.height <- 0.05 # 0.1
   	
   	params$chr.ideog.pos <- 1
   	params$highlight.pos <- 1.1
   	params$chr.name.pos <- 1.1
-  	params$plot.radius <- 0.9
+  	#params$plot.radius <- 0.9
   	params$track.out.start <- 1.2
-  	params$highlight.width <- 0
-  	
+  	params$highlight.width <- 0 
+	}
   	params$text.size <- entity.label.cex
   	RCircos.Reset.Plot.Parameters(params)
 
@@ -258,7 +292,7 @@ xCircos <- function(g, entity=c("SNP","Gene"), top_num=50, colormap=c("yr","bwr"
   	## Label SNPs/genes in outside track
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Adding SNP or gene names (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Adding SNP and/or gene names (%s) ...", as.character(now)), appendLF=T)
 	}
   	name.col <- "Name"
   	side <- entity.label.side
