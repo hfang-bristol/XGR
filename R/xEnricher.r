@@ -148,7 +148,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         	if(1){
 				## background should be: customised background plus input data of interest
 				background <- base::union(background, data)
-        	}	
+        	}
             ###########################################
             gs <- lapply(gs, function(x){
             	ind <- match(x, background)

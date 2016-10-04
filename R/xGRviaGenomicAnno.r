@@ -10,7 +10,7 @@
 #' @param resolution the resolution of overlaps being tested. It can be one of "bases" at the base resolution (by default), "regions" at the region resolution, and "hybrid" at the base-region hybrid resolution (that is, data at the region resolution but annotation/background at the base resolution). If regions being analysed are SNPs themselves, then the results are the same when choosing this parameter as 'bases' or 'hybrid'
 #' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable bases (covered by 'annotation.file'). In other words, if the background is provided, the background bases are those after being overlapped with annotatable bases. Notably, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', it should be false
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
-#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -106,6 +106,35 @@
 #' \itemize{
 #'  \item{\code{Blueprint_DNaseI}: a list (36 samples) of GenomicRanges objects; each is an GR object containing identified peaks per sample.}
 #' }
+#' 16. Roadmap Epigenomics Core 15-state Genome Segmentation data for primary cells (blood and T cells)
+#' \itemize{
+#' \item{\code{EpigenomeAtlas_15Segments.E033}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E033 (Primary T cells from cord blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E034}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E034 (Primary T cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E037}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E037 (Primary T helper memory cells from peripheral blood 2).}
+#' \item{\code{EpigenomeAtlas_15Segments.E038}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E038 (Primary T helper naive cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E039}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E039 (Primary T helper naive cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E040}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E040 (Primary T helper memory cells from peripheral blood 1).}
+#' \item{\code{EpigenomeAtlas_15Segments.E041}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E041 (Primary T helper cells PMA-I stimulated).}
+#' \item{\code{EpigenomeAtlas_15Segments.E042}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E042 (Primary T helper 17 cells PMA-I stimulated).}
+#' \item{\code{EpigenomeAtlas_15Segments.E043}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E043 (Primary T helper cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E044}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E044 (Primary T regulatory cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E045}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E045 (Primary T cells effector/memory enriched from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E047}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E047 (Primary T killer naive cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E048}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E048 (Primary T killer memory cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E062}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E062 (Primary mononuclear cells from peripheral blood).}
+#' }
+#' 17. Roadmap Epigenomics Core 15-state Genome Segmentation data for primary cells (HSC and B cells)
+#' \itemize{
+#' \item{\code{EpigenomeAtlas_15Segments.E029}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E029 (Primary monocytes from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E030}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E030 (Primary neutrophils from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E031}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E031 (Primary B cells from cord blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E032}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E032 (Primary B cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E035}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E035 (Primary hematopoietic stem cells).}
+#' \item{\code{EpigenomeAtlas_15Segments.E036}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E036 (Primary hematopoietic stem cells short term culture).}
+#' \item{\code{EpigenomeAtlas_15Segments.E046}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E046 (Primary Natural Killer cells from peripheral blood).}
+#' \item{\code{EpigenomeAtlas_15Segments.E050}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E050 (Primary hematopoietic stem cells G-CSF-mobilized Female).}
+#' \item{\code{EpigenomeAtlas_15Segments.E051}: a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome E051 (Primary hematopoietic stem cells G-CSF-mobilized Male).}
+#' }
 #' @export
 #' @seealso \code{\link{xEnrichViewer}}
 #' @include xGRviaGenomicAnno.r
@@ -129,7 +158,7 @@
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
 
-xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), resolution=c("bases","regions","hybrid"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS", "Blueprint_BoneMarrow_Histone","Blueprint_CellLine_Histone","Blueprint_CordBlood_Histone","Blueprint_Thymus_Histone","Blueprint_VenousBlood_Histone","Blueprint_DNaseI"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), resolution=c("bases","regions","hybrid"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS", "Blueprint_BoneMarrow_Histone","Blueprint_CellLine_Histone","Blueprint_CordBlood_Histone","Blueprint_Thymus_Histone","Blueprint_VenousBlood_Histone","Blueprint_DNaseI","EpigenomeAtlas_15Segments.E029", "EpigenomeAtlas_15Segments.E030", "EpigenomeAtlas_15Segments.E031", "EpigenomeAtlas_15Segments.E032", "EpigenomeAtlas_15Segments.E033", "EpigenomeAtlas_15Segments.E034", "EpigenomeAtlas_15Segments.E035", "EpigenomeAtlas_15Segments.E036", "EpigenomeAtlas_15Segments.E037", "EpigenomeAtlas_15Segments.E038", "EpigenomeAtlas_15Segments.E039", "EpigenomeAtlas_15Segments.E040", "EpigenomeAtlas_15Segments.E041", "EpigenomeAtlas_15Segments.E042", "EpigenomeAtlas_15Segments.E043", "EpigenomeAtlas_15Segments.E044", "EpigenomeAtlas_15Segments.E045", "EpigenomeAtlas_15Segments.E046", "EpigenomeAtlas_15Segments.E047", "EpigenomeAtlas_15Segments.E048", "EpigenomeAtlas_15Segments.E050", "EpigenomeAtlas_15Segments.E051", "EpigenomeAtlas_15Segments.E062"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -231,16 +260,23 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(is.na(GR.annotation)){
-				stop("Please specify annotation RData!\n")
+			if(class(GR.annotation) == "GRanges"){
+				###################################
+				## now GR.annotation can be directly provided as a GR object
+				###################################
+				aGR <- GR.annotation
 			}else{
-				if(length(GR.annotation)>1){
-					message("\tONLY the first specified annotation RData will be used!\n")
-					GR.annotation <- GR.annotation[1]
-				}
-				aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
-				if(is.null(aGR)){
-					stop("Your specified annotation RData does not exist!\n")
+				if(is.na(GR.annotation)){
+					stop("Please specify annotation RData!\n")
+				}else{
+					if(length(GR.annotation)>1){
+						message("\tONLY the first specified annotation RData will be used!\n")
+						GR.annotation <- GR.annotation[1]
+					}
+					aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+					if(is.null(aGR)){
+						stop("Your specified annotation RData does not exist!\n")
+					}
 				}
 			}
 		}
@@ -308,16 +344,23 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(is.na(GR.annotation)){
-				stop("Please specify annotation RData!\n")
+			if(class(GR.annotation) == "GRanges"){
+				###################################
+				## now GR.annotation can be directly provided as a GR object
+				###################################
+				aGR <- GR.annotation
 			}else{
-				if(length(GR.annotation)>1){
-					message("\tONLY the first specified annotation RData will be used!\n")
-					GR.annotation <- GR.annotation[1]
-				}
-				aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
-				if(is.null(aGR)){
-					stop("Your specified annotation RData does not exist!\n")
+				if(is.na(GR.annotation)){
+					stop("Please specify annotation RData!\n")
+				}else{
+					if(length(GR.annotation)>1){
+						message("\tONLY the first specified annotation RData will be used!\n")
+						GR.annotation <- GR.annotation[1]
+					}
+					aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+					if(is.null(aGR)){
+						stop("Your specified annotation RData does not exist!\n")
+					}
 				}
 			}
 		}
@@ -369,16 +412,23 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(is.na(GR.annotation)){
-				stop("Please specify annotation RData!\n")
+			if(class(GR.annotation) == "GRanges"){
+				###################################
+				## now GR.annotation can be directly provided as a GR object
+				###################################
+				aGR <- GR.annotation
 			}else{
-				if(length(GR.annotation)>1){
-					message("\tONLY the first specified annotation RData will be used!\n")
-					GR.annotation <- GR.annotation[1]
-				}
-				aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
-				if(is.null(aGR)){
-					stop("Your specified annotation RData does not exist!\n")
+				if(is.na(GR.annotation)){
+					stop("Please specify annotation RData!\n")
+				}else{
+					if(length(GR.annotation)>1){
+						message("\tONLY the first specified annotation RData will be used!\n")
+						GR.annotation <- GR.annotation[1]
+					}
+					aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+					if(is.null(aGR)){
+						stop("Your specified annotation RData does not exist!\n")
+					}
 				}
 			}
 		}
@@ -405,16 +455,23 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			## construct annotation GR
 			aGR <- annotation
 		}else{
-			if(is.na(GR.annotation)){
-				stop("Please specify annotation RData!\n")
+			if(class(GR.annotation) == "GRanges"){
+				###################################
+				## now GR.annotation can be directly provided as a GR object
+				###################################
+				aGR <- GR.annotation
 			}else{
-				if(length(GR.annotation)>1){
-					message("\tONLY the first specified annotation RData will be used!\n")
-					GR.annotation <- GR.annotation[1]
-				}
-				aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
-				if(is.null(aGR)){
-					stop("Your specified annotation RData does not exist!\n")
+				if(is.na(GR.annotation)){
+					stop("Please specify annotation RData!\n")
+				}else{
+					if(length(GR.annotation)>1){
+						message("\tONLY the first specified annotation RData will be used!\n")
+						GR.annotation <- GR.annotation[1]
+					}
+					aGR <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+					if(is.null(aGR)){
+						stop("Your specified annotation RData does not exist!\n")
+					}
 				}
 			}
 		}

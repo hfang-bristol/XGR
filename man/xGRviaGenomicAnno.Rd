@@ -25,7 +25,19 @@ background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "ReMap_PublicAndEncode_mergedTFBS", "ReMap_Encode_TFBS",
 "Blueprint_BoneMarrow_Histone", "Blueprint_CellLine_Histone",
 "Blueprint_CordBlood_Histone", "Blueprint_Thymus_Histone",
-"Blueprint_VenousBlood_Histone", "Blueprint_DNaseI"), verbose = T,
+"Blueprint_VenousBlood_Histone", "Blueprint_DNaseI",
+"EpigenomeAtlas_15Segments.E029", "EpigenomeAtlas_15Segments.E030",
+"EpigenomeAtlas_15Segments.E031", "EpigenomeAtlas_15Segments.E032",
+"EpigenomeAtlas_15Segments.E033", "EpigenomeAtlas_15Segments.E034",
+"EpigenomeAtlas_15Segments.E035", "EpigenomeAtlas_15Segments.E036",
+"EpigenomeAtlas_15Segments.E037", "EpigenomeAtlas_15Segments.E038",
+"EpigenomeAtlas_15Segments.E039", "EpigenomeAtlas_15Segments.E040",
+"EpigenomeAtlas_15Segments.E041", "EpigenomeAtlas_15Segments.E042",
+"EpigenomeAtlas_15Segments.E043", "EpigenomeAtlas_15Segments.E044",
+"EpigenomeAtlas_15Segments.E045", "EpigenomeAtlas_15Segments.E046",
+"EpigenomeAtlas_15Segments.E047", "EpigenomeAtlas_15Segments.E048",
+"EpigenomeAtlas_15Segments.E050", "EpigenomeAtlas_15Segments.E051",
+"EpigenomeAtlas_15Segments.E062"), verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -109,7 +121,8 @@ annotation data, the user can specify the customised input. To do so,
 first save your RData file (a list of GR objects, each is an GR object
 correponding to an annotation) into your local computer. Then, tell
 "GR.annotation" with your RData file name (with or without extension),
-plus specify your file RData path in "RData.location"}
+plus specify your file RData path in "RData.location". Note: you can
+also load your customised GR object directly}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -311,6 +324,106 @@ GR object containing identified peaks per histone per sample.}
 \itemize{
 \item{\code{Blueprint_DNaseI}: a list (36 samples) of GenomicRanges
 objects; each is an GR object containing identified peaks per sample.}
+}
+16. Roadmap Epigenomics Core 15-state Genome Segmentation data for
+primary cells (blood and T cells)
+\itemize{
+\item{\code{EpigenomeAtlas_15Segments.E033}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E033 (Primary T cells
+from cord blood).}
+\item{\code{EpigenomeAtlas_15Segments.E034}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E034 (Primary T cells
+from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E037}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E037 (Primary T helper
+memory cells from peripheral blood 2).}
+\item{\code{EpigenomeAtlas_15Segments.E038}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E038 (Primary T helper
+naive cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E039}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E039 (Primary T helper
+naive cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E040}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E040 (Primary T helper
+memory cells from peripheral blood 1).}
+\item{\code{EpigenomeAtlas_15Segments.E041}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E041 (Primary T helper
+cells PMA-I stimulated).}
+\item{\code{EpigenomeAtlas_15Segments.E042}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E042 (Primary T helper
+17 cells PMA-I stimulated).}
+\item{\code{EpigenomeAtlas_15Segments.E043}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E043 (Primary T helper
+cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E044}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E044 (Primary T
+regulatory cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E045}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E045 (Primary T cells
+effector/memory enriched from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E047}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E047 (Primary T killer
+naive cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E048}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E048 (Primary T killer
+memory cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E062}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E062 (Primary
+mononuclear cells from peripheral blood).}
+}
+17. Roadmap Epigenomics Core 15-state Genome Segmentation data for
+primary cells (HSC and B cells)
+\itemize{
+\item{\code{EpigenomeAtlas_15Segments.E029}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E029 (Primary
+monocytes from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E030}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E030 (Primary
+neutrophils from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E031}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E031 (Primary B cells
+from cord blood).}
+\item{\code{EpigenomeAtlas_15Segments.E032}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E032 (Primary B cells
+from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E035}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E035 (Primary
+hematopoietic stem cells).}
+\item{\code{EpigenomeAtlas_15Segments.E036}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E036 (Primary
+hematopoietic stem cells short term culture).}
+\item{\code{EpigenomeAtlas_15Segments.E046}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E046 (Primary Natural
+Killer cells from peripheral blood).}
+\item{\code{EpigenomeAtlas_15Segments.E050}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E050 (Primary
+hematopoietic stem cells G-CSF-mobilized Female).}
+\item{\code{EpigenomeAtlas_15Segments.E051}: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E051 (Primary
+hematopoietic stem cells G-CSF-mobilized Male).}
 }
 }
 \examples{
