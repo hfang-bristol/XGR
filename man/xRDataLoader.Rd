@@ -19,7 +19,8 @@ xRDataLoader(RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
 "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP",
 "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6",
 "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF",
-"org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"),
+"org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN",
+"org.Hs.PCommons_UN"),
 RData.customised = NULL, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
@@ -38,8 +39,9 @@ RData.location =
 "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM",
 "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF",
 "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH",
-"org.Hs.egPS", "org.Hs.egSF", "org.Hs.string", "org.Hs.PCommons_DN",
-"org.Hs.PCommons_UN"}
+"org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string",
+"org.Hs.PCommons_DN", "org.Hs.PCommons_UN", "org.Hs.egGTExV4",
+"org.Hs.egGTExV6"}
 
 \item{RData.customised}{a file name for RData-formatted file. By
 default, it is NULL. It is designed when the user wants to import

@@ -6,20 +6,18 @@
 \usage{
 xEnricherGenes(data, background = NULL, ontology = c("GOBP", "GOMF",
 "GOCC",
-"PS", "PS2", "SF", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"MsigdbH",
-"MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG",
-"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
-"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7", "DGIdb"), size.range = c(10, 2000),
-min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
-"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
-T,
+"PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
+"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
+"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
+"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6"),
+size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
+0.01,
+lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = F, verbose = T,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -36,16 +34,18 @@ Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular
 Function, "GOCC" for Gene Ontology Cellular Component, "PS" for
 phylostratific age information, "PS2" for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
-information), "SF" for domain superfamily assignments, "DO" for Disease
-Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for
-Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype
-Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for
-Mammalian Phenotype, and Drug-Gene Interaction database (DGIdb) for
-drugable categories, and the molecular signatures database (Msigdb,
-including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
-"MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
-"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
+information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam
+domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype
+Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance,
+"HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human
+Phenotype Mortality Aging, "MP" for Mammalian Phenotype, Drug-Gene
+Interaction database ("DGIdb") for drugable categories, tissue-specific
+eQTL-containing genes from GTEx ("GTExV4" and "GTExV6"), and the
+molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1",
+"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
+"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
+"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
+"MsigdbC6", "MsigdbC7")}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
