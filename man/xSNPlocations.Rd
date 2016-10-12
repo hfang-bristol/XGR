@@ -59,7 +59,7 @@ gr <- ImmunoBase$AS$variant
 data <- names(gr)
 
 # b) define nearby genes
-df_nGenes <- xSNPlocations(data=data, RData.location=RData.location)
+snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 }
 }
 \seealso{

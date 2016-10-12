@@ -26,7 +26,7 @@
 #' data <- names(gr)
 #'
 #' # b) define nearby genes
-#' df_nGenes <- xSNPlocations(data=data, RData.location=RData.location)
+#' snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 #' }
 
 xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
@@ -80,7 +80,7 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=T
 		res_df <- do.call(rbind, res_ls)
 		res_gr <- GenomicRanges::GRanges(
 			seqnames=S4Vectors::Rle(res_df[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(res_df[,2])-1, end=as.numeric(res_df[,2]), names=data_rest),
+			ranges = IRanges::IRanges(start=as.numeric(res_df[,2]), end=as.numeric(res_df[,2]), names=data_rest),
 			strand = S4Vectors::Rle(rep('*',nrow(res_df)))
 		)
 	}else{
