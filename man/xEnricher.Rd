@@ -125,7 +125,7 @@ snps/genes overlapped between a snp/gene set and the given input data
 value but after being adjusted for multiple comparisons}
 \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell
 for the overlapped-members observed in an individaul term, and
-off-diagnal cell for the overlapped-members shared betwene two terms}
+off-diagnal cell for the overlapped-members shared between two terms}
 \item{\code{call}: the call that produced this result}
 }
 }

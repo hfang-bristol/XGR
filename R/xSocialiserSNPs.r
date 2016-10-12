@@ -169,7 +169,13 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 		relations <- t(relations)
 		colnames(relations) <- c("from","to","weight")
 		res <- igraph::graph.data.frame(d=relations, directed=F)
-		
+
+    	if(class(res) == "igraph"){
+    		if(!is.null(E(res)$weight)){
+    			E(res)$weight <- as.numeric(E(res)$weight)
+    		}
+    	}
+
 		res$dag <- dag
     }
     

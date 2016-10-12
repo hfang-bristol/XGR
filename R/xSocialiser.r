@@ -456,6 +456,12 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     if (class(sim) == "dgCMatrix" | class(sim) == "dsCMatrix"){
     	res <- xConverter(sim, from="dgCMatrix", to="igraph", verbose=F)
     	
+    	if(class(res) == "igraph"){
+    		if(!is.null(E(res)$weight)){
+    			E(res)$weight <- as.numeric(E(res)$weight)
+    		}
+    	}
+    	
 		## append a graph attribute 'dag' storing the underlying annotated ontology DAG
 		res$dag <- ig
     }

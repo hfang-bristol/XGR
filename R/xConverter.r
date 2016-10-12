@@ -59,9 +59,10 @@ xConverter <- function (obj, from=c("dgCMatrix","igraph"), to=c("igraph","dgCMat
         
         ## get adjacency matrix
         if ("weight" %in% list.edge.attributes(obj)){
-            objConverted <- igraph::get.adjacency(obj, type="both", attr="weight", edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
+        	E(obj)$weight <- as.numeric(E(obj)$weight)
+            objConverted <- igraph::as_adjacency_matrix(obj, type="both", attr="weight", edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
         }else{
-            objConverted <- igraph::get.adjacency(obj, type="both", attr=NULL, edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
+            objConverted <- igraph::as_adjacency_matrix(obj, type="both", attr=NULL, edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
         }
         
     }else if(from=="dgCMatrix"){
@@ -96,7 +97,7 @@ xConverter <- function (obj, from=c("dgCMatrix","igraph"), to=c("igraph","dgCMat
         
         ## convert to "igraph"
         if(from=="dgCMatrix"){
-            objConverted <- igraph::graph.data.frame(d=relations, directed=F, vertices=nodes)
+            objConverted <- igraph::graph_from_data_frame(d=relations, directed=F, vertices=nodes)
         }
         
     }

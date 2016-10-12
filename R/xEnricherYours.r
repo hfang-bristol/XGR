@@ -96,9 +96,13 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     ## import data file
     if(is.matrix(data.file) | is.data.frame(data.file)){
         data <- unique(data.file[,1])
-    }else if(!is.null(data.file) & !is.na(data.file)){
-		data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
-		data <- unique(data[,1])
+    }else if(!is.null(data.file) & any(!is.na(data.file))){
+    	if(length(data.file)==1){
+			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+			data <- unique(data[,1])
+		}else{
+			data <- data.file
+		}
     }else{
     	stop("The file 'data.file' must be provided!\n")
     }
@@ -106,7 +110,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     ## import annotation file
     if(is.matrix(annotation.file) | is.data.frame(annotation.file)){
         input <- cbind(annotation.file[,1], annotation.file[,2])
-    }else if(!is.null(annotation.file) & !is.na(annotation.file)){
+    }else if(!is.null(annotation.file) & any(!is.na(annotation.file))){
 		input <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
     }else{
     	stop("The file 'annotation.file' must be provided!\n")
