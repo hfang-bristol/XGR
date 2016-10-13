@@ -59,7 +59,7 @@ default) will be processed}
 ontology root (if any) is used to restrict terms in consideration. By
 default, it sets to 'NULL' to consider all distances}
 
-\item{test}{the statistic test used. It can be "fisher" for using
+\item{test}{the test statistic used. It can be "fisher" for using
 fisher's exact test, "hypergeo" for using hypergeometric test, or
 "binomial" for using binomial test. Fisher's exact test is to test the
 independence between gene group (genes belonging to a group or not) and
@@ -71,9 +71,9 @@ genes, and thus compare sampling to background. Unlike hypergeometric
 test, binomial test is to sample at random (with replacement) from the
 background with the constant probability. In terms of the ease of
 finding the significance, they are in order: hypergeometric test >
-binomial test > fisher's exact test. In other words, in terms of the
-calculated p-value, hypergeometric test < binomial test < fisher's
-exact test}
+fisher's exact test > binomial test. In other words, in terms of the
+calculated p-value, hypergeometric test < fisher's exact test <
+binomial test}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
