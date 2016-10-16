@@ -103,7 +103,7 @@ xConverter <- function (obj, from=c("dgCMatrix","igraph"), to=c("igraph","dgCMat
     }
     
     if(verbose){
-        message(sprintf("Your input object '%s' of class '%s' has been converted into an object of class '%s'.", deparse(substitute(obj)), from, to), appendLF=T)
+        message(sprintf("Your input object of class '%s' has been converted into an object of class '%s'.", from, to), appendLF=T)
     }
     
     return(objConverted)

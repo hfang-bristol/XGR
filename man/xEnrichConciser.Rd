@@ -13,8 +13,8 @@ xEnrichConciser(eTerm, cutoff = c(0.9, 0.5), verbose = T)
 default, it has the first element 0.9 and the second element 0.5. It
 means, for a term (less significant; called 'B'), if there is a more
 significant term (called 'A'), their overlapped members cover at least
-90% of the B's members but less than 50% of the A's members, then this
-term B will be defined as redundant and thus being removed}
+90% of the B's members, and also at less 50% of the A's members, then
+this term B will be defined as redundant and thus being removed}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -26,7 +26,7 @@ an object of class "eTerm", after redundant terms being removed.
 \code{xEnrichConciser} is supposed to make enrichment results conciser
 by removing redundant terms. A redundant term (called 'B') is claimed
 if its overlapped part (A&B) with a more significant term (called 'A')
-meets both criteria: 1) |A&B| > 0.9*|B|; and 2) |A&B| < 0.5*|A|.
+meets both criteria: 1) |A&B| > 0.9*|B|; and 2) |A&B| > 0.5*|A|.
 }
 \note{
 none

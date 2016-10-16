@@ -1,6 +1,6 @@
 citEntry(entry="Article",
     author = "Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight",
-    title = "XGR: exploring genomic relations for precision interpretation through enrichment, similarity, network and annotation analysis",
+    title = "XGR: exploring genomic relations for enhanced interpretation through enrichment, similarity, network and annotation analysis",
     journal = "Zenodo",
     volume = "",
     issue = "",
@@ -10,6 +10,6 @@ citEntry(entry="Article",
     doi = "10.5281/zenodo.56428",
     textVersion = paste(
                 "Fang, H., Knezevic, B., Burnham, K.L. & Knight, J.C.",
-                "XGR: exploring genomic relations for precision interpretation through enrichment, similarity, network and annotation analysis.",
+                "XGR: exploring genomic relations for enhanced interpretation through enrichment, similarity, network and annotation analysis.",
                 "http://dx.doi.org/10.5281/zenodo.56428")
 )

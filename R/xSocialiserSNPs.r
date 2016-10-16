@@ -106,7 +106,7 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 		#########
 		## load annotation information
 		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, verbose=verbose)
-			
+		
 		#########
 		## include additional SNPs that are in LD with input SNPs
 		if(LD.r2>=0.8 & LD.r2<=1){

@@ -18,7 +18,7 @@
 #' @return
 #' an object of class "mSeed", a list with following components:
 #' \itemize{
-#'  \item{\code{SNP}: a matrix of nSNP X 3 containing SNP information, where nSNP is the number of SNPs, and the 3 columns are "SNP" (Lead and/or LD SNPs), "Score" (the scores for SNPs calculated based on p-values taking into account the given threshold of the significant level), "Pval" (the input p-values for Lead SNPs or R2-adjusted p-values for LD SNPs), "Flag" (indicating  as Lead or LD SNPs)}
+#'  \item{\code{SNP}: a matrix of nSNP X 4 containing SNP information, where nSNP is the number of SNPs, and the 3 columns are "SNP" (Lead and/or LD SNPs), "Score" (the scores for SNPs calculated based on p-values taking into account the given threshold of the significant level), "Pval" (the input p-values for Lead SNPs or R2-adjusted p-values for LD SNPs), "Flag" (indicating  as Lead or LD SNPs)}
 #'  \item{\code{Gene}: a matrix of nGene X 3 containing Gene information, where nGene is the number of seed genes, and the 3 columns are "Gene" (gene symbol), "Score" (the scores for seed genes), "Pval" (pvalue-like significance level transformed from gene scores)}
 #'  \item{\code{call}: the call that produced this result}
 #' }
@@ -94,7 +94,7 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
     
     ####################################################################################
     
-    ## df_SNP df_eGenes
+    ## df_SNP df_nGenes
     allGenes <- sort(df_nGenes$Gene)
     allSNPs <- sort(df_SNP$SNP)
     
@@ -143,7 +143,7 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
 	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("%d Genes are defined as seeds and scored using '%s' scoring scheme", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
+		message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
 	}
     
     mSeed <- list(SNP = df_SNP,

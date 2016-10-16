@@ -102,7 +102,7 @@ RData files. See \code{\link{xRDataLoader}} for details}
 \value{
 an object of class "mSeed", a list with following components:
 \itemize{
-\item{\code{SNP}: a matrix of nSNP X 3 containing SNP information,
+\item{\code{SNP}: a matrix of nSNP X 4 containing SNP information,
 where nSNP is the number of SNPs, and the 3 columns are "SNP" (Lead
 and/or LD SNPs), "Score" (the scores for SNPs calculated based on
 p-values taking into account the given threshold of the significant

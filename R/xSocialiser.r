@@ -179,7 +179,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     sim.term <- suppressMessages(xDAGsim(ig, terms=terms, method.term=method.term, fast=fast, parallel=parallel, multicores=multicores, verbose=T))
     
     if (class(sim.term) == "igraph"){
-    	sim.term <- xConverter(sim.term, from='igraph', to='dgCMatrix')
+    	sim.term <- xConverter(sim.term, from='igraph', to='dgCMatrix', verbose=F)
     }
     
     ##############################################################################################
