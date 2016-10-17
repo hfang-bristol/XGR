@@ -25,8 +25,8 @@
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' \dontrun{
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
 #' ig.HPPA <- xRDataLoader(RData='ig.HPPA')
 #' org.Hs.egHPPA <- xRDataLoader(RData='org.Hs.egHPPA')
@@ -141,8 +141,12 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
     load_local2 <- file.path(path_host, paste(RData, ".RData", sep=""))
     load_package <- RData
     
-    ## first, load data from the package itself
-    if(length(suppressWarnings(tryCatch(eval(parse(text=paste("data(",load_package,", package='XGR')",sep=""))), error=function(e) e, warning=function(w) w)))==2){
+    #####################################################################
+    ## first, load data from the package itself (NOW DISABLE THIS OPTION)
+    #####################################################################
+    #if(length(suppressWarnings(tryCatch(eval(parse(text=paste("data(",load_package,", package='XGR')",sep=""))), error=function(e) e, warning=function(w) w)))==2){
+    
+    if(1){
         ## second, load local R files
         RData_local <- c(load_local1, load_local2)
         load_flag <- sapply(RData_local, function(x){

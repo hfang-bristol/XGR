@@ -765,17 +765,18 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     
     ################################
     cross <- matrix(0, nrow=length(overlaps), ncol=length(overlaps))
-    for(i in seq(1,length(overlaps)-1)){
-    	x1 <- overlaps[[i]]
-    	for(j in seq(i+1,length(overlaps))){
-    		x2 <- overlaps[[j]]
-    		cross[i,j] <- length(intersect(x1, x2))
-    		cross[j,i] <- length(intersect(x1, x2))
-    	}
+    if(length(overlaps)>=2){
+		for(i in seq(1,length(overlaps)-1)){
+			x1 <- overlaps[[i]]
+			for(j in seq(i+1,length(overlaps))){
+				x2 <- overlaps[[j]]
+				cross[i,j] <- length(intersect(x1, x2))
+				cross[j,i] <- length(intersect(x1, x2))
+			}
+		}
+		colnames(cross) <- rownames(cross) <- names(overlaps)
+		diag(cross) <- sapply(overlaps, length)
     }
-    colnames(cross) <- rownames(cross) <- names(overlaps)
-    diag(cross) <- sapply(overlaps, length)
-    
     ####################################################################################
     
     eTerm <- list(term_info	 = set_info,
