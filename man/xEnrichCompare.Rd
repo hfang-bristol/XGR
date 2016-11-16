@@ -6,7 +6,7 @@
 \usage{
 xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
 "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 3,
-wrap.width = NULL, sharings = NULL)
+wrap.width = NULL, sharings = NULL, signature = TRUE)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects}
@@ -32,6 +32,10 @@ will be displayed. For example, when comparing three groups of
 enrichment results, it can be set into c(2,3) to display only shared
 terms by any two or all three. By default, it is NULL meaning no such
 restriction}
+
+\item{signature}{a logical to indicate whether the signature is
+assigned to the plot caption. By default, it sets TRUE showing which
+function is used to draw this graph}
 }
 \value{
 an object of class "ggplot", but appended with a 'g' (an igraph object
@@ -77,8 +81,8 @@ RData.location=RData.location)
 # 3) Compare enrichment results
 list_eTerm <- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree,
 eTerm_LD_Tree)
-names(list_eTerm) <- c('LD (-) & Tree (-)', 'LD (-) & Tree (+)', 'LD
-(+) & Tree (-)', 'LD (+) & Tree (+)')
+names(list_eTerm) <- c('LD(-) & Tree(-)','LD(-) & Tree(+)','LD(+) &
+Tree(-)','LD(+) & Tree(+)')
 ## side-by-side comparisons 
 bp <- xEnrichCompare(list_eTerm, displayBy="fc")
 #pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
@@ -91,7 +95,7 @@ bp + theme(axis.title.x=element_text(color="black"))
 ## modify fill colors
 bp + scale_fill_manual(values=c("black","#888888"))
 ## show legend title but hide strip
-bp + theme(legend.position="right", strip.text = element_blank())
+bp + theme(legend.position="right", strip.text=element_blank())
 
 # 4) DAGplot of comparative enrichment results in the context of ontology tree
 xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))

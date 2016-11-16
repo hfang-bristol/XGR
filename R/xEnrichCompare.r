@@ -9,6 +9,7 @@
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
 #' @param sharings a numeric vector specifying whether only shared terms will be displayed. For example, when comparing three groups of enrichment results, it can be set into c(2,3) to display only shared terms by any two or all three. By default, it is NULL meaning no such restriction
+#' @param signature a logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot", but appended with a 'g' (an igraph object to represent DAG after being unionised)
 #' @note none
 #' @export
@@ -38,7 +39,7 @@
 #'
 #' # 3) Compare enrichment results
 #' list_eTerm <- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree, eTerm_LD_Tree)
-#' names(list_eTerm) <- c('LD (-) & Tree (-)', 'LD (-) & Tree (+)', 'LD (+) & Tree (-)', 'LD (+) & Tree (+)')
+#' names(list_eTerm) <- c('LD(-) & Tree(-)','LD(-) & Tree(+)','LD(+) & Tree(-)','LD(+) & Tree(+)')
 #' ## side-by-side comparisons 
 #' bp <- xEnrichCompare(list_eTerm, displayBy="fc")
 #' #pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
@@ -51,13 +52,13 @@
 #' ## modify fill colors
 #' bp + scale_fill_manual(values=c("black","#888888"))
 #' ## show legend title but hide strip
-#' bp + theme(legend.position="right", strip.text = element_blank())
+#' bp + theme(legend.position="right", strip.text=element_blank())
 #'
 #' # 4) DAGplot of comparative enrichment results in the context of ontology tree
 #' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
-xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, sharings=NULL) 
+xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, sharings=NULL, signature=TRUE) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -195,7 +196,16 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="blue"), axis.title.x=element_text(size=14,color="blue")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
 	
 	## title
-	p <- p + ggtitle(paste0('Enrichments under FDR < ', FDR.cutoff))
+	title <- paste0('Enrichments under FDR < ', FDR.cutoff)
+	p <- p + labs(title=title) + theme(plot.title=element_text(hjust=0.5))
+	## caption
+    if(signature){
+    	caption <- paste("Created by xEnrichCompare from XGR version", utils ::packageVersion("XGR"))
+    	p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
+    }
+	
+	## put arrows on x-axis
+	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
 	## strip
 	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))

@@ -130,12 +130,16 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     if(is.matrix(background.file) | is.data.frame(background.file)){
         background <- unique(background.file[,1])
     }else if(!is.null(background.file)){
-		background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
-		background <- unique(background[,1])
+    
+    	if(length(background.file)==1){
+			background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
+			background <- unique(background[,1])
+		}else{
+			background <- background.file
+		}
     }else{
-    	background <- unique(input[,1])
+    	background <- background.file
     }
-	
     #############################################################################################
     
     if(verbose){

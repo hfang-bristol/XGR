@@ -9,6 +9,7 @@
 #' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
+#' @param signature a logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -41,7 +42,7 @@
 #' bp + theme(axis.title.x=element_text(color="blue"))
 #' }
 
-xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL) 
+xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, signature=TRUE) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -111,6 +112,18 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		
 		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size)
 	}
+	
+	## caption
+    if(signature){
+    	caption <- paste("Created by xEnrichBarplot from XGR version", utils ::packageVersion("XGR"))
+    	bp <- bp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
+    }
+	
+	## put arrows on x-axis
+	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
+	
+	## x-axis (actually y-axis) position
+	bp <- bp + scale_y_continuous(position="top")
 	
 	invisible(bp)
 }

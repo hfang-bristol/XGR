@@ -6,7 +6,7 @@
 \usage{
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
 "zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, wrap.width = NULL)
+bar.label.size = 3, wrap.width = NULL, signature = TRUE)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -31,6 +31,10 @@ FDR. By default, it sets to true for bar labelling}
 size. By default, it sets to 3}
 
 \item{wrap.width}{a positive integer specifying wrap width of name}
+
+\item{signature}{a logical to indicate whether the signature is
+assigned to the plot caption. By default, it sets TRUE showing which
+function is used to draw this graph}
 }
 \value{
 an object of class "ggplot"
