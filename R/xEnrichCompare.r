@@ -193,7 +193,15 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}
 	
-	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="blue"), axis.title.x=element_text(size=14,color="blue")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
+	p <- p + geom_bar(stat="identity")+ theme_bw() + theme(legend.position="none",legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=14,color="black")) + geom_vline(xintercept=xintercept-0.5,color="black",linetype="dotdash") + coord_flip()
+	
+	## strip
+	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
+	
+	if(bar.label){
+		#p <- p + geom_text(aes(label=label),hjust=1,size=bar.label.size)
+		p <- p + geom_text(eval(parse(text=paste("aes(label=label)",sep=""))) ,hjust=1,size=bar.label.size)
+	}
 	
 	## title
 	title <- paste0('Enrichments under FDR < ', FDR.cutoff)
@@ -206,14 +214,6 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	
 	## put arrows on x-axis
 	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
-	
-	## strip
-	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
-	
-	if(bar.label){
-		#p <- p + geom_text(aes(label=label),hjust=1,size=bar.label.size)
-		p <- p + geom_text(eval(parse(text=paste("aes(label=label)",sep=""))) ,hjust=1,size=bar.label.size)
-	}
 	
 	## group
 	#bp <- p + facet_grid(~group)

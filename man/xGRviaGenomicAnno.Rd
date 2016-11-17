@@ -95,8 +95,8 @@ one of "bases" at the base resolution (by default), "regions" at the
 region resolution, and "hybrid" at the base-region hybrid resolution
 (that is, data at the region resolution but annotation/background at
 the base resolution). If regions being analysed are SNPs themselves,
-then the results are the same when choosing this parameter as 'bases'
-or 'hybrid'}
+then the results are the same even when choosing this parameter as
+either 'bases' or 'hybrid' or 'regions'}
 
 \item{background.annotatable.only}{logical to indicate whether the
 background is further restricted to annotatable bases (covered by
@@ -131,7 +131,8 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a data frame with 8 columns:
+a data frame with 8 columns (below explanations are based on results at
+the 'hybrid' resolution):
 \itemize{
 \item{\code{name}: the annotation name}
 \item{\code{nAnno}: the number of bases covered by that annotation. If
