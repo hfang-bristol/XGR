@@ -9,8 +9,7 @@ xLiftOver(data.file, format.file = c("data.frame", "bed",
 "GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
 "hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), merged = T, verbose =
 T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of genomic
@@ -57,9 +56,9 @@ build to another. Supported are the conversions between genome builds
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # Provide UCSC genes (hg19)
 UCSC_genes <- xRDataLoader(RData.customised='UCSC_genes',

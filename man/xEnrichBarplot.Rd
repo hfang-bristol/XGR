@@ -48,9 +48,9 @@ none
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
 cis <- xRDataLoader(RData.customised='JKscience_TS2A',
@@ -69,10 +69,6 @@ bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
 #pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
 print(bp)
 #dev.off()
-## modify y axis text
-bp + theme(axis.text.y=element_text(size=10,color="blue"))
-## modify x axis title
-bp + theme(axis.title.x=element_text(color="blue"))
 }
 }
 \seealso{

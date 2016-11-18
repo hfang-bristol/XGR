@@ -42,8 +42,7 @@ ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
 0.01,
 lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
 "all_shortest_paths"), true.path.rule = F, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -329,30 +328,29 @@ maximum of both p-values in these two calculations.
 
 <pre>
 ## Not run: 
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
-# a) provide input data
+## a) provide input data
 data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-data.file &lt;- "~/Sites/SVN/github/bigdata/ImmunoBase_GWAS.bed"
 
-# b) perform DO enrichment analysis for nearby genes (with GWAS SNPs)
+## b) perform DO enrichment analysis for nearby genes (with GWAS SNPs)
 eTerm &lt;- xGRviaGeneAnno(data.file=data.file, format.file="bed",
 gap.max=0, ontology="DO", RData.location=RData.location)
 
-# c) view enrichment results for the top significant terms
+## c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 
-# d) save enrichment results to the file called 'Regions2genes_enrichments.txt'
+## d) save enrichment results to the file called 'Regions2genes_enrichments.txt'
 output &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions2genes_enrichments.txt",
 sep="\t", row.names=FALSE)
 
-# e) barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+## e) barplot of significant enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num=10, displayBy="fc")
 print(bp)
 
 ## End(Not run)

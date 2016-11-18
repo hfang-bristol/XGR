@@ -5,6 +5,8 @@ NEW FEATURES
 
     o Change functions ('xEnrichBarplot' and 'xEnrichCompare') caused by the major ggplot2 update (2.2.0)
     
+    o Add function 'xColormap' for defining color palette (including those used by ggplot2)
+
 
 CHANGES IN VERSION 1.0.4
 -----------------------

@@ -66,6 +66,7 @@ xEnrichConciser <- function(eTerm, cutoff=c(0.9,0.5), verbose=T)
 		
 	}else{
 		res <- NULL
+		message("The provided object can be used for removing redundant terms.\n")
 	}
     
     res

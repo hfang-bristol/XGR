@@ -6,8 +6,7 @@
 \usage{
 xGRsampling(GR.data, GR.background, num.samples = 100, gap.max = 50000,
 max.distance = NULL, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{GR.data}{an input data GR object, containing a set of genomic
@@ -50,9 +49,9 @@ required, the randomised region can be restricted to be no more than
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 # a) provide input data GR object storing GWAS SNPs

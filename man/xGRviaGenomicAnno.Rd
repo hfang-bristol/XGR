@@ -38,8 +38,7 @@ background.annotatable.only = T, p.adjust.method = c("BH", "BY",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
 "EpigenomeAtlas_15Segments_E062"), verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of genomic
@@ -429,25 +428,26 @@ hematopoietic stem cells G-CSF-mobilized Male).}
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
-# a) provide input data
+## a) provide input data
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 
-# b) perform enrichment analysis using FANTOM expressed enhancers
+## b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell")
+GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
 
-# c) view enrichment results for the top significant terms
+## c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 
-# d) barplot of enriched terms
-bp <- xEnrichBarplot(eTerm, top_num='auto', displayBy="fdr")
+## d) barplot of enriched terms
+bp <- xEnrichBarplot(eTerm, top_num='auto', displayBy="fc")
 bp
 
-# e) save enrichment results to the file called 'Regions_enrichments.txt'
+## e) save enrichment results to the file called 'Regions_enrichments.txt'
 output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions_enrichments.txt", sep="\\t",

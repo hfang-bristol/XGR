@@ -15,9 +15,9 @@
 #' @include xLiftOver.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/bigdata"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # Provide UCSC genes (hg19)
 #' UCSC_genes <- xRDataLoader(RData.customised='UCSC_genes', RData.location=RData.location)
@@ -28,7 +28,7 @@
 #' gr
 #' }
 
-xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -161,7 +161,9 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 			)
 	
 		## append back meta data
-		ind <- as.numeric(rownames(df))
+		#ind <- as.numeric(rownames(df))
+		#names(gr) <- names_data[ind]
+		ind <- match(rownames(df), names_data)
 		names(gr) <- names_data[ind]
 		GenomicRanges::mcols(gr) <- mcols_data[ind,]
 		

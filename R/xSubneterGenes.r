@@ -18,19 +18,19 @@
 #' @include xSubneterGenes.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #'
 #' # a) provide the input nodes/genes with the significance info
 #' ## load human genes
-#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
+#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
 #' sig <- rbeta(500, shape1=0.5, shape2=1)
 #' data <- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
 #' 
 #' # b) perform network analysis
 #' # b1) find maximum-scoring subnet based on the given significance threshold
-#' subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.significance=0.01)
+#' subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.significance=0.01, RData.location=RData.location)
 #' # b2) find maximum-scoring subnet with the desired node number=50
 #' subnet <- xSubneterGenes(data=data, network="STRING_high", subnet.size=50, RData.location=RData.location)
 #'
@@ -48,10 +48,10 @@
 #' 
 #' # e) visualise the identified subnet as a circos plot
 #' library(RCircos)
-#' xCircos(g=subnet, entity="Gene")
+#' xCircos(g=subnet, entity="Gene", colormap="white-gray", RData.location=RData.location)
 #' }
 
-xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, seed.genes=T, subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, seed.genes=T, subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -111,7 +111,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
         
         if(length(grep('STRING',network,perl=T)) > 0){
 			g <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location, verbose=verbose)
-
+			
 			## restrict to those edges with given confidence
 			flag <- unlist(strsplit(network,"_"))[2]
 			if(flag=='highest'){
@@ -122,6 +122,11 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[combined_score>=400])"))
 			}
 			
+			########################
+			# because of the way storing the network from the STRING database
+			V(g)$name <- V(g)$symbol
+			########################
+						
         }else if(length(grep('PCommonsUN',network,perl=T)) > 0){
 			g <- xRDataLoader(RData.customised='org.Hs.PCommons_UN', RData.location=RData.location, verbose=verbose)
 			
@@ -151,7 +156,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 				eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=101 | controls_expression_of>=101 | controls_phosphorylation_of>=101 | controls_state_change_of>=101 | controls_transport_of>=101])"))
 			}
         }
-	
+
 	}
 
     if(verbose){
@@ -160,18 +165,16 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	
 	if(seed.genes){
 		## further restrict the network to only nodes/genes with pval values
-		ind <- match(V(g)$symbol, names(pval))
+		ind <- match(V(g)$name, names(pval))
 		## for extracted graph
 		nodes_mapped <- V(g)$name[!is.na(ind)]
 		g <- dnet::dNetInduce(g=g, nodes_query=nodes_mapped, knn=0, remove.loops=F, largest.comp=T)
-		V(g)$name <- V(g)$symbol
 	}else{
-		ind <- match(V(g)$symbol, names(pval))
-		nodes_not_mapped <- V(g)$symbol[is.na(ind)]
+		ind <- match(V(g)$name, names(pval))
+		nodes_not_mapped <- V(g)$name[is.na(ind)]
 		pval_not_mapped <- rep(1, length(nodes_not_mapped))
 		names(pval_not_mapped) <- nodes_not_mapped
 		pval <- c(pval, pval_not_mapped)
-		V(g)$name <- V(g)$symbol
 	}
 	
 	    
@@ -194,7 +197,8 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	if(ecount(subnet)>0 && class(subnet)=="igraph"){
 		relations <- igraph::get.data.frame(subnet, what="edges")[,c(1,2)]
 		nodes <- igraph::get.data.frame(subnet, what="vertices")
-		nodes <- cbind(symbol=nodes$symbol, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score)
+		#nodes <- cbind(symbol=nodes$name, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score)
+		nodes <- cbind(name=nodes$name, significance=pval[rownames(nodes)], score=nodes$score)
 		if(is.directed(subnet)){
 			subg <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
 		}else{

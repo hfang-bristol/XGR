@@ -51,5 +51,6 @@ Collate:
     'xGRsampling.r'
     'xLiftOver.r'
     'xEnrichConciser.r'
+    'xColormap.r'
 License: GPL-2
 biocViews: Bioinformatics

@@ -16,9 +16,9 @@
 #' @include xGRsampling.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/bigdata"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' # a) provide input data GR object storing GWAS SNPs
@@ -31,7 +31,7 @@
 #' sGR_List <- xGRsampling(GR.data=dbSNP_GWAS, GR.background=FANTOM5_Enhancer_Cell, num.samples=1000, RData.location=RData.location)
 #' }
 
-xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, max.distance=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, max.distance=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
 	if(is.null(max.distance)){

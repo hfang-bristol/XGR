@@ -23,8 +23,7 @@ xLiftOver(data.file, format.file = c("data.frame", "bed",
 "GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
 "hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), merged = T, verbose =
 T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -96,9 +95,9 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <pre>
 ## Not run: 
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/bigdata"
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # Provide UCSC genes (hg19)
 UCSC_genes &lt;- xRDataLoader(RData.customised='UCSC_genes',

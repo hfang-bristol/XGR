@@ -12,8 +12,7 @@ xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
 "PCommonsDN_CTD"), network.customised = NULL, seed.genes = T,
 subnet.significance = 0.01, subnet.size = NULL, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -116,20 +115,21 @@ for guiding follow-up experiments.
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the input nodes/genes with the significance info
 ## load human genes
-org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
+org.Hs.eg <- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
 sig <- rbeta(500, shape1=0.5, shape2=1)
 data <- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
 
 # b) perform network analysis
 # b1) find maximum-scoring subnet based on the given significance threshold
 subnet <- xSubneterGenes(data=data, network="STRING_high",
-subnet.significance=0.01)
+subnet.significance=0.01, RData.location=RData.location)
 # b2) find maximum-scoring subnet with the desired node number=50
 subnet <- xSubneterGenes(data=data, network="STRING_high",
 subnet.size=50, RData.location=RData.location)
@@ -151,7 +151,8 @@ xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
-xCircos(g=subnet, entity="Gene")
+xCircos(g=subnet, entity="Gene", colormap="white-gray",
+RData.location=RData.location)
 }
 }
 \seealso{

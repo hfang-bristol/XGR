@@ -17,9 +17,9 @@
 #' @include xEnrichBarplot.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/bigdata"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
 #' cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)
@@ -36,10 +36,6 @@
 #' #pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
 #' print(bp)
 #' #dev.off()
-#' ## modify y axis text
-#' bp + theme(axis.text.y=element_text(size=10,color="blue"))
-#' ## modify x axis title
-#' bp + theme(axis.title.x=element_text(color="blue"))
 #' }
 
 xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, signature=TRUE) 

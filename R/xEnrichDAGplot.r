@@ -60,9 +60,9 @@
 #' @include xEnrichDAGplot.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/bigdata"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
 #' cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location)

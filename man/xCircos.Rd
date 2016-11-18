@@ -8,11 +8,10 @@ xCircos(g, entity = c("SNP", "Gene", "Both"), top_num = 50,
 colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"), rescale = T, nodes.query = NULL, ideogram = T,
 chr.exclude = "auto", entity.label.cex = 0.7,
-entity.label.side = c("out", "in"), entity.label.track = 1,
+entity.label.side = c("in", "out"), entity.label.track = 1,
 entity.label.query = NULL, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{g}{an object of class "igraph". For example, it stores semantic
@@ -109,13 +108,15 @@ none
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-library(RCircos)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# provide genes and SNPs reported in AS GWAS studies
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+library(RCircos)
+
+# provide genes and SNPs reported in GWAS studies
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 
 # 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 ## Get lead SNPs reported in AS GWAS
@@ -143,7 +144,7 @@ xCircos(g=gene.g, entity="Gene", chr.exclude="chrY",
 RData.location=RData.location)
 #dev.off()
 
-# 3) Gene-SNP pairs from trans-eQTL mapping
+# 3) Advanced usages: Gene-SNP pairs from trans-eQTL mapping
 JKscience_TS3A <- xRDataLoader(RData.customised='JKscience_TS3A',
 RData.location=RData.location)
 ## extract the significant trans-eQTL in IFN
@@ -153,12 +154,12 @@ relations <- JKscience_TS3A[ind, c("Symbol","variant","IFN_fdr")]
 relations <- data.frame(from=relations$Symbol, to=relations$variant,
 weight=-log10(relations$IFN_fdr))
 ig_Gene2SNP <- igraph::graph.data.frame(d=relations, directed=TRUE)
-# Circos plot of the DO-based gene similarity network
+# Circos plot of the eQTL (Gene-SNP) network
 #out.file <- "eQTL_Circos.pdf"
 #pdf(file=out.file, height=12, width=12, compress=TRUE)
-xCircos(g=ig_Gene2SNP, entity="Both", top_num=50,
+xCircos(g=ig_Gene2SNP, entity="Both", top_num=NULL,
 nodes.query=c("GAD1","TNFRSF1B"), chr.exclude=NULL,
-RData.location=RData.location)
+entity.label.side="out", RData.location=RData.location)
 #dev.off()
 }
 }
