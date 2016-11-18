@@ -10,9 +10,7 @@ significance.threshold = 5e-05, distance.max = 50000,
 decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
-verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -129,13 +127,14 @@ located within distance window of input and/or LD SNPs.
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
 data <- GenomicRanges::mcols(gr)[,c(1,3)]

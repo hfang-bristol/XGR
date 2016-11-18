@@ -16,8 +16,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
 "PCommonsDN_CTD"), network.customised = NULL, seed.genes = T,
 subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -181,13 +180,14 @@ highly scored genes as possible but a few less scored genes as linkers.
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the seed SNPs with the weight info
 ## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
 data <- GenomicRanges::mcols(gr)[,c(1,3)]
@@ -198,7 +198,7 @@ subnet <- xSubneterSNPs(data=data, network="STRING_high", seed.genes=F,
 subnet.significance=0.01, RData.location=RData.location)
 # b2) find maximum-scoring subnet with the desired node number=30
 subnet <- xSubneterSNPs(data=data, network="STRING_high", seed.genes=F,
-subnet.size=30)
+subnet.size=30, RData.location=RData.location)
 
 # c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
 output <- igraph::get.data.frame(subnet, what="edges")
@@ -217,7 +217,8 @@ xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
-xCircos(g=subnet, entity="Gene", RData.location=RData.location)
+xCircos(g=subnet, entity="Gene", colormap="white-gray",
+RData.location=RData.location)
 }
 }
 \seealso{

@@ -12,8 +12,7 @@ xSocialiserSNPs(data, ontology = c("EF", "EF_disease", "EF_phenotype",
 fast = TRUE, parallel = TRUE, multicores = NULL,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 true.path.rule = T, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{an input vector. It contains a list of SNPs of interest}
@@ -145,13 +144,13 @@ subgraph.
 }
 \examples{
 \dontrun{
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 # a) provide the input SNPs of interest (eg 8 randomly chosen SNPs)
-anno <- xRDataLoader(RData='GWAS2EF')
+anno <- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
 allSNPs <- rownames(anno)
 data <- sample(allSNPs,8)
 data

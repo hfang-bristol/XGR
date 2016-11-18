@@ -14,13 +14,13 @@
 #' @include xSNPlocations.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
 #' data <- names(gr)
@@ -29,7 +29,7 @@
 #' snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 #' }
 
-xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
 	## replace '_' with ':'

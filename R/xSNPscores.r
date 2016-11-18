@@ -23,13 +23,13 @@
 #' @include xSNPscores.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
 #' data <- GenomicRanges::mcols(gr)[,c(1,3)]
@@ -41,7 +41,7 @@
 #' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, include.LD="EUR", RData.location=RData.location)
 #' }
 
-xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     if(is.null(data)){

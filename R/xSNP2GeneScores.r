@@ -28,13 +28,13 @@
 #' @include xSNP2GeneScores.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
 #' data <- GenomicRanges::mcols(gr)[,c(1,3)]
@@ -49,7 +49,7 @@
 #' head(mSeed$Gene)
 #' }
 
-xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, distance.max=50000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, distance.max=50000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one

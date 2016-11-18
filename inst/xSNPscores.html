@@ -20,8 +20,7 @@ threshold of the significant level.
 <pre>
 xSNPscores(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -127,13 +126,14 @@ Lead SNPs or LD SNPs
 
 <pre>
 ## Not run: 
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
 data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]

@@ -23,14 +23,14 @@
 #' @include xSocialiserGenes.r
 #' @examples
 #' \dontrun{
-#' # Load the library
+#' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # Gene-based similarity analysis using Mammalian Phenotype Ontology (MP)
 #' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 #' ## load human genes
-#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
+#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
 #' data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
 #' data
 #' 
@@ -50,7 +50,7 @@
 #' xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width, edge.label=x, edge.label.cex=0.7)
 #' }
 
-xSocialiserGenes <- function(data, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSocialiserGenes <- function(data, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)

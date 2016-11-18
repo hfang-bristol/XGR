@@ -23,8 +23,7 @@ xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
 "linear"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
 "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -136,13 +135,14 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <pre>
 ## Not run: 
-# Load the library
+# Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location="~/Sites/SVN/github/RDataCentre/Portal"
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
 data &lt;- names(gr)
