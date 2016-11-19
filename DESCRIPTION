@@ -56,5 +56,6 @@ Collate:
     'xGR2nGenes.r'
     'xGRscores.r'
     'xGR2GeneScores.r'
+    'xSubneterGR.r'
 License: GPL-2
 biocViews: Bioinformatics

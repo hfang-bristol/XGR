@@ -18,11 +18,12 @@ weight is calcualted as a decaying function of the gene-to-GR distance.
 <h3>Usage</h3>
 
 <pre>
-xGR2nGenes(data, distance.max = 50000, decay.kernel = c("rapid",
-"slow",
-"linear"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes(data, build.conversion = c(NA, "hg38.to.hg19",
+"hg18.to.hg19"),
+distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
+decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -35,6 +36,12 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 be provided in the format of 'chrN:start-end', where N is either 1-22
 or X, start (or end) is genomic positional number; for example,
 'chr1:13-20'</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>

@@ -146,6 +146,8 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
 		now <- Sys.time()
 		message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
 	}
+	
+	df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,df_SNP$SNP,decreasing=TRUE),]
     
     mSeed <- list(SNP = df_SNP,
                   Gene = df_Gene,

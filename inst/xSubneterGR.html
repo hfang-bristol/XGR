@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a gene network from an input network...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSubneterGR"><tr><td>xSubneterGR</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to identify a gene network from an input network given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)</h2>
+
+<h3>Description</h3>
+
+<p><code>xSubneterGR</code> is supposed to identify maximum-scoring gene
+subnetwork from an input graph with the node information on the
+significance (measured as p-values or fdr). To do so, it defines seed
+genes and their scores that take into account the distance to and the
+significance of input SNPs. It returns an object of class &quot;igraph&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSubneterGR(data, significance.threshold = 5e-05, build.conversion =
+c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), distance.max = 50000,
+decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+scoring.scheme = c("max", "sum", "sequential"),
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD"), network.customised = NULL, seed.genes = T,
+subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a named input vector containing the sinificance level for
+genomic regions (GR). For this named vector, the element names are GR,
+in the format of 'chrN:start-end', where N is either 1-22 or X, start
+(or end) is genomic positional number; for example, 'chr1:13-20'. The
+element values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for GR, 2nd column for the significance level.</p>
+</td></tr>
+<tr valign="top"><td><code>significance.threshold</code></td>
+<td>
+<p>the given significance threshold. By
+default, it is set to NULL, meaning there is no constraint on the
+significance level when transforming the significance level of GR into
+scores. If given, those GR below this are considered significant and
+thus scored positively. Instead, those above this are considered
+insigificant and thus receive no score</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR. Only
+those genes no far way from this distance will be considered as seed
+genes. This parameter will influence the distance-component weights
+calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel function. It
+can be one of 'slow' for slow decay, 'linear' for linear decay, and
+'rapid' for rapid decay</p>
+</td></tr>
+<tr valign="top"><td><code>decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
+</td></tr>
+<tr valign="top"><td><code>GR.Gene</code></td>
+<td>
+<p>the genomic regions of genes. By default, it is
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
+</td></tr>
+<tr valign="top"><td><code>scoring.scheme</code></td>
+<td>
+<p>the method used to calculate seed gene scores
+under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for the
+maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
+weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
+<i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+</td></tr>
+<tr valign="top"><td><code>network</code></td>
+<td>
+<p>the built-in network. Currently two sources of network
+information are supported: the STRING database (version 10) and the
+Pathways Commons database (version 7). STRING is a meta-integration of
+undirect interactions from the functional aspect, while Pathways
+Commons mainly contains both undirect and direct interactions from the
+physical/pathway aspect. Both have scores to control the confidence of
+interactions. Therefore, the user can choose the different quality of
+the interactions. In STRING, &quot;STRING_highest&quot; indicates interactions
+with highest confidence (confidence scores&gt;=900), &quot;STRING_high&quot; for
+interactions with high confidence (confidence scores&gt;=700), and
+&quot;STRING_medium&quot; for interactions with medium confidence (confidence
+scores&gt;=400). For undirect/physical interactions from Pathways Commons,
+&quot;PCommonsUN_high&quot; indicates undirect interactions with high confidence
+(supported with the PubMed references plus at least 2 different
+sources), &quot;PCommonsUN_medium&quot; for undirect interactions with medium
+confidence (supported with the PubMed references). For direct
+(pathway-merged) interactions from Pathways Commons, &quot;PCommonsDN_high&quot;
+indicates direct interactions with high confidence (supported with the
+PubMed references plus at least 2 different sources), and
+&quot;PCommonsUN_medium&quot; for direct interactions with medium confidence
+(supported with the PubMed references). In addtion to pooled version of
+pathways from all data sources, the user can also choose the
+pathway-merged network from individual sources, that is,
+&quot;PCommonsDN_Reactome&quot; for those from Reactome, &quot;PCommonsDN_KEGG&quot; for
+those from KEGG, &quot;PCommonsDN_HumanCyc&quot; for those from HumanCyc,
+&quot;PCommonsDN_PID&quot; for those froom PID, &quot;PCommonsDN_PANTHER&quot; for those
+from PANTHER, &quot;PCommonsDN_ReconX&quot; for those from ReconX,
+&quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC, &quot;PCommonsDN_PhosphoSite&quot;
+for those from PhosphoSite, and &quot;PCommonsDN_CTD&quot; for those from CTD</p>
+</td></tr>
+<tr valign="top"><td><code>network.customised</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;. By default, it
+is NULL. It is designed to allow the user analysing their customised
+network data that are not listed in the above argument 'network'. This
+customisation (if provided) has the high priority over built-in
+network</p>
+</td></tr>
+<tr valign="top"><td><code>seed.genes</code></td>
+<td>
+<p>logical to indicate whether the identified network is
+restricted to seed genes (ie nearby genes that are located within
+defined distance window centred on lead or LD SNPs). By default, it
+sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>subnet.significance</code></td>
+<td>
+<p>the given significance threshold. By
+default, it is set to NULL, meaning there is no constraint on
+nodes/genes. If given, those nodes/genes with p-values below this are
+considered significant and thus scored positively. Instead, those
+p-values above this given significance threshold are considered
+insigificant and thus scored negatively</p>
+</td></tr>
+<tr valign="top"><td><code>subnet.size</code></td>
+<td>
+<p>the desired number of nodes constrained to the
+resulting subnet. It is not nulll, a wide range of significance
+thresholds will be scanned to find the optimal significance threshold
+leading to the desired number of nodes in the resulting subnet.
+Notably, the given significance threshold will be overwritten by this
+option</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;. It has
+ndoe attributes: significance, score
+</p>
+
+
+<h3>Note</h3>
+
+<p>The algorithm identifying a gene subnetwork that is likely modulated by
+input genomic regions (GR) includes two major steps. The first step is
+to use <code>xGR2GeneScores</code> for defining and scoring nearby
+genes that are located within distance window of input GR. The second
+step is to use <code>xSubneterGenes</code> for identifying a
+maximum-scoring gene subnetwork that contains as many highly scored
+genes as possible but a few less scored genes as linkers.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGR2GeneScores</code>, <code>xSubneterGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+df &lt;- as.data.frame(gr, row.names=NULL)
+chr &lt;- df$seqnames
+start &lt;- df$start
+end &lt;- df$end
+sig &lt;- df$Pvalue
+GR &lt;- paste(chr,':',start,'-',end, sep='')
+data &lt;- cbind(GR=GR, Sig=sig)
+
+# b) perform network analysis
+# b1) find maximum-scoring subnet based on the given significance threshold
+subnet &lt;- xSubneterGR(data=data, network="STRING_high", seed.genes=F,
+subnet.significance=0.01, RData.location=RData.location)
+# b2) find maximum-scoring subnet with the desired node number=30
+subnet &lt;- xSubneterGR(data=data, network="STRING_high", seed.genes=F,
+subnet.size=30, RData.location=RData.location)
+
+# c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
+output &lt;- igraph::get.data.frame(subnet, what="edges")
+utils::write.table(output, file="subnet_edges.txt", sep="\t",
+row.names=FALSE)
+output &lt;- igraph::get.data.frame(subnet, what="vertices")
+utils::write.table(output, file="subnet_nodes.txt", sep="\t",
+row.names=FALSE)
+
+# d) visualise the identified subnet
+## do visualisation with nodes colored according to the significance
+xVisNet(g=subnet, pattern=-log10(as.numeric(V(subnet)$significance)),
+vertex.shape="sphere", colormap="wyr")
+## do visualisation with nodes colored according to transformed scores
+xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
+
+# e) visualise the identified subnet as a circos plot
+library(RCircos)
+xCircos(g=subnet, entity="Gene", colormap="white-gray",
+RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

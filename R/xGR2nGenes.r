@@ -3,6 +3,7 @@
 #' \code{xGR2nGenes} is supposed to define nearby genes given a list of genomic regions (GR) within certain distance window. The distance weight is calcualted as a decaying function of the gene-to-GR distance. 
 #'
 #' @param data a input vector containing genomic regions (GR). GR should be provided in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'
+#' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
@@ -42,10 +43,11 @@
 #' df_nGenes <- xGR2nGenes(data=data, distance.max=10000, decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 #' }
 
-xGR2nGenes <- function(data, distance.max=50000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes <- function(data, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
+    build.conversion <- match.arg(build.conversion)
     decay.kernel <- match.arg(decay.kernel)
 	
     ######################################################
@@ -73,6 +75,13 @@ xGR2nGenes <- function(data, distance.max=50000, decay.kernel=c("rapid","slow","
 	)
 	names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
 	
+	# lift over
+	if(!is.na(build.conversion)){
+		if(verbose){
+			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
+		}
+		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
+	}
   	#######################################################
   	
 	if(verbose){

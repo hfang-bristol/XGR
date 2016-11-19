@@ -56,7 +56,7 @@ provided.}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
-"hg18.to.hg19". By default it is NA (no need to do so).}
+"hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{gap.max}{the maximum distance to nearby genes. Only those genes
 no far way from this distance will be considered as nearby genes. By

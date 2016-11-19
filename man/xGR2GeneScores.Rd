@@ -4,10 +4,11 @@
 \alias{xGR2GeneScores}
 \title{Function to identify likely modulated seed genes given a list of genomic regions together with the significance level}
 \usage{
-xGR2GeneScores(data, significance.threshold = 5e-05, distance.max =
-50000,
-decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+xGR2GeneScores(data, significance.threshold = 5e-05,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+distance.max = 50000, decay.kernel = c("slow", "linear", "rapid"),
+decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"),
 scoring.scheme = c("max", "sum", "sequential"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
@@ -26,6 +27,10 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{build.conversion}{the conversion from one genome build to
+another. The conversions supported are "hg38.to.hg19" and
+"hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{distance.max}{the maximum distance between genes and GR. Only
 those genes no far way from this distance will be considered as seed

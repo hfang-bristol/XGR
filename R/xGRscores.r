@@ -37,7 +37,6 @@
 #' data <- cbind(GR=GR, Sig=sig)
 #'
 #' # b) calculate GR scores (considering significant cutoff 5e-5)
-#' ## without inclusion of LD SNPs
 #' df_GR <- xGRscores(data=data, significance.threshold=5e-5, RData.location=RData.location)
 #' }
 

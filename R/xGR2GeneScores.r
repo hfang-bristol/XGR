@@ -4,6 +4,7 @@
 #'
 #' @param data a named input vector containing the sinificance level for genomic regions (GR). For this named vector, the element names are GR, in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. The element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for GR, 2nd column for the significance level. 
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insigificant and thus receive no score
+#' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
@@ -51,10 +52,11 @@
 #' head(mSeed$Gene)
 #' }
 
-xGR2GeneScores <- function(data, significance.threshold=5e-5, distance.max=50000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2GeneScores <- function(data, significance.threshold=5e-5, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("slow","linear","rapid"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
+    build.conversion <- match.arg(build.conversion)
     decay.kernel <- match.arg(decay.kernel)
     scoring.scheme <- match.arg(scoring.scheme)
     
@@ -85,7 +87,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, distance.max=50000
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_nGenes <- xGR2nGenes(data=df_GR$GR, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, verbose=verbose, RData.location=RData.location)
+	df_nGenes <- xGR2nGenes(data=df_GR$GR, build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()
@@ -148,6 +150,8 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, distance.max=50000
 		now <- Sys.time()
 		message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
 	}
+    
+    df_GR <- df_GR[order(df_GR$Score,df_GR$GR,decreasing=TRUE),]
     
     mSeed <- list(GR = df_GR,
                   Gene = df_Gene,
