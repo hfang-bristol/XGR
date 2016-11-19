@@ -7,6 +7,8 @@ NEW FEATURES
     
     o Add function 'xColormap' for defining color palette (including those used by ggplot2)
 
+    o Add new functions ('xSubneterGR', 'xGR2GeneScores', 'xGR2nGenes' and 'xGRscores') to conduct region-based network analysis
+    
 
 CHANGES IN VERSION 1.0.4
 -----------------------

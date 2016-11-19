@@ -279,7 +279,8 @@ row.names=FALSE)
 xVisNet(g=subnet, pattern=-log10(as.numeric(V(subnet)$significance)),
 vertex.shape="sphere", colormap="wyr")
 ## do visualisation with nodes colored according to transformed scores
-xVisNet(g=subnet, pattern=V(subnet)$score, vertex.shape="sphere")
+xVisNet(g=subnet, pattern=as.numeric(V(subnet)$score),
+vertex.shape="sphere")
 
 # e) visualise the identified subnet as a circos plot
 library(RCircos)
