@@ -129,7 +129,7 @@ located within distance window of input and/or LD SNPs.
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase

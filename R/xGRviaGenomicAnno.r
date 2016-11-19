@@ -142,7 +142,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' 
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' ## a) provide input data
@@ -323,7 +323,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
 			seqnames=S4Vectors::Rle(data[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[,2]+1), end=as.numeric(data[,3])),
+			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
 			strand = S4Vectors::Rle(rep('*',nrow(data)))
 		)
 		
@@ -344,7 +344,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				x <- x[ind,]
 				gr <- GenomicRanges::GRanges(
 					seqnames=S4Vectors::Rle(x[,1]),
-					ranges = IRanges::IRanges(start=as.numeric(x[,2]+1), end=as.numeric(x[,3])),
+					ranges = IRanges::IRanges(start=as.numeric(x[,2]), end=as.numeric(x[,3])),
 					strand = S4Vectors::Rle(rep('*',nrow(x)))
 				)
 			})
@@ -385,7 +385,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			background <- background[ind,]
 			bGR <- GenomicRanges::GRanges(
 				seqnames=S4Vectors::Rle(background[,1]),
-				ranges = IRanges::IRanges(start=as.numeric(background[,2]+1), end=as.numeric(background[,3])),
+				ranges = IRanges::IRanges(start=as.numeric(background[,2]), end=as.numeric(background[,3])),
 				strand = S4Vectors::Rle(rep('*',nrow(data)))
 			)
 		}else{

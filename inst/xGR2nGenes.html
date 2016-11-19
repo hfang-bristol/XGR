@@ -1,28 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define nearby genes given a list of SNPs</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define nearby genes given a list of genomic...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xSNP2nGenes"><tr><td>xSNP2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGR2nGenes"><tr><td>xGR2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to define nearby genes given a list of SNPs</h2>
+<h2>Function to define nearby genes given a list of genomic regions</h2>
 
 <h3>Description</h3>
 
-<p><code>xSNP2nGenes</code> is supposed to define nearby genes given a list of
-SNPs within certain distance window. The distance weight is calcualted
-as a decaying function of the gene-to-SNP distance.
+<p><code>xGR2nGenes</code> is supposed to define nearby genes given a list of
+genomic regions (GR) within certain distance window. The distance
+weight is calcualted as a decaying function of the gene-to-GR distance.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
+xGR2nGenes(data, distance.max = 50000, decay.kernel = c("rapid",
 "slow",
-"linear"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
-"dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
+"linear"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -32,17 +31,17 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a input vector containing SNPs. SNPs should be provided as
-dbSNP ID (ie starting with rs). Alternatively, they can be in the
-format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
-positional number; for example, 'chr16:28525386'</p>
+<p>a input vector containing genomic regions (GR). GR should
+be provided in the format of 'chrN:start-end', where N is either 1-22
+or X, start (or end) is genomic positional number; for example,
+'chr1:13-20'</p>
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>
-<p>the maximum distance between genes and SNPs. Only
+<p>the maximum distance between genes and GR. Only
 those genes no far way from this distance will be considered as seed
 genes. This parameter will influence the distance-component weights
-calculated for nearby SNPs per gene</p>
+calculated for nearby GR per gene</p>
 </td></tr>
 <tr valign="top"><td><code>decay.kernel</code></td>
 <td>
@@ -54,20 +53,6 @@ can be one of 'slow' for slow decay, 'linear' for linear decay, and
 <td>
 <p>a numeric specifying a decay exponent. By
 default, it sets to 2</p>
-</td></tr>
-<tr valign="top"><td><code>GR.SNP</code></td>
-<td>
-<p>the genomic regions of SNPs. By default, it is
-'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
-SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
-Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
-(hg19). Alternatively, the user can specify the customised input. To do
-so, first save your RData file (containing an GR object) into your
-local computer, and make sure the GR object content names refer to
-dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;. Note: you can also load your customised GR object
-directly</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
@@ -106,10 +91,10 @@ RData files. See <code>xRDataLoader</code> for details</p>
 <li><p><code>Gene</code>: nearby genes
 </p>
 </li>
-<li><p><code>SNP</code>: SNPs
+<li><p><code>GR</code>: genomic regions
 </p>
 </li>
-<li><p><code>Dist</code>: the genomic distance between the gene and the SNP
+<li><p><code>Dist</code>: the genomic distance between the gene and the GR
 </p>
 </li>
 <li><p><code>Weight</code>: the distance weight based on the genomic distance
@@ -139,16 +124,20 @@ RData files. See <code>xRDataLoader</code> for details</p>
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
-# a) provide the seed SNPs with the significance info
+# a) provide the genomic regions
 ## load ImmunoBase
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
 RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
-data &lt;- names(gr)
+df &lt;- as.data.frame(gr, row.names=NULL)
+chr &lt;- df$seqnames
+start &lt;- df$start
+end &lt;- df$end
+data &lt;- paste(chr,':',start,'-',end, sep='')
 
 # b) define nearby genes
-df_nGenes &lt;- xSNP2nGenes(data=data, distance.max=200000,
+df_nGenes &lt;- xGR2nGenes(data=data, distance.max=10000,
 decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 
 ## End(Not run)

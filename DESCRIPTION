@@ -53,5 +53,8 @@ Collate:
     'xLiftOver.r'
     'xEnrichConciser.r'
     'xColormap.r'
+    'xGR2nGenes.r'
+    'xGRscores.r'
+    'xGR2GeneScores.r'
 License: GPL-2
 biocViews: Bioinformatics

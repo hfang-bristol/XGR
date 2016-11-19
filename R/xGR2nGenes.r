@@ -1,12 +1,11 @@
-#' Function to define nearby genes given a list of SNPs
+#' Function to define nearby genes given a list of genomic regions
 #'
-#' \code{xSNP2nGenes} is supposed to define nearby genes given a list of SNPs within certain distance window. The distance weight is calcualted as a decaying function of the gene-to-SNP distance. 
+#' \code{xGR2nGenes} is supposed to define nearby genes given a list of genomic regions (GR) within certain distance window. The distance weight is calcualted as a decaying function of the gene-to-GR distance. 
 #'
-#' @param data a input vector containing SNPs. SNPs should be provided as dbSNP ID (ie starting with rs). Alternatively, they can be in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number; for example, 'chr16:28525386'
-#' @param distance.max the maximum distance between genes and SNPs. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby SNPs per gene
+#' @param data a input vector containing genomic regions (GR). GR should be provided in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'
+#' @param distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
-#' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -14,50 +13,66 @@
 #' a data frame with following columns:
 #' \itemize{
 #'  \item{\code{Gene}: nearby genes}
-#'  \item{\code{SNP}: SNPs}
-#'  \item{\code{Dist}: the genomic distance between the gene and the SNP}
+#'  \item{\code{GR}: genomic regions}
+#'  \item{\code{Dist}: the genomic distance between the gene and the GR}
 #'  \item{\code{Weight}: the distance weight based on the genomic distance}
 #' }
 #' @note For details on the decay kernels, please refer to \code{\link{xVisKernels}}
 #' @export
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xVisKernels}}
-#' @include xSNP2nGenes.r
+#' @include xGR2nGenes.r
 #' @examples
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #'
-#' # a) provide the seed SNPs with the significance info
+#' # a) provide the genomic regions
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
-#' data <- names(gr)
+#' df <- as.data.frame(gr, row.names=NULL)
+#' chr <- df$seqnames
+#' start <- df$start
+#' end <- df$end
+#' data <- paste(chr,':',start,'-',end, sep='')
 #'
 #' # b) define nearby genes
-#' df_nGenes <- xSNP2nGenes(data=data, distance.max=200000, decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+#' df_nGenes <- xGR2nGenes(data=data, distance.max=10000, decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 #' }
 
-xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes <- function(data, distance.max=50000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     decay.kernel <- match.arg(decay.kernel)
 	
-	## replace '_' with ':'
-	data <- gsub("_", ":", data, perl=T)
-	## replace 'imm:' with 'chr'
-	data <- gsub("imm:", "chr", data, perl=T)
-	
-	data <- unique(data)
-	
     ######################################################
     # Link to targets based on genomic distance
     ######################################################
+    data <- unique(data)
     
-    gr_SNP <- xSNPlocations(data=data, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
-
+	## construct GR
+	input <- do.call(rbind, strsplit(data, ":|-"))
+	if(ncol(input)>=3){
+		data <- input[,1:3]
+	}else if(ncol(input)==2){
+		data <- input[,c(1,2,2)]
+	}else{
+		stop("Your input 'data' does not meet the format 'chr:start-end'!\n")
+	}
+	
+	## make sure positions are numeric
+	ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
+	data <- data[ind,]
+	dGR <- GenomicRanges::GRanges(
+		seqnames=S4Vectors::Rle(data[,1]),
+		ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
+		strand = S4Vectors::Rle(rep('*',nrow(data)))
+	)
+	names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
+	
   	#######################################################
   	
 	if(verbose){
@@ -81,7 +96,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	maxgap <- distance.max
 	minoverlap <- 1L # 1b overlaps
 	subject <- gr_Gene
-	query <- gr_SNP
+	query <- dGR
 	q2r <- as.matrix(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
 	
 	if(length(q2r) > 0){
@@ -92,7 +107,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 			x <- subject[ind_gene[i],]
 			y <- query[list_gene[[i]],]
 			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-			res <- data.frame(Gene=rep(names(x),length(dists)), SNP=names(y), Dist=dists, stringsAsFactors=F)
+			res <- data.frame(Gene=rep(names(x),length(dists)), GR=names(y), Dist=dists, stringsAsFactors=F)
 		})
 	
 		## weights according to distance away from SNPs

@@ -30,7 +30,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
@@ -139,6 +139,7 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
 	#############
 	## for output
 	df_Gene <- data.frame(Gene=names(seeds.genes), Score=seeds.genes, Pval=pval, row.names=NULL, stringsAsFactors=F)
+	df_Gene <- df_Gene[order(df_Gene$Score,decreasing=TRUE),]
 	#############
 	
 	if(verbose){
