@@ -197,8 +197,8 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	if(ecount(subnet)>0 && class(subnet)=="igraph"){
 		relations <- igraph::get.data.frame(subnet, what="edges")[,c(1,2)]
 		nodes <- igraph::get.data.frame(subnet, what="vertices")
-		#nodes <- cbind(symbol=nodes$name, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score)
-		nodes <- cbind(name=nodes$name, significance=pval[rownames(nodes)], score=nodes$score)
+		nodes <- cbind(symbol=nodes$name, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score)
+		#nodes <- cbind(name=nodes$name, significance=pval[rownames(nodes)], score=nodes$score)
 		if(is.directed(subnet)){
 			subg <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
 		}else{
