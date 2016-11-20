@@ -230,13 +230,31 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			G2S_score <- xSparseMatrix(df_nGenes[,c("Gene","GR","Weight")], verbose=verbose)
 			## calculate genetic influence score under a set of SNPs for each seed gene
 			if(scoring.scheme=='max'){
-				seeds.genes <- apply(G2S_score, 1, function(x) {
-					base::max(x)
-				})
+				if(1){
+					system.time({
+					mat <- as.matrix(G2S_score)
+					seeds.genes <- do.call(base::pmax, lapply(1:ncol(mat), function(j) mat[,j]))
+					})
+				}else{
+					system.time({
+					seeds.genes <- apply(G2S_score, 1, function(x) {
+						base::max(x)
+					})
+					})
+				}
+				
 			}else if(scoring.scheme=='sum'){
-				seeds.genes <- apply(G2S_score, 1, function(x) {
-					base::sum(x)
-				})
+				if(1){
+					system.time({
+					seeds.genes <- base::rowSums(as.matrix(G2S_score))
+					})
+				}else{
+					system.time({
+					seeds.genes <- apply(G2S_score, 1, function(x) {
+						base::sum(x)
+					})
+					})
+				}
 			}else if(scoring.scheme=='sequential'){
 				seeds.genes <- apply(G2S_score, 1, function(x) {
 					base::sum(base::sort(x, decreasing=T) / (1:length(x)))
@@ -250,6 +268,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 
 			## for output
 			df_Gene <- data.frame(Gene=names(seeds.genes), Score=seeds.genes, stringsAsFactors=F)
+			rownames(df_Gene) <- NULL
 			df_Gene <- df_Gene[order(df_Gene$Score,decreasing=TRUE),]
 			
 			invisible(df_Gene)

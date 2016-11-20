@@ -117,13 +117,24 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
     
     ## calculate genetic influence score under a set of SNPs for each seed gene
     if(scoring.scheme=='max'){
-    	seeds.genes <- apply(G2S_score, 1, function(x) {
-            base::max(x)
-        })
+		if(1){
+			mat <- as.matrix(G2S_score)
+			seeds.genes <- do.call(base::pmax, lapply(1:ncol(mat), function(j) mat[,j]))
+		}else{
+			seeds.genes <- apply(G2S_score, 1, function(x) {
+				base::max(x)
+			})
+		}
+		
     }else if(scoring.scheme=='sum'){
-    	seeds.genes <- apply(G2S_score, 1, function(x) {
-            base::sum(x)
-        })
+		if(1){
+			seeds.genes <- base::rowSums(as.matrix(G2S_score))
+		}else{
+			seeds.genes <- apply(G2S_score, 1, function(x) {
+				base::sum(x)
+			})
+		}
+		
     }else if(scoring.scheme=='sequential'){
         seeds.genes <- apply(G2S_score, 1, function(x) {
         	base::sum(base::sort(x, decreasing=T) / (1:length(x)))
