@@ -18,11 +18,13 @@ weight is calcualted as a decaying function of the gene-to-GR distance.
 <h3>Usage</h3>
 
 <pre>
-xGR2nGenes(data, build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"),
+xGR2nGenes(data, format = c("chr:start-end", "data.frame", "bed",
+"GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
 decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"),
+scoring = F, scoring.scheme = c("max", "sum", "sequential"),
 verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -32,10 +34,24 @@ verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a input vector containing genomic regions (GR). GR should
-be provided in the format of 'chrN:start-end', where N is either 1-22
-or X, start (or end) is genomic positional number; for example,
-'chr1:13-20'</p>
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>the format of the input data. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
@@ -76,6 +92,19 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
+<tr valign="top"><td><code>scoring</code></td>
+<td>
+<p>logical to indicate whether gene-leverl scoring will be
+further calculated. By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>scoring.scheme</code></td>
+<td>
+<p>the method used to calculate seed gene scores
+under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for the
+maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
+weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
+<i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -91,7 +120,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a data frame with following columns:
+<p>If scoring sets to false, a data frame with following columns:
 </p>
 
 <ul>
@@ -105,6 +134,18 @@ RData files. See <code>xRDataLoader</code> for details</p>
 </p>
 </li>
 <li><p><code>Weight</code>: the distance weight based on the genomic distance
+</p>
+</li></ul>
+
+<p>If scoring sets to true, a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>Gene</code>: nearby genes
+</p>
+</li>
+<li><p><code>Score</code>: gene score taking into account the distance weight
+based on the genomic distance
 </p>
 </li></ul>
 
@@ -143,9 +184,15 @@ start &lt;- df$start
 end &lt;- df$end
 data &lt;- paste(chr,':',start,'-',end, sep='')
 
-# b) define nearby genes
-df_nGenes &lt;- xGR2nGenes(data=data, distance.max=10000,
-decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+# b) define nearby genes without gene scoring
+df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="slow", decay.exponent=2,
+RData.location=RData.location)
+
+# c) define nearby genes and their scores
+df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T,
+scoring.scheme="max", RData.location=RData.location)
 
 ## End(Not run)
 </pre>

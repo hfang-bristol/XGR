@@ -4,18 +4,32 @@
 \alias{xGR2nGenes}
 \title{Function to define nearby genes given a list of genomic regions}
 \usage{
-xGR2nGenes(data, build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"),
+xGR2nGenes(data, format = c("chr:start-end", "data.frame", "bed",
+"GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
 decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"),
+scoring = F, scoring.scheme = c("max", "sum", "sequential"),
 verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{a input vector containing genomic regions (GR). GR should
-be provided in the format of 'chrN:start-end', where N is either 1-22
-or X, start (or end) is genomic positional number; for example,
-'chr1:13-20'}
+\item{data}{input genomic regions (GR). If formatted as "chr:start-end"
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')}
+
+\item{format}{the format of the input data. It can be one of
+"data.frame", "chr:start-end", "bed" or "GRanges"}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
@@ -46,6 +60,15 @@ without extension), plus specify your file RData path in
 "RData.location". Note: you can also load your customised GR object
 directly}
 
+\item{scoring}{logical to indicate whether gene-leverl scoring will be
+further calculated. By default, it sets to false}
+
+\item{scoring.scheme}{the method used to calculate seed gene scores
+under a set of GR. It can be one of "sum" for adding up, "max" for the
+maximum, and "sequential" for the sequential weighting. The sequential
+weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where
+\eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
@@ -53,12 +76,18 @@ displayed in the screen. By default, it sets to true for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a data frame with following columns:
+If scoring sets to false, a data frame with following columns:
 \itemize{
 \item{\code{Gene}: nearby genes}
 \item{\code{GR}: genomic regions}
 \item{\code{Dist}: the genomic distance between the gene and the GR}
 \item{\code{Weight}: the distance weight based on the genomic distance}
+}
+If scoring sets to true, a data frame with following columns:
+\itemize{
+\item{\code{Gene}: nearby genes}
+\item{\code{Score}: gene score taking into account the distance weight
+based on the genomic distance}
 }
 }
 \description{
@@ -88,9 +117,15 @@ start <- df$start
 end <- df$end
 data <- paste(chr,':',start,'-',end, sep='')
 
-# b) define nearby genes
-df_nGenes <- xGR2nGenes(data=data, distance.max=10000,
-decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+# b) define nearby genes without gene scoring
+df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="slow", decay.exponent=2,
+RData.location=RData.location)
+
+# c) define nearby genes and their scores
+df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T,
+scoring.scheme="max", RData.location=RData.location)
 }
 }
 \seealso{

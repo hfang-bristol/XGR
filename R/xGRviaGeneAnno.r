@@ -98,8 +98,13 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     ## import data file
     if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
         data <- data.file
-    }else if(!is.null(data.file) & !is.na(data.file)){
-		data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+    }else if(!is.null(data.file) & any(!is.na(data.file))){
+    	if(length(data.file)==1){
+			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+			data <- unique(data[,1])
+		}else{
+			data <- data.file
+		}
     }else{
     	stop("The file 'data.file' must be provided!\n")
     }
@@ -112,7 +117,12 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     if(is.matrix(background.file) | is.data.frame(background.file) | class(background.file)=="GRanges"){
         background <- background.file
     }else if(!is.null(background.file)){
-		background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
+    	if(length(background.file)==1){
+			background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
+			background <- unique(background[,1])
+		}else{
+			background <- background.file
+		}
     }else{
     	background <- NULL
     }

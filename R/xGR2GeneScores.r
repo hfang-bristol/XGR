@@ -87,7 +87,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, build.conversion=c
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_nGenes <- xGR2nGenes(data=df_GR$GR, build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, verbose=verbose, RData.location=RData.location)
+	df_nGenes <- xGR2nGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, scoring=F, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()

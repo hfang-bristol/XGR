@@ -77,6 +77,11 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		}
     }
     
+	if(verbose){
+		now <- Sys.time()
+		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=T)
+	}
+    
 	# genes: get all UCSC genes within defined distance window away from variants
 	maxgap <- distance.max
 	minoverlap <- 1L # 1b overlaps
@@ -86,17 +91,31 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	
 	if(length(q2r) > 0){
 	
-		list_gene <- split(x=q2r[,1], f=q2r[,2])
-		ind_gene <- as.numeric(names(list_gene))
-		res_list <- lapply(1:length(ind_gene), function(i){
-			x <- subject[ind_gene[i],]
-			y <- query[list_gene[[i]],]
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Calculate distance (%s) ...", as.character(now)), appendLF=T)
+		}
+	
+		if(1){
+			### very quick
+			x <- subject[q2r[,2],]
+			y <- query[q2r[,1],]
 			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-			res <- data.frame(Gene=rep(names(x),length(dists)), SNP=names(y), Dist=dists, stringsAsFactors=F)
-		})
+			df_nGenes <- data.frame(Gene=names(x), GR=names(y), Dist=dists, stringsAsFactors=F)
+		}else{
+			### very slow
+			list_gene <- split(x=q2r[,1], f=q2r[,2])
+			ind_gene <- as.numeric(names(list_gene))
+			res_list <- lapply(1:length(ind_gene), function(i){
+				x <- subject[ind_gene[i],]
+				y <- query[list_gene[[i]],]
+				dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
+				res <- data.frame(Gene=rep(names(x),length(dists)), GR=names(y), Dist=dists, stringsAsFactors=F)
+			})
+			df_nGenes <- do.call(rbind, res_list)
+		}
 	
 		## weights according to distance away from SNPs
-		df_nGenes <- do.call(rbind, res_list)
 		if(distance.max==0){
 			x <- df_nGenes$Dist
 		}else{
@@ -113,7 +132,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel", length(unique(df_nGenes$Gene)), distance.max, decay.kernel), appendLF=T)
+			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(df_nGenes$Gene)), distance.max, decay.kernel, as.character(now)), appendLF=T)
 		}
 		
 		df_nGenes <- df_nGenes[order(df_nGenes$Gene,df_nGenes$Dist,decreasing=FALSE),]
