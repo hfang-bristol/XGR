@@ -21,11 +21,10 @@ weight is calcualted as a decaying function of the gene-to-GR distance.
 xGR2nGenes(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
-decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"),
-scoring = F, scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F, verbose = T,
+distance.max = 50000, decay.kernel = c("rapid", "slow", "linear",
+"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), scoring = F, scoring.scheme = c("max", "sum",
+"sequential"), scoring.rescale = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -71,7 +70,8 @@ calculated for nearby GR per gene</p>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay</p>
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'</p>
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>
@@ -166,7 +166,7 @@ based on the genomic distance
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>, <code>xVisKernels</code>
+<p><code>xRDataLoader</code>, <code>xGR</code>
 </p>
 
 
@@ -190,14 +190,24 @@ start &lt;- df$start
 end &lt;- df$end
 data &lt;- paste(chr,':',start,'-',end, sep='')
 
-# b) define nearby genes without gene scoring
+# b) define nearby genes taking into acount distance weight
+# without gene scoring
 df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
 distance.max=10000, decay.kernel="slow", decay.exponent=2,
 RData.location=RData.location)
-
-# c) define nearby genes and their scores
+# with their scores
 df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
 distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T,
+scoring.scheme="max", RData.location=RData.location)
+
+# c) define nearby genes without taking into acount distance weight
+# without gene scoring
+df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="constant",
+RData.location=RData.location)
+# with their scores
+df_nGenes &lt;- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="constant", scoring=T,
 scoring.scheme="max", RData.location=RData.location)
 
 ## End(Not run)

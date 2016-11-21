@@ -5,7 +5,7 @@
 
 <table width="100%" summary="page for xSubneterGR"><tr><td>xSubneterGR</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to identify a gene network from an input network given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)</h2>
+<h2>Function to identify a gene network from an input network given a list of genomic regions together with the significance level</h2>
 
 <h3>Description</h3>
 
@@ -13,7 +13,8 @@
 subnetwork from an input graph with the node information on the
 significance (measured as p-values or fdr). To do so, it defines seed
 genes and their scores that take into account the distance to and the
-significance of input SNPs. It returns an object of class &quot;igraph&quot;.
+significance of input genomic regions (GR). It returns an object of
+class &quot;igraph&quot;.
 </p>
 
 
@@ -23,8 +24,9 @@ significance of input SNPs. It returns an object of class &quot;igraph&quot;.
 xSubneterGR(data, significance.threshold = 5e-05, build.conversion =
 c(NA,
 "hg38.to.hg19", "hg18.to.hg19"), distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"),
 scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
@@ -76,7 +78,8 @@ calculated for nearby GR per gene</p>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay</p>
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'</p>
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>

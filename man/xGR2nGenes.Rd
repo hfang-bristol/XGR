@@ -7,11 +7,10 @@
 xGR2nGenes(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
-decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"),
-scoring = F, scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F, verbose = T,
+distance.max = 50000, decay.kernel = c("rapid", "slow", "linear",
+"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), scoring = F, scoring.scheme = c("max", "sum",
+"sequential"), scoring.rescale = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -43,7 +42,8 @@ calculated for nearby GR per gene}
 
 \item{decay.kernel}{a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay}
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'}
 
 \item{decay.exponent}{a numeric specifying a decay exponent. By
 default, it sets to 2}
@@ -121,18 +121,28 @@ start <- df$start
 end <- df$end
 data <- paste(chr,':',start,'-',end, sep='')
 
-# b) define nearby genes without gene scoring
+# b) define nearby genes taking into acount distance weight
+# without gene scoring
 df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
 distance.max=10000, decay.kernel="slow", decay.exponent=2,
 RData.location=RData.location)
-
-# c) define nearby genes and their scores
+# with their scores
 df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
 distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T,
+scoring.scheme="max", RData.location=RData.location)
+
+# c) define nearby genes without taking into acount distance weight
+# without gene scoring
+df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="constant",
+RData.location=RData.location)
+# with their scores
+df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
+distance.max=10000, decay.kernel="constant", scoring=T,
 scoring.scheme="max", RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xVisKernels}}
+\code{\link{xRDataLoader}}, \code{\link{xGR}}
 }
 

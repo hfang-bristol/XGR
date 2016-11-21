@@ -7,10 +7,11 @@
 xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
 0.8,
 significance.threshold = 5e-05, distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+scoring.scheme = c("max", "sum", "sequential"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -55,7 +56,8 @@ calculated for nearby SNPs per gene}
 
 \item{decay.kernel}{a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay}
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'}
 
 \item{decay.exponent}{a numeric specifying a decay exponent. By
 default, it sets to 2}

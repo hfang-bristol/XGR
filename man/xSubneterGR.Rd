@@ -2,13 +2,14 @@
 % Please edit documentation in R/xSubneterGR.r
 \name{xSubneterGR}
 \alias{xSubneterGR}
-\title{Function to identify a gene network from an input network given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)}
+\title{Function to identify a gene network from an input network given a list of genomic regions together with the significance level}
 \usage{
 xSubneterGR(data, significance.threshold = 5e-05, build.conversion =
 c(NA,
 "hg38.to.hg19", "hg18.to.hg19"), distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid"), decay.exponent = 2,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"),
 scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
@@ -46,7 +47,8 @@ calculated for nearby GR per gene}
 
 \item{decay.kernel}{a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay}
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'}
 
 \item{decay.exponent}{a numeric specifying a decay exponent. By
 default, it sets to 2}
@@ -140,7 +142,8 @@ ndoe attributes: significance, score
 subnetwork from an input graph with the node information on the
 significance (measured as p-values or fdr). To do so, it defines seed
 genes and their scores that take into account the distance to and the
-significance of input SNPs. It returns an object of class "igraph".
+significance of input genomic regions (GR). It returns an object of
+class "igraph".
 }
 \note{
 The algorithm identifying a gene subnetwork that is likely modulated by

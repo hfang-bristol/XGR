@@ -20,10 +20,9 @@ as a decaying function of the gene-to-SNP distance.
 <pre>
 xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
 "slow",
-"linear"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
-"dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"linear", "constant"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -48,7 +47,8 @@ calculated for nearby SNPs per gene</p>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay</p>
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'</p>
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>

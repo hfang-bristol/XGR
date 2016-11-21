@@ -22,11 +22,10 @@ significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
 <pre>
 xGR2GeneScores(data, significance.threshold = 5e-05,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("slow", "linear", "rapid"),
-decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"),
-scoring.scheme = c("max", "sum", "sequential"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
+"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -69,7 +68,8 @@ calculated for nearby GR per gene</p>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay</p>
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'</p>
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>
