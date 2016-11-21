@@ -25,7 +25,8 @@ distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
 decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"),
 scoring = F, scoring.scheme = c("max", "sum", "sequential"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+scoring.rescale = F, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -94,7 +95,7 @@ directly</p>
 </td></tr>
 <tr valign="top"><td><code>scoring</code></td>
 <td>
-<p>logical to indicate whether gene-leverl scoring will be
+<p>logical to indicate whether gene-level scoring will be
 further calculated. By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
@@ -104,6 +105,11 @@ under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quo
 maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
 weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
 <i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+</td></tr>
+<tr valign="top"><td><code>scoring.rescale</code></td>
+<td>
+<p>logical to indicate whether gene scores will be
+further rescaled into the [0,1] range. By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

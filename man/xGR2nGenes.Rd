@@ -11,7 +11,8 @@ distance.max = 50000, decay.kernel = c("rapid", "slow", "linear"),
 decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"),
 scoring = F, scoring.scheme = c("max", "sum", "sequential"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+scoring.rescale = F, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -60,7 +61,7 @@ without extension), plus specify your file RData path in
 "RData.location". Note: you can also load your customised GR object
 directly}
 
-\item{scoring}{logical to indicate whether gene-leverl scoring will be
+\item{scoring}{logical to indicate whether gene-level scoring will be
 further calculated. By default, it sets to false}
 
 \item{scoring.scheme}{the method used to calculate seed gene scores
@@ -68,6 +69,9 @@ under a set of GR. It can be one of "sum" for adding up, "max" for the
 maximum, and "sequential" for the sequential weighting. The sequential
 weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where
 \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)}
+
+\item{scoring.rescale}{logical to indicate whether gene scores will be
+further rescaled into the [0,1] range. By default, it sets to false}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

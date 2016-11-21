@@ -9,8 +9,9 @@
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
-#' @param scoring logical to indicate whether gene-leverl scoring will be further calculated. By default, it sets to false
+#' @param scoring logical to indicate whether gene-level scoring will be further calculated. By default, it sets to false
 #' @param scoring.scheme the method used to calculate seed gene scores under a set of GR. It can be one of "sum" for adding up, "max" for the maximum, and "sequential" for the sequential weighting. The sequential weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)
+#' @param scoring.rescale logical to indicate whether gene scores will be further rescaled into the [0,1] range. By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
@@ -54,7 +55,7 @@
 #' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=F, scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -264,6 +265,15 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			if(verbose){
 				now <- Sys.time()
 				message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme (%s)", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
+			}
+
+			if(scoring.rescale){
+				if(verbose){
+					now <- Sys.time()
+					message(sprintf("Also rescale score into the [0,1] range (%s)", as.character(now)), appendLF=T)
+				}
+				# rescale to [0 1]
+				seeds.genes <- (seeds.genes - min(seeds.genes))/(max(seeds.genes) - min(seeds.genes))
 			}
 
 			## for output

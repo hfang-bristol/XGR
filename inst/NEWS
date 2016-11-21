@@ -9,6 +9,8 @@ NEW FEATURES
 
     o Add new functions ('xSubneterGR', 'xGR2GeneScores', 'xGR2nGenes' and 'xGRscores') to conduct region-based network analysis
     
+    o Populate annotations
+    
 
 CHANGES IN VERSION 1.0.4
 -----------------------
