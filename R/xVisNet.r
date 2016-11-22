@@ -74,7 +74,7 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     }
     
     
-    par_old <- graphics::par()
+    suppressWarnings(par_old <- graphics::par(no.readonly=TRUE))
     
 	dnet::visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, edge.arrow.size=edge.arrow.size, ...)
     

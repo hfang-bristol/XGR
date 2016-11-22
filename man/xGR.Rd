@@ -24,7 +24,7 @@ not to be provided. The data could also be an object of 'GRanges' (in
 this case, formatted as 'GRanges')}
 
 \item{format}{the format of the input data. It can be one of
-"data.frame", "chr:start-end", "bed" or "GRanges"}
+"chr:start-end", "data.frame", "bed" or "GRanges"}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
