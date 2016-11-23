@@ -184,7 +184,8 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 			
 				load_remotes <- c(
 				paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep=""),
-				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep="")
+				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep=""),
+				paste("http://galahad.well.ox.ac.uk/bigdata_dev/", RData, ".RData", sep="")
 				)
 				
 				for(i in 1:length(load_remotes)){

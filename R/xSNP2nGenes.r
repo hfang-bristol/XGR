@@ -101,7 +101,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 			x <- subject[q2r[,2],]
 			y <- query[q2r[,1],]
 			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-			df_nGenes <- data.frame(Gene=names(x), GR=names(y), Dist=dists, stringsAsFactors=F)
+			df_nGenes <- data.frame(Gene=names(x), SNP=names(y), Dist=dists, stringsAsFactors=F)
 		}else{
 			### very slow
 			list_gene <- split(x=q2r[,1], f=q2r[,2])
@@ -110,7 +110,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 				x <- subject[ind_gene[i],]
 				y <- query[list_gene[[i]],]
 				dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-				res <- data.frame(Gene=rep(names(x),length(dists)), GR=names(y), Dist=dists, stringsAsFactors=F)
+				res <- data.frame(Gene=rep(names(x),length(dists)), SNP=names(y), Dist=dists, stringsAsFactors=F)
 			})
 			df_nGenes <- do.call(rbind, res_list)
 		}
