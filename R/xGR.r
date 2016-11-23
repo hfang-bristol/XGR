@@ -108,8 +108,10 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 	}else if(format=="GRanges"){
 		dGR <- data
 		
-		df <- as.data.frame(dGR, row.names=NULL)
-		names(dGR) <- paste(df$seqnames,':',df$start,'-',df$end, sep='')
+		if(is.null(names(dGR))){
+			df <- as.data.frame(dGR, row.names=NULL)
+			names(dGR) <- paste(df$seqnames,':',df$start,'-',df$end, sep='')
+		}
 	}
 
 	# lift over
