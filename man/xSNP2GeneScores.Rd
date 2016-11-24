@@ -6,7 +6,7 @@
 \usage{
 xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
 0.8,
-significance.threshold = 5e-05, distance.max = 50000,
+significance.threshold = 5e-05, score.cap = 10, distance.max = 50000,
 decay.kernel = c("slow", "linear", "rapid", "constant"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
@@ -48,6 +48,9 @@ significance level when transforming the significance level of SNPs
 into scores. If given, those SNPs below this are considered significant
 and thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{score.cap}{the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied}
 
 \item{distance.max}{the maximum distance between genes and SNPs. Only
 those genes no far way from this distance will be considered as seed

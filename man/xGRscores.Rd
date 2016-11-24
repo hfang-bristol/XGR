@@ -4,8 +4,8 @@
 \alias{xGRscores}
 \title{Function to score genomic regions based on the given significance level}
 \usage{
-xGRscores(data, significance.threshold = 0.05, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGRscores(data, significance.threshold = 0.05, score.cap = 10,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -22,6 +22,9 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{score.cap}{the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

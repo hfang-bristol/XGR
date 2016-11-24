@@ -7,6 +7,7 @@
 #' @param LD.customised a user-input matrix or data frame with 3 columns: 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2 value. It is designed to allow the user analysing their precalcuated LD info. This customisation (if provided) has the high priority over built-in LD SNPs
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.8 to 1
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of SNPs into scores. If given, those SNPs below this are considered significant and thus scored positively. Instead, those above this are considered insigificant and thus receive no score
+#' @param score.cap the maximum score being capped. By default, it is set to 10. If NULL, no capping is applied
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
@@ -41,7 +42,7 @@
 #' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, include.LD="EUR", RData.location=RData.location)
 #' }
 
-xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     if(is.null(data)){
@@ -265,8 +266,26 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     flag[is.na(ind)] <- 'LD'
     
     df_SNP <- data.frame(SNP=names(pval), Score=seeds.snps, Pval=pval, Flag=flag, row.names=NULL, stringsAsFactors=F)
-    df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,df_SNP$SNP,decreasing=TRUE),]
+    
+    ##############################
+    ## cap the maximum score
+    if(!is.null(score.cap)){
+    	score.cap <- as.numeric(score.cap)
+    	if(score.cap <= max(df_SNP$Score)){
+    		df_SNP$Score[df_SNP$Score>=score.cap] <- score.cap
+    		
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("SNP score capped to the maximum score %d.", score.cap), appendLF=T)
+			}
+    	}
+    }
+    ##############################
+        
+    df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,-df_SNP$Pval,df_SNP$SNP,decreasing=TRUE),]
     #########
+
+
     
     invisible(df_SNP)
 }

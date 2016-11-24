@@ -21,7 +21,7 @@ significance of input SNPs. It returns an object of class &quot;igraph&quot;.
 
 <pre>
 xSubneterSNPs(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
-significance.threshold = 5e-05, distance.max = 2e+05,
+significance.threshold = 5e-05, score.cap = 10, distance.max = 2e+05,
 decay.kernel = c("slow", "linear", "rapid", "constant"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
@@ -84,6 +84,11 @@ significance level when transforming the significance level of SNPs
 into scores. If given, those SNPs below this are considered significant
 and thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
+</td></tr>
+<tr valign="top"><td><code>score.cap</code></td>
+<td>
+<p>the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied</p>
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>

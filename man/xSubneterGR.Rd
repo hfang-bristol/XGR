@@ -4,13 +4,11 @@
 \alias{xSubneterGR}
 \title{Function to identify a gene network from an input network given a list of genomic regions together with the significance level}
 \usage{
-xSubneterGR(data, significance.threshold = 5e-05, build.conversion =
-c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid", "constant"),
-decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"),
-scoring.scheme = c("max", "sum", "sequential"),
+xSubneterGR(data, significance.threshold = 5e-05, score.cap = 10,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
+"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
@@ -35,6 +33,9 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{score.cap}{the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and

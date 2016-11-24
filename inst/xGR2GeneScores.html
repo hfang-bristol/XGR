@@ -20,7 +20,7 @@ significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
 <h3>Usage</h3>
 
 <pre>
-xGR2GeneScores(data, significance.threshold = 5e-05,
+xGR2GeneScores(data, significance.threshold = 5e-05, score.cap = 10,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
 "constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
@@ -50,6 +50,11 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
+</td></tr>
+<tr valign="top"><td><code>score.cap</code></td>
+<td>
+<p>the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>

@@ -17,8 +17,8 @@ together with the significance level.
 <h3>Usage</h3>
 
 <pre>
-xGRscores(data, significance.threshold = 0.05, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGRscores(data, significance.threshold = 0.05, score.cap = 10,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -43,6 +43,11 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
+</td></tr>
+<tr valign="top"><td><code>score.cap</code></td>
+<td>
+<p>the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

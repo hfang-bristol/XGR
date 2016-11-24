@@ -5,7 +5,7 @@
 \title{Function to score lead or LD SNPs based on the given significance level}
 \usage{
 xSNPscores(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
-significance.threshold = 5e-05, verbose = T,
+significance.threshold = 5e-05, score.cap = 10, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -44,6 +44,9 @@ significance level when transforming the significance level of SNPs
 into scores. If given, those SNPs below this are considered significant
 and thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{score.cap}{the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

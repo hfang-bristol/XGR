@@ -4,7 +4,7 @@
 \alias{xGR2GeneScores}
 \title{Function to identify likely modulated seed genes given a list of genomic regions together with the significance level}
 \usage{
-xGR2GeneScores(data, significance.threshold = 5e-05,
+xGR2GeneScores(data, significance.threshold = 5e-05, score.cap = 10,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
 "constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
@@ -26,6 +26,9 @@ significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score}
+
+\item{score.cap}{the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
