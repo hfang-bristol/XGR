@@ -33,9 +33,9 @@ enrichment results, it can be set into c(2,3) to display only shared
 terms by any two or all three. By default, it is NULL meaning no such
 restriction}
 
-\item{signature}{a logical to indicate whether the signature is
-assigned to the plot caption. By default, it sets TRUE showing which
-function is used to draw this graph}
+\item{signature}{logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE showing which function is
+used to draw this graph}
 }
 \value{
 an object of class "ggplot", but appended with a 'g' (an igraph object

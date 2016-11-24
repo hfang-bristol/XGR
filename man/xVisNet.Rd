@@ -7,10 +7,11 @@
 xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
 "br",
 "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, glayout = layout_with_kk, vertex.frame.color = NA,
-vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
-vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = 0.3,
-vertex.label.color = "blue", edge.arrow.size = 0.3, ...)
+newpage = T, signature = TRUE, glayout = layout_with_kk,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.dist = 0.3, vertex.label.color = "blue",
+edge.arrow.size = 0.3, ...)
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -48,6 +49,9 @@ pattern is null, it always sets to false}
 
 \item{newpage}{logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page}
+
+\item{signature}{logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets FALSE}
 
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this

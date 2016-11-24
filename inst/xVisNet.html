@@ -21,10 +21,11 @@ input pattern.
 xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
 "br",
 "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, glayout = layout_with_kk, vertex.frame.color = NA,
-vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
-vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = 0.3,
-vertex.label.color = "blue", edge.arrow.size = 0.3, ...)
+newpage = T, signature = TRUE, glayout = layout_with_kk,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.dist = 0.3, vertex.label.color = "blue",
+edge.arrow.size = 0.3, ...)
 </pre>
 
 
@@ -80,6 +81,11 @@ pattern is null, it always sets to false</p>
 <td>
 <p>logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page</p>
+</td></tr>
+<tr valign="top"><td><code>signature</code></td>
+<td>
+<p>logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets FALSE</p>
 </td></tr>
 <tr valign="top"><td><code>glayout</code></td>
 <td>

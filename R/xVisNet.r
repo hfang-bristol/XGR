@@ -9,6 +9,7 @@
 #' @param zlim the minimum and maximum z/patttern values for which colors should be plotted, defaulting to the range of the finite values of z. Each of the given colors will be used to color an equispaced interval of this range. The midpoints of the intervals cover the range, so that values just outside the range will be plotted
 #' @param colorbar logical to indicate whether to append a colorbar. If pattern is null, it always sets to false
 #' @param newpage logical to indicate whether to open a new page. By default, it sets to true for opening a new page
+#' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets FALSE
 #' @param glayout either a function or a numeric matrix configuring how the vertices will be placed on the plot. If layout is a function, this function will be called with the graph as the single parameter to determine the actual coordinates. This function can be one of "layout_nicely" (previously "layout.auto"), "layout_randomly" (previously "layout.random"), "layout_in_circle" (previously "layout.circle"), "layout_on_sphere" (previously "layout.sphere"), "layout_with_fr" (previously "layout.fruchterman.reingold"), "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree" (previously "layout.reingold.tilford"), "layout_with_lgl" (previously "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"), "layout_with_sugiyama" (previously "layout.kamada.kawai"), "layout_with_dh" (previously "layout.davidson.harel"), "layout_with_drl" (previously "layout.drl"), "layout_with_gem" (previously "layout.gem"), "layout_with_mds". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
 #' @param vertex.frame.color the color of the frame of the vertices. If it is NA, then there is no frame
 #' @param vertex.size the size of each vertex. If it is a vector, each vertex may differ in size
@@ -45,7 +46,7 @@
 #' names(pattern) <- V(g)$name
 #' xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
-xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", edge.arrow.size=0.3, ...)
+xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=T, newpage=T, signature=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", edge.arrow.size=0.3, ...)
 {
     
     if (class(g) != "igraph"){
@@ -79,6 +80,11 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
 	dnet::visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, edge.arrow.size=edge.arrow.size, ...)
     
     suppressWarnings(graphics::par(par_old))
+    
+    if(signature){
+    	caption <- paste("Created by xVisNet from XGR version", utils::packageVersion("XGR"))
+    	graphics::mtext(caption, side=1, line=2, adj=1, cex=.66, font=3)
+    }
     
     invisible()
 }

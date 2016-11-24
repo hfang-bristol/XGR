@@ -32,9 +32,9 @@ size. By default, it sets to 3}
 
 \item{wrap.width}{a positive integer specifying wrap width of name}
 
-\item{signature}{a logical to indicate whether the signature is
-assigned to the plot caption. By default, it sets TRUE showing which
-function is used to draw this graph}
+\item{signature}{logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE showing which function is
+used to draw this graph}
 }
 \value{
 an object of class "ggplot"
