@@ -120,7 +120,24 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
     #########
     
     df_GR <- data.frame(GR=names(pval), Score=seeds.snps, Pval=pval, row.names=NULL, stringsAsFactors=F)
-    df_GR <- df_GR[order(df_GR$Score,df_GR$GR,decreasing=TRUE),]
+    
+    
+    ##############################
+    ## cap the maximum score
+    if(!is.null(score.cap)){
+    	score.cap <- as.numeric(score.cap)
+    	if(score.cap <= max(df_GR$Score)){
+    		df_GR$Score[df_GR$Score>=score.cap] <- score.cap
+    		
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("GR score capped to the maximum score %d.", score.cap), appendLF=T)
+			}
+    	}
+    }
+    ##############################
+    
+    df_GR <- df_GR[order(df_GR$Score,-df_GR$Pval,df_GR$GR,decreasing=TRUE),]
     #########
     
     invisible(df_GR)
