@@ -72,29 +72,35 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		df$name <- unlist(res_list)
 	}
 	
+	name <- ''
+	height <- ''
 	if(displayBy=='adjp' | displayBy=='fdr'){
 		df <- df[with(df,order(-adjp,zscore)),]
 		df$name <- factor(df$name, levels=df$name)
-		p <- ggplot(df, aes(x=df$name, y=-1*log10(df$adjp))) 
+		df$height <- -1*log10(df$adjp)
+		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment significance: -log10(FDR)")
 	}else if(displayBy=='fc'){
 		df <- df[with(df,order(fc,-adjp)),]
 		df$name <- factor(df$name, levels=df$name)
-		p <- ggplot(df, aes(x=df$name, y=df$fc))
+		df$height <- df$fc
+		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment changes")
 	}else if(displayBy=='pvalue'){
 		df <- df[with(df,order(-pvalue,zscore)),]
 		df$name <- factor(df$name, levels=df$name)
-		p <- ggplot(df, aes(x=df$name, y=-1*log10(df$pvalue)))
+		df$height <- -1*log10(df$pvalue)
+		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}else if(displayBy=='zscore'){
 		df <- df[with(df,order(zscore,-adjp)),]
 		df$name <- factor(df$name, levels=df$name)
-		p <- ggplot(df, aes(x=df$name, y=df$zscore))
+		df$height <- df$zscore
+		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment z-scores")
 	}
 	
-	bp <- p + geom_bar(stat="identity", fill="orange") + theme_bw() + theme(axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient(low="lightyellow",high="orange") + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
 	
 	if(bar.label){
 		## get text label

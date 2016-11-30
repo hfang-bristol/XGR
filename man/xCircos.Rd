@@ -57,9 +57,9 @@ chromosome ideogram. It can be "out" (by default) or "in"}
 \item{entity.label.track}{an integer specifying the plot track for
 genes/SNPs labels. Default is 1}
 
-\item{entity.label.query}{which genes/SNPs labels in query will be
-displayed. By default, it sets to NULL meaning all will be displayed.
-If labes in query can not be found, then all will be displayed}
+\item{entity.label.query}{which genes/SNPs in query will be labelled.
+By default, it sets to NULL meaning all will be displayed. If labels in
+query can not be found, then all will be displayed}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
