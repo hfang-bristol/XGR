@@ -26,9 +26,8 @@
 #'  \item{\code{expProb}: the probability of expecting bases overlapped between background regions and annotation regions}
 #'  \item{\code{obsProb}: the probability of observing regions overlapped between input regions and annotation regions}
 #' }
-#' @note
+#' @note 
 #' The genomic annotation data are described below according to the data sources and data types.
-#'
 #' 1. ENCODE Transcription Factor ChIP-seq data
 #' \itemize{
 #'  \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and transcription factors) of GenomicRanges objects; each is an GR object containing uniformly identified peaks per cell type per transcription factor.}
@@ -95,6 +94,7 @@
 #'  \item{\code{Blueprint_DNaseI}: a list (36 samples) of GenomicRanges objects; each is an GR object containing identified peaks per sample.}
 #' }
 #' 12. BLUEPRINT DNA Methylation data
+#' \itemize{
 #'  \item{\code{Blueprint_Methylation_hyper}: a list (206 samples) of GenomicRanges objects; each is an GR object containing hyper-methylated CpG regions per sample.}
 #'  \item{\code{Blueprint_Methylation_hypo}: a list (206 samples) of GenomicRanges objects; each is an GR object containing hypo-methylated CpG regions per sample.}
 #' }
