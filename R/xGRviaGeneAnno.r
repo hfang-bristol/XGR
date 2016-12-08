@@ -101,7 +101,7 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     }else if(!is.null(data.file) & any(!is.na(data.file))){
     	if(length(data.file)==1){
 			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
-			data <- unique(data[,1])
+			#data <- unique(data[,1])
 		}else{
 			data <- data.file
 		}
