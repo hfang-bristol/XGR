@@ -1,15 +1,15 @@
 citEntry(entry="Article",
     author = "Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight",
-    title = "XGR: exploring genomic relations for enhanced interpretation through enrichment, similarity, network and annotation analysis",
-    journal = "Zenodo",
+    title = "XGR software for enhanced interpretation of genomic summary data, illustrated by application to immunological traits",
+    journal = "Genome Medicine",
     volume = "",
     issue = "",
     year = "2016", 
     pages = "",
-    url = "http://dx.doi.org/10.5281/zenodo.56428",
+    url = "http://dx.doi.org/10.1186/s13073-016-0384-y",
     doi = "10.5281/zenodo.56428",
     textVersion = paste(
-                "Fang, H., Knezevic, B., Burnham, K.L. & Knight, J.C.",
-                "XGR: exploring genomic relations for enhanced interpretation through enrichment, similarity, network and annotation analysis.",
-                "http://dx.doi.org/10.5281/zenodo.56428")
-)
+    	"Fang, H., Knezevic, B., Burnham, K.L. & Knight, J.C.",
+        "XGR software for enhanced interpretation of genomic summary data, illustrated by application to immunological traits.",
+        "http://dx.doi.org/10.1186/s13073-016-0384-y")
+	)
