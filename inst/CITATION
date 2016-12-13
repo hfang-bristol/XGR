@@ -2,14 +2,14 @@ citEntry(entry="Article",
     author = "Hai Fang, Bogdan Knezevic, Katie L Burnham, Julian C Knight",
     title = "XGR software for enhanced interpretation of genomic summary data, illustrated by application to immunological traits",
     journal = "Genome Medicine",
-    volume = "",
-    issue = "",
+    volume = "8",
+    issue = "1",
     year = "2016", 
-    pages = "",
+    pages = "129",
     url = "http://dx.doi.org/10.1186/s13073-016-0384-y",
     doi = "10.1186/s13073-016-0384-y",
     textVersion = paste(
     	"Fang, H., Knezevic, B., Burnham, K.L. & Knight, J.C.",
         "XGR software for enhanced interpretation of genomic summary data, illustrated by application to immunological traits.",
-        "http://dx.doi.org/10.1186/s13073-016-0384-y")
+        "Genome Medicine, 8:129, 2016. http://dx.doi.org/10.1186/s13073-016-0384-y")
 	)
