@@ -180,7 +180,7 @@ annotatable genomic regions will be used.
 }
 \note{
 The genomic annotation data are described below according to the data
-sources and data types.
+sources and data types.\cr
 1. ENCODE Transcription Factor ChIP-seq data
 \itemize{
 \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and

@@ -30,7 +30,7 @@
 #'  \item{\code{nData}: the number of bases covered by input regions}
 #'  \item{\code{nBG}: the number of bases covered by background regions}
 #' }
-#' @note The genomic annotation data are described below according to the data sources and data types.
+#' @note The genomic annotation data are described below according to the data sources and data types.\cr
 #' 1. ENCODE Transcription Factor ChIP-seq data
 #' \itemize{
 #'  \item{\code{Uniform_TFBS}: a list (690 combinations of cell types and transcription factors) of GenomicRanges objects; each is an GR object containing uniformly identified peaks per cell type per transcription factor.}
