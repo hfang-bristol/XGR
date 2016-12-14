@@ -87,7 +87,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	minoverlap <- 1L # 1b overlaps
 	subject <- gr_Gene
 	query <- gr_SNP
-	q2r <- as.matrix(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))
 	
 	if(length(q2r) > 0){
 	

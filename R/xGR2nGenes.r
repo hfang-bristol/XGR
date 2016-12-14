@@ -99,7 +99,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	minoverlap <- 1L # 1b overlaps
 	subject <- gr_Gene
 	query <- dGR
-	q2r <- as.matrix(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))
 	
 	if(length(q2r) > 0){
 	
