@@ -66,10 +66,16 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     }
     
     if(!is.null(pattern)){
+    	pattern <- as.numeric(pattern)
 		pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
 		if(is.null(zlim)){
-			vmax <- ceiling(stats::quantile(pattern, 0.75))
+			if(max(pattern)<1 & max(pattern)>0){
+				vmax <- ceiling(stats::quantile(pattern, 0.75)*10)/10
+			}else{
+				vmax <- ceiling(stats::quantile(pattern, 0.75))
+			}
 			vmin <- floor(min(pattern))
+			
 			zlim <- c(vmin, vmax)
 		}
     }

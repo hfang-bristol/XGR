@@ -116,30 +116,22 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
     ## calculate genetic influence score for a gene-SNP pair
     G2S_score <- G2S * mat_SNP_score
     
+    ## Gene2SNP
+    Gene2SNP <- xSM2DF(data=G2S_score, verbose=FALSE)
+    colnames(Gene2SNP) <- c('Gene','SNP','Score')
+	ls_gene <- split(x=Gene2SNP$Score, f=Gene2SNP$Gene)
     ## calculate genetic influence score under a set of SNPs for each seed gene
     if(scoring.scheme=='max'){
-		if(1){
-			mat <- as.matrix(G2S_score)
-			seeds.genes <- do.call(base::pmax, lapply(1:ncol(mat), function(j) mat[,j]))
-		}else{
-			seeds.genes <- apply(G2S_score, 1, function(x) {
-				base::max(x)
-			})
-		}
+		seeds.genes <- sapply(ls_gene, max)
 		
     }else if(scoring.scheme=='sum'){
-		if(1){
-			seeds.genes <- base::rowSums(as.matrix(G2S_score))
-		}else{
-			seeds.genes <- apply(G2S_score, 1, function(x) {
-				base::sum(x)
-			})
-		}
+		seeds.genes <- sapply(ls_gene, sum)
 		
     }else if(scoring.scheme=='sequential'){
-        seeds.genes <- apply(G2S_score, 1, function(x) {
-        	base::sum(base::sort(x, decreasing=T) / (1:length(x)))
-        })
+		seeds.genes <- sapply(ls_gene, function(x){
+			base::sum(x / base::rank(-x,ties.method="min"))
+		})
+		
     }
 	
     ################################

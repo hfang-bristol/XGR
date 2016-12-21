@@ -22,7 +22,7 @@ xSM2DF <- function(data, verbose=TRUE)
 {
     
     if(class(data) == 'dgCMatrix' | is.data.frame(data)){
-    	data <- as.matrix(data)
+    	#data <- as.matrix(data)
 	}
     
     ## row names
@@ -31,7 +31,7 @@ xSM2DF <- function(data, verbose=TRUE)
     }else{
     	names_row <- rownames(data)
     }
-        
+    
     ## column names
     if(is.null(colnames(data))){
     	names_col <- 1:ncol(data)
@@ -39,22 +39,41 @@ xSM2DF <- function(data, verbose=TRUE)
     	names_col <- colnames(data)
     }
 	
-	## values
-    xy <- which(data!=0, arr.ind=TRUE)
-    ind <- which(data!=0, arr.ind=FALSE)
-    
-    if(nrow(xy) > 0){
-    	res_df <- data.frame(rownames=names_row[xy[,1]], colnames=names_col[xy[,2]], values=data[ind], stringsAsFactors=FALSE)
+	if(is.data.frame(data) | class(data) == 'matrix'){
+		data <- as.matrix(data)
 		
-		res_df <- res_df[order(res_df$rownames,res_df$values,decreasing=FALSE),]
+		## values
+		xy <- which(data!=0, arr.ind=TRUE)
+		ind <- which(data!=0, arr.ind=FALSE)
+
+		if(nrow(xy) > 0){
+			res_df <- data.frame(rownames=names_row[xy[,1]], colnames=names_col[xy[,2]], values=data[ind], stringsAsFactors=FALSE)
 		
-		if(verbose){
-			message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=T)
+			res_df <- res_df[order(res_df$rownames,res_df$values,decreasing=FALSE),]
+		
+			if(verbose){
+				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=T)
+			}
+		
+		}else{
+			res_df <- NULL
+		}
+
+	}else if(class(data) == 'dgCMatrix'){
+		ijx <- summary(data)
+		if(nrow(ijx)>0){
+			res_df <- data.frame(rownames=names_row[ijx[,1]], colnames=names_col[ijx[,2]], values=ijx[,3], stringsAsFactors=FALSE)
+		
+			res_df <- res_df[order(res_df$rownames,res_df$values,decreasing=FALSE),]
+		
+			if(verbose){
+				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=T)
+			}
+		}else{
+			res_df <- NULL
 		}
 		
-    }else{
-    	res_df <- NULL
-    }
+	}
     
     invisible(res_df)
 }

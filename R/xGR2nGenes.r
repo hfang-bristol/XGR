@@ -154,20 +154,28 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		############################################
 		## whether gene scoring
 		if(scoring){
+			if(0){
 			## sparse matrix of nGenes X GR
 			G2S_score <- xSparseMatrix(df_nGenes[,c("Gene","GR","Weight")], verbose=verbose)
+			}
+			
+			ls_gene <- split(x=df_nGenes$Weight, f=df_nGenes$Gene)
+			
 			## calculate genetic influence score under a set of SNPs for each seed gene
 			if(scoring.scheme=='max'){
-				if(1){
-					system.time({
+				seeds.genes <- sapply(ls_gene, max)
+				
+				if(0){
 					##########################
 					## to be improved (if too many columns)
 					#mat <- as.matrix(G2S_score)
-					mat <- G2S_score
+					#mat <- G2S_score
+					#seeds.genes <- do.call(base::pmax, lapply(1:ncol(mat), function(j) mat[,j]))
 					##########################
-					seeds.genes <- do.call(base::pmax, lapply(1:ncol(mat), function(j) mat[,j]))
-					})
-				}else{
+					ind <- !duplicated(df_nGenes[,1])
+					seeds.genes <- df_nGenes[ind, 4]
+					names(seeds.genes) <- df_nGenes[ind, 1]					
+				
 					system.time({
 					seeds.genes <- apply(G2S_score, 1, function(x) {
 						base::max(x)
@@ -176,21 +184,29 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				}
 				
 			}else if(scoring.scheme=='sum'){
-				if(1){
-					system.time({
+				seeds.genes <- sapply(ls_gene, sum)
+				
+				if(0){
+					##########################
+					## to be improved (if too many columns)
 					seeds.genes <- base::rowSums(as.matrix(G2S_score))
-					})
-				}else{
-					system.time({
+					##########################
 					seeds.genes <- apply(G2S_score, 1, function(x) {
 						base::sum(x)
 					})
-					})
 				}
+				
 			}else if(scoring.scheme=='sequential'){
+				seeds.genes <- sapply(ls_gene, function(x){
+					#base::sum(base::sort(x, decreasing=T) / (1:length(x)))
+					base::sum(x / base::rank(-x,ties.method="min"))
+				})
+				
+				if(0){
 				seeds.genes <- apply(G2S_score, 1, function(x) {
 					base::sum(base::sort(x, decreasing=T) / (1:length(x)))
 				})
+				}
 			}
 
 			if(verbose){

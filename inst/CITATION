@@ -6,7 +6,7 @@ citEntry(entry="Article",
     issue = "1",
     year = "2016", 
     pages = "129",
-    url = "http://dx.doi.org/10.1186/s13073-016-0384-y",
+    url = "http://www.ncbi.nlm.nih.gov/pubmed/27964755",
     doi = "10.1186/s13073-016-0384-y",
     textVersion = paste(
     	"Fang, H., Knezevic, B., Burnham, K.L. & Knight, J.C.",

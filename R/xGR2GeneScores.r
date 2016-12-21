@@ -99,40 +99,62 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, buil
     
     ####################################################################################
     
-    ## df_GR df_nGenes
-    allGenes <- sort(df_nGenes$Gene)
-    allGR <- sort(df_GR$GR)
-    
-    ## sparse matrix of nGenes X GR
-    G2S_n <- xSparseMatrix(df_nGenes[,c("Gene","GR","Weight")], rows=allGenes, columns=allGR, verbose=verbose)
-    G2S <- G2S_n
-    
-    ## consider GR scores
-    ind <- match(colnames(G2S), df_GR$GR)
-    ########
-    df_GR <- df_GR[ind,]
-    ########
-    GR_score <- df_GR$Score
-    names(GR_score) <- colnames(G2S)
-    ## convert into matrix
-    mat_GR_score <- matrix(rep(GR_score,each=nrow(G2S)), nrow=nrow(G2S))
-    
-    ## calculate genetic influence score for a gene-GR pair
-    G2S_score <- G2S * mat_GR_score
-    
-    ## calculate genetic influence score under a set of SNPs for each seed gene
-    if(scoring.scheme=='max'){
-    	seeds.genes <- apply(G2S_score, 1, function(x) {
-            base::max(x)
-        })
-    }else if(scoring.scheme=='sum'){
-    	seeds.genes <- apply(G2S_score, 1, function(x) {
-            base::sum(x)
-        })
-    }else if(scoring.scheme=='sequential'){
-        seeds.genes <- apply(G2S_score, 1, function(x) {
-        	base::sum(base::sort(x, decreasing=T) / (1:length(x)))
-        })
+    if(1){
+    	ind <- match(df_nGenes$GR, df_GR$GR)
+    	## Gene2GR
+    	score <- df_nGenes$Weight * df_GR$Score[ind]
+    	Gene2GR <- data.frame(Gene=df_nGenes$Gene, GR=df_nGenes$GR, Score=score, stringsAsFactors=FALSE)
+    	Gene2GR <- Gene2GR[order(Gene2GR$Gene,-Gene2GR$Score,decreasing=FALSE),]
+    	
+    	ls_gene <- split(x=Gene2GR$Score, f=Gene2GR$Gene)
+		## calculate genetic influence score under a set of SNPs for each seed gene
+		if(scoring.scheme=='max'){
+			seeds.genes <- sapply(ls_gene, max)
+		}else if(scoring.scheme=='sum'){
+			seeds.genes <- sapply(ls_gene, sum)
+		}else if(scoring.scheme=='sequential'){
+			seeds.genes <- sapply(ls_gene, function(x){
+				base::sum(x / base::rank(-x,ties.method="min"))
+			})
+		}
+    	
+    }else{
+		## df_GR df_nGenes
+		allGenes <- sort(df_nGenes$Gene)
+		allGR <- sort(df_GR$GR)
+	
+		## sparse matrix of nGenes X GR
+		G2S_n <- xSparseMatrix(df_nGenes[,c("Gene","GR","Weight")], rows=allGenes, columns=allGR, verbose=verbose)
+		G2S <- G2S_n
+	
+		## consider GR scores
+		ind <- match(colnames(G2S), df_GR$GR)
+		########
+		df_GR <- df_GR[ind,]
+		########
+		GR_score <- df_GR$Score
+		names(GR_score) <- colnames(G2S)
+		## convert into matrix
+		mat_GR_score <- matrix(rep(GR_score,each=nrow(G2S)), nrow=nrow(G2S))
+	
+		## calculate genetic influence score for a gene-GR pair
+		G2S_score <- G2S * mat_GR_score
+    	
+		## calculate genetic influence score under a set of SNPs for each seed gene
+		if(scoring.scheme=='max'){
+			seeds.genes <- apply(G2S_score, 1, function(x) {
+				base::max(x)
+			})
+		}else if(scoring.scheme=='sum'){
+			seeds.genes <- apply(G2S_score, 1, function(x) {
+				base::sum(x)
+			})
+		}else if(scoring.scheme=='sequential'){
+			seeds.genes <- apply(G2S_score, 1, function(x) {
+				base::sum(base::sort(x, decreasing=T) / (1:length(x)))
+			})
+		}
+
     }
 	
     ################################
