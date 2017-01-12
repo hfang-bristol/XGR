@@ -108,7 +108,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
     ###### parallel computing
     flag_parallel <- F
     if(parallel==TRUE){
-        flag_parallel <- dnet::dCheckParallel(multicores=multicores, verbose=verbose)
+        flag_parallel <- xCheckParallel(multicores=multicores, verbose=verbose)
         if(flag_parallel){
                 
             if(method.term=="Resnik"){

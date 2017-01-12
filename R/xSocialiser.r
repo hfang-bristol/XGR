@@ -194,7 +194,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     flag_parallel <- F
     if(parallel==TRUE){
     
-        flag_parallel <- dnet::dCheckParallel(multicores=multicores, verbose=verbose)
+        flag_parallel <- xCheckParallel(multicores=multicores, verbose=verbose)
         if(flag_parallel){
             if(measure=='average'){
                 i <- 1

@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.0.7
+-----------------------
+
+NEW FEATURES
+
+    o Add function 'xCheckParallel' for checking and using parallel computing on Unix-like systems and on Windows
+    
+
 CHANGES IN VERSION 1.0.6
 -----------------------
 
