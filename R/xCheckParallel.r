@@ -11,7 +11,9 @@
 #' @seealso \code{\link{xDAGsim}}, \code{\link{xSocialiser}}, \code{\link{xGRviaGenomicAnnoAdv}}
 #' @include xCheckParallel.r
 #' @examples
-#' xCheckParallel(multicores=2)
+#' \dontrun{
+#' xCheckParallel()
+#' }
 
 xCheckParallel <- function(multicores=NULL, verbose=T)
 {

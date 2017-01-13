@@ -69,13 +69,11 @@ just used for understanding scripts</p>
 <td>
 <p>logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
-does so. Partly because parallel backends available will be
-system-specific (now only Linux or Mac OS). Also, it will depend on
-whether these two packages &quot;foreach&quot; and &quot;doMC&quot; have been installed. It
-can be installed via:
+does so. It will depend on whether these two packages &quot;foreach&quot; and
+&quot;doParallel&quot; have been installed. It can be installed via:
 <code>source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doMC"))</code>. If not yet installed, this option will
-be disabled</p>
+biocLite(c("foreach","doParallel"))</code>. If not yet installed, this option
+will be disabled</p>
 </td></tr>
 <tr valign="top"><td><code>multicores</code></td>
 <td>

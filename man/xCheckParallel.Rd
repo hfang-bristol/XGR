@@ -29,7 +29,9 @@ via: \code{source("http://bioconductor.org/biocLite.R");
 biocLite(c("foreach","doParallel"))}.
 }
 \examples{
-xCheckParallel(multicores=2)
+\dontrun{
+xCheckParallel()
+}
 }
 \seealso{
 \code{\link{xDAGsim}}, \code{\link{xSocialiser}},
