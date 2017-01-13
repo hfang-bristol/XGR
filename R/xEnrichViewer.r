@@ -74,7 +74,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   zscore       = as.numeric(eTerm$zscore),
 							   pvalue       = as.numeric(eTerm$pvalue),
 							   adjp         = as.numeric(eTerm$adjp),
-							   distance     = as.numeric(eTerm$term_info$distance),
+							   distance     = eTerm$term_info$distance,
 							   members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
 							   stringsAsFactors=F
 							  )
@@ -86,7 +86,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   zscore       = as.numeric(eTerm$zscore),
 							   pvalue       = as.numeric(eTerm$pvalue),
 							   adjp         = as.numeric(eTerm$adjp),
-							   distance     = as.numeric(eTerm$term_info$distance),
+							   distance     = eTerm$term_info$distance,
 							   members      = sapply(eTerm$overlap, function(x) paste(x,collapse=', ')),
 							   stringsAsFactors=F
 							  )

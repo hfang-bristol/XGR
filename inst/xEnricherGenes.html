@@ -27,10 +27,13 @@ xEnricherGenes(data, background = NULL, ontology = c("GOBP", "GOMF",
 "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
 "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
 "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6"),
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"),
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
+"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
+"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
+"CreedsGeneDN"), size.range = c(10, 2000), min.overlap = 3,
+which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
 0.01,
 lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
@@ -66,12 +69,15 @@ Phenotypic Abnormality, &quot;HPMI&quot; for Human Phenotype Mode of Inheritance
 &quot;HPCM&quot; for Human Phenotype Clinical Modifier, &quot;HPMA&quot; for Human
 Phenotype Mortality Aging, &quot;MP&quot; for Mammalian Phenotype, Drug-Gene
 Interaction database (&quot;DGIdb&quot;) for drugable categories, tissue-specific
-eQTL-containing genes from GTEx (&quot;GTExV4&quot; and &quot;GTExV6&quot;), and the
-molecular signatures database (Msigdb, including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;,
-&quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;,
-&quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;,
-&quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;,
-&quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
+eQTL-containing genes from GTEx (&quot;GTExV4&quot; and &quot;GTExV6&quot;), crowd
+extracted expression of differential signatures from CREEDS
+(&quot;CreedsDisease&quot;, &quot;CreedsDiseaseUP&quot;, &quot;CreedsDiseaseDN&quot;, &quot;CreedsDrug&quot;,
+&quot;CreedsDrugUP&quot;, &quot;CreedsDrugDN&quot;, &quot;CreedsGene&quot;, &quot;CreedsGeneUP&quot; and
+&quot;CreedsGeneDN&quot;), and the molecular signatures database (Msigdb,
+including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;,
+&quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;,
+&quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;,
+&quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
