@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert gene symbols to entrez geneid</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSymbol2GeneID"><tr><td>xSymbol2GeneID</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to convert gene symbols to entrez geneid</h2>
+
+<h3>Description</h3>
+
+<p><code>xSymbol2GeneID</code> is supposed to convert gene symbols to entrez
+geneid.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSymbol2GeneID(data, check.symbol.identity = F, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>an input vector containing gene symbols</p>
+</td></tr>
+<tr valign="top"><td><code>check.symbol.identity</code></td>
+<td>
+<p>logical to indicate whether doing match
+via Synonyms for those unmatchable by official gene symbols. By
+default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a vector containing entrez geneid
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xEnricherGenes</code>,
+<code>xSocialiserGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
+Symbol &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+Symbol
+
+# b) convert into GeneID
+GeneID &lt;- xSymbol2GeneID(Symbol)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

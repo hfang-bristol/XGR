@@ -75,13 +75,11 @@ just used for understanding scripts}
 
 \item{parallel}{logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
-does so. Partly because parallel backends available will be
-system-specific (now only Linux or Mac OS). Also, it will depend on
-whether these two packages "foreach" and "doMC" have been installed. It
-can be installed via:
+does so. It will depend on whether these two packages "foreach" and
+"doParallel" have been installed. It can be installed via:
 \code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doMC"))}. If not yet installed, this option will
-be disabled}
+biocLite(c("foreach","doParallel"))}. If not yet installed, this option
+will be disabled}
 
 \item{multicores}{an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.
@@ -118,7 +116,7 @@ socialized genes. Now it supports enrichment analysis using a wide
 variety of ontologies such as Gene Ontology and Phenotype Ontologies.
 It first calculates semantic similarity between terms and then derives
 semantic similarity from term-term semantic similarity. Parallel
-computing is also supported for Linux or Mac operating systems.
+computing is also supported.
 }
 \note{
 For the mode "shortest_paths", the induced subgraph is the most

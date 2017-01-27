@@ -113,7 +113,7 @@ similarity given the input data and the ontology direct acyclic graph
 network representation of socialized genes/SNPs. It first calculates
 semantic similarity between terms and then derives semantic similarity
 from term-term semantic similarity. Parallel computing is also
-supported for Linux or Mac operating systems.
+supported.
 }
 \note{
 For the mode "shortest_paths", the induced subgraph is the most

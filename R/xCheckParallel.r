@@ -8,7 +8,7 @@
 #' @note
 #' Whether parallel computation with multicores is used is system-specific. Also, it will depend on whether these two packages "foreach" and "doParallel" have been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("foreach","doParallel"))}.
 #' @export
-#' @seealso \code{\link{xDAGsim}}, \code{\link{xSocialiser}}, \code{\link{xGRviaGenomicAnnoAdv}}
+#' @seealso \code{\link{xDAGsim}}, \code{\link{xSocialiser}}, \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}, \code{\link{xGRviaGenomicAnnoAdv}}
 #' @include xCheckParallel.r
 #' @examples
 #' \dontrun{
