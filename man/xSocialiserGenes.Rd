@@ -4,19 +4,21 @@
 \alias{xSocialiserGenes}
 \title{Function to calculate pair-wise semantic similarity given a list of genes and the ontology in query}
 \usage{
-xSocialiserGenes(data, ontology = c("GOBP", "GOMF", "GOCC", "DO",
-"HPPA",
-"HPMI", "HPCM", "HPMA", "MP"), measure = c("BM.average", "BM.max",
-"BM.complete", "average", "max"), method.term = c("Resnik", "Lin",
-"Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE,
-fast = TRUE, parallel = TRUE, multicores = NULL,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T, verbose = T,
+xSocialiserGenes(data, check.symbol.identity = F, ontology = c("GOBP",
+"GOMF", "GOCC", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP"),
+measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
+method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
+rescale = TRUE, force = TRUE, fast = TRUE, parallel = TRUE,
+multicores = NULL, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = T, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{an input vector. It contains a list of Gene Symbols of
-interest}
+\item{data}{an input vector containing gene symbols}
+
+\item{check.symbol.identity}{logical to indicate whether to match the
+input data via Synonyms for those unmatchable by official gene symbols.
+By default, it sets to false}
 
 \item{ontology}{the ontology supported currently. It can be "GOBP" for
 Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular

@@ -23,14 +23,13 @@ computing is also supported.
 <h3>Usage</h3>
 
 <pre>
-xSocialiserGenes(data, ontology = c("GOBP", "GOMF", "GOCC", "DO",
-"HPPA",
-"HPMI", "HPCM", "HPMA", "MP"), measure = c("BM.average", "BM.max",
-"BM.complete", "average", "max"), method.term = c("Resnik", "Lin",
-"Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE,
-fast = TRUE, parallel = TRUE, multicores = NULL,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T, verbose = T,
+xSocialiserGenes(data, check.symbol.identity = F, ontology = c("GOBP",
+"GOMF", "GOCC", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP"),
+measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
+method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
+rescale = TRUE, force = TRUE, fast = TRUE, parallel = TRUE,
+multicores = NULL, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = T, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -40,8 +39,13 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector. It contains a list of Gene Symbols of
-interest</p>
+<p>an input vector containing gene symbols</p>
+</td></tr>
+<tr valign="top"><td><code>check.symbol.identity</code></td>
+<td>
+<p>logical to indicate whether to match the
+input data via Synonyms for those unmatchable by official gene symbols.
+By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>

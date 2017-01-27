@@ -21,15 +21,19 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 <h3>Usage</h3>
 
 <pre>
-xEnricherGenes(data, background = NULL, ontology = c("GOBP", "GOMF",
-"GOCC",
-"PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
+xEnricherGenes(data, background = NULL, check.symbol.identity = F,
+ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
+"HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH", "MsigdbC1",
+"MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
+"DGIdb",
+"GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP",
+"CreedsDiseaseDN",
+"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
+"CreedsGeneUP",
 "CreedsGeneDN"), size.range = c(10, 2000), min.overlap = 3,
 which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
@@ -47,14 +51,19 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector. It contains a list of Gene Symbols of
-interest</p>
+<p>an input vector containing gene symbols</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-<p>a background vector. It contains a list of Gene
-Symbols as the test background. If NULL, by default all annotatable are
-used as background</p>
+<p>a background vector containing gene symbols as the
+test background. If NULL, by default all annotatable are used as
+background</p>
+</td></tr>
+<tr valign="top"><td><code>check.symbol.identity</code></td>
+<td>
+<p>logical to indicate whether to match the
+input data/background via Synonyms for those unmatchable by official
+gene symbols. By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>

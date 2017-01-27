@@ -4,15 +4,19 @@
 \alias{xEnricherGenes}
 \title{Function to conduct enrichment analysis given a list of genes and the ontology in query}
 \usage{
-xEnricherGenes(data, background = NULL, ontology = c("GOBP", "GOMF",
-"GOCC",
-"PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
+xEnricherGenes(data, background = NULL, check.symbol.identity = F,
+ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
+"HPPA", "HPMI", "HPCM", "HPMA", "MP", "MsigdbH", "MsigdbC1",
+"MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
+"DGIdb",
+"GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP",
+"CreedsDiseaseDN",
+"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
+"CreedsGeneUP",
 "CreedsGeneDN"), size.range = c(10, 2000), min.overlap = 3,
 which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
@@ -24,12 +28,15 @@ lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{an input vector. It contains a list of Gene Symbols of
-interest}
+\item{data}{an input vector containing gene symbols}
 
-\item{background}{a background vector. It contains a list of Gene
-Symbols as the test background. If NULL, by default all annotatable are
-used as background}
+\item{background}{a background vector containing gene symbols as the
+test background. If NULL, by default all annotatable are used as
+background}
+
+\item{check.symbol.identity}{logical to indicate whether to match the
+input data/background via Synonyms for those unmatchable by official
+gene symbols. By default, it sets to false}
 
 \item{ontology}{the ontology supported currently. It can be "GOBP" for
 Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular

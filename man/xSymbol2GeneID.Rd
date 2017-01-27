@@ -10,9 +10,9 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 \arguments{
 \item{data}{an input vector containing gene symbols}
 
-\item{check.symbol.identity}{logical to indicate whether doing match
-via Synonyms for those unmatchable by official gene symbols. By
-default, it sets to false}
+\item{check.symbol.identity}{logical to indicate whether to match the
+input data via Synonyms for those unmatchable by official gene symbols.
+By default, it sets to false}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -46,7 +46,6 @@ GeneID <- xSymbol2GeneID(Symbol)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xEnricherGenes}},
-\code{\link{xSocialiserGenes}}
+\code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
 }
 
