@@ -54,4 +54,3 @@ ig
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

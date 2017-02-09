@@ -39,4 +39,3 @@ eTerm_concise <- xEnrichConciser(eTerm)
 \seealso{
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}
 }
-

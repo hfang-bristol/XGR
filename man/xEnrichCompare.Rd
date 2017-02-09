@@ -105,4 +105,3 @@ xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},
 \code{\link{xEnrichDAGplotAdv}}
 }
-

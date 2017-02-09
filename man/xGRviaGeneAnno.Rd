@@ -263,4 +263,3 @@ print(bp)
 \seealso{
 \code{\link{xEnrichViewer}}, \code{\link{xEnricherGenes}}
 }
-

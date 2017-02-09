@@ -75,4 +75,3 @@ print(bp)
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},
 \code{\link{xEnrichViewer}}
 }
-

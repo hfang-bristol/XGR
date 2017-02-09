@@ -34,4 +34,3 @@ xFunArgs(fun="xRDataLoader")
 \seealso{
 \code{\link{xFunArgs}}
 }
-

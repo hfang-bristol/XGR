@@ -158,4 +158,3 @@ head(mSeed$Gene)
 \code{\link{xSNPscores}}, \code{\link{xSNP2nGenes}},
 \code{\link{xSparseMatrix}}
 }
-

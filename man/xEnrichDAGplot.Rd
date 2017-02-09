@@ -204,4 +204,3 @@ shape=shape_nodes))
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},
 \code{\link{xEnrichViewer}}
 }
-

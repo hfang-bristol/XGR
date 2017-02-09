@@ -230,4 +230,3 @@ RData.location=RData.location)
 \seealso{
 \code{\link{xSNP2GeneScores}}, \code{\link{xSubneterGenes}}
 }
-

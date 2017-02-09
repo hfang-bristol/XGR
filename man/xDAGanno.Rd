@@ -128,4 +128,3 @@ dnet::visDAG(g=dag, data=data, node.info="both")
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

@@ -200,4 +200,3 @@ xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 \seealso{
 \code{\link{xEnrichCompare}}
 }
-

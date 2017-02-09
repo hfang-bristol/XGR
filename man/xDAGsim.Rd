@@ -110,4 +110,3 @@ sim
 \seealso{
 \code{\link{xDAGanno}}, \code{\link{xConverter}}
 }
-

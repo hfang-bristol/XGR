@@ -145,4 +145,3 @@ scoring.scheme="max", RData.location=RData.location)
 \seealso{
 \code{\link{xRDataLoader}}, \code{\link{xGR}}
 }
-

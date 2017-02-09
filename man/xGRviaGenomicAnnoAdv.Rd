@@ -472,4 +472,3 @@ row.names=FALSE)
 \seealso{
 \code{\link{xEnrichViewer}}
 }
-

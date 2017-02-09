@@ -163,4 +163,3 @@ node.info=c("none"), vertex.label=NA, wrap.width=30)
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},
 \code{\link{xEnrichViewer}}
 }
-

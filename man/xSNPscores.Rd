@@ -100,4 +100,3 @@ include.LD="EUR", RData.location=RData.location)
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

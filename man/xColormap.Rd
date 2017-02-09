@@ -64,4 +64,3 @@ palette.name <- xColormap(colormap="ggplot2")
 # use the return function "palette.name" to generate 3 default colors used by ggplot2
 palette.name(3)
 }
-

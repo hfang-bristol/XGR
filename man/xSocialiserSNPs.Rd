@@ -177,4 +177,3 @@ edge.label=x, edge.label.cex=0.7)
 \seealso{
 \code{\link{xSocialiser}}
 }
-

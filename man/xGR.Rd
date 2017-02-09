@@ -69,4 +69,3 @@ RData.location=RData.location)
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

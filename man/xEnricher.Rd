@@ -209,4 +209,3 @@ node.info=c("full_term_name"))
 \code{\link{xDAGanno}}, \code{\link{xEnricherGenes}},
 \code{\link{xEnricherSNPs}}
 }
-

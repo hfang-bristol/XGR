@@ -166,4 +166,3 @@ entity.label.side="out", RData.location=RData.location)
 \seealso{
 \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
 }
-

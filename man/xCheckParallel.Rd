@@ -38,4 +38,3 @@ xCheckParallel()
 \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}},
 \code{\link{xGRviaGenomicAnnoAdv}}
 }
-

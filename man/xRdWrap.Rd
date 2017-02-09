@@ -30,4 +30,3 @@ files will be replaced with new ones.
 \seealso{
 \code{\link{xRdWrap}}
 }
-

@@ -196,4 +196,3 @@ output.format="igraph")
 \seealso{
 \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
 }
-

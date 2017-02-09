@@ -100,4 +100,3 @@ decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 \seealso{
 \code{\link{xRDataLoader}}, \code{\link{xVisKernels}}
 }
-

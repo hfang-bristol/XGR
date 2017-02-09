@@ -41,4 +41,3 @@ xVisKernels(exponent=3)
 \seealso{
 \code{\link{xSNP2nGenes}}
 }
-

@@ -8,6 +8,7 @@
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param test the test statistic used. It can be "fisher" for using fisher's exact test, "hypergeo" for using hypergeometric test, or "binomial" for using binomial test. Fisher's exact test is to test the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not), and thus compare sampling to the left part of background (after sampling without replacement). Hypergeometric test is to sample at random (without replacement) from the background containing annotated and non-annotated genes, and thus compare sampling to background. Unlike hypergeometric test, binomial test is to sample at random (with replacement) from the background with the constant probability. In terms of the ease of finding the significance, they are in order: hypergeometric test > fisher's exact test > binomial test. In other words, in terms of the calculated p-value, hypergeometric test < fisher's exact test < binomial test
+#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable genes (covered by 'annotation.file'). In other words, if the background is provided, the background genes are those after being overlapped with annotatable genes. Notably, if only one annotation is provided in 'annotation.file', it should be false
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @return 
@@ -81,7 +82,7 @@
 #' bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
 #' print(bp)
 
-xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T)
+xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T)
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -107,25 +108,6 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     	stop("The file 'data.file' must be provided!\n")
     }
     
-    ## import annotation file
-    if(is.matrix(annotation.file) | is.data.frame(annotation.file)){
-        input <- cbind(annotation.file[,1], annotation.file[,2])
-    }else if(!is.null(annotation.file) & any(!is.na(annotation.file))){
-		input <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
-    }else{
-    	stop("The file 'annotation.file' must be provided!\n")
-    }
-    ## define annotation information
-	anno <- split(x=input[,1], f=input[,2])
-    
-	## define ontology information (artifically)
-	terms <- names(anno)
-	nodes <- data.frame(name=terms, term_id=terms, term_name=terms, term_distance=rep(1,length(terms)), stringsAsFactors=F)
-	root <- c('Root', 'Root', 'Root', 0)
-	nodes <- rbind(nodes, root)
-	relations <- data.frame(from='Root', to=nodes$name)
-	g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
-
 	## define background information
     if(is.matrix(background.file) | is.data.frame(background.file)){
         background <- unique(background.file[,1])
@@ -139,7 +121,38 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
 		}
     }else{
     	background <- background.file
+    }    
+    
+    ## import annotation file
+    if(is.matrix(annotation.file) | is.data.frame(annotation.file)){
+        input <- cbind(annotation.file[,1], annotation.file[,2])
+    }else if(!is.null(annotation.file) & any(!is.na(annotation.file))){
+		input <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
+    }else{
+    	stop("The file 'annotation.file' must be provided!\n")
     }
+    
+    ###################################
+    # only works when "background.file" is not NULL and "background.annotatable.only" is false
+	if(background.annotatable.only==FALSE){
+		if(!is.null(background.file)){
+			tmp <- cbind(background.file, rep('BG',length(background.file)))
+			input <- rbind(input, tmp)
+		}
+	}
+    ###################################    
+    ## define annotation information
+	anno <- split(x=input[,1], f=input[,2])
+    
+	## define ontology information (artifically)
+	terms <- names(anno)
+	nodes <- data.frame(name=terms, term_id=terms, term_name=terms, term_distance=rep(1,length(terms)), stringsAsFactors=F)
+	root <- c('Root', 'Root', 'Root', 0)
+	nodes <- rbind(nodes, root)
+	relations <- data.frame(from='Root', to=nodes$name)
+	g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+
+
     #############################################################################################
     
     if(verbose){

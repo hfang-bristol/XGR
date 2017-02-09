@@ -49,4 +49,3 @@ res
 \seealso{
 \code{\link{xSparseMatrix}}
 }
-

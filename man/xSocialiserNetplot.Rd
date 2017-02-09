@@ -155,4 +155,3 @@ node.info=c("none"), vertex.label=NA, wrap.width=30)
 \seealso{
 \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
 }
-

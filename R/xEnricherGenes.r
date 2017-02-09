@@ -176,8 +176,10 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 		message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=T)
 	}
     data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+    data <- data[!is.na(data)]
     if(length(background)>0){
         background <- xSymbol2GeneID(background, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+        background <- background[!is.na(background)]
     }
     
     #############################################################################################

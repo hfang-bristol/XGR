@@ -138,4 +138,3 @@ xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 \seealso{
 \code{\link{xSubneterGenes}}, \code{\link{xSubneterSNPs}}
 }
-

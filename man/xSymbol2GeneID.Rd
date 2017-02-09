@@ -21,7 +21,7 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a vector containing entrez geneid
+a vector containing entrez geneid with 'NA' for the unmatched
 }
 \description{
 \code{xSymbol2GeneID} is supposed to convert gene symbols to entrez
@@ -48,4 +48,3 @@ GeneID <- xSymbol2GeneID(Symbol)
 \seealso{
 \code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
 }
-

@@ -105,6 +105,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
 		message(sprintf("Do gene mapping from Symbols to EntrezIDs for (%s) ...", as.character(now)), appendLF=T)
 	}
     data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+    data <- data[!is.na(data)]
     
     #############################################################################################
     

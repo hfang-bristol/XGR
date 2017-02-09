@@ -6,9 +6,10 @@
 \usage{
 xEnricherYours(data.file, annotation.file, background.file = NULL,
 size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
-"fisher", "binomial"), p.adjust.method = c("BH", "BY", "bonferroni",
-"holm",
-"hochberg", "hommel"), verbose = T)
+"fisher", "binomial"), background.annotatable.only = T,
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+verbose = T)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of entities
@@ -62,6 +63,13 @@ finding the significance, they are in order: hypergeometric test >
 fisher's exact test > binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test < fisher's exact test <
 binomial test}
+
+\item{background.annotatable.only}{logical to indicate whether the
+background is further restricted to annotatable genes (covered by
+'annotation.file'). In other words, if the background is provided, the
+background genes are those after being overlapped with annotatable
+genes. Notably, if only one annotation is provided in
+'annotation.file', it should be false}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
@@ -177,4 +185,3 @@ print(bp)
 \seealso{
 \code{\link{xEnricher}}
 }
-

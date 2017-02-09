@@ -61,4 +61,3 @@ xEnrichViewer(eTerm)
 \seealso{
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}
 }
-

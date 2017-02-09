@@ -26,4 +26,3 @@ This auxiliary function helps create a new package.
 \seealso{
 \code{\link{xRd2HTML}}
 }
-

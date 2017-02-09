@@ -205,4 +205,3 @@ query2='rs1250550', output.format="igraph")
 \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}},
 \code{\link{xSocialiserDAGplot}}
 }
-

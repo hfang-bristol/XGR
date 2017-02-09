@@ -91,4 +91,3 @@ org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

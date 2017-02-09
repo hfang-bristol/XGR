@@ -133,4 +133,3 @@ head(mSeed$Gene)
 \code{\link{xGRscores}}, \code{\link{xGR2nGenes}},
 \code{\link{xSparseMatrix}}
 }
-

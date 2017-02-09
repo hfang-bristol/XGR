@@ -162,4 +162,3 @@ edge.label=x, edge.label.cex=0.7)
 \code{\link{xDAGsim}}, \code{\link{xSocialiserGenes}},
 \code{\link{xSocialiserSNPs}}
 }
-

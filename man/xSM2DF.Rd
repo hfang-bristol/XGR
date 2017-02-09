@@ -38,4 +38,3 @@ res_df
 \seealso{
 \code{\link{xSM2DF}}
 }
-

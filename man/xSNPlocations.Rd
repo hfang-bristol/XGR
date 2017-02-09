@@ -65,4 +65,3 @@ snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 \seealso{
 \code{\link{xRDataLoader}}
 }
-

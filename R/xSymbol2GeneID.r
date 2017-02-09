@@ -6,7 +6,7 @@
 #' @param check.symbol.identity logical to indicate whether to match the input data via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
-#' @return a vector containing entrez geneid
+#' @return a vector containing entrez geneid with 'NA' for the unmatched
 #' @note none
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}

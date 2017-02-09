@@ -228,4 +228,3 @@ node.info=c("full_term_name"))
 \seealso{
 \code{\link{xRDataLoader}}, \code{\link{xEnricher}}
 }
-
