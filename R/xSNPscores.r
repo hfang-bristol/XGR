@@ -162,7 +162,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 				}else if(length(ind_lead) == 1){
 					ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
 					sLL <- data_ld[ind_lead, ind_ld]
-					res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=names(sLL), R2=sLL, stringsAsFactors=F)
+					res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=F)
 				}else{
 					NULL
 				}

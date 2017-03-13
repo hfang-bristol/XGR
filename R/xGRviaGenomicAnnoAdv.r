@@ -499,9 +499,9 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	mergeOverlaps <- function(qGR, sGR, out.format=c("GR","counts"), maxgap=0L, minoverlap=1L){
 		out.format <- match.arg(out.format)
 		
-		hits <- GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-		qhits <- qGR[S4Vectors::queryHits(hits)]
-		shits <- sGR[S4Vectors::subjectHits(hits)]
+		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+		qhits <- qGR[hits[,1]]
+		shits <- sGR[hits[,2]]
 		gr <- IRanges::pintersect(qhits, shits, ignore.strand=T)
 		if(out.format=='GR'){
 			gr
@@ -514,9 +514,9 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	mergeOverlaps_GRL <- function(qGR, sGRL, maxgap=0L, minoverlap=1L, out.format=c("GR", "counts")){
 		out.format <- match.arg(out.format)
 		
-		hits_GRL <- GenomicRanges::findOverlaps(query=qGR, subject=sGRL, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-		qhits_GRL <- S4Vectors::queryHits(hits_GRL)
-		shits_GRL <- S4Vectors::subjectHits(hits_GRL)
+		hits_GRL <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGRL, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+		qhits_GRL <- hits_GRL[,1]
+		shits_GRL <- hits_GRL[,2]
 		
 		res_ls <- split(x=qhits_GRL, f=shits_GRL)
 		names_ls <- as.numeric(names(res_ls))

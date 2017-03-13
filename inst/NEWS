@@ -5,6 +5,8 @@ NEW FEATURES
 
     o Add a new function 'xSymbol2GeneID' for converting gene symbols to entrez geneid
     
+    o Add a new function 'xDAGpropagate' for propagating annotations
+    
     
 CHANGES IN VERSION 1.0.8
 -----------------------

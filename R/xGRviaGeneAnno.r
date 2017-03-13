@@ -285,8 +285,8 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 	minoverlap <- 1L # 1b overlaps
 	subject <- gr_Gene
 	query <- dGR
-	hits <- GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-	dGR_genes <- unique(names(gr_Gene[S4Vectors::subjectHits(hits)]))
+	hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+	dGR_genes <- unique(names(gr_Gene[hits[,2]]))
 	
 	if(verbose){
 		now <- Sys.time()
@@ -309,8 +309,8 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 		minoverlap <- 1L # 1b overlaps
 		subject <- gr_Gene
 		query <- bGR
-		hits <- GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-		bGR_genes <- unique(names(gr_Gene[S4Vectors::subjectHits(hits)]))
+		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+		bGR_genes <- unique(names(gr_Gene[hits[,2]]))
 		
 		if(verbose){
 			now <- Sys.time()

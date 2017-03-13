@@ -494,9 +494,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	#####################################
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
 	mergeOverlaps <- function(qGR, sGR, maxgap=0L, minoverlap=1L){
-		hits <- GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)
-		qhits <- qGR[S4Vectors::queryHits(hits)]
-		shits <- sGR[S4Vectors::subjectHits(hits)]
+		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+		qhits <- qGR[hits[,1]]
+		shits <- sGR[hits[,2]]
 
 		oGR <- IRanges::pintersect(qhits, shits, ignore.strand=T)
 		IRanges::reduce(oGR)
