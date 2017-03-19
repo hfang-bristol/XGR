@@ -33,7 +33,7 @@
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","ggplot2"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2"))
 {
     if(length(colormap)>1){
         colormap <- colormap[1]
@@ -52,6 +52,15 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			}
 		}
     	palette.name <- my_hue_pal(h=c(0,360)+15, c=100, l=65, h.start=0, direction=1)
+    	
+	}else if(colormap == "heat"){
+		palette.name <- grDevices::heat.colors
+	}else if(colormap == "terrain"){
+		palette.name <- grDevices::terrain.colors
+	}else if(colormap == "topo"){
+		palette.name <- grDevices::topo.colors
+	}else if(colormap == "cm"){
+		palette.name <- grDevices::cm.colors
     	
     }else{
     	palette.name <- supraHex::visColormap(colormap=colormap)

@@ -42,6 +42,7 @@ xDAGpropagate <- function (g, annotation, path.mode=c("all_paths","shortest_path
 {
     
     path.mode <- match.arg(path.mode)
+    propagation <- match.arg(propagation)
     
     ig <- g
     if (class(ig) != "igraph"){

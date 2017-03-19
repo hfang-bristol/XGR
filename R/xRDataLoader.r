@@ -17,11 +17,13 @@
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
 #' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl
-#' @importFrom graphics plot lines legend
+#' @importFrom graphics plot lines legend contour text par
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd
 #' @importFrom BiocGenerics unlist
+#' @importFrom akima interp
+#' @importFrom plot3D image2D persp3D image3D contour3D
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples

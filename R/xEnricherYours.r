@@ -60,7 +60,6 @@
 #' # e) barplot of significant enrichment results
 #' bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
 #' print(bp)
-#' }
 #' 
 #' # Using ImmunoBase SNPs and associations/annotations with disease traits
 #' ## get ImmunoBase
@@ -81,6 +80,7 @@
 #' # barplot of significant enrichment results
 #' bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
 #' print(bp)
+#' }
 
 xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=T, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T)
 {

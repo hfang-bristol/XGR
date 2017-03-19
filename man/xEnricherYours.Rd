@@ -157,7 +157,6 @@ row.names=FALSE)
 # e) barplot of significant enrichment results
 bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
 print(bp)
-}
 
 # Using ImmunoBase SNPs and associations/annotations with disease traits
 ## get ImmunoBase
@@ -181,6 +180,7 @@ xEnrichViewer(eTerm)
 # barplot of significant enrichment results
 bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
 print(bp)
+}
 }
 \seealso{
 \code{\link{xEnricher}}

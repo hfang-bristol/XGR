@@ -6,7 +6,7 @@
 \usage{
 xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
-"wb", "ggplot2"))
+"wb", "heat", "terrain", "topo", "cm", "ggplot2"))
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"

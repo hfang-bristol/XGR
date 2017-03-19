@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise interpolated irregular data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xVisInterp"><tr><td>xVisInterp</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise interpolated irregular data</h2>
+
+<h3>Description</h3>
+
+<p><code>xVisInterp</code> is supposed to visualise irregular data after
+bilinear or bicubic spline interpolation onto a grid.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xVisInterp(ls_xyz, interpolation = c("spline", "linear"), nx = 100,
+ny = 100, zlim = NULL, nD = c("auto", "2D", "3D"), colkey = TRUE,
+contour = FALSE, image = FALSE, clab = c("Value", ""), nlevels = 20,
+colormap = "terrain", theta.3D = 40, phi.3D = 20, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>ls_xyz</code></td>
+<td>
+<p>a list with three components (x, y and z)</p>
+</td></tr>
+<tr valign="top"><td><code>interpolation</code></td>
+<td>
+<p>the method for the interpolation. It can be
+&quot;linear&quot; or &quot;spline&quot; interpolation</p>
+</td></tr>
+<tr valign="top"><td><code>nx</code></td>
+<td>
+<p>the dimension of output grid in x direction</p>
+</td></tr>
+<tr valign="top"><td><code>ny</code></td>
+<td>
+<p>the dimension of output grid in y direction</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values, defaulting to the range
+of the finite values of z</p>
+</td></tr>
+<tr valign="top"><td><code>nD</code></td>
+<td>
+<p>an integer specifying the dimension of the visualisation. It
+can be one of '2D', '3D', and 'auto' (to display the input raw data as
+well in 2D)</p>
+</td></tr>
+<tr valign="top"><td><code>colkey</code></td>
+<td>
+<p>a logical (TRUE by default) or a 'list' with parameters
+for the color key (legend). List parameters should be one of 'side,
+plot, length, width, dist, shift, addlines, col.clab, cex.clab,
+side.clab, line.clab, adj.clab, font.clab'. The defaults for the
+parameters are 'side=4, plot=TRUE, length=1, width=1, dist=0, shift=0,
+addlines=FALSE, col.clab=NULL, cex.clab=par(&quot;cex.lab&quot;), side.clab=NULL,
+line.clab=NULL, adj.clab=NULL, font.clab=NULL'.
+colkey=list(side=4,length=0.15,width=0.5,shift=0.35,dist=-0.15,cex.axis=0.6,cex.clab=0.8,side.clab=3)</p>
+</td></tr>
+<tr valign="top"><td><code>contour</code></td>
+<td>
+<p>a logical (FALSE by default) or a 'list' with parameters
+for the contour function. An optional parameter to this 'list' is the
+'side' where the image should be plotted. Allowed values for 'side' are
+a z-value, or 'side = &quot;zmin&quot;, &quot;zmax&quot;', for positioning at bottom or top
+respectively. The default is to put the image at the bottom</p>
+</td></tr>
+<tr valign="top"><td><code>image</code></td>
+<td>
+<p>a logical (FALSE by default) or a 'list' with parameters
+for the image2D function. An optional parameter to this 'list' is the
+'side' where the image should be plotted. Allowed values for 'side' are
+a z-value, or 'side = &quot;zmin&quot;, &quot;zmax&quot;', for positioning at bottom or top
+respectively. The default is to put the image at the bottom</p>
+</td></tr>
+<tr valign="top"><td><code>clab</code></td>
+<td>
+<p>a title for the colorbar. the label to be written on top of
+the color key; to lower it, 'clab' can be made a vector, with the first
+values empty strings.</p>
+</td></tr>
+<tr valign="top"><td><code>nlevels</code></td>
+<td>
+<p>the number of levels to partition the input matrix
+values. The same level has the same color mapped to</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>theta.3D</code></td>
+<td>
+<p>the azimuthal direction. By default, it is 40</p>
+</td></tr>
+<tr valign="top"><td><code>phi.3D</code></td>
+<td>
+<p>the colatitude direction. By default, it is 20</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>invisible
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xVisInterp</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
+g &lt;- erdos.renyi.game(100, 1/10)
+glayout &lt;- layout_with_kk(g)
+ls_xyz &lt;- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g))
+
+# auto
+ls_xyz.smooth &lt;- xVisInterp(ls_xyz, nD="auto")
+# 2D
+ls_xyz.smooth &lt;- xVisInterp(ls_xyz, nD="2D")
+# 3D
+xVisInterp(ls_xyz, nD="3D", theta.3D=40, phi.3D=20, clab="Value\n")
+# 3D of different views
+pdf("xVisInterp.pdf")
+for(theta.3D in seq(0,360,10)){ xVisInterp(ls_xyz, nD="3D",
+contour=TRUE, image=TRUE, clab=paste0("theta:",theta.3D,"\n"),
+theta.3D=theta.3D, phi.3D=20)}
+dev.off()
+
+## End(Not run)
+</pre>
+
+
+</body></html>

@@ -29,9 +29,7 @@
 xSymbol2GeneID <- function(data, check.symbol.identity=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     
-    if (is.vector(data)){
-        data <- unique(data)
-    }else{
+    if (!is.vector(data)){
         stop("The input data must be a vector.\n")
     }
     Symbol <- as.character(data)

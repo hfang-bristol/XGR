@@ -6,8 +6,8 @@
 \usage{
 xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
 "br",
-"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, signature = TRUE, glayout = layout_with_kk,
+"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = TRUE,
+newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
 vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
 vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
 vertex.label.dist = 0.3, vertex.label.color = "blue",
@@ -28,10 +28,11 @@ arguments: colormap, ncolors, zlim and colorbar)}
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
 colormap), "wyr" (white-yellow-red colormap), "br" (black-red
-colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and
+colormap), "yr" (yellow-red colormap), "wb" (white-black colormap),
 "rainbow" (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. "blue-black-yellow",
+red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. "lightyellow-orange" (by default), "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}

@@ -20,8 +20,8 @@ input pattern.
 <pre>
 xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
 "br",
-"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, signature = TRUE, glayout = layout_with_kk,
+"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = TRUE,
+newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
 vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
 vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
 vertex.label.dist = 0.3, vertex.label.color = "blue",
@@ -52,10 +52,11 @@ arguments: colormap, ncolors, zlim and colorbar)</p>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
 colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
 &quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
