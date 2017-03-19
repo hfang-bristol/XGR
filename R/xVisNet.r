@@ -66,7 +66,13 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     }
     
     if(!is.null(pattern)){
-    	pattern <- as.numeric(pattern)
+    	if(class(pattern)=="character"){
+    		tmp <- as.numeric(pattern)
+    		if(!is.null(names(pattern))){
+    			names(tmp) <- names(pattern)
+    		}
+    		pattern <- tmp
+    	}
 		pattern[is.infinite(pattern)] <- max(pattern[!is.infinite(pattern)])
 		if(is.null(zlim)){
 			if(max(pattern)<1 & max(pattern)>0){

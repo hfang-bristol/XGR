@@ -39,8 +39,9 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
-    RData <- match.arg(RData)
-
+    #RData <- match.arg(RData)
+	
+	RData <- RData[1]
 	######################################################################################
 	# RData now is primarily hosted in github
 	######################################################################################

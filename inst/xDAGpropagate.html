@@ -102,26 +102,84 @@ subgraph.
 
 <pre>
 ## Not run: 
-# 1) SNP-based ontology
-# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
-g &lt;- xRDataLoader('ig.EF')
+# Load the library
+library(XGR)
 
-# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
-anno &lt;- xRDataLoader(RData='GWAS2EF')
+## End(Not run)
 
-# 1c) prepare for annotation data
-# randomly select 5 terms/vertices (and their annotation data)
-annotation &lt;- anno[, sample(1:dim(anno)[2],5)]
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
+# 1) EF ontology
+# ig.EF (an object of class "igraph" storing as a directed graph)
+ig &lt;- xRDataLoader('ig.EF', RData.location=RData.location)
+## optional: extract the disease part (EFO:0000408)
+neighs.out &lt;- igraph::neighborhood(ig, order=vcount(ig),
+nodes='EFO:0000408', mode="out")
+vids &lt;- V(ig)[unique(unlist(neighs.out))]$name
+g &lt;- igraph::induced.subgraph(ig, vids=vids)
 
-# 1d) obtain the induced subgraph according to the input annotation data
-# based on shortest paths (i.e. the most concise subgraph induced)
+################
+# 2a) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+annotation &lt;- xRDataLoader(RData='GWAS2EF',
+RData.location=RData.location)
+## only significant
+annotation[as.matrix(annotation&gt;5e-8)] &lt;- 0
+
+# 2b) propagation based on shortest paths (ie the most concise subgraph)
 dag &lt;- xDAGpropagate(g, annotation, path.mode="shortest_paths",
-propagation="min", verbose=TRUE)
+propagation="min")
 
-# 1e) color-code nodes/terms according to the number of annotations
+# 2c) color-code nodes/terms according to the number of annotations
 data &lt;- sapply(V(dag)$anno, length)
 names(data) &lt;- V(dag)$name
-dnet::visDAG(g=dag, data=data, node.info="both")
+## only those GWAS&gt;=100
+nodes &lt;- V(dag)$name[data&gt;=100]
+dagg &lt;- igraph::induced.subgraph(dag, vids=nodes)
+### DAG plot
+dnet::visDAG(dagg, data, node.info="both")
+### Net plot
+set.seed(825); glayout &lt;- layout_with_kk(dagg)
+xVisNet(dagg, pattern=data, colormap="yr", glayout=glayout,
+vertex.label=V(dagg)$term_name, vertex.shape="sphere",
+vertex.label.font=2, vertex.label.dist=0.2, vertex.label.cex=0.5,
+zlim=c(100,300))
+### interpolation plot
+set.seed(825); glayout &lt;- layout_with_kk(dagg)
+pattern &lt;- sapply(V(dagg)$anno, length)
+ls_xyz &lt;- data.frame(x=glayout[,1], y=glayout[,2], z=log10(pattern))
+xVisInterp(ls_xyz, nD="auto", image=TRUE)
+
+################
+3a) load ChEMBL targets annotated by EF (an object of class "dgCMatrix"
+storing a spare matrix)
+annotation &lt;- xRDataLoader(RData='Target2EF',
+RData.location=RData.location)
+## only approved (phase=4)
+annotation[as.matrix(annotation&lt;4)] &lt;- 0
+
+3b) propagation based on all paths
+dag &lt;- xDAGpropagate(g, annotation, path.mode="all_paths",
+propagation="max")
+
+3c) color-code nodes/terms according to the number of annotations
+data &lt;- sapply(V(dag)$anno, length)
+names(data) &lt;- V(dag)$name
+## only those Targets&gt;=50
+nodes &lt;- V(dag)$name[data&gt;=50]
+dagg &lt;- igraph::induced.subgraph(dag, vids=nodes)
+### DAG plot
+dnet::visDAG(dagg, data, node.info="both")
+### Net plot
+set.seed(825); glayout &lt;- layout_with_kk(dagg)
+xVisNet(dagg, pattern=data, colormap="yr", glayout=glayout,
+vertex.label=V(dagg)$term_name, vertex.shape="sphere",
+vertex.label.font=2, vertex.label.dist=0.2, vertex.label.cex=0.5,
+zlim=c(50,300))
+### interpolation plot
+set.seed(825); glayout &lt;- layout_with_kk(dagg)
+pattern &lt;- sapply(V(dagg)$anno, length)
+ls_xyz &lt;- data.frame(x=glayout[,1], y=glayout[,2], z=log10(pattern))
+xVisInterp(ls_xyz, nD="3D", contour=TRUE)
 
 ## End(Not run)
 </pre>
