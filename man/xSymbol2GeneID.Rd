@@ -4,7 +4,8 @@
 \alias{xSymbol2GeneID}
 \title{Function to convert gene symbols to entrez geneid}
 \usage{
-xSymbol2GeneID(data, check.symbol.identity = F, verbose = T,
+xSymbol2GeneID(data, check.symbol.identity = F, details = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -14,6 +15,9 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 input data via Synonyms for those unmatchable by official gene symbols.
 By default, it sets to false}
 
+\item{details}{logical to indicate whether to result in a data frame
+(in great details). By default, it sets to false}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
 
@@ -21,14 +25,16 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a vector containing entrez geneid with 'NA' for the unmatched
+a vector containing entrez geneid with 'NA' for the unmatched if
+(details set to false); otherwise, a data frame is returned
 }
 \description{
 \code{xSymbol2GeneID} is supposed to convert gene symbols to entrez
 geneid.
 }
 \note{
-none
+If a symbol mapped many times, the one assiged as the "protein-coding"
+type of gene is preferred.
 }
 \examples{
 \dontrun{
@@ -43,6 +49,9 @@ Symbol
 
 # b) convert into GeneID
 GeneID <- xSymbol2GeneID(Symbol)
+
+# c) convert into a data frame
+df <- xSymbol2GeneID(Symbol, details=TRUE)
 }
 }
 \seealso{

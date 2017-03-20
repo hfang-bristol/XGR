@@ -32,11 +32,11 @@ displayed in the screen. By default, it sets to true for display}
 }
 \value{
 \itemize{
-\item{\code{subg}: an induced subgraph, an object of class "igraph". In
-addition to the original attributes to nodes and edges, the return
-subgraph is also appended by two node attributes: 1) "anno" containing
-a list of variants/genes (with numeric values as elements); 2) "IC"
-standing for information content defined as negative 10-based
+\item{\code{subg}: an induced/propagated subgraph, an object of class
+"igraph". In addition to the original attributes to nodes and edges,
+the return subgraph is also appended by two node attributes: 1) "anno"
+containing a list of variants/genes (with numeric values as elements);
+2) "IC" standing for information content defined as negative 10-based
 log-transformed frequency of variants/genes annotated to that term.}
 }
 }
@@ -76,7 +76,7 @@ vids <- V(ig)[unique(unlist(neighs.out))]$name
 g <- igraph::induced.subgraph(ig, vids=vids)
 
 ################
-# 2a) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+# 2a) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a sparse matrix)
 annotation <- xRDataLoader(RData='GWAS2EF',
 RData.location=RData.location)
 ## only significant
@@ -108,7 +108,7 @@ xVisInterp(ls_xyz, nD="auto", image=TRUE)
 
 ################
 3a) load ChEMBL targets annotated by EF (an object of class "dgCMatrix"
-storing a spare matrix)
+storing a sparse matrix)
 annotation <- xRDataLoader(RData='Target2EF',
 RData.location=RData.location)
 ## only approved (phase=4)

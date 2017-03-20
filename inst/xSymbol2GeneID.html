@@ -17,7 +17,8 @@ geneid.
 <h3>Usage</h3>
 
 <pre>
-xSymbol2GeneID(data, check.symbol.identity = F, verbose = T,
+xSymbol2GeneID(data, check.symbol.identity = F, details = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -35,6 +36,11 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 input data via Synonyms for those unmatchable by official gene symbols.
 By default, it sets to false</p>
 </td></tr>
+<tr valign="top"><td><code>details</code></td>
+<td>
+<p>logical to indicate whether to result in a data frame
+(in great details). By default, it sets to false</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -50,13 +56,15 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a vector containing entrez geneid with 'NA' for the unmatched
+<p>a vector containing entrez geneid with 'NA' for the unmatched if
+(details set to false); otherwise, a data frame is returned
 </p>
 
 
 <h3>Note</h3>
 
-<p>none
+<p>If a symbol mapped many times, the one assiged as the &quot;protein-coding&quot;
+type of gene is preferred.
 </p>
 
 
@@ -81,6 +89,9 @@ Symbol
 
 # b) convert into GeneID
 GeneID &lt;- xSymbol2GeneID(Symbol)
+
+# c) convert into a data frame
+df &lt;- xSymbol2GeneID(Symbol, details=TRUE)
 
 ## End(Not run)
 </pre>

@@ -9,7 +9,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return 
 #' \itemize{
-#'  \item{\code{subg}: an induced subgraph, an object of class "igraph". In addition to the original attributes to nodes and edges, the return subgraph is also appended by two node attributes: 1) "anno" containing a list of variants/genes (with numeric values as elements); 2) "IC" standing for information content defined as negative 10-based log-transformed frequency of variants/genes annotated to that term.}
+#'  \item{\code{subg}: an induced/propagated subgraph, an object of class "igraph". In addition to the original attributes to nodes and edges, the return subgraph is also appended by two node attributes: 1) "anno" containing a list of variants/genes (with numeric values as elements); 2) "IC" standing for information content defined as negative 10-based log-transformed frequency of variants/genes annotated to that term.}
 #' }
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
@@ -32,7 +32,7 @@
 #' g <- igraph::induced.subgraph(ig, vids=vids)
 #' 
 #' ################
-#' # 2a) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+#' # 2a) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a sparse matrix)
 #' annotation <- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
 #' ## only significant
 #' annotation[as.matrix(annotation>5e-8)] <- 0
@@ -58,7 +58,7 @@
 #' xVisInterp(ls_xyz, nD="auto", image=TRUE)
 #' 
 #' ################
-#' 3a) load ChEMBL targets annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+#' 3a) load ChEMBL targets annotated by EF (an object of class "dgCMatrix" storing a sparse matrix)
 #' annotation <- xRDataLoader(RData='Target2EF', RData.location=RData.location)
 #' ## only approved (phase=4)
 #' annotation[as.matrix(annotation<4)] <- 0

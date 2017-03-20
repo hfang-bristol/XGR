@@ -4,10 +4,11 @@
 #'
 #' @param data an input vector containing gene symbols
 #' @param check.symbol.identity logical to indicate whether to match the input data via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
+#' @param details logical to indicate whether to result in a data frame (in great details). By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
-#' @return a vector containing entrez geneid with 'NA' for the unmatched
-#' @note none
+#' @return a vector containing entrez geneid with 'NA' for the unmatched if (details set to false); otherwise, a data frame is returned
+#' @note If a symbol mapped many times, the one assiged as the "protein-coding" type of gene is preferred.
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
 #' @include xSymbol2GeneID.r
@@ -24,9 +25,12 @@
 #' 
 #' # b) convert into GeneID
 #' GeneID <- xSymbol2GeneID(Symbol)
+#' 
+#' # c) convert into a data frame
+#' df <- xSymbol2GeneID(Symbol, details=TRUE)
 #' }
 
-xSymbol2GeneID <- function(data, check.symbol.identity=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     
     if (!is.vector(data)){
@@ -35,11 +39,16 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, verbose=T, RData.locat
     Symbol <- as.character(data)
     
     ## load Enterz Gene information
-	EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, verbose=verbose)	
+	df_eg <- xRDataLoader(RData.customised='org.Hs.eg', RData.location=RData.location, verbose=verbose)$gene_info
     
-	allGeneID <- EG$gene_info$GeneID
-	allSymbol <- as.vector(EG$gene_info$Symbol)
-	allSynonyms <- as.vector(EG$gene_info$Synonyms)
+    ## subdived into two parts: "protein-coding" and the rest
+    type_of_gene <- ''
+    df_eg <- rbind(subset(df_eg,type_of_gene=='protein-coding'), subset(df_eg,type_of_gene!='protein-coding'))
+    
+	allGeneID <- df_eg$GeneID
+	allSymbol <- as.vector(df_eg$Symbol)
+	allSynonyms <- as.vector(df_eg$Synonyms)
+	allDescription <- as.vector(df_eg$description)
 	
     ## correct for those symbols being shown as DATE format
     if(1){
@@ -67,10 +76,11 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, verbose=T, RData.locat
             Symbol <- a
         }
     }
-        
+    
     ## case-insensitive
+    ## only keep the first matched one
     match_flag <- match(tolower(Symbol),tolower(allSymbol))
-        
+    
     ## match via Synonyms for those unmatchable by official gene symbols
     if(check.symbol.identity){
     	## match Synonyms (if not found via Symbol)
@@ -103,11 +113,16 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, verbose=T, RData.locat
     	if(verbose){
         	now <- Sys.time()
             message(sprintf("\tAmong %d symbols of input data, there are %d mappable via official gene symbols but %d left unmappable", length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))), appendLF=T)
-        }    
+        }
     }
-        
+    
 	## convert into GeneID
-    GeneID <- allGeneID[match_flag]
-        
-    return(GeneID)
+	df_res <- df_eg[match_flag, ]
+	
+	if(details){
+		df_res <- data.frame(Input=Symbol, df_res, stringsAsFactors=F)
+		return(df_res)
+	}else{
+		return(df_res$GeneID)
+	}
 }
