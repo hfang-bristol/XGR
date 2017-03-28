@@ -9,6 +9,8 @@ NEW FEATURES
 
     o Modify 'xSymbol2GeneID' allowing for converting into gene info
         
+    o Define S3 classes ('eTerm')
+
     
 CHANGES IN VERSION 1.0.9
 -----------------------

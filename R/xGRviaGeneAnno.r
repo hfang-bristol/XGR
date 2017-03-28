@@ -26,6 +26,7 @@
 #' \itemize{
 #'  \item{\code{term_info}: a matrix of nTerm X 4 containing snp/gene set information, where nTerm is the number of terms, and the 4 columns are "id" (i.e. "Term ID"), "name" (i.e. "Term Name"), "namespace" and "distance"}
 #'  \item{\code{annotation}: a list of terms containing annotations, each term storing its annotations. Always, terms are identified by "id"}
+#'  \item{\code{g}: an igraph object to represent DAG}
 #'  \item{\code{data}: a vector containing input data in consideration. It is not always the same as the input data as only those mappable are retained}
 #'  \item{\code{background}: a vector containing the background data. It is not always the same as the input data as only those mappable are retained}
 #'  \item{\code{overlap}: a list of overlapped snp/gene sets, each storing snps overlapped between a snp/gene set and the given input data (i.e. the snps of interest). Always, gene sets are identified by "id"}

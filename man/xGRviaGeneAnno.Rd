@@ -180,6 +180,7 @@ information, where nTerm is the number of terms, and the 4 columns are
 "distance"}
 \item{\code{annotation}: a list of terms containing annotations, each
 term storing its annotations. Always, terms are identified by "id"}
+\item{\code{g}: an igraph object to represent DAG}
 \item{\code{data}: a vector containing input data in consideration. It
 is not always the same as the input data as only those mappable are
 retained}

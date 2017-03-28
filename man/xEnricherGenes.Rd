@@ -196,6 +196,7 @@ library(XGR)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
+set.seed(825)
 data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
 data
 

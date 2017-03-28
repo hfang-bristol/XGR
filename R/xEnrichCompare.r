@@ -143,6 +143,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	}
 	
 	## draw side-by-side barplot
+	name <- fc <- group <- adjp <- zscore <- pvalue <- label <- NULL
 	if(displayBy=='fc'){
 		## sort by: nSig group fc (adjp)
 		d <- d[with(d, order(nSig,group,fc,-adjp)), ]
@@ -152,8 +153,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=fc,fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=fc,fill=group)",sep=""))))
+		p <- ggplot(d, aes(x=name,y=fc,fill=group))
 		p <- p + ylab("Enrichment changes")
 	}else if(displayBy=='adjp' | displayBy=='fdr'){
 		## sort by: nSig group adjp (zscore)
@@ -164,8 +164,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=-1*log10(adjp),fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(adjp),fill=group)",sep=""))))
+		p <- ggplot(d, aes(x=name,y=-1*log10(adjp),fill=group))
 		p <- p + ylab("Enrichment significance: -log10(FDR)")
 	}else if(displayBy=='zscore'){
 		## sort by: nSig group zcore (adjp)
@@ -176,8 +175,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=zscore,fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=zscore,fill=group)",sep=""))))
+		p <- ggplot(d, aes(x=name,y=zscore,fill=group))
 		p <- p + ylab("Enrichment z-scores")
 	}else if(displayBy=='pvalue'){
 		## sort by: nSig group pvalue (zscore)
@@ -188,8 +186,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 		ind <- match(unique(d$id), names(nSig))
 		xintercept <- which(!duplicated(nSig[ind]))[-1]
 		## ggplot
-		#p <- ggplot(d, aes(x=name,y=-1*log10(pvalue),fill=group))
-		p <- ggplot(d, eval(parse(text=paste("aes(x=name,y=-1*log10(pvalue),fill=group)",sep=""))))
+		p <- ggplot(d, aes(x=name,y=-1*log10(pvalue),fill=group))
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}
 	
@@ -199,8 +196,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	p <- p + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="italic"))
 	
 	if(bar.label){
-		#p <- p + geom_text(aes(label=label),hjust=1,size=bar.label.size)
-		p <- p + geom_text(eval(parse(text=paste("aes(label=label)",sep=""))) ,hjust=1,size=bar.label.size)
+		p <- p + geom_text(aes(label=label),hjust=1,size=bar.label.size)
 	}
 	
 	## title
@@ -216,8 +212,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
 	## group
-	#bp <- p + facet_grid(~group)
-	bp <- p + eval(parse(text=paste("facet_grid(~group)",sep="")))
+	bp <- p + facet_grid(~group)
 	
 	##############################
 	## append 'g' to 'bp' (if DAG)
