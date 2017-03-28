@@ -97,6 +97,12 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)
     
+    ############
+    if(length(data)==0){
+    	return(FALSE)
+    }
+    ############
+    
     if (is.vector(data)){
         data <- unique(data)
     }else{
