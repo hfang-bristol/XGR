@@ -39,7 +39,7 @@ xSM2DF <- function(data, verbose=TRUE)
     	names_col <- colnames(data)
     }
 	
-	if(is.data.frame(data) | class(data) == 'matrix'){
+	if(is.data.frame(data) | class(data) == 'matrix' | class(data) == 'dgeMatrix'){
 		data <- as.matrix(data)
 		
 		## values
