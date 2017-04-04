@@ -39,7 +39,7 @@
 #' ls_xyz.smooth <- xVisInterp(ls_xyz, nD="2D")
 #' # 3D
 #' xVisInterp(ls_xyz, nD="3D", theta.3D=40, phi.3D=20, clab="Value\n")
-#' # 3D of different views
+#' # 3D views of different angles
 #' pdf("xVisInterp.pdf")
 #' for(theta.3D in seq(0,360,10)){ xVisInterp(ls_xyz, nD="3D", contour=TRUE, image=TRUE, clab=paste0("theta:",theta.3D,"\n"), theta.3D=theta.3D, phi.3D=20)}
 #' dev.off()
@@ -61,8 +61,13 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 		}
 		
     }else if(class(ls_xyz)=="data.frame" | class(ls_xyz)=="matrix"){
-		ls_xyz <- ls_xyz[,1:3]
-		colnames(ls_xyz) <- c("x","y","z")
+    	if(ncol(ls_xyz)==3){
+			ls_xyz <- ls_xyz[,1:3]
+			colnames(ls_xyz) <- c("x","y","z")
+		}else if(ncol(ls_xyz)==4){
+			ls_xyz <- ls_xyz[,1:4]
+			colnames(ls_xyz) <- c("x","y","z","label")
+		}
 		ls_xyz <- as.list(ls_xyz)
 		
     }else{
@@ -76,7 +81,7 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 	}
 	
     ## increase smoothness (using finer grid)
-    x <- y <- z <- ''
+    x <- y <- z <- label <- NULL
     ls_xyz.smooth <- with(ls_xyz, akima::interp(x, y, z, nx=nx, ny=ny, linear=linear))
 	
 	col <- xColormap(colormap)(nlevels)
@@ -94,7 +99,8 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 		colors <- xColormap(colormap)(length(breaks)-1)
 		
 		if(image){
-			graphics::image(ls_xyz.smooth, breaks=breaks, col=colors)
+			#graphics::image(ls_xyz.smooth, axes=FALSE, breaks=breaks, col=colors)
+			graphics::image(ls_xyz.smooth, axes=FALSE, breaks=breaks, col=colors, xlim=grDevices::extendrange(ls_xyz.smooth$x,f=0.1), ylim=grDevices::extendrange(ls_xyz.smooth$y,f=0.1))
 		}
 		
 		if(contour){
@@ -107,11 +113,17 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 			
 		}else{
 			if(!image){
-				plot(y ~ x, data=ls_xyz, pch=20, col="blue")
+				plot(y ~ x, data=ls_xyz, pch=20, col="blue", axes=FALSE, ann=FALSE)
 			}else{
 				graphics::points(ls_xyz, pch=20, cex=1)
 			}
-			with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=0.6))
+			
+			if(is.null(ls_xyz$label)){
+				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=0.6))
+			}else{
+				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=0.6))
+			}
+			
 		}
 		
 		

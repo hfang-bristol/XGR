@@ -98,7 +98,7 @@ ls_xyz.smooth <- xVisInterp(ls_xyz, nD="auto")
 ls_xyz.smooth <- xVisInterp(ls_xyz, nD="2D")
 # 3D
 xVisInterp(ls_xyz, nD="3D", theta.3D=40, phi.3D=20, clab="Value\\n")
-# 3D of different views
+# 3D views of different angles
 pdf("xVisInterp.pdf")
 for(theta.3D in seq(0,360,10)){ xVisInterp(ls_xyz, nD="3D",
 contour=TRUE, image=TRUE, clab=paste0("theta:",theta.3D,"\\n"),
