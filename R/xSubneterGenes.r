@@ -109,7 +109,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=T)
 		}
         
-        g <- xDefineNet(network=network, weighted=FALSE, verbose=verbose, RData.location=RData.location)
+        g <- xDefineNet(network=network, weighted=FALSE, verbose=FALSE, RData.location=RData.location)
 
 	}
 

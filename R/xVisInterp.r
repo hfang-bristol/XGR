@@ -126,7 +126,6 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 			
 		}
 		
-		
 	}else if(nD=='2D'){
 		if(class(contour)!='list'){
 			if(contour){
