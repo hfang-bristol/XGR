@@ -11,6 +11,7 @@ decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
 "PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
@@ -104,33 +105,35 @@ where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)}
 
 \item{network}{the built-in network. Currently two sources of network
 information are supported: the STRING database (version 10) and the
-Pathways Commons database (version 7). STRING is a meta-integration of
+Pathway Commons database (version 7). STRING is a meta-integration of
 undirect interactions from the functional aspect, while Pathways
 Commons mainly contains both undirect and direct interactions from the
 physical/pathway aspect. Both have scores to control the confidence of
 interactions. Therefore, the user can choose the different quality of
 the interactions. In STRING, "STRING_highest" indicates interactions
 with highest confidence (confidence scores>=900), "STRING_high" for
-interactions with high confidence (confidence scores>=700), and
+interactions with high confidence (confidence scores>=700),
 "STRING_medium" for interactions with medium confidence (confidence
-scores>=400). For undirect/physical interactions from Pathways Commons,
-"PCommonsUN_high" indicates undirect interactions with high confidence
-(supported with the PubMed references plus at least 2 different
-sources), "PCommonsUN_medium" for undirect interactions with medium
-confidence (supported with the PubMed references). For direct
-(pathway-merged) interactions from Pathways Commons, "PCommonsDN_high"
-indicates direct interactions with high confidence (supported with the
-PubMed references plus at least 2 different sources), and
-"PCommonsUN_medium" for direct interactions with medium confidence
-(supported with the PubMed references). In addtion to pooled version of
-pathways from all data sources, the user can also choose the
-pathway-merged network from individual sources, that is,
-"PCommonsDN_Reactome" for those from Reactome, "PCommonsDN_KEGG" for
-those from KEGG, "PCommonsDN_HumanCyc" for those from HumanCyc,
-"PCommonsDN_PID" for those froom PID, "PCommonsDN_PANTHER" for those
-from PANTHER, "PCommonsDN_ReconX" for those from ReconX,
-"PCommonsDN_TRANSFAC" for those from TRANSFAC, "PCommonsDN_PhosphoSite"
-for those from PhosphoSite, and "PCommonsDN_CTD" for those from CTD}
+scores>=400), and "STRING_low" for interactions with low confidence
+(confidence scores>=150). For undirect/physical interactions from
+Pathways Commons, "PCommonsUN_high" indicates undirect interactions
+with high confidence (supported with the PubMed references plus at
+least 2 different sources), "PCommonsUN_medium" for undirect
+interactions with medium confidence (supported with the PubMed
+references). For direct (pathway-merged) interactions from Pathways
+Commons, "PCommonsDN_high" indicates direct interactions with high
+confidence (supported with the PubMed references plus at least 2
+different sources), and "PCommonsUN_medium" for direct interactions
+with medium confidence (supported with the PubMed references). In
+addition to pooled version of pathways from all data sources, the user
+can also choose the pathway-merged network from individual sources,
+that is, "PCommonsDN_Reactome" for those from Reactome,
+"PCommonsDN_KEGG" for those from KEGG, "PCommonsDN_HumanCyc" for those
+from HumanCyc, "PCommonsDN_PID" for those froom PID,
+"PCommonsDN_PANTHER" for those from PANTHER, "PCommonsDN_ReconX" for
+those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC,
+"PCommonsDN_PhosphoSite" for those from PhosphoSite, and
+"PCommonsDN_CTD" for those from CTD}
 
 \item{network.customised}{an object of class "igraph". By default, it
 is NULL. It is designed to allow the user analysing their customised
