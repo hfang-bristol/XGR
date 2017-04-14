@@ -22,7 +22,6 @@
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd
 #' @importFrom BiocGenerics unlist
-#' @importFrom akima interp
 #' @importFrom plot3D image2D persp3D image3D contour3D
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
