@@ -59,6 +59,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		}else{
 			relations <- igraph::get.data.frame(g, what="edges")[, c(1,2)]
 			colnames(relations) <- c("from","to")
+			relations$weight <- rep(1, nrow(relations))
 		}
 		## do removal for node extraction (without 'name'; otherwise failed to do so using the function 'igraph::get.data.frame')
 		g <- igraph::delete_vertex_attr(g, "name")
@@ -68,7 +69,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		### remove the duplicated
 		nodes <- nodes[!duplicated(nodes), ]			
 		########################
-			
+		
 		g <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)
 			
     }else if(length(grep('PCommonsUN',network,perl=TRUE)) > 0){
@@ -107,6 +108,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		
 		relations <- igraph::get.data.frame(g, what="edges")[, c(1,2)]
 		colnames(relations) <- c("from","to")
+		relations$weight <- rep(1, nrow(relations))
 		nodes <- igraph::get.data.frame(g, what="vertices")[, c(3,4)]
 		g <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)
     }
