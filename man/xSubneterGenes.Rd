@@ -9,9 +9,12 @@ xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
 "PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
-"PCommonsDN_PhosphoSite", "PCommonsDN_CTD"), network.customised = NULL,
-seed.genes = T, subnet.significance = 0.01, subnet.size = NULL,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD"), STRING.only = c(NA,
+"neighborhood_score", "fusion_score", "cooccurence_score",
+"coexpression_score", "experimental_score", "database_score",
+"textmining_score")[1], network.customised = NULL, seed.genes = T,
+subnet.significance = 0.01, subnet.size = NULL, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -52,6 +55,14 @@ from HumanCyc, "PCommonsDN_PID" for those froom PID,
 those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC,
 "PCommonsDN_PhosphoSite" for those from PhosphoSite, and
 "PCommonsDN_CTD" for those from CTD}
+
+\item{STRING.only}{the further restriction of STRING by interaction
+type. If NA, no such restriction. Otherwide, it can be one or more of
+"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score".
+Useful options are c("experimental_score","database_score"): only
+experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
+and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
+and Reactome) are used}
 
 \item{network.customised}{an object of class "igraph". By default, it
 is NULL. It is designed to allow the user analysing their customised
