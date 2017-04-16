@@ -130,6 +130,17 @@ library(XGR)
 
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
+# STRING (high quality)
+g &lt;- xDefineNet(network="STRING_high", RData.location=RData.location)
+# STRING (high quality), with edges weighted 
+g &lt;- xDefineNet(network="STRING_high", weighted=T,
+RData.location=RData.location)
+# STRING (high quality), only edges sourced from experimental or curated data
+g &lt;- xDefineNet(network="STRING_high",
+STRING.only=c("experimental_score","database_score"),
+RData.location=RData.location)
+
+# Pathway Commons 
 g &lt;- xDefineNet(network="PCommonsDN_medium",
 RData.location=RData.location)
 

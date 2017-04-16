@@ -89,6 +89,17 @@ library(XGR)
 
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
+# STRING (high quality)
+g <- xDefineNet(network="STRING_high", RData.location=RData.location)
+# STRING (high quality), with edges weighted 
+g <- xDefineNet(network="STRING_high", weighted=T,
+RData.location=RData.location)
+# STRING (high quality), only edges sourced from experimental or curated data
+g <- xDefineNet(network="STRING_high",
+STRING.only=c("experimental_score","database_score"),
+RData.location=RData.location)
+
+# Pathway Commons 
 g <- xDefineNet(network="PCommonsDN_medium",
 RData.location=RData.location)
 }
