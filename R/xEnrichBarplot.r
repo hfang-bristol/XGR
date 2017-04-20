@@ -72,12 +72,14 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		df$name <- unlist(res_list)
 	}
 	
-	name <- ''
-	height <- ''
+	name <- height <- NULL
 	if(displayBy=='adjp' | displayBy=='fdr'){
 		df <- df[with(df,order(-adjp,zscore)),]
 		df$name <- factor(df$name, levels=df$name)
 		df$height <- -1*log10(df$adjp)
+		####
+		df$height[is.infinite(df$height)] <- max(df$height[!is.infinite(df$height)])
+		####
 		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment significance: -log10(FDR)")
 	}else if(displayBy=='fc'){
@@ -90,6 +92,9 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		df <- df[with(df,order(-pvalue,zscore)),]
 		df$name <- factor(df$name, levels=df$name)
 		df$height <- -1*log10(df$pvalue)
+		####
+		df$height[is.infinite(df$height)] <- max(df$height[!is.infinite(df$height)])
+		####
 		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment significance: -log10(p-value)")
 	}else if(displayBy=='zscore'){

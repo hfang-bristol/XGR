@@ -130,7 +130,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		colnames(relations) <- c("from","to")
 		relations$weight <- rep(1, nrow(relations))
 		nodes <- igraph::get.data.frame(g, what="vertices")[, c(3,4)]
-		g <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)
+		g <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
     }
     
     invisible(g)
