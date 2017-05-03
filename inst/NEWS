@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.1.1
+-----------------------
+
+NEW FEATURES
+
+    o Modify 'xGRviaGenomicAnno' enabling two-side p-value calculation
+    
+
 CHANGES IN VERSION 1.0.10
 -----------------------
 

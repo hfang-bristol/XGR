@@ -9,9 +9,10 @@ NULL,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 resolution = c("bases", "regions", "hybrid"),
-background.annotatable.only = T, p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), GR.annotation = c(NA,
-"Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
+background.annotatable.only = T, p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
 "ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
 "Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
@@ -104,6 +105,11 @@ background is further restricted to annotatable bases (covered by
 background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
 is provided in 'annotation.file', it should be false}
+
+\item{p.tail}{the tail used to calculate p-values. It can be either
+"two-tails" for the significance based on two-tails (ie both over- and
+under-overrepresentation) or "one-tail" (by default) for the
+significance based on one tail (ie only over-representation)}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
@@ -436,8 +442,13 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 
 ## b) perform enrichment analysis using FANTOM expressed enhancers
-eTerm <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
+### one-tail p-value calculation (by default)
+eTerm <- xGRviaGenomicAnno(data.file, format.file="bed",
 GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+### alternatively: two-tails p-value calculation (useful to identify delepetions)
+eTerm_2 <- xGRviaGenomicAnno(data.file, format.file="bed",
+GR.annotation="FANTOM5_Enhancer_Cell", p.tail="two-tails",
+RData.location=RData.location)
 
 ## c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
