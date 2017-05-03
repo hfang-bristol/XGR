@@ -143,7 +143,7 @@
 #' ## b) perform enrichment analysis using FANTOM expressed enhancers
 #' ### one-tail p-value calculation (by default)
 #' eTerm <- xGRviaGenomicAnno(data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
-#' ### alternatively: two-tails p-value calculation (useful to identify delepetions)
+#' ### alternatively: two-tails p-value calculation (useful to identify depletions)
 #' eTerm_2 <- xGRviaGenomicAnno(data.file, format.file="bed", GR.annotation="FANTOM5_Enhancer_Cell", p.tail="two-tails", RData.location=RData.location)
 #'
 #' ## c) view enrichment results for the top significant terms

@@ -1,26 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define a colormap</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xColormap"><tr><td>xColormap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to define a colormap</h2>
-
-<h3>Description</h3>
-
-<p><code>xColormap</code> is supposed to define a colormap. It returns a
-function, which will take an integer argument specifying how many
-colors interpolate the given colormap.
-</p>
-
+<h2>xColormap</h2>
 
 <h3>Usage</h3>
 
 <pre>
 xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
-"rainbow",
-"wb", "heat", "terrain", "topo", "cm", "ggplot2"))
+"rainbow", "wb", "heat", "terrain", "topo", "cm", "ggplot2"))
 </pre>
 
 
@@ -29,89 +20,58 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 <table summary="R argblock">
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
-default color palette). Alternatively, any hyphen-separated HTML color
-names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-
-<ul>
-<li><p><code>palette.name</code>: a function that takes an integer argument
-for generating that number of colors interpolating the given sequence
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>The input colormap includes:
-</p>
-
-<ul>
-<li><p>&quot;jet&quot;: jet colormap
-</p>
-</li>
-<li><p>&quot;bwr&quot;: blue-white-red
-</p>
-</li>
-<li><p>&quot;gbr&quot;: green-black-red
-</p>
-</li>
-<li><p>&quot;wyr&quot;: white-yellow-red
-</p>
-</li>
-<li><p>&quot;br&quot;: black-red
-</p>
-</li>
-<li><p>&quot;yr&quot;: yellow-red
-</p>
-</li>
-<li><p>&quot;wb&quot;: white-black
-</p>
-</li>
-<li><p>&quot;rainbow&quot;: rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta
-</p>
-</li>
-<li><p>&quot;ggplot2&quot;: emulating ggplot2 default color palette
-</p>
-</li>
-<li><p>Alternatively, any hyphen-separated HTML color names, e.g.
-&quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
-&quot;darkblue-lightblue-lightyellow-darkorange&quot;,
-&quot;darkgreen-white-darkviolet&quot;, &quot;darkgreen-lightgreen-lightpink-darkred&quot;.
-A list of standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a>
-</p>
-</li></ul>
-
 
 
 <h3>Examples</h3>
 
 <pre>
-# 1) define "blue-white-red" colormap
-palette.name &lt;- xColormap(colormap="bwr")
-# use the return function "palette.name" to generate 10 colors spanning "bwr"
-palette.name(10)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 2) define default colormap from ggplot2
-palette.name &lt;- xColormap(colormap="ggplot2")
-# use the return function "palette.name" to generate 3 default colors used by ggplot2
-palette.name(3)
+## The function is currently defined as
+function (colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
+"rainbow", "wb", "heat", "terrain", "topo", "cm", "ggplot2"))
+{
+if (length(colormap) &gt; 1) {
+colormap &lt;- colormap[1]
+}
+if (colormap == "ggplot2") {
+my_hue_pal &lt;- function(h = c(0, 360) + 15, c = 100, l = 65,
+h.start = 0, direction = 1) {
+function(n) {
+if ((diff(h)%%360) &lt; 1) {
+h[2] &lt;- h[2] - 360/n
+}
+rotate &lt;- function(x) (x + h.start)%%360 * direction
+hues &lt;- rotate(seq(h[1], h[2], length.out = n))
+grDevices::hcl(hues, c, l)
+}
+}
+palette.name &lt;- my_hue_pal(h = c(0, 360) + 15, c = 100,
+l = 65, h.start = 0, direction = 1)
+}
+else if (colormap == "heat") {
+palette.name &lt;- grDevices::heat.colors
+}
+else if (colormap == "terrain") {
+palette.name &lt;- grDevices::terrain.colors
+}
+else if (colormap == "topo") {
+palette.name &lt;- grDevices::topo.colors
+}
+else if (colormap == "cm") {
+palette.name &lt;- grDevices::cm.colors
+}
+else {
+palette.name &lt;- supraHex::visColormap(colormap = colormap)
+}
+invisible(palette.name)
+}
 </pre>
 
 

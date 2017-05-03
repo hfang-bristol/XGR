@@ -1,20 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a subnetwork from an input network and...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSubneterGenes"><tr><td>xSubneterGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to identify a subnetwork from an input network and the signficance level imposed on its nodes</h2>
-
-<h3>Description</h3>
-
-<p><code>xSubneterGenes</code> is supposed to identify maximum-scoring
-subnetwork from an input graph with the node information on the
-significance (measured as p-values or fdr). It returns an object of
-class &quot;igraph&quot;.
-</p>
-
+<h2>xSubneterGenes</h2>
 
 <h3>Usage</h3>
 
@@ -38,184 +29,204 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a named input vector containing the significance level for
-nodes (gene symbols). For this named vector, the element names are gene
-symbols, the element values for the significance level (measured as
-p-value or fdr). Alternatively, it can be a matrix or data frame with
-two columns: 1st column for gene symbols, 2nd column for the
-significance level</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>network</code></td>
 <td>
-<p>the built-in network. Currently two sources of network
-information are supported: the STRING database (version 10) and the
-Pathway Commons database (version 7). STRING is a meta-integration of
-undirect interactions from the functional aspect, while Pathways
-Commons mainly contains both undirect and direct interactions from the
-physical/pathway aspect. Both have scores to control the confidence of
-interactions. Therefore, the user can choose the different quality of
-the interactions. In STRING, &quot;STRING_highest&quot; indicates interactions
-with highest confidence (confidence scores&gt;=900), &quot;STRING_high&quot; for
-interactions with high confidence (confidence scores&gt;=700),
-&quot;STRING_medium&quot; for interactions with medium confidence (confidence
-scores&gt;=400), and &quot;STRING_low&quot; for interactions with low confidence
-(confidence scores&gt;=150). For undirect/physical interactions from
-Pathways Commons, &quot;PCommonsUN_high&quot; indicates undirect interactions
-with high confidence (supported with the PubMed references plus at
-least 2 different sources), &quot;PCommonsUN_medium&quot; for undirect
-interactions with medium confidence (supported with the PubMed
-references). For direct (pathway-merged) interactions from Pathways
-Commons, &quot;PCommonsDN_high&quot; indicates direct interactions with high
-confidence (supported with the PubMed references plus at least 2
-different sources), and &quot;PCommonsUN_medium&quot; for direct interactions
-with medium confidence (supported with the PubMed references). In
-addition to pooled version of pathways from all data sources, the user
-can also choose the pathway-merged network from individual sources,
-that is, &quot;PCommonsDN_Reactome&quot; for those from Reactome,
-&quot;PCommonsDN_KEGG&quot; for those from KEGG, &quot;PCommonsDN_HumanCyc&quot; for those
-from HumanCyc, &quot;PCommonsDN_PID&quot; for those froom PID,
-&quot;PCommonsDN_PANTHER&quot; for those from PANTHER, &quot;PCommonsDN_ReconX&quot; for
-those from ReconX, &quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC,
-&quot;PCommonsDN_PhosphoSite&quot; for those from PhosphoSite, and
-&quot;PCommonsDN_CTD&quot; for those from CTD</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>STRING.only</code></td>
 <td>
-<p>the further restriction of STRING by interaction
-type. If NA, no such restriction. Otherwide, it can be one or more of
-&quot;neighborhood_score&quot;,&quot;fusion_score&quot;,&quot;cooccurence_score&quot;,&quot;coexpression_score&quot;,&quot;experimental_score&quot;,&quot;database_score&quot;,&quot;textmining_score&quot;.
-Useful options are c(&quot;experimental_score&quot;,&quot;database_score&quot;): only
-experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
-and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
-and Reactome) are used</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>network.customised</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;. By default, it
-is NULL. It is designed to allow the user analysing their customised
-network data that are not listed in the above argument 'network'. This
-customisation (if provided) has the high priority over built-in
-network</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>seed.genes</code></td>
 <td>
-<p>logical to indicate whether the identified network is
-restricted to seed genes (ie input genes with the signficant level). By
-default, it sets to true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>subnet.significance</code></td>
 <td>
-<p>the given significance threshold. By
-default, it is set to NULL, meaning there is no constraint on
-nodes/genes. If given, those nodes/genes with p-values below this are
-considered significant and thus scored positively. Instead, those
-p-values above this given significance threshold are considered
-insigificant and thus scored negatively</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>subnet.size</code></td>
 <td>
-<p>the desired number of nodes constrained to the
-resulting subnet. It is not nulll, a wide range of significance
-thresholds will be scanned to find the optimal significance threshold
-leading to the desired number of nodes in the resulting subnet.
-Notably, the given significance threshold will be overwritten by this
-option</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;
-</p>
-
-
-<h3>Note</h3>
-
-<p>The algorithm identifying a subnetwork is implemented in the dnet
-package
-(http://genomemedicine.biomedcentral.com/articles/10.1186/s13073-014-0064-8).
-In brief, from an input network with input node/gene information (the
-significant level; p-values or FDR), the way of searching for a
-maximum-scoring subnetwork is done as follows. Given the threshold of
-tolerable p-value, it gives positive scores for nodes with p-values
-below the threshold (nodes of interest), and negative scores for nodes
-with threshold-above p-values (intolerable). After score
-transformation, the search for a maximum scoring subnetwork is deduced
-to find the connected subnetwork that is enriched with positive-score
-nodes, allowing for a few negative-score nodes as linkers. This
-objective is met through minimum spanning tree finding and
-post-processing, previously used as a heuristic solver of
-prize-collecting Steiner tree problem. The solver is deterministic,
-only determined by the given tolerable p-value threshold. For
-identification of the subnetwork with a desired number of nodes, an
-iterative procedure is also developed to fine-tune tolerable
-thresholds. This explicit control over the node size may be necessary
-for guiding follow-up experiments.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xRDataLoader</code>, <code>xDefineNet</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the input nodes/genes with the significance info
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-sig &lt;- rbeta(500, shape1=0.5, shape2=1)
-data &lt;- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
-
-# b) perform network analysis
-# b1) find maximum-scoring subnet based on the given significance threshold
-subnet &lt;- xSubneterGenes(data=data, network="STRING_high",
-subnet.significance=0.01, RData.location=RData.location)
-# b2) find maximum-scoring subnet with the desired node number=50
-subnet &lt;- xSubneterGenes(data=data, network="STRING_high",
-subnet.size=50, RData.location=RData.location)
-
-# c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
-output &lt;- igraph::get.data.frame(subnet, what="edges")
-utils::write.table(output, file="subnet_edges.txt", sep="\t",
-row.names=FALSE)
-output &lt;- igraph::get.data.frame(subnet, what="vertices")
-utils::write.table(output, file="subnet_nodes.txt", sep="\t",
-row.names=FALSE)
-
-# d) visualise the identified subnet
-## do visualisation with nodes colored according to the significance (you provide)
-xVisNet(g=subnet, pattern=-log10(as.numeric(V(subnet)$significance)),
-vertex.shape="sphere", colormap="wyr")
-## do visualisation with nodes colored according to transformed scores
-xVisNet(g=subnet, pattern=as.numeric(V(subnet)$score),
-vertex.shape="sphere")
-
-# e) visualise the identified subnet as a circos plot
-library(RCircos)
-xCircos(g=subnet, entity="Gene", colormap="white-gray",
-RData.location=RData.location)
-
-## End(Not run)
+## The function is currently defined as
+function (data, network = c("STRING_highest", "STRING_high",
+"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
+"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
+"PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD"), STRING.only = c(NA,
+"neighborhood_score", "fusion_score", "cooccurence_score",
+"coexpression_score", "experimental_score", "database_score",
+"textmining_score")[1], network.customised = NULL, seed.genes = T,
+subnet.significance = 0.01, subnet.size = NULL, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+{
+startT &lt;- Sys.time()
+if (verbose) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = T)
+message("", appendLF = T)
+}
+network &lt;- match.arg(network)
+if (is.null(data)) {
+stop("The input data must be not NULL.\n")
+}
+if (is.vector(data)) {
+if (length(data) &gt; 1) {
+if (is.null(names(data))) {
+stop("The input data must have names with attached gene symbols.\n")
+}
+}
+else {
+data &lt;- utils::read.delim(file = data, header = F,
+row.names = NULL, stringsAsFactors = F)
+}
+}
+if (is.vector(data)) {
+pval &lt;- data
+}
+else if (is.matrix(data) | is.data.frame(data)) {
+data &lt;- as.matrix(data)
+data_list &lt;- split(x = data[, 2], f = as.character(data[,
+1]))
+res_list &lt;- lapply(data_list, function(x) {
+x &lt;- as.numeric(x)
+x &lt;- x[!is.na(x)]
+if (length(x) &gt; 0) {
+min(x)
+}
+else {
+NULL
+}
+})
+pval &lt;- unlist(res_list)
+}
+if (!is.null(network.customised) &amp;&amp; class(network.customised) ==
+"igraph") {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the customised network (%s) ...",
+as.character(now)), appendLF = T)
+}
+g &lt;- network.customised
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the network %s (%s) ...", network,
+as.character(now)), appendLF = T)
+}
+g &lt;- xDefineNet(network = network, STRING.only = STRING.only,
+weighted = FALSE, verbose = FALSE, RData.location = RData.location)
+}
+if (verbose) {
+message(sprintf("The network you choose has %d nodes and %d edges",
+vcount(g), ecount(g)), appendLF = T)
+}
+if (seed.genes) {
+ind &lt;- match(V(g)$name, names(pval))
+nodes_mapped &lt;- V(g)$name[!is.na(ind)]
+g &lt;- dnet::dNetInduce(g = g, nodes_query = nodes_mapped,
+knn = 0, remove.loops = F, largest.comp = T)
+}
+else {
+ind &lt;- match(V(g)$name, names(pval))
+nodes_not_mapped &lt;- V(g)$name[is.na(ind)]
+pval_not_mapped &lt;- rep(1, length(nodes_not_mapped))
+names(pval_not_mapped) &lt;- nodes_not_mapped
+pval &lt;- c(pval, pval_not_mapped)
+}
+if (verbose) {
+message(sprintf("Restricted to data/nodes of interest, the network
+(with the largest interconnected component) has %d nodes and %d
+edges",
+vcount(g), ecount(g)), appendLF = T)
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("Start to identify a subnetwork (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+subnet &lt;- dNetPipeline(g = g, pval = pval, method = "customised",
+significance.threshold = subnet.significance, nsize = subnet.size,
+plot = F, verbose = verbose)
+if (ecount(subnet) &gt; 0 &amp;&amp; class(subnet) == "igraph") {
+relations &lt;- igraph::get.data.frame(subnet, what = "edges")[,
+c(1, 2)]
+nodes &lt;- igraph::get.data.frame(subnet, what = "vertices")
+nodes &lt;- cbind(name = nodes$name, description = nodes$description,
+significance = pval[rownames(nodes)], score = nodes$score)
+if (is.directed(subnet)) {
+subg &lt;- igraph::graph.data.frame(d = relations, directed = TRUE,
+vertices = nodes)
+}
+else {
+subg &lt;- igraph::graph.data.frame(d = relations, directed = FALSE,
+vertices = nodes)
+}
+}
+else {
+subg &lt;- NULL
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("The subnetwork has been identified (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+endT &lt;- Sys.time()
+if (verbose) {
+message(paste(c("\nFinish at ", as.character(endT)),
+collapse = ""), appendLF = T)
+}
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = T)
+return(subg)
+}
 </pre>
 
 

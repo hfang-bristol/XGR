@@ -1,5 +1,5 @@
-\name{xRdWrap}
-\alias{xRdWrap}
+\name{print.eTerm}
+\alias{print.eTerm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %% ~~function to do ... ~~
@@ -8,15 +8,15 @@
 %% ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-xRdWrap(path = "./XGR/man", remove.dontrun = FALSE)
+print.eTerm(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-\item{path}{
-%% ~~Describe \code{path} here~~
+\item{x}{
+%% ~~Describe \code{x} here~~
 }
-\item{remove.dontrun}{
-%% ~~Describe \code{remove.dontrun} here~~
+\item{\dots}{
+%% ~~Describe \code{\dots} here~~
 }
 }
 \details{
@@ -50,50 +50,26 @@ xRdWrap(path = "./XGR/man", remove.dontrun = FALSE)
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (path = "./XGR/man", remove.dontrun = FALSE)
+function (x, ...)
 {
-for (nm in list.files(path, pattern = "\\.Rd$")) {
-input_file <- file.path(path, nm)
-message(sprintf(input_file), appendLF = T)
-x <- readLines(input_file)
-y <- vector()
-flag_examples <- F
-flag_examples_dontrun <- F
-num_examples_brace <- 0
-for (i in 1:length(x)) {
-if (length(grep("^#", x[i])) == 0 & length(grep("^\\\\title",
-x[i])) == 0) {
-y <- c(y, strwrap(x[i]))
-}
-else {
-y <- c(y, x[i])
-}
-if (remove.dontrun == T) {
-if (x[i] == "\\examples{") {
-flag_examples <- T
-}
-if (flag_examples == T) {
-if (x[i] == "\\dontrun{") {
-y <- y[-1 * length(y)]
-flag_examples_dontrun <- T
-}
-if (flag_examples_dontrun == T) {
-if (x[i] == "}") {
-num_examples_brace <- num_examples_brace +
-1
-}
-if (num_examples_brace == 1) {
-y <- y[-1 * length(y)]
-flag_examples <- F
-}
-}
-}
-}
-}
-fileConn <- file(input_file)
-writeLines(y, fileConn)
-close(fileConn)
-}
+cat(sprintf("An object of S3 class '\%s', with \%d components
+including:",
+class(x), length(names(x))), "\n", sep = "")
+cat(sprintf(" $term_info: a data frame of \%d rows X \%d columns",
+dim(x$term_info)[1], dim(x$term_info)[2]), "\n", sep = "")
+cat(sprintf(" $data: a vector (\%d in total)", length(x$data)),
+"\n", sep = "")
+cat(sprintf(" $background: a vector (\%d in total)",
+length(x$background)),
+"\n", sep = "")
+cat(sprintf(" $adjp: a vector (\%d in total)", length(x$adjp)),
+"\n", sep = "")
+cat(sprintf(" $cross: a matrix of \%d X \%d", dim(x$cross)[1],
+dim(x$cross)[2]), "\n", sep = "")
+cat("\n--------------------------------------------------\n")
+cat("xEnrichViewer(eTerm):\n")
+print(xEnrichViewer(x), row.names = TRUE)
+cat("......\n")
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

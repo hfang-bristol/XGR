@@ -1,22 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given a list of genes...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnricherGenes"><tr><td>xEnricherGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct enrichment analysis given a list of genes and the ontology in query</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnricherGenes</code> is supposed to conduct enrichment analysis given
-the input data and the ontology in query. It returns an object of class
-&quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact test or
-Hypergeometric test. The test can respect the hierarchy of the
-ontology. Now it supports enrichment analysis using a wide variety of
-ontologies such as Gene Ontology and Phenotype Ontologies.
-</p>
-
+<h2>xEnricherGenes</h2>
 
 <h3>Usage</h3>
 
@@ -29,15 +18,14 @@ ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
 "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
 "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease",
 "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
-"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN"),
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
+"CreedsGeneDN"), size.range = c(10, 2000), min.overlap = 3,
+which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"), ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -46,287 +34,257 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector containing gene symbols</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-<p>a background vector containing gene symbols as the
-test background. If NULL, by default all annotatable are used as
-background</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>check.symbol.identity</code></td>
 <td>
-<p>logical to indicate whether to match the
-input data/background via Synonyms for those unmatchable by official
-gene symbols. By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>
-<p>the ontology supported currently. It can be &quot;GOBP&quot; for
-Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
-Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PS&quot; for
-phylostratific age information, &quot;PS2&quot; for the collapsed PS version
-(inferred ancestors being collapsed into one with the known taxonomy
-information), &quot;SF&quot; for SCOP domain superfamilies, &quot;Pfam&quot; for Pfam
-domain families, &quot;DO&quot; for Disease Ontology, &quot;HPPA&quot; for Human Phenotype
-Phenotypic Abnormality, &quot;HPMI&quot; for Human Phenotype Mode of Inheritance,
-&quot;HPCM&quot; for Human Phenotype Clinical Modifier, &quot;HPMA&quot; for Human
-Phenotype Mortality Aging, &quot;MP&quot; for Mammalian Phenotype, &quot;EF&quot; for
-Experimental Factor Ontology (used to annotate GWAS Catalog genes),
-Drug-Gene Interaction database (&quot;DGIdb&quot;) for drugable categories,
-tissue-specific eQTL-containing genes from GTEx (&quot;GTExV4&quot; and
-&quot;GTExV6&quot;), crowd extracted expression of differential signatures from
-CREEDS (&quot;CreedsDisease&quot;, &quot;CreedsDiseaseUP&quot;, &quot;CreedsDiseaseDN&quot;,
-&quot;CreedsDrug&quot;, &quot;CreedsDrugUP&quot;, &quot;CreedsDrugDN&quot;, &quot;CreedsGene&quot;,
-&quot;CreedsGeneUP&quot; and &quot;CreedsGeneDN&quot;), and the molecular signatures
-database (Msigdb, including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;,
-&quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;,
-&quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;,
-&quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;,
-&quot;MsigdbC7&quot;)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-<p>the minimum and maximum size of members of each term
-in consideration. By default, it sets to a minimum of 10 but no more
-than 2000</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-<p>the minimum number of overlaps. Only those terms
-with members that overlap with input data at least min.overlap (3 by
-default) will be processed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>which.distance</code></td>
 <td>
-<p>which terms with the distance away from the
-ontology root (if any) is used to restrict terms in consideration. By
-default, it sets to 'NULL' to consider all distances</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-<p>the test statistic used. It can be &quot;fisher&quot; for using
-fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
-&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
-independence between gene group (genes belonging to a group or not) and
-gene annotation (genes annotated by a term or not), and thus compare
-sampling to the left part of background (after sampling without
-replacement). Hypergeometric test is to sample at random (without
-replacement) from the background containing annotated and non-annotated
-genes, and thus compare sampling to background. Unlike hypergeometric
-test, binomial test is to sample at random (with replacement) from the
-background with the constant probability. In terms of the ease of
-finding the significance, they are in order: hypergeometric test &gt;
-fisher's exact test &gt; binomial test. In other words, in terms of the
-calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
-binomial test</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-<p>the method used to adjust p-values. It can be
-one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
-first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
-discovery rate (FDR: the expected proportion of false discoveries
-amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
-&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
-the family-wise error rate (FWER). Notes: FDR is a less stringent
-condition than FWER</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontology.algorithm</code></td>
 <td>
-<p>the algorithm used to account for the
-hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
-&quot;lea&quot;. For details, please see 'Note' below</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>elim.pvalue</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;elim&quot;. It is used to control how to declare a signficantly enriched
-term (and subsequently all genes in this term are eliminated from all
-its ancestors)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>lea.depth</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;lea&quot;. It is used to control how many maximum depth is used to consider
-the children of a term (and subsequently all genes in these children
-term are eliminated from the use for the recalculation of the
-signifance at this term)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-<p>the mode of paths induced by vertices/nodes with input
-annotation data. It can be &quot;all_paths&quot; for all possible paths to the
-root, &quot;shortest_paths&quot; for only one path to the root (for each node in
-query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
-for each node, find all shortest paths with the equal lengths)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-<p>logical to indicate whether the true-path rule
-should be applied to propagate annotations. By default, it sets to
-false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;eTerm&quot;, a list with following components:
-</p>
-
-<ul>
-<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
-information, where nTerm is the number of terms, and the 4 columns are
-&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
-&quot;distance&quot;
-</p>
-</li>
-<li><p><code>annotation</code>: a list of terms containing annotations, each
-term storing its annotations. Always, terms are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>g</code>: an igraph object to represent DAG
-</p>
-</li>
-<li><p><code>data</code>: a vector containing input data in consideration. It
-is not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>background</code>: a vector containing the background data. It is
-not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
-snps overlapped between a snp/gene set and the given input data (i.e.
-the snps of interest). Always, gene sets are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>fc</code>: a vector containing fold changes
-</p>
-</li>
-<li><p><code>zscore</code>: a vector containing z-scores
-</p>
-</li>
-<li><p><code>pvalue</code>: a vector containing p-values
-</p>
-</li>
-<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
-value but after being adjusted for multiple comparisons
-</p>
-</li>
-<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
-for the overlapped-members observed in an individaul term, and
-off-diagnal cell for the overlapped-members shared betwene two terms
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>The interpretation of the algorithms used to account for the hierarchy
-of the ontology is:
-</p>
-
-<ul>
-<li><p>&quot;none&quot;: does not consider the ontology hierarchy at all.
-</p>
-</li>
-<li><p>&quot;lea&quot;: computers the significance of a term in terms of the
-significance of its children at the maximum depth (e.g. 2). Precisely,
-once snps are already annotated to any children terms with a more
-signficance than itself, then all these snps are eliminated from the
-use for the recalculation of the signifance at that term. The final
-p-values takes the maximum of the original p-value and the recalculated
-p-value.
-</p>
-</li>
-<li><p>&quot;elim&quot;: computers the significance of a term in terms of the
-significance of its all children. Precisely, once snps are already
-annotated to a signficantly enriched term under the cutoff of e.g.
-pvalue&lt;1e-2, all these snps are eliminated from the ancestors of that
-term).
-</p>
-</li>
-<li><p>&quot;pc&quot;: requires the significance of a term not only using the
-whole snps as background but also using snps annotated to all its
-direct parents/ancestors as background. The final p-value takes the
-maximum of both p-values in these two calculations.
-</p>
-</li>
-<li><p>&quot;Notes&quot;: the order of the number of significant terms is: &quot;none&quot;
-&gt; &quot;lea&quot; &gt; &quot;elim&quot; &gt; &quot;pc&quot;.
-</p>
-</li></ul>
-
-
-
-<h3>See Also</h3>
-
-<p><code>xRDataLoader</code>, <code>xEnricher</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# Gene-based enrichment analysis using Mammalian Phenotype Ontology (MP)
-# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-data
-
-# optionally, provide the test background (if not provided, all human genes)
-#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
-
-# b) perform enrichment analysis
-eTerm &lt;- xEnricherGenes(data=data, ontology="MP")
-
-# c) view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-
-# d) save enrichment results to the file called 'MP_enrichments.txt'
-res &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
-details=TRUE)
-output &lt;- data.frame(term=rownames(res), res)
-utils::write.table(output, file="MP_enrichments.txt", sep="\t",
-row.names=FALSE)
-
-# e) barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
-
-# f) visualise the top 10 significant terms in the ontology hierarchy
-# color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
-xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
-node.info=c("full_term_name"))
-# color-code terms according to the z-scores
-xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
-node.info=c("full_term_name"))
-
-## End(Not run)
+## The function is currently defined as
+function (data, background = NULL, check.symbol.identity = F,
+ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam",
+"DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH",
+"MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
+"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
+"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
+"MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease",
+"CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
+"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN"),
+size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm =
+c("none",
+"pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
+{
+startT &lt;- Sys.time()
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = T)
+message("", appendLF = T)
+ontology &lt;- match.arg(ontology)
+test &lt;- match.arg(test)
+p.adjust.method &lt;- match.arg(p.adjust.method)
+ontology.algorithm &lt;- match.arg(ontology.algorithm)
+path.mode &lt;- match.arg(path.mode)
+if (length(data) == 0) {
+return(FALSE)
+}
+if (is.vector(data)) {
+data &lt;- unique(data)
+}
+else {
+stop("The input data must be a vector.\n")
+}
+data &lt;- as.character(data)
+if (!is.na(ontology)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the ontology %s and its gene annotations (%s)
+...",
+ontology, as.character(now)), appendLF = T)
+}
+flag_PS2 &lt;- FALSE
+if (ontology == "PS2") {
+flag_PS2 &lt;- TRUE
+ontology &lt;- "PS"
+}
+GS &lt;- xRDataLoader(RData.customised = paste("org.Hs.eg",
+ontology, sep = ""), RData.location = RData.location,
+verbose = verbose)
+if (flag_PS2) {
+tmp &lt;- as.character(unique(GS$set_info$name))
+inds &lt;- sapply(tmp, function(x) which(GS$set_info$name ==
+x))
+set_info &lt;- data.frame()
+for (i in 1:length(inds)) {
+set_info &lt;- rbind(set_info, as.matrix(GS$set_info[max(inds[[i]]),
+]))
+}
+gs &lt;- list()
+for (i in 1:length(inds)) {
+gs[[i]] &lt;- unlist(GS$gs[inds[[i]]], use.names = F)
+}
+names(gs) &lt;- rownames(set_info)
+GS$set_info &lt;- set_info
+GS$gs &lt;- gs
+}
+anno &lt;- GS$gs
+all.ontologies &lt;- c("GOBP", "GOMF", "GOCC", "DO", "HPPA",
+"HPMI", "HPCM", "HPMA", "MP", "EF")
+flag_ontology &lt;- ontology %in% all.ontologies
+if (flag_ontology) {
+g &lt;- xRDataLoader(RData.customised = paste("ig.",
+ontology, sep = ""), RData.location = RData.location,
+verbose = verbose)
+}
+else {
+ontology.algorithm &lt;- "none"
+nodes &lt;- data.frame(name = as.character(GS$set_info$setID),
+term_id = as.character(GS$set_info$setID), term_name =
+as.character(GS$set_info$name),
+term_distance = as.character(GS$set_info$distance),
+stringsAsFactors = F)
+nodes &lt;- rbind(nodes, c("root", "root", "root", "root"))
+relations &lt;- data.frame(from = "root", to = nodes$name)
+g &lt;- igraph::graph.data.frame(d = relations, directed = T,
+vertices = nodes)
+}
+}
+else {
+stop("There is no input for the ontology.\n")
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...",
+as.character(now)), appendLF = T)
+}
+data &lt;- xSymbol2GeneID(data, check.symbol.identity =
+check.symbol.identity,
+verbose = verbose, RData.location = RData.location)
+data &lt;- data[!is.na(data)]
+if (length(background) &gt; 0) {
+background &lt;- xSymbol2GeneID(background, check.symbol.identity =
+check.symbol.identity,
+verbose = verbose, RData.location = RData.location)
+background &lt;- background[!is.na(background)]
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xEnricher' is being called (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+eTerm &lt;- xEnricher(data = data, annotation = anno, g = g,
+background = background, size.range = size.range, min.overlap =
+min.overlap,
+which.distance = which.distance, test = test, p.adjust.method =
+p.adjust.method,
+ontology.algorithm = ontology.algorithm, elim.pvalue = elim.pvalue,
+lea.depth = lea.depth, path.mode = path.mode, true.path.rule =
+true.path.rule,
+verbose = verbose)
+if (1 &amp; class(eTerm) == "eTerm") {
+EG &lt;- xRDataLoader(RData.customised = paste("org.Hs.eg",
+sep = ""), RData.location = RData.location, verbose = verbose)
+allGeneID &lt;- EG$gene_info$GeneID
+allSymbol &lt;- as.vector(EG$gene_info$Symbol)
+overlap &lt;- eTerm$overlap
+overlap_symbols &lt;- lapply(overlap, function(x) {
+ind &lt;- match(x, allGeneID)
+allSymbol[ind]
+})
+eTerm$overlap &lt;- overlap_symbols
+eTerm$data &lt;- allSymbol[match(eTerm$data, allGeneID)]
+eTerm$background &lt;- allSymbol[match(eTerm$background,
+allGeneID)]
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xEnricher' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+endT &lt;- Sys.time()
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = T)
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = T)
+invisible(eTerm)
+}
 </pre>
 
 
