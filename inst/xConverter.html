@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an object between graph classes</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xConverter"><tr><td>xConverter</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xConverter</h2>
+<h2>Function to convert an object between graph classes</h2>
+
+<h3>Description</h3>
+
+<p><code>xConverter</code> is supposed to convert an object between classes
+'dgCMatrix' and 'igraph'.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -20,102 +27,68 @@ xConverter(obj, from = c("dgCMatrix", "igraph"), to = c("igraph",
 <table summary="R argblock">
 <tr valign="top"><td><code>obj</code></td>
 <td>
-
-
+<p>an object of class &quot;dgCMatrix&quot; or &quot;igraph&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>from</code></td>
 <td>
-
-
+<p>a character specifying the class converted from. It can be
+one of &quot;dgCMatrix&quot; and &quot;igraph&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>to</code></td>
 <td>
-
-
+<p>a character specifying the class converted to. It can be one
+of &quot;dgCMatrix&quot; and &quot;igraph&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;dgCMatrix&quot; or &quot;igraph&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>Conversion is also supported between classes 'dgCMatrix' and 'igraph'
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# generate a ring graph
+g &lt;- make_ring(10, directed=TRUE)
 
-## The function is currently defined as
-function (obj, from = c("dgCMatrix", "igraph"), to = c("igraph",
-"dgCMatrix"), verbose = TRUE)
-{
-from &lt;- match.arg(from)
-to &lt;- match.arg(to)
-if (class(obj) != from) {
-}
-if (from != "igraph" &amp; to != "igraph") {
-stop(sprintf("Conversion between '%s' and '%s' is not supported.\n",
-from, to))
-}
-if (from == to) {
-warnings(sprintf("Since the class '%s' converted from is the same as
-the class '%s' converted to, it will return exactly what you
-input.\n",
-from, to))
-return(obj)
-}
-if (from == "igraph") {
-data &lt;- igraph::get.data.frame(obj, what = "vertices")
-if ("weight" %in% list.edge.attributes(obj)) {
-E(obj)$weight &lt;- as.numeric(E(obj)$weight)
-objConverted &lt;- igraph::as_adjacency_matrix(obj,
-type = "both", attr = "weight", edges = F, names = T,
-sparse = getIgraphOpt("sparsematrices"))
-}
-else {
-objConverted &lt;- igraph::as_adjacency_matrix(obj,
-type = "both", attr = NULL, edges = F, names = T,
-sparse = getIgraphOpt("sparsematrices"))
-}
-}
-else if (from == "dgCMatrix") {
-nodes &lt;- data.frame(name = rownames(obj))
-nodenames &lt;- rownames(obj)
-adjM &lt;- obj
-tmp &lt;- which(as.matrix(adjM != 0), arr.ind = T)
-if (from == "dgCMatrix") {
-ind &lt;- which(tmp[, 1] &lt; tmp[, 2])
-ttmp &lt;- matrix(0, nrow = length(ind), ncol = 2)
-ttmp[1:length(ind), ] &lt;- tmp[ind, ]
-tmp &lt;- ttmp
-}
-weight_flag &lt;- T
-if (all(adjM[tmp] == 1)) {
-weight_flag &lt;- F
-}
-if (weight_flag) {
-relations &lt;- data.frame(from = nodenames[tmp[, 1]],
-to = nodenames[tmp[, 2]], weight = adjM[tmp])
-}
-else {
-relations &lt;- data.frame(from = nodenames[tmp[, 1]],
-to = nodenames[tmp[, 2]])
-}
-if (from == "dgCMatrix") {
-objConverted &lt;- igraph::graph_from_data_frame(d = relations,
-directed = F, vertices = nodes)
-}
-}
-if (verbose) {
-message(sprintf("Your input object of class '%s' has been converted
-into an object of class '%s'.",
-from, to), appendLF = T)
-}
-return(objConverted)
-}
+# convert the object from 'igraph' to 'dgCMatrix' class
+xConverter(g, from='igraph', to='dgCMatrix')
+
+## Not run: 
+# Conversion between 'dgCMatrix' and 'igraph'
+# ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+g
+
+# convert the object from 'igraph' to 'dgCMatrix' class
+s &lt;- xConverter(g, from='igraph', to='dgCMatrix')
+s[1:10,1:10]
+
+# convert the object from 'dgCMatrix' to 'igraph' class
+ig &lt;- xConverter(s, from="dgCMatrix", to="igraph")
+ig
+
+## End(Not run)
 </pre>
 
 
