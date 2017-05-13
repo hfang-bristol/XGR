@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to animate the visualisation of interpolated...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xVisInterpAnimate"><tr><td>xVisInterpAnimate</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to animate the visualisation of interpolated irregular data</h2>
+
+<h3>Description</h3>
+
+<p><code>xVisInterpAnimate</code> is supposed to animate the visualisation of
+interpolated irregular data. The output can be a pdf file containing a
+list of frames/images, a mp4 video file or a gif file. To support video
+output file, the software 'ffmpeg' must be first installed (also put
+its path into the system PATH variable; see Note). To support gif
+output file, the software 'ImageMagick' must be first installed (also
+put its path into the system PATH variable; see Note).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xVisInterpAnimate(ls_xyz, interpolation = c("spline", "linear"), nx =
+100,
+ny = 100, zlim = NULL, colkey = TRUE, contour = FALSE,
+image = FALSE, clab = c("Value"), nlevels = 20, colormap = "terrain",
+theta.3D = 0, phi.3D = 20, verbose = TRUE,
+filename = "xVisInterpAnimate", filetype = c("pdf", "mp4", "gif"),
+image.type = c("jpg", "png"), num.frame = 36, sec_per_frame = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>ls_xyz</code></td>
+<td>
+<p>a list with 3 required components (x, y and z) and an
+optional component (label)</p>
+</td></tr>
+<tr valign="top"><td><code>interpolation</code></td>
+<td>
+<p>the method for the interpolation. It can be
+&quot;linear&quot; or &quot;spline&quot; interpolation</p>
+</td></tr>
+<tr valign="top"><td><code>nx</code></td>
+<td>
+<p>the dimension of output grid in x direction</p>
+</td></tr>
+<tr valign="top"><td><code>ny</code></td>
+<td>
+<p>the dimension of output grid in y direction</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values, defaulting to the range
+of the finite values of z</p>
+</td></tr>
+<tr valign="top"><td><code>colkey</code></td>
+<td>
+<p>a logical (TRUE by default) or a 'list' with parameters
+for the color key (legend). List parameters should be one of 'side,
+plot, length, width, dist, shift, addlines, col.clab, cex.clab,
+side.clab, line.clab, adj.clab, font.clab'. The defaults for the
+parameters are 'side=4, plot=TRUE, length=1, width=1, dist=0, shift=0,
+addlines=FALSE, col.clab=NULL, cex.clab=par(&quot;cex.lab&quot;), side.clab=NULL,
+line.clab=NULL, adj.clab=NULL, font.clab=NULL'.
+colkey=list(side=4,length=0.15,width=0.5,shift=0.35,dist=-0.15,cex.axis=0.6,cex.clab=0.8,side.clab=3)</p>
+</td></tr>
+<tr valign="top"><td><code>contour</code></td>
+<td>
+<p>a logical (FALSE by default) or a 'list' with parameters
+for the contour function. An optional parameter to this 'list' is the
+'side' where the image should be plotted. Allowed values for 'side' are
+a z-value, or 'side = &quot;zmin&quot;, &quot;zmax&quot;', for positioning at bottom or top
+respectively. The default is to put the image at the bottom</p>
+</td></tr>
+<tr valign="top"><td><code>image</code></td>
+<td>
+<p>a logical (FALSE by default) or a 'list' with parameters
+for the image2D function. An optional parameter to this 'list' is the
+'side' where the image should be plotted. Allowed values for 'side' are
+a z-value, or 'side = &quot;zmin&quot;, &quot;zmax&quot;', for positioning at bottom or top
+respectively. The default is to put the image at the bottom</p>
+</td></tr>
+<tr valign="top"><td><code>clab</code></td>
+<td>
+<p>a title for the colorbar. the label to be written on top of
+the color key; to lower it, 'clab' can be made a vector, with the first
+values empty strings.</p>
+</td></tr>
+<tr valign="top"><td><code>nlevels</code></td>
+<td>
+<p>the number of levels to partition the input matrix
+values. The same level has the same color mapped to</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>theta.3D</code></td>
+<td>
+<p>the starting azimuthal direction. By default, it is 0</p>
+</td></tr>
+<tr valign="top"><td><code>phi.3D</code></td>
+<td>
+<p>the colatitude direction. By default, it is 20</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xVisInterpAnimate'</p>
+</td></tr>
+<tr valign="top"><td><code>filetype</code></td>
+<td>
+<p>the type of the output file, i.e. the extension of the
+output file name. It can be one of either 'pdf' for the pdf file, 'mp4'
+for the mp4 video file, 'gif' for the gif file</p>
+</td></tr>
+<tr valign="top"><td><code>image.type</code></td>
+<td>
+<p>the type of the image files temporarily generated. It
+can be one of either 'jpg' or 'png'. These temporary image files are
+used for producing mp4/gif output file. The reason doing so is to
+accommodate that sometimes only one of image types is supported so that
+you can choose the right one</p>
+</td></tr>
+<tr valign="top"><td><code>num.frame</code></td>
+<td>
+<p>a numeric value specifying the number of
+frames/images. By default, it sets to the number of columns in the
+input data matrix</p>
+</td></tr>
+<tr valign="top"><td><code>sec_per_frame</code></td>
+<td>
+<p>a numeric value specifying how long (seconds) it
+takes to stream a frame/image. This argument only works when producing
+mp4 video or gif file.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If specifying the output file name (see argument 'filename' above), the
+output file is either 'filename.pdf' or 'filename.mp4' or
+'filename.gif' in the current working directory. If no output file name
+specified, by default the output file is either 'xVisInterpAnimate.pdf'
+or 'xVisInterpAnimate.mp4' or 'xVisInterpAnimate.gif'
+</p>
+
+
+<h3>Note</h3>
+
+<p>When producing mp4 video, this function requires the installation of
+the software 'ffmpeg' at <a href="https://www.ffmpeg.org">https://www.ffmpeg.org</a>. Shell command
+lines for ffmpeg installation in Terminal (for both Linux and Mac) are:
+</p>
+
+<ul>
+<li><p>1) <code>wget -O ffmpeg.tar.gz
+http://www.ffmpeg.org/releases/ffmpeg-2.7.1.tar.gz</code>
+</p>
+</li>
+<li><p>2) <code>mkdir ~/ffmpeg | tar xvfz ffmpeg.tar.gz -C ~/ffmpeg
+--strip-components=1</code>
+</p>
+</li>
+<li><p>3) <code>cd ffmpeg</code>
+</p>
+</li>
+<li><p>4a) # Assuming you want installation with a ROOT (sudo)
+privilege: <br /><code>./configure --disable-yasm</code>
+</p>
+</li>
+<li><p>4b) # Assuming you want local installation without ROOT (sudo)
+privilege: <br /><code>./configure --disable-yasm --prefix=$HOME/ffmpeg</code>
+</p>
+</li>
+<li><p>5) <code>make</code>
+</p>
+</li>
+<li><p>6) <code>make install</code>
+</p>
+</li>
+<li><p>7) # add the system PATH variable to your ~/.bash_profile file if
+you follow 4b) route: <br /><code>export PATH=$HOME/ffmpeg:$PATH</code>
+</p>
+</li>
+<li><p>8) # make sure ffmpeg has been installed successfully:
+<br /><code>ffmpeg -h</code>
+</p>
+</li></ul>
+
+<p>When producing gif file, this function requires the installation of the
+software 'ImageMagick' at <a href="http://www.imagemagick.org">http://www.imagemagick.org</a>. Shell
+command lines for ImageMagick installation in Terminal are:
+</p>
+
+<ul>
+<li><p>1) <code>wget
+http://www.imagemagick.org/download/ImageMagick.tar.gz</code>
+</p>
+</li>
+<li><p>2) <code>mkdir ~/ImageMagick | tar xvzf ImageMagick.tar.gz -C
+~/ImageMagick --strip-components=1</code>
+</p>
+</li>
+<li><p>3) <code>cd ImageMagick</code>
+</p>
+</li>
+<li><p>4) <code>./configure --prefix=$HOME/ImageMagick</code>
+</p>
+</li>
+<li><p>5) <code>make</code>
+</p>
+</li>
+<li><p>6) <code>make install</code>
+</p>
+</li>
+<li><p>7) # add the system PATH variable to your ~/.bash_profile file.
+<br /> For Linux: <br /><code>export MAGICK_HOME=$HOME/ImageMagick</code>
+<br /><code>export PATH=$MAGICK_HOME/bin:$PATH</code> <br /><code>export
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$MAGICK_HOME/lib</code>
+<br /> For Mac: <br /><code>export MAGICK_HOME=$HOME/ImageMagick</code>
+<br /><code>export PATH=$MAGICK_HOME/bin:$PATH</code> <br /><code>export
+DYLD_LIBRARY_PATH=$MAGICK_HOME/lib/</code>
+</p>
+</li>
+<li><p>8a) # check configuration: <br /><code>convert -list configure</code>
+</p>
+</li>
+<li><p>8b) # check image format supported: <br /><code>identify -list
+format</code>
+</p>
+</li>
+<li><p>Tips: <br /> Prior to 4), please make sure <code>libjpeg</code> and
+<code>libpng</code> are installed. If NOT, for Mac try this: <br /><code>brew
+install libjpeg libpng</code> <br /> To check whether ImageMagick does work,
+please get additional information from: <br /><code>identify -list format</code>
+<br /><code>convert -list configure</code> <br /> On details, please refer to
+<a href="http://www.imagemagick.org/script/advanced-unix-installation.php">http://www.imagemagick.org/script/advanced-unix-installation.php</a>
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>visNetMul</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
+g &lt;- erdos.renyi.game(20, 1/10)
+glayout &lt;- layout_with_kk(g)
+ls_xyz &lt;- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g),
+label=degree(g))
+
+# 3D views of different angles
+# output as a pdf file
+xVisInterpAnimate(ls_xyz, image=TRUE, filetype="pdf")
+# output as a mp4 file
+xVisInterpAnimate(ls_xyz, filetype="mp4")
+# output as a gif file
+xVisInterpAnimate(ls_xyz, filetype="gif", num.frame=72,
+sec_per_frame=0.5)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

@@ -2,7 +2,7 @@
 #'
 #' \code{xVisInterp} is supposed to visualise irregular data after bilinear or bicubic spline interpolation onto a grid. 
 #'
-#' @param ls_xyz a list with three components (x, y and z)
+#' @param ls_xyz a list with 3 required components (x, y and z) and an optional component (label)
 #' @param interpolation the method for the interpolation. It can be "linear" or "spline" interpolation
 #' @param nx the dimension of output grid in x direction
 #' @param ny the dimension of output grid in y direction
@@ -29,9 +29,9 @@
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
-#' g <- erdos.renyi.game(100, 1/10)
+#' g <- erdos.renyi.game(20, 1/10)
 #' glayout <- layout_with_kk(g)
-#' ls_xyz <- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g))
+#' ls_xyz <- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g), label=degree(g))
 #' 
 #' # auto
 #' ls_xyz.smooth <- xVisInterp(ls_xyz, nD="auto")
@@ -54,7 +54,7 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
     nD <- match.arg(nD)
 	
 	if(class(ls_xyz)=='list'){
-		ind <- names(ls_xyz) %in% c("x","y","z")
+		ind <- names(ls_xyz) %in% c("x","y","z","label")
 		ls_xyz <- ls_xyz[ind]
 		if(length(ls_xyz)!=3){
 			return(NULL)
@@ -171,7 +171,7 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 			}
 		
 			graphics::par(mar=c(0,0,0,0))
-			plot3D::persp3D(z=ls_xyz.smooth$z, axes=FALSE, box=FALSE, zlim=zlim, cex.axis=0.8, cex.lab=1.2, ticktype=c("simple","detailed")[1], col=col, colkey=colkey, clab=clab, bty="b", facets=TRUE, curtain=FALSE, plot=plot, lighting=TRUE, lphi=90, theta=theta.3D, phi=phi.3D, d=1)
+			plot3D::persp3D(z=ls_xyz.smooth$z, x=ls_xyz.smooth$x, y=ls_xyz.smooth$y, axes=FALSE, box=FALSE, zlim=zlim, cex.axis=0.8, cex.lab=1.2, ticktype=c("simple","detailed")[1], col=col, colkey=colkey, clab=clab, bty="b", facets=TRUE, curtain=FALSE, plot=plot, lighting=TRUE, lphi=90, theta=theta.3D, phi=phi.3D, d=1)
 		
 			if(image){
 				if(contour){
@@ -179,8 +179,23 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 				}else{
 					plot2 <- TRUE
 				}
-				plot3D::image3D(z=zlim[1], colvar=ls_xyz.smooth$z, col=col, box=FALSE, colkey=FALSE, add=TRUE, plot=plot2)
-		
+				
+				if(is.null(ls_xyz$label)){
+					plot3D::image3D(z=zlim[1], x=ls_xyz.smooth$x, y=ls_xyz.smooth$y, colvar=ls_xyz.smooth$z, col=col, box=FALSE, colkey=FALSE, add=TRUE, plot=plot2)
+					
+				}else{
+					plot3D::image3D(z=zlim[1], x=ls_xyz.smooth$x, y=ls_xyz.smooth$y, colvar=ls_xyz.smooth$z, col=col, box=FALSE, colkey=FALSE, add=TRUE, plot=FALSE)
+					
+					z_plane <- zlim[1]+(zlim[2]-zlim[1])/200
+					if(verbose){
+						now <- Sys.time()
+						message(sprintf("The labellings are done at z=%.3f", z_plane), appendLF=TRUE)
+					}
+					
+					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane,length(ls_xyz$z)), type="n", colkey=FALSE, pch=19, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
+					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.3, colkey=FALSE, cex=0.6, col="black", srt=30, add=TRUE, plot=plot2)
+
+				}
 			}
 		
 			if(contour){

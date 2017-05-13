@@ -10,7 +10,8 @@ contour = FALSE, image = FALSE, clab = c("Value", ""), nlevels = 20,
 colormap = "terrain", theta.3D = 40, phi.3D = 20, verbose = TRUE)
 }
 \arguments{
-\item{ls_xyz}{a list with three components (x, y and z)}
+\item{ls_xyz}{a list with 3 required components (x, y and z) and an
+optional component (label)}
 
 \item{interpolation}{the method for the interpolation. It can be
 "linear" or "spline" interpolation}
@@ -88,9 +89,10 @@ library(XGR)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-g <- erdos.renyi.game(100, 1/10)
+g <- erdos.renyi.game(20, 1/10)
 glayout <- layout_with_kk(g)
-ls_xyz <- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g))
+ls_xyz <- data.frame(x=glayout[,1], y=glayout[,2], z=degree(g),
+label=degree(g))
 
 # auto
 ls_xyz.smooth <- xVisInterp(ls_xyz, nD="auto")
