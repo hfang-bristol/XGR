@@ -10,7 +10,8 @@ ny = 100, zlim = NULL, colkey = TRUE, contour = FALSE,
 image = FALSE, clab = c("Value"), nlevels = 20, colormap = "terrain",
 theta.3D = 0, phi.3D = 20, verbose = TRUE,
 filename = "xVisInterpAnimate", filetype = c("pdf", "mp4", "gif"),
-image.type = c("jpg", "png"), num.frame = 36, sec_per_frame = 1)
+image.type = c("jpg", "png"), image.bg = "transparent",
+height.device = NULL, num.frame = 36, sec_per_frame = 1, res = 72)
 }
 \arguments{
 \item{ls_xyz}{a list with 3 required components (x, y and z) and an
@@ -85,13 +86,22 @@ used for producing mp4/gif output file. The reason doing so is to
 accommodate that sometimes only one of image types is supported so that
 you can choose the right one}
 
+\item{image.bg}{the background color for each frame/image. This
+argument only works when producing mp4 video or gif file}
+
+\item{height.device}{a numeric value specifying the height (or width)
+of device/frame/image.}
+
 \item{num.frame}{a numeric value specifying the number of
 frames/images. By default, it sets to the number of columns in the
 input data matrix}
 
 \item{sec_per_frame}{a numeric value specifying how long (seconds) it
 takes to stream a frame/image. This argument only works when producing
-mp4 video or gif file.}
+mp4 video or gif file}
+
+\item{res}{the resolution for each frame/image. This argument only
+works when producing mp4 video or gif file}
 }
 \value{
 If specifying the output file name (see argument 'filename' above), the

@@ -20,8 +20,11 @@
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xVisInterpAnimate'
 #' @param filetype the type of the output file, i.e. the extension of the output file name. It can be one of either 'pdf' for the pdf file, 'mp4' for the mp4 video file, 'gif' for the gif file
 #' @param image.type the type of the image files temporarily generated. It can be one of either 'jpg' or 'png'. These temporary image files are used for producing mp4/gif output file. The reason doing so is to accommodate that sometimes only one of image types is supported so that you can choose the right one
+#' @param image.bg the background color for each frame/image. This argument only works when producing mp4 video or gif file
+#' @param height.device a numeric value specifying the height (or width) of device/frame/image.
 #' @param num.frame a numeric value specifying the number of frames/images. By default, it sets to the number of columns in the input data matrix
-#' @param sec_per_frame a numeric value specifying how long (seconds) it takes to stream a frame/image. This argument only works when producing mp4 video or gif file.
+#' @param sec_per_frame a numeric value specifying how long (seconds) it takes to stream a frame/image. This argument only works when producing mp4 video or gif file
+#' @param res the resolution for each frame/image. This argument only works when producing mp4 video or gif file
 #' @return 
 #' If specifying the output file name (see argument 'filename' above), the output file is either 'filename.pdf' or 'filename.mp4' or 'filename.gif' in the current working directory. If no output file name specified, by default the output file is either 'xVisInterpAnimate.pdf' or 'xVisInterpAnimate.mp4' or 'xVisInterpAnimate.gif'
 #' @note When producing mp4 video, this function requires the installation of the software 'ffmpeg' at \url{https://www.ffmpeg.org}. Shell command lines for ffmpeg installation in Terminal (for both Linux and Mac) are:
@@ -72,10 +75,13 @@
 #' }
 
 xVisInterpAnimate <- function (ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value"), nlevels=20, colormap="terrain",
-theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("pdf", "mp4", "gif"), image.type=c("jpg","png"), num.frame=36, sec_per_frame=1)
+theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("pdf", "mp4", "gif"), image.type=c("jpg","png"), image.bg="transparent", height.device=NULL, num.frame=36, sec_per_frame=1, res=72)
 {
     
+    interpolation <- match.arg(interpolation)
     filetype <- match.arg(filetype)
+    image.type <- match.arg(image.type)
+    
     if(is.null(filename)){
         outputfile <- paste("xVisInterpAnimate", filetype, sep=".")
     }else{
@@ -84,9 +90,20 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
 
     if(filetype=="pdf"){
         
-        grDevices::pdf(outputfile)
+        if(is.null(height.device)){
+            height.device <- 7
+        }
+        
+        grDevices::pdf(outputfile, width=height.device, height=height.device, bg=image.bg)
         for(theta.3D.move in seq(theta.3D, 360+theta.3D, 360/num.frame)){ 
-        	clab.move <- paste0("theta:",theta.3D.move,"\n",clab,"\n\n\n")
+        	theta.3D.move <- theta.3D.move %% 360
+        	
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("Viewed at %d polar angle and %d azimuthal angle (%s)", phi.3D, theta.3D.move, as.character(now)), appendLF=TRUE)
+			}
+        	
+        	clab.move <- paste0("Viewed at angles (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
         	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=verbose)
         }
         grDevices::dev.off()
@@ -104,8 +121,6 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
         ## frame_per_sec: frames per second
         frame_per_sec <- 1/sec_per_frame
         
-        image.type <- match.arg(image.type)
-        
         ## specify the temporary image files
         tdir <- tempdir()
         if(image.type=='png'){
@@ -117,16 +132,28 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
         	## remove the existing temporary jpg files
         	unlink(file.path(tdir, "Rplot*.jpg"), recursive=T, force=T)
         }
-        unlink(file.path(tdir, outputfile), recursive=T, force=T)
+        tfile <- file.path(tdir, base::basename(outputfile))
+        unlink(tfile, recursive=T, force=T)
+        
+        if(is.null(height.device)){
+            height.device <- 480*res/72
+        }
         
         if(image.type=='png'){
-        	grDevices::png(image_files)
+        	grDevices::png(image_files, width=height.device, height=height.device, res=res, bg=image.bg)
         }else if(image.type=='jpg'){
-        	grDevices::jpeg(image_files)
+        	grDevices::jpeg(image_files, width=height.device, height=height.device, res=res, bg=image.bg)
         }
         for(theta.3D.move in seq(theta.3D, 360+theta.3D, 360/num.frame)){ 
-        	clab.move <- paste0("theta:",theta.3D.move,"\n",clab,"\n\n\n")
-        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=verbose)
+        	theta.3D.move <- theta.3D.move %% 360
+        	
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("Viewed at %d polar angle and %d azimuthal angle (%s)", phi.3D, theta.3D.move, as.character(now)), appendLF=TRUE)
+			}
+        	
+        	clab.move <- paste0("Viewed at angles (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
+        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=FALSE)
         }
         grDevices::dev.off()
         
@@ -152,8 +179,8 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
 			## 100/ticks: images/frames per second
 		
 			image_files <- paste('Rplot','*.', image.type, sep='')
-			convert1 <- paste("convert -delay", 100*sec_per_frame, file.path(tdir, image_files), file.path(tdir, outputfile))
-			convert2 <- paste("$HOME/ImageMagick/bin/convert -delay", 100*sec_per_frame, file.path(tdir, image_files), file.path(tdir, outputfile))
+			convert1 <- paste("convert -delay", 100*sec_per_frame, file.path(tdir, image_files), file.path(tdir, base::basename(outputfile)))
+			convert2 <- paste("$HOME/ImageMagick/bin/convert -delay", 100*sec_per_frame, file.path(tdir, image_files), tfile)
 			convert_local <- c(convert1, convert2)
 			cmd_flag <- 1
 			for(i in 1:length(convert_local)){
@@ -168,8 +195,8 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
 		}
 		
         if(cmd_flag==0){
-            if(file.exists(file.path(tdir, outputfile))){
-                file.copy(from=file.path(tdir, outputfile), to=outputfile, overwrite=T, recursive=F, copy.mode=T)
+            if(file.exists(tfile)){
+                file.copy(from=tfile, to=outputfile, overwrite=T, recursive=F, copy.mode=T)
                 message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
             }
         }else{

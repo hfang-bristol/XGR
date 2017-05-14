@@ -119,9 +119,9 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 			}
 			
 			if(is.null(ls_xyz$label)){
-				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=0.6))
+				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=0.7))
 			}else{
-				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=0.6))
+				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=0.7))
 			}
 			
 		}
@@ -186,14 +186,15 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 				}else{
 					plot3D::image3D(z=zlim[1], x=ls_xyz.smooth$x, y=ls_xyz.smooth$y, colvar=ls_xyz.smooth$z, col=col, box=FALSE, colkey=FALSE, add=TRUE, plot=FALSE)
 					
-					z_plane <- zlim[1]+(zlim[2]-zlim[1])/200
+					z_plane_point <- zlim[1]+(zlim[2]-zlim[1])/150
+					z_plane_text <- zlim[1]+(zlim[2]-zlim[1])/100
 					if(verbose){
 						now <- Sys.time()
-						message(sprintf("The labellings are done at z=%.3f", z_plane), appendLF=TRUE)
+						message(sprintf("The points are at z=%.3f and texts at z=%.3f", z_plane_point, z_plane_text), appendLF=TRUE)
 					}
 					
-					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane,length(ls_xyz$z)), type="n", colkey=FALSE, pch=19, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
-					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.3, colkey=FALSE, cex=0.6, col="black", srt=30, add=TRUE, plot=plot2)
+					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_point,length(ls_xyz$z)), type="n", colkey=FALSE, pch=25, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
+					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.4, colkey=FALSE, cex=0.7, col="black", srt=30, add=TRUE, plot=plot2)
 
 				}
 			}
