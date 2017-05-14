@@ -14,6 +14,9 @@
 #' @param clab a title for the colorbar. the label to be written on top of the color key; to lower it, 'clab' can be made a vector, with the first values empty strings.
 #' @param nlevels the number of levels to partition the input matrix values. The same level has the same color mapped to
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param label.pch a numeric value specifying the graphiics symbol (by default, 17 for upward triangle). This argument only works when the labelling is enabled
+#' @param label.text.cex a numeric value specifying the text size. This argument only works when the labelling is enabled
+#' @param xy.swap logical to indicate whether to wrap x and y. By default, it sets to false
 #' @param theta.3D the azimuthal direction. By default, it is 40
 #' @param phi.3D the colatitude direction. By default, it is 20
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
@@ -45,8 +48,7 @@
 #' dev.off()
 #' }
 
-xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain",
-theta.3D=40, phi.3D=20, verbose=TRUE)
+xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, xy.swap=FALSE, theta.3D=40, phi.3D=20, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -80,6 +82,12 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 		linear <- FALSE
 	}
 	
+	if(xy.swap){
+		tmp <- ls_xyz$y
+		ls_xyz$y <- ls_xyz$x
+		ls_xyz$x <- tmp
+	}
+	
     ## increase smoothness (using finer grid)
     x <- y <- z <- label <- NULL
     ls_xyz.smooth <- with(ls_xyz, akima::interp(x, y, z, nx=nx, ny=ny, linear=linear))
@@ -109,19 +117,19 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 			}else{
 				graphics::contour(ls_xyz.smooth, labcex=1, levels=breaks, col=colors)
 			}
-			graphics::points(ls_xyz, pch=20, cex=1, col="black")
+			graphics::points(ls_xyz, pch=label.pch, cex=1, col="black")
 			
 		}else{
 			if(!image){
-				plot(y ~ x, data=ls_xyz, pch=20, col="blue", axes=FALSE, ann=FALSE)
+				plot(y ~ x, data=ls_xyz, pch=label.pch, col="blue", axes=FALSE, ann=FALSE)
 			}else{
-				graphics::points(ls_xyz, pch=20, cex=1)
+				graphics::points(ls_xyz, pch=label.pch, cex=1)
 			}
 			
 			if(is.null(ls_xyz$label)){
-				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=0.7))
+				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=label.text.cex))
 			}else{
-				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=0.7))
+				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=label.text.cex))
 			}
 			
 		}
@@ -193,8 +201,8 @@ theta.3D=40, phi.3D=20, verbose=TRUE)
 						message(sprintf("The points are at z=%.3f and texts at z=%.3f", z_plane_point, z_plane_text), appendLF=TRUE)
 					}
 					
-					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_point,length(ls_xyz$z)), type="n", colkey=FALSE, pch=25, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
-					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.4, colkey=FALSE, cex=0.7, col="black", srt=30, add=TRUE, plot=plot2)
+					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_point,length(ls_xyz$z)), type="n", colkey=FALSE, pch=label.pch, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
+					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.4, colkey=FALSE, cex=label.text.cex, col="black", srt=30, add=TRUE, plot=plot2)
 
 				}
 			}

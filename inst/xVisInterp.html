@@ -20,7 +20,8 @@ bilinear or bicubic spline interpolation onto a grid.
 xVisInterp(ls_xyz, interpolation = c("spline", "linear"), nx = 100,
 ny = 100, zlim = NULL, nD = c("auto", "2D", "3D"), colkey = TRUE,
 contour = FALSE, image = FALSE, clab = c("Value", ""), nlevels = 20,
-colormap = "terrain", theta.3D = 40, phi.3D = 20, verbose = TRUE)
+colormap = "terrain", label.pch = 17, label.text.cex = 0.8,
+xy.swap = FALSE, theta.3D = 40, phi.3D = 20, verbose = TRUE)
 </pre>
 
 
@@ -106,6 +107,22 @@ hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>label.pch</code></td>
+<td>
+<p>a numeric value specifying the graphiics symbol (by
+default, 17 for upward triangle). This argument only works when the
+labelling is enabled</p>
+</td></tr>
+<tr valign="top"><td><code>label.text.cex</code></td>
+<td>
+<p>a numeric value specifying the text size. This
+argument only works when the labelling is enabled</p>
+</td></tr>
+<tr valign="top"><td><code>xy.swap</code></td>
+<td>
+<p>logical to indicate whether to wrap x and y. By default,
+it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>theta.3D</code></td>
 <td>

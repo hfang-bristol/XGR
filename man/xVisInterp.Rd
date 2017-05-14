@@ -7,7 +7,8 @@
 xVisInterp(ls_xyz, interpolation = c("spline", "linear"), nx = 100,
 ny = 100, zlim = NULL, nD = c("auto", "2D", "3D"), colkey = TRUE,
 contour = FALSE, image = FALSE, clab = c("Value", ""), nlevels = 20,
-colormap = "terrain", theta.3D = 40, phi.3D = 20, verbose = TRUE)
+colormap = "terrain", label.pch = 17, label.text.cex = 0.8,
+xy.swap = FALSE, theta.3D = 40, phi.3D = 20, verbose = TRUE)
 }
 \arguments{
 \item{ls_xyz}{a list with 3 required components (x, y and z) and an
@@ -65,6 +66,16 @@ hyphen-separated HTML color names, e.g. "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}
+
+\item{label.pch}{a numeric value specifying the graphiics symbol (by
+default, 17 for upward triangle). This argument only works when the
+labelling is enabled}
+
+\item{label.text.cex}{a numeric value specifying the text size. This
+argument only works when the labelling is enabled}
+
+\item{xy.swap}{logical to indicate whether to wrap x and y. By default,
+it sets to false}
 
 \item{theta.3D}{the azimuthal direction. By default, it is 40}
 

@@ -14,6 +14,9 @@
 #' @param clab a title for the colorbar. the label to be written on top of the color key; to lower it, 'clab' can be made a vector, with the first values empty strings.
 #' @param nlevels the number of levels to partition the input matrix values. The same level has the same color mapped to
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param label.pch a numeric value specifying the graphiics symbol (by default, 17 for upward triangle). This argument only works when the labelling is enabled
+#' @param label.text.cex a numeric value specifying the text size. This argument only works when the labelling is enabled
+#' @param xy.swap logical to indicate whether to wrap x and y. By default, it sets to false
 #' @param theta.3D the starting azimuthal direction. By default, it is 0
 #' @param phi.3D the colatitude direction. By default, it is 20
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
@@ -74,8 +77,7 @@
 #' xVisInterpAnimate(ls_xyz, filetype="gif", num.frame=72, sec_per_frame=0.5)
 #' }
 
-xVisInterpAnimate <- function (ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value"), nlevels=20, colormap="terrain",
-theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("pdf", "mp4", "gif"), image.type=c("jpg","png"), image.bg="transparent", height.device=NULL, num.frame=36, sec_per_frame=1, res=72)
+xVisInterpAnimate <- function (ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value"), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, xy.swap=FALSE, theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("pdf", "mp4", "gif"), image.type=c("jpg","png"), image.bg="transparent", height.device=NULL, num.frame=36, sec_per_frame=1, res=72)
 {
     
     interpolation <- match.arg(interpolation)
@@ -103,8 +105,8 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
 				message(sprintf("Viewed at %d polar angle and %d azimuthal angle (%s)", phi.3D, theta.3D.move, as.character(now)), appendLF=TRUE)
 			}
         	
-        	clab.move <- paste0("Viewed at angles (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
-        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=verbose)
+        	clab.move <- paste0("Viewer's angle (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
+        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, label.pch=label.pch, label.text.cex=label.text.cex, xy.swap=xy.swap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=FALSE)
         }
         grDevices::dev.off()
         
@@ -152,8 +154,8 @@ theta.3D=0, phi.3D=20, verbose=TRUE, filename="xVisInterpAnimate", filetype=c("p
 				message(sprintf("Viewed at %d polar angle and %d azimuthal angle (%s)", phi.3D, theta.3D.move, as.character(now)), appendLF=TRUE)
 			}
         	
-        	clab.move <- paste0("Viewed at angles (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
-        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=FALSE)
+        	clab.move <- paste0("Viewer's angle (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
+        	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, label.pch=label.pch, label.text.cex=label.text.cex, xy.swap=xy.swap, clab=clab.move, nlevels=nlevels, colormap=colormap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=FALSE)
         }
         grDevices::dev.off()
         
