@@ -6,7 +6,8 @@
 \usage{
 xDAGpropagate(g, annotation, path.mode = c("all_paths",
 "shortest_paths",
-"all_shortest_paths"), propagation = c("min", "max"), verbose = TRUE)
+"all_shortest_paths"), propagation = c("all", "min", "max"),
+verbose = TRUE)
 }
 \arguments{
 \item{g}{an object of class "igraph" to represent DAG}
@@ -15,7 +16,9 @@ xDAGpropagate(g, annotation, path.mode = c("all_paths",
 provided. It can be a sparse Matrix of class "dgCMatrix" (with
 variants/genes as rows and terms as columns), or a data frame with
 three columns: 1st column for variants/genes, 2nd column for terms, and
-3rd column for values}
+3rd column for values, or a list (with the name for terms) each element
+storing a named vactor (that is, value for the content and
+variants/genes as names)}
 
 \item{path.mode}{the mode of paths induced by vertices/nodes with input
 annotation data. It can be "all_paths" for all possible paths to the
@@ -25,7 +28,8 @@ for each node, find all shortest paths with the equal lengths)}
 
 \item{propagation}{how to propagate the score. It can be "max" for
 retaining the maximum value from its children, "min" for retaining the
-minimum value from its children}
+minimum value from its children, and 'all' for retaining all from its
+children (by default)}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

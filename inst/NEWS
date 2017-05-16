@@ -7,6 +7,8 @@ NEW FEATURES
 
     o Add a new function 'xVisInterpAnimate' for animating irregular data interpolation and visualisation
     
+    o Modify 'xDAGpropagate' allowing for keeping all children
+    
 
 CHANGES IN VERSION 1.0.10
 -----------------------

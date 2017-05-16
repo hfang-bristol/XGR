@@ -27,7 +27,8 @@ annotated to a term should also be annotated by its all ancestor terms.
 <pre>
 xDAGpropagate(g, annotation, path.mode = c("all_paths",
 "shortest_paths",
-"all_shortest_paths"), propagation = c("min", "max"), verbose = TRUE)
+"all_shortest_paths"), propagation = c("all", "min", "max"),
+verbose = TRUE)
 </pre>
 
 
@@ -44,7 +45,9 @@ xDAGpropagate(g, annotation, path.mode = c("all_paths",
 provided. It can be a sparse Matrix of class &quot;dgCMatrix&quot; (with
 variants/genes as rows and terms as columns), or a data frame with
 three columns: 1st column for variants/genes, 2nd column for terms, and
-3rd column for values</p>
+3rd column for values, or a list (with the name for terms) each element
+storing a named vactor (that is, value for the content and
+variants/genes as names)</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
@@ -58,7 +61,8 @@ for each node, find all shortest paths with the equal lengths)</p>
 <td>
 <p>how to propagate the score. It can be &quot;max&quot; for
 retaining the maximum value from its children, &quot;min&quot; for retaining the
-minimum value from its children</p>
+minimum value from its children, and 'all' for retaining all from its
+children (by default)</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
