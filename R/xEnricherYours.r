@@ -98,7 +98,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     	return(FALSE)
     }
     ############
-        
+    
     ###################
     ## import data file
     if(is.matrix(data.file) | is.data.frame(data.file)){

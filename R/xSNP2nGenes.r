@@ -111,11 +111,31 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 			###
 			df_y <- GenomicRanges::as.data.frame(y, row.names=NULL)
 			df_x <- GenomicRanges::as.data.frame(x, row.names=NULL)
-			df_interval <- data.frame(seqnames=df_y$seqnames, start=df_y$start, end=df_y$end, stringsAsFactors=FALSE)
-			ind <- df_y$start < df_x$start
-			df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_y$start[ind], end=df_x$start[ind], stringsAsFactors=FALSE)
-			ind <- df_y$start > df_x$end
-			df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_x$end[ind], end=df_y$start[ind], stringsAsFactors=FALSE)
+			
+			if(0){
+				## Gap defined as the regions from an SNP to the closest end of a Gene
+				df_interval <- data.frame(seqnames=df_y$seqnames, start=df_y$start, end=df_y$end, stringsAsFactors=FALSE)
+				ind <- df_y$start < df_x$start
+				df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_y$start[ind], end=df_x$start[ind], stringsAsFactors=FALSE)
+				ind <- df_y$start > df_x$end
+				df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_x$end[ind], end=df_y$start[ind], stringsAsFactors=FALSE)
+				
+			}else{
+				## Gap defined as the regions from an SNP to the TSS of a Gene
+				
+				df_interval <- data.frame(seqnames=df_y$seqnames, start=df_y$start, end=df_y$end, stringsAsFactors=FALSE)
+				ind <- df_x$strand=='+'
+				df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_y$start[ind], end=df_x$start[ind], stringsAsFactors=FALSE)
+				ind <- df_x$strand=='-'
+				df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_y$start[ind], end=df_x$end[ind], stringsAsFactors=FALSE)
+				ind <- df_x$strand=='*'
+				df_interval[ind,] <- data.frame(seqnames=df_y$seqnames[ind], start=df_y$start[ind], end=(df_x$start[ind]+df_x$end[ind])/2, stringsAsFactors=FALSE)
+				
+				## swap the location of start and end
+				ind <- df_interval$start > df_interval$end
+				df_interval[ind,] <- data.frame(seqnames=df_interval$seqnames[ind], start=df_interval$end[ind], end=df_interval$start[ind], stringsAsFactors=FALSE)
+			}
+			
 			vec_interval <- paste0(df_interval$seqnames,':',df_interval$start,'-',df_interval$end)
 			###
 			
