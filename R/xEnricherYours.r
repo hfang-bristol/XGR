@@ -134,7 +134,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
 		}
     }else{
     	background <- background.file
-    }    
+    }
     
     ## import annotation file
     if(is.matrix(annotation.file) | is.data.frame(annotation.file)){
@@ -157,7 +157,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     ## define annotation information
 	anno <- split(x=input[,1], f=input[,2])
     
-	## define ontology information (artifically)
+	## define ontology information (artificially)
 	terms <- names(anno)
 	nodes <- data.frame(name=terms, term_id=terms, term_name=terms, term_distance=rep(1,length(terms)), stringsAsFactors=F)
 	root <- c('Root', 'Root', 'Root', 0)

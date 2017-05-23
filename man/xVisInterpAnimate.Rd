@@ -8,11 +8,11 @@ xVisInterpAnimate(ls_xyz, interpolation = c("spline", "linear"), nx =
 100,
 ny = 100, zlim = NULL, colkey = TRUE, contour = FALSE,
 image = FALSE, clab = c("Value"), nlevels = 20, colormap = "terrain",
-label.pch = 17, label.text.cex = 0.8, xy.swap = FALSE, theta.3D = 0,
-phi.3D = 20, verbose = TRUE, filename = "xVisInterpAnimate",
-filetype = c("pdf", "mp4", "gif"), image.type = c("jpg", "png"),
-image.bg = "transparent", height.device = NULL, num.frame = 36,
-sec_per_frame = 1, res = 72)
+label.pch = 17, label.text.cex = 0.8, label.text.adj = -0.4,
+label.text.adj.z = 0.01, xy.swap = FALSE, theta.3D = 0, phi.3D = 20,
+verbose = TRUE, filename = "xVisInterpAnimate", filetype = c("pdf",
+"mp4", "gif"), image.type = c("jpg", "png"), image.bg = "transparent",
+height.device = NULL, num.frame = 36, sec_per_frame = 1, res = 72)
 }
 \arguments{
 \item{ls_xyz}{a list with 3 required components (x, y and z) and an
@@ -73,6 +73,12 @@ labelling is enabled}
 
 \item{label.text.cex}{a numeric value specifying the text size. This
 argument only works when the labelling is enabled}
+
+\item{label.text.adj}{a numeric value adjusting the text location in
+xy-plane. This argument only works when the labelling is enabled}
+
+\item{label.text.adj.z}{a numeric value adjusting the text locaion in
+z-axis. This argument only works when the labelling is enabled}
 
 \item{xy.swap}{logical to indicate whether to wrap x and y. By default,
 it sets to false}

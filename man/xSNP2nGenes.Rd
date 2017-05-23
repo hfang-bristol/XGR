@@ -8,6 +8,8 @@ xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
 "slow",
 "linear", "constant"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
 "dbSNP_Common"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+include.TAD = c(NA, "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"),
 verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -54,6 +56,15 @@ without extension), plus specify your file RData path in
 "RData.location". Note: you can also load your customised GR object
 directly}
 
+\item{include.TAD}{TAD boundary regions are also included. By default,
+it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
+region will be kept). TAD datasets can be one of "GM12878"
+(lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell)
+,"TRO" (trophoblasts-like cell), "H1" (embryonic stem cell), "MES"
+(mesendoderm) and "NPC" (neural progenitor cell). Explanations can be
+found at \url{http://dx.doi.org/10.1016/j.celrep.2016.10.061}}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
@@ -67,6 +78,11 @@ a data frame with following columns:
 \item{\code{SNP}: SNPs}
 \item{\code{Dist}: the genomic distance between the gene and the SNP}
 \item{\code{Weight}: the distance weight based on the genomic distance}
+\item{\code{Gap}: the genomic gap between the gene and the SNP (in the
+form of 'chr:start-end')}
+\item{\code{TAD}: if applied, it can be 'Excluded' or the TAD boundary
+region (in the form of 'chr:start-end') that the genomic interval falls
+into}
 }
 }
 \description{
@@ -95,6 +111,11 @@ data <- names(gr)
 # b) define nearby genes
 df_nGenes <- xSNP2nGenes(data=data, distance.max=200000,
 decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+
+# c) define nearby genes (considering TAD boundary regions in GM12878)
+df_nGenes <- xSNP2nGenes(data=data, distance.max=200000,
+decay.kernel="slow", decay.exponent=2, include.TAD='GM12878',
+RData.location=RData.location)
 }
 }
 \seealso{

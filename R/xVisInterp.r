@@ -16,6 +16,8 @@
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param label.pch a numeric value specifying the graphiics symbol (by default, 17 for upward triangle). This argument only works when the labelling is enabled
 #' @param label.text.cex a numeric value specifying the text size. This argument only works when the labelling is enabled
+#' @param label.text.adj a numeric value adjusting the text location in xy-plane. This argument only works when the labelling is enabled
+#' @param label.text.adj.z a numeric value adjusting the text locaion in z-axis. This argument only works when the labelling is enabled
 #' @param xy.swap logical to indicate whether to wrap x and y. By default, it sets to false
 #' @param theta.3D the azimuthal direction. By default, it is 40
 #' @param phi.3D the colatitude direction. By default, it is 20
@@ -48,7 +50,7 @@
 #' dev.off()
 #' }
 
-xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, xy.swap=FALSE, theta.3D=40, phi.3D=20, verbose=TRUE)
+xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, label.text.adj=-0.4, label.text.adj.z=0.01, xy.swap=FALSE, theta.3D=40, phi.3D=20, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -194,15 +196,15 @@ xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100
 				}else{
 					plot3D::image3D(z=zlim[1], x=ls_xyz.smooth$x, y=ls_xyz.smooth$y, colvar=ls_xyz.smooth$z, col=col, box=FALSE, colkey=FALSE, add=TRUE, plot=FALSE)
 					
-					z_plane_point <- zlim[1]+(zlim[2]-zlim[1])/150
-					z_plane_text <- zlim[1]+(zlim[2]-zlim[1])/100
+					z_plane_point <- zlim[1]+(zlim[2]-zlim[1])*1.5*label.text.adj.z
+					z_plane_text <- zlim[1]+(zlim[2]-zlim[1])*label.text.adj.z
 					if(verbose){
 						now <- Sys.time()
 						message(sprintf("The points are at z=%.3f and texts at z=%.3f", z_plane_point, z_plane_text), appendLF=TRUE)
 					}
 					
 					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_point,length(ls_xyz$z)), type="n", colkey=FALSE, pch=label.pch, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
-					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=-0.4, colkey=FALSE, cex=label.text.cex, col="black", srt=30, add=TRUE, plot=plot2)
+					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=label.text.adj, colkey=FALSE, cex=label.text.cex, col="black", srt=30, add=TRUE, plot=plot2)
 
 				}
 			}

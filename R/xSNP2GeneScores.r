@@ -13,6 +13,7 @@
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
+#' @param include.TAD TAD boundary regions are also included. By default, it is 'NA' to disable this option. Otherwise, inclusion of a TAD dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD region will be kept). TAD datasets can be one of "GM12878"  (lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell) ,"TRO" (trophoblasts-like cell), "H1" (embryonic stem cell), "MES" (mesendoderm) and "NPC" (neural progenitor cell). Explanations can be found at \url{http://dx.doi.org/10.1016/j.celrep.2016.10.061}
 #' @param scoring.scheme the method used to calculate seed gene scores under a set of SNPs. It can be one of "sum" for adding up, "max" for the maximum, and "sequential" for the sequential weighting. The sequential weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -41,7 +42,7 @@
 #' data <- GenomicRanges::mcols(gr)[,c(1,3)]
 #' 
 #' # b) define and score seed geens
-#' mSeed <- xSNP2GeneScores(data=data, RData.location=RData.location)
+#' mSeed <- xSNP2GeneScores(data=data, include.TAD="GM12878", RData.location=RData.location)
 #'
 #' # c) extract SNP info
 #' head(mSeed$SNP)
@@ -50,11 +51,12 @@
 #' head(mSeed$Gene)
 #' }
 
-xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c(NA,"GM12878","IMR90","MSC","TRO","H1","MES","NPC"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     decay.kernel <- match.arg(decay.kernel)
+    include.TAD <- match.arg(include.TAD)
     scoring.scheme <- match.arg(scoring.scheme)
     
     ####################################################################################
@@ -84,7 +86,11 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_nGenes <- xSNP2nGenes(data=df_SNP$SNP, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, verbose=verbose, RData.location=RData.location)
+	df_nGenes <- xSNP2nGenes(data=df_SNP$SNP, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, verbose=verbose, RData.location=RData.location)
+	
+	if(!is.na(include.TAD)){
+		df_nGenes <- base::subset(df_nGenes, TAD!='Excluded')
+	}
 	
 	if(verbose){
         now <- Sys.time()

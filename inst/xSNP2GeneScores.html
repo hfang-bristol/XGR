@@ -25,7 +25,9 @@ xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
 significance.threshold = 5e-05, score.cap = 10, distance.max = 50000,
 decay.kernel = c("slow", "linear", "rapid", "constant"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD =
+c(NA,
+"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"),
 scoring.scheme = c("max", "sum", "sequential"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
@@ -132,6 +134,17 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
+<tr valign="top"><td><code>include.TAD</code></td>
+<td>
+<p>TAD boundary regions are also included. By default,
+it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
+region will be kept). TAD datasets can be one of &quot;GM12878&quot;
+(lymphoblast), &quot;IMR90&quot; (fibroblast), &quot;MSC&quot; (mesenchymal stem cell)
+,&quot;TRO&quot; (trophoblasts-like cell), &quot;H1&quot; (embryonic stem cell), &quot;MES&quot;
+(mesendoderm) and &quot;NPC&quot; (neural progenitor cell). Explanations can be
+found at <a href="http://dx.doi.org/10.1016/j.celrep.2016.10.061">http://dx.doi.org/10.1016/j.celrep.2016.10.061</a></p>
+</td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
 <td>
 <p>the method used to calculate seed gene scores
@@ -211,7 +224,8 @@ gr &lt;- ImmunoBase$AS$variant
 data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]
 
 # b) define and score seed geens
-mSeed &lt;- xSNP2GeneScores(data=data, RData.location=RData.location)
+mSeed &lt;- xSNP2GeneScores(data=data, include.TAD="GM12878",
+RData.location=RData.location)
 
 # c) extract SNP info
 head(mSeed$SNP)
