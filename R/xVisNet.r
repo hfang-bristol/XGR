@@ -17,8 +17,9 @@
 #' @param vertex.shape the shape of each vertex. It can be one of "circle", "square", "csquare", "rectangle", "crectangle", "vrectangle", "pie" (\url{http://igraph.org/r/doc/vertex.shape.pie.html}), "sphere", and "none". If it sets to NULL, these vertices with negative will be "csquare" and the rest "circle". 
 #' @param vertex.label the label of the vertices. If it is NA, then there is no label. The default vertex labels are the name attribute of the nodes
 #' @param vertex.label.cex the font size of vertex labels.
-#' @param vertex.label.dist the distance of the label from the center of the vertex. If it is 0 then the label is centered on the vertex. If it is 1 then the label is displayed beside the vertex.
-#' @param vertex.label.color the color of vertex labels.
+#' @param vertex.label.dist the distance of the label from the center of the vertex. If it is 0 then the label is centered on the vertex. If it is 1 then the label is displayed beside the vertex
+#' @param vertex.label.color the color of vertex labels
+#' @param vertex.label.family the font family of vertex labels
 #' @param edge.arrow.size the size of the arrows for the directed edge. The default value is 1.
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
 #' @return
@@ -46,7 +47,7 @@
 #' names(pattern) <- V(g)$name
 #' xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
-xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=TRUE, newpage=TRUE, signature=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", edge.arrow.size=0.3, ...)
+xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=TRUE, newpage=TRUE, signature=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", vertex.label.family="sans", edge.arrow.size=0.3, ...)
 {
     
     if (class(g) != "igraph"){
@@ -89,13 +90,13 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     
     suppressWarnings(par_old <- graphics::par(no.readonly=TRUE))
     
-	dnet::visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, edge.arrow.size=edge.arrow.size, ...)
+	visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, vertex.label.family=vertex.label.family, edge.arrow.size=edge.arrow.size, ...)
     
     suppressWarnings(graphics::par(par_old))
     
     if(signature){
     	caption <- paste("Created by xVisNet from XGR version", utils::packageVersion("XGR"))
-    	graphics::mtext(caption, side=1, line=2, adj=1, cex=.66, font=3)
+    	graphics::mtext(caption, side=1, line=2, adj=1, cex=.66, font=3, family=vertex.label.family)
     }
     
     invisible()

@@ -11,7 +11,7 @@ newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
 vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
 vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
 vertex.label.dist = 0.3, vertex.label.color = "blue",
-edge.arrow.size = 0.3, ...)
+vertex.label.family = "sans", edge.arrow.size = 0.3, ...)
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -96,9 +96,11 @@ nodes}
 
 \item{vertex.label.dist}{the distance of the label from the center of
 the vertex. If it is 0 then the label is centered on the vertex. If it
-is 1 then the label is displayed beside the vertex.}
+is 1 then the label is displayed beside the vertex}
 
-\item{vertex.label.color}{the color of vertex labels.}
+\item{vertex.label.color}{the color of vertex labels}
+
+\item{vertex.label.family}{the font family of vertex labels}
 
 \item{edge.arrow.size}{the size of the arrows for the directed edge.
 The default value is 1.}

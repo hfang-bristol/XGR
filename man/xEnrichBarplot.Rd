@@ -6,7 +6,8 @@
 \usage{
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
 "zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, wrap.width = NULL, signature = TRUE)
+bar.label.size = 3, wrap.width = NULL, font.family = "sans",
+signature = TRUE)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -31,6 +32,8 @@ FDR. By default, it sets to true for bar labelling}
 size. By default, it sets to 3}
 
 \item{wrap.width}{a positive integer specifying wrap width of name}
+
+\item{font.family}{the font family for texts}
 
 \item{signature}{logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is

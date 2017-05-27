@@ -11,6 +11,8 @@ NEW FEATURES
     
     o Modify 'xSNP2nGenes' and 'xSNP2GeneScores' allowing for inclusion of a TAD dataset to pre-filter SNP-nGene pairs
     
+    o Modify 'xEnrichBarplot', 'xEnrichCompare', 'xVisNet', 'xVisInterp', 'xVisInterpAnimate' and 'xVisEvidence' allowing for inclusion of font family
+    
 
 CHANGES IN VERSION 1.0.10
 -----------------------

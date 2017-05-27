@@ -8,8 +8,9 @@ xVisInterp(ls_xyz, interpolation = c("spline", "linear"), nx = 100,
 ny = 100, zlim = NULL, nD = c("auto", "2D", "3D"), colkey = TRUE,
 contour = FALSE, image = FALSE, clab = c("Value", ""), nlevels = 20,
 colormap = "terrain", label.pch = 17, label.text.cex = 0.8,
-label.text.adj = -0.4, label.text.adj.z = 0.01, xy.swap = FALSE,
-theta.3D = 40, phi.3D = 20, verbose = TRUE)
+label.text.adj = -0.4, label.text.adj.z = 0.01,
+label.font.family = "sans", xy.swap = FALSE, theta.3D = 40,
+phi.3D = 20, verbose = TRUE)
 }
 \arguments{
 \item{ls_xyz}{a list with 3 required components (x, y and z) and an
@@ -80,6 +81,9 @@ xy-plane. This argument only works when the labelling is enabled}
 
 \item{label.text.adj.z}{a numeric value adjusting the text locaion in
 z-axis. This argument only works when the labelling is enabled}
+
+\item{label.font.family}{the font family for texts. This argument only
+works when the labelling is enabled}
 
 \item{xy.swap}{logical to indicate whether to wrap x and y. By default,
 it sets to false}

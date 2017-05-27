@@ -18,6 +18,7 @@
 #' @param label.text.cex a numeric value specifying the text size. This argument only works when the labelling is enabled
 #' @param label.text.adj a numeric value adjusting the text location in xy-plane. This argument only works when the labelling is enabled
 #' @param label.text.adj.z a numeric value adjusting the text locaion in z-axis. This argument only works when the labelling is enabled
+#' @param label.font.family the font family for texts. This argument only works when the labelling is enabled
 #' @param xy.swap logical to indicate whether to wrap x and y. By default, it sets to false
 #' @param theta.3D the azimuthal direction. By default, it is 40
 #' @param phi.3D the colatitude direction. By default, it is 20
@@ -50,7 +51,7 @@
 #' dev.off()
 #' }
 
-xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, label.text.adj=-0.4, label.text.adj.z=0.01, xy.swap=FALSE, theta.3D=40, phi.3D=20, verbose=TRUE)
+xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100, zlim=NULL, nD=c("auto","2D","3D"), colkey=TRUE, contour=FALSE, image=FALSE, clab=c("Value",""), nlevels=20, colormap="terrain", label.pch=17, label.text.cex=0.8, label.text.adj=-0.4, label.text.adj.z=0.01, label.font.family="sans", xy.swap=FALSE, theta.3D=40, phi.3D=20, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -129,9 +130,9 @@ xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100
 			}
 			
 			if(is.null(ls_xyz$label)){
-				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=label.text.cex))
+				with(ls_xyz, graphics::text(x, y, formatC(z,dig=2), adj=-0.2, cex=label.text.cex, family=label.font.family))
 			}else{
-				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=label.text.cex))
+				with(ls_xyz, graphics::text(x, y, label, adj=-0.2, cex=label.text.cex, family=label.font.family))
 			}
 			
 		}
@@ -204,7 +205,7 @@ xVisInterp <-function(ls_xyz, interpolation=c("spline","linear"), nx=100, ny=100
 					}
 					
 					plot3D::scatter3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_point,length(ls_xyz$z)), type="n", colkey=FALSE, pch=label.pch, cex=0.6, alpha=0.5, col="black", add=TRUE, plot=FALSE)
-					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=label.text.adj, colkey=FALSE, cex=label.text.cex, col="black", srt=30, add=TRUE, plot=plot2)
+					plot3D::text3D(x=ls_xyz$x, y=ls_xyz$y, z=rep(z_plane_text,length(ls_xyz$z)), label=ls_xyz$label, adj=label.text.adj, colkey=FALSE, cex=label.text.cex, col="black", srt=30, family=label.font.family, add=TRUE, plot=plot2)
 
 				}
 			}

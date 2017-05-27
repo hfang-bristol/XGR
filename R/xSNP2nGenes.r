@@ -197,7 +197,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("\t%d out of %d SNP-nGene pairs are within the same TAD boundary regions", sum(df_nGenes$TAD!='Excluded'), length(iGR)), appendLF=T)
-			message(sprintf("\t%d Genes are defined as nearby genes after considering TAD boundary regions", length(unique(df_nGenes[df_nGenes$TAD!='Excluded','Gene']))), appendLF=T)
+			message(sprintf("\t%d out of %d genes are defined as nearby genes after considering TAD boundary regions", length(unique(df_nGenes[df_nGenes$TAD!='Excluded','Gene'])), length(unique(df_nGenes$Gene))), appendLF=T)
 		}
 		
 	}

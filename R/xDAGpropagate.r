@@ -178,22 +178,24 @@ xDAGpropagate <- function (g, annotation, path.mode=c("all_paths","shortest_path
                     	x <- all_list[[i]]
                         if(propagation=='max'){
                             y <- max(x)
+                            #data.frame(name=names(all_list)[i], value=y, stringsAsFactors=FALSE)
                         }else if(propagation=='min'){
                             y <- min(x)
+                            #data.frame(name=names(all_list)[i], value=y, stringsAsFactors=FALSE)
                         }else{
                         	y <- unique(x)
                         }
-                        data.frame(name=rep(names(all_list)[i], length(y)), value=y, stringsAsFactors=FALSE)
+                        data.frame(name=rep(names(all_list)[i],length(y)), value=y, stringsAsFactors=FALSE)
                     })
                     
                     if(0){
-                    x_mat <- base::do.call(base::rbind, output_list)
-                    output <- as.vector(x_mat)
-                    names(output) <- rownames(x_mat)
+						x_mat <- base::do.call(base::rbind, output_list)
+						output <- as.vector(x_mat)
+						names(output) <- rownames(x_mat)
                 	}else{
-                    x_mat <- base::do.call(base::rbind, output_list)
-                    output <- x_mat$value
-                    names(output) <- x_mat$name
+						x_mat <- base::do.call(base::rbind, output_list)
+						output <- x_mat$value
+						names(output) <- x_mat$name
                 	}
                 	
                     return(output)
