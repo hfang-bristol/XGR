@@ -46,6 +46,19 @@
 #' pattern <- runif(vcount(g))
 #' names(pattern) <- V(g)$name
 #' xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
+#' 
+#' # 5) use font family (Arial)
+#' \dontrun{
+#' source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+#' library(extrafont)
+#' font_import()
+#' fonttable()
+#' ## creating PDF files with fonts
+#' loadfonts()
+#' pdf("xVisNet_fonts.pdf", family="Arial Black")
+#' xVisNet(g=g, newpage=FALSE, vertex.label.family="Arial Black", signature=F)
+#' dev.off()
+#' }
 
 xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr","rainbow","wb"), ncolors=40, zlim=NULL, colorbar=TRUE, newpage=TRUE, signature=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape=NULL, vertex.label=NULL, vertex.label.cex=NULL, vertex.label.dist=0.3, vertex.label.color="blue", vertex.label.family="sans", edge.arrow.size=0.3, ...)
 {

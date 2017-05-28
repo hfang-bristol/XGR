@@ -207,6 +207,21 @@ xVisNet(g=g, vertex.shape="sphere")
 pattern &lt;- runif(vcount(g))
 names(pattern) &lt;- V(g)$name
 xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
+
+# 5) use font family (Arial)
+## Not run: 
+source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+library(extrafont)
+font_import()
+fonttable()
+## creating PDF files with fonts
+loadfonts()
+pdf("xVisNet_fonts.pdf", family="Arial Black")
+xVisNet(g=g, newpage=FALSE, vertex.label.family="Arial Black",
+signature=F)
+dev.off()
+
+## End(Not run)
 </pre>
 
 

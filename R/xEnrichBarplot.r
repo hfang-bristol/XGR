@@ -38,6 +38,21 @@
 #' print(bp)
 #' #dev.off()
 #' }
+#' 
+#' # 4) use font family (Arial)
+#' \dontrun{
+#' source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+#' library(extrafont)
+#' font_import()
+#' fonttable()
+#' ## creating PDF files with fonts
+#' library(extrafont)
+#' loadfonts()
+#' bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc", font.family="Arial Black")
+#' pdf(file="enrichment_barplot_fonts.pdf", height=6, width=12, family="Arial Black")
+#' print(bp)
+#' dev.off()
+#' }
 
 xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, font.family="sans", signature=TRUE) 
 {

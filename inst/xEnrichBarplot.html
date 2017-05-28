@@ -123,6 +123,24 @@ print(bp)
 #dev.off()
 
 ## End(Not run)
+
+# 4) use font family (Arial)
+## Not run: 
+source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+library(extrafont)
+font_import()
+fonttable()
+## creating PDF files with fonts
+library(extrafont)
+loadfonts()
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc",
+font.family="Arial Black")
+pdf(file="enrichment_barplot_fonts.pdf", height=6, width=12,
+family="Arial Black")
+print(bp)
+dev.off()
+
+## End(Not run)
 </pre>
 
 

@@ -73,6 +73,23 @@ bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
 print(bp)
 #dev.off()
 }
+
+# 4) use font family (Arial)
+\dontrun{
+source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+library(extrafont)
+font_import()
+fonttable()
+## creating PDF files with fonts
+library(extrafont)
+loadfonts()
+bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc",
+font.family="Arial Black")
+pdf(file="enrichment_barplot_fonts.pdf", height=6, width=12,
+family="Arial Black")
+print(bp)
+dev.off()
+}
 }
 \seealso{
 \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},

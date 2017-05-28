@@ -99,7 +99,7 @@ xVisInterpAnimate <- function (ls_xyz, interpolation=c("spline","linear"), nx=10
             height.device <- 7
         }
         
-        grDevices::pdf(outputfile, width=height.device, height=height.device, bg=image.bg)
+        grDevices::pdf(outputfile, width=height.device, height=height.device, bg=image.bg, family=label.font.family)
         for(theta.3D.move in seq(theta.3D, 360+theta.3D, 360/num.frame)){ 
         	theta.3D.move <- theta.3D.move %% 360
         	
@@ -108,7 +108,7 @@ xVisInterpAnimate <- function (ls_xyz, interpolation=c("spline","linear"), nx=10
 				message(sprintf("Viewed at %d polar angle and %d azimuthal angle (%s)", phi.3D, theta.3D.move, as.character(now)), appendLF=TRUE)
 			}
         	
-        	clab.move <- paste0("Viewer's angle (polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
+        	clab.move <- paste0("Viewer's angle\n(polar:",phi.3D,", azimuthal:",theta.3D.move,")\n",clab,"\n\n\n")
         	xVisInterp(ls_xyz=ls_xyz, interpolation=interpolation, nx=nx, ny=ny, zlim=zlim, nD="3D", colkey=colkey, contour=contour, image=image, clab=clab.move, nlevels=nlevels, colormap=colormap, label.pch=label.pch, label.text.cex=label.text.cex, label.text.adj=label.text.adj, label.text.adj.z=label.text.adj.z, label.font.family=label.font.family, xy.swap=xy.swap, theta.3D=theta.3D.move, phi.3D=phi.3D, verbose=FALSE)
         }
         grDevices::dev.off()
