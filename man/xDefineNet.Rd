@@ -11,12 +11,11 @@ xDefineNet(network = c("STRING_highest", "STRING_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
 "PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
-"PCommonsDN_CTD"), STRING.only = c(NA, "neighborhood_score",
-"fusion_score",
-"cooccurence_score", "coexpression_score", "experimental_score",
-"database_score", "textmining_score")[1], weighted = FALSE,
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"PCommonsDN_CTD", "KEGG"), STRING.only = c(NA, "neighborhood_score",
+"fusion_score", "cooccurence_score", "coexpression_score",
+"experimental_score", "database_score", "textmining_score")[1],
+weighted = FALSE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{network}{the built-in network. Currently two sources of network
@@ -49,7 +48,8 @@ from HumanCyc, "PCommonsDN_PID" for those froom PID,
 "PCommonsDN_PANTHER" for those from PANTHER, "PCommonsDN_ReconX" for
 those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC,
 "PCommonsDN_PhosphoSite" for those from PhosphoSite, and
-"PCommonsDN_CTD" for those from CTD}
+"PCommonsDN_CTD" for those from CTD. The primary source 'KEGG' is also
+provided}
 
 \item{STRING.only}{the further restriction of STRING by interaction
 type. If NA, no such restriction. Otherwide, it can be one or more of
@@ -102,6 +102,9 @@ RData.location=RData.location)
 # Pathway Commons 
 g <- xDefineNet(network="PCommonsDN_medium",
 RData.location=RData.location)
+
+# KEGG
+g <- xDefineNet(network="KEGG", RData.location=RData.location)
 }
 }
 \seealso{

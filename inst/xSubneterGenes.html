@@ -24,7 +24,8 @@ xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
 "PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
-"PCommonsDN_PhosphoSite", "PCommonsDN_CTD"), STRING.only = c(NA,
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG"), STRING.only =
+c(NA,
 "neighborhood_score", "fusion_score", "cooccurence_score",
 "coexpression_score", "experimental_score", "database_score",
 "textmining_score")[1], network.customised = NULL, seed.genes = T,
@@ -77,7 +78,8 @@ from HumanCyc, &quot;PCommonsDN_PID&quot; for those froom PID,
 &quot;PCommonsDN_PANTHER&quot; for those from PANTHER, &quot;PCommonsDN_ReconX&quot; for
 those from ReconX, &quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC,
 &quot;PCommonsDN_PhosphoSite&quot; for those from PhosphoSite, and
-&quot;PCommonsDN_CTD&quot; for those from CTD</p>
+&quot;PCommonsDN_CTD&quot; for those from CTD. The primary source 'KEGG' is also
+provided</p>
 </td></tr>
 <tr valign="top"><td><code>STRING.only</code></td>
 <td>
