@@ -39,14 +39,17 @@ c("GOBP",
 "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
 "CreedsDrug",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN", "KEGG"), size.range = c(10, 2000), min.overlap = 3,
-which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
+"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
+"KEGGenvironmental",
+"KEGGcellular", "KEGGorganismal", "KEGGdisease"), size.range = c(10,
+2000),
+min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
+"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -133,12 +136,17 @@ tissue-specific eQTL-containing genes from GTEx (&quot;GTExV4&quot; and
 &quot;GTExV6&quot;), crowd extracted expression of differential signatures from
 CREEDS (&quot;CreedsDisease&quot;, &quot;CreedsDiseaseUP&quot;, &quot;CreedsDiseaseDN&quot;,
 &quot;CreedsDrug&quot;, &quot;CreedsDrugUP&quot;, &quot;CreedsDrugDN&quot;, &quot;CreedsGene&quot;,
-&quot;CreedsGeneUP&quot; and &quot;CreedsGeneDN&quot;), KEGG pathways (&quot;KEGG&quot;), and the
-molecular signatures database (Msigdb, including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;,
-&quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;,
-&quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;,
-&quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;,
-&quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
+&quot;CreedsGeneUP&quot; and &quot;CreedsGeneDN&quot;), KEGG pathways (including 'KEGG' for
+all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
+'Genetic Information Processing' pathways, 'KEGGenvironmental' for
+'Environmental Information Processing' pathways, 'KEGGcellular' for
+'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
+Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
+and the molecular signatures database (Msigdb, including &quot;MsigdbH&quot;,
+&quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;,
+&quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;,
+&quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;,
+&quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>

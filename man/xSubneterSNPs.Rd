@@ -16,8 +16,11 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
 "PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
-"PCommonsDN_CTD", "KEGG"), network.customised = NULL, seed.genes = T,
-subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
+"PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease"),
+network.customised = NULL, seed.genes = T, subnet.significance = 5e-05,
+subnet.size = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -133,8 +136,14 @@ from HumanCyc, "PCommonsDN_PID" for those froom PID,
 "PCommonsDN_PANTHER" for those from PANTHER, "PCommonsDN_ReconX" for
 those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC,
 "PCommonsDN_PhosphoSite" for those from PhosphoSite, and
-"PCommonsDN_CTD" for those from CTD. The primary source 'KEGG' is also
-provided}
+"PCommonsDN_CTD" for those from CTD. For direct (pathway-merged)
+interactions sourced from KEGG, it can be 'KEGG' for all,
+'KEGG_metabolism' for pathways grouped into 'Metabolism',
+'KEGG_genetic' for 'Genetic Information Processing' pathways,
+'KEGG_environmental' for 'Environmental Information Processing'
+pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
+'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
+for 'Human Diseases' pathways}
 
 \item{network.customised}{an object of class "igraph". By default, it
 is NULL. It is designed to allow the user analysing their customised

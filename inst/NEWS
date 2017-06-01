@@ -13,6 +13,8 @@ NEW FEATURES
     
     o Modify 'xEnrichBarplot', 'xEnrichCompare', 'xVisNet', 'xVisInterp', 'xVisInterpAnimate' and 'xVisEvidence' allowing for inclusion of font family
     
+    o Populate the primary source KEGG into 'xEnricherGenes', 'xGRviaGeneAnno', 'xDefineNet', 'xSubneterGenes', 'xSubneterSNPs' and 'xSubneterGR'
+
 
 CHANGES IN VERSION 1.0.10
 -----------------------
