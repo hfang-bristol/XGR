@@ -51,7 +51,7 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, 
 	allDescription <- as.vector(df_eg$description)
 	
     ## correct for those symbols being shown as DATE format
-    if(1){
+    if(0){
         ## for those starting with 'Mar' in a excel-input date format
         a <- Symbol
         flag <- grep("-Mar$", a, ignore.case=T, perl=T, value=F)
@@ -79,7 +79,8 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, 
     
     ## case-insensitive
     ## only keep the first matched one
-    match_flag <- match(tolower(Symbol),tolower(allSymbol))
+    #match_flag <- match(tolower(Symbol),tolower(allSymbol))
+    match_flag <- match(Symbol,allSymbol)
     
     ## match via Synonyms for those unmatchable by official gene symbols
     if(check.symbol.identity){
