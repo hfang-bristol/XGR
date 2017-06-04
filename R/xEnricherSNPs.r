@@ -105,7 +105,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
     
     ############
     if(length(data)==0){
-    	return(FALSE)
+    	return(NULL)
     }
     ############
     

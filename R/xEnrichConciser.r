@@ -19,8 +19,9 @@
 xEnrichConciser <- function(eTerm, cutoff=c(0.9,0.5), verbose=T) 
 {
     
-    if(is.logical(eTerm)){
-        stop("There is no enrichment in the 'eTerm' object.\n")
+    if(is.null(eTerm)){
+        warnings("There is no enrichment in the 'eTerm' object.\n")
+        return(NULL)
     }
     
     if(class(eTerm) == "eTerm" ){
@@ -66,7 +67,7 @@ xEnrichConciser <- function(eTerm, cutoff=c(0.9,0.5), verbose=T)
 		
 	}else{
 		res <- NULL
-		message("The provided object can be used for removing redundant terms.\n")
+		message("The provided object cannot be used for removing redundant terms.\n")
 	}
     
     res

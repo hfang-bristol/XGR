@@ -181,7 +181,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     
     if(length(gs)==0){
         warnings("There are no terms being used.\n")
-        return(F)
+        return(NULL)
     }
 
     ##############################################################################################
@@ -336,7 +336,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     if(length(genes.group)==0){
         #stop("There is no gene being used.\n")
         warnings("There is no gene being used.\n")
-        return(F)
+        return(NULL)
     }else{    
 		if(verbose){
 			now <- Sys.time()
@@ -688,7 +688,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     if(sum(flag_filter)==0){
         #stop("It seems there are no terms meeting the specified 'size.range' and 'min.overlap'.\n")
         warnings("It seems there are no terms meeting the specified 'size.range' and 'min.overlap'.\n")
-        return(F)
+        return(NULL)
     }
     gs <- gs[flag_filter]
     overlaps <- overlaps[flag_filter]
@@ -715,7 +715,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     
     if(length(pvals)==0){
         warnings("There are no pvals being calcualted.\n")
-        return(F)
+        return(NULL)
     }
     
     ## update set_info

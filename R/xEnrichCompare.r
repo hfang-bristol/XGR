@@ -10,6 +10,7 @@
 #' @param wrap.width a positive integer specifying wrap width of name
 #' @param sharings a numeric vector specifying whether only shared terms will be displayed. For example, when comparing three groups of enrichment results, it can be set into c(2,3) to display only shared terms by any two or all three. By default, it is NULL meaning no such restriction
 #' @param font.family the font family for texts
+#' @param facet logical to indicate whether to facet/wrap a 1d of panels into 2d. By default, it sets TRUE
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot", but appended with a 'g' (an igraph object to represent DAG after being unionised)
 #' @note none
@@ -59,10 +60,13 @@
 #' xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 #' }
 
-xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, sharings=NULL, font.family="sans", signature=TRUE) 
+xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=2.5, wrap.width=NULL, sharings=NULL, font.family="sans", facet=TRUE, signature=TRUE) 
 {
     
     displayBy <- match.arg(displayBy)
+    
+    ## Remove null elements in a list
+	list_eTerm <- base::Filter(base::Negate(is.null), list_eTerm)
     
 	## Combine into a data frame called 'df_all'
 	list_names <- names(list_eTerm)
@@ -71,7 +75,11 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	}
 	res_ls <- lapply(1:length(list_eTerm), function(i){
 		df <- xEnrichViewer(list_eTerm[[i]], top_num="all", sortBy="none")
-		cbind(group=rep(list_names[i],nrow(df)), id=rownames(df), df, stringsAsFactors=F)
+		if(is.null(df)){
+			return(NULL)
+		}else{
+			cbind(group=rep(list_names[i],nrow(df)), id=rownames(df), df, stringsAsFactors=F)
+		}
 	})
 	df_all <- do.call(rbind, res_ls)
 	rownames(df_all) <- NULL
@@ -81,7 +89,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	d <- df_all[ind, c("id","name","fc","adjp","zscore","pvalue","group")]
 	
 	## group factor
-	d$group <- factor(d$group, levels=list_names)
+	d$group <- factor(d$group, levels=rev(list_names))
 
 	## text wrap
 	if(!is.null(wrap.width)){
@@ -202,7 +210,7 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
 	}
 	
 	## title
-	title <- paste0('Enrichments under FDR < ', FDR.cutoff)
+	title <- paste0('Enrichments (FDR < ', FDR.cutoff, ')')
 	p <- p + labs(title=title) + theme(plot.title=element_text(hjust=0.5))
 	## caption
     if(signature){
@@ -210,15 +218,19 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
     	p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	
-	
 	## change font family to 'Arial'
-	bp <- bp + theme(text=element_text(family=font.family))
+	p <- p + theme(text=element_text(family=font.family))
 	
 	## put arrows on x-axis
 	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
 	## group
-	bp <- p + facet_grid(~group)
+	if(facet){
+		bp <- p + facet_grid(~group)
+	}else{
+		#bp <- p + theme(legend.position="bottom",legend.title=element_blank()) + guides(fill=guide_legend(reverse=TRUE,nrow=1,byrow=TRUE))
+		bp <- p + theme(legend.position="bottom",legend.title=element_text(size=10,color="black",face="bold")) + guides(fill=guide_legend(title="",title.position="left",reverse=TRUE,nrow=1,byrow=TRUE))
+	}
 	
 	##############################
 	## append 'g' to 'bp' (if DAG)

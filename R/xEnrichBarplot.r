@@ -59,8 +59,9 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
     
     displayBy <- match.arg(displayBy)
     
-    if(is.logical(eTerm)){
-        stop("There is no enrichment in the 'eTerm' object.\n")
+    if(is.null(eTerm)){
+        warnings("There is no enrichment in the 'eTerm' object.\n")
+        return(NULL)
     }
     
     ## when 'auto', will keep the significant terms

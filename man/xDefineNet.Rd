@@ -120,5 +120,5 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xCombineNet}}
 }

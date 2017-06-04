@@ -99,7 +99,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     
     ############
     if(length(data)==0){
-    	return(FALSE)
+    	return(NULL)
     }
     ############
     

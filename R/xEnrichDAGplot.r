@@ -103,8 +103,9 @@ xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
     layout.orientation <- match.arg(layout.orientation)
     node.info<- match.arg(node.info)
     
-    if(is.logical(eTerm)){
-        stop("There is no enrichment in the 'eTerm' object.\n")
+    if(is.null(eTerm)){
+        warnings("There is no enrichment in the 'eTerm' object.\n")
+        return(NULL)
     }
     
     if(class(eTerm)[1]=="eTerm"){

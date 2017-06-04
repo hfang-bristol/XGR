@@ -39,8 +39,9 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
     	sortBy <- 'adjp'
     }
     
-    if(is.logical(eTerm)){
-        stop("There is no enrichment in the 'eTerm' object.\n")
+    if(is.null(eTerm)){
+        warnings("There is no enrichment in the 'eTerm' object.\n")
+        return(NULL)
     }
     
     if(class(eTerm) == "data.frame" ){

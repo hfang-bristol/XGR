@@ -95,7 +95,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     
     ############
     if(length(data.file)==0){
-    	return(FALSE)
+    	return(NULL)
     }
     ############
     

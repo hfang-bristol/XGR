@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to combine networks from a list of igraph objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xCombineNet"><tr><td>xCombineNet</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to combine networks from a list of igraph objects</h2>
+
+<h3>Description</h3>
+
+<p><code>xCombineNet</code> is supposed to combine networks from a list of
+igraph objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xCombineNet(list_ig, combineBy = c("union", "intersect"),
+attrBy = c("intersect", "union"), keep.all.vertices = FALSE,
+verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>list_ig</code></td>
+<td>
+<p>a list of &quot;igraph&quot; objects or a &quot;igraph&quot; object</p>
+</td></tr>
+<tr valign="top"><td><code>combineBy</code></td>
+<td>
+<p>how to resolve edges from a list of &quot;igraph&quot; objects.
+It can be &quot;intersect&quot; for intersecting edges and &quot;union&quot; for unionising
+edges (by default)</p>
+</td></tr>
+<tr valign="top"><td><code>attrBy</code></td>
+<td>
+<p>the method used to extract node attributes. It can be
+&quot;intersect&quot; for intersecting node attributes (by default) and &quot;union&quot;
+for unionising node attributes</p>
+</td></tr>
+<tr valign="top"><td><code>keep.all.vertices</code></td>
+<td>
+<p>logical to indicate whether all nodes are kept
+when intersecting edges. By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;igraph&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xDefineNet</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
+g1 &lt;- xDefineNet(network="KEGG_environmental",
+RData.location=RData.location)
+g2 &lt;- xDefineNet(network="KEGG_organismal",
+RData.location=RData.location)
+ls_ig &lt;- list(g1, g2)
+ig &lt;- xCombineNet(ls_ig, combineBy='union', attrBy="intersect",
+verbose=TRUE)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

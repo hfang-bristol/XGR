@@ -11,7 +11,7 @@
 #' an object of class "igraph"
 #' @note The input graph will treat as an unweighted graph if there is no 'weight' edge attribute associated with
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xCombineNet}}
 #' @include xDefineNet.r
 #' @examples
 #' \dontrun{
