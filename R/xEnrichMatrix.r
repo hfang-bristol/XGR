@@ -15,6 +15,7 @@
 #' @param title the title of the plot. By default, it is NULL
 #' @param flip logical to indicate whether to flip the coordiate. By default, it sets to false
 #' @param y.rotate the angle to rotate the y tick labelings. By default, it is 45
+#' @param font.family the font family for texts
 #' @param ... additional graphic parameters for corrplot::corrplot
 #' @return 
 #' If the method is 'gpplot2', it returns a ggplot object. Otherwise, it is a data frame
@@ -29,9 +30,10 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[1], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
 #' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[4], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
+#' #gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)
 #' }
 
-xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, title=NULL, flip=FALSE, y.rotate=45, ...)
+xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, title=NULL, flip=FALSE, y.rotate=45, font.family="sans", ...)
 {
     method <- match.arg(method)    
     displayBy <- match.arg(displayBy)
@@ -69,7 +71,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		
 		list_names <- unique(d$group)
 	}
-		
+	
 	## group factor
 	d$group <- factor(d$group, levels=rev(list_names))
 	
@@ -160,6 +162,8 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		title_size <- "-log10(p-value)"
 	}
 	
+	d$bycol <- -1*log10(d$adjp)
+	
 	mat_fdr <- as.matrix(xSparseMatrix(d[,c('name','group','adjp')]))
 	mat_fdr[mat_fdr==0] <- 1
 	
@@ -200,18 +204,21 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 			d$name <- factor(d$name, levels=rownames(mat_val))				
 		}else{
 			d$group <- factor(d$group, levels=colnames(mat_val))
-			d$name <- factor(d$name, levels=rev(rownames(mat_val)))			
+			d$name <- factor(d$name, levels=rev(rownames(mat_val)))
 		}
 		d$val[d$val<=zlim[1]] <- zlim[1]
 		d$val[d$val>=zlim[2]] <- zlim[2]
 		####
 		
-		gp <- ggplot(d, aes(x=group, y=name, color=val))
-		gp <- gp + geom_point(aes(size=zscore))
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(0, ceiling(max(d$val)*10)/10)) + guides(color=guide_colourbar(title="-log10(FDR)", barwidth=0.5, title.position="top", n=5))
-		gp <- gp + scale_size_continuous(limits=c(floor(min(df$zscore)*10)/10, ceiling(max(df$zscore)*10)/10), range=c(1,4)) + guides(size=guide_legend(title_size, title.position="top", ncol=1))
+		group <- name <- val <- zscore <- bycol <- NULL
+		
+		gp <- ggplot(d, aes(x=group, y=name, color=bycol))
+		gp <- gp + geom_point(aes(size=val))
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(0, ceiling(max(d$bycol)*10)/10)) + guides(color=guide_colourbar(title="-log10(FDR)", barwidth=0.5, title.position="top", n=5))
+		gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4)) + guides(size=guide_legend(title_size, title.position="top", ncol=1))
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate), axis.text.y=element_text(face="bold", color="black", size=8, angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 		gp <- gp + labs(title=title)
+		gp <- gp + theme(text=element_text(family=font.family))
 		gp <- gp + scale_x_discrete(position="top")
 		
 		if(flip){
