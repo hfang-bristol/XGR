@@ -12,9 +12,12 @@
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the finite values of displayed matrix
+#' @param title the title of the plot. By default, it is NULL
+#' @param flip logical to indicate whether to flip the coordiate. By default, it sets to false
+#' @param y.rotate the angle to rotate the y tick labelings. By default, it is 45
 #' @param ... additional graphic parameters for corrplot::corrplot
 #' @return 
-#' a data frame
+#' If the method is 'gpplot2', it returns a ggplot object. Otherwise, it is a data frame
 #' @note none
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
@@ -24,11 +27,11 @@
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
-#' xEnrichMatrix(list_eTerm, method="color", displayBy="zscore", reorder="row", colormap="jet", zlim=c(0,10), cl.pos="b", cl.ratio=0.1, cl.align.text="c", mar=c(0.1,0.1,0.5,0.1), tl.col="black", tl.cex=0.6, tl.srt=90)
-#' xEnrichMatrix(list_eTerm, method="pie", displayBy="fdr", FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder="row", colormap="green-white-blue", ncolors=20, zlim=c(0,10), cl.pos="n", mar=c(0.1,0.1,0.5,0.1), tl.col="black", tl.cex=0.6, tl.srt=90)
+#' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[1], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
+#' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[4], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
 #' }
 
-xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, ...)
+xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, title=NULL, flip=FALSE, y.rotate=45, ...)
 {
     method <- match.arg(method)    
     displayBy <- match.arg(displayBy)
@@ -124,6 +127,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"),
 		d$val <- d$fc
 		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
 		mat_val[mat_val==0] <- 1
+		title_size <- "FC"
 	}else if(displayBy=='adjp'){
 		########
 		d$adjp[d$adjp==0] <- min(d$adjp[d$adjp!=0])
@@ -134,6 +138,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"),
 		d$name <- factor(d$name, levels=unique(d$name))
 		d$val <- -1*log10(d$adjp)
 		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		title_size <- "-log10(FDR)"
 	}else if(displayBy=='zscore'){
 		## sort by: nSig group zcore (adjp)
 		d <- d[with(d, order(nSig,group,zscore,-adjp)), ]
@@ -141,6 +146,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"),
 		d$name <- factor(d$name, levels=unique(d$name))
 		d$val <- d$zscore
 		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		title_size <- "Z-score"
 	}else if(displayBy=='pvalue'){
 		########
 		d$pvalue[d$pvalue==0] <- min(d$pvalue[d$pvalue!=0])
@@ -151,6 +157,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"),
 		d$name <- factor(d$name, levels=unique(d$name))
 		d$val <- -1*log10(d$pvalue)
 		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		title_size <- "-log10(p-value)"
 	}
 	
 	mat_fdr <- as.matrix(xSparseMatrix(d[,c('name','group','adjp')]))
@@ -178,7 +185,41 @@ xEnrichMatrix <- function(list_eTerm, method=c("circle","square","color","pie"),
 	mat_val[mat_val<=zlim[1]] <- zlim[1]
 	mat_val[mat_val>=zlim[2]] <- zlim[2]
 	
-	corrplot::corrplot(mat_val, method=method, is.cor=FALSE, col=xColormap(colormap)(ncolors), cl.lim=c(zlim[1],zlim[2]), p.mat=mat_fdr, sig.level=FDR.cutoff, insig="blank", addgrid.col="transparent", mar=c(0.1,0.1,1,0.1), ...)
-
-	invisible(d)
+	if(method!="ggplot2"){
+		if(is.null(title)){
+			corrplot::corrplot(mat_val, method=method, is.cor=FALSE, col=xColormap(colormap)(ncolors), cl.lim=c(zlim[1],zlim[2]), p.mat=mat_fdr, sig.level=FDR.cutoff, insig="blank", addgrid.col="transparent", mar=c(0.1,0.1,1,0.1), ...)
+		}else{
+			corrplot::corrplot(mat_val, method=method, is.cor=FALSE, col=xColormap(colormap)(ncolors), cl.lim=c(zlim[1],zlim[2]), p.mat=mat_fdr, sig.level=FDR.cutoff, insig="blank", addgrid.col="transparent", mar=c(0.1,0.1,1,0.1), title=title, ...)
+		}
+		invisible(d)
+		
+	}else{
+		####
+		if(flip){
+			d$group <- factor(d$group, levels=rev(colnames(mat_val)))
+			d$name <- factor(d$name, levels=rownames(mat_val))				
+		}else{
+			d$group <- factor(d$group, levels=colnames(mat_val))
+			d$name <- factor(d$name, levels=rev(rownames(mat_val)))			
+		}
+		d$val[d$val<=zlim[1]] <- zlim[1]
+		d$val[d$val>=zlim[2]] <- zlim[2]
+		####
+		
+		gp <- ggplot(d, aes(x=group, y=name, color=val))
+		gp <- gp + geom_point(aes(size=zscore))
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(0, ceiling(max(d$val)*10)/10)) + guides(color=guide_colourbar(title="-log10(FDR)", barwidth=0.5, title.position="top", n=5))
+		gp <- gp + scale_size_continuous(limits=c(floor(min(df$zscore)*10)/10, ceiling(max(df$zscore)*10)/10), range=c(1,4)) + guides(size=guide_legend(title_size, title.position="top", ncol=1))
+		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate), axis.text.y=element_text(face="bold", color="black", size=8, angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+		gp <- gp + labs(title=title)
+		gp <- gp + scale_x_discrete(position="top")
+		
+		if(flip){
+			gp <- gp + coord_flip() + scale_x_discrete(position="bottom") + scale_y_discrete(position="right")
+			gp <- gp + theme(axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate, hjust=0))
+		}
+		
+		invisible(gp)
+	}
+	
 }

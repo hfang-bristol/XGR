@@ -4,11 +4,13 @@
 \alias{xEnrichMatrix}
 \title{Function to compare enrichment results using matrix plots}
 \usage{
-xEnrichMatrix(list_eTerm, method = c("circle", "square", "color",
-"pie"),
-displayBy = c("zscore", "fc", "adjp", "pvalue"), FDR.cutoff = 0.05,
-wrap.width = NULL, sharings = NULL, reorder = c("row", "none", "col",
-"both"), colormap = "jet", ncolors = 20, zlim = NULL, ...)
+xEnrichMatrix(list_eTerm, method = c("ggplot2", "circle", "square",
+"color",
+"pie"), displayBy = c("zscore", "fc", "adjp", "pvalue"),
+FDR.cutoff = 0.05, wrap.width = NULL, sharings = NULL,
+reorder = c("row", "none", "col", "both"), colormap = "jet",
+ncolors = 20, zlim = NULL, title = NULL, flip = FALSE,
+y.rotate = 45, ...)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects, or a data frame (with at
@@ -54,10 +56,19 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 matrix}
 
+\item{title}{the title of the plot. By default, it is NULL}
+
+\item{flip}{logical to indicate whether to flip the coordiate. By
+default, it sets to false}
+
+\item{y.rotate}{the angle to rotate the y tick labelings. By default,
+it is 45}
+
 \item{...}{additional graphic parameters for corrplot::corrplot}
 }
 \value{
-a data frame
+If the method is 'gpplot2', it returns a ggplot object. Otherwise, it
+is a data frame
 }
 \description{
 \code{xEnrichMatrix} is supposed to compare enrichment results using
@@ -71,14 +82,8 @@ none
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
-xEnrichMatrix(list_eTerm, method="color", displayBy="zscore",
-reorder="row", colormap="jet", zlim=c(0,10), cl.pos="b", cl.ratio=0.1,
-cl.align.text="c", mar=c(0.1,0.1,0.5,0.1), tl.col="black", tl.cex=0.6,
-tl.srt=90)
-xEnrichMatrix(list_eTerm, method="pie", displayBy="fdr",
-FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder="row",
-colormap="green-white-blue", ncolors=20, zlim=c(0,10), cl.pos="n",
-mar=c(0.1,0.1,0.5,0.1), tl.col="black", tl.cex=0.6, tl.srt=90)
+#xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[1], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
+#xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[4], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
 }
 }
 \seealso{
