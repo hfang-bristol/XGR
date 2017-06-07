@@ -14,7 +14,6 @@
 #' @seealso \code{\link{xDefineNet}}
 #' @include xCombineNet.r
 #' @examples
-#' @examples
 #' \dontrun{
 #' # Load the library
 #' library(XGR)

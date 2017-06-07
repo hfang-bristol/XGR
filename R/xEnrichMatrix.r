@@ -12,9 +12,11 @@
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the finite values of displayed matrix
+#' @param slim the minimum and maximum displaying values for which sizes should be plotted
 #' @param title the title of the plot. By default, it is NULL
 #' @param flip logical to indicate whether to flip the coordiate. By default, it sets to false
 #' @param y.rotate the angle to rotate the y tick labelings. By default, it is 45
+#' @param shape the number specifying the shape. By default, it is 19
 #' @param font.family the font family for texts
 #' @param ... additional graphic parameters for corrplot::corrplot
 #' @return 
@@ -33,7 +35,7 @@
 #' #gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)
 #' }
 
-xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, title=NULL, flip=FALSE, y.rotate=45, font.family="sans", ...)
+xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, slim=NULL, title=NULL, flip=FALSE, y.rotate=45, shape=19, font.family="sans", ...)
 {
     method <- match.arg(method)    
     displayBy <- match.arg(displayBy)
@@ -183,11 +185,11 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 	mat_val <- mat_val[ind_row, ind_col]
 	mat_fdr <- mat_fdr[ind_row, ind_col]
 	
-	if(is.null(zlim)){
-		zlim <- c(min(mat_val), max(mat_val))
+	if(is.null(slim)){
+		slim <- c(min(mat_val), max(mat_val))
 	}
-	mat_val[mat_val<=zlim[1]] <- zlim[1]
-	mat_val[mat_val>=zlim[2]] <- zlim[2]
+	mat_val[mat_val<=slim[1]] <- slim[1]
+	mat_val[mat_val>=slim[2]] <- slim[2]
 	
 	if(method!="ggplot2"){
 		if(is.null(title)){
@@ -206,16 +208,22 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 			d$group <- factor(d$group, levels=colnames(mat_val))
 			d$name <- factor(d$name, levels=rev(rownames(mat_val)))
 		}
-		d$val[d$val<=zlim[1]] <- zlim[1]
-		d$val[d$val>=zlim[2]] <- zlim[2]
+		d$val[d$val<=slim[1]] <- slim[1]
+		d$val[d$val>=slim[2]] <- slim[2]
 		####
+		
+		if(is.null(zlim)){
+			zlim <- c(0,ceiling(max(d$bycol)*10)/10)
+		}
+		d$bycol[d$bycol>=zlim[2]] <- zlim[2]
 		
 		group <- name <- val <- zscore <- bycol <- NULL
 		
 		gp <- ggplot(d, aes(x=group, y=name, color=bycol))
-		gp <- gp + geom_point(aes(size=val))
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(0, ceiling(max(d$bycol)*10)/10)) + guides(color=guide_colourbar(title="-log10(FDR)", barwidth=0.5, title.position="top", n=5))
-		gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4)) + guides(size=guide_legend(title_size, title.position="top", ncol=1))
+		gp <- gp + geom_point(aes(size=val),shape=shape)
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title="-log10(FDR)",title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
+		gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4), guide=guide_legend(title_size,title.position="top",ncol=1))
+		
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate), axis.text.y=element_text(face="bold", color="black", size=8, angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 		gp <- gp + labs(title=title)
 		gp <- gp + theme(text=element_text(family=font.family))

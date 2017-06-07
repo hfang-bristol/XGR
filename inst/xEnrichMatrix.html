@@ -22,8 +22,8 @@ xEnrichMatrix(list_eTerm, method = c("ggplot2", "circle", "square",
 "pie"), displayBy = c("zscore", "fc", "adjp", "pvalue"),
 FDR.cutoff = 0.05, wrap.width = NULL, sharings = NULL,
 reorder = c("row", "none", "col", "both"), colormap = "jet",
-ncolors = 20, zlim = NULL, title = NULL, flip = FALSE,
-y.rotate = 45, font.family = "sans", ...)
+ncolors = 20, zlim = NULL, slim = NULL, title = NULL, flip = FALSE,
+y.rotate = 45, shape = 19, font.family = "sans", ...)
 </pre>
 
 
@@ -93,6 +93,11 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 matrix</p>
 </td></tr>
+<tr valign="top"><td><code>slim</code></td>
+<td>
+<p>the minimum and maximum displaying values for which sizes
+should be plotted</p>
+</td></tr>
 <tr valign="top"><td><code>title</code></td>
 <td>
 <p>the title of the plot. By default, it is NULL</p>
@@ -106,6 +111,10 @@ default, it sets to false</p>
 <td>
 <p>the angle to rotate the y tick labelings. By default,
 it is 45</p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>the number specifying the shape. By default, it is 19</p>
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>

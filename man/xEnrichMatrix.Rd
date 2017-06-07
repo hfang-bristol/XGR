@@ -9,8 +9,8 @@ xEnrichMatrix(list_eTerm, method = c("ggplot2", "circle", "square",
 "pie"), displayBy = c("zscore", "fc", "adjp", "pvalue"),
 FDR.cutoff = 0.05, wrap.width = NULL, sharings = NULL,
 reorder = c("row", "none", "col", "both"), colormap = "jet",
-ncolors = 20, zlim = NULL, title = NULL, flip = FALSE,
-y.rotate = 45, font.family = "sans", ...)
+ncolors = 20, zlim = NULL, slim = NULL, title = NULL, flip = FALSE,
+y.rotate = 45, shape = 19, font.family = "sans", ...)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects, or a data frame (with at
@@ -56,6 +56,9 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 matrix}
 
+\item{slim}{the minimum and maximum displaying values for which sizes
+should be plotted}
+
 \item{title}{the title of the plot. By default, it is NULL}
 
 \item{flip}{logical to indicate whether to flip the coordiate. By
@@ -63,6 +66,8 @@ default, it sets to false}
 
 \item{y.rotate}{the angle to rotate the y tick labelings. By default,
 it is 45}
+
+\item{shape}{the number specifying the shape. By default, it is 19}
 
 \item{font.family}{the font family for texts}
 
