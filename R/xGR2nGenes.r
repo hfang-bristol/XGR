@@ -78,7 +78,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
 	}
 	if(class(GR.Gene) == "GRanges"){
-			gr_Gene <- GR.Gene
+			gr_Gene <- xGR(GR.Gene, format="GRanges", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
 	}else{
 		gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
 		if(is.null(gr_Gene)){
