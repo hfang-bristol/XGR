@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a graph object of class &quot;igraph&quot;</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGraphML"><tr><td>xGraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise a graph object of class &quot;igraph&quot;</h2>
+
+<h3>Description</h3>
+
+<p><code>xGraphML</code> is supposed to visualise a graph object of class
+&quot;igraph&quot;. It also allows vertices/nodes color-coded according to the
+input pattern.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGraphML(g, pattern = NULL, colormap = "wyr", ncolors = 64, zlim =
+NULL,
+filename = "xGraphML")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>pattern</code></td>
+<td>
+<p>a numeric vector used to color-code vertices/nodes.
+Notably, if the input vector contains names, then these names should
+include all node names of input graph, i.e. V(g)$name, since there is a
+mapping operation. After mapping, the length of the patern vector
+should be the same as the number of nodes of input graph; otherwise,
+this input pattern will be ignored. The way of how to color-code is to
+map values in the pattern onto the whole colormap (see the next
+arguments: colormap, ncolors, zlim and colorbar)</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z/patttern values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xGraphML'</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>invisible
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGraphML</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+# load REACTOME
+# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
+RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
+nodes="R-HSA-168256", mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# 4) visualise the graph with vertices being color-coded by the pattern
+pattern &lt;- runif(vcount(ig))
+names(pattern) &lt;- V(ig)$name
+xGraphML(g=ig, pattern=pattern, colormap="bwr")
+
+## End(Not run)
+</pre>
+
+
+</body></html>

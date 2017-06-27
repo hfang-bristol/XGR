@@ -67,5 +67,6 @@ Collate:
     'xDefineNet.r'
     'xCombineNet.r'
     'xEnrichMatrix.r'
+    'xGraphML.r'
 License: GPL-2
 biocViews: Bioinformatics

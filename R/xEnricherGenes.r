@@ -86,7 +86,7 @@
 #' # g) visualise the significant terms in the ontology hierarchy 
 #' # restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
 #' g <- xRDataLoader(RData.customised='ig.REACTOME', RData.location=RData.location)
-#' neighs.out <- igraph::neighborhood(g, order=vcount(ig), nodes=c("R-HSA-162582","R-HSA-168256"), mode="out")
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes=c("R-HSA-162582","R-HSA-168256"), mode="out")
 #' nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
 #' ig <- igraph::induced.subgraph(g, vids=nodeInduced)
 #' xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
