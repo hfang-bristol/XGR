@@ -19,8 +19,10 @@ the others by ellipse nodes. It returns an object of class 'Ragraph'.
 <h3>Usage</h3>
 
 <pre>
-xEnrichDAGplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), path.mode = c("all_paths", "shortest_paths",
+xEnrichDAGplot(eTerm, top_num = 10, ig = NULL, displayBy = c("fc",
+"adjp",
+"fdr", "zscore", "pvalue"), path.mode = c("all_paths",
+"shortest_paths",
 "all_shortest_paths"), height = 7, width = 7, margin = rep(0.1, 4),
 colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"), ncolors = 40, zlim = NULL, colorbar = T,
@@ -44,6 +46,12 @@ graph.edge.attrs = NULL, node.attrs = NULL)
 <p>the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
 0.05) will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>ig</code></td>
+<td>
+<p>the igraph object. If provided, only those terms within it
+will be visualised. By default, it is NULL meaning no surch
+restriction</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>

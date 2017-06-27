@@ -31,7 +31,7 @@ ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
 "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
 "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG",
 "KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental", "KEGGcellular",
-"KEGGorganismal", "KEGGdisease"), size.range = c(10, 2000),
+"KEGGorganismal", "KEGGdisease", "REACTOME"), size.range = c(10, 2000),
 min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
 "binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
@@ -86,11 +86,11 @@ all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
 'Environmental Information Processing' pathways, 'KEGGcellular' for
 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
 Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
-and the molecular signatures database (Msigdb, including &quot;MsigdbH&quot;,
-&quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;,
-&quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;,
-&quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;,
-&quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
+REACTOME pathways, and the molecular signatures database (Msigdb,
+including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &quot;MsigdbC2CPall&quot;,
+&quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;,
+&quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;,
+&quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
@@ -296,11 +296,13 @@ maximum of both p-values in these two calculations.
 ## Not run: 
 # Load the library
 library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# Gene-based enrichment analysis using Mammalian Phenotype Ontology (MP)
+# Gene-based enrichment analysis using REACTOME pathways
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
 set.seed(825)
 data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
 data
@@ -309,16 +311,17 @@ data
 #background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
 
 # b) perform enrichment analysis
-eTerm &lt;- xEnricherGenes(data=data, ontology="MP")
+eTerm &lt;- xEnricherGenes(data=data, ontology="REACTOME",
+RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
 
-# d) save enrichment results to the file called 'MP_enrichments.txt'
+# d) save enrichment results to the file called 'REACTOME_enrichments.txt'
 res &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
 details=TRUE)
 output &lt;- data.frame(term=rownames(res), res)
-utils::write.table(output, file="MP_enrichments.txt", sep="\t",
+utils::write.table(output, file="REACTOME_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 # e) barplot of significant enrichment results
@@ -328,10 +331,21 @@ print(bp)
 # f) visualise the top 10 significant terms in the ontology hierarchy
 # color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
 xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
-node.info=c("full_term_name"))
+node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 # color-code terms according to the z-scores
 xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
-node.info=c("full_term_name"))
+node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
+
+# g) visualise the significant terms in the ontology hierarchy 
+# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
+RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(ig),
+nodes=c("R-HSA-162582","R-HSA-168256"), mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp",
+node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 
 ## End(Not run)
 </pre>

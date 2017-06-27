@@ -4,8 +4,10 @@
 \alias{xEnrichDAGplot}
 \title{Function to visualise enrichment results using a direct acyclic graph (DAG)}
 \usage{
-xEnrichDAGplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), path.mode = c("all_paths", "shortest_paths",
+xEnrichDAGplot(eTerm, top_num = 10, ig = NULL, displayBy = c("fc",
+"adjp",
+"fdr", "zscore", "pvalue"), path.mode = c("all_paths",
+"shortest_paths",
 "all_shortest_paths"), height = 7, width = 7, margin = rep(0.1, 4),
 colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"), ncolors = 40, zlim = NULL, colorbar = T,
@@ -21,6 +23,10 @@ graph.edge.attrs = NULL, node.attrs = NULL)
 \item{top_num}{the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (FDR <
 0.05) will be displayed}
+
+\item{ig}{the igraph object. If provided, only those terms within it
+will be visualised. By default, it is NULL meaning no surch
+restriction}
 
 \item{displayBy}{which statistics will be used for displaying. It can
 be "fc" for enrichment fold change (by default), "adjp" or "fdr" for

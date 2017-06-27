@@ -4,6 +4,7 @@
 #'
 #' @param eTerm an object of class "eTerm"
 #' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (FDR < 0.05) will be displayed
+#' @param ig the igraph object. If provided, only those terms within it will be visualised. By default, it is NULL meaning no surch restriction
 #' @param displayBy which statistics will be used for displaying. It can be "fc" for enrichment fold change (by default), "adjp" or "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score
 #' @param path.mode the mode of paths induced by nodes in query. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param height a numeric value specifying the height of device
@@ -95,7 +96,7 @@
 #' 
 #' }
 
-xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zscore","pvalue"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("top_bottom","left_right","bottom_top","right_left"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
+xEnrichDAGplot <- function(eTerm, top_num=10, ig=NULL, displayBy=c("fc","adjp","fdr","zscore","pvalue"), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), height=7, width=7, margin=rep(0.1,4), colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), ncolors=40, zlim=NULL, colorbar=T, colorbar.fraction=0.1, newpage=T, layout.orientation=c("top_bottom","left_right","bottom_top","right_left"), node.info=c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width=NULL, graph.node.attrs=NULL, graph.edge.attrs=NULL, node.attrs=NULL)
 {
     
     displayBy <- match.arg(displayBy)
@@ -122,9 +123,19 @@ xEnrichDAGplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 			}
 		}
 		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
-	
-		g <- eTerm$g
 		nodes_query <- rownames(df)
+		
+		##########################################################
+		# restrict those nodes provided in 'ig'
+		if(class(ig)=="igraph"){
+			nodes_query_tmp <- intersect(nodes_query, V(ig)$name)
+			if(length(nodes_query_tmp)>0){
+				nodes_query <- nodes_query_tmp
+			}
+		}
+		##########################################################
+				
+		g <- eTerm$g
 		subg <- dnet::dDAGinduce(g, nodes_query, path.mode=path.mode)
 	
 		if(displayBy=='adjp' | displayBy=='fdr'){

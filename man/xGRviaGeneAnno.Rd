@@ -22,15 +22,14 @@ c("GOBP",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
 "CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
 "KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease"), size.range = c(10,
-2000),
-min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
-"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
-T,
+"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME"),
+size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
+0.01,
+lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -105,11 +104,11 @@ all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
 'Environmental Information Processing' pathways, 'KEGGcellular' for
 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
 Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
-and the molecular signatures database (Msigdb, including "MsigdbH",
-"MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
+REACTOME pathways, and the molecular signatures database (Msigdb,
+including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
+"MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
+"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
