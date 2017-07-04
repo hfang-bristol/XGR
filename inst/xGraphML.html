@@ -1,25 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a graph object of class &quot;igraph&quot;</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a graph object of...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGraphML"><tr><td>xGraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise a graph object of class &quot;igraph&quot;</h2>
+<h2>Function to generate a graphml file from a graph object of class &quot;igraph&quot;</h2>
 
 <h3>Description</h3>
 
-<p><code>xGraphML</code> is supposed to visualise a graph object of class
-&quot;igraph&quot;. It also allows vertices/nodes color-coded according to the
-input pattern.
+<p><code>xGraphML</code> is supposed to generate a graphml file from a graph
+object of class &quot;igraph&quot;.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xGraphML(g, pattern = NULL, colormap = "wyr", ncolors = 64, zlim =
-NULL,
+xGraphML(g, node.label = NULL, label.wrap.width = NULL,
+node.tooltip = NULL, node.link = NULL, node.color = NULL,
+colormap = "wyr", ncolors = 64, zlim = NULL, node.size = NULL,
 filename = "xGraphML")
 </pre>
 
@@ -31,16 +31,33 @@ filename = "xGraphML")
 <td>
 <p>an object of class &quot;igraph&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>pattern</code></td>
+<tr valign="top"><td><code>node.label</code></td>
 <td>
-<p>a numeric vector used to color-code vertices/nodes.
-Notably, if the input vector contains names, then these names should
-include all node names of input graph, i.e. V(g)$name, since there is a
-mapping operation. After mapping, the length of the patern vector
-should be the same as the number of nodes of input graph; otherwise,
-this input pattern will be ignored. The way of how to color-code is to
-map values in the pattern onto the whole colormap (see the next
-arguments: colormap, ncolors, zlim and colorbar)</p>
+<p>either a vector labelling nodes or a character
+specifying which node attribute used for the labelling. If NULL (by
+default), no node labelling. If provided as a vector, a node with 'NA'
+will be not labelled</p>
+</td></tr>
+<tr valign="top"><td><code>label.wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of
+name</p>
+</td></tr>
+<tr valign="top"><td><code>node.tooltip</code></td>
+<td>
+<p>either a vector used for node tooltips or a
+character specifying which node attribute used for the tooltips. If
+NULL (by default), node attribute 'name' will be used node lab</p>
+</td></tr>
+<tr valign="top"><td><code>node.link</code></td>
+<td>
+<p>a string specifying hyperlink address. By default, it
+is NULL meaning no hyperlink</p>
+</td></tr>
+<tr valign="top"><td><code>node.color</code></td>
+<td>
+<p>a character specifying which node attribute used for
+node coloring. If NULL (by default), it is '#BFFFBF'</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -67,6 +84,12 @@ should be plotted, defaulting to the range of the finite values of z.
 Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>node.size</code></td>
+<td>
+<p>either a vector specifying node size or a character
+specifying which node attribute used for the node size. If NULL (by
+default), it will be 30</p>
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
@@ -114,7 +137,7 @@ ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
 # 4) visualise the graph with vertices being color-coded by the pattern
 pattern &lt;- runif(vcount(ig))
 names(pattern) &lt;- V(ig)$name
-xGraphML(g=ig, pattern=pattern, colormap="bwr")
+xGraphML(g=ig, colormap="wyr")
 
 ## End(Not run)
 </pre>

@@ -30,9 +30,9 @@
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
-#' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[1], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
-#' #xEnrichMatrix(list_eTerm, method=c("circle","square","color","pie")[4], displayBy=c("zscore","fc","adjp","pvalue")[3], FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder=c("none","col","row","both")[3], colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
-#' #gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)
+#' xEnrichMatrix(list_eTerm, method="circle", displayBy="adjp", FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder="row", colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
+#' xEnrichMatrix(list_eTerm, method="pie", displayBy="adjp", FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder="row", colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
+#' gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)
 #' }
 
 xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, slim=NULL, title=NULL, flip=FALSE, y.rotate=45, shape=19, font.family="sans", ...)
@@ -66,12 +66,16 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		
 	}else if(class(list_eTerm)=="data.frame"){
 		ind <- colnames(list_eTerm) %in% c("group","name","adjp",displayBy)
-		df_all <- list_eTerm[,ind]
-		## extract the columns: name fc adjp group
-		ind <- which(df_all$adjp < FDR.cutoff)
-		d <- df_all[ind,]
-		
-		list_names <- unique(d$group)
+		if(sum(ind)==4){
+			#df_all <- list_eTerm[,ind]
+			df_all <- list_eTerm
+			## extract the columns: name fc adjp group
+			ind <- which(df_all$adjp < FDR.cutoff)
+			d <- df_all[ind,]
+			list_names <- unique(d$group)
+		}else{
+			return(NULL)
+		}
 	}
 	
 	## group factor

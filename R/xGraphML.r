@@ -1,12 +1,17 @@
-#' Function to visualise a graph object of class "igraph"
+#' Function to generate a graphml file from a graph object of class "igraph"
 #'
-#' \code{xGraphML} is supposed to visualise a graph object of class "igraph". It also allows vertices/nodes color-coded according to the input pattern. 
+#' \code{xGraphML} is supposed to generate a graphml file from a graph object of class "igraph".
 #'
 #' @param g an object of class "igraph"
-#' @param pattern a numeric vector used to color-code vertices/nodes. Notably, if the input vector contains names, then these names should include all node names of input graph, i.e. V(g)$name, since there is a mapping operation. After mapping, the length of the patern vector should be the same as the number of nodes of input graph; otherwise, this input pattern will be ignored. The way of how to color-code is to map values in the pattern onto the whole colormap (see the next arguments: colormap, ncolors, zlim and colorbar)
+#' @param node.label either a vector labelling nodes or a character specifying which node attribute used for the labelling. If NULL (by default), no node labelling. If provided as a vector, a node with 'NA' will be not labelled
+#' @param label.wrap.width a positive integer specifying wrap width of name
+#' @param node.tooltip either a vector used for node tooltips or a character specifying which node attribute used for the tooltips. If NULL (by default), node attribute 'name' will be used node lab
+#' @param node.link a string specifying hyperlink address. By default, it is NULL meaning no hyperlink
+#' @param node.color a character specifying which node attribute used for node coloring. If NULL (by default), it is '#BFFFBF'
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z/patttern values for which colors should be plotted, defaulting to the range of the finite values of z. Each of the given colors will be used to color an equispaced interval of this range. The midpoints of the intervals cover the range, so that values just outside the range will be plotted
+#' @param node.size either a vector specifying node size or a character specifying which node attribute used for the node size. If NULL (by default), it will be 30
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML'
 #' @return
 #' invisible
@@ -30,10 +35,10 @@
 #' # 4) visualise the graph with vertices being color-coded by the pattern
 #' pattern <- runif(vcount(ig))
 #' names(pattern) <- V(ig)$name
-#' xGraphML(g=ig, pattern=pattern, colormap="bwr")
+#' xGraphML(g=ig, colormap="wyr")
 #' }
 
-xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, filename='xGraphML')
+xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.tooltip=NULL, node.link=NULL, node.color=NULL, colormap='wyr', ncolors=64, zlim=NULL, node.size=NULL, filename='xGraphML')
 {
     
     if (class(g) != "igraph"){
@@ -44,21 +49,13 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
     
     ######################################################################################
     ######################################################################################
-    nsize <- vcount(ig)
-    if (!is.null(pattern)){
-    
-        flag <- 0
-        if(!is.null(names(pattern))){
-            pattern <- pattern[V(ig)$name]
-        }
-        if(length(pattern)==nsize){
-            flag <- 1
-        }
-                
-        if(flag==1){
+    ## node.color (by default, "#BFFFBF")
+    if (!is.null(node.color)){
+    	pattern <- igraph::vertex_attr(ig, node.color)
+     
+        if(!is.null(pattern)){
         	
         	pattern <- as.numeric(pattern)
-        	
         	pattern_nona <- pattern[!is.na(pattern)]
         	pattern_nona <- as.numeric(pattern_nona)
         	
@@ -75,7 +72,7 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
             
             ## A function to map a vector to colors
             vec2color <- function(vec, colormap=colormap, ncolors=ncolors, zlim=zlim){
-                palette.name <- visColormap(colormap=colormap)
+                palette.name <- xColormap(colormap=colormap)
                 colors <- palette.name(ncolors)
                 scale <- length(colors)/(max(zlim)-min(zlim))
                 sapply(1:length(vec), function(x){
@@ -87,19 +84,16 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
 					}
                 })
             }
-            vertex.color <- vec2color(pattern, colormap=colormap, ncolors=ncolors, zlim=zlim)
+            node.color <- vec2color(pattern, colormap=colormap, ncolors=ncolors, zlim=zlim)
         }else{
             warning("The input 'pattern' is ignored. Please check the help for enabling your input")
-            vertex.color <- rep("#BFFFBF", nsize)
+            node.color <- rep("#BFFFBF", vcount(ig))
         }
     }else{
-        vertex.color <- rep("#BFFFBF", nsize)
+        node.color <- rep("#BFFFBF", vcount(ig))
     }
     ######################################################################################
     ######################################################################################
-    
-	V(ig)$label <- V(ig)$name
-    V(ig)$name <- paste0('n', 1:vcount(ig))
     
     #############
     ## head
@@ -118,7 +112,81 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
     #############
     ## nodes
     #############
+    nnode <- igraph::vcount(ig)
+    
+    ## node.label (by default, NULL)
+    if(length(node.label)!=nnode){
+		if(!is.null(node.label)){
+			node.label <- igraph::vertex_attr(ig, node.label)
+		}
+		if(is.null(node.label)){
+			#node.label <- igraph::vertex_attr(ig, 'name')
+			node.label <- rep(NA, nnode)
+		}
+	}
+	node.label <- unlist(lapply(node.label, function(x) gsub('/','-',x)))
+	node.label <- unlist(lapply(node.label, function(x) gsub('&','-',x)))
+	
+	## text wrap
+	if(!is.null(label.wrap.width)){
+		width <- as.integer(label.wrap.width)
+		res_list <- lapply(node.label, function(x){
+			if(!is.na(x)){
+				x <- gsub('_', ' ', x)
+				y <- strwrap(x, width=width)
+				if(length(y)>1){
+					paste0(y[1], '...')
+				}else{
+					y
+				}
+			}else{
+				x
+			}
+		})
+		node.label <- unlist(res_list)
+	}
+	
+    ## node.tooltip (by default, the 'name' node attribute)
+    if(length(node.tooltip)!=nnode){
+		if(!is.null(node.tooltip)){
+			node.tooltip <- igraph::vertex_attr(ig, node.tooltip)
+		}
+		if(is.null(node.tooltip)){
+			node.tooltip <- igraph::vertex_attr(ig, 'name')
+		}
+    }
+    node.tooltip <- unlist(lapply(node.tooltip, function(x) gsub('/','-',x)))
+    node.tooltip <- unlist(lapply(node.tooltip, function(x) gsub('&','-',x)))
+    
+    ## node.size (by default, 30)
+    if(length(node.size)!=nnode){
+		if(!is.null(node.size)){
+			node.size <- igraph::vertex_attr(ig, node.size)
+			node.size <- 5 + 24 * (node.size - min(node.size)) / (max(node.size) - min(node.size))
+		}
+		if(is.null(node.size)){
+			node.size <- rep(30, nnode)
+		}
+    }
+    
+    ## artificially create 'name'
+    V(ig)$label <- V(ig)$name
+    V(ig)$name <- paste0('n', 1:vcount(ig))
+    ## layout
+    glayout <- igraph::layout_with_kk(ig)
+    
+    ## do loop
     df_nodes <- igraph::get.data.frame(ig, what="vertices")
+    df_nodes$node.label <- node.label
+    df_nodes$node.tooltip <- node.tooltip
+    #df_nodes$node.color <- node.color
+    df_nodes$node.color <- paste0(node.color, 'cc')
+    df_nodes$node.size <- node.size
+    
+    ### sort: NA comes last
+    #df_nodes <- df_nodes[with(df_nodes,order(node.label)), ]
+    ###
+    
     ls_nodes <- lapply(1:nrow(df_nodes), function(i){
     	
     	k <- 0
@@ -126,24 +194,39 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
     	
     	k <- k+1
     	vec[k] <- paste0('<node id="', df_nodes$name[i], '">')
+    	
+    	#######
+    	if(!is.null(node.link)){
+			k <- k+1
+			vec[k] <- paste0('<data key="d1"><![CDATA[', node.link, '/', df_nodes$node.label[i], ']]></data>')
+    	}
+    	#######
+    	
     	k <- k+1
-    	vec[k] <- paste0('<data key="d1"><![CDATA[http://galahad.well.ox.ac.uk:3030/pidb/target/', df_nodes$label[i], ']]></data>')
-    	k <- k+1
-    	vec[k] <- paste0('<data key="d2"><![CDATA[', df_nodes$term_name[i], ']]></data>')
+    	vec[k] <- paste0('<data key="d2"><![CDATA[', df_nodes$node.tooltip[i], ']]></data>')
     	k <- k+1
     	vec[k] <- paste0('<data key="d3">')
     	k <- k+1
     	vec[k] <- paste0('<y:ShapeNode>')
     	k <- k+1
-    	vec[k] <- paste0('<y:Geometry height="150" width="300" x="0" y="0"/>')
+    	vec[k] <- paste0('<y:Geometry height="', df_nodes$node.size[i], '" width="', df_nodes$node.size[i] ,'" x="0" y="0"/>')
+    	#vec[k] <- paste0('<y:Geometry height="1" width="2" x="', glayout[i,1], '" y="', glayout[i,2], '"/>')
     	k <- k+1
-    	vec[k] <- paste0('<y:Fill color="', vertex.color[i], '" transparent="false"/>')
+    	vec[k] <- paste0('<y:Fill color="', df_nodes$node.color[i], '" transparent="false"/>')
     	k <- k+1
-    	vec[k] <- paste0('<y:BorderStyle color="#999999" raised="false" type="line" width="2.0"/>')
+    	vec[k] <- paste0('<y:BorderStyle color="#dddddd" raised="false" type="line" width="1"/>')
+    	
+    	########
     	k <- k+1
-    	vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="24" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="10" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="10" x="0" y="0">', df_nodes$label[i], '</y:NodeLabel>')
+    	if(!is.na(df_nodes$node.label[i])){
+    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="#000000" verticalTextPosition="bottom" visible="true" width="30" x="0" y="0">', df_nodes$node.label[i], '</y:NodeLabel>')
+    	}else{
+    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="#000000" verticalTextPosition="bottom" visible="false" width="30" x="0" y="0">', df_nodes$node.tooltip[i], '</y:NodeLabel>')
+    	}
+    	########
+    	
     	k <- k+1
-    	vec[k] <- paste0('<y:Shape type="roundrectangle"/>')
+    	vec[k] <- paste0('<y:Shape type="ellipse"/>')
     	k <- k+1
     	vec[k] <- paste0('</y:ShapeNode>')
     	k <- k+1
@@ -156,7 +239,7 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
     vec_nodes <- unlist(ls_nodes)
     output.nodes <- paste(vec_nodes, collapse='\n')
     
-   #############
+   	############
     ## edges
     #############
     df_edges <- igraph::get.data.frame(ig, what="edges")
@@ -177,11 +260,11 @@ xGraphML <- function(g, pattern=NULL, colormap='wyr', ncolors=64, zlim=NULL, fil
     	k <- k+1
     	
     	if(0){
-    	vec[k] <- paste0('<y:Path sx="23.0" sy="0.0" tx="-23.589796832899538" ty="45.93944090514677"/>')
+    	vec[k] <- paste0('<y:Path sx="0" sy="0" tx="0" ty="0"/>')
     	k <- k+1
     	}
     	
-    	vec[k] <- paste0('<y:LineStyle color="#000000" type="line" width="1.0"/>')
+    	vec[k] <- paste0('<y:LineStyle color="#aaaaaaaa" type="line" width="1.0"/>')
     	k <- k+1
     	vec[k] <- paste0('<y:Arrows source="none" target="standard"/>')
     	k <- k+1

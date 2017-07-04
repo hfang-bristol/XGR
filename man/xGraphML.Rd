@@ -2,23 +2,33 @@
 % Please edit documentation in R/xGraphML.r
 \name{xGraphML}
 \alias{xGraphML}
-\title{Function to visualise a graph object of class "igraph"}
+\title{Function to generate a graphml file from a graph object of class "igraph"}
 \usage{
-xGraphML(g, pattern = NULL, colormap = "wyr", ncolors = 64, zlim =
-NULL,
+xGraphML(g, node.label = NULL, label.wrap.width = NULL,
+node.tooltip = NULL, node.link = NULL, node.color = NULL,
+colormap = "wyr", ncolors = 64, zlim = NULL, node.size = NULL,
 filename = "xGraphML")
 }
 \arguments{
 \item{g}{an object of class "igraph"}
 
-\item{pattern}{a numeric vector used to color-code vertices/nodes.
-Notably, if the input vector contains names, then these names should
-include all node names of input graph, i.e. V(g)$name, since there is a
-mapping operation. After mapping, the length of the patern vector
-should be the same as the number of nodes of input graph; otherwise,
-this input pattern will be ignored. The way of how to color-code is to
-map values in the pattern onto the whole colormap (see the next
-arguments: colormap, ncolors, zlim and colorbar)}
+\item{node.label}{either a vector labelling nodes or a character
+specifying which node attribute used for the labelling. If NULL (by
+default), no node labelling. If provided as a vector, a node with 'NA'
+will be not labelled}
+
+\item{label.wrap.width}{a positive integer specifying wrap width of
+name}
+
+\item{node.tooltip}{either a vector used for node tooltips or a
+character specifying which node attribute used for the tooltips. If
+NULL (by default), node attribute 'name' will be used node lab}
+
+\item{node.link}{a string specifying hyperlink address. By default, it
+is NULL meaning no hyperlink}
+
+\item{node.color}{a character specifying which node attribute used for
+node coloring. If NULL (by default), it is '#BFFFBF'}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -40,6 +50,10 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted}
 
+\item{node.size}{either a vector specifying node size or a character
+specifying which node attribute used for the node size. If NULL (by
+default), it will be 30}
+
 \item{filename}{the without-extension part of the name of the output
 file. By default, it is 'xGraphML'}
 }
@@ -47,9 +61,8 @@ file. By default, it is 'xGraphML'}
 invisible
 }
 \description{
-\code{xGraphML} is supposed to visualise a graph object of class
-"igraph". It also allows vertices/nodes color-coded according to the
-input pattern.
+\code{xGraphML} is supposed to generate a graphml file from a graph
+object of class "igraph".
 }
 \note{
 none
@@ -72,7 +85,7 @@ ig <- igraph::induced.subgraph(g, vids=nodeInduced)
 # 4) visualise the graph with vertices being color-coded by the pattern
 pattern <- runif(vcount(ig))
 names(pattern) <- V(ig)$name
-xGraphML(g=ig, pattern=pattern, colormap="bwr")
+xGraphML(g=ig, colormap="wyr")
 }
 }
 \seealso{
