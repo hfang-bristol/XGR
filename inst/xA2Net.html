@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise an igraph object using ggnetwork</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xA2Net"><tr><td>xA2Net</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise an igraph object using ggnetwork</h2>
+
+<h3>Description</h3>
+
+<p><code>xA2Net</code> is supposed to visualise an igraph object using
+ggnetwork.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xA2Net(g, node.label = NULL, label.wrap.width = NULL,
+node.label.size = NULL, node.label.color = "darkblue",
+node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
+0.01,
+node.label.force = 1, node.shape = 19, node.xcoord = NULL,
+node.ycoord = NULL, node.color = NULL, node.color.title = NULL,
+colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
+node.size = NULL, node.size.title = NULL, node.size.range = c(1, 4),
+slim = NULL, title = "", edge.color = "black", edge.color.alpha = 0.5,
+edge.curve = 0.1, edge.arrow.gap = 0.02)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>node.label</code></td>
+<td>
+<p>either a vector labelling nodes or a character
+specifying which node attribute used for the labelling. If NULL (by
+default), no node labelling</p>
+</td></tr>
+<tr valign="top"><td><code>label.wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of
+node labelling</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.size</code></td>
+<td>
+<p>a vector specifying node size or a character
+specifying which node attribute used for node label size</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.color</code></td>
+<td>
+<p>the node label color</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.alpha</code></td>
+<td>
+<p>the 0-1 value specifying transparency of node
+labelling</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.padding</code></td>
+<td>
+<p>the padding around the labeled node</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.arrow</code></td>
+<td>
+<p>the arrow pointing to the labeled node</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.force</code></td>
+<td>
+<p>the repelling force between overlapping labels</p>
+</td></tr>
+<tr valign="top"><td><code>node.shape</code></td>
+<td>
+<p>an integer specifying node shape</p>
+</td></tr>
+<tr valign="top"><td><code>node.xcoord</code></td>
+<td>
+<p>a vector specifying x coordinates. If NULL, it will
+be created using igraph::layout_with_kk</p>
+</td></tr>
+<tr valign="top"><td><code>node.ycoord</code></td>
+<td>
+<p>a vector specifying y coordinates. If NULL, it will
+be created using igraph::layout_with_kk</p>
+</td></tr>
+<tr valign="top"><td><code>node.color</code></td>
+<td>
+<p>a character specifying which node attribute used for
+node coloring</p>
+</td></tr>
+<tr valign="top"><td><code>node.color.title</code></td>
+<td>
+<p>a character specifying the title for node
+coloring</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum values for which colors should be
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>node.size</code></td>
+<td>
+<p>either a vector specifying node size or a character
+specifying which node attribute used for the node size</p>
+</td></tr>
+<tr valign="top"><td><code>node.size.title</code></td>
+<td>
+<p>a character specifying the title for node
+sizing</p>
+</td></tr>
+<tr valign="top"><td><code>node.size.range</code></td>
+<td>
+<p>the range of actual node size</p>
+</td></tr>
+<tr valign="top"><td><code>slim</code></td>
+<td>
+<p>the minimum and maximum values for which sizes should be
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>title</code></td>
+<td>
+<p>a character specifying the title for the plot</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>a character specifying the edge colors</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color.alpha</code></td>
+<td>
+<p>the 0-1 value specifying transparency of edge
+colors</p>
+</td></tr>
+<tr valign="top"><td><code>edge.curve</code></td>
+<td>
+<p>a numeric value specifying the edge curve. 0 for the
+straight line</p>
+</td></tr>
+<tr valign="top"><td><code>edge.arrow.gap</code></td>
+<td>
+<p>a gap between the arrow and the node</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xA2Net</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+# load REACTOME
+# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
+RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
+nodes="R-HSA-168256", mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# 4) visualise the graph with vertices being color-coded
+gp &lt;- xA2Net(g=ig, node.label='node.label', label.wrap.width=30,
+node.label.size='node.label.size', node.label.color='black',
+node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0,
+node.label.force=2, node.shape=19, node.xcoord='xcoord',
+node.ycoord='ycoord', node.color='adjp',
+node.color.title='-log10(FDR)', colormap='grey-orange-darkred',
+ncolors=64, zlim=c(0,zlim_max), node.size='zscore',
+node.size.title='Z-score', slim=c(0,slim_max),
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+gp &lt;- xA2Net(g=ls_ig, node.label='node.label', label.wrap.width=30,
+node.label.size='node.label.size', node.label.color='black',
+node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0,
+node.label.force=2, node.shape=19, node.xcoord='xcoord',
+node.ycoord='ycoord', node.color='adjp',
+node.color.title='-log10(FDR)', colormap='grey-orange-darkred',
+ncolors=64, zlim=c(0,zlim_max), node.size='zscore',
+node.size.title='Z-score', slim=c(0,slim_max),
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+
+# 5) visualise gene network
+glayout &lt;- igraph::layout_with_kk(g)
+V(g)$xcoord &lt;- glayout[,1]
+V(g)$ycoord &lt;- glayout[,2]
+V(g)$degree &lt;- igraph::degree(g)
+gp &lt;- xA2Net(g=g, node.label='name', node.label.size=2,
+node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
+node.label.arrow=0, node.label.force=0.01, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',
+node.color.title='5-star\nrating', colormap='yellow-red', ncolors=64,
+zlim=c(0,5), node.size='degree', node.size.title='Degree', slim=c(0,5),
+edge.color="orange",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0.025,
+title='')
+gp_rating &lt;- xA2Net(g=g, node.label='name', node.label.size=2,
+node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1,
+node.label.arrow=0, node.label.force=0.01, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',
+node.color.title='5-star\nrating', colormap='white-yellow-red',
+ncolors=64, zlim=c(0,5), node.size.range=5,
+edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02,
+title='')
+
+## End(Not run)
+</pre>
+
+
+</body></html>

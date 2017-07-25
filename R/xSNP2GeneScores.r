@@ -32,8 +32,10 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
+#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #'
+#' \dontrun{
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
@@ -89,6 +91,7 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
 	df_nGenes <- xSNP2nGenes(data=df_SNP$SNP, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, verbose=verbose, RData.location=RData.location)
 	
 	if(!is.na(include.TAD)){
+		TAD <- NULL
 		df_nGenes <- base::subset(df_nGenes, TAD!='Excluded')
 	}
 	

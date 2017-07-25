@@ -2,6 +2,8 @@
 
 S3method(print,eTerm)
 export(eTerm)
+export(xA2Net)
+export(xA2NetCode)
 export(xCheckParallel)
 export(xCircos)
 export(xColormap)
