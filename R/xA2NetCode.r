@@ -54,7 +54,7 @@
 #' # 1b) visualise the graph with nodes coded
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
 #' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=7, height=7)
-#' print(ls_gp$code + coord_equal(ratio=1.1))
+#' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
 #' 
@@ -261,7 +261,7 @@ xA2NetCode <- function(g, node.level='term_distance', node.level.value=2, node.l
     tt <- gridExtra::ttheme_default(base_size=table.base.size,
     		padding=unit(c(1,1),"mm"), 
     		core=list(fg_params=list(lineheight=0.8, fontfamily='sans'), bg_params=list(fill=c('snow1','snow2'))),
-    		colhead=list(bg_params=list(fill="snow3"), fg_params=list(cex=1.2)),
+    		colhead=list(bg_params=list(fill="snow3"), fg_params=list(cex=1)),
     		rowhead=list(fg_params=list(hjust=0, x=0, fontface="bold.italic"), bg_params=list(fill=c('snow2','snow1'))),
     )
 	

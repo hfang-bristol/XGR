@@ -47,11 +47,13 @@
 #' nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
 #' ig <- igraph::induced.subgraph(g, vids=nodeInduced)
 #'
-#' # 4) visualise the graph with vertices being color-coded
-#' gp <- xA2Net(g=ig, node.label='node.label', label.wrap.width=30, node.label.size='node.label.size', node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=2, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='adjp', node.color.title='-log10(FDR)', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,zlim_max), node.size='zscore', node.size.title='Z-score', slim=c(0,slim_max), edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
-#' gp <- xA2Net(g=ls_ig, node.label='node.label', label.wrap.width=30, node.label.size='node.label.size', node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=2, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='adjp', node.color.title='-log10(FDR)', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,zlim_max), node.size='zscore', node.size.title='Z-score', slim=c(0,slim_max), edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
+#' # visualise the graph with vertices being color-coded
+#' V(ig)$degree <- igraph::degree(ig)
+#' gp <- xA2Net(g=ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
+#' #gp <- xA2Net(g=ls_ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
 #' 
-#' # 5) visualise gene network
+#' ###########################
+#' # visualise gene network
 #' glayout <- igraph::layout_with_kk(g)
 #' V(g)$xcoord <- glayout[,1]
 #' V(g)$ycoord <- glayout[,2]

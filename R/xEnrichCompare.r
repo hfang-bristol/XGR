@@ -67,6 +67,9 @@ xEnrichCompare <- function(list_eTerm, displayBy=c("fc","adjp","fdr","zscore","p
     
     ## Remove null elements in a list
 	list_eTerm <- base::Filter(base::Negate(is.null), list_eTerm)
+    if(length(list_eTerm)==0){
+    	return(NULL)
+    }
     
 	## Combine into a data frame called 'df_all'
 	list_names <- names(list_eTerm)
