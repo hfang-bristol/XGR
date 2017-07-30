@@ -176,6 +176,44 @@ vertex.shape="sphere")
 library(RCircos)
 xCircos(g=subnet, entity="Gene", colormap="white-gray",
 RData.location=RData.location)
+
+# g) visualise the subnet using the same layout_with_kk
+df_tmp <- df[match(V(subnet)$name,df$Symbol),]
+vec_tmp <- colnames(df_tmp)
+names(vec_tmp) <- vec_tmp
+glayout <- igraph::layout_with_kk(subnet)
+V(subnet)$xcoord <- glayout[,1]
+V(subnet)$xcoord <- glayout[,2]
+# g1) colored according to FDR
+ls_ig <- lapply(vec_tmp, function(x){
+ig <- subnet
+V(ig)$fdr <- -log10(as.numeric(df_tmp[,x]))
+ig
+})
+gp_FDR <- xA2Net(g=ls_g, node.label='name', node.label.size=2,
+node.label.color='blue', node.label.alpha=0.8, node.label.padding=0.25,
+node.label.arrow=0, node.label.force=0.1, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='fdr',
+node.color.title=expression(-log[10]('FDR')),
+colormap='grey-yellow-orange', ncolors=64, zlim=c(0,3),
+node.size.range=4,
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.1,edge.arrow.gap=0.025)
+# g2) colored according to FC
+ls_ig <- lapply(vec_tmp, function(x){
+ig <- subnet
+V(ig)$lfc <- as.numeric(df_tmp[,x])
+ig
+})
+gp_FC <- xA2Net(g=ls_g, node.label='name', node.label.size=2,
+node.label.color='blue', node.label.alpha=0.8, node.label.padding=0.25,
+node.label.arrow=0, node.label.force=0.1, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='lfc',
+node.color.title=expression(log[2]('FC')), colormap='cyan1-grey-pink1',
+ncolors=64, zlim=c(-3,3), node.size.range=4,
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.1,edge.arrow.gap=0.025)
+# g3) colored according to FC
+gridExtra::grid.arrange(grobs=list(gp_FDR, gp_FC), ncol=2,
+as.table=TRUE)
 }
 }
 \seealso{

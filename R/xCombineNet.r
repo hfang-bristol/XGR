@@ -83,11 +83,9 @@ xCombineNet <- function(list_ig, combineBy=c('union','intersect'), attrBy=c("int
 	})
 	df_edge <- do.call(rbind, ls_edge)
 	if(combineBy=='intersect'){
-		from <- to <- NULL
-		#ftc <- plyr::ddply(df_edge, .(from,to), nrow)
-		ftc <- plyr::ddply(df_edge, c('from','to'), nrow)
-		ind <- which(ftc[,3]==length(ls_ig))
-		df_edge <- ftc[ind, c(1,2)]
+		from <- to <- count <- NULL
+		ftc <- df_edge %>% dplyr::group_by(from,to) %>% dplyr::summarize(count=n()) %>% dplyr::filter(count==length(ls_ig)) %>% dplyr::select(from, to)
+		df_edge <- as.data.frame(ftc)
 		if(!keep.all.vertices){
 			tmp_nodes <- unique(c(df_edge[,1], df_edge[,2]))
 			ind <- match(df_node$name, tmp_nodes)

@@ -23,6 +23,7 @@
 #' @importFrom stats sd
 #' @importFrom BiocGenerics unlist
 #' @importFrom plot3D image2D persp3D image3D contour3D
+#' @importFrom dplyr select filter arrange mutate group_by summarise desc n
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples

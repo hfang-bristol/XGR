@@ -99,6 +99,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		####
 		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment significance: -log10(FDR)")
+		
 	}else if(displayBy=='fc'){
 		df <- df[with(df,order(fc,-adjp)),]
 		df$name <- factor(df$name, levels=df$name)

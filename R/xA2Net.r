@@ -50,7 +50,7 @@
 #' # visualise the graph with vertices being color-coded
 #' V(ig)$degree <- igraph::degree(ig)
 #' gp <- xA2Net(g=ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
-#' #gp <- xA2Net(g=ls_ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
+#' gp <- xA2Net(g=ls_ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
 #' 
 #' ###########################
 #' # visualise gene network
@@ -96,7 +96,7 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 			if(!is.null(node.ycoord)){
 				node.ycoord <- igraph::vertex_attr(ig, node.ycoord)
 			}
-				
+			
 			if(is.null(node.xcoord) | is.null(node.ycoord)){
 				## layout
 				#glayout <- igraph::layout_with_kk(ig)

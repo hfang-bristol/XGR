@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw a volcano plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xVolcano"><tr><td>xVolcano</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to draw a volcano plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xVolcano</code> is supposed to draw a volcano plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xVolcano(data, column.lfc = "lfc", column.fdr = "fdr", cutoff.lfc = 1,
+cutoff.fdr = 0.05, colors = c("#EEEEEE", "darkgrey", "pink", "red"),
+column.label = NULL, top = 10, top.direction = c("both", "up", "down"),
+label.size = 2, label.color = "black", label.alpha = 0.8,
+label.padding = 0.5, label.arrow = 0.01, label.force = 0.5,
+xlim = NULL, ylim = NULL, y.scale = c("normal", "log"),
+xlab = expression(log[2]("fold change")),
+ylab = expression(-log[10]("FDR")), font.family = "sans",
+signature = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>column.lfc</code></td>
+<td>
+<p>a character specifying 'lfc' column (log2-transformed
+fold change)</p>
+</td></tr>
+<tr valign="top"><td><code>column.fdr</code></td>
+<td>
+<p>a character specifying 'fdr' column</p>
+</td></tr>
+<tr valign="top"><td><code>cutoff.lfc</code></td>
+<td>
+<p>a numeric defining 'lfc' cutoff. By default, it is 1
+(at least 2-fold changes)</p>
+</td></tr>
+<tr valign="top"><td><code>cutoff.fdr</code></td>
+<td>
+<p>a numeric defining 'fdr' cutoff. By default, it is
+0.05</p>
+</td></tr>
+<tr valign="top"><td><code>colors</code></td>
+<td>
+<p>a 4-element vector for color-coded points. By default, it
+is c(&quot;#EEEEEE&quot;,&quot;darkgrey&quot;,&quot;pink&quot;,&quot;red&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>column.label</code></td>
+<td>
+<p>a character specifying 'label' column</p>
+</td></tr>
+<tr valign="top"><td><code>top</code></td>
+<td>
+<p>an integer specifying the number of the top points for
+labellings</p>
+</td></tr>
+<tr valign="top"><td><code>top.direction</code></td>
+<td>
+<p>the direction (up- and down-regulated) of the top
+points. It can be one of 'both' (up- and down-regulated), 'up'
+(up-regulated only) and 'down' (down-regulated only)</p>
+</td></tr>
+<tr valign="top"><td><code>label.size</code></td>
+<td>
+<p>the label size</p>
+</td></tr>
+<tr valign="top"><td><code>label.color</code></td>
+<td>
+<p>the label color</p>
+</td></tr>
+<tr valign="top"><td><code>label.alpha</code></td>
+<td>
+<p>the 0-1 value specifying transparency of labelling</p>
+</td></tr>
+<tr valign="top"><td><code>label.padding</code></td>
+<td>
+<p>the padding around the labeled</p>
+</td></tr>
+<tr valign="top"><td><code>label.arrow</code></td>
+<td>
+<p>the arrow pointing to the labeled</p>
+</td></tr>
+<tr valign="top"><td><code>label.force</code></td>
+<td>
+<p>the repelling force between overlapping labels</p>
+</td></tr>
+<tr valign="top"><td><code>xlim</code></td>
+<td>
+<p>the limits in the x-axis</p>
+</td></tr>
+<tr valign="top"><td><code>ylim</code></td>
+<td>
+<p>the limits in the y-axis</p>
+</td></tr>
+<tr valign="top"><td><code>y.scale</code></td>
+<td>
+<p>how to transform the y scale. It can be &quot;normal&quot; for no
+transformation, and &quot;log&quot; for log-based transformation</p>
+</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+<p>the x labelling. By default, it is expression(log[2](&quot;fold
+change&quot;))</p>
+</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+<p>the y labelling. By default, it is
+expression(-log[10](&quot;FDR&quot;))</p>
+</td></tr>
+<tr valign="top"><td><code>font.family</code></td>
+<td>
+<p>the font family for texts</p>
+</td></tr>
+<tr valign="top"><td><code>signature</code></td>
+<td>
+<p>logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xVolcano</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+## End(Not run)
+</pre>
+
+
+</body></html>
