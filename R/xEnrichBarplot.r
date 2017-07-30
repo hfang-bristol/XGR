@@ -89,41 +89,50 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		df$name <- unlist(res_list)
 	}
 	
-	name <- height <- NULL
+	name <- height <- direction <- hjust <- NULL
+	adjp <- zscore <- pvalue <- fc <- NULL
+	
+	##########
+	## consider the direction of z-score
+	df <- df %>% dplyr::mutate(direction=ifelse(zscore>0,1,-1))
+	##########	
+	
 	if(displayBy=='adjp' | displayBy=='fdr'){
-		df <- df[with(df,order(-adjp,zscore)),]
+		df <- df %>% dplyr::arrange(direction, desc(adjp), zscore) %>% dplyr::mutate(height=-1*log10(adjp)) %>% dplyr::mutate(hjust=1)
 		df$name <- factor(df$name, levels=df$name)
-		df$height <- -1*log10(df$adjp)
 		####
 		df$height[is.infinite(df$height)] <- max(df$height[!is.infinite(df$height)])
 		####
 		p <- ggplot(df, aes(x=name, y=height))
-		p <- p + ylab("Enrichment significance: -log10(FDR)")
+		p <- p + ylab(expression(paste("Enrichment significance: ", -log[10]("FDR"))))
 		
 	}else if(displayBy=='fc'){
-		df <- df[with(df,order(fc,-adjp)),]
+		df <- df %>% dplyr::arrange(direction, fc, desc(adjp)) %>% dplyr::mutate(height=log2(fc)) %>% dplyr::mutate(hjust=ifelse(height>=0,1,0))
 		df$name <- factor(df$name, levels=df$name)
-		df$height <- df$fc
 		p <- ggplot(df, aes(x=name, y=height))
-		p <- p + ylab("Enrichment changes")
+		p <- p + ylab(expression(paste("Enrichment changes: ", log[2]("FC"))))
+		
 	}else if(displayBy=='pvalue'){
-		df <- df[with(df,order(-pvalue,zscore)),]
+		df <- df %>% dplyr::arrange(direction, desc(pvalue), zscore) %>%  dplyr::mutate(height=-1*log10(pvalue)) %>% dplyr::mutate(hjust=1)
 		df$name <- factor(df$name, levels=df$name)
-		df$height <- -1*log10(df$pvalue)
 		####
 		df$height[is.infinite(df$height)] <- max(df$height[!is.infinite(df$height)])
 		####
 		p <- ggplot(df, aes(x=name, y=height))
-		p <- p + ylab("Enrichment significance: -log10(p-value)")
+		p <- p + ylab(expression(paste("Enrichment significance: ", -log[10]("p-value"))))
+
 	}else if(displayBy=='zscore'){
-		df <- df[with(df,order(zscore,-adjp)),]
+		df <- df %>% dplyr::arrange(direction, zscore, desc(adjp)) %>% dplyr::mutate(height=zscore) %>% dplyr::mutate(hjust=ifelse(height>=0,1,0))
 		df$name <- factor(df$name, levels=df$name)
-		df$height <- df$zscore
 		p <- ggplot(df, aes(x=name, y=height))
 		p <- p + ylab("Enrichment z-scores")
+
 	}
 	
-	bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient(low="lightyellow",high="orange") + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	#bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient(low="lightyellow",high="orange")
+	bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient2(low="cyan", mid="grey", high="orange", midpoint=0)
+	bp <- bp + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	
 	bp <- bp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	
 	if(bar.label){
@@ -134,9 +143,14 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 			sub("-0?", "-", res)
 		}
 		label <- to_scientific_notation(df$adjp)
-		label <- paste('FDR', as.character(label), sep='=')
+		df$label <- paste('FDR', as.character(label), sep='=')
 		
-		bp <- bp + geom_text(aes(label=label),hjust=1,size=bar.label.size,family=font.family)
+		## hjust==1
+		df_sub <- df %>% dplyr::filter(hjust==1)
+		bp <- bp + geom_text(data=df_sub, aes(label=label),hjust=1,size=bar.label.size,family=font.family)
+		## hjust==0
+		df_sub <- df %>% dplyr::filter(hjust==0)
+		bp <- bp + geom_text(data=df_sub, aes(label=label),hjust=0,size=bar.label.size,family=font.family)
 	}
 	
 	## caption
