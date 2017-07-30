@@ -7,9 +7,8 @@
 xEnricherYours(data.file, annotation.file, background.file = NULL,
 size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
 "fisher", "binomial"), background.annotatable.only = T,
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-verbose = T)
+p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
+"bonferroni", "holm", "hochberg", "hommel"), verbose = T)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of entities
@@ -70,6 +69,11 @@ background is further restricted to annotatable genes (covered by
 background genes are those after being overlapped with annotatable
 genes. Notably, if only one annotation is provided in
 'annotation.file', it should be false}
+
+\item{p.tail}{the tail used to calculate p-values. It can be either
+"two-tails" for the significance based on two-tails (ie both over- and
+under-overrepresentation) or "one-tail" (by default) for the
+significance based on one tail (ie only over-representation)}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The

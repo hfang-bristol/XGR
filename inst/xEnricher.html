@@ -23,12 +23,13 @@ can respect the hierarchy of the ontology.
 xEnricher(data, annotation, g, background = NULL, size.range = c(10,
 2000),
 min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
-"binomial"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = TRUE,
-verbose = T)
+"binomial"), p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
+0.01,
+lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = TRUE, verbose = T)
 </pre>
 
 
@@ -96,6 +97,13 @@ finding the significance, they are in order: hypergeometric test &gt;
 fisher's exact test &gt; binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
 binomial test</p>
+</td></tr>
+<tr valign="top"><td><code>p.tail</code></td>
+<td>
+<p>the tail used to calculate p-values. It can be either
+&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
+under-overrepresentation) or &quot;one-tail&quot; (by default) for the
+significance based on one tail (ie only over-representation)</p>
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>

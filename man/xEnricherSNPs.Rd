@@ -7,12 +7,13 @@
 xEnricherSNPs(data, background = NULL, ontology = c("EF", "EF_disease",
 "EF_phenotype", "EF_bp"), include.LD = NA, LD.r2 = 0.8,
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = T, verbose = T,
+test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = T, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -72,6 +73,11 @@ finding the significance, they are in order: hypergeometric test >
 fisher's exact test > binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test < fisher's exact test <
 binomial test}
+
+\item{p.tail}{the tail used to calculate p-values. It can be either
+"two-tails" for the significance based on two-tails (ie both over- and
+under-overrepresentation) or "one-tail" (by default) for the
+significance based on one tail (ie only over-representation)}
 
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The

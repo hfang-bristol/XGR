@@ -3,7 +3,7 @@ CHANGES IN VERSION 1.1.1
 
 NEW FEATURES
 
-    o Modify 'xGRviaGenomicAnno' enabling two-side p-value calculation
+    o Modify functions ('xEnricher', 'xEnricherGenes', 'xEnricherSNPs', 'xEnricherYours', 'xGRviaGenomicAnno') enabling two-side p-value calculation
 
     o Add a new function 'xVisInterpAnimate' for animating irregular data interpolation and visualisation
     
