@@ -508,14 +508,30 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	}
 	
     ## Binomial test: sampling at random from the background with the constant probability of having annotated genes (with replacement)
-    doBinomialTest <- function(X, K, M, N, lower.tail){
+    doBinomialTest <- function(X, K, M, N, p.tail){
         # X: num of success in sampling
         # K: num of sampling
         # M: num of success in background
         # N: num in background
         
         N <- max(N, M)
-        p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=lower.tail, log.p=F))
+    	#########################
+    	if(K==0 || M==0 || N==0){
+    		p.value <- 1
+    	}else{
+    		if(p.tail=='one-tail'){
+    			p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    		}else{
+    			if(X>=K*M/N){
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    			}else{
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=T, log.p=F)
+    			}
+    		}
+    	}
+    	#########################
+        #p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=F, log.p=F))
+
         return(p.value)
     }
 	#####################################
@@ -684,15 +700,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			z.score <- 0
 		}
 		
-		######################
-		lower.tail <- F
-		if(p.tail=='two-tails'){
-			if(X < x.exp){
-				lower.tail <- T
-			}
-		}
-		######################
-		p.value <- doBinomialTest(X, K, M, N, lower.tail)
+		p.value <- doBinomialTest(X, K, M, N, p.tail)
 		
 		## output
 		c(X, K, M, N, X/K, M/N, (X/K)/(M/N), z.score, p.value)

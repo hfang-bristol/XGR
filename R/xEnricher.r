@@ -205,7 +205,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     }
 
     ## Hypergeometric test: sampling at random from the background containing annotated and non-annotated genes (without replacement); thus compare sampling to background
-    doHypergeoTest <- function(genes.group, genes.term, genes.universe, lower.tail){
+    doHypergeoTest <- function(genes.group, genes.term, genes.universe, p.tail){
         genes.hit <- intersect(genes.group, genes.term)
         # num of success in sampling
         X <- length(genes.hit)
@@ -220,13 +220,30 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         m <- M
         n <- N-M # num of failure in background
         k <- K
-        p.value <- ifelse(m==0 || k==0, 1, stats::phyper(x,m,n,k, lower.tail=lower.tail, log.p=F))
+    	#########################
+    	if(m==0 || k==0){
+    		p.value <- 1
+    	}else{
+    		if(p.tail=='one-tail'){
+    			p.value <- stats::phyper(x,m,n,k, lower.tail=F, log.p=F)
+    		}else{
+    			if(X>=K*M/N){
+    				p.value <- stats::phyper(x,m,n,k, lower.tail=F, log.p=F)
+    			}else{
+    				p.value <- stats::phyper(x,m,n,k, lower.tail=T, log.p=F)
+    			}
+    		}
+    	}
+    	#########################
+        #p.value <- ifelse(m==0 || k==0, 1, stats::phyper(x,m,n,k, lower.tail=lower.tail, log.p=F))
+        
+        
         return(p.value)
     }
     
     
     ## Binomial test: sampling at random from the background with the constant probability of having annotated genes (with replacement)
-    doBinomialTest <- function(genes.group, genes.term, genes.universe, lower.tail){
+    doBinomialTest <- function(genes.group, genes.term, genes.universe, p.tail){
         genes.hit <- intersect(genes.group, genes.term)
         # num of success in sampling
         X <- length(genes.hit)
@@ -236,8 +253,24 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         M <- length(genes.term)
         # num in background
         N <- length(genes.universe)
-    
-        p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=lower.tail, log.p=F))
+    	
+    	#########################
+    	if(K==0 || M==0 || N==0){
+    		p.value <- 1
+    	}else{
+    		if(p.tail=='one-tail'){
+    			p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    		}else{
+    			if(X>=K*M/N){
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    			}else{
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=T, log.p=F)
+    			}
+    		}
+    	}
+    	#########################
+        #p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=F, log.p=F))
+        
         return(p.value)
     }
     
@@ -350,13 +383,6 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     subg <- dnet::dDAGinduce(g=subg, nodes_query=terms, path.mode=path.mode)
 	set_info <- data.frame(id=V(subg)$term_id, name=V(subg)$term_name, distance=V(subg)$term_distance, row.names=V(subg)$name)
     
-	######################
-	lower.tail <- F
-	if(p.tail=='two-tails'){
-		lower.tail <- T
-	}
-	######################
-    
     if(ontology.algorithm=="none"){
     
         if(verbose){
@@ -373,8 +399,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
             genes.term <- unique(unlist(gs[term]))
             p.value <- switch(test,
                 fisher =  doFisherTest(genes.group, genes.term, genes.universe),
-                hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail),
-                binomial = doBinomialTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail)
+                hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, p.tail=p.tail),
+                binomial = doBinomialTest(genes.group, genes.term, genes.universe, p.tail=p.tail)
             )
         })
         
@@ -428,8 +454,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     ## do test based on the whole genes as background
                     pvalue_whole <- switch(test,
                         fisher =  doFisherTest(genes.group, genes.term, genes.universe),
-                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail),
-                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail)
+                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, p.tail=p.tail),
+                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, p.tail=p.tail)
                     )
                     zscore_whole <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc_whole <- fcHyper(genes.group, genes.term, genes.universe)
@@ -448,8 +474,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     ## do test based on the genes in parents as background
                     pvalue_relative <- switch(test,
                         fisher =  doFisherTest(genes.group.parent, genes.term.parent, genes.parent),
-                        hypergeo = doHypergeoTest(genes.group.parent, genes.term.parent, genes.parent),
-                        binomial = doBinomialTest(genes.group.parent, genes.term.parent, genes.parent)
+                        hypergeo = doHypergeoTest(genes.group.parent, genes.term.parent, genes.parent, p.tail=p.tail),
+                        binomial = doBinomialTest(genes.group.parent, genes.term.parent, genes.parent, p.tail=p.tail)
                     )
                     zscore_relative <- zscoreHyper(genes.group.parent, genes.term.parent, genes.parent)
                     fc_relative <- fcHyper(genes.group.parent, genes.term.parent, genes.parent)
@@ -512,8 +538,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     ## do test
                     pvalue <- switch(test,
                         fisher =  doFisherTest(genes.group, genes.term, genes.universe),
-                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail),
-                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail)
+                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, p.tail=p.tail),
+                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, p.tail=p.tail)
                     )
                     zscore <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc <- fcHyper(genes.group, genes.term, genes.universe)
@@ -589,8 +615,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     ## do test
                     pvalue.old <- switch(test,
                         fisher =  doFisherTest(genes.group, genes.term, genes.universe),
-                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail),
-                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, lower.tail=lower.tail)
+                        hypergeo = doHypergeoTest(genes.group, genes.term, genes.universe, p.tail=p.tail),
+                        binomial = doBinomialTest(genes.group, genes.term, genes.universe, p.tail=p.tail)
                     )
                     zscore.old <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc.old <- fcHyper(genes.group, genes.term, genes.universe)
@@ -632,8 +658,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                             ## recalculate the significance
                             pvalue.new <- switch(test,
                                 fisher =  doFisherTest(genes.group, genes.term.new, genes.universe),
-                                hypergeo = doHypergeoTest(genes.group, genes.term.new, genes.universe, lower.tail=lower.tail),
-                                binomial = doBinomialTest(genes.group, genes.term.new, genes.universe, lower.tail=lower.tail)
+                                hypergeo = doHypergeoTest(genes.group, genes.term.new, genes.universe, p.tail=p.tail),
+                                binomial = doBinomialTest(genes.group, genes.term.new, genes.universe, p.tail=p.tail)
                             )
                             zscore.new <- zscoreHyper(genes.group, genes.term.new, genes.universe)
                             fc.new <- fcHyper(genes.group, genes.term.new, genes.universe)
