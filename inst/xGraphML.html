@@ -18,9 +18,13 @@ object of class &quot;igraph&quot;.
 
 <pre>
 xGraphML(g, node.label = NULL, label.wrap.width = NULL,
-node.tooltip = NULL, node.link = NULL, node.color = NULL,
-colormap = "wyr", ncolors = 64, zlim = NULL, node.size = NULL,
-filename = "xGraphML")
+node.label.size = 12, node.label.color = "#000000", node.tooltip =
+NULL,
+node.link = NULL, node.xcoord = "xcoord", node.ycoord = "ycoord",
+node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
+nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
+zlim = NULL, node.size = 30, node.coord.scale = 300,
+edge.color = "#00000033", edge.width = 1, filename = "xGraphML")
 </pre>
 
 
@@ -43,6 +47,14 @@ will be not labelled</p>
 <p>a positive integer specifying wrap width of
 name</p>
 </td></tr>
+<tr valign="top"><td><code>node.label.size</code></td>
+<td>
+<p>the node label size</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.color</code></td>
+<td>
+<p>the node label color</p>
+</td></tr>
 <tr valign="top"><td><code>node.tooltip</code></td>
 <td>
 <p>either a vector used for node tooltips or a
@@ -53,6 +65,16 @@ NULL (by default), node attribute 'name' will be used node lab</p>
 <td>
 <p>a string specifying hyperlink address. By default, it
 is NULL meaning no hyperlink</p>
+</td></tr>
+<tr valign="top"><td><code>node.xcoord</code></td>
+<td>
+<p>a vector specifying x coordinates. If NULL, it will
+be created using igraph::layout_with_kk</p>
+</td></tr>
+<tr valign="top"><td><code>node.ycoord</code></td>
+<td>
+<p>a vector specifying y coordinates. If NULL, it will
+be created using igraph::layout_with_kk</p>
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
@@ -77,6 +99,20 @@ standard color names can be found in
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
+<tr valign="top"><td><code>nlegend</code></td>
+<td>
+<p>the number of colors specified in the legend. By
+default, it is 11</p>
+</td></tr>
+<tr valign="top"><td><code>legend.label.size</code></td>
+<td>
+<p>the legend label size. By default, it is 10</p>
+</td></tr>
+<tr valign="top"><td><code>legend.interval</code></td>
+<td>
+<p>the interval between legends. By default, it is
+0.05</p>
+</td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
@@ -90,6 +126,20 @@ values just outside the range will be plotted</p>
 <p>either a vector specifying node size or a character
 specifying which node attribute used for the node size. If NULL (by
 default), it will be 30</p>
+</td></tr>
+<tr valign="top"><td><code>node.coord.scale</code></td>
+<td>
+<p>the node coord (-1,1) subjected to be rescaled.
+By default, it is 300</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>a character specifying the edge colors. By default,
+it is #00000033</p>
+</td></tr>
+<tr valign="top"><td><code>edge.width</code></td>
+<td>
+<p>the edge width. By default, it is 1</p>
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
@@ -135,9 +185,18 @@ nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
 ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
 
 # 4) visualise the graph with vertices being color-coded by the pattern
-pattern &lt;- runif(vcount(ig))
-names(pattern) &lt;- V(ig)$name
-xGraphML(g=ig, colormap="wyr")
+V(ig)$pattern &lt;- runif(vcount(ig))
+xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
+node.size=10, node.label.size=6)
+
+glayout &lt;- igraph::layout_with_kk(ig)
+V(ig)$xcoord &lt;- glayout[,1]
+V(ig)$ycoord &lt;- glayout[,2]
+xGraphML(g=ig, node.label="name", node.tooltip="description",
+node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern",
+colormap="grey-orange-darkred",
+node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+nlegend=11, node.size=30, node.coord.scale=300)
 
 ## End(Not run)
 </pre>

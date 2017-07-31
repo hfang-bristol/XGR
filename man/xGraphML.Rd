@@ -5,9 +5,13 @@
 \title{Function to generate a graphml file from a graph object of class "igraph"}
 \usage{
 xGraphML(g, node.label = NULL, label.wrap.width = NULL,
-node.tooltip = NULL, node.link = NULL, node.color = NULL,
-colormap = "wyr", ncolors = 64, zlim = NULL, node.size = NULL,
-filename = "xGraphML")
+node.label.size = 12, node.label.color = "#000000", node.tooltip =
+NULL,
+node.link = NULL, node.xcoord = "xcoord", node.ycoord = "ycoord",
+node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
+nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
+zlim = NULL, node.size = 30, node.coord.scale = 300,
+edge.color = "#00000033", edge.width = 1, filename = "xGraphML")
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -20,12 +24,22 @@ will be not labelled}
 \item{label.wrap.width}{a positive integer specifying wrap width of
 name}
 
+\item{node.label.size}{the node label size}
+
+\item{node.label.color}{the node label color}
+
 \item{node.tooltip}{either a vector used for node tooltips or a
 character specifying which node attribute used for the tooltips. If
 NULL (by default), node attribute 'name' will be used node lab}
 
 \item{node.link}{a string specifying hyperlink address. By default, it
 is NULL meaning no hyperlink}
+
+\item{node.xcoord}{a vector specifying x coordinates. If NULL, it will
+be created using igraph::layout_with_kk}
+
+\item{node.ycoord}{a vector specifying y coordinates. If NULL, it will
+be created using igraph::layout_with_kk}
 
 \item{node.color}{a character specifying which node attribute used for
 node coloring. If NULL (by default), it is '#BFFFBF'}
@@ -44,6 +58,14 @@ standard color names can be found in
 
 \item{ncolors}{the number of colors specified over the colormap}
 
+\item{nlegend}{the number of colors specified in the legend. By
+default, it is 11}
+
+\item{legend.label.size}{the legend label size. By default, it is 10}
+
+\item{legend.interval}{the interval between legends. By default, it is
+0.05}
+
 \item{zlim}{the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
 Each of the given colors will be used to color an equispaced interval
@@ -53,6 +75,14 @@ values just outside the range will be plotted}
 \item{node.size}{either a vector specifying node size or a character
 specifying which node attribute used for the node size. If NULL (by
 default), it will be 30}
+
+\item{node.coord.scale}{the node coord (-1,1) subjected to be rescaled.
+By default, it is 300}
+
+\item{edge.color}{a character specifying the edge colors. By default,
+it is #00000033}
+
+\item{edge.width}{the edge width. By default, it is 1}
 
 \item{filename}{the without-extension part of the name of the output
 file. By default, it is 'xGraphML'}
@@ -83,9 +113,18 @@ nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
 ig <- igraph::induced.subgraph(g, vids=nodeInduced)
 
 # 4) visualise the graph with vertices being color-coded by the pattern
-pattern <- runif(vcount(ig))
-names(pattern) <- V(ig)$name
-xGraphML(g=ig, colormap="wyr")
+V(ig)$pattern <- runif(vcount(ig))
+xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
+node.size=10, node.label.size=6)
+
+glayout <- igraph::layout_with_kk(ig)
+V(ig)$xcoord <- glayout[,1]
+V(ig)$ycoord <- glayout[,2]
+xGraphML(g=ig, node.label="name", node.tooltip="description",
+node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern",
+colormap="grey-orange-darkred",
+node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+nlegend=11, node.size=30, node.coord.scale=300)
 }
 }
 \seealso{
