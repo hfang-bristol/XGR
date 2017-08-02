@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a graph object of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xA2GraphML"><tr><td>xA2GraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to generate a graphml file from a graph object of class &quot;igraph&quot;</h2>
+
+<h3>Description</h3>
+
+<p><code>xA2GraphML</code> is supposed to generate a graphml file from a graph
+object of class &quot;igraph&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xA2GraphML(data, query = "AA:hsa04672", curation = c("manual",
+"automatic",
+"any"), node.label = "label", node.color = "lfc",
+colormap = "deepskyblue-white-darkorange", ncolors = 64, nlegend = 11,
+zlim = NULL, legend.title = "", node.tooltip = "tooltip",
+node.highlight = "fdr", node.highlight.cutoff = 0.05,
+edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
+color.thispath = "#bbbbbb", color.otherpath = "#cccccc",
+filename = "xA2GraphML", verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>query</code></td>
+<td>
+<p>the identity of a pathway in query. The full list of
+pathways in human can be found at
+<a href="http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=hsa">http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=hsa</a>.
+For example, 'AA:hsa04672' for 'NOD-like receptor signaling pathway',
+where the prefix 'AA:' can be ignored. Alternatively, it can be key
+words describing the pathway</p>
+</td></tr>
+<tr valign="top"><td><code>curation</code></td>
+<td>
+<p>the type of curation. It can be one of &quot;manual&quot; (only
+the manual one), &quot;automatic&quot; (only the automatic one) or &quot;any&quot; (first
+the manual one then the automatic one)</p>
+</td></tr>
+<tr valign="top"><td><code>node.label</code></td>
+<td>
+<p>a character specifying which column used for node
+labelling. By default, it is 'label'</p>
+</td></tr>
+<tr valign="top"><td><code>node.color</code></td>
+<td>
+<p>a character specifying which column used for node
+coloring. By default, it is 'lfc'</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>nlegend</code></td>
+<td>
+<p>the number of colors specified in the legend. By
+default, it is 11</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z/patttern values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the legend title. By default, it is &rdquo;</p>
+</td></tr>
+<tr valign="top"><td><code>node.tooltip</code></td>
+<td>
+<p>a character specifying which column used for node
+tooltip. By default, it is 'tooltip'. If not found, it will be
+'Symbol-Name-Color'</p>
+</td></tr>
+<tr valign="top"><td><code>node.highlight</code></td>
+<td>
+<p>a character specifying which column used for node
+highlighting. By default, it is 'fdr'. If so, those highlighted will
+have bold and larger labels</p>
+</td></tr>
+<tr valign="top"><td><code>node.highlight.cutoff</code></td>
+<td>
+<p>a numeric specifying the cutoff for node
+highlighting. By default, it is 0.05 meaninght those less than this
+cutoff will be highlighted</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>a character specifying the edge colors. By default,
+it is '#00000033'</p>
+</td></tr>
+<tr valign="top"><td><code>edge.width</code></td>
+<td>
+<p>the edge width. By default, it is 1</p>
+</td></tr>
+<tr valign="top"><td><code>color.gene</code></td>
+<td>
+<p>a character specifying the gene node colors. By
+default, it is '#dddddd'</p>
+</td></tr>
+<tr valign="top"><td><code>color.thispath</code></td>
+<td>
+<p>a character specifying the color for this pathway
+node. By default, it is '#bbbbbb'</p>
+</td></tr>
+<tr valign="top"><td><code>color.otherpath</code></td>
+<td>
+<p>a character specifying the color for other
+pathway nodes. By default, it is '#cccccc'</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xA2GraphML'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>invisible
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xA2GraphML</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+## load GWAS genes
+GWAS_Gene &lt;- xRDataLoader(RData.customised='GWAS_Gene',
+RData.location=RData.location)
+data &lt;- GWAS_Gene %&gt;% dplyr::filter(Odds_Ratio!='NULL' &amp;
+Disease_ID=='RA') %&gt;% dplyr::transmute(label=Symbol,
+lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %&gt;%
+dplyr::group_by(label) %&gt;% dplyr::summarise(lfc=max(lfc),
+fdr=min(fdr))
+
+## manual one (the same as curation='any')
+xA2GraphML(data, query="AA:hsa04630", curation='manual',
+node.label="label", node.color="lfc", node.highlight='fdr',
+node.highlight.cutoff=5e-8, filename='xA2GraphML',
+legend.title='log2(Odds ratio)', zlim=c(-1,1),
+RData.location=RData.location)
+## automatic one
+xA2GraphML(data, query="AA:hsa04630", curation='automatic',
+node.label="label", node.color="lfc", node.highlight='fdr',
+node.highlight.cutoff=5e-8, filename='xA2GraphML',
+legend.title='log2(Odds ratio)', zlim=c(-1,1),
+RData.location=RData.location)
+
+## key words 
+xA2GraphML(data, query="Asthma", curation='any', node.label="label",
+node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8,
+filename='xA2GraphML', RData.location=RData.location,
+legend.title='log2(Odds ratio)', zlim=c(-1,1))
+
+## End(Not run)
+</pre>
+
+
+</body></html>

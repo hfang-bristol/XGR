@@ -8,10 +8,11 @@ xGraphML(g, node.label = NULL, label.wrap.width = NULL,
 node.label.size = 12, node.label.color = "#000000", node.tooltip =
 NULL,
 node.link = NULL, node.xcoord = "xcoord", node.ycoord = "ycoord",
-node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
-nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
-zlim = NULL, node.size = 30, node.coord.scale = 300,
-edge.color = "#00000033", edge.width = 1, filename = "xGraphML")
+node.color.na = "#dddddd", node.color = NULL,
+colormap = "grey-orange-darkred", ncolors = 64, nlegend = 11,
+legend.label.size = 10, legend.interval = 0.05, zlim = NULL,
+node.size = 30, node.coord.scale = 300, edge.color = "#00000033",
+edge.width = 1, filename = "xGraphML")
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -40,6 +41,9 @@ be created using igraph::layout_with_kk}
 
 \item{node.ycoord}{a vector specifying y coordinates. If NULL, it will
 be created using igraph::layout_with_kk}
+
+\item{node.color.na}{the color for nodes with NA. By default, it is
+'#dddddd'}
 
 \item{node.color}{a character specifying which node attribute used for
 node coloring. If NULL (by default), it is '#BFFFBF'}

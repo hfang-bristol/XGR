@@ -11,6 +11,7 @@
 #' @param node.link a string specifying hyperlink address. By default, it is NULL meaning no hyperlink
 #' @param node.xcoord a vector specifying x coordinates. If NULL, it will be created using igraph::layout_with_kk
 #' @param node.ycoord a vector specifying y coordinates. If NULL, it will be created using igraph::layout_with_kk
+#' @param node.color.na the color for nodes with NA. By default, it is '#dddddd'
 #' @param node.color a character specifying which node attribute used for node coloring. If NULL (by default), it is '#BFFFBF'
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
@@ -52,7 +53,7 @@
 #' xGraphML(g=ig, node.label="name", node.tooltip="description", node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern", colormap="grey-orange-darkred", node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=", nlegend=11, node.size=30, node.coord.scale=300)
 #' }
 
-xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=12, node.label.color='#000000', node.tooltip=NULL, node.link=NULL, node.xcoord="xcoord", node.ycoord="ycoord", node.color=NULL, colormap='grey-orange-darkred', ncolors=64, nlegend=11, legend.label.size=10, legend.interval=0.05, zlim=NULL, node.size=30, node.coord.scale=300, edge.color="#00000033", edge.width=1, filename='xGraphML')
+xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=12, node.label.color='#000000', node.tooltip=NULL, node.link=NULL, node.xcoord="xcoord", node.ycoord="ycoord", node.color.na='#dddddd', node.color=NULL, colormap='grey-orange-darkred', ncolors=64, nlegend=11, legend.label.size=10, legend.interval=0.05, zlim=NULL, node.size=30, node.coord.scale=300, edge.color="#00000033", edge.width=1, filename='xGraphML')
 {
     
     if (class(g) != "igraph"){
@@ -92,7 +93,7 @@ xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=
                 scale <- length(colors)/(max(zlim)-min(zlim))
                 sapply(1:length(vec), function(x){
                 	if(is.na(vec[x])){
-                		'transparent'
+                		'#dddddd'
                 	}else{
 						ind <- floor(1+(vec[x]-min(zlim))*scale)
 						colors[max(1,min(ncolors,ind))]
@@ -281,9 +282,9 @@ xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=
     	########
     	k <- k+1
     	if(!is.na(df_nodes$node.label[i])){
-    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',node.label.size,'" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="',node.label.color,'" verticalTextPosition="bottom" visible="true" width="30" x="0" y="0">', df_nodes$node.label[i], '</y:NodeLabel>')
+    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',node.label.size,'" fontStyle="italic" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="',node.label.color,'" verticalTextPosition="bottom" visible="true" width="30" x="0" y="0">', df_nodes$node.label[i], '</y:NodeLabel>')
     	}else{
-    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',node.label.size,'" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="',node.label.color,'" verticalTextPosition="bottom" visible="false" width="30" x="0" y="0">', df_nodes$node.tooltip[i], '</y:NodeLabel>')
+    		vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',node.label.size,'" fontStyle="italic" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="n" textColor="',node.label.color,'" verticalTextPosition="bottom" visible="false" width="30" x="0" y="0">', df_nodes$node.tooltip[i], '</y:NodeLabel>')
     	}
     	########
     	
@@ -330,7 +331,7 @@ xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=
 		
 			########
 			k <- k+1
-			vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',legend.label.size,'" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="w" textColor="#000000" verticalTextPosition="bottom" visible="true" width="30" x="0" y="0">', df_legends$labels[i], '</y:NodeLabel>')
+			vec[k] <- paste0('<y:NodeLabel alignment="center" autoSizePolicy="content" borderDistance="0.0" fontFamily="Arial" fontSize="',legend.label.size,'" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30" horizontalTextPosition="center" iconTextGap="4" modelName="sides" modelPosition="w" textColor="#000000" verticalTextPosition="bottom" visible="true" width="30" x="0" y="0">', df_legends$labels[i], '</y:NodeLabel>')
 			########
 		
 			k <- k+1
