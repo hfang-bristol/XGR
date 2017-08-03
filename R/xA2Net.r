@@ -87,6 +87,15 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 	ls_df <- lapply(1:length(ls_ig), function(i){
     	ig <- ls_ig[[i]]
     	
+    	########## remove any attributes with the list data type
+    	node_attrs <- igraph::vertex_attr_names(ig)
+    	for(k in 1:length(node_attrs)){
+    		if(class(igraph::vertex_attr(ig, node_attrs[k]))=='list'){
+    			ig <- ig %>% igraph::delete_vertex_attr(node_attrs[k])
+    		}
+    	}
+    	##########
+
 		nnode <- igraph::vcount(ig)
 		## node.xcoord (by default, NULL)
 		if(length(node.xcoord)!=nnode | length(node.ycoord)!=nnode){

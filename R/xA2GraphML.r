@@ -214,8 +214,8 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
 			message(sprintf("\t %d genes in total and %d genes matched (%s)", n_total, n_matched, as.character(now)), appendLF=TRUE)
 		}
 		
+		############
 		ls_nodes <- lapply(1:nrow(df_nodes), function(i){
-		
 			ind_found <- match(df_nodes$name[i], df$Symbol)
 			ind_legend <- match(df_nodes$name[i], df_legends$name)
 		

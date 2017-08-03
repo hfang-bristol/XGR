@@ -53,7 +53,7 @@
 #'
 #' # 1b) visualise the graph with nodes coded
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=7, height=7)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -66,10 +66,11 @@
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, node.color='term_anno', node.color.title='# genes\n(log10)', colormap='white-cyan-darkcyan', zlim=c(1,4))
 #' 
 #' 
-#' # load EF
+#' # load EF (annotating GWAS reported genes)
 #' # 2a) restricted to disease ('EFO:0000408') and annotation (>=10)
+#' # 2a) restricted to immune system disease ('EFO:0000540') and annotation (>=10)
 #' g <- xRDataLoader(RData.customised='ig.EF', RData.location=RData.location)
-#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="EFO:0000408", mode="out")
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="EFO:0000540", mode="out")
 #' nodeClan <- V(g)[unique(unlist(neighs.out))]$name
 #' anno <- xRDataLoader(RData.customised='org.Hs.egEF', RData.location=RData.location)
 #' vec <- sapply(anno$gs, length)
@@ -78,13 +79,24 @@
 #' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
 #' vids <- intersect(nodeClan, nodeAnno)
 #' ig <- igraph::induced.subgraph(g, vids=vids)
-#'
+#' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 2b) visualise the graph with nodes coded
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=4, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=7, height=7)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
+#' # 2c) ## GWAS genes for immune system disease ('EFO:0000540')
+#' anno <- xRDataLoader(RData.customised='org.Hs.egEF', RData.location=RData.location)
+#' genes <- anno$gs[['EFO:0000540']]
+#' # 2d) ## GWAS SNPs for immune system disease ('EFO:0000540')
+#' annotation <- xRDataLoader(RData.customised='GWAS2EF', RData.location=RData.location)
+#' dag <- xDAGpropagate(g, annotation, path.mode="all_paths", propagation="min")
+#' snps <- unlist(V(dag)[V(dag)$name=='EFO:0000540']$anno)
+#' # 2e) ## ChEMBL targets for immune system disease ('EFO:0000540')
+#' annotation <- xRDataLoader(RData.customised='Target2EF', RData.location=RData.location)
+#' dag <- xDAGpropagate(g, annotation, path.mode="all_paths", propagation="max")
+#' targets <- unlist(V(dag)[V(dag)$name=='EFO:0000540']$anno)
 #' 
 #' 
 #' # load GOBP
@@ -99,10 +111,10 @@
 #' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
 #' vids <- intersect(nodeClan, nodeAnno)
 #' ig <- igraph::induced.subgraph(g, vids=vids)
-#'
+#' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 3b) visualise the graph with nodes coded
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=7, height=7)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -120,10 +132,74 @@
 #' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
 #' vids <- intersect(nodeClan, nodeAnno)
 #' ig <- igraph::induced.subgraph(g, vids=vids)
-#'
+#' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 4b) visualise the graph with nodes coded
 #' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2, simplify=T)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=7, height=7)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' print(ls_gp$code + coord_equal(ratio=1))
+#' print(ls_gp$table)
+#' dev.off()
+#' 
+#' 
+#' # load HPPA
+#' # 5a) restricted to Abnormality of the immune system ('HP:0002715') and annotation (>=50)
+#' g <- xRDataLoader(RData.customised='ig.HPPA', RData.location=RData.location)
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="HP:0002715", mode="out")
+#' nodeClan <- V(g)[unique(unlist(neighs.out))]$name
+#' anno <- xRDataLoader(RData.customised='org.Hs.egHPPA', RData.location=RData.location)
+#' vec <- sapply(anno$gs, length)
+#' nodeAnno <- names(vec[vec>=50])
+#' neighs.in <- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno, mode="in")
+#' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
+#' vids <- intersect(nodeClan, nodeAnno)
+#' ig <- igraph::induced.subgraph(g, vids=vids)
+#' V(ig)$anno <- anno$gs[V(ig)$name]
+#' # 5b) visualise the graph with nodes coded
+#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2, simplify=F)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' print(ls_gp$code + coord_equal(ratio=1))
+#' print(ls_gp$table)
+#' dev.off()
+#' 
+#' 
+#' # load DO
+#' # 6a) restricted to immune system disease ('DOID:2914') and annotation (>=10)
+#' g <- xRDataLoader(RData.customised='ig.DO', RData.location=RData.location)
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="DOID:2914", mode="out")
+#' nodeClan <- V(g)[unique(unlist(neighs.out))]$name
+#' anno <- xRDataLoader(RData.customised='org.Hs.egDO', RData.location=RData.location)
+#' vec <- sapply(anno$gs, length)
+#' nodeAnno <- names(vec[vec>=10])
+#' neighs.in <- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno, mode="in")
+#' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
+#' vids <- intersect(nodeClan, nodeAnno)
+#' ig <- igraph::induced.subgraph(g, vids=vids)
+#' V(ig)$anno <- anno$gs[V(ig)$name]
+#' # 6b) visualise the graph with nodes coded
+#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2, simplify=F)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' print(ls_gp$code + coord_equal(ratio=1))
+#' print(ls_gp$table)
+#' dev.off()
+#' 
+#' 
+#' # load MP
+#' # 7a) restricted to immune system phenotype ('MP:0005387') and annotation (>=50)
+#' # 7a) restricted to abnormal immune system physiology ('MP:0001790') and annotation (>=50)
+#' g <- xRDataLoader(RData.customised='ig.MP', RData.location=RData.location)
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="MP:0001790", mode="out")
+#' nodeClan <- V(g)[unique(unlist(neighs.out))]$name
+#' anno <- xRDataLoader(RData.customised='org.Hs.egMP', RData.location=RData.location)
+#' vec <- sapply(anno$gs, length)
+#' nodeAnno <- names(vec[vec>=50])
+#' neighs.in <- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno, mode="in")
+#' nodeAnno <- V(g)[unique(unlist(neighs.in))]$name
+#' vids <- intersect(nodeClan, nodeAnno)
+#' ig <- igraph::induced.subgraph(g, vids=vids)
+#' V(ig)$anno <- anno$gs[V(ig)$name]
+#' # 7b) visualise the graph with nodes coded
+#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=3, node.shape=19, node.size.range=4, edge.color.alpha=0.2, simplify=F)
+#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
