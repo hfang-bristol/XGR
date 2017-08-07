@@ -5,8 +5,8 @@
 #' @param g an object of class "igraph"
 #' @param node.label either a vector labelling nodes or a character specifying which node attribute used for the labelling. If NULL (by default), no node labelling
 #' @param label.wrap.width a positive integer specifying wrap width of node labelling
-#' @param node.label.size a vector specifying node size or a character specifying which node attribute used for node label size
-#' @param node.label.color the node label color
+#' @param node.label.size a character specifying which node attribute used for node label size
+#' @param node.label.color a character specifying which node attribute used for the node label color
 #' @param node.label.alpha the 0-1 value specifying transparency of node labelling
 #' @param node.label.padding the padding around the labeled node
 #' @param node.label.arrow the arrow pointing to the labeled node
@@ -24,12 +24,14 @@
 #' @param node.size.range the range of actual node size
 #' @param slim the minimum and maximum values for which sizes should be plotted
 #' @param title a character specifying the title for the plot
-#' @param edge.color a character specifying the edge colors
+#' @param edge.size a numeric value specifying the edge size. By default, it is 0.5
+#' @param edge.color a character specifying which edge attribute defining the the edge colors
 #' @param edge.color.alpha the 0-1 value specifying transparency of edge colors
 #' @param edge.curve a numeric value specifying the edge curve. 0 for the straight line
+#' @param edge.arrow a numeric value specifying the edge arrow. By default, it is 2
 #' @param edge.arrow.gap a gap between the arrow and the node
 #' @return
-#' a ggplot object
+#' a ggplot object, appended with 'data_nodes' and 'data_edges'
 #' @note none
 #' @export
 #' @seealso \code{\link{xA2Net}}
@@ -62,7 +64,7 @@
 #' gp_rating <- xA2Net(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02, title='')
 #' }
 
-xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NULL, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow.gap=0.02)
+xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NULL, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
 {
     
    	if(any(class(g) %in% c("igraph"))){
@@ -86,6 +88,10 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
     
 	ls_df <- lapply(1:length(ls_ig), function(i){
     	ig <- ls_ig[[i]]
+    	
+		if(igraph::vcount(ig)==0){
+			return(NULL)
+		}
     	
     	########## remove any attributes with the list data type
     	node_attrs <- igraph::vertex_attr_names(ig)
@@ -170,6 +176,21 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		}
 		V(ig)$n.label.size <- node.label.size
 	
+		## node.label.color (by default, 0)
+		if(length(node.label.color)!=nnode){
+			if(!is.null(node.label.color)){
+				tmp.node.label.color <- igraph::vertex_attr(ig, node.label.color)
+			}else{
+				tmp.node.label.color <- rep(0, nnode)
+			}
+			if(is.null(tmp.node.label.color)){
+				node.label.color <- rep(node.label.color, nnode)
+			}else{
+				node.label.color <- tmp.node.label.color
+			}
+		}
+		V(ig)$n.label.color <- node.label.color
+	
 		## node.color (by default, 0)
 		if(length(node.color)!=nnode){
 			if(!is.null(node.color)){
@@ -207,7 +228,25 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		node.size[node.size<=slim[1]] <- slim[1]
 		node.size[node.size>=slim[2]] <- slim[2]
 		V(ig)$n.size <- node.size
-
+		
+		###########################
+		nedge <- igraph::ecount(ig)
+		## edge.color (by default, 'black')
+		if(length(edge.color)!=nedge){
+			if(!is.null(edge.color)){
+				tmp.edge.color <- igraph::edge_attr(ig, edge.color)
+			}else{
+				tmp.edge.color <- rep('black', nedge)
+			}
+			if(is.null(tmp.edge.color)){
+				edge.color <- rep(edge.color, nedge)
+			}else{
+				edge.color <- tmp.edge.color
+			}
+		}
+		E(ig)$e.color <- edge.color
+		###########################
+		
 		gnet <- ggnetwork::ggnetwork(intergraph::asNetwork(ig), layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
 		data.frame(gnet, trait=rep(names(ls_ig)[i],nrow(gnet)), stringsAsFactors=F)
 	})
@@ -225,16 +264,17 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
     df$n.size <- as.numeric(df$n.size)
     
     #############################################################
-    n.color <- n.size <- n.label <- n.label.size <- NULL
+    n.color <- n.size <- n.label <- n.label.size <- n.label.color <- NULL
     x <- y <- xend <- yend <- NULL
     
 	## ggplot
 	gp <- ggplot(df, aes(x=x,y=y,xend=xend,yend=yend)) 
 	
+	e.color <- subset(df, !is.na(na.y))$e.color
 	if(igraph::is_directed(ls_ig[[1]])){
-		gp <- gp + ggnetwork::geom_edges(color=edge.color, alpha=edge.color.alpha, curvature=edge.curve, arrow=arrow(length=unit(3,"pt"),type="closed")) 
+		gp <- gp + ggnetwork::geom_edges(color=e.color, size=edge.size,  alpha=edge.color.alpha, curvature=edge.curve, arrow=arrow(length=unit(edge.arrow,"pt"),type="closed"), show.legend=FALSE) 
 	}else{
-		gp <- gp + ggnetwork::geom_edges(color=edge.color, alpha=edge.color.alpha, curvature=edge.curve)
+		gp <- gp + ggnetwork::geom_edges(color=e.color, size=edge.size, alpha=edge.color.alpha, curvature=edge.curve, show.legend=FALSE)
 	}
 	
 	gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size), shape=node.shape)
@@ -309,30 +349,31 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 			)
 		}
 		###########	
-	
-		if(length(unique(df$n.label.size))>1){
-			#
-			gp <- gp + my_geom_nodetext_repel(aes(label=n.label,size=n.label.size), lineheight=0.8, color=node.label.color, fontface="bold", alpha=node.label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(node.label.padding,"lines"), segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(node.label.arrow,'npc')), force=node.label.force)
-		}else{
-			if(unique(df$n.label.size)!=0){
-				gp <- gp + my_geom_nodetext_repel(aes(label=n.label), lineheight=0.8, size=unique(df$n.label.size), color=node.label.color, fontface="bold", alpha=node.label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(node.label.padding,"lines"), segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(node.label.arrow,'npc')), force=node.label.force)
-			}
-		}
-		
+		n.label.size <- subset(df, is.na(na.y))$n.label.size
+		n.label.color <- subset(df, is.na(na.y))$n.label.color
+		gp <- gp + my_geom_nodetext_repel(aes(label=n.label), lineheight=0.8, size=n.label.size, color=n.label.color, fontface="bold", alpha=node.label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(node.label.padding,"lines"), segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(node.label.arrow,'npc')), force=node.label.force)
 	}
     
     ####################
-    ## append data_nodes
+    
     if(1){
 		df <- gp$data
-		
+
 		na.y <- NULL
 		
+		## append data_nodes
 		df_sub <- subset(df, is.na(na.y))
-		ind <- match(colnames(df_sub), c('xend','yend','na.x','na.y'))
+		ind <- match(colnames(df_sub), c('xend','yend','na.x','na.y','e.color','edge.color'))
 		df_sub <- df_sub[,is.na(ind)]
 		df_sub <- df_sub[!duplicated(df_sub),]
 		gp$data_nodes <- df_sub
+		
+		## append data_edges
+		df_sub <- subset(df, !is.na(na.y))
+		ind <- match(colnames(df_sub), c('x','y','xend','yend','e.color','edge.color'))
+		df_sub <- df_sub[,!is.na(ind)]
+		df_sub <- df_sub[!duplicated(df_sub),]
+		gp$data_edges <- df_sub
     }
     
     invisible(gp)

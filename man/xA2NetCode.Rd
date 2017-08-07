@@ -11,11 +11,11 @@ node.label.alpha = 0.8, node.label.padding = 0, node.label.arrow =
 node.label.force = 0, node.shape = 19, node.xcoord = NULL,
 node.ycoord = NULL, node.color = NULL, node.color.title = NULL,
 colormap = "grey-grey", ncolors = 64, zlim = NULL,
-node.size.range = 4, title = "", edge.color = "black",
-edge.color.alpha = 0.4, edge.curve = 0.1, edge.arrow.gap = 0.02,
-node.table = "term_name", node.table.wrap = 50, table.base.size = 7,
-table.row.space = 2, table.nrow = 55, table.ncol = NULL,
-simplify = FALSE)
+node.size.range = 4, title = "", edge.size = 0.5,
+edge.color = "black", edge.color.alpha = 0.4, edge.curve = 0.1,
+edge.arrow = 2, edge.arrow.gap = 0.02, node.table = "term_name",
+node.table.wrap = 50, table.base.size = 7, table.row.space = 2,
+table.nrow = 55, table.ncol = NULL, root.code = "RT")
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -26,10 +26,11 @@ the node level. By default, it is 'term_distance'}
 \item{node.level.value}{a positive integer specifying the level value
 as major branches. By default, it is 2}
 
-\item{node.label.size}{a vector specifying node size or a character
-specifying which node attribute used for node label size}
+\item{node.label.size}{a character specifying which node attribute used
+for node label size}
 
-\item{node.label.color}{the node label color}
+\item{node.label.color}{a character specifying which node attribute
+used for the node label color}
 
 \item{node.label.alpha}{the 0-1 value specifying transparency of node
 labelling}
@@ -75,13 +76,20 @@ plotted}
 
 \item{title}{a character specifying the title for the plot}
 
-\item{edge.color}{a character specifying the edge colors}
+\item{edge.size}{a numeric value specifying the edge size. By default,
+it is 0.5}
+
+\item{edge.color}{a character specifying which edge attribute defining
+the the edge colors}
 
 \item{edge.color.alpha}{the 0-1 value specifying transparency of edge
 colors}
 
 \item{edge.curve}{a numeric value specifying the edge curve. 0 for the
 straight line}
+
+\item{edge.arrow}{a numeric value specifying the edge arrow. By
+default, it is 2}
 
 \item{edge.arrow.gap}{a gap between the arrow and the node}
 
@@ -103,11 +111,13 @@ the table}
 \item{table.ncol}{NULL or a positive integer specifying the number of
 columns per page. If NULL, it will be 3 or less}
 
-\item{simplify}{logical to simplify the graph or not. If TRUE, only
-keep edges from nodes to nodes with higher level}
+\item{root.code}{a character specifying the root code. By default, it
+is 'RT'}
 }
 \value{
-al list of ggplot objects, with two components: code and table
+a list with 3 components, two ggplot objects (code and table) and an
+igraph object (ig appended with node attributes 'node.code' and
+'node.table')
 }
 \description{
 \code{xA2NetCode} is supposed to create codes annotating nodes in an
@@ -246,7 +256,7 @@ V(ig)$anno <- anno$gs[V(ig)$name]
 # 4b) visualise the graph with nodes coded
 ls_gp <- xA2NetCode(g=ig, node.level='term_distance',
 node.level.value=1, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2, simplify=T)
+edge.color.alpha=0.2)
 pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
@@ -273,7 +283,7 @@ V(ig)$anno <- anno$gs[V(ig)$name]
 # 5b) visualise the graph with nodes coded
 ls_gp <- xA2NetCode(g=ig, node.level='term_distance',
 node.level.value=1, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2, simplify=F)
+edge.color.alpha=0.2)
 pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
@@ -300,7 +310,7 @@ V(ig)$anno <- anno$gs[V(ig)$name]
 # 6b) visualise the graph with nodes coded
 ls_gp <- xA2NetCode(g=ig, node.level='term_distance',
 node.level.value=2, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2, simplify=F)
+edge.color.alpha=0.2)
 pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
@@ -328,7 +338,7 @@ V(ig)$anno <- anno$gs[V(ig)$name]
 # 7b) visualise the graph with nodes coded
 ls_gp <- xA2NetCode(g=ig, node.level='term_distance',
 node.level.value=3, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2, simplify=F)
+edge.color.alpha=0.2)
 pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)

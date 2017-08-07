@@ -25,8 +25,9 @@ node.label.force = 1, node.shape = 19, node.xcoord = NULL,
 node.ycoord = NULL, node.color = NULL, node.color.title = NULL,
 colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
 node.size = NULL, node.size.title = NULL, node.size.range = c(1, 4),
-slim = NULL, title = "", edge.color = "black", edge.color.alpha = 0.5,
-edge.curve = 0.1, edge.arrow.gap = 0.02)
+slim = NULL, title = "", edge.size = 0.5, edge.color = "black",
+edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
+edge.arrow.gap = 0.02)
 </pre>
 
 
@@ -50,12 +51,13 @@ node labelling</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.size</code></td>
 <td>
-<p>a vector specifying node size or a character
-specifying which node attribute used for node label size</p>
+<p>a character specifying which node attribute used
+for node label size</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.color</code></td>
 <td>
-<p>the node label color</p>
+<p>a character specifying which node attribute
+used for the node label color</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.alpha</code></td>
 <td>
@@ -144,9 +146,15 @@ plotted</p>
 <td>
 <p>a character specifying the title for the plot</p>
 </td></tr>
+<tr valign="top"><td><code>edge.size</code></td>
+<td>
+<p>a numeric value specifying the edge size. By default,
+it is 0.5</p>
+</td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-<p>a character specifying the edge colors</p>
+<p>a character specifying which edge attribute defining
+the the edge colors</p>
 </td></tr>
 <tr valign="top"><td><code>edge.color.alpha</code></td>
 <td>
@@ -158,6 +166,11 @@ colors</p>
 <p>a numeric value specifying the edge curve. 0 for the
 straight line</p>
 </td></tr>
+<tr valign="top"><td><code>edge.arrow</code></td>
+<td>
+<p>a numeric value specifying the edge arrow. By
+default, it is 2</p>
+</td></tr>
 <tr valign="top"><td><code>edge.arrow.gap</code></td>
 <td>
 <p>a gap between the arrow and the node</p>
@@ -167,7 +180,7 @@ straight line</p>
 
 <h3>Value</h3>
 
-<p>a ggplot object
+<p>a ggplot object, appended with 'data_nodes' and 'data_edges'
 </p>
 
 

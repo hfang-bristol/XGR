@@ -4,9 +4,8 @@
 \alias{xA2GraphML}
 \title{Function to generate a graphml file from a graph object of class "igraph"}
 \usage{
-xA2GraphML(data, query = "AA:hsa04672", curation = c("manual",
-"automatic",
-"any"), node.label = "label", node.color = "lfc",
+xA2GraphML(data = NULL, query = "AA:hsa04672", curation = c("manual",
+"automatic", "any"), node.label = "label", node.color = "lfc",
 colormap = "deepskyblue-white-darkorange", ncolors = 64, nlegend = 11,
 zlim = NULL, legend.title = "", node.tooltip = "tooltip",
 node.highlight = "fdr", node.highlight.cutoff = 0.05,
@@ -110,6 +109,8 @@ none
 # Load the library
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+xA2GraphML(query="AA:hsa04630", RData.location=RData.location)
 
 ## load GWAS genes
 GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene',

@@ -69,6 +69,10 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     	ig <- g
     }
     
+    if(igraph::vcount(ig)==0){
+    	return(NULL)
+    }
+    
     if(is_directed(ig)){
     	#edge.arrow.size <- 0.8
     }
@@ -103,7 +107,7 @@ xVisNet <- function(g, pattern=NULL, colormap=c("yr","jet","gbr","wyr","br","bwr
     
     suppressWarnings(par_old <- graphics::par(no.readonly=TRUE))
     
-	visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, vertex.label.family=vertex.label.family, edge.arrow.size=edge.arrow.size, ...)
+	dnet::visNet(g=ig, pattern=pattern, colormap=colormap, ncolors=ncolors, zlim=zlim, colorbar=colorbar, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, vertex.label.family=vertex.label.family, edge.arrow.size=edge.arrow.size, ...)
     
     suppressWarnings(graphics::par(par_old))
     

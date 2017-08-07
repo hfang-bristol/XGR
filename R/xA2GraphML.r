@@ -35,6 +35,8 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
+#' xA2GraphML(query="AA:hsa04630", RData.location=RData.location)
+#' 
 #' ## load GWAS genes
 #' GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene', RData.location=RData.location)
 #' data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL' & Disease_ID=='RA') %>% dplyr::transmute(label=Symbol, lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>% dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
@@ -48,7 +50,7 @@
 #' xA2GraphML(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xA2GraphML', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-white-darkorange', ncolors=64, nlegend=11, zlim=NULL, legend.title='', node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xA2GraphML', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-white-darkorange', ncolors=64, nlegend=11, zlim=NULL, legend.title='', node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xA2GraphML', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -61,7 +63,9 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
 	if(all(c(node.label, node.color) %in% colnames(data))){
 		df <- data.frame(Symbol=data[,node.label], LFC=signif(data[,node.color],digits=2), stringsAsFactors=FALSE)
 	}else{
-		return(NULL)
+		df <- data.frame(Symbol=NA, LFC=0, stringsAsFactors=FALSE)
+		data <- df
+		#return(NULL)
 	}
 
     ## FDR (by default, 1)
@@ -85,6 +89,7 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
     # df$node.color
     ######################################################################################
     ## node.color (by default, "#BFFFBF")
+	df_legends <- NULL
     if (!is.null(node.color)){
     	ind <- match(node.color, colnames(data))
 
@@ -129,7 +134,7 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
             ############# 
             
         }else{
-            warning("The input 'pattern' is ignored. Please check the help for enabling your input")
+            #warning("The input 'pattern' is ignored. Please check the help for enabling your input")
             node.color <- rep("#BFFFBF", nrow(data))
         }
     }else{
@@ -192,6 +197,15 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
 		n_total <- 0
 		n_matched <- 0
 		for( i in 1:nrow(df_nodes)){
+			
+			########################
+			if(grepl('Legend',df_nodes$name[i])){
+				if(is.null(df_legends)){
+					next
+				}
+			}
+			########################
+					
 			ind_found <- match(df_nodes$name[i], df$Symbol)
 			ind_legend <- match(df_nodes$name[i], df_legends$name)
 			#############
@@ -216,6 +230,15 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
 		
 		############
 		ls_nodes <- lapply(1:nrow(df_nodes), function(i){
+		
+			########################
+			if(grepl('Legend',df_nodes$name[i])){
+				if(is.null(df_legends)){
+					return(NULL)
+				}
+			}
+			########################
+		
 			ind_found <- match(df_nodes$name[i], df$Symbol)
 			ind_legend <- match(df_nodes$name[i], df_legends$name)
 		
@@ -452,7 +475,7 @@ xA2GraphML <- function(data, query="AA:hsa04672", curation=c('manual','automatic
 			if(length(automatic_ind)==0){
 				warning(sprintf("Automated: no found for queried '%s'", query), appendLF=TRUE)
 				return(NULL)
-					
+				
 			}else if(length(automatic_ind)>1){
 				warning(sprintf("Automated: %d found for queried %s: only 1st kept", length(automatic_ind), query), appendLF=TRUE)
 				automatic_ind <- automatic_ind[1]

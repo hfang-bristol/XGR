@@ -12,8 +12,9 @@ node.label.force = 1, node.shape = 19, node.xcoord = NULL,
 node.ycoord = NULL, node.color = NULL, node.color.title = NULL,
 colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
 node.size = NULL, node.size.title = NULL, node.size.range = c(1, 4),
-slim = NULL, title = "", edge.color = "black", edge.color.alpha = 0.5,
-edge.curve = 0.1, edge.arrow.gap = 0.02)
+slim = NULL, title = "", edge.size = 0.5, edge.color = "black",
+edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
+edge.arrow.gap = 0.02)
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -25,10 +26,11 @@ default), no node labelling}
 \item{label.wrap.width}{a positive integer specifying wrap width of
 node labelling}
 
-\item{node.label.size}{a vector specifying node size or a character
-specifying which node attribute used for node label size}
+\item{node.label.size}{a character specifying which node attribute used
+for node label size}
 
-\item{node.label.color}{the node label color}
+\item{node.label.color}{a character specifying which node attribute
+used for the node label color}
 
 \item{node.label.alpha}{the 0-1 value specifying transparency of node
 labelling}
@@ -83,7 +85,11 @@ plotted}
 
 \item{title}{a character specifying the title for the plot}
 
-\item{edge.color}{a character specifying the edge colors}
+\item{edge.size}{a numeric value specifying the edge size. By default,
+it is 0.5}
+
+\item{edge.color}{a character specifying which edge attribute defining
+the the edge colors}
 
 \item{edge.color.alpha}{the 0-1 value specifying transparency of edge
 colors}
@@ -91,10 +97,13 @@ colors}
 \item{edge.curve}{a numeric value specifying the edge curve. 0 for the
 straight line}
 
+\item{edge.arrow}{a numeric value specifying the edge arrow. By
+default, it is 2}
+
 \item{edge.arrow.gap}{a gap between the arrow and the node}
 }
 \value{
-a ggplot object
+a ggplot object, appended with 'data_nodes' and 'data_edges'
 }
 \description{
 \code{xA2Net} is supposed to visualise an igraph object using

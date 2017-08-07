@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to construct an immune ontology</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xIOcreate"><tr><td>xIOcreate</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to construct an immune ontology</h2>
+
+<h3>Description</h3>
+
+<p><code>xIOcreate</code> is supposed to construct an immune ontology.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xIOcreate(cutoff.anno = 15, colormap = "ggplot2", filename =
+"xIOcreate",
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cutoff.anno</code></td>
+<td>
+<p>an integer specifying the annotation cutoff obove
+which ontology terms are considered</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xA2GraphML'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a list with 3 components, two ggplot objects (code and table) and an
+igraph object (ig) having attributes:
+</p>
+
+<ul>
+<li><p><code>name</code>: a node attribute for name (ie node.code)
+</p>
+</li>
+<li><p><code>term_id</code>: a node attribute for term_id (the primary
+source)
+</p>
+</li>
+<li><p><code>term_name</code>: a node attribute for term_name (the primary
+source)
+</p>
+</li>
+<li><p><code>term_distance</code>: a node attribute for term_distance
+(starting with 0, 1, ...)
+</p>
+</li>
+<li><p><code>term_namespace</code>: a node attribute for term_namespace (ie
+IO, Disease, Function, Phenotype)
+</p>
+</li>
+<li><p><code>anno</code>: a node attribute as a list storing annotated gene
+symbols
+</p>
+</li>
+<li><p><code>net</code>: a node attribute as a list storing connectivity
+between genes
+</p>
+</li>
+<li><p><code>path</code>: a node attribute as a list storing pathways
+enriched
+</p>
+</li>
+<li><p><code>node.label</code>: a node attribute for the node label in the
+form of '[nAnno-&gt;nNode@nEdge-&gt;nPath] term_name'
+</p>
+</li>
+<li><p><code>node.label.size</code>: a node attribute for the node label size
+(decreasing radiately)
+</p>
+</li>
+<li><p><code>node.label.color</code>: a node attribute for the node label
+color (grouped by the subontologies)
+</p>
+</li>
+<li><p><code>xcoord</code>: a node attribute for the node x coordinate
+</p>
+</li>
+<li><p><code>ycoord</code>: a node attribute for the node y coordinate
+</p>
+</li>
+<li><p><code>node.code</code>: a node attribute for the 3-letter node code,
+1st letter for the subontology, 2nd for the distance, 3rd for the
+sequential order at the same distance
+</p>
+</li>
+<li><p><code>node.table</code>: a node attribute for the node label in the
+lookup table
+</p>
+</li>
+<li><p><code>edge.color</code>: an edge attribute for the edge color (grouped
+by the subontologies)
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xIOcreate</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+ls_IO &lt;- xIOcreate(RData.location=RData.location)
+ls_IO$ig
+ls_IO$code
+ls_IO$table
+
+lapply(V(ls_IO$ig)[['b5c']]$path, function(x) xA2GraphML(query=x,
+filename=x, RData.location=RData.location))
+
+## End(Not run)
+</pre>
+
+
+</body></html>
