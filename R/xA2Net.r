@@ -5,13 +5,16 @@
 #' @param g an object of class "igraph"
 #' @param node.label either a vector labelling nodes or a character specifying which node attribute used for the labelling. If NULL (by default), no node labelling
 #' @param label.wrap.width a positive integer specifying wrap width of node labelling
+#' @param label.wrap.lineheight line height spacing for text in ggplot. By default it is 0.8
 #' @param node.label.size a character specifying which node attribute used for node label size
+#' @param node.label.fontface a character specifying which node attribute used for node label fontface ('plain', 'bold', 'italic', 'bold.italic')
 #' @param node.label.color a character specifying which node attribute used for the node label color
 #' @param node.label.alpha the 0-1 value specifying transparency of node labelling
 #' @param node.label.padding the padding around the labeled node
 #' @param node.label.arrow the arrow pointing to the labeled node
 #' @param node.label.force the repelling force between overlapping labels
-#' @param node.shape an integer specifying node shape
+#' @param node.shape an integer specifying node shape or a character specifying which node attribute used for the node shape (no matter whether it is numeric or character)
+#' @param node.shape.title a character specifying the title for node shaping
 #' @param node.xcoord a vector specifying x coordinates. If NULL, it will be created using igraph::layout_with_kk
 #' @param node.ycoord a vector specifying y coordinates. If NULL, it will be created using igraph::layout_with_kk
 #' @param node.color a character specifying which node attribute used for node coloring
@@ -19,6 +22,7 @@
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum values for which colors should be plotted
+#' @param na.color the color for NAs. By default, it is 'grey80'
 #' @param node.size either a vector specifying node size or a character specifying which node attribute used for the node size
 #' @param node.size.title a character specifying the title for node sizing
 #' @param node.size.range the range of actual node size
@@ -64,7 +68,7 @@
 #' gp_rating <- xA2Net(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02, title='')
 #' }
 
-xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NULL, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
+xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lineheight=0.8, node.label.size=NULL, node.label.fontface='plain', node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.shape.title=NULL, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, na.color='grey80', node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
 {
     
    	if(any(class(g) %in% c("igraph"))){
@@ -176,6 +180,21 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		}
 		V(ig)$n.label.size <- node.label.size
 	
+		## node.label.fontface (by default, 0)
+		if(length(node.label.fontface)!=nnode){
+			if(!is.null(node.label.fontface)){
+				tmp.node.label.fontface <- igraph::vertex_attr(ig, node.label.fontface)
+			}else{
+				tmp.node.label.fontface <- rep(0, nnode)
+			}
+			if(is.null(tmp.node.label.fontface)){
+				node.label.fontface <- rep(node.label.fontface, nnode)
+			}else{
+				node.label.fontface <- tmp.node.label.fontface
+			}
+		}
+		V(ig)$n.label.fontface <- node.label.fontface
+	
 		## node.label.color (by default, 0)
 		if(length(node.label.color)!=nnode){
 			if(!is.null(node.label.color)){
@@ -229,6 +248,21 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		node.size[node.size>=slim[2]] <- slim[2]
 		V(ig)$n.size <- node.size
 		
+		## node.shape (by default, 19)
+		if(length(node.shape)!=nnode){
+			if(!is.null(node.shape)){
+				tmp.node.shape <- igraph::vertex_attr(ig, node.shape)
+			}else{
+				tmp.node.shape <- rep(19, nnode)
+			}
+			if(is.null(tmp.node.shape)){
+				node.shape <- rep(node.shape, nnode)
+			}else{
+				node.shape <- tmp.node.shape
+			}
+		}
+		V(ig)$n.shape <- node.shape
+		
 		###########################
 		nedge <- igraph::ecount(ig)
 		## edge.color (by default, 'black')
@@ -262,9 +296,12 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
     ## make sure numeric
     df$n.color <- as.numeric(df$n.color)
     df$n.size <- as.numeric(df$n.size)
+
+    ## make sure factor    
+    df$n.shape <- factor(df$n.shape, levels=unique(df$n.shape))
     
     #############################################################
-    n.color <- n.size <- n.label <- n.label.size <- n.label.color <- NULL
+    n.color <- n.size <- n.shape <- n.label <- n.label.size <- n.label.color <- NULL
     x <- y <- xend <- yend <- NULL
     
 	## ggplot
@@ -277,16 +314,24 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		gp <- gp + ggnetwork::geom_edges(color=e.color, size=edge.size, alpha=edge.color.alpha, curvature=edge.curve, show.legend=FALSE)
 	}
 	
-	gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size), shape=node.shape)
+	if(length(unique(df$n.shape))==1){
+		gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size), shape=node.shape)
+	}else{
+		gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size, shape=n.shape))
+		#######
+		# node shape
+		gp <- gp + scale_shape(guide=guide_legend(node.shape.title,title.position="top",ncol=1))
+		#######
+	}
 	
 	if(is.null(node.color.title)){
 		node.color.title <- 'Node color'
 	}
 	if(is.null(zlim)){
-		zlim <- range(df$n.color)
+		zlim <- range(df$n.color[!is.na(df$n.color)])
 	}
 	if(zlim[1] != zlim[2]){
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
 	}else{
 		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5))
 	}
@@ -315,6 +360,11 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		if(zlim[1]==zlim[2]){
 			gp <- gp + guides(color="none")
 		}
+		
+		if(length(unique(df$n.shape))==1){
+			gp <- gp + guides(shape="none")
+		}
+		
     }
     gp <- gp + theme(legend.title=element_text(size=8,face="bold"),legend.text=element_text(size=6))
     
@@ -350,8 +400,9 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=NU
 		}
 		###########	
 		n.label.size <- subset(df, is.na(na.y))$n.label.size
+		n.label.fontface <- subset(df, is.na(na.y))$n.label.fontface
 		n.label.color <- subset(df, is.na(na.y))$n.label.color
-		gp <- gp + my_geom_nodetext_repel(aes(label=n.label), lineheight=0.8, size=n.label.size, color=n.label.color, fontface="bold", alpha=node.label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(node.label.padding,"lines"), segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(node.label.arrow,'npc')), force=node.label.force)
+		gp <- gp + my_geom_nodetext_repel(aes(label=n.label), lineheight=label.wrap.lineheight, size=n.label.size, color=n.label.color, fontface=n.label.fontface, alpha=node.label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(node.label.padding,"lines"), segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(node.label.arrow,'npc')), force=node.label.force)
 	}
     
     ####################

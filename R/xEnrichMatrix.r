@@ -72,7 +72,11 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 			## extract the columns: name fc adjp group
 			ind <- which(df_all$adjp < FDR.cutoff)
 			d <- df_all[ind,]
-			list_names <- unique(d$group)
+			if(is.factor(d$group)){
+				list_names <- levels(d$group)
+			}else{
+				list_names <- unique(d$group)
+			}
 		}else{
 			return(NULL)
 		}
@@ -131,9 +135,11 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		## sort by: nSig group fc (adjp)
 		d <- d[with(d, order(nSig,group,fc,-adjp)), ]
 		## define levels
-		d$name <- factor(d$name, levels=unique(d$name))
+		if(!is.factor(d$name)){
+			d$name <- factor(d$name, levels=unique(d$name))
+		}
 		d$val <- d$fc
-		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')], rows=levels(d$name), columns=levels(d$group)))
 		mat_val[mat_val==0] <- 1
 		title_size <- "FC"
 	}else if(displayBy=='adjp'){
@@ -143,17 +149,22 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		## sort by: nSig group adjp
 		d <- d[with(d, order(nSig,group,-adjp)), ]
 		## define levels
-		d$name <- factor(d$name, levels=unique(d$name))
+		if(!is.factor(d$name)){
+			d$name <- factor(d$name, levels=unique(d$name))
+		}
 		d$val <- -1*log10(d$adjp)
-		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')], rows=levels(d$name), columns=levels(d$group)))
 		title_size <- "-log10(FDR)"
+		
 	}else if(displayBy=='zscore'){
 		## sort by: nSig group zcore (adjp)
 		d <- d[with(d, order(nSig,group,zscore,-adjp)), ]
 		## define levels
-		d$name <- factor(d$name, levels=unique(d$name))
+		if(!is.factor(d$name)){
+			d$name <- factor(d$name, levels=unique(d$name))
+		}
 		d$val <- d$zscore
-		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')], rows=levels(d$name), columns=levels(d$group)))
 		title_size <- "Z-score"
 	}else if(displayBy=='pvalue'){
 		########
@@ -162,15 +173,17 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		## sort by: nSig group pvalue
 		d <- d[with(d, order(nSig,group,-pvalue)), ]
 		## define levels
-		d$name <- factor(d$name, levels=unique(d$name))
+		if(!is.factor(d$name)){
+			d$name <- factor(d$name, levels=unique(d$name))
+		}
 		d$val <- -1*log10(d$pvalue)
-		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')]))
+		mat_val <- as.matrix(xSparseMatrix(d[,c('name','group','val')], rows=levels(d$name), columns=levels(d$group)))
 		title_size <- "-log10(p-value)"
 	}
 	
 	d$bycol <- -1*log10(d$adjp)
 	
-	mat_fdr <- as.matrix(xSparseMatrix(d[,c('name','group','adjp')]))
+	mat_fdr <- as.matrix(xSparseMatrix(d[,c('name','group','adjp')], rows=levels(d$name), columns=levels(d$group)))
 	mat_fdr[mat_fdr==0] <- 1
 	
 	ind_row <- 1:nrow(mat_val)
@@ -207,7 +220,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		####
 		if(flip){
 			d$group <- factor(d$group, levels=rev(colnames(mat_val)))
-			d$name <- factor(d$name, levels=rownames(mat_val))				
+			d$name <- factor(d$name, levels=rownames(mat_val))
 		}else{
 			d$group <- factor(d$group, levels=colnames(mat_val))
 			d$name <- factor(d$name, levels=rev(rownames(mat_val)))
@@ -225,7 +238,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		
 		gp <- ggplot(d, aes(x=group, y=name, color=bycol))
 		gp <- gp + geom_point(aes(size=val),shape=shape)
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title="-log10(FDR)",title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
 		gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4), guide=guide_legend(title_size,title.position="top",ncol=1))
 		
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate), axis.text.y=element_text(face="bold", color="black", size=8, angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())

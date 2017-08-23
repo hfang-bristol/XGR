@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap using ggplot2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xHeatmap"><tr><td>xHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to draw heatmap using ggplot2</h2>
+
+<h3>Description</h3>
+
+<p><code>xHeatmap</code> is supposed to draw heatmap using ggplot2.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xHeatmap(data, reorder = c("none", "row", "col", "both"), colormap =
+"jet",
+ncolors = 64, zlim = NULL, barwidth = 0.5, barheight = NULL,
+nbin = 64, legend.title = "", x.rotate = 45, x.text.size = 8,
+y.text.size = 8, shape = 19, size = 1, font.family = "sans",
+na.color = "grey80", data.label = NULL, label.size = 1,
+label.color = "black", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame/matrix for coloring</p>
+</td></tr>
+<tr valign="top"><td><code>reorder</code></td>
+<td>
+<p>how to reorder rows and columns. It can be &quot;none&quot; for no
+reordering, &quot;row&quot; for reordering rows according to number of sharings
+(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
+rows and columns</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the finite values of displayed
+matrix</p>
+</td></tr>
+<tr valign="top"><td><code>barwidth</code></td>
+<td>
+<p>the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>barheight</code></td>
+<td>
+<p>the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>nbin</code></td>
+<td>
+<p>the number of bins for drawing colorbar</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the title of the colorbar. By default, it is &rdquo;</p>
+</td></tr>
+<tr valign="top"><td><code>x.rotate</code></td>
+<td>
+<p>the angle to rotate the x tick labelings. By default,
+it is 45</p>
+</td></tr>
+<tr valign="top"><td><code>x.text.size</code></td>
+<td>
+<p>the text size of the x tick labelings. By default,
+it is 8</p>
+</td></tr>
+<tr valign="top"><td><code>y.text.size</code></td>
+<td>
+<p>the text size of the y tick labelings. By default,
+it is 8</p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>the number specifying the shape. By default, it is 19</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>the number specifying the shape size. By default, it is 1</p>
+</td></tr>
+<tr valign="top"><td><code>font.family</code></td>
+<td>
+<p>the font family for texts</p>
+</td></tr>
+<tr valign="top"><td><code>na.color</code></td>
+<td>
+<p>the color for NAs. By default, it is 'grey80'</p>
+</td></tr>
+<tr valign="top"><td><code>data.label</code></td>
+<td>
+<p>a data frame/matrix used for the labelling</p>
+</td></tr>
+<tr valign="top"><td><code>label.size</code></td>
+<td>
+<p>the label size</p>
+</td></tr>
+<tr valign="top"><td><code>label.color</code></td>
+<td>
+<p>the label color</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters for
+supraHex::visTreeBootstrap</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If the method is 'gpplot2', it returns a ggplot object, with
+components: gene, sample, val, y, x
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xHeatmap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+gp &lt;- xHeatmap(data, reorder="none", colormap='darkgreen-lightyellow',
+ncolors=64, zlim=c(0,151), x.rotate=45, shape=19, size=3,
+x.text.size=6,y.text.size=8)
+gp + guides(color=guide_legend())
+gp + geom_text(aes(x, y,
+label=val),size=1.8,color='red',fontface='bold',na.rm=TRUE,angle=45)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

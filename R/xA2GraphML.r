@@ -151,6 +151,7 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 		info <- AA.path$info
 		path <- gsub('^AA:', '', info$path)
 		query <- gsub('^AA:', '', query)
+		query <- gsub('^path:', '', query)
 		manual_ind <- match(query, path)
 		if(is.na(manual_ind)){
 			manual_ind <- grep(query, info$name)
@@ -469,6 +470,7 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 		ls_ig <- xRDataLoader(RData.customised="ig.KEGG.list", RData.location=RData.location)
 		kegg <- gsub('^path:', '', sapply(ls_ig,function(x) x$path))
 		query <- gsub('^AA:', '', query)
+		query <- gsub('^path:', '', query)
 		automatic_ind <- match(query, kegg)
 		if(is.na(automatic_ind)){
 			automatic_ind <- grep(query, names(kegg))

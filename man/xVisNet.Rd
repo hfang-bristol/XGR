@@ -68,9 +68,9 @@ determine the actual coordinates. This function can be one of
 "layout_with_sugiyama" (previously "layout.kamada.kawai"),
 "layout_with_dh" (previously "layout.davidson.harel"),
 "layout_with_drl" (previously "layout.drl"), "layout_with_gem"
-(previously "layout.gem"), "layout_with_mds". A full explanation of
-these layouts can be found in
-\url{http://igraph.org/r/doc/layout_nicely.html}}
+(previously "layout.gem"), "layout_with_mds", and
+"layout_as_bipartite". A full explanation of these layouts can be found
+in \url{http://igraph.org/r/doc/layout_nicely.html}}
 
 \item{vertex.frame.color}{the color of the frame of the vertices. If it
 is NA, then there is no frame}

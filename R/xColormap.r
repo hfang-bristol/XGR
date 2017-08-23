@@ -3,6 +3,7 @@
 #' \code{xColormap} is supposed to define a colormap. It returns a function, which will take an integer argument specifying how many colors interpolate the given colormap.
 #'
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param interpolate use spline or linear interpolation
 #' @return 
 #' \itemize{
 #'  \item{\code{palette.name}: a function that takes an integer argument for generating that number of colors interpolating the given sequence}
@@ -33,11 +34,16 @@
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both"), interpolate=c("spline","linear"))
 {
+
+	interpolate <- match.arg(interpolate)
+	
     if(length(colormap)>1){
         colormap <- colormap[1]
     }
+    
+    ## http://www.cbs.dtu.dk/~eklund/squash/
     
     if(colormap=='ggplot2'){
     
@@ -52,6 +58,13 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			}
 		}
     	palette.name <- my_hue_pal(h=c(0,360)+15, c=100, l=65, h.start=0, direction=1)
+    	
+    }else if(colormap == "jet.top"){
+    	palette.name <-colorRampPalette(c("#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000")[-5], interpolate=interpolate)
+    }else if(colormap == "jet.bottom"){
+    	palette.name <-colorRampPalette(rev(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F")[-5]), interpolate=interpolate)
+    }else if(colormap == "jet.both"){
+    	palette.name <-colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000")[c(-1,-9)], interpolate=interpolate)
     	
 	}else if(colormap == "heat"){
 		palette.name <- grDevices::heat.colors

@@ -20,7 +20,9 @@ colors interpolate the given colormap.
 <pre>
 xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
-"wb", "heat", "terrain", "topo", "cm", "ggplot2"))
+"wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
+"jet.bottom",
+"jet.both"), interpolate = c("spline", "linear"))
 </pre>
 
 
@@ -40,6 +42,10 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>interpolate</code></td>
+<td>
+<p>use spline or linear interpolation</p>
 </td></tr>
 </table>
 

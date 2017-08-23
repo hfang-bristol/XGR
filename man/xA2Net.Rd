@@ -5,14 +5,17 @@
 \title{Function to visualise an igraph object using ggnetwork}
 \usage{
 xA2Net(g, node.label = NULL, label.wrap.width = NULL,
-node.label.size = NULL, node.label.color = "darkblue",
+label.wrap.lineheight = 0.8, node.label.size = NULL,
+node.label.fontface = "plain", node.label.color = "darkblue",
 node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
 0.01,
-node.label.force = 1, node.shape = 19, node.xcoord = NULL,
-node.ycoord = NULL, node.color = NULL, node.color.title = NULL,
-colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
-node.size = NULL, node.size.title = NULL, node.size.range = c(1, 4),
-slim = NULL, title = "", edge.size = 0.5, edge.color = "black",
+node.label.force = 1, node.shape = 19, node.shape.title = NULL,
+node.xcoord = NULL, node.ycoord = NULL, node.color = NULL,
+node.color.title = NULL, colormap = "grey-orange-darkred", ncolors =
+64,
+zlim = NULL, na.color = "grey80", node.size = NULL,
+node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
+title = "", edge.size = 0.5, edge.color = "black",
 edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
 edge.arrow.gap = 0.02)
 }
@@ -26,8 +29,15 @@ default), no node labelling}
 \item{label.wrap.width}{a positive integer specifying wrap width of
 node labelling}
 
+\item{label.wrap.lineheight}{line height spacing for text in ggplot. By
+default it is 0.8}
+
 \item{node.label.size}{a character specifying which node attribute used
 for node label size}
+
+\item{node.label.fontface}{a character specifying which node attribute
+used for node label fontface ('plain', 'bold', 'italic',
+'bold.italic')}
 
 \item{node.label.color}{a character specifying which node attribute
 used for the node label color}
@@ -41,7 +51,12 @@ labelling}
 
 \item{node.label.force}{the repelling force between overlapping labels}
 
-\item{node.shape}{an integer specifying node shape}
+\item{node.shape}{an integer specifying node shape or a character
+specifying which node attribute used for the node shape (no matter
+whether it is numeric or character)}
+
+\item{node.shape.title}{a character specifying the title for node
+shaping}
 
 \item{node.xcoord}{a vector specifying x coordinates. If NULL, it will
 be created using igraph::layout_with_kk}
@@ -71,6 +86,8 @@ standard color names can be found in
 
 \item{zlim}{the minimum and maximum values for which colors should be
 plotted}
+
+\item{na.color}{the color for NAs. By default, it is 'grey80'}
 
 \item{node.size}{either a vector specifying node size or a character
 specifying which node attribute used for the node size}

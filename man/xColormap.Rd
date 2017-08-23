@@ -6,7 +6,9 @@
 \usage{
 xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
-"wb", "heat", "terrain", "topo", "cm", "ggplot2"))
+"wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
+"jet.bottom",
+"jet.both"), interpolate = c("spline", "linear"))
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"
@@ -20,6 +22,8 @@ names, e.g. "lightyellow-orange" (by default), "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}
+
+\item{interpolate}{use spline or linear interpolation}
 }
 \value{
 \itemize{

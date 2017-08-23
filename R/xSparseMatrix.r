@@ -60,14 +60,16 @@ xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=T)
     	if(is.null(rows)){
         	x_row <- sort(unique(x[,1]))
         }else{
-        	x_row <- sort(union(rows, unique(x[,1])))
+        	#x_row <- sort(union(rows, unique(x[,1])))
+        	x_row <- rows
         }
         
     	## column names
     	if(is.null(columns)){
         	x_col <- sort(unique(x[,2]))
         }else{
-        	x_col <- sort(union(columns, unique(x[,2])))
+        	#x_col <- sort(union(columns, unique(x[,2])))
+        	x_col <- columns
         }
         
         #############################
