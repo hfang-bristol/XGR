@@ -56,7 +56,7 @@
 #' \item{7) # add the system PATH variable to your ~/.bash_profile file. \cr For Linux: \cr\code{export MAGICK_HOME=$HOME/ImageMagick} \cr\code{export PATH=$MAGICK_HOME/bin:$PATH} \cr\code{export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$MAGICK_HOME/lib} \cr For Mac: \cr\code{export MAGICK_HOME=$HOME/ImageMagick} \cr\code{export PATH=$MAGICK_HOME/bin:$PATH} \cr\code{export DYLD_LIBRARY_PATH=$MAGICK_HOME/lib/}}
 #' \item{8a) # check configuration: \cr\code{convert -list configure}}
 #' \item{8b) # check image format supported: \cr\code{identify -list format}}
-#' \item{Tips: \cr Prior to 4), please make sure \code{libjpeg} and \code{libpng} are installed. If NOT, for Mac try this: \cr\code{brew install libjpeg libpng} \cr To check whether ImageMagick does work, please get additional information from: \cr\code{identify -list format} \cr\code{convert -list configure} \cr On details, please refer to \url{http://www.imagemagick.org/script/advanced-unix-installation.php}}
+#' \item{Tips: \cr Prior to 4), please make sure \code{libjpeg} and \code{libpng} are installed. If NOT, for Mac try this: \cr\code{brew install libjpeg libpng librsvg} \cr To check whether ImageMagick does work, please get additional information from: \cr\code{identify -list format} \cr\code{convert -list configure} \cr On details, please refer to \url{http://www.imagemagick.org/script/advanced-unix-installation.php}}
 #' }
 #' @export
 #' @seealso \code{\link{visNetMul}}

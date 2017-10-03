@@ -185,9 +185,10 @@ DYLD_LIBRARY_PATH=$MAGICK_HOME/lib/}}
 format}}
 \item{Tips: \cr Prior to 4), please make sure \code{libjpeg} and
 \code{libpng} are installed. If NOT, for Mac try this: \cr\code{brew
-install libjpeg libpng} \cr To check whether ImageMagick does work,
-please get additional information from: \cr\code{identify -list format}
-\cr\code{convert -list configure} \cr On details, please refer to
+install libjpeg libpng librsvg} \cr To check whether ImageMagick does
+work, please get additional information from: \cr\code{identify -list
+format} \cr\code{convert -list configure} \cr On details, please refer
+to
 \url{http://www.imagemagick.org/script/advanced-unix-installation.php}}
 }
 }

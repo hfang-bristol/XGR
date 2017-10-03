@@ -7,11 +7,11 @@
 xA2GraphML(data = NULL, query = "AA:hsa04672", curation = c("manual",
 "automatic", "any"), node.label = "label", node.color = "lfc",
 colormap = "deepskyblue-white-darkorange", ncolors = 64, nlegend = 11,
-zlim = NULL, legend.title = "", node.tooltip = "tooltip",
-node.highlight = "fdr", node.highlight.cutoff = 0.05,
-edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
-color.thispath = "#bbbbbb", color.otherpath = "#cccccc",
-filename = "xA2GraphML", verbose = TRUE,
+zlim = NULL, legend.title = "", title.thispath = NULL,
+node.tooltip = "tooltip", node.highlight = "fdr",
+node.highlight.cutoff = 0.05, edge.color = "#00000033", edge.width = 1,
+color.gene = "#dddddd", color.thispath = "#bbbbbb",
+color.otherpath = "#cccccc", filename = "xA2GraphML", verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -58,6 +58,9 @@ of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted}
 
 \item{legend.title}{the legend title. By default, it is ''}
+
+\item{title.thispath}{the appended title for this pathway. By default,
+it is NLULL}
 
 \item{node.tooltip}{a character specifying which column used for node
 tooltip. By default, it is 'tooltip'. If not found, it will be

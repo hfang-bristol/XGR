@@ -12,6 +12,7 @@
 #' @param nlegend the number of colors specified in the legend. By default, it is 11
 #' @param zlim the minimum and maximum z/patttern values for which colors should be plotted, defaulting to the range of the finite values of z. Each of the given colors will be used to color an equispaced interval of this range. The midpoints of the intervals cover the range, so that values just outside the range will be plotted
 #' @param legend.title the legend title. By default, it is ''
+#' @param title.thispath the appended title for this pathway. By default, it is NLULL
 #' @param node.tooltip a character specifying which column used for node tooltip. By default, it is 'tooltip'. If not found, it will be 'Symbol-Name-Color'
 #' @param node.highlight a character specifying which column used for node highlighting. By default, it is 'fdr'. If so, those highlighted will have bold and larger labels
 #' @param node.highlight.cutoff a numeric specifying the cutoff for node highlighting. By default, it is 0.05 meaninght those less than this cutoff will be highlighted
@@ -50,7 +51,7 @@
 #' xA2GraphML(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xA2GraphML', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-white-darkorange', ncolors=64, nlegend=11, zlim=NULL, legend.title='', node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xA2GraphML', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-white-darkorange', ncolors=64, nlegend=11, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xA2GraphML', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -75,7 +76,9 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 			df$FDR <- signif(data[,node.highlight],digits=2)
 		}
     }
-
+	
+	df <- df[!is.na(df$LFC), ]
+	
     ## tooltip
     vec_description <- XGR::xSymbol2GeneID(df$Symbol, details=TRUE, verbose=verbose, RData.location=RData.location)$description
     df$tooltip <- paste0('Symbol: ', df$Symbol, '\nName: ', vec_description, '\nColor: ', df$LFC, '\nHightlight: ', df$FDR)
@@ -252,13 +255,6 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 			flag_otherpath <- grepl('#C0C0C0', df_nodes$fill[i])
 			#############
 			
-			if(flag_gene & is.na(ind_legend)){
-				n_total <- n_total+1;
-				if(!is.na(ind_found)){
-					n_matched <- n_matched+1;
-				}
-			}
-
 			k <- 0
 			vec <- vector()
 		
@@ -283,13 +279,18 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 				if(!is.na(ind_legend)){
 					k <- k+1
 					vec[k] <- paste0('<data key="d2"><![CDATA[', df_legends$labels[ind_legend], ']]></data>')
+										
+				}else{
 				
-				}else if(flag_gene){
-					k <- k+1
-					vec[k] <- paste0('<data key="d1"><![CDATA[', "http://www.genecards.org/cgi-bin/carddisp.pl?gene=", df_nodes$name[i], ']]></data>')
+					if(grepl('Legend', df_nodes$name[i])){
+						return(NULL)
+					}else if(flag_gene){
+						k <- k+1
+						vec[k] <- paste0('<data key="d1"><![CDATA[', "http://www.genecards.org/cgi-bin/carddisp.pl?gene=", df_nodes$name[i], ']]></data>')
 			
-					k <- k+1
-					vec[k] <- paste0('<data key="d2"><![CDATA[', df_nodes$name[i], ']]></data>')
+						k <- k+1
+						vec[k] <- paste0('<data key="d2"><![CDATA[', df_nodes$name[i], ']]></data>')
+					}
 				}
 			}
 		
@@ -377,6 +378,13 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 			### name_display
 			name_display <- df_nodes$name[i]
 			name_display <- gsub('@@', '\n', name_display)
+			
+			if(flag_thispath){
+				if(!is.null(title.thispath)){
+					name_display <- paste0(name_display, ' ', title.thispath)
+				}
+			}
+			
 			if(!is.na(ind_legend)){
 				name_display <- df_legends$labels[ind_legend]
 			}else{

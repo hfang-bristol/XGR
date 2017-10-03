@@ -142,7 +142,7 @@ xEnrichBarplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		}
 	}
 	#bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient2(low="cyan", mid="grey", high="orange", midpoint=0)
-	bp <- bp + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=12,color="black"))
+	bp <- bp + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=12,color="black")) + coord_flip()
 	
 	bp <- bp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	
