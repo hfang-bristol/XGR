@@ -9,10 +9,9 @@ xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
 significance.threshold = 5e-05, score.cap = 10, distance.max = 50000,
 decay.kernel = c("slow", "linear", "rapid", "constant"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD =
-c(NA,
-"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"),
-scoring.scheme = c("max", "sum", "sequential"), verbose = T,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"), scoring.scheme = c("max", "sum", "sequential"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

@@ -8,9 +8,9 @@ xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
 "slow",
 "linear", "constant"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
 "dbSNP_Common"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-include.TAD = c(NA, "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
-"NPC"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a input vector containing SNPs. SNPs should be provided as
@@ -57,7 +57,7 @@ without extension), plus specify your file RData path in
 directly}
 
 \item{include.TAD}{TAD boundary regions are also included. By default,
-it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+it is 'none' to disable this option. Otherwise, inclusion of a TAD
 dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
 region will be kept). TAD datasets can be one of "GM12878"
 (lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell)

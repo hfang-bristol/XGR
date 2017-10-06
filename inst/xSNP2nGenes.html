@@ -22,9 +22,9 @@ xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
 "slow",
 "linear", "constant"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
 "dbSNP_Common"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-include.TAD = c(NA, "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
-"NPC"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -89,7 +89,7 @@ directly</p>
 <tr valign="top"><td><code>include.TAD</code></td>
 <td>
 <p>TAD boundary regions are also included. By default,
-it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+it is 'none' to disable this option. Otherwise, inclusion of a TAD
 dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
 region will be kept). TAD datasets can be one of &quot;GM12878&quot;
 (lymphoblast), &quot;IMR90&quot; (fibroblast), &quot;MSC&quot; (mesenchymal stem cell)
