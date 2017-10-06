@@ -752,6 +752,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
     
 	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "expProb", "obsProb")]
+	eTerm <- xEnrichViewer(res_df, top_num=nrow(res_df), sortBy='zscore')
 	
-	invisible(res_df)
+	invisible(eTerm)
 }
