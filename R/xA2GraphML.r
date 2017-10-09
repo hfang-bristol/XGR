@@ -149,6 +149,8 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
     ######################################################################################
 	
     #####################################
+    manual_ind <- 0
+    manual_ind_at <- 0
     if(curation %in% c('any','manual')){
 		AA.path <- xRDataLoader(RData.customised="AA.path", RData.location=RData.location)
 		info <- AA.path$info
@@ -163,24 +165,55 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 				manual_ind <- manual_ind[1]
 			}else if(length(manual_ind)==0){
 				warning(sprintf("Manual curation: no found for queried '%s'", query), appendLF=TRUE)
-				if(curation=='manual'){
-					return(NULL)
+				
+				###########################################################
+				AT.path <- xRDataLoader(RData.customised="AT.path", RData.location=RData.location)
+				info <- AT.path$info
+				path <- gsub('^AT:', '', info$path)
+				query <- gsub('^AT:', '', query)
+				query <- gsub('^path:', '', query)
+				manual_ind_at <- match(query, path)
+				
+				if(is.na(manual_ind_at)){
+					manual_ind_at <- grep(query, info$name)
+					if(length(manual_ind_at)>1){
+						warning(sprintf("Automatic curation: %d found for queried %s: only 1st kept", length(manual_ind_at), query), appendLF=TRUE)
+						manual_ind_at <- manual_ind_at[1]
+					}else if(length(manual_ind_at)==0){
+						warning(sprintf("Automatic curation: no found for queried '%s'", query), appendLF=TRUE)
+						if(curation=='manual'){
+							return(NULL)
+						}
+					}
 				}
+				###########################################################
 			}
 		}
     }
     
     #####################################
-    if(length(manual_ind) != 0){
-    
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.path$info$path[manual_ind], AA.path$info$name[manual_ind], as.character(now)), appendLF=TRUE)
+    if(length(manual_ind) != 0 | length(manual_ind_at) != 0){
+    	
+    	if(length(manual_ind) != 0){
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.path$info$path[manual_ind], AA.path$info$name[manual_ind], as.character(now)), appendLF=TRUE)
+			}
+			detail <- AA.path$detail[[manual_ind]]
+			df_nodes <- detail$nodes
+			df_edges <- detail$edges
+			
+		}else{
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("Automatic curation: visualising '%s: %s' (%s) ...", AT.path$info$path[manual_ind_at], AT.path$info$name[manual_ind_at], as.character(now)), appendLF=TRUE)
+			}
+			detail <- AT.path$detail[[manual_ind_at]]
+			df_nodes <- detail$nodes
+			df_edges <- detail$edges
+			
 		}
-		detail <- AA.path$detail[[manual_ind]]
-		df_nodes <- detail$nodes
-		df_edges <- detail$edges
-
+		
 		#############
 		## head
 		#############
@@ -478,6 +511,7 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 		ls_ig <- xRDataLoader(RData.customised="ig.KEGG.list", RData.location=RData.location)
 		kegg <- gsub('^path:', '', sapply(ls_ig,function(x) x$path))
 		query <- gsub('^AA:', '', query)
+		query <- gsub('^AT:', '', query)
 		query <- gsub('^path:', '', query)
 		automatic_ind <- match(query, kegg)
 		if(is.na(automatic_ind)){
