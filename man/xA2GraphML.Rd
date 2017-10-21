@@ -24,9 +24,10 @@ For example, 'AA:hsa04672' for 'NOD-like receptor signaling pathway',
 where the prefix 'AA:' can be ignored. Alternatively, it can be key
 words describing the pathway}
 
-\item{curation}{the type of curation. It can be one of "manual" (only
-the manual one), "automatic" (only the automatic one) or "any" (first
-the manual one then the automatic one)}
+\item{curation}{the type of curation. It can be one of "manual" (the
+manual one 'AA' followed by the semi-manual one 'AT'), "automatic"
+(only the automatic one) or "any" (first the manual one then the
+automatic one)}
 
 \item{node.label}{a character specifying which column used for node
 labelling. By default, it is 'label'}

@@ -4,7 +4,7 @@
 #'
 #' @param data a data frame
 #' @param query the identity of a pathway in query. The full list of pathways in human can be found at \url{http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa}. For example, 'AA:hsa04672' for 'NOD-like receptor signaling pathway', where the prefix 'AA:' can be ignored. Alternatively, it can be key words describing the pathway
-#' @param curation the type of curation. It can be one of "manual" (only the manual one), "automatic" (only the automatic one) or "any" (first the manual one then the automatic one)
+#' @param curation the type of curation. It can be one of "manual" (the manual one 'AA' followed by the semi-manual one 'AT'), "automatic" (only the automatic one) or "any" (first the manual one then the automatic one)
 #' @param node.label a character specifying which column used for node labelling. By default, it is 'label'
 #' @param node.color a character specifying which column used for node coloring. By default, it is 'lfc'
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
@@ -149,8 +149,8 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
     ######################################################################################
 	
     #####################################
-    manual_ind <- 0
-    manual_ind_at <- 0
+    manual_ind <- NULL
+    manual_ind_at <- NULL
     if(curation %in% c('any','manual')){
 		AA.path <- xRDataLoader(RData.customised="AA.path", RData.location=RData.location)
 		info <- AA.path$info
@@ -209,9 +209,17 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 				message(sprintf("Automatic curation: visualising '%s: %s' (%s) ...", AT.path$info$path[manual_ind_at], AT.path$info$name[manual_ind_at], as.character(now)), appendLF=TRUE)
 			}
 			detail <- AT.path$detail[[manual_ind_at]]
-			df_nodes <- detail$nodes
-			df_edges <- detail$edges
 			
+			df_nodes <- detail$nodes
+			#########
+			# remove ::.* for the semi-manual only
+			#########
+			df_nodes$node_id <- gsub('::.*','',df_nodes$node_id)
+			#########
+			
+			df_edges <- detail$edges
+			df_edges$source  <- gsub('::.*','',df_edges$source)
+			df_edges$target  <- gsub('::.*','',df_edges$target)
 		}
 		
 		#############
@@ -226,7 +234,7 @@ xA2GraphML <- function(data=NULL, query="AA:hsa04672", curation=c('manual','auto
 	  <key for="edge" id="d4" attr.name="description" attr.type="string"/>
 	  <key for="edge" id="d5" yfiles.type="edgegraphics"/>
 	  <key for="graphml" id="d6" yfiles.type="resources"/>
-	  <graph edgedefault="directed" id="G">';
+	  <graph edgedefault="directed" id="G">'
 	
 		#############
 		## nodes
