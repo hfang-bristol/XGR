@@ -13,7 +13,7 @@
 #' @return 
 #' a list with two componets:
 #' \itemize{
-#'  \item{\code{df_summary}: a data frame of n x 4, where n is the number of named vectors, and the 4 columns are "name", "cor" (i.e. "correlation"), "pval" (i.e. p-value), "fdr"}
+#'  \item{\code{df_summary}: a data frame of n x 5, where n is the number of named vectors, and the 5 columns are "name", "num" (i.e. number of data points used for calculation), "cor" (i.e. correlation), "pval" (i.e. p-value), "fdr"}
 #'  \item{\code{ls_gp}: NULL if the plot is not drawn; otherwise, a list of 'ggplot' objects}
 #' }
 #' @note none
@@ -112,16 +112,16 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 		}
 	
 		if(pval_obs < 0.05){
-			pval_obs <- format(signif(res$p.value,2),scientific=TRUE)
+			pval_obs <- as.numeric(format(signif(res$p.value,2),scientific=TRUE))
 		}else{
 			pval_obs <- signif(res$p.value,3)
 		}
 	
-		data.frame(name=names(list_vec)[i], cor=cor_obs, pval=pval_obs, stringsAsFactors=FALSE)
+		data.frame(name=names(list_vec)[i], num=nrow(df), cor=cor_obs, pval=pval_obs, stringsAsFactors=FALSE)
     })
     dff <- do.call(rbind, ls_df)
     fdr <- stats::p.adjust(dff$pval, method=p.adjust.method)
-    dff$fdr <- ifelse(fdr<0.05, format(signif(fdr,2),scientific=TRUE), signif(fdr,3))
+    dff$fdr <- ifelse(fdr<0.05, as.numeric(format(signif(fdr,2),scientific=TRUE)), signif(fdr,3))
     rownames(dff) <- 1:nrow(dff)
     
     if(plot){

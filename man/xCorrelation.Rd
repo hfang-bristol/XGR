@@ -41,9 +41,10 @@ condition than FWER}
 \value{
 a list with two componets:
 \itemize{
-\item{\code{df_summary}: a data frame of n x 4, where n is the number
-of named vectors, and the 4 columns are "name", "cor" (i.e.
-"correlation"), "pval" (i.e. p-value), "fdr"}
+\item{\code{df_summary}: a data frame of n x 5, where n is the number
+of named vectors, and the 5 columns are "name", "num" (i.e. number of
+data points used for calculation), "cor" (i.e. correlation), "pval"
+(i.e. p-value), "fdr"}
 \item{\code{ls_gp}: NULL if the plot is not drawn; otherwise, a list of
 'ggplot' objects}
 }
