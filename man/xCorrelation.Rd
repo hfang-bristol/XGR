@@ -73,7 +73,7 @@ seeds.genes <- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
 data <- 1- seeds.genes/500000
 
-# b) perform priority analysis
+# b) prepare a data frame
 df <- data.frame(name=names(data), value=data, stringsAsFactors=FALSE)
 
 # c) do correlation

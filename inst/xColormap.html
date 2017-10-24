@@ -22,7 +22,7 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom",
-"jet.both"), interpolate = c("spline", "linear"))
+"jet.both", "spectral"), interpolate = c("spline", "linear"))
 </pre>
 
 
@@ -41,7 +41,8 @@ default color palette). Alternatively, any hyphen-separated HTML color
 names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a>. It can also be a
+function of 'colorRampPalette'</p>
 </td></tr>
 <tr valign="top"><td><code>interpolate</code></td>
 <td>
@@ -93,6 +94,9 @@ red-yellow-green-cyan-blue-magenta
 </p>
 </li>
 <li><p>&quot;ggplot2&quot;: emulating ggplot2 default color palette
+</p>
+</li>
+<li><p>&quot;spectral&quot;: emulating RColorBrewer spectral color palette
 </p>
 </li>
 <li><p>Alternatively, any hyphen-separated HTML color names, e.g.
