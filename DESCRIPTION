@@ -76,6 +76,6 @@ Collate:
     'xIOcreate.r'
     'xHeatmap.r'
     'xCorrelation.r'
-    'xPolar.r'
+    'xPolarDot.r'
 License: GPL-2
 biocViews: Bioinformatics

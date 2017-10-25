@@ -1,20 +1,20 @@
-#' Function to visualise a data frame using a polor plot
+#' Function to visualise a data frame using a polar dotplot
 #'
-#' \code{xPolar} is supposed to visualise a data frame using a polor plot. It returns an object of class "ggplot".
+#' \code{xPolarDot} is supposed to visualise a data frame using a polor dotplot. It returns an object of class "ggplot".
 #'
 #' @param df a data frame with two columns ('name' and 'value')
-#' @param colormap either NULL or color names ('darkblue-yellow-darkred' by default) for points
+#' @param colormap either NULL or color names ('darkblue-yellow-darkred' by default) for points according to the value column
 #' @param shape an integer specifying point shape
 #' @param size an integer specifying the point size. By default, it sets to 2
+#' @param parallel logical to indicate whether the label is parallel to polar coordinate. By default, it sets FALSE
 #' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
-#' @seealso \code{\link{xPolar}}
-#' @include xPolar.r
+#' @seealso \code{\link{xPolarDot}}
+#' @include xPolarDot.r
 #' @examples
-#' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
@@ -32,11 +32,11 @@
 #' df <- data.frame(name=names(data), value=data, stringsAsFactors=FALSE)
 #' 
 #' # c) do correlation
-#' gp <- xPolar(df[1:50,])
+#' gp <- xPolarDot(df[1:50,])
 #' gp
 #' }
 
-xPolar <- function(df, colormap='darkblue-yellow-darkred', shape=19, size=2, font.family="sans", signature=TRUE) 
+xPolarDot <- function(df, colormap='darkblue-yellow-darkred', shape=19, size=2, parallel=FALSE, font.family="sans", signature=TRUE) 
 {
     
     if(class(df) == "data.frame"){
@@ -54,8 +54,13 @@ xPolar <- function(df, colormap='darkblue-yellow-darkred', shape=19, size=2, fon
 	df$name <- factor(df$name, levels=df$name)
 	
 	color <- unlist(strsplit(colormap, "-"))
-	angle <- 90 - 360/length(df$name) * seq_along(df$name)
-	angle[angle < -90] <- -180 + angle[angle < -90]
+	
+	if(parallel){
+		angle <- 90 - 360/length(df$name) * seq_along(df$name)
+		angle[angle < -90] <- -180 + angle[angle < -90]
+	}else{
+		angle <- 0
+	}
 	
 	## polar plot
 	gp <- ggplot(df, aes(x=name, y=value)) 
@@ -74,7 +79,7 @@ xPolar <- function(df, colormap='darkblue-yellow-darkred', shape=19, size=2, fon
 	
 	## caption
     if(signature){
-    	caption <- paste("Created by xPolar from XGR version", utils ::packageVersion("XGR"))
+    	caption <- paste("Created by xPolarDot from XGR version", utils ::packageVersion("XGR"))
     	gp <- gp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	
