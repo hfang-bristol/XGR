@@ -19,6 +19,7 @@
 #' @param path.mode the mode of paths induced by vertices/nodes with input annotation data. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
+#' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "eTerm", a list with following components:
@@ -90,11 +91,15 @@
 #' xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore", node.info=c("full_term_name"))
 #' }
 
-xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
-    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-    message("", appendLF=T)
+    if(!silent){
+    	message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+    	message("", appendLF=TRUE)
+    }else{
+    	verbose <- FALSE
+    }
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -200,10 +205,12 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
     
     ####################################################################################
     endT <- Sys.time()
-    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
-    
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    
+    if(!silent){
+    	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    }
     
     invisible(eTerm)
 }

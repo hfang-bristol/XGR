@@ -33,7 +33,8 @@ test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
 elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
 "shortest_paths", "all_shortest_paths"), true.path.rule = T, verbose =
 T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+silent = FALSE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -172,6 +173,12 @@ true</p>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>

@@ -12,6 +12,7 @@
 #' @param p.tail the tail used to calculate p-values. It can be either "two-tails" for the significance based on two-tails (ie both over- and under-overrepresentation)  or "one-tail" (by default) for the significance based on one tail (ie only over-representation)
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
+#' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @return 
 #' an object of class "eTerm", a list with following components:
 #' \itemize{
@@ -83,11 +84,16 @@
 #' print(bp)
 #' }
 
-xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=T, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T)
+xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=T, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T, silent=FALSE)
 {
     startT <- Sys.time()
-    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-    message("", appendLF=T)
+    if(!silent){
+    	message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+    	message("", appendLF=TRUE)
+    }else{
+    	verbose <- FALSE
+    }
+    
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -187,10 +193,12 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     
     ####################################################################################
     endT <- Sys.time()
-    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
-    
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    
+    if(!silent){
+    	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    }
     
     invisible(eTerm)
 }

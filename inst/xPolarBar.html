@@ -1,15 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a data frame using a polar dotplot</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a data frame using a polar barplot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xPolarDot"><tr><td>xPolarDot</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xPolarBar"><tr><td>xPolarBar</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise a data frame using a polar dotplot</h2>
+<h2>Function to visualise a data frame using a polar barplot</h2>
 
 <h3>Description</h3>
 
-<p><code>xPolarDot</code> is supposed to visualise a data frame using a polar
+<p><code>xPolarBar</code> is supposed to visualise a data frame using a polar
 dotplot. It returns an object of class &quot;ggplot&quot;.
 </p>
 
@@ -17,8 +17,7 @@ dotplot. It returns an object of class &quot;ggplot&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPolarDot(df, colormap = "darkblue-yellow-darkred", shape = 19, size =
-2,
+xPolarBar(df, colormap = "spectral", size.name = 10, size.value = 3,
 parallel = FALSE, font.family = "sans", signature = TRUE)
 </pre>
 
@@ -32,17 +31,18 @@ parallel = FALSE, font.family = "sans", signature = TRUE)
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>either NULL or color names ('darkblue-yellow-darkred'
-by default) for points according to the value column</p>
+<p>either NULL or color names ('spectral' by default) for
+bars according to the name column</p>
 </td></tr>
-<tr valign="top"><td><code>shape</code></td>
+<tr valign="top"><td><code>size.name</code></td>
 <td>
-<p>an integer specifying point shape</p>
+<p>an integer specifying the text size for the name
+column. By default, it sets to 10</p>
 </td></tr>
-<tr valign="top"><td><code>size</code></td>
+<tr valign="top"><td><code>size.value</code></td>
 <td>
-<p>an integer specifying the point size. By default, it sets
-to 2</p>
+<p>an integer specifying the text size for the value
+column. By default, it sets to 3</p>
 </td></tr>
 <tr valign="top"><td><code>parallel</code></td>
 <td>
@@ -76,7 +76,7 @@ used to draw this graph</p>
 
 <h3>See Also</h3>
 
-<p><code>xPolarDot</code>
+<p><code>xPolarBar</code>
 </p>
 
 
@@ -101,7 +101,7 @@ data &lt;- 1- seeds.genes/500000
 df &lt;- data.frame(name=names(data), value=data, stringsAsFactors=FALSE)
 
 # c) do correlation
-gp &lt;- xPolarDot(df[1:50,])
+gp &lt;- xPolarBar(df[1:20,], parallel=TRUE)
 gp
 
 ## End(Not run)

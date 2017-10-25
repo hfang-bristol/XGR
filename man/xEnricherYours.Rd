@@ -8,7 +8,8 @@ xEnricherYours(data.file, annotation.file, background.file = NULL,
 size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
 "fisher", "binomial"), background.annotatable.only = T,
 p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), verbose = T)
+"bonferroni", "holm", "hochberg", "hommel"), verbose = T, silent =
+FALSE)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of entities
@@ -86,6 +87,10 @@ condition than FWER}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 }
 \value{
 an object of class "eTerm", a list with following components:

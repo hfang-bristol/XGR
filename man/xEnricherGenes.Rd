@@ -24,7 +24,8 @@ test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
 elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
 "shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
 T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+silent = FALSE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}
@@ -134,6 +135,10 @@ false}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
