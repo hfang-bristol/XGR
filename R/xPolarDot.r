@@ -3,7 +3,7 @@
 #' \code{xPolarDot} is supposed to visualise a data frame using a polar dotplot. It returns an object of class "ggplot".
 #'
 #' @param df a data frame with two columns ('name' and 'value')
-#' @param colormap either NULL or color names ('darkblue-yellow-darkred' by default) for points according to the value column
+#' @param colormap either NULL or color names ('blue-yellow-red' by default) for points according to the value column
 #' @param shape an integer specifying point shape
 #' @param size an integer specifying the point size. By default, it sets to 2
 #' @param parallel logical to indicate whether the label is parallel to polar coordinate. By default, it sets FALSE
@@ -36,7 +36,7 @@
 #' gp
 #' }
 
-xPolarDot <- function(df, colormap='darkblue-yellow-darkred', shape=19, size=2, parallel=FALSE, font.family="sans", signature=TRUE) 
+xPolarDot <- function(df, colormap='blue-yellow-red', shape=19, size=2, parallel=FALSE, font.family="sans", signature=TRUE) 
 {
     
     if(class(df) == "data.frame"){

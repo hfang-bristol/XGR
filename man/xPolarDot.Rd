@@ -4,15 +4,14 @@
 \alias{xPolarDot}
 \title{Function to visualise a data frame using a polar dotplot}
 \usage{
-xPolarDot(df, colormap = "darkblue-yellow-darkred", shape = 19, size =
-2,
+xPolarDot(df, colormap = "blue-yellow-red", shape = 19, size = 2,
 parallel = FALSE, font.family = "sans", signature = TRUE)
 }
 \arguments{
 \item{df}{a data frame with two columns ('name' and 'value')}
 
-\item{colormap}{either NULL or color names ('darkblue-yellow-darkred'
-by default) for points according to the value column}
+\item{colormap}{either NULL or color names ('blue-yellow-red' by
+default) for points according to the value column}
 
 \item{shape}{an integer specifying point shape}
 
