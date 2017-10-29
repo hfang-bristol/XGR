@@ -3,16 +3,16 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xEnricherGenes"><tr><td>xEnricherGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xEnricherGenesAdv"><tr><td>xEnricherGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to conduct enrichment analysis given a list of genes and the ontology in query</h2>
 
 <h3>Description</h3>
 
-<p><code>xEnricherGenes</code> is supposed to conduct enrichment analysis given
-the input data and the ontology in query. It returns an object of class
-&quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact test or
-Hypergeometric test. The test can respect the hierarchy of the
+<p><code>xEnricherGenesAdv</code> is supposed to conduct enrichment analysis
+given the input data and the ontology in query. It returns an object of
+class &quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact
+test or Hypergeometric test. The test can respect the hierarchy of the
 ontology. Now it supports enrichment analysis using a wide variety of
 ontologies such as Gene Ontology and Phenotype Ontologies.
 </p>
@@ -21,8 +21,9 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 <h3>Usage</h3>
 
 <pre>
-xEnricherGenes(data, background = NULL, check.symbol.identity = F,
-ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
+xEnricherGenesAdv(list_vec, background = NULL, check.symbol.identity =
+F,
+ontologies = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
 "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
 "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
 "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
@@ -41,17 +42,19 @@ test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
 elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
 "shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
 T,
-silent = FALSE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+silent = FALSE, plot = TRUE, fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc"),
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<tr valign="top"><td><code>list_vec</code></td>
 <td>
-<p>an input vector containing gene symbols</p>
+<p>an input vector containing gene symbols. Alternatively
+it can be a list of vectors, representing multiple groups of genes</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
@@ -65,12 +68,12 @@ background</p>
 input data/background via Synonyms for those unmatchable by official
 gene symbols. By default, it sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>ontology</code></td>
+<tr valign="top"><td><code>ontologies</code></td>
 <td>
-<p>the ontology supported currently. It can be &quot;GOBP&quot; for
-Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
-Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PS&quot; for
-phylostratific age information, &quot;PS2&quot; for the collapsed PS version
+<p>the ontologies supported currently. It can be &quot;GOBP&quot;
+for Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology
+Molecular Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PS&quot;
+for phylostratific age information, &quot;PS2&quot; for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
 information), &quot;SF&quot; for SCOP domain superfamilies, &quot;Pfam&quot; for Pfam
 domain families, &quot;DO&quot; for Disease Ontology, &quot;HPPA&quot; for Human Phenotype
@@ -195,6 +198,23 @@ displayed in the screen. By default, it sets to false for no display</p>
 completely. By default, it sets to false. If true, verbose will be
 forced to be false</p>
 </td></tr>
+<tr valign="top"><td><code>plot</code></td>
+<td>
+<p>logical to indicate whether heatmap plot is drawn</p>
+</td></tr>
+<tr valign="top"><td><code>fdr.cutoff</code></td>
+<td>
+<p>fdr cutoff used to declare the significant terms. By
+default, it is set to 0.05. This option only works when setting plot
+(see above) is TRUE</p>
+</td></tr>
+<tr valign="top"><td><code>displayBy</code></td>
+<td>
+<p>which statistics will be used for drawing heatmap. It
+can be &quot;fc&quot; for enrichment fold change (by default), &quot;fdr&quot; for adjusted
+p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment
+z-score. This option only works when setting plot (see above) is TRUE</p>
+</td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
@@ -205,57 +225,27 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;eTerm&quot;, a list with following components:
+<p>a list with two componets:
 </p>
 
 <ul>
-<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
-information, where nTerm is the number of terms, and the 4 columns are
-&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
-&quot;distance&quot;
+<li><p><code>df</code>: a data frame of n x 12, where the 12 columns are
+&quot;group&quot; (the input group names), &quot;ontology&quot; (input ontologies), &quot;id&quot;
+(term ID), &quot;name&quot; (term name), &quot;nAnno&quot; (number in members annotated by
+a term), &quot;nOverlap&quot; (number in overlaps), &quot;fc&quot; (enrichment fold
+changes), &quot;zscore&quot; (enrichment z-score), &quot;pvalue&quot; (nominal p value),
+&quot;adjp&quot; (adjusted p value (FDR)), &quot;distance&quot; (term distance or other
+information), &quot;members&quot; (members (represented as Gene Symbols) in
+overlaps)
 </p>
 </li>
-<li><p><code>annotation</code>: a list of terms containing annotations, each
-term storing its annotations. Always, terms are identified by &quot;id&quot;
+<li><p><code>mat</code>: NULL if the plot is not drawn; otherwise, a matrix of
+term names X groups with numeric values for the signficant enrichment,
+NA for the insignificant ones
 </p>
 </li>
-<li><p><code>g</code>: an igraph object to represent DAG
-</p>
-</li>
-<li><p><code>data</code>: a vector containing input data in consideration. It
-is not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>background</code>: a vector containing the background data. It is
-not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
-snps overlapped between a snp/gene set and the given input data (i.e.
-the snps of interest). Always, gene sets are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>fc</code>: a vector containing fold changes
-</p>
-</li>
-<li><p><code>zscore</code>: a vector containing z-scores
-</p>
-</li>
-<li><p><code>pvalue</code>: a vector containing p-values
-</p>
-</li>
-<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
-value but after being adjusted for multiple comparisons
-</p>
-</li>
-<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
-for the overlapped-members observed in an individaul term, and
-off-diagnal cell for the overlapped-members shared betwene two terms
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
+<li><p><code>gp</code>: NULL if the plot is not drawn; otherwise, a 'ggplot'
+object
 </p>
 </li></ul>
 
@@ -263,46 +253,14 @@ off-diagnal cell for the overlapped-members shared betwene two terms
 
 <h3>Note</h3>
 
-<p>The interpretation of the algorithms used to account for the hierarchy
-of the ontology is:
+<p>none
 </p>
-
-<ul>
-<li><p>&quot;none&quot;: does not consider the ontology hierarchy at all.
-</p>
-</li>
-<li><p>&quot;lea&quot;: computers the significance of a term in terms of the
-significance of its children at the maximum depth (e.g. 2). Precisely,
-once snps are already annotated to any children terms with a more
-signficance than itself, then all these snps are eliminated from the
-use for the recalculation of the signifance at that term. The final
-p-values takes the maximum of the original p-value and the recalculated
-p-value.
-</p>
-</li>
-<li><p>&quot;elim&quot;: computers the significance of a term in terms of the
-significance of its all children. Precisely, once snps are already
-annotated to a signficantly enriched term under the cutoff of e.g.
-pvalue&lt;1e-2, all these snps are eliminated from the ancestors of that
-term).
-</p>
-</li>
-<li><p>&quot;pc&quot;: requires the significance of a term not only using the
-whole snps as background but also using snps annotated to all its
-direct parents/ancestors as background. The final p-value takes the
-maximum of both p-values in these two calculations.
-</p>
-</li>
-<li><p>&quot;Notes&quot;: the order of the number of significant terms is: &quot;none&quot;
-&gt; &quot;lea&quot; &gt; &quot;elim&quot; &gt; &quot;pc&quot;.
-</p>
-</li></ul>
-
 
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>, <code>xEnricher</code>
+<p><code>xRDataLoader</code>, <code>xEnricherGenes</code>,
+<code>xEnrichViewer</code>, <code>xHeatmap</code>
 </p>
 
 
@@ -327,41 +285,10 @@ data
 #background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
 
 # b) perform enrichment analysis
-eTerm &lt;- xEnricherGenes(data=data, ontology="REACTOME",
+ls_res &lt;- xEnricherGenesAdv(data, ontologies="REACTOME",
 RData.location=RData.location)
-
-# c) view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-
-# d) save enrichment results to the file called 'REACTOME_enrichments.txt'
-res &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
-details=TRUE)
-output &lt;- data.frame(term=rownames(res), res)
-utils::write.table(output, file="REACTOME_enrichments.txt", sep="\t",
-row.names=FALSE)
-
-# e) barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
-
-# f) visualise the top 10 significant terms in the ontology hierarchy
-# color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
-xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
-node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
-# color-code terms according to the z-scores
-xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
-node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
-
-# g) visualise the significant terms in the ontology hierarchy 
-# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
-g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes=c("R-HSA-162582","R-HSA-168256"), mode="out")
-nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
-ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
-xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp",
-node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
+ls_res$mat
+ls_res$gp
 
 ## End(Not run)
 </pre>

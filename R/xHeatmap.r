@@ -72,8 +72,18 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="jet",
 		tree_bs <- visTreeBootstrap(t(mat), visTree=FALSE, ...)
 		ind_col <- match(tree_bs$tip.label, colnames(mat))
 	}
-	mat_val <- mat_val[ind_row, ind_col]
 	
+	################
+	if(0){
+		mat_val <- mat_val[ind_row, ind_col]
+	}else{
+		mat_tmp <- as.matrix(mat_val[ind_row, ind_col], ncol=length(ind_col))
+		rownames(mat_tmp) <- rownames(mat_val)[ind_row]
+		colnames(mat_tmp) <- colnames(mat_val)[ind_col]
+		mat_val <- mat_tmp
+	}
+	################
+		
 	if(class(mat_val)=='matrix'){
 		mat_val <- as.data.frame(mat_val)
 	}

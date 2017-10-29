@@ -40,8 +40,8 @@ a data frame with following components:
 \item{\code{zscore}: enrichment z-score}
 \item{\code{pvalue}: nominal p value}
 \item{\code{adjp}: adjusted p value (FDR)}
-\item{\code{distance}: term distance; optional, it is only appended
-when "details" is true}
+\item{\code{distance}: term distance or other information; optional, it
+is only appended when "details" is true}
 \item{\code{members}: members (represented as Gene Symbols) in
 overlaps; optional, it is only appended when "details" is true}
 }

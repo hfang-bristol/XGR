@@ -62,7 +62,7 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
     	return(NULL)
     }
     ############
-    if(is.vector(list_vec)){
+    if(is.vector(list_vec) & class(list_vec)!="list"){
     	# assume a vector
 		if(is.null(names(list_vec))){
 			stop("The input vector must have names.\n")
@@ -79,7 +79,6 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
         stop("The input data must be a named vector or a list of named vectors.\n")
     }
     
-	## Combine into a data frame called 'df_disease'
 	list_names <- names(list_vec)
 	if(is.null(list_names)){
 		list_names <- paste0('V', 1:length(list_vec))
