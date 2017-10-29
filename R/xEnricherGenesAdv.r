@@ -1,6 +1,6 @@
-#' Function to conduct enrichment analysis given a list of genes and the ontology in query
+#' Function to conduct enrichment analysis given a list of gene sets and a list of ontologies
 #'
-#' \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis given the input data and the ontology in query. It returns an object of class "eTerm". Enrichment analysis is based on either Fisher's exact test or Hypergeometric test. The test can respect the hierarchy of the ontology. Now it supports enrichment analysis using a wide variety of ontologies such as Gene Ontology and Phenotype Ontologies.
+#' \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}.
 #'
 #' @param list_vec an input vector containing gene symbols. Alternatively it can be a list of vectors, representing multiple groups of genes
 #' @param background a background vector containing gene symbols as the test background. If NULL, by default all annotatable are used as background
@@ -133,7 +133,11 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     	gp <- NULL
     	mat <- NULL
     	
-    	ls_df <- split(x=df_all, f=df_all$ontology)
+    	ls_df <- split(x=df_all[,-12], f=df_all$ontology)
+    	#######
+    	## keep the same order for ontologies as input
+    	ls_df <- ls_df[unique(df_all$ontology)]
+    	#######    	
 		ls_mat <- lapply(1:length(ls_df), function(i){
 		
 			df <- ls_df[[i]]
@@ -157,9 +161,26 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 					mat[mat==0] <- NA
 					mat <- log2(mat)
 				}
-				ind <- order(-nchar(rownames(mat)))
-				df_mat <- as.data.frame(mat) %>% dplyr::arrange(ind)
-				rownames(df_mat) <- rownames(mat)[ind]
+				
+				if(nrow(mat)==1){
+					df_mat <- mat
+				}else{
+					
+					## order by the length of names
+					rname_ordered <- rownames(mat)[order(-nchar(rownames(mat)))]
+					## order by the evolutionary ages
+					if(names(ls_df)[i]=='PS2'){
+						df_tmp <- unique(df[,c('id','name')])
+						df_tmp <- df_tmp[with(df_tmp, order(as.numeric(df_tmp$id))),]
+						rname_ordered <- df_tmp$name
+					}
+					
+					ind <- match(rname_ordered, rownames(mat))
+					df_mat <- as.matrix(mat[ind,], ncol=ncol(mat))
+					colnames(df_mat) <- colnames(mat)
+					
+					colnames(df_mat) <- colnames(mat)
+				}
 				return(df_mat)
 					
 			}else{
@@ -171,7 +192,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 		
 		if(!is.null(mat)){
 			if(displayBy=='fdr' | displayBy=='pvalue'){
-				colormap <- 'grey90-darkorange'
+				colormap <- 'grey100-darkorange'
 				zlim <- c(0, ceiling(max(mat[!is.na(mat)])))
 				
 				if(displayBy=='fdr'){
@@ -184,14 +205,14 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 				tmp_max <- ceiling(max(mat[!is.na(mat)]))
 				tmp_min <- floor(min(mat[!is.na(mat)]))
 				if(tmp_max>0 & tmp_min<0){
-					colormap <- 'deepskyblue-grey90-darkorange'	
+					colormap <- 'deepskyblue-grey100-darkorange'	
 					tmp <- max(tmp_max, abs(tmp_min))
 					zlim <- c(-tmp, tmp)
 				}else if(tmp_max<=0){
-					colormap <- 'deepskyblue-grey90'	
+					colormap <- 'deepskyblue-grey100'	
 					zlim <- c(tmp_min, 0)
 				}else if(tmp_min>=0){
-					colormap <- 'grey90-darkorange'	
+					colormap <- 'grey100-darkorange'	
 					zlim <- c(0, tmp_max)
 				}
 				
@@ -202,7 +223,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 				}
 			}
 		
-			gp <- xHeatmap(mat, reorder="none", colormap=colormap, ncolors=64, zlim=zlim, legend.title=legend.title, barwidth=0.4, x.rotate=60, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent',barheight=min(4,nrow(mat)))
+			gp <- xHeatmap(mat, reorder="none", colormap=colormap, ncolors=64, zlim=zlim, legend.title=legend.title, barwidth=0.4, x.rotate=60, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent',barheight=max(3,min(5,nrow(mat))))
 			gp <- gp + theme(legend.title=element_text(size=8))
 		}
 		

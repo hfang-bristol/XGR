@@ -2,7 +2,7 @@
 % Please edit documentation in R/xEnricherGenesAdv.r
 \name{xEnricherGenesAdv}
 \alias{xEnricherGenesAdv}
-\title{Function to conduct enrichment analysis given a list of genes and the ontology in query}
+\title{Function to conduct enrichment analysis given a list of gene sets and a list of ontologies}
 \usage{
 xEnricherGenesAdv(list_vec, background = NULL, check.symbol.identity =
 F,
@@ -177,11 +177,8 @@ object}
 }
 \description{
 \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis
-given the input data and the ontology in query. It returns an object of
-class "eTerm". Enrichment analysis is based on either Fisher's exact
-test or Hypergeometric test. The test can respect the hierarchy of the
-ontology. Now it supports enrichment analysis using a wide variety of
-ontologies such as Gene Ontology and Phenotype Ontologies.
+given a list of gene sets and a list of ontologies. It is an advanced
+version of \code{xEnricherGenes}.
 }
 \note{
 none
