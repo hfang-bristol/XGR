@@ -10,11 +10,13 @@
 #' @param nperm the number of random permutations
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param plot logical to indicate whether scatter plot is drawn
+#' @param plot.smooth the smooth method for the scatter plot. It can be NA (depending on correlation type), "lm" for the linear line or 'loess' for the loess curve
 #' @return 
-#' a list with two componets:
+#' a list with three componets:
 #' \itemize{
 #'  \item{\code{df_summary}: a data frame of n x 5, where n is the number of named vectors, and the 5 columns are "name", "num" (i.e. number of data points used for calculation), "cor" (i.e. correlation), "pval" (i.e. p-value), "fdr"}
-#'  \item{\code{ls_gp}: NULL if the plot is not drawn; otherwise, a list of 'ggplot' objects}
+#'  \item{\code{ls_gp_curve}: NULL if the plot is not drawn; otherwise, a list of 'ggplot' objects for scatter plot together with an estimated curve}
+#'  \item{\code{ls_gp_pdf}: NULL if the plot is not drawn; otherwise, a list of 'ggplot' objects for pdf plot for null distribution of correlation together with a vertical line for observed correlation}
 #' }
 #' @note none
 #' @export
@@ -43,12 +45,13 @@
 #' ls_res <- xCorrelation(df, data, method="pearson", p.type="empirical", nperm=2000, plot=TRUE)
 #' }
 
-xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c("nominal","empirical"), seed=825, nperm=2000, p.adjust.method=c("BH","BY","bonferroni","holm","hochberg","hommel"), plot=FALSE)
+xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c("nominal","empirical"), seed=825, nperm=2000, p.adjust.method=c("BH","BY","bonferroni","holm","hochberg","hommel"), plot=FALSE, plot.smooth=c(NA, "lm","loess"))
 {
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     method <- match.arg(method)
     p.type <- match.arg(p.type)
     p.adjust.method <- match.arg(p.adjust.method)
+    plot.smooth <- match.arg(plot.smooth)
     
     if(class(df) == "data.frame"){
     	df_priority <- df[,c(1:2)]
@@ -85,7 +88,7 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 		names(list_vec) <- list_names
 	}
     
-    ls_df <- lapply(1:length(list_vec), function(i){
+    ls_df_gp <- lapply(1:length(list_vec), function(i){
 		
 		data <- list_vec[[i]]
 		df_priority_data <- df_priority
@@ -100,24 +103,50 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 	
 		if(p.type == 'nominal'){
 			pval_obs <- res$p.value
+			
+			if(pval_obs < 0.05){
+				pval_obs <- as.numeric(format(signif(res$p.value,2),scientific=TRUE))
+			}else{
+				pval_obs <- signif(res$p.value,3)
+			}
+			
+			gp_pdf <- NULL
+			
 		}else if(p.type == 'empirical'){
 			B <- nperm
 			set.seed(seed)
-			vec_p <- sapply(1:B, function(i){
+			vec_exp <- sapply(1:B, function(i){
 				df$priority <- sample(df_priority_data$priority, nrow(df))
 				cor_exp <- stats::cor(x=df$priority, y=df$data, method=method)
 			})
-			pval_obs <- sum(abs(vec_p) > abs(cor_obs))/B
+			pval_obs <- sum(abs(vec_exp) > abs(cor_obs))/B
+			
+			if(pval_obs < 0.05){
+				pval_obs <- as.numeric(format(signif(res$p.value,2),scientific=TRUE))
+			}else{
+				pval_obs <- signif(res$p.value,3)
+			}
+			
+			##################################
+			## gp_pdf
+			cor <- NULL
+			gp <- ggplot(data.frame(cor=vec_exp), aes(cor))
+			gp <- gp + geom_density(adjust=0.8,fill='grey',colour='grey',alpha=0.5)
+			gp <- gp + geom_vline(xintercept=cor_obs,color='red')
+
+			gp <- gp + scale_x_continuous(limits=c(-1,1))
+			gp <- gp + theme_bw() + theme(axis.title.y=element_text(size=12,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=12,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
+			gp <- gp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+			gp_pdf <- gp + labs(x=paste0("Correlation (",method,")"), y=paste0("Probability density (null distribution)\nestimated based on ",B," permutations"), title=paste0("Observed correlation: ",cor_obs,' (empirical p-value: ',pval_obs,')')) + theme(plot.title=element_text(hjust=0.5))
+			##################################
+			
 		}
-	
-		if(pval_obs < 0.05){
-			pval_obs <- as.numeric(format(signif(res$p.value,2),scientific=TRUE))
-		}else{
-			pval_obs <- signif(res$p.value,3)
-		}
-	
-		data.frame(name=names(list_vec)[i], num=nrow(df), cor=cor_obs, pval=pval_obs, stringsAsFactors=FALSE)
+
+		df <- data.frame(name=names(list_vec)[i], num=nrow(df), cor=cor_obs, pval=pval_obs, stringsAsFactors=FALSE)
+		list(df=df, gp=gp_pdf)
     })
+    ls_gp_pdf <- lapply(ls_df_gp, function(x) x$gp)
+    ls_df <- lapply(ls_df_gp, function(x) x$df)
     dff <- do.call(rbind, ls_df)
     fdr <- stats::p.adjust(dff$pval, method=p.adjust.method)
     dff$fdr <- ifelse(fdr<0.05, as.numeric(format(signif(fdr,2),scientific=TRUE)), signif(fdr,3))
@@ -140,7 +169,14 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 			priority <- name <- NULL
 			m <- ggplot(df, aes(x=priority, y=data))
 			m <- m + geom_point()
-			m <- m + geom_smooth(method=c("lm","loess")[1], se=TRUE, span=4)
+			if(is.na(plot.smooth)){
+				if(method=="pearson"){
+					plot.smooth <- "lm"
+				}else if(method=="spearman"){
+					plot.smooth <- "loess"
+				}
+			}
+			m <- m + geom_smooth(method=plot.smooth, se=TRUE, span=4)
 			m <- m + theme_bw() + theme(legend.position="top", axis.title.y=element_text(size=12,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=12,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
 			m <- m + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 			subtitle <- paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs,', fdr: ',fdr_obs)
@@ -162,7 +198,8 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
     }
     
     ls_res <- list(df_summary = dff,
-    			  ls_gp = ls_gp_curve
+    			  ls_gp_curve = ls_gp_curve,
+    			  ls_gp_pdf	= ls_gp_pdf
                  )
     
     invisible(ls_res)

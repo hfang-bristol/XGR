@@ -21,7 +21,7 @@ xCorrelation(df, list_vec, method = c("pearson", "spearman"),
 p.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
 "hommel"),
-plot = FALSE)
+plot = FALSE, plot.smooth = c(NA, "lm", "loess"))
 </pre>
 
 
@@ -71,12 +71,18 @@ condition than FWER</p>
 <td>
 <p>logical to indicate whether scatter plot is drawn</p>
 </td></tr>
+<tr valign="top"><td><code>plot.smooth</code></td>
+<td>
+<p>the smooth method for the scatter plot. It can be NA
+(depending on correlation type), &quot;lm&quot; for the linear line or 'loess'
+for the loess curve</p>
+</td></tr>
 </table>
 
 
 <h3>Value</h3>
 
-<p>a list with two componets:
+<p>a list with three componets:
 </p>
 
 <ul>
@@ -86,8 +92,14 @@ data points used for calculation), &quot;cor&quot; (i.e. correlation), &quot;pva
 (i.e. p-value), &quot;fdr&quot;
 </p>
 </li>
-<li><p><code>ls_gp</code>: NULL if the plot is not drawn; otherwise, a list of
-'ggplot' objects
+<li><p><code>ls_gp_curve</code>: NULL if the plot is not drawn; otherwise, a
+list of 'ggplot' objects for scatter plot together with an estimated
+curve
+</p>
+</li>
+<li><p><code>ls_gp_pdf</code>: NULL if the plot is not drawn; otherwise, a
+list of 'ggplot' objects for pdf plot for null distribution of
+correlation together with a vertical line for observed correlation
 </p>
 </li></ul>
 

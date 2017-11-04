@@ -8,7 +8,7 @@ xCorrelation(df, list_vec, method = c("pearson", "spearman"),
 p.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
 "hommel"),
-plot = FALSE)
+plot = FALSE, plot.smooth = c(NA, "lm", "loess"))
 }
 \arguments{
 \item{df}{a data frame with two columns ('name' and 'value')}
@@ -37,16 +37,24 @@ the family-wise error rate (FWER). Notes: FDR is a less stringent
 condition than FWER}
 
 \item{plot}{logical to indicate whether scatter plot is drawn}
+
+\item{plot.smooth}{the smooth method for the scatter plot. It can be NA
+(depending on correlation type), "lm" for the linear line or 'loess'
+for the loess curve}
 }
 \value{
-a list with two componets:
+a list with three componets:
 \itemize{
 \item{\code{df_summary}: a data frame of n x 5, where n is the number
 of named vectors, and the 5 columns are "name", "num" (i.e. number of
 data points used for calculation), "cor" (i.e. correlation), "pval"
 (i.e. p-value), "fdr"}
-\item{\code{ls_gp}: NULL if the plot is not drawn; otherwise, a list of
-'ggplot' objects}
+\item{\code{ls_gp_curve}: NULL if the plot is not drawn; otherwise, a
+list of 'ggplot' objects for scatter plot together with an estimated
+curve}
+\item{\code{ls_gp_pdf}: NULL if the plot is not drawn; otherwise, a
+list of 'ggplot' objects for pdf plot for null distribution of
+correlation together with a vertical line for observed correlation}
 }
 }
 \description{

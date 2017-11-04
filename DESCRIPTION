@@ -79,5 +79,6 @@ Collate:
     'xPolarDot.r'
     'xPolarBar.r'
     'xEnricherGenesAdv.r'
+    'xHeatmapAdv.r'
 License: GPL-2
 biocViews: Bioinformatics
