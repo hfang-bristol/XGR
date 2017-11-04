@@ -143,7 +143,11 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 			m <- m + geom_smooth(method=c("lm","loess")[1], se=TRUE, span=4)
 			m <- m + theme_bw() + theme(legend.position="top", axis.title.y=element_text(size=12,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=12,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
 			m <- m + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-			gp_curve <- m + labs(x="data frame", y=name_obs, title=paste0("Correlation (",method,")"), subtitle=paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs,', fdr: ',fdr_obs)) + theme(plot.title=element_text(hjust=0.5, size=12), plot.subtitle=element_text(hjust=0.5, size=10))
+			subtitle <- paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs,', fdr: ',fdr_obs)
+			if(length(list_vec)==1){
+				subtitle <- paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs)
+			}
+			gp_curve <- m + labs(x="data frame", y=name_obs, title=paste0("Correlation (",method,"; n=",nrow(df),")"), subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5, size=12), plot.subtitle=element_text(hjust=0.5, size=10))
 		
 			if(0){
 			gp_curve <- gp_curve + scale_x_continuous(limits=c(0,ceiling(max(df$priority)*10)/10)) 

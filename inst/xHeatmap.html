@@ -16,13 +16,13 @@
 <h3>Usage</h3>
 
 <pre>
-xHeatmap(data, reorder = c("none", "row", "col", "both"), colormap =
-"jet",
-ncolors = 64, zlim = NULL, barwidth = 0.5, barheight = NULL,
-nbin = 64, legend.title = "", x.rotate = 45, x.text.size = 8,
-y.text.size = 8, shape = 19, size = 1, font.family = "sans",
-na.color = "grey80", data.label = NULL, label.size = 1,
-label.color = "black", ...)
+xHeatmap(data, reorder = c("none", "row", "col", "both"),
+colormap = "spectral", ncolors = 64, zlim = NULL, barwidth = 0.3,
+barheight = NULL, nbin = 64, legend.title = "", x.rotate = 60,
+x.text.size = 6, y.text.size = 6, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 2, plot.margin = unit(c(5.5,
+5.5, 5.5, 5.5), "pt"), font.family = "sans", na.color = "grey80",
+data.label = NULL, label.size = 1, label.color = "black", ...)
 </pre>
 
 
@@ -31,7 +31,8 @@ label.color = "black", ...)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data frame/matrix for coloring</p>
+<p>a data frame/matrix for coloring. The coloring can be
+continuous (numeric matrix) or discrete (factor matrix)</p>
 </td></tr>
 <tr valign="top"><td><code>reorder</code></td>
 <td>
@@ -84,17 +85,27 @@ matrix</p>
 <tr valign="top"><td><code>x.rotate</code></td>
 <td>
 <p>the angle to rotate the x tick labelings. By default,
-it is 45</p>
+it is 60</p>
 </td></tr>
 <tr valign="top"><td><code>x.text.size</code></td>
 <td>
 <p>the text size of the x tick labelings. By default,
-it is 8</p>
+it is 6</p>
 </td></tr>
 <tr valign="top"><td><code>y.text.size</code></td>
 <td>
 <p>the text size of the y tick labelings. By default,
-it is 8</p>
+it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>legend.text.size</code></td>
+<td>
+<p>the text size of the legend tick labelings. By
+default, it is 5</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title.size</code></td>
+<td>
+<p>the text size of the legend titles. By
+default, it is 6</p>
 </td></tr>
 <tr valign="top"><td><code>shape</code></td>
 <td>
@@ -102,7 +113,12 @@ it is 8</p>
 </td></tr>
 <tr valign="top"><td><code>size</code></td>
 <td>
-<p>the number specifying the shape size. By default, it is 1</p>
+<p>the number specifying the shape size. By default, it is 2</p>
+</td></tr>
+<tr valign="top"><td><code>plot.margin</code></td>
+<td>
+<p>the margin (t, r, b, l) around plot. By default, it
+is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
@@ -134,8 +150,7 @@ supraHex::visTreeBootstrap</p>
 
 <h3>Value</h3>
 
-<p>If the method is 'gpplot2', it returns a ggplot object, with
-components: gene, sample, val, y, x
+<p>a gpplot2 object
 </p>
 
 
@@ -157,12 +172,15 @@ components: gene, sample, val, y, x
 ## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-gp &lt;- xHeatmap(data, reorder="none", colormap='darkgreen-lightyellow',
-ncolors=64, zlim=c(0,151), x.rotate=45, shape=19, size=3,
-x.text.size=6,y.text.size=8)
-gp + guides(color=guide_legend())
+data(mtcars)
+gp &lt;- xHeatmap(mtcars, reorder="none", colormap='jet.top', x.rotate=45,
+shape=19, size=3, x.text.size=8,y.text.size=8, legend.title='mtcars')
+gp + theme(legend.position="bottom",legend.direction="horizontal") +
+guides(color=guide_colorbar(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
+gp + theme(legend.position="bottom",legend.direction="horizontal") +
+guides(color=guide_legend(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
 gp + geom_text(aes(x, y,
-label=val),size=1.8,color='red',fontface='bold',na.rm=TRUE,angle=45)
+label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
 
 ## End(Not run)
 </pre>

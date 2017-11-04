@@ -4,16 +4,17 @@
 \alias{xHeatmap}
 \title{Function to draw heatmap using ggplot2}
 \usage{
-xHeatmap(data, reorder = c("none", "row", "col", "both"), colormap =
-"jet",
-ncolors = 64, zlim = NULL, barwidth = 0.5, barheight = NULL,
-nbin = 64, legend.title = "", x.rotate = 45, x.text.size = 8,
-y.text.size = 8, shape = 19, size = 1, font.family = "sans",
-na.color = "grey80", data.label = NULL, label.size = 1,
-label.color = "black", ...)
+xHeatmap(data, reorder = c("none", "row", "col", "both"),
+colormap = "spectral", ncolors = 64, zlim = NULL, barwidth = 0.3,
+barheight = NULL, nbin = 64, legend.title = "", x.rotate = 60,
+x.text.size = 6, y.text.size = 6, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 2, plot.margin = unit(c(5.5,
+5.5, 5.5, 5.5), "pt"), font.family = "sans", na.color = "grey80",
+data.label = NULL, label.size = 1, label.color = "black", ...)
 }
 \arguments{
-\item{data}{a data frame/matrix for coloring}
+\item{data}{a data frame/matrix for coloring. The coloring can be
+continuous (numeric matrix) or discrete (factor matrix)}
 
 \item{reorder}{how to reorder rows and columns. It can be "none" for no
 reordering, "row" for reordering rows according to number of sharings
@@ -48,17 +49,26 @@ matrix}
 \item{legend.title}{the title of the colorbar. By default, it is ''}
 
 \item{x.rotate}{the angle to rotate the x tick labelings. By default,
-it is 45}
+it is 60}
 
 \item{x.text.size}{the text size of the x tick labelings. By default,
-it is 8}
+it is 6}
 
 \item{y.text.size}{the text size of the y tick labelings. By default,
-it is 8}
+it is 6}
+
+\item{legend.text.size}{the text size of the legend tick labelings. By
+default, it is 5}
+
+\item{legend.title.size}{the text size of the legend titles. By
+default, it is 6}
 
 \item{shape}{the number specifying the shape. By default, it is 19}
 
-\item{size}{the number specifying the shape size. By default, it is 1}
+\item{size}{the number specifying the shape size. By default, it is 2}
+
+\item{plot.margin}{the margin (t, r, b, l) around plot. By default, it
+is unit(c(5.5,5.5,5.5,5.5),"pt")}
 
 \item{font.family}{the font family for texts}
 
@@ -74,8 +84,7 @@ it is 8}
 supraHex::visTreeBootstrap}
 }
 \value{
-If the method is 'gpplot2', it returns a ggplot object, with
-components: gene, sample, val, y, x
+a gpplot2 object
 }
 \description{
 \code{xHeatmap} is supposed to draw heatmap using ggplot2.
@@ -87,12 +96,15 @@ none
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-gp <- xHeatmap(data, reorder="none", colormap='darkgreen-lightyellow',
-ncolors=64, zlim=c(0,151), x.rotate=45, shape=19, size=3,
-x.text.size=6,y.text.size=8)
-gp + guides(color=guide_legend())
+data(mtcars)
+gp <- xHeatmap(mtcars, reorder="none", colormap='jet.top', x.rotate=45,
+shape=19, size=3, x.text.size=8,y.text.size=8, legend.title='mtcars')
+gp + theme(legend.position="bottom",legend.direction="horizontal") +
+guides(color=guide_colorbar(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
+gp + theme(legend.position="bottom",legend.direction="horizontal") +
+guides(color=guide_legend(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
 gp + geom_text(aes(x, y,
-label=val),size=1.8,color='red',fontface='bold',na.rm=TRUE,angle=45)
+label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
 }
 }
 \seealso{
