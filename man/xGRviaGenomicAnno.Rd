@@ -179,7 +179,7 @@ factor.}
 \item{\code{ENCODE_TFBS_ClusteredV3}: a list (161 transcription
 factors) of GenomicRanges objects; each is an GR object containing
 clustered peaks per transcription factor, along with a meta-column
-'cells' telling cell types associtated with a clustered peak.}
+'cells' telling cell types associated with a clustered peak.}
 \item{\code{ENCODE_TFBS_ClusteredV3_CellTypes}: a list (91 cell types)
 of a list (transcription factors) of GenomicRanges objects. Each cell
 type is a list (transcription factor) of GenomicRanges objects; each is
@@ -192,7 +192,7 @@ GenomicRanges objects; each is an GR object containing uniformly
 identified peaks per cell type.}
 \item{\code{ENCODE_DNaseI_ClusteredV3}: an GR object containing
 clustered peaks, along with a meta-column 'num_cells' telling how many
-cell types associtated with a clustered peak.}
+cell types associated with a clustered peak.}
 \item{\code{ENCODE_DNaseI_ClusteredV3_CellTypes}: a list (125 cell
 types) of GenomicRanges objects; each is an GR object containing
 clustered peaks per cell type.}

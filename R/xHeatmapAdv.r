@@ -142,7 +142,7 @@ xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both
 	})
 	#gt_legend <- gridExtra::grid.arrange(grobs=ls_gp_legend, nrow=legend.nrow, as.table=TRUE)
 	gt_legend <- gridExtra::arrangeGrob(grobs=ls_gp_legend, nrow=legend.nrow, as.table=TRUE, top='', padding=unit(c(1,0,0,0),"line"))
-	#grid.draw(gt_legend)
+	#grid::grid.draw(gt_legend)
 	
 	#######################################
 	## aligning axes (keep the same heights)

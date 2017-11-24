@@ -95,7 +95,13 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 		ind <- match(df_priority_data$name, names(data))
 		df_priority_data$data <- data[ind]
 		df <- subset(df_priority_data, !is.na(data))
-	
+		
+		################
+		if(nrow(df)<=5){
+			return(NULL)
+		}
+		################
+				
 		##############
 		res <- stats::cor.test(x=df$priority, y=as.numeric(df$data), method=method, exact=FALSE)
 		cor_obs <- signif(res$estimate, 3)
@@ -135,9 +141,9 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 			gp <- gp + geom_vline(xintercept=cor_obs,color='red')
 
 			gp <- gp + scale_x_continuous(limits=c(-1,1))
-			gp <- gp + theme_bw() + theme(axis.title.y=element_text(size=12,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=12,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
+			gp <- gp + theme_bw() + theme(axis.title.y=element_text(size=10,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=10,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
 			gp <- gp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-			gp_pdf <- gp + labs(x=paste0("Correlation (",method,")"), y=paste0("Probability density (null distribution)\nestimated based on ",B," permutations"), title=paste0("Observed correlation: ",cor_obs,' (empirical p-value: ',pval_obs,')')) + theme(plot.title=element_text(hjust=0.5))
+			gp_pdf <- gp + labs(x=paste0("Correlation (",method,")"), y=paste0("Probability density (null distribution)\nestimated based on ",B," permutations"), title=names(list_vec)[i], subtitle=paste0("correlation: ",cor_obs,' (empirical p: ',pval_obs,')')) + theme(plot.title=element_text(hjust=0.5, size=10), plot.subtitle=element_text(hjust=0.5, size=8))
 			##################################
 			
 		}
@@ -145,9 +151,27 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 		df <- data.frame(name=names(list_vec)[i], num=nrow(df), cor=cor_obs, pval=pval_obs, stringsAsFactors=FALSE)
 		list(df=df, gp=gp_pdf)
     })
-    ls_gp_pdf <- lapply(ls_df_gp, function(x) x$gp)
-    ls_df <- lapply(ls_df_gp, function(x) x$df)
+    
+    ## ls_gp_pdf
+    ls_gp_pdf <- lapply(ls_df_gp, function(x){
+    	if(!is.null(x)){
+    		x$gp
+    	}
+    })
+    names(ls_gp_pdf) <- names(list_vec)
+    ## dff
+    ls_df <- lapply(ls_df_gp, function(x){
+    	if(!is.null(x)){
+    		x$df
+    	}
+    })
     dff <- do.call(rbind, ls_df)
+    
+    ###########
+    if(is.null(dff)){
+    	return(NULL)
+    }
+    ###########    
     fdr <- stats::p.adjust(dff$pval, method=p.adjust.method)
     dff$fdr <- ifelse(fdr<0.05, as.numeric(format(signif(fdr,2),scientific=TRUE)), signif(fdr,3))
     rownames(dff) <- 1:nrow(dff)
@@ -161,10 +185,15 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 			df_priority_data$data <- data[ind]
 			df <- subset(df_priority_data, !is.na(data))
 			
-			name_obs <- dff$name[i]
-			cor_obs <- dff$cor[i]
-			pval_obs <- dff$pval[i]
-			fdr_obs <- dff$fdr[i]
+			ind <- match(names(list_vec)[i], dff$name)
+			if(is.na(ind)){
+				return(NULL)
+			}else{
+				name_obs <- dff$name[ind]
+				cor_obs <- dff$cor[ind]
+				pval_obs <- dff$pval[ind]
+				fdr_obs <- dff$fdr[ind]
+			}
 			
 			priority <- name <- NULL
 			m <- ggplot(df, aes(x=priority, y=data))
@@ -177,13 +206,13 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 				}
 			}
 			m <- m + geom_smooth(method=plot.smooth, se=TRUE, span=4)
-			m <- m + theme_bw() + theme(legend.position="top", axis.title.y=element_text(size=12,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=12,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
+			m <- m + theme_bw() + theme(legend.position="top", axis.title.y=element_text(size=10,color="black"), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=10,color="black"), axis.text.x=element_text(size=8,color="black"), panel.background=element_rect(fill="transparent"))
 			m <- m + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-			subtitle <- paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs,', fdr: ',fdr_obs)
+			subtitle <- paste0("correlation: ",cor_obs,' (',p.type,' p: ',pval_obs,', fdr: ',fdr_obs,')')
 			if(length(list_vec)==1){
-				subtitle <- paste0("correlation: ",cor_obs,', ',p.type,' p-value: ',pval_obs)
+				subtitle <- paste0("correlation: ",cor_obs,', (',p.type,' p: ',pval_obs,')')
 			}
-			gp_curve <- m + labs(x="data frame", y=name_obs, title=paste0("Correlation (",method,"; n=",nrow(df),")"), subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5, size=12), plot.subtitle=element_text(hjust=0.5, size=10))
+			gp_curve <- m + labs(x="data frame", y=name_obs, title=paste0("Correlation (",method,"; n=",nrow(df),")"), subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5, size=10), plot.subtitle=element_text(hjust=0.5, size=8))
 		
 			if(0){
 			gp_curve <- gp_curve + scale_x_continuous(limits=c(0,ceiling(max(df$priority)*10)/10)) 

@@ -61,7 +61,9 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		indx <- sapply(mat_val, is.factor)
 		mat_val[indx] <- sapply(mat_val[,indx], function(x) as.numeric(x))
 		
-		flag_factor <- TRUE
+		################
+		flag_factor <- F
+		################
 	}
 	
 	ind_row <- 1:nrow(mat_val)
