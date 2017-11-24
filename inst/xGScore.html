@@ -10,9 +10,9 @@
 <h3>Description</h3>
 
 <p><code>xGScore</code> is supposed to extract genomic scores given a list of
-genomic regions. Scores for genomic positions can be numeric values for
-constraint/conservation or impact/pathogenicity on variation on
-positions. It returns a GR object
+genomic regions. Scores for genomic regions/variants can be
+constraint/conservation or impact/pathogenicity. It returns a GR
+object.
 </p>
 
 
@@ -62,15 +62,18 @@ another. The conversions supported are &quot;hg38.to.hg19&quot; and
 <td>
 <p>which genomic scores (GS) annotaions used. It can
 be 'fitCons' (the probability of fitness consequences for point
-mutations), 'phastCons' (the probability that each nucleotide belongs
-to a conserved element: negative selection [0,1]), 'phyloP'
+mutations; <a href="http://www.ncbi.nlm.nih.gov/pubmed/25599402">http://www.ncbi.nlm.nih.gov/pubmed/25599402</a>),
+'phastCons' (the probability that each nucleotide belongs to a
+conserved element/negative selection [0,1]:
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/25599402">http://www.ncbi.nlm.nih.gov/pubmed/25599402</a>), 'phyloP'
 (conservation at individual sites representing -log p-values under a
 null hypothesis of neutral evolution, positive scores for conservation
 and negative scores for acceleration), 'mcap' (eliminating a majority
 of variants with uncertain significance in clinical exomes at high
-sensitivity), and 'cadd' (combined annotation dependent depletion for
-estimating relative levels of pathogenicity of potential human
-variants)</p>
+sensitivity: <a href="http://www.ncbi.nlm.nih.gov/pubmed/27776117">http://www.ncbi.nlm.nih.gov/pubmed/27776117</a>), and
+'cadd' (combined annotation dependent depletion for estimating relative
+levels of pathogenicity of potential human variants:
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24487276">http://www.ncbi.nlm.nih.gov/pubmed/24487276</a>)</p>
 </td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
 <td>

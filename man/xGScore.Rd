@@ -35,15 +35,18 @@ another. The conversions supported are "hg38.to.hg19" and
 
 \item{GS.annotation}{which genomic scores (GS) annotaions used. It can
 be 'fitCons' (the probability of fitness consequences for point
-mutations), 'phastCons' (the probability that each nucleotide belongs
-to a conserved element: negative selection [0,1]), 'phyloP'
+mutations; \url{http://www.ncbi.nlm.nih.gov/pubmed/25599402}),
+'phastCons' (the probability that each nucleotide belongs to a
+conserved element/negative selection [0,1]:
+\url{http://www.ncbi.nlm.nih.gov/pubmed/25599402}), 'phyloP'
 (conservation at individual sites representing -log p-values under a
 null hypothesis of neutral evolution, positive scores for conservation
 and negative scores for acceleration), 'mcap' (eliminating a majority
 of variants with uncertain significance in clinical exomes at high
-sensitivity), and 'cadd' (combined annotation dependent depletion for
-estimating relative levels of pathogenicity of potential human
-variants)}
+sensitivity: \url{http://www.ncbi.nlm.nih.gov/pubmed/27776117}), and
+'cadd' (combined annotation dependent depletion for estimating relative
+levels of pathogenicity of potential human variants:
+\url{http://www.ncbi.nlm.nih.gov/pubmed/24487276})}
 
 \item{scoring.scheme}{the method used to calculate scores spanning a
 set of GR. It can be one of "mean", "median", "max", "min" and "sum"}
@@ -59,9 +62,9 @@ a GenomicRanges object
 }
 \description{
 \code{xGScore} is supposed to extract genomic scores given a list of
-genomic regions. Scores for genomic positions can be numeric values for
-constraint/conservation or impact/pathogenicity on variation on
-positions. It returns a GR object
+genomic regions. Scores for genomic regions/variants can be
+constraint/conservation or impact/pathogenicity. It returns a GR
+object.
 }
 \examples{
 \dontrun{
