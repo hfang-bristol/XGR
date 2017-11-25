@@ -411,11 +411,22 @@ RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS
 data <- ImmunoBase$AS$variant
 
-# b) extract fitness consequence score 
-# in terms of overlaps with genomic segments (Primary monocytes from peripheral blood)
+# b) in terms of overlaps with genomic segments (Primary monocytes from peripheral blood)
+## fitness consequence score 
 res_df <- xGScoreAdv(data=data, format="GRanges",
 GS.annotation="fitCons",
 GR.annotation="EpigenomeAtlas_15Segments_E029",
+RData.location=RData.location)
+## phastCons conservation score 
+res_df <- xGScoreAdv(data=data, format="GRanges",
+GS.annotation="phastCons",
+GR.annotation="EpigenomeAtlas_15Segments_E029",
+RData.location=RData.location)
+
+# c) in terms of overlaps with genic annotations
+## phyloP conservation score 
+res_df <- xGScoreAdv(data=data, format="GRanges",
+GS.annotation="phyloP", GR.annotation="Genic_anno",
 RData.location=RData.location)
 }
 }

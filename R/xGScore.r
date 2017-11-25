@@ -27,7 +27,7 @@
 #' data <- ImmunoBase$AS$variant
 #'
 #' # b) extract fitness consequence score
-#' gr <- xGScore(data=data, format="GRanges", GS.annotation="phastCons", scoring.scheme="mean", RData.location=RData.location)
+#' gr <- xGScore(data=data, format="GRanges", GS.annotation="fitCons", scoring.scheme="mean", RData.location=RData.location)
 #' }
 
 xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), scoring.scheme=c("mean","median","max","min","sum"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata_dev")
@@ -133,7 +133,8 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 	#############
 	# only those in chr1..chr22 chrX chrY allows
 	if(1){
-		ind <- grepl('_|chrM',as.data.frame(dGR)$seqnames)
+		#ind <- grepl('_|chrM',as.data.frame(dGR)$seqnames)
+		ind <- grepl('_|chrM',as.vector(dGR@seqnames))
 		dGR <- dGR[!ind]
 	}
 	#############

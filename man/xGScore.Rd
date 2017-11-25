@@ -79,7 +79,7 @@ RData.location=RData.location)
 data <- ImmunoBase$AS$variant
 
 # b) extract fitness consequence score
-gr <- xGScore(data=data, format="GRanges", GS.annotation="phastCons",
+gr <- xGScore(data=data, format="GRanges", GS.annotation="fitCons",
 scoring.scheme="mean", RData.location=RData.location)
 }
 }
