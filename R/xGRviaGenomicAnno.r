@@ -271,7 +271,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(class(GR.annotation) == "GRanges"){
+			if(class(GR.annotation) == "list"){
 				###################################
 				## now GR.annotation can be directly provided as a GR object
 				###################################
@@ -355,7 +355,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(class(GR.annotation) == "GRanges"){
+			if(class(GR.annotation) == "list"){
 				###################################
 				## now GR.annotation can be directly provided as a GR object
 				###################################
@@ -423,7 +423,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			if(class(GR.annotation) == "GRanges"){
+			if(class(GR.annotation) == "list"){
 				###################################
 				## now GR.annotation can be directly provided as a GR object
 				###################################
@@ -466,7 +466,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			## construct annotation GR
 			aGR <- annotation
 		}else{
-			if(class(GR.annotation) == "GRanges"){
+			if(class(GR.annotation) == "list"){
 				###################################
 				## now GR.annotation can be directly provided as a GR object
 				###################################
