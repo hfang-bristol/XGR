@@ -9,7 +9,7 @@ xGScore(data, format = c("chr:start-end", "data.frame", "bed",
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GS.annotation = c("fitCons", "phastCons", "phyloP", "mcap", "cadd"),
 scoring.scheme = c("mean", "median", "max", "min", "sum"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata_dev")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -79,7 +79,7 @@ RData.location=RData.location)
 data <- ImmunoBase$AS$variant
 
 # b) extract fitness consequence score
-gr <- xGScore(data=data, format="GRanges", GS.annotation="fitCons",
+gr <- xGScore(data=data, format="GRanges", GS.annotation="phastCons",
 scoring.scheme="mean", RData.location=RData.location)
 }
 }

@@ -27,10 +27,10 @@
 #' data <- ImmunoBase$AS$variant
 #'
 #' # b) extract fitness consequence score
-#' gr <- xGScore(data=data, format="GRanges", GS.annotation="fitCons", scoring.scheme="mean", RData.location=RData.location)
+#' gr <- xGScore(data=data, format="GRanges", GS.annotation="phastCons", scoring.scheme="mean", RData.location=RData.location)
 #' }
 
-xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), scoring.scheme=c("mean","median","max","min","sum"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), scoring.scheme=c("mean","median","max","min","sum"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata_dev")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -58,9 +58,9 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 	}else if(GS.annotation=='phyloP'){
 		gsco <- xRDataLoader('hg19.phyloP100way.UCSC', verbose=verbose, RData.location=RData.location)
 	}else if(GS.annotation=='mcap'){
-		gsco <- xRDataLoader('mcap.v1.0.hg19', verbose=verbose, RData.location=RData.location)
+		gsco <- xRDataLoader('hg19.mcap.v1.0', verbose=verbose, RData.location=RData.location)
 	}else if(GS.annotation=='cadd'){
-		gsco <- xRDataLoader('cadd.v1.3.hg19', verbose=verbose, RData.location=RData.location)
+		gsco <- xRDataLoader('hg19.cadd.v1.3', verbose=verbose, RData.location=RData.location)
 	}
 	
 	#############
@@ -69,7 +69,7 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 	#############
 	
 	if(verbose){
-		message(sprintf("\tIntended directory: '%s' (%s) ...", gsco@data_dirpath, as.character(Sys.time())), appendLF=T)
+		message(sprintf("\tintended directory: '%s' (%s) ...", gsco@data_dirpath, as.character(Sys.time())), appendLF=T)
 	}
 	
 	## check file exists
@@ -91,12 +91,12 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 		## create a new directory to hold the downloads
 		my_dir <- file.path(getwd(), GS.annotation)
 		if(verbose){
-			message(sprintf("\tActual directory: '%s' (%s) ...", my_dir, as.character(Sys.time())), appendLF=T)
+			message(sprintf("\tactual directory: '%s' (%s) ...", my_dir, as.character(Sys.time())), appendLF=T)
 		}
 		if(!file.exists(my_dir)){
 		
 			if(verbose){
-				message(sprintf("\tDownloading files (once and only once) into '%s' (%s) ...", my_dir, as.character(Sys.time())), appendLF=T)
+				message(sprintf("\tdownloading files (once and only once) into '%s' (%s) ...", my_dir, as.character(Sys.time())), appendLF=T)
 			}
 		
 			dir.create(my_dir)
@@ -112,7 +112,7 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 
 		gsco@data_dirpath <- my_dir
 	}
-    
+    	
 	##########################################
 	if(verbose){
 		now <- Sys.time()
@@ -129,6 +129,14 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 	}else if(scoring.scheme=="sum"){
 		summaryFun <- sum
 	}
+	
+	#############
+	# only those in chr1..chr22 chrX chrY allows
+	if(1){
+		ind <- grepl('_|chrM',as.data.frame(dGR)$seqnames)
+		dGR <- dGR[!ind]
+	}
+	#############
 	
 	dGR$GScore <- suppressWarnings(GenomicScores::scores(gsco, dGR, scores.only=TRUE, summaryFun=summaryFun))
 

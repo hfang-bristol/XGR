@@ -39,7 +39,8 @@ GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
-"EpigenomeAtlas_15Segments_E062"), verbose = T,
+"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno"), verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -429,6 +430,27 @@ hematopoietic stem cells G-CSF-mobilized Female).}
 segments) of GenomicRanges objects; each is an GR object containing
 segments per category in the reference epigenome E051 (Primary
 hematopoietic stem cells G-CSF-mobilized Male).}
+}
+15. CpG annotation
+\itemize{
+\item{\code{CpG_anno}: a list (4 categories) of GenomicRanges objects;
+each is an GR object. They are exclusive, including (in order)
+"CpG_islands", "CpG_shores" (2Kb upstream/downstream from the ends of
+the CpG islands), "CpG_shelves" (2Kb upstream/downstream of the
+farthest upstream/downstream limits of the CpG shores), and "CpG_inter"
+(the remaining inter-CGI genomic regions 'open sea'). }
+}
+16. Genic annotation
+\itemize{
+\item{\code{Genic_anno}: a list (12 categories) of GenomicRanges
+objects; each is an GR object. They are not exclusively, including
+"Genic_1to5kb" (1-5Kb upstream of TSS), "Genic_promoters" (1Kb upstream
+of TSS), "Genic_5UTRs", "Genic_firstexons" (first exons),
+"Genic_exons", "Genic_exonintronboundaries", "Genic_introns",
+"Genic_intronexonboundaries", "Genic_cds", "Genic_3UTRs",
+"Genic_intergenic" (the intergenic regions exclude the previous list of
+annotations), and "Genic_lncRNA" (GENCODE long non-coding RNA (lncRNA)
+transcripts). }
 }
 }
 \examples{

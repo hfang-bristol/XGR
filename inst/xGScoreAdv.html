@@ -11,10 +11,11 @@
 
 <p><code>xGScoreAdv</code> is supposed to calculate per base scores for a input
 list of genomic regions (genome build 19), using genomic annotations
-(eg active chromatin, transcription factor binding sites/motifs,
-conserved sites). The per base scores are calculated for overlaps with
-each genomic annotation. Scores for genomic regions/variants can be
-constraint/conservation or impact/pathogenicity.
+(eg genomic segments, active chromatin, transcription factor binding
+sites/motifs, conserved sites). The per base scores are calculated for
+overlaps with each genomic annotation. Scores for genomic
+regions/variants can be constraint/conservation or
+impact/pathogenicity.
 </p>
 
 
@@ -52,8 +53,10 @@ GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
-"EpigenomeAtlas_15Segments_E062"), details = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno"), details =
+F,
+verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata_dev")
 </pre>
 
 
@@ -560,6 +563,35 @@ hematopoietic stem cells G-CSF-mobilized Male).
 </p>
 </li></ul>
 
+<p>15. CpG annotation
+</p>
+
+<ul>
+<li><p><code>CpG_anno</code>: a list (4 categories) of GenomicRanges objects;
+each is an GR object. They are exclusive, including (in order)
+&quot;CpG_islands&quot;, &quot;CpG_shores&quot; (2Kb upstream/downstream from the ends of
+the CpG islands), &quot;CpG_shelves&quot; (2Kb upstream/downstream of the
+farthest upstream/downstream limits of the CpG shores), and &quot;CpG_inter&quot;
+(the remaining inter-CGI genomic regions 'open sea'). 
+</p>
+</li></ul>
+
+<p>16. Genic annotation
+</p>
+
+<ul>
+<li><p><code>Genic_anno</code>: a list (12 categories) of GenomicRanges
+objects; each is an GR object. They are not exclusively, including
+&quot;Genic_1to5kb&quot; (1-5Kb upstream of TSS), &quot;Genic_promoters&quot; (1Kb upstream
+of TSS), &quot;Genic_5UTRs&quot;, &quot;Genic_firstexons&quot; (first exons),
+&quot;Genic_exons&quot;, &quot;Genic_exonintronboundaries&quot;, &quot;Genic_introns&quot;,
+&quot;Genic_intronexonboundaries&quot;, &quot;Genic_cds&quot;, &quot;Genic_3UTRs&quot;,
+&quot;Genic_intergenic&quot; (the intergenic regions exclude the previous list of
+annotations), and &quot;Genic_lncRNA&quot; (GENCODE long non-coding RNA (lncRNA)
+transcripts). 
+</p>
+</li></ul>
+
 
 
 <h3>See Also</h3>
@@ -583,7 +615,8 @@ RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS
 data &lt;- ImmunoBase$AS$variant
 
-# b) extract fitness consequence score in terms of overlaps with genomic segments (Primary monocytes from peripheral blood)
+# b) extract fitness consequence score 
+# in terms of overlaps with genomic segments (Primary monocytes from peripheral blood)
 res_df &lt;- xGScoreAdv(data=data, format="GRanges",
 GS.annotation="fitCons",
 GR.annotation="EpigenomeAtlas_15Segments_E029",
