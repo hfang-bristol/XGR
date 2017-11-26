@@ -138,8 +138,8 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a data frame with 8 columns (below explanations are based on results at
-the 'hybrid' resolution):
+a data frame with following columns (below explanations are based on
+results at the 'hybrid' resolution):
 \itemize{
 \item{\code{name}: the annotation name}
 \item{\code{nAnno}: the number of bases covered by that annotation. If
@@ -152,6 +152,11 @@ also restricted by this}
 \item{\code{pvalue}: p-value}
 \item{\code{adjp}: adjusted p-value. It is the p value but after being
 adjusted for multiple comparisons}
+\item{\code{or}: a vector containing odds ratio}
+\item{\code{CIl}: a vector containing lower bound confidence interval
+for the odds ratio}
+\item{\code{CIu}: a vector containing upper bound confidence interval
+for the odds ratio}
 \item{\code{expProb}: the probability of expecting bases overlapped
 between background regions and annotation regions}
 \item{\code{obsProb}: the probability of observing regions overlapped
@@ -479,7 +484,11 @@ xEnrichViewer(eTerm)
 bp <- xEnrichBarplot(eTerm, top_num='auto', displayBy="fc")
 bp
 
-## e) save enrichment results to the file called 'Regions_enrichments.txt'
+## e) forest plot of enriched terms
+gp <- xEnrichForest(eTerm)
+gp
+
+## f) save enrichment results to the file called 'Regions_enrichments.txt'
 output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions_enrichments.txt", sep="\\t",

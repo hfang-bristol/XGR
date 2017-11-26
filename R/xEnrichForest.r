@@ -47,7 +47,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE) 
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE)
 {
     
     if(is.null(eTerm)){
@@ -77,6 +77,20 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, colormap="ggplot2.
 		
 		if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
 			df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu')]
+			
+		}else if(all(c('group','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+			df <- eTerm[,c('group','name','adjp','or','CIl','CIu')]
+			df$ontology <- 'ontology'
+			
+		}else if(all(c('ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+			df <- eTerm[,c('ontology','name','adjp','or','CIl','CIu')]
+			df$group <- 'group'
+		
+		}else if(all(c('name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+			df <- eTerm[,c('name','adjp','or','CIl','CIu')]
+			df$group <- 'group'
+			df$ontology <- 'ontology'
+		
 		}else{
 			warnings("The input data.frame does not contain required columns: c('group','ontology','name','adjp','or','CIl','CIu').\n")
         	return(NULL)

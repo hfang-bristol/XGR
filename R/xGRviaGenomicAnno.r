@@ -15,7 +15,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' a data frame with 8 columns (below explanations are based on results at the 'hybrid' resolution):
+#' a data frame with following columns (below explanations are based on results at the 'hybrid' resolution):
 #' \itemize{
 #'  \item{\code{name}: the annotation name}
 #'  \item{\code{nAnno}: the number of bases covered by that annotation. If the background is provided, they are also restricted by this}
@@ -24,6 +24,9 @@
 #'  \item{\code{zscore}: z-score}
 #'  \item{\code{pvalue}: p-value}
 #'  \item{\code{adjp}: adjusted p-value. It is the p value but after being adjusted for multiple comparisons}
+#'  \item{\code{or}: a vector containing odds ratio}
+#'  \item{\code{CIl}: a vector containing lower bound confidence interval for the odds ratio}
+#'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{expProb}: the probability of expecting bases overlapped between background regions and annotation regions}
 #'  \item{\code{obsProb}: the probability of observing regions overlapped between input regions and annotation regions}
 #' }
@@ -161,7 +164,11 @@
 #' bp <- xEnrichBarplot(eTerm, top_num='auto', displayBy="fc")
 #' bp
 #'
-#' ## e) save enrichment results to the file called 'Regions_enrichments.txt'
+#' ## e) forest plot of enriched terms
+#' gp <- xEnrichForest(eTerm)
+#' gp
+#'
+#' ## f) save enrichment results to the file called 'Regions_enrichments.txt'
 #' output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
 #' utils::write.table(output, file="Regions_enrichments.txt", sep="\t", row.names=FALSE)
 #' }
@@ -542,6 +549,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 
         return(p.value)
     }
+    
 	#####################################
     
     ############
@@ -710,12 +718,20 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		
 		p.value <- doBinomialTest(X, K, M, N, p.tail)
 		
+		## odds ratio calculated from Fisher's exact test
+		## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
+		cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
+		res <- stats::fisher.test(cTab)
+		or <- as.vector(res$estimate)
+		CIl <- as.vector(res$conf.int)[1]
+		CIu <- as.vector(res$conf.int)[2]
+		
 		## output
-		c(X, K, M, N, X/K, M/N, (X/K)/(M/N), z.score, p.value)
+		c(X, K, M, N, X/K, M/N, (X/K)/(M/N), z.score, p.value, or, CIl, CIu)
 	})
 	res_df <- do.call(rbind, res_ls)
 	enrichment_df <- data.frame(names(overlap_nBases), res_df, stringsAsFactors=F)
-	colnames(enrichment_df) <- c("name", "nOverlap", "nData", "nAnno", "nBG", "obsProb", "expProb", "fc", "zscore", "pvalue")
+	colnames(enrichment_df) <- c("name", "nOverlap", "nData", "nAnno", "nBG", "obsProb", "expProb", "fc", "zscore", "pvalue", "or", "CIl", "CIu")
 
 	## Adjust P-values for multiple comparisons
 	p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel")[1]
@@ -759,7 +775,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
     
-	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "expProb", "obsProb")]
+	res_df <- enrichment_df[, c("name", "nAnno", "nOverlap", "fc", "zscore", "pvalue", "adjp", "or", "CIl", "CIu", "expProb", "obsProb")]
 	eTerm <- xEnrichViewer(res_df, top_num=nrow(res_df), sortBy='zscore')
 	
 	invisible(eTerm)

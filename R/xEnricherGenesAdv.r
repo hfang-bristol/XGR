@@ -1,6 +1,6 @@
 #' Function to conduct enrichment analysis given a list of gene sets and a list of ontologies
 #'
-#' \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}.
+#' \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}, returning an object of the class 'ls_eTerm'.
 #'
 #' @param list_vec an input vector containing gene symbols. Alternatively it can be a list of vectors, representing multiple groups of genes
 #' @param background a background vector containing gene symbols as the test background. If NULL, by default all annotatable are used as background

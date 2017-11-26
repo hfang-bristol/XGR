@@ -3,7 +3,11 @@ CHANGES IN VERSION 1.1.1
 
 NEW FEATURES
 
-    o Modify functions ('xEnricher', 'xEnricherGenes', 'xEnricherSNPs', 'xEnricherYours', 'xGRviaGenomicAnno') enabling two-side p-value calculation
+    o Modify functions ('xEnricher', 'xEnricherGenes', 'xEnricherSNPs', 'xEnricherYours', 'xGRviaGenomicAnno') enabling two-side p-value calculation and inclusion of odds ratio (confidence intervals)
+
+    o Add a new function 'xEnricherGenesAdv' for conducting enrichment analysis given a list of gene sets and a list of ontologies
+    
+    o Add a new function 'xEnrichForest' for visualising enrichment results in a forest plot
 
     o Add a new function 'xVisInterpAnimate' for animating irregular data interpolation and visualisation
     

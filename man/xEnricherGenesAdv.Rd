@@ -181,7 +181,8 @@ object}
 \description{
 \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis
 given a list of gene sets and a list of ontologies. It is an advanced
-version of \code{xEnricherGenes}.
+version of \code{xEnricherGenes}, returning an object of the class
+'ls_eTerm'.
 }
 \note{
 none
