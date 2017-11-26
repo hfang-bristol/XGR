@@ -8,7 +8,9 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom",
-"jet.both", "spectral"), interpolate = c("spline", "linear"))
+"jet.both", "spectral", "ggplot2.top", "ggplot2.bottom",
+"ggplot2.both"),
+interpolate = c("spline", "linear"))
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"

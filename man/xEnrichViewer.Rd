@@ -5,7 +5,7 @@
 \title{Function to view enrichment results}
 \usage{
 xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
-"zscore", "fc", "nAnno", "nOverlap", "none"), decreasing = NULL,
+"zscore", "fc", "nAnno", "nOverlap", "or", "none"), decreasing = NULL,
 details = F)
 }
 \arguments{
@@ -18,8 +18,8 @@ details = F)
 gene sets (terms). It can be "adjp" or "fdr" for adjusted p value
 (FDR), "pvalue" for p value, "zscore" for enrichment z-score, "fc" for
 enrichment fold change, "nAnno" for the number of sets (terms),
-"nOverlap" for the number in overlaps, and "none" for ordering
-according to ID of terms}
+"nOverlap" for the number in overlaps, "or" for the odds ratio, and
+"none" for ordering according to ID of terms}
 
 \item{decreasing}{logical to indicate whether to sort in a decreasing
 order. If it is null, it would be true for "zscore", "nAnno" or
@@ -40,6 +40,11 @@ a data frame with following components:
 \item{\code{zscore}: enrichment z-score}
 \item{\code{pvalue}: nominal p value}
 \item{\code{adjp}: adjusted p value (FDR)}
+\item{\code{or}: a vector containing odds ratio}
+\item{\code{CIl}: a vector containing lower bound confidence interval
+for the odds ratio}
+\item{\code{CIu}: a vector containing upper bound confidence interval
+for the odds ratio}
 \item{\code{distance}: term distance or other information; optional, it
 is only appended when "details" is true}
 \item{\code{members}: members (represented as Gene Symbols) in

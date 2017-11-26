@@ -112,7 +112,7 @@ appended when "details" is true}
 }
 }
 \description{
-\code{xGScoreAdv} is supposed to calculate per base scores for a input
+\code{xGScoreAdv} is supposed to calculate per base scores for an input
 list of genomic regions (genome build 19), using genomic annotations
 (eg genomic segments, active chromatin, transcription factor binding
 sites/motifs, conserved sites). The per base scores are calculated for

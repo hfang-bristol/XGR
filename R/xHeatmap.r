@@ -107,7 +107,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	if(class(mat_val)=='data.frame'){
 		
 		if(is.null(zlim)){
-			zlim <- c(ceiling(min(mat_val)*10)/10, ceiling(max(mat_val)*10)/10)
+			zlim <- c(floor(min(mat_val)*10)/10, ceiling(max(mat_val)*10)/10)
 		}
 		mat_val[mat_val<=zlim[1]] <- zlim[1]
 		mat_val[mat_val>=zlim[2]] <- zlim[2]

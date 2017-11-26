@@ -158,7 +158,7 @@ z-score. This option only works when setting plot (see above) is TRUE}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a list with two componets:
+an object of class "ls_eTerm", a list with following components:
 \itemize{
 \item{\code{df}: a data frame of n x 12, where the 12 columns are
 "group" (the input group names), "ontology" (input ontologies), "id"
@@ -189,7 +189,7 @@ none
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# Gene-based enrichment analysis using REACTOME pathways
+# Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg',
@@ -202,10 +202,11 @@ data
 #background <- as.character(org.Hs.eg$gene_info$Symbol)
 
 # b) perform enrichment analysis
-ls_res <- xEnricherGenesAdv(data, ontologies="REACTOME",
+ls_eTerm <- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
 RData.location=RData.location)
-ls_res$mat
-ls_res$gp
+ls_eTerm$df
+ls_eTerm$mat
+ls_eTerm$gp
 }
 }
 \seealso{

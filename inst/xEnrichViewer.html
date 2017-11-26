@@ -18,7 +18,7 @@ analysis.
 
 <pre>
 xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
-"zscore", "fc", "nAnno", "nOverlap", "none"), decreasing = NULL,
+"zscore", "fc", "nAnno", "nOverlap", "or", "none"), decreasing = NULL,
 details = F)
 </pre>
 
@@ -41,8 +41,8 @@ details = F)
 gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
 (FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
 enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
-&quot;nOverlap&quot; for the number in overlaps, and &quot;none&quot; for ordering
-according to ID of terms</p>
+&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
+&quot;none&quot; for ordering according to ID of terms</p>
 </td></tr>
 <tr valign="top"><td><code>decreasing</code></td>
 <td>
@@ -87,6 +87,17 @@ inclusion</p>
 </p>
 </li>
 <li><p><code>adjp</code>: adjusted p value (FDR)
+</p>
+</li>
+<li><p><code>or</code>: a vector containing odds ratio
+</p>
+</li>
+<li><p><code>CIl</code>: a vector containing lower bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>CIu</code>: a vector containing upper bound confidence interval
+for the odds ratio
 </p>
 </li>
 <li><p><code>distance</code>: term distance or other information; optional, it

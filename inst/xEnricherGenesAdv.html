@@ -222,7 +222,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a list with two componets:
+<p>an object of class &quot;ls_eTerm&quot;, a list with following components:
 </p>
 
 <ul>
@@ -269,7 +269,7 @@ object
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# Gene-based enrichment analysis using REACTOME pathways
+# Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
@@ -282,10 +282,11 @@ data
 #background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
 
 # b) perform enrichment analysis
-ls_res &lt;- xEnricherGenesAdv(data, ontologies="REACTOME",
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
 RData.location=RData.location)
-ls_res$mat
-ls_res$gp
+ls_eTerm$df
+ls_eTerm$mat
+ls_eTerm$gp
 
 ## End(Not run)
 </pre>

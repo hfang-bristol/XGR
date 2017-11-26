@@ -35,7 +35,7 @@
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral"), interpolate=c("spline","linear"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both"), interpolate=c("spline","linear"))
 {
 
 	interpolate <- match.arg(interpolate)
@@ -71,6 +71,13 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			palette.name <-colorRampPalette(rev(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F")[-5]), interpolate=interpolate)
 		}else if(colormap == "jet.both"){
 			palette.name <-colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000")[c(-1,-9)], interpolate=interpolate)
+		
+		}else if(colormap == "ggplot2.top"){
+			palette.name <-colorRampPalette(c("#00C19F","#00B9E3","#619CFF","#DB72FB","#FF61C3"), interpolate=interpolate)
+		}else if(colormap == "ggplot2.bottom"){
+			palette.name <-colorRampPalette(rev(c("#F8766D","#D39200","#93AA00","#00BA38","#00C19F")), interpolate=interpolate)
+		}else if(colormap == "ggplot2.both"){
+			palette.name <-colorRampPalette(c("#F8766D","#D39200","#93AA00","#00BA38","#00C19F","#00B9E3","#619CFF","#DB72FB","#FF61C3")[c(-1,-9)], interpolate=interpolate)
 		
 		}else if(colormap == "spectral"){
 			palette.name <-colorRampPalette(rev(c('#D53E4F','#F46D43','#FDAE61','#FEE08B','#FFFFBF','#E6F598','#ABDDA4','#66C2A5','#3288BD')), interpolate=interpolate)

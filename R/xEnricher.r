@@ -31,6 +31,9 @@
 #'  \item{\code{zscore}: a vector containing z-scores}
 #'  \item{\code{pvalue}: a vector containing p-values}
 #'  \item{\code{adjp}: a vector containing adjusted p-values. It is the p value but after being adjusted for multiple comparisons}
+#'  \item{\code{or}: a vector containing odds ratio}
+#'  \item{\code{CIl}: a vector containing lower bound confidence interval for the odds ratio}
+#'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared between two terms}
 #'  \item{\code{call}: the call that produced this result}
 #' }
@@ -340,7 +343,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         return(z)
     }
     
-    ## fold change calcualted from hypergeometric distribution
+    ## fold change calculated from hypergeometric distribution
     fcHyper <- function(genes.group, genes.term, genes.universe){
         genes.hit <- intersect(genes.group, genes.term)
         # num of success in sampling
@@ -356,6 +359,27 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         fc <- X/x.exp
 
         return(fc)
+    }
+    
+    ## odds ratio calculated from Fisher's exact test
+    ### OR is a measure of association between a risk factor and a disease outcome. The OR represents the odds that the disease outcome will occur given the risk factor, compared to the odds of the outcome occurring in the absence of that risk factor. Used to determine whether a factor is risky for the outcome, and to compare the magnitude of various risk factors for that outcome.
+    ### The 95% confidence interval (CI) is used to estimate the precision of the OR; the higher CI is the lower the precision is. Does not report a statistical significance
+    ### Confounding: a confounding variable influences/explains a non-casual association between a factor and the outcome. A confounding variable is causally associated with the outcome, and non-causally or causally associated with the disease, but is not an intermediate variable in the causal pathway between exposure and outcome. Stratification and multiple regression techniques are two methods used to address confounding, and produce adjusted ORs.
+    orFisher <- function(genes.group, genes.term, genes.universe){
+        genes.hit <- intersect(genes.group, genes.term)
+        # num of success in sampling
+        X <- length(genes.hit)
+        # num of sampling
+        K <- length(genes.group)
+        # num of success in background
+        M <- length(genes.term)
+        # num in background
+        N <- length(genes.universe)
+        ## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
+        cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
+        res <- stats::fisher.test(cTab)
+        
+        return(c(as.vector(res$estimate), as.vector(res$conf.int)))
     }
     ##############################################################################################
 
@@ -413,6 +437,15 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
             genes.term <- unique(unlist(gs[term]))
             fcHyper(genes.group, genes.term, genes.universe)
         })
+        
+        ls_or <- lapply(terms, function(term){
+            genes.term <- unique(unlist(gs[term]))
+            orFisher(genes.group, genes.term, genes.universe)
+        })
+        df_or <- do.call(rbind, ls_or)
+        ors <- df_or[,1]
+        CIl <- df_or[,2]
+        CIu <- df_or[,3]        
         
     }else if(ontology.algorithm=="pc" || ontology.algorithm=="elim" || ontology.algorithm=="lea"){
 
@@ -739,6 +772,9 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     zscores <- zscores[ind_zscores[!is.na(ind_zscores)]]
     fcs <- fcs[ind_zscores[!is.na(ind_zscores)]]
     pvals <- pvals[ind_zscores[!is.na(ind_zscores)]]
+    ors <- ors[ind_zscores[!is.na(ind_zscores)]]
+    CIl <- CIl[ind_zscores[!is.na(ind_zscores)]]
+    CIu <- CIu[ind_zscores[!is.na(ind_zscores)]]
     
     ## remove those with zscores=NA
     flag <- !is.na(zscores)
@@ -747,9 +783,12 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     zscores <- zscores[flag]
     fcs <- fcs[flag]
     pvals <- pvals[flag]
+    ors <- ors[flag]
+    CIl <- CIl[flag]
+    CIu <- CIu[flag]
     
     if(length(pvals)==0){
-        warnings("There are no pvals being calcualted.\n")
+        warnings("There are no pvals being calculated.\n")
         return(NULL)
     }
     
@@ -760,6 +799,9 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     zscores <- signif(zscores, digits=3)
     fcs <- signif(fcs, digits=3)
     pvals <- sapply(pvals, function(x) min(x,1))
+    ors <- signif(ors, digits=3)
+    CIl <- signif(CIl, digits=3)
+    CIu <- signif(CIu, digits=3)
     
     if(verbose){
         now <- Sys.time()
@@ -824,7 +866,9 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                   zscore   = zscores,
                   pvalue   = pvals,
                   adjp     = adjpvals,
-                  cross	   = cross,
+                  or       = ors,
+                  CIl      = CIl,
+                  CIu	   = CIu,
                   call     = match.call()
                  )
     class(eTerm) <- "eTerm"

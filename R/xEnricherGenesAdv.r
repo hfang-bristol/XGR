@@ -24,7 +24,7 @@
 #' @param displayBy which statistics will be used for drawing heatmap. It can be "fc" for enrichment fold change (by default), "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score. This option only works when setting plot (see above) is TRUE
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' a list with two componets:
+#' an object of class "ls_eTerm", a list with following components:
 #' \itemize{
 #'  \item{\code{df}: a data frame of n x 12, where the 12 columns are "group" (the input group names), "ontology" (input ontologies), "id" (term ID), "name" (term name), "nAnno" (number in members annotated by a term), "nOverlap" (number in overlaps), "fc" (enrichment fold changes), "zscore" (enrichment z-score), "pvalue" (nominal p value), "adjp" (adjusted p value (FDR)), "distance" (term distance or other information), "members" (members (represented as Gene Symbols) in overlaps)}
 #'  \item{\code{mat}: NULL if the plot is not drawn; otherwise, a matrix of term names X groups with numeric values for the signficant enrichment, NA for the insignificant ones}
@@ -40,7 +40,7 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
-#' # Gene-based enrichment analysis using REACTOME pathways
+#' # Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
 #' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 #' ## load human genes
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
@@ -52,9 +52,10 @@
 #' #background <- as.character(org.Hs.eg$gene_info$Symbol)
 #' 
 #' # b) perform enrichment analysis
-#' ls_res <- xEnricherGenesAdv(data, ontologies="REACTOME", RData.location=RData.location)
-#' ls_res$mat
-#' ls_res$gp
+#' ls_eTerm <- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"), RData.location=RData.location)
+#' ls_eTerm$df
+#' ls_eTerm$mat
+#' ls_eTerm$gp
 #' }
 
 xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -137,7 +138,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     	#######
     	## keep the same order for ontologies as input
     	ls_df <- ls_df[unique(df_all$ontology)]
-    	#######    	
+    	#######
 		ls_mat <- lapply(1:length(ls_df), function(i){
 		
 			df <- ls_df[[i]]
@@ -229,10 +230,11 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 		
     }
     
-    ls_res <- list(df = df_all,
+    ls_eTerm <- list(df = df_all,
     			   mat = mat,
     			   gp = gp
                  )
+    class(ls_eTerm) <- "ls_eTerm"
                  
     ####################################################################################
     endT <- Sys.time()
@@ -243,5 +245,5 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     }
     
-    invisible(ls_res)
+    invisible(ls_eTerm)
 }
