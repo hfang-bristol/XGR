@@ -34,6 +34,9 @@
 #'  \item{\code{zscore}: a vector containing z-scores}
 #'  \item{\code{pvalue}: a vector containing p-values}
 #'  \item{\code{adjp}: a vector containing adjusted p-values. It is the p value but after being adjusted for multiple comparisons}
+#'  \item{\code{or}: a vector containing odds ratio}
+#'  \item{\code{CIl}: a vector containing lower bound confidence interval for the odds ratio}
+#'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared betwene two terms}
 #'  \item{\code{call}: the call that produced this result}
 #' }
@@ -53,24 +56,25 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
 #' # SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 #' # a) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')
 #' ## load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
-#' anno <- xRDataLoader(RData='GWAS2EF')
+#' anno <- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
 #' ind <- which(colnames(anno)=='EFO:0002690')
-#' data <- rownames(anno)[anno[,ind]==1]
+#' data <- rownames(anno)[anno[,ind]!=0]
 #' data
 #'
 #' # optionally, provide the test background (if not provided, all annotatable SNPs)
 #' #background <- rownames(anno)
 #' 
 #' # b) perform enrichment analysis
-#' eTerm <- xEnricherSNPs(data=data, ontology="EF", path.mode=c("all_paths"))
+#' eTerm <- xEnricherSNPs(data=data, ontology="EF", path.mode=c("all_paths"), RData.location=RData.location)
 #'
 #' # b') optionally, enrichment analysis for input SNPs plus their LD SNPs
 #' ## LD based on European population (EUR) with r2>=0.8
-#' #eTerm <- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8)
+#' #eTerm <- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 #' 
 #' # c) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)

@@ -21,12 +21,12 @@
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param plot logical to indicate whether heatmap plot is drawn
 #' @param fdr.cutoff fdr cutoff used to declare the significant terms. By default, it is set to 0.05. This option only works when setting plot (see above) is TRUE
-#' @param displayBy which statistics will be used for drawing heatmap. It can be "fc" for enrichment fold change (by default), "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score. This option only works when setting plot (see above) is TRUE
+#' @param displayBy which statistics will be used for drawing heatmap. It can be "fc" for enrichment fold change, "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score (by default), "or" for odds ratio. This option only works when setting plot (see above) is TRUE
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "ls_eTerm", a list with following components:
 #' \itemize{
-#'  \item{\code{df}: a data frame of n x 12, where the 12 columns are "group" (the input group names), "ontology" (input ontologies), "id" (term ID), "name" (term name), "nAnno" (number in members annotated by a term), "nOverlap" (number in overlaps), "fc" (enrichment fold changes), "zscore" (enrichment z-score), "pvalue" (nominal p value), "adjp" (adjusted p value (FDR)), "distance" (term distance or other information), "members" (members (represented as Gene Symbols) in overlaps)}
+#'  \item{\code{df}: a data frame of n x 12, where the 12 columns are "group" (the input group names), "ontology" (input ontologies), "id" (term ID), "name" (term name), "nAnno" (number in members annotated by a term), "nOverlap" (number in overlaps), "fc" (enrichment fold changes), "zscore" (enrichment z-score), "pvalue" (nominal p value), "adjp" (adjusted p value (FDR)), "or" (odds ratio), "CIl" (lower bound confidence interval for the odds ratio), "CIu" (upper bound confidence interval for the odds ratio), "distance" (term distance or other information), "members" (members (represented as Gene Symbols) in overlaps)}
 #'  \item{\code{mat}: NULL if the plot is not drawn; otherwise, a matrix of term names X groups with numeric values for the signficant enrichment, NA for the insignificant ones}
 #'  \item{\code{gp}: NULL if the plot is not drawn; otherwise, a 'ggplot' object}
 #' }
@@ -58,7 +58,7 @@
 #' ls_eTerm$gp
 #' }
 
-xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -161,6 +161,10 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 					mat <- as.matrix(xSparseMatrix(df[,c('name','group','fc')], rows=unique(df$name), columns=names(list_vec)))
 					mat[mat==0] <- NA
 					mat <- log2(mat)
+				}else if(displayBy=='or'){
+					mat <- as.matrix(xSparseMatrix(df[,c('name','group','or')], rows=unique(df$name), columns=names(list_vec)))
+					mat[mat==0] <- NA
+					mat <- log2(mat)
 				}
 				
 				if(nrow(mat)==1){
@@ -202,7 +206,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 					legend.title <- expression(-log[10]("p-value"))
 				}
 				
-			}else if(displayBy=='fc' | displayBy=='zscore'){
+			}else if(displayBy=='fc' | displayBy=='zscore' | displayBy=='or'){
 				tmp_max <- ceiling(max(mat[!is.na(mat)]))
 				tmp_min <- floor(min(mat[!is.na(mat)]))
 				if(tmp_max>0 & tmp_min<0){
@@ -221,6 +225,8 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 					legend.title <- expression(log[2]("FC"))
 				}else if(displayBy=='zscore'){	
 					legend.title <- ("Z-score")
+				}else if(displayBy=='or'){	
+					legend.title <- expression(log[2]("OR"))
 				}
 			}
 		

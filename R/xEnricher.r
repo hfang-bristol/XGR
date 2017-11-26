@@ -203,7 +203,25 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         N <- length(genes.universe)
         ## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
         cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
-        p.value <- ifelse(all(cTab==0), 1, stats::fisher.test(cTab, alternative="greater")$p.value)
+        
+        if(0){
+			p.value <- ifelse(all(cTab==0), 1, stats::fisher.test(cTab, alternative="greater")$p.value)
+        }else{
+			if(all(cTab==0)){
+				p.value <- 1
+			}else{
+				if(p.tail=='one-tail'){
+					p.value <- stats::fisher.test(cTab, alternative="greater")$p.value
+				}else{
+					if(X>=K*M/N){
+						p.value <- stats::fisher.test(cTab, alternative="greater")$p.value
+					}else{
+						p.value <- stats::fisher.test(cTab, alternative="less")$p.value
+					}
+				}
+			}
+        }
+        
         return(p.value)
     }
 
@@ -476,6 +494,13 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         ## node2fc.Hash: key (node), value (fc)
         node2fc.Hash <- new.env(hash=T, parent=emptyenv())    
         
+        ## node2or.Hash: key (node), value (or)
+        node2or.Hash <- new.env(hash=T, parent=emptyenv())
+        ## node2CIl.Hash: key (node), value (CIl)
+        node2CIl.Hash <- new.env(hash=T, parent=emptyenv())
+        ## node2CIu.Hash: key (node), value (CIu)
+        node2CIu.Hash <- new.env(hash=T, parent=emptyenv())
+                        
         if(ontology.algorithm=="pc"){
         
             for(i in nLevels:2) {
@@ -492,6 +517,11 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     )
                     zscore_whole <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc_whole <- fcHyper(genes.group, genes.term, genes.universe)
+                    
+                    vec_whole <- orFisher(genes.group, genes.term, genes.universe)
+                    or_whole <- vec_whole[1]
+                    CIl_whole <- vec_whole[2]
+                    CIu_whole <- vec_whole[3]
             
                     ## get the incoming neighbors/parents (including self) that are reachable
                     neighs.in <- igraph::neighborhood(subg, order=1, nodes=currNode, mode="in")
@@ -513,20 +543,39 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     zscore_relative <- zscoreHyper(genes.group.parent, genes.term.parent, genes.parent)
                     fc_relative <- fcHyper(genes.group.parent, genes.term.parent, genes.parent)
                 
+                    vec_relative <- orFisher(genes.group.parent, genes.term.parent, genes.parent)
+                    or_relative <- vec_relative[1]
+                    CIl_relative <- vec_relative[2]
+                    CIu_relative <- vec_relative[3]
+                
                     ## take the maximum value of pvalue_whole and pvalue_relative
                     pvalue <- max(pvalue_whole, pvalue_relative)
                     ## store the result (the p-value)
                     assign(currNode, pvalue, envir=node2pval.Hash)
                     
-                    ## take the miminum value of zscore_whole and zscore_relative
+                    ## zscore
                     zscore <- ifelse(pvalue_whole>pvalue_relative, zscore_whole, zscore_relative)
                     ## store the result (the z-score)
                     assign(currNode, zscore, envir=node2zscore.Hash)
                     
-                    ## take the miminum value of fc_whole and fc_relative
+                    ## fc
                     fc <- ifelse(pvalue_whole>pvalue_relative, fc_whole, fc_relative)
                     ## store the result (the fc)
                     assign(currNode, fc, envir=node2fc.Hash)
+                    
+                    ## or
+                    or <- ifelse(pvalue_whole>pvalue_relative, or_whole, or_relative)
+                    ## store the result (the or)
+                    assign(currNode, or, envir=node2or.Hash)
+                    ## CIl
+                    CIl <- ifelse(pvalue_whole>pvalue_relative, CIl_whole, CIl_relative)
+                    ## stCIle the result (the CIl)
+                    assign(currNode, CIl, envir=node2CIl.Hash)
+                    ## CIu
+                    CIu <- ifelse(pvalue_whole>pvalue_relative, CIu_whole, CIu_relative)
+                    ## stCIue the result (the CIu)
+                    assign(currNode, CIu, envir=node2CIu.Hash)                    
+                    
                 }
                 
                 if(verbose){
@@ -576,6 +625,11 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     )
                     zscore <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc <- fcHyper(genes.group, genes.term, genes.universe)
+
+                    vec <- orFisher(genes.group, genes.term, genes.universe)
+                    or <- vec[1]
+                    CIl <- vec[2]
+                    CIu <- vec[3]
                     
                     ## store the result (the p-value)
                     assign(currNode, pvalue, envir=node2pval.Hash)
@@ -584,6 +638,13 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     ## store the result (the fc)
                     assign(currNode, fc, envir=node2fc.Hash)
                     
+                    ## store the result (the or)
+                    assign(currNode, or, envir=node2or.Hash)
+                    ## store the result (the CIl)
+                    assign(currNode, CIl, envir=node2CIl.Hash)
+                    ## store the result (the CIu)
+                    assign(currNode, CIu, envir=node2CIu.Hash)
+                                                            
                     ## condition to update "ancNode2gene.Hash"
                     if(pvalue < pval.cutoff) {
                         ## mark the significant node
@@ -653,7 +714,12 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     )
                     zscore.old <- zscoreHyper(genes.group, genes.term, genes.universe)
                     fc.old <- fcHyper(genes.group, genes.term, genes.universe)
-                    
+
+                    vec.old <- orFisher(genes.group, genes.term, genes.universe)
+                    or.old <- vec.old[1]
+                    CIl.old <- vec.old[2]
+                    CIu.old <- vec.old[3]
+                                        
                     ## store the result (old pvalue)
                     assign(currNode, pvalue.old, envir=node2pvalo.Hash)
                     
@@ -697,35 +763,63 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                             zscore.new <- zscoreHyper(genes.group, genes.term.new, genes.universe)
                             fc.new <- fcHyper(genes.group, genes.term.new, genes.universe)
                             
+                            vec.new <- orFisher(genes.group, genes.term.new, genes.universe)
+							or.new <- vec.new[1]
+							CIl.new <- vec.new[2]
+							CIu.new <- vec.new[3]
+                                                        
                             ## take the maximum value of pvalue_new and the original pvalue
                             pvalue <- max(pvalue.new, pvalue.old)
                             
-                            ## take the minimum value of zscore_new and the original zscore
+                            ## zscore
                             zscore <- ifelse(pvalue.new>pvalue.old, zscore.new, zscore.old)
                             
-                            ## take the minimum value of fc_new and the original zscore
+                            ## fc
                             fc <- ifelse(pvalue.new>pvalue.old, fc.new, fc.old)
+                            
+                            ## or
+                            or <- ifelse(pvalue.new>pvalue.old, or.new, or.old)
+                            ## CIl
+                            CIl <- ifelse(pvalue.new>pvalue.old, CIl.new, CIl.old)
+                            ## CIu
+                            CIu <- ifelse(pvalue.new>pvalue.old, CIu.new, CIu.old)
                             
                         }else{
                             pvalue <- pvalue.old
                             zscore <- zscore.old
                             fc <- fc.old
+                            
+                            or <- or.old
+                            CIl <- CIl.old
+                            CIu <- CIu.old
                         }
                         
                     }else{
                         pvalue <- pvalue.old
                         zscore <- zscore.old
                         fc <- fc.old
+                        
+                        or <- or.old
+                        CIl <- CIl.old
+                        CIu <- CIu.old
                     }
                     
                     ## store the result (recalculated pvalue if have to)
                     assign(currNode, pvalue, envir=node2pval.Hash)
                     
-                    ## store the result (recalculated zscore if have to)
+                    ## zscore
                     assign(currNode, zscore, envir=node2zscore.Hash)
                     
-                    ## store the result (recalculated zscore if have to)
+                    ## fc
                     assign(currNode, fc, envir=node2fc.Hash)
+                    
+                    ## or
+                    assign(currNode, or, envir=node2or.Hash)
+                    ## CIl
+                    assign(currNode, CIl, envir=node2CIl.Hash)
+                    ## CIu
+                    assign(currNode, CIu, envir=node2CIu.Hash)
+                    
                 }
     
                 if(verbose){
@@ -738,6 +832,10 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         pvals <- unlist(as.list(node2pval.Hash))
         zscores <- unlist(as.list(node2zscore.Hash))
         fcs <- unlist(as.list(node2fc.Hash))
+        
+        ors <- unlist(as.list(node2or.Hash))
+        CIl <- unlist(as.list(node2CIl.Hash))
+        CIu <- unlist(as.list(node2CIu.Hash))
     
     }
 	

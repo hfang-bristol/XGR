@@ -235,6 +235,17 @@ the snps of interest). Always, gene sets are identified by &quot;id&quot;
 value but after being adjusted for multiple comparisons
 </p>
 </li>
+<li><p><code>or</code>: a vector containing odds ratio
+</p>
+</li>
+<li><p><code>CIl</code>: a vector containing lower bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>CIu</code>: a vector containing upper bound confidence interval
+for the odds ratio
+</p>
+</li>
 <li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
 for the overlapped-members observed in an individaul term, and
 off-diagnal cell for the overlapped-members shared betwene two terms
@@ -297,13 +308,14 @@ maximum of both p-values in these two calculations.
 ## Not run: 
 # Load the library
 library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 # a) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')
 ## load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
-anno &lt;- xRDataLoader(RData='GWAS2EF')
+anno &lt;- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
 ind &lt;- which(colnames(anno)=='EFO:0002690')
-data &lt;- rownames(anno)[anno[,ind]==1]
+data &lt;- rownames(anno)[anno[,ind]!=0]
 data
 
 # optionally, provide the test background (if not provided, all annotatable SNPs)
@@ -311,11 +323,11 @@ data
 
 # b) perform enrichment analysis
 eTerm &lt;- xEnricherSNPs(data=data, ontology="EF",
-path.mode=c("all_paths"))
+path.mode=c("all_paths"), RData.location=RData.location)
 
 # b') optionally, enrichment analysis for input SNPs plus their LD SNPs
 ## LD based on European population (EUR) with r2&gt;=0.8
-#eTerm &lt;- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8)
+#eTerm &lt;- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)

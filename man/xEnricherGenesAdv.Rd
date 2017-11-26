@@ -26,7 +26,7 @@ elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
 "shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
 T,
 silent = FALSE, plot = TRUE, fdr.cutoff = 0.05,
-displayBy = c("zscore", "fdr", "pvalue", "fc"),
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -150,9 +150,10 @@ default, it is set to 0.05. This option only works when setting plot
 (see above) is TRUE}
 
 \item{displayBy}{which statistics will be used for drawing heatmap. It
-can be "fc" for enrichment fold change (by default), "fdr" for adjusted
-p value (or FDR), "pvalue" for p value, "zscore" for enrichment
-z-score. This option only works when setting plot (see above) is TRUE}
+can be "fc" for enrichment fold change, "fdr" for adjusted p value (or
+FDR), "pvalue" for p value, "zscore" for enrichment z-score (by
+default), "or" for odds ratio. This option only works when setting plot
+(see above) is TRUE}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
@@ -165,7 +166,9 @@ an object of class "ls_eTerm", a list with following components:
 (term ID), "name" (term name), "nAnno" (number in members annotated by
 a term), "nOverlap" (number in overlaps), "fc" (enrichment fold
 changes), "zscore" (enrichment z-score), "pvalue" (nominal p value),
-"adjp" (adjusted p value (FDR)), "distance" (term distance or other
+"adjp" (adjusted p value (FDR)), "or" (odds ratio), "CIl" (lower bound
+confidence interval for the odds ratio), "CIu" (upper bound confidence
+interval for the odds ratio), "distance" (term distance or other
 information), "members" (members (represented as Gene Symbols) in
 overlaps)}
 \item{\code{mat}: NULL if the plot is not drawn; otherwise, a matrix of
