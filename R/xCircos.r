@@ -284,8 +284,10 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 	}
 	
 	palette.name <- xColormap(colormap=colormap)
-	cut_index <- as.numeric(cut(input.data$similarity, breaks=seq(0, 1, 0.05)))
-	cut_index[is.na(cut_index)] <- 1
+	#cut_index <- as.numeric(cut(input.data$similarity, breaks=seq(0, 1, 0.05)))
+	#cut_index[is.na(cut_index)] <- 1
+	cut_index <- as.numeric(cut(input.data$similarity, breaks=min(input.data$similarity)+max(input.data$similarity)*seq(0, 1, 0.05)))
+	cut_index[is.na(cut_index)] <- max(input.data$similarity)
   	input.data$PlotColor <- palette.name(20)[cut_index]
   	input.data <- input.data[order(input.data$similarity, decreasing=F), ]
   	RCircos.Link.Plot(input.data, track.num=1, FALSE)
