@@ -1,17 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define genes crosslinking to an input list of...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define genes from an input list of genomic...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGR2xGenes"><tr><td>xGR2xGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to define genes crosslinking to an input list of genomic regions and the customised crosslink info</h2>
+<h2>Function to define genes from an input list of genomic regions given the crosslink info</h2>
 
 <h3>Description</h3>
 
 <p><code>xGR2xGenes</code> is supposed to define genes crosslinking to an input
 list of genomic regions (GR). Also required is the crosslink info with
-a score crosslinking a GR to a gene.
+a score quantifying the link of a GR to a gene. Currently supported
+built-in crosslink info is enhancer genes and nearby genes (purely),
+though the user can customise it via 'crosslink.customised'; if so, it
+has priority over the built-in data.
 </p>
 
 
@@ -21,9 +24,11 @@ a score crosslinking a GR to a gene.
 xGR2xGenes(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-crosslink.customised = NULL, cdf.function = c("original", "empirical"),
-scoring = F, scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F, verbose = T,
+crosslink = c("genehancer", "nearby"), crosslink.customised = NULL,
+cdf.function = c("original", "empirical"), scoring = F,
+scoring.scheme = c("max", "sum", "sequential"), scoring.rescale = F,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -58,16 +63,24 @@ this case, formatted as 'GRanges')</p>
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
+<tr valign="top"><td><code>crosslink</code></td>
+<td>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. It can be one of 'genehancer' (enhancer
+genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
+specify the relevant parameters 'nearby.distance.max',
+'nearby.decay.kernel' and 'nearby.decay.exponent' below)</p>
+</td></tr>
 <tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>the link info with a score linking a GR to
-a gene. A user-input matrix or data frame with 4 columns: 1st column
-for genomic regions (formatted as &quot;chr:start-end&quot;, genome build 19),
-2nd column for Genes, 3rd for crosslink score (crosslinking a genomic
-region to a gene, such as -log10 significance level), and 4th for
-contexts (optional; if nor provided, it will be added as 'C').
-Alternatively, it can be a file containing these 4 columns. Required,
-otherwise it will return NULL</p>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if nor provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
 </td></tr>
 <tr valign="top"><td><code>cdf.function</code></td>
 <td>
@@ -93,6 +106,25 @@ weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
 <td>
 <p>logical to indicate whether gene scores will be
 further rescaled into the [0,1] range. By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -157,7 +189,7 @@ GR
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
-# a) provide the genomic regions
+# 1) provide the genomic regions
 ## load ImmunoBase
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
 RData.location=RData.location)
@@ -166,14 +198,23 @@ gr &lt;- ImmunoBase$AS$variant
 names(gr) &lt;- NULL
 dGR &lt;- xGR(gr, format="GRanges")
 
-# b) provide crosslink.customised
+# 2) using built-in crosslink info
+## enhancer genes
+df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges", crosslink="genehancer",
+RData.location=RData.location)
+## nearby genes (50kb, decaying rapidly)
+df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges", crosslink="nearby",
+nearby.distance.max=50000, nearby.decay.kernel="rapid",
+RData.location=RData.location)
+
+# 3) advanced use
+# 3a) provide crosslink.customised
 ## illustration purpose only (see the content of 'crosslink.customised')
 df &lt;- xGR2nGenes(dGR, format="GRanges", RData.location=RData.location)
 crosslink.customised &lt;- data.frame(GR=df$GR, Gene=df$Gene,
 Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=F)
 #crosslink.customised &lt;- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=F)
-
-# c) define crosslinking genes
+# 3b) define crosslinking genes
 # without gene scoring
 df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges",
 crosslink.customised=crosslink.customised,

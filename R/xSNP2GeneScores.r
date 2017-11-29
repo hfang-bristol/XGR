@@ -70,7 +70,7 @@ xSNP2GeneScores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, 
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_SNP <- xSNPscores(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, verbose=verbose, RData.location=RData.location)
+	df_SNP <- xSNPscores(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()

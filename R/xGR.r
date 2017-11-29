@@ -77,7 +77,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
 		
 	}else if(format=="chr:start-end"){
-		data <- unique(data)
+		data <- unique(data[!is.na(data)])
 		input <- do.call(rbind, strsplit(data, ":|-"))
 		if(ncol(input)>=3){
 			data <- matrix(input[,1:3], nrow=nrow(input))

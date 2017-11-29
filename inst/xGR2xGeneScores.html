@@ -1,31 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes given a list...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes from an...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGR2GeneScores"><tr><td>xGR2GeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGR2xGeneScores"><tr><td>xGR2xGeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to identify likely modulated seed genes given a list of genomic regions together with the significance level</h2>
+<h2>Function to identify likely modulated seed genes from an input list of genomic regions together with the significance level given the crosslink info</h2>
 
 <h3>Description</h3>
 
-<p><code>xGR2GeneScores</code> is supposed to identify likely modulated seed
+<p><code>xGR2xGeneScores</code> is supposed to identify likely modulated seed
 genes from a list of genomic regions (GR) together with the
 significance level (measured as p-values or fdr). To do so, it defines
-seed genes and their scores that take into account the distance to and
-the significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
+seed genes and their scores given the crosslink info with a score
+quantifying the link of a GR to a gene. It returns an object of class
+&quot;mSeed&quot;.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xGR2GeneScores(data, significance.threshold = 5e-05, score.cap = 10,
+xGR2xGeneScores(data, significance.threshold = 5e-05, score.cap = 10,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
-"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+crosslink = c("genehancer", "nearby"), crosslink.customised = NULL,
+cdf.function = c("original", "empirical"), scoring.scheme = c("max",
+"sum", "sequential"), nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -62,47 +65,59 @@ to 10. If NULL, no capping is applied</p>
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>distance.max</code></td>
+<tr valign="top"><td><code>crosslink</code></td>
 <td>
-<p>the maximum distance between genes and GR. Only
-those genes no far way from this distance will be considered as seed
-genes. This parameter will influence the distance-component weights
-calculated for nearby GR per gene</p>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. It can be one of 'genehancer' (enhancer
+genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
+specify the relevant parameters 'nearby.distance.max',
+'nearby.decay.kernel' and 'nearby.decay.exponent' below)</p>
 </td></tr>
-<tr valign="top"><td><code>decay.kernel</code></td>
+<tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>a character specifying a decay kernel function. It
-can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay. If no distance weight is used, please select
-'constant'</p>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if nor provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
 </td></tr>
-<tr valign="top"><td><code>decay.exponent</code></td>
+<tr valign="top"><td><code>cdf.function</code></td>
 <td>
-<p>a numeric specifying a decay exponent. By
-default, it sets to 2</p>
-</td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
-<td>
-<p>the genomic regions of genes. By default, it is
-'UCSC_knownGene', that is, UCSC known genes (together with genomic
-locations) based on human genome assembly hg19. It can be
-'UCSC_knownCanonical', that is, UCSC known canonical genes (together
-with genomic locations) based on human genome assembly hg19.
-Alternatively, the user can specify the customised input. To do so,
-first save your RData file (containing an GR object) into your local
-computer, and make sure the GR object content names refer to Gene
-Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;. Note: you can also load your customised GR object
-directly</p>
+<p>a character specifying how to transform the input
+crosslink score. It can be one of 'original' (no such transformation),
+and 'empirical' for looking at empirical Cumulative Distribution
+Function (cdf; as such it is converted into pvalue-like values [0,1])</p>
 </td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
 <td>
 <p>the method used to calculate seed gene scores
-under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for the
-maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
-weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
-<i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+under a set of GR (also over Contexts if many). It can be one of &quot;sum&quot;
+for adding up, &quot;max&quot; for the maximum, and &quot;sequential&quot; for the
+sequential weighting. The sequential weighting is done via:
+<i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where <i>R_{i}</i> is the
+<i>i^{th}</i> rank (in a descreasing order)</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -144,15 +159,14 @@ significance level transformed from gene scores)
 
 <h3>Note</h3>
 
-<p>This function uses <code>xGRscores</code> and <code>xGR2nGenes</code>
-to define and score nearby genes that are located within distance
-window of input genomic regions.
+<p>This function uses <code>xGRscores</code> and <code>xGR2xGenes</code>
+to define and score seed genes from input genomic regions.
 </p>
 
 
 <h3>See Also</h3>
 
-<p><code>xGRscores</code>, <code>xGR2nGenes</code>,
+<p><code>xGRscores</code>, <code>xGR2xGenes</code>,
 <code>xSparseMatrix</code>
 </p>
 
@@ -172,15 +186,12 @@ RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
 df &lt;- as.data.frame(gr, row.names=NULL)
-chr &lt;- df$seqnames
-start &lt;- df$start
-end &lt;- df$end
-sig &lt;- df$Pvalue
-GR &lt;- paste(chr,':',start,'-',end, sep='')
-data &lt;- cbind(GR=GR, Sig=sig)
+GR &lt;- paste0(df$seqnames,':',df$start,'-',df$end)
+data &lt;- cbind(GR=GR, Sig=df$Pvalue)
 
 # b) define and score seed geens
-mSeed &lt;- xGR2GeneScores(data=data, RData.location=RData.location)
+mSeed &lt;- xGR2xGeneScores(data=data, crosslink="genehancer",
+RData.location=RData.location)
 
 # c) extract GR info
 head(mSeed$GR)

@@ -1,9 +1,9 @@
 #' Function to identify likely modulated seed genes given a list of genomic regions together with the significance level
 #'
-#' \code{xGR2GeneScores} is supposed to identify likely modulated seed genes from a list of SNPs together with the significance level (measured as p-values or fdr). To do so, it defines seed genes and their scores that take into account the distance to and the significance of input SNPs. It returns an object of class "mSeed". 
+#' \code{xGR2GeneScores} is supposed to identify likely modulated seed genes from a list of genomic regions (GR) together with the significance level (measured as p-values or fdr). To do so, it defines seed genes and their scores that take into account the distance to and the significance of input SNPs. It returns an object of class "mSeed". 
 #'
 #' @param data a named input vector containing the sinificance level for genomic regions (GR). For this named vector, the element names are GR, in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. The element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for GR, 2nd column for the significance level. 
-#' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insigificant and thus receive no score
+#' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insignificant and thus receive no score
 #' @param score.cap the maximum score being capped. By default, it is set to 10. If NULL, no capping is applied
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
@@ -70,7 +70,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, buil
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, verbose=verbose, RData.location=RData.location)
+	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()

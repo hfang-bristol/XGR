@@ -25,7 +25,7 @@ default, it is set to NULL, meaning there is no constraint on the
 significance level when transforming the significance level of GR into
 scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
-insigificant and thus receive no score}
+insignificant and thus receive no score}
 
 \item{score.cap}{the maximum score being capped. By default, it is set
 to 10. If NULL, no capping is applied}
@@ -89,10 +89,10 @@ significance level transformed from gene scores)}
 }
 \description{
 \code{xGR2GeneScores} is supposed to identify likely modulated seed
-genes from a list of SNPs together with the significance level
-(measured as p-values or fdr). To do so, it defines seed genes and
-their scores that take into account the distance to and the
-significance of input SNPs. It returns an object of class "mSeed".
+genes from a list of genomic regions (GR) together with the
+significance level (measured as p-values or fdr). To do so, it defines
+seed genes and their scores that take into account the distance to and
+the significance of input SNPs. It returns an object of class "mSeed".
 }
 \note{
 This function uses \code{\link{xGRscores}} and \code{\link{xGR2nGenes}}
