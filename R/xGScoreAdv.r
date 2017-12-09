@@ -186,7 +186,7 @@ xGScoreAdv <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRa
     
 	#####################################
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
-	mergeOverlaps <- function(qGR, sGR, maxgap=0L, minoverlap=1L){
+	mergeOverlaps <- function(qGR, sGR, maxgap=-1L, minoverlap=0L){
 		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
 		qhits <- qGR[hits[,1]]
 		shits <- sGR[hits[,2]]

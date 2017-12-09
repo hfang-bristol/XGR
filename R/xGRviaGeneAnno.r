@@ -283,7 +283,8 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 
 	# genes of interest: get all UCSC genes within defined distance window away from dGR
 	maxgap <- gap.max
-	minoverlap <- 1L # 1b overlaps
+	#minoverlap <- 1L # 1b overlaps
+	minoverlap <- 0L
 	subject <- gr_Gene
 	query <- dGR
 	hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
@@ -307,7 +308,8 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 	
 		# genes as the backgournd
 		maxgap <- gap.max
-		minoverlap <- 1L # 1b overlaps
+		#minoverlap <- 1L # 1b overlaps
+		minoverlap <- 0L
 		subject <- gr_Gene
 		query <- bGR
 		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))

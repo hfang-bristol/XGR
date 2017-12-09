@@ -13,7 +13,7 @@ include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{a input vector containing SNPs. SNPs should be provided as
+\item{data}{an input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
 format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
 positional number; for example, 'chr16:28525386'}

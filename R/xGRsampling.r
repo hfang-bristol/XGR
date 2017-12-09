@@ -74,7 +74,7 @@ xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, 
 	}
 	#####################################
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
-	mergeOverlaps <- function(qGR, sGR, maxgap=0L, minoverlap=1L){
+	mergeOverlaps <- function(qGR, sGR, maxgap=-1L, minoverlap=0L){
 		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
 		qhits <- qGR[hits[,1]]
 		shits <- sGR[hits[,2]]
@@ -95,7 +95,7 @@ xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, 
 		message(sprintf("Third, find background islands that contain data regions (%s) ...", as.character(now)), appendLF=T)
 	}
 	## find islands
-	hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=dGR_reduced, subject=GR.background, maxgap=gap.max, minoverlap=1L, type="any", select="all", ignore.strand=T)))
+	hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=dGR_reduced, subject=GR.background, maxgap=gap.max, minoverlap=0L, type="any", select="all", ignore.strand=T)))
 	ind_data <- hits[,1]
 	ind_background <- hits[,2]
 	dt_ls <- split(x=ind_background, f=ind_data)

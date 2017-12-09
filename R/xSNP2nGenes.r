@@ -2,7 +2,7 @@
 #'
 #' \code{xSNP2nGenes} is supposed to define nearby genes given a list of SNPs within certain distance window. The distance weight is calcualted as a decaying function of the gene-to-SNP distance. 
 #'
-#' @param data a input vector containing SNPs. SNPs should be provided as dbSNP ID (ie starting with rs). Alternatively, they can be in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number; for example, 'chr16:28525386'
+#' @param data an input vector containing SNPs. SNPs should be provided as dbSNP ID (ie starting with rs). Alternatively, they can be in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number; for example, 'chr16:28525386'
 #' @param distance.max the maximum distance between genes and SNPs. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby SNPs per gene
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay. If no distance weight is used, please select 'constant'
 #' @param decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
@@ -90,7 +90,8 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
     
 	# genes: get all UCSC genes within defined distance window away from variants
 	maxgap <- distance.max
-	minoverlap <- 1L # 1b overlaps
+	#minoverlap <- 1L # 1b overlaps
+	minoverlap <- 0L
 	subject <- gr_Gene
 	query <- gr_SNP
 	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))

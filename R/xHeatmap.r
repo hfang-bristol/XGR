@@ -74,6 +74,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		####
 		mat[is.na(mat)] <- 0
 		####
+		set.seed(825)
 		tree_bs <- visTreeBootstrap(mat, visTree=FALSE, ...)
 		ind_row <- match(tree_bs$tip.label, rownames(mat))
 	}
@@ -85,6 +86,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		####
 		mat[is.na(mat)] <- 0
 		####
+		set.seed(825)
 		tree_bs <- visTreeBootstrap(t(mat), visTree=FALSE, ...)
 		ind_col <- match(tree_bs$tip.label, colnames(mat))
 	}

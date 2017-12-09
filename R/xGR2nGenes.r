@@ -96,7 +96,8 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	}
 	# genes: get all UCSC genes within defined distance window away from variants
 	maxgap <- distance.max
-	minoverlap <- 1L # 1b overlaps
+	#minoverlap <- 1L # 1b overlaps
+	minoverlap <- 0L
 	subject <- gr_Gene
 	query <- dGR
 	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))

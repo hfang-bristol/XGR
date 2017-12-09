@@ -504,7 +504,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	
 	#####################################
 	## A function to return an GR object storing overlapped regions (ie only overlapped regions!)
-	mergeOverlaps <- function(qGR, sGR, out.format=c("GR","counts"), maxgap=0L, minoverlap=1L){
+	mergeOverlaps <- function(qGR, sGR, out.format=c("GR","counts"), maxgap=-1L, minoverlap=0L){
 		out.format <- match.arg(out.format)
 		
 		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
@@ -519,7 +519,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	}
 	
 	## A function to return a list of GR objects storing overlapped regions (ie only overlapped regions!)
-	mergeOverlaps_GRL <- function(qGR, sGRL, maxgap=0L, minoverlap=1L, out.format=c("GR", "counts")){
+	mergeOverlaps_GRL <- function(qGR, sGRL, maxgap=-1L, minoverlap=0L, out.format=c("GR", "counts")){
 		out.format <- match.arg(out.format)
 		
 		hits_GRL <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=qGR, subject=sGRL, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))

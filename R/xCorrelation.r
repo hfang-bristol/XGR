@@ -77,7 +77,7 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 		list_vec <- base::Filter(base::Negate(is.null), list_vec)
 		if(length(list_vec)==0){
 			return(NULL)
-		}	
+		}
     }else{
         stop("The input data must be a named vector or a list of named vectors.\n")
     }

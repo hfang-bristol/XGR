@@ -68,14 +68,14 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 		}else if(colormap == "jet.top"){
 			palette.name <-colorRampPalette(c("#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000")[-5], interpolate=interpolate)
 		}else if(colormap == "jet.bottom"){
-			palette.name <-colorRampPalette(rev(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F")[-5]), interpolate=interpolate)
+			palette.name <-colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F")[-5], interpolate=interpolate)
 		}else if(colormap == "jet.both"){
 			palette.name <-colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000")[c(-1,-9)], interpolate=interpolate)
 		
 		}else if(colormap == "ggplot2.top"){
 			palette.name <-colorRampPalette(c("#00C19F","#00B9E3","#619CFF","#DB72FB","#FF61C3"), interpolate=interpolate)
 		}else if(colormap == "ggplot2.bottom"){
-			palette.name <-colorRampPalette(rev(c("#F8766D","#D39200","#93AA00","#00BA38","#00C19F")), interpolate=interpolate)
+			palette.name <-colorRampPalette(c("#F8766D","#D39200","#93AA00","#00BA38","#00C19F"), interpolate=interpolate)
 		}else if(colormap == "ggplot2.both"){
 			palette.name <-colorRampPalette(c("#F8766D","#D39200","#93AA00","#00BA38","#00C19F","#00B9E3","#619CFF","#DB72FB","#FF61C3")[c(-1,-9)], interpolate=interpolate)
 		
