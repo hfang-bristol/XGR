@@ -43,12 +43,6 @@
 #'
 #' # b) define and score seed geens
 #' mSeed <- xGR2xGeneScores(data=data, crosslink="genehancer", RData.location=RData.location)
-#'
-#' # c) extract GR info
-#' head(mSeed$GR)
-#'
-#' # d) extract gene info
-#' head(mSeed$Gene)
 #' }
 
 xGR2xGeneScores <- function(data, significance.threshold=5e-5, score.cap=10, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -152,8 +146,7 @@ xGR2xGeneScores <- function(data, significance.threshold=5e-5, score.cap=10, bui
     df_GR <- df_GR[order(df_GR$Score,df_GR$GR,decreasing=TRUE),]
     
     mSeed <- list(GR = df_GR,
-                  Gene = df_Gene,
-                  Call = match.call()
+                  Gene = df_Gene
                  )
     class(mSeed) <- "mSeed"
     

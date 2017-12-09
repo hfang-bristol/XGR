@@ -89,7 +89,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	}
     
 	# genes: get all UCSC genes within defined distance window away from variants
-	maxgap <- distance.max
+	maxgap <- distance.max-1
 	#minoverlap <- 1L # 1b overlaps
 	minoverlap <- 0L
 	subject <- gr_Gene

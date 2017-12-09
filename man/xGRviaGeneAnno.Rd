@@ -56,7 +56,7 @@ genomic regions as the test background. The file format is the same as
 non-redundant bases covered by 'annotation.file') are used as
 background. However, if only one annotation (eg only a transcription
 factor) is provided in 'annotation.file', the background must be
-provided.}
+provided}
 
 \item{format.file}{the format for input files. It can be one of
 "data.frame", "chr:start-end", "bed" or "GRanges"}

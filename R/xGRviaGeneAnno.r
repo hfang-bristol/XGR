@@ -3,7 +3,7 @@
 #' \code{xGRviaGeneAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using nearby gene annotations. To do so, nearby genes are first defined within the maximum gap between genomic regions and gene location. Enrichment analysis is based on either Fisher's exact test or Hypergeometric test for estimating the significance of overlapped nearby genes. Test background can be provided; by default, the annotatable genes will be used. 
 #'
 #' @param data.file an input data file, containing a list of genomic regions to test. If the input file is formatted as a 'data.frame' (specified by the parameter 'format.file' below), the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. If the format is indicated as "chr:start-end", instead of using the first 3 columns, only the first column will be used and processed. If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns
-#' @param background.file an input background file containing a list of genomic regions as the test background. The file format is the same as 'data.file'. By default, it is NULL meaning all annotatable bases (ig non-redundant bases covered by 'annotation.file') are used as background. However, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', the background must be provided. 
+#' @param background.file an input background file containing a list of genomic regions as the test background. The file format is the same as 'data.file'. By default, it is NULL meaning all annotatable bases (ig non-redundant bases covered by 'annotation.file') are used as background. However, if only one annotation (eg only a transcription factor) is provided in 'annotation.file', the background must be provided
 #' @param format.file the format for input files. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param gap.max the maximum distance to nearby genes. Only those genes no far way from this distance will be considered as nearby genes. By default, it is 0 meaning that nearby genes are those overlapping with genomic regions
@@ -282,7 +282,7 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 	}
 
 	# genes of interest: get all UCSC genes within defined distance window away from dGR
-	maxgap <- gap.max
+	maxgap <- gap.max-1
 	#minoverlap <- 1L # 1b overlaps
 	minoverlap <- 0L
 	subject <- gr_Gene
@@ -305,9 +305,9 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
 			}
 			bGR <- xLiftOver(data.file=bGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
 		}
-	
+
 		# genes as the backgournd
-		maxgap <- gap.max
+		maxgap <- gap.max-1
 		#minoverlap <- 1L # 1b overlaps
 		minoverlap <- 0L
 		subject <- gr_Gene

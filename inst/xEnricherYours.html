@@ -257,7 +257,9 @@ print(bp)
 
 # Using ImmunoBase SNPs and associations/annotations with disease traits
 ## get ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 ## get disease associated variants/SNPs
 variants_list &lt;- lapply(ImmunoBase, function(x)
 cbind(SNP=names(x$variants),
@@ -267,7 +269,8 @@ annotation.file &lt;- do.call(rbind, variants_list)
 head(annotation.file)
 ## provide the input SNPs of interest
 ## for example, cis-eQTLs induced by interferon gamma
-cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A')
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
 data.file &lt;- matrix(cis[which(cis$IFN_t&gt;0),c('variant')], ncol=1)
 # perform enrichment analysis
 eTerm &lt;- xEnricherYours(data.file=data.file,

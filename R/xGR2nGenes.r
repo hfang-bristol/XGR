@@ -95,7 +95,8 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=T)
 	}
 	# genes: get all UCSC genes within defined distance window away from variants
-	maxgap <- distance.max
+	#maxgap <- distance.max
+	maxgap <- distance.max -1
 	#minoverlap <- 1L # 1b overlaps
 	minoverlap <- 0L
 	subject <- gr_Gene

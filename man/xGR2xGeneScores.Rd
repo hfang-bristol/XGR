@@ -128,12 +128,6 @@ data <- cbind(GR=GR, Sig=df$Pvalue)
 # b) define and score seed geens
 mSeed <- xGR2xGeneScores(data=data, crosslink="genehancer",
 RData.location=RData.location)
-
-# c) extract GR info
-head(mSeed$GR)
-
-# d) extract gene info
-head(mSeed$Gene)
 }
 }
 \seealso{

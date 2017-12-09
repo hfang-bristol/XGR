@@ -121,12 +121,6 @@ data <- cbind(GR=GR, Sig=sig)
 
 # b) define and score seed geens
 mSeed <- xGR2GeneScores(data=data, RData.location=RData.location)
-
-# c) extract GR info
-head(mSeed$GR)
-
-# d) extract gene info
-head(mSeed$Gene)
 }
 }
 \seealso{

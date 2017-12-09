@@ -45,12 +45,6 @@
 #' 
 #' # b) define and score seed geens
 #' mSeed <- xGR2GeneScores(data=data, RData.location=RData.location)
-#'
-#' # c) extract GR info
-#' head(mSeed$GR)
-#'
-#' # d) extract gene info
-#' head(mSeed$Gene)
 #' }
 
 xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
