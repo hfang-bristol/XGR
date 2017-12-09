@@ -82,6 +82,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   CIl         	= as.numeric(eTerm$CIl),
 							   CIu         	= as.numeric(eTerm$CIu),
 							   distance     = eTerm$term_info$distance,
+							   namespace    = eTerm$term_info$namespace,
 							   members      = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
 							   stringsAsFactors=F
 							  )
@@ -97,6 +98,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   CIl         	= as.numeric(eTerm$CIl),
 							   CIu         	= as.numeric(eTerm$CIu),
 							   distance     = eTerm$term_info$distance,
+							   namespace    = eTerm$term_info$namespace,
 							   members      = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
 							   stringsAsFactors=F
 							  )
@@ -106,7 +108,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 	}
 	    
     if(details == T){
-        res <- tab[,c(1:12)]
+        res <- tab[,c(1:13)]
     }else{
         res <- tab[,c(1:10)]
     }

@@ -16,7 +16,8 @@ ontologies = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
 "CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
 "KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME", "CGL"),
+"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
+"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
 "two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
@@ -63,11 +64,22 @@ all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
 'Environmental Information Processing' pathways, 'KEGGcellular' for
 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
 Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
-REACTOME pathways, and the molecular signatures database (Msigdb,
-including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
-"MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
-"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
+'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies
+(where x can be 'CellCellCommunication', 'CellCycle',
+'CellularResponsesToExternalStimuli', 'ChromatinOrganization',
+'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption',
+'Disease', 'DNARepair', 'DNAReplication',
+'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)',
+'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins',
+'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem',
+'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath',
+'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules',
+'VesicleMediatedTransport'), and the molecular signatures database
+(Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
+"MsigdbC7")}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
@@ -208,9 +220,7 @@ data
 # b) perform enrichment analysis
 ls_eTerm <- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
 RData.location=RData.location)
-ls_eTerm$df
-ls_eTerm$mat
-ls_eTerm$gp
+ls_eTerm
 }
 }
 \seealso{

@@ -5,6 +5,7 @@
 #' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp','or','CIl','CIu')
 #' @param top_num the number of the top terms (sorted according to FDR or adjusted p-values). If it is 'auto', only the significant terms (see below FDR.cutoff) will be displayed
 #' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05. This option only works when setting top_num (see above) is 'auto'
+#' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the -log10(FDR)
@@ -47,7 +48,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE)
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE)
 {
     
     if(is.null(eTerm)){
@@ -68,40 +69,60 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, colormap="ggplot2.
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
-	}else if(class(eTerm)=='ls_eTerm'){
-		## when 'auto', will keep the significant terms
-		df <- eTerm$df
-		df <- subset(df, df$adjp<FDR.cutoff)
-		
-	}else if(class(eTerm)=='data.frame'){
-		
-		if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-			df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu')]
+	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	
+		if(class(eTerm)=='ls_eTerm'){
+			## when 'auto', will keep the significant terms
+			df <- eTerm$df
 			
-		}else if(all(c('group','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-			df <- eTerm[,c('group','name','adjp','or','CIl','CIu')]
-			df$ontology <- 'ontology'
+		}else if(class(eTerm)=='data.frame'){
+			if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+				df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu')]
 			
-		}else if(all(c('ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-			df <- eTerm[,c('ontology','name','adjp','or','CIl','CIu')]
-			df$group <- 'group'
-		
-		}else if(all(c('name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-			df <- eTerm[,c('name','adjp','or','CIl','CIu')]
-			df$group <- 'group'
-			df$ontology <- 'ontology'
-		
-		}else{
-			warnings("The input data.frame does not contain required columns: c('group','ontology','name','adjp','or','CIl','CIu').\n")
-        	return(NULL)
+			}else if(all(c('group','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+				df <- eTerm[,c('group','name','adjp','or','CIl','CIu')]
+				df$ontology <- 'ontology'
+			
+			}else if(all(c('ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+				df <- eTerm[,c('ontology','name','adjp','or','CIl','CIu')]
+				df$group <- 'group'
+			
+			}else if(all(c('name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+				df <- eTerm[,c('name','adjp','or','CIl','CIu')]
+				df$group <- 'group'
+				df$ontology <- 'ontology'
+			
+			}else{
+				warnings("The input data.frame does not contain required columns: c('group','ontology','name','adjp','or','CIl','CIu').\n")
+				return(NULL)
+			}
+			
 		}
 		
-		df <- subset(df, df$adjp<FDR.cutoff)
-		
-		
+		or <- group <- ontology <- rank <- NULL
+		df <- df %>% dplyr::arrange(-or)
+		if(top_num=='auto'){
+			df <- subset(df, df$adjp<FDR.cutoff)
+		}else{
+			top_num <- as.integer(top_num)
+			df <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=order(or,decreasing=T),add=TRUE) %>% dplyr::filter(rank<=top_num))
+		}
 		
 	}
+
+	##########################
+	##########################
+	if(!CI.one){
+		ind <- which(df$CIl>1 | df$CIu<1)
+		df <- df[ind,]
+	}
 	
+	if(nrow(df)==0){
+		return(NULL)
+	}
+	##########################
+	##########################
+
 	## text wrap
 	if(!is.null(wrap.width)){
 		width <- as.integer(wrap.width)

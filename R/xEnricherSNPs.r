@@ -138,6 +138,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
 		#########
 		## load ontology information
 		ig <- xRDataLoader(RData=paste('ig.EF', sep=''), RData.location=RData.location, verbose=verbose)
+		V(ig)$namespace <- ontology
 		
 		if(ontology != 'EF'){
 			if(ontology=='EF_disease'){
@@ -150,6 +151,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
             neighs.out <- igraph::neighborhood(ig, order=vcount(ig), nodes=node, mode="out")
             nodeInduced <- V(ig)[unique(unlist(neighs.out))]$name
             g <- igraph::induced.subgraph(ig, vids=nodeInduced)
+            V(g)$namespace <- ontology
         }else{
         	g <- ig
         }

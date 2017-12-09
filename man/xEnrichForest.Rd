@@ -4,7 +4,7 @@
 \alias{xEnrichForest}
 \title{Function to visualise enrichment results using a forest plot}
 \usage{
-xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05,
+xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
 barheight = NULL, wrap.width = NULL, font.family = "sans",
 signature = TRUE)
@@ -21,6 +21,9 @@ below FDR.cutoff) will be displayed}
 \item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05. This option only works when setting top_num
 (see above) is 'auto'}
+
+\item{CI.one}{logical to indicate whether to allow the inclusion of one
+in CI. By default, it is TURE (allowed)}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red

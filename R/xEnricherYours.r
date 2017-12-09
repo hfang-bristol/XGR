@@ -171,8 +171,8 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     
 	## define ontology information (artificially)
 	terms <- names(anno)
-	nodes <- data.frame(name=terms, term_id=terms, term_name=terms, term_distance=rep(1,length(terms)), stringsAsFactors=F)
-	root <- c('Root', 'Root', 'Root', 0)
+	nodes <- data.frame(name=terms, term_id=terms, term_name=terms, term_distance=rep(1,length(terms)), term_namespace=rep('Customised',length(terms)), stringsAsFactors=F)
+	root <- c('Root', 'Root', 'Root', 0, 'Customised')
 	nodes <- rbind(nodes, root)
 	relations <- data.frame(from='Root', to=nodes$name)
 	g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)

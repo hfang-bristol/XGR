@@ -423,7 +423,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 
     ## generate a subgraph of a direct acyclic graph (DAG) induced by terms
     subg <- dnet::dDAGinduce(g=subg, nodes_query=terms, path.mode=path.mode)
-	set_info <- data.frame(id=V(subg)$term_id, name=V(subg)$term_name, distance=V(subg)$term_distance, row.names=V(subg)$name)
+	set_info <- data.frame(id=V(subg)$term_id, name=V(subg)$term_name, distance=V(subg)$term_distance, namespace=V(subg)$term_namespace, row.names=V(subg)$name, stringsAsFactors=F)
     
     if(ontology.algorithm=="none"){
     
