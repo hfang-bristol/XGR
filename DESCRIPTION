@@ -86,5 +86,6 @@ Collate:
     'xGR2xGenes.r'
     'xGR2xGeneScores.r'
     'xGR2xNet.r'
+    'xGRviaGeneAnnoAdv.r'
 License: GPL-2
 biocViews: Bioinformatics

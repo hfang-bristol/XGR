@@ -44,12 +44,13 @@ c("GOBP",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
 "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
+test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -195,6 +196,13 @@ fisher's exact test &gt; binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
 binomial test</p>
 </td></tr>
+<tr valign="top"><td><code>p.tail</code></td>
+<td>
+<p>the tail used to calculate p-values. It can be either
+&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
+under-overrepresentation) or &quot;one-tail&quot; (by default) for the
+significance based on one tail (ie only over-representation)</p>
+</td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
 <p>the method used to adjust p-values. It can be
@@ -299,6 +307,17 @@ the snps of interest). Always, gene sets are identified by &quot;id&quot;
 </li>
 <li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
 value but after being adjusted for multiple comparisons
+</p>
+</li>
+<li><p><code>or</code>: a vector containing odds ratio
+</p>
+</li>
+<li><p><code>CIl</code>: a vector containing lower bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>CIu</code>: a vector containing upper bound confidence interval
+for the odds ratio
 </p>
 </li>
 <li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell

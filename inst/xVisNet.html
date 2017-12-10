@@ -190,6 +190,7 @@ The default value is 1.</p>
 <h3>Examples</h3>
 
 <pre>
+## Not run: 
 # 1) generate a ring graph
 g &lt;- make_ring(10, directed=TRUE)
 
@@ -209,7 +210,6 @@ names(pattern) &lt;- V(g)$name
 xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
 # 5) use font family (Arial)
-## Not run: 
 source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
 library(extrafont)
 font_import()

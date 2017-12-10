@@ -25,12 +25,13 @@ c("GOBP",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
 "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
+test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -150,6 +151,11 @@ fisher's exact test > binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test < fisher's exact test <
 binomial test}
 
+\item{p.tail}{the tail used to calculate p-values. It can be either
+"two-tails" for the significance based on two-tails (ie both over- and
+under-overrepresentation) or "one-tail" (by default) for the
+significance based on one tail (ie only over-representation)}
+
 \item{p.adjust.method}{the method used to adjust p-values. It can be
 one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
 first two methods "BH" (widely used) and "BY" control the false
@@ -214,6 +220,11 @@ the snps of interest). Always, gene sets are identified by "id"}
 \item{\code{pvalue}: a vector containing p-values}
 \item{\code{adjp}: a vector containing adjusted p-values. It is the p
 value but after being adjusted for multiple comparisons}
+\item{\code{or}: a vector containing odds ratio}
+\item{\code{CIl}: a vector containing lower bound confidence interval
+for the odds ratio}
+\item{\code{CIu}: a vector containing upper bound confidence interval
+for the odds ratio}
 \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell
 for the overlapped-members observed in an individaul term, and
 off-diagnal cell for the overlapped-members shared betwene two terms}

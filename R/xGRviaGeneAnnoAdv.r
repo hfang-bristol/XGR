@@ -1,10 +1,11 @@
 #' Function to conduct enrichment analysis given a list of gene sets and a list of ontologies
 #'
-#' \code{xEnricherGenesAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}, returning an object of the class 'ls_eTerm'.
+#' \code{xGRviaGeneAnnoAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}, returning an object of the class 'ls_eTerm'.
 #'
-#' @param list_vec an input vector containing gene symbols. Alternatively it can be a list of vectors, representing multiple groups of genes
-#' @param background a background vector containing gene symbols as the test background. If NULL, by default all annotatable are used as background
-#' @param check.symbol.identity logical to indicate whether to match the input data/background via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
+#' @param list_vec an input vector containing gene symbols. Alternatively it can be a list of vectors, representing multiple groups of genomic regions. Formatted as "chr:start-end" are genomic regions
+#' @param background a background vector containing genomic regions (formatted as "chr:start-end") as the test background. If NULL, by default all annotatable are used as background
+#' @param gap.max the maximum distance to nearby genes. Only those genes no far way from this distance will be considered as nearby genes. By default, it is 0 meaning that nearby genes are those overlapping with genomic regions
+#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param ontologies the ontologies supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS" for phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for Experimental Factor Ontology (used to annotate GWAS Catalog genes), Drug-Gene Interaction database ("DGIdb") for druggable categories, tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p" and "GTExV7"), crowd extracted expression of differential signatures from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for 'Genetic Information Processing' pathways, 'KEGGenvironmental' for 'Environmental Information Processing' pathways, 'KEGGcellular' for 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways), 'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies (where x can be 'CellCellCommunication', 'CellCycle', 'CellularResponsesToExternalStimuli', 'ChromatinOrganization', 'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption', 'Disease', 'DNARepair', 'DNAReplication', 'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)', 'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins', 'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem', 'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath', 'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules', 'VesicleMediatedTransport'), and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
@@ -32,33 +33,30 @@
 #' }
 #' @note none
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xEnricherGenes}}, \code{\link{xEnrichViewer}}, \code{\link{xHeatmap}}
-#' @include xEnricherGenesAdv.r
+#' @seealso \code{\link{xRDataLoader}}, \code{\link{xGRviaGeneAnno}}, \code{\link{xEnrichViewer}}, \code{\link{xHeatmap}}
+#' @include xGRviaGeneAnnoAdv.r
 #' @examples
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
-#' # Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-#' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
-#' ## load human genes
-#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
-#' set.seed(825)
-#' data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-#' data
-#' 
-#' # optionally, provide the test background (if not provided, all human genes)
-#' #background <- as.character(org.Hs.eg$gene_info$Symbol)
+#' # Enrichment analysis for GWAS SNPs from ImmunoBase
+#' ## a) provide input data (bed-formatted)
+#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
+#' input <- read.delim(file=data.file, header=T, stringsAsFactors=F)
+#' data <- paste0(input$chrom, ':', (input$chromStart+1), '-', input$chromEnd)
 #' 
 #' # b) perform enrichment analysis
-#' ls_eTerm <- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"), RData.location=RData.location)
+#' ## overlap with gene body
+#' ls_eTerm <- xGRviaGeneAnnoAdv(data, gap.max=0, ontologies=c("REACTOME_ImmuneSystem","REACTOME_SignalTransduction"), RData.location=RData.location)
 #' ls_eTerm
 #' ## forest plot of enrichment results
-#' gp <- xEnrichForest(ls_eTerm, top_num=10)
+#' gp <- xEnrichForest(ls_eTerm, top_num=10, CI.one=F)
+#' gp
 #' }
 
-xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGRviaGeneAnnoAdv <- function(list_vec, background=NULL, gap.max=0, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), ontologies=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -74,7 +72,6 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)
-    p.tail <- match.arg(p.tail)
     displayBy <- match.arg(displayBy)
     
     ############
@@ -113,7 +110,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 			}
 			ontology <- ontologies[j]
 			
-    		eTerm <- xEnricherGenes(data=data, background=background, check.symbol.identity=check.symbol.identity, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=TRUE, RData.location=RData.location)
+			eTerm <- xGRviaGeneAnno(data.file=data, background.file=background, format.file="chr:start-end", build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), gap.max=gap.max, GR.Gene=GR.Gene, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, RData.location=RData.location)
 			df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
 			
 			if(is.null(df)){
@@ -241,7 +238,6 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     			   gp = gp
                  )
     class(ls_eTerm) <- "ls_eTerm"
-                 
     ####################################################################################
     endT <- Sys.time()
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))

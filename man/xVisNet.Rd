@@ -120,6 +120,7 @@ input pattern.
 none
 }
 \examples{
+\dontrun{
 # 1) generate a ring graph
 g <- make_ring(10, directed=TRUE)
 
@@ -139,7 +140,6 @@ names(pattern) <- V(g)$name
 xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
 # 5) use font family (Arial)
-\dontrun{
 source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
 library(extrafont)
 font_import()

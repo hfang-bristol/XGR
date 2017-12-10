@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xEnricherGenesAdv"><tr><td>xEnricherGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGRviaGeneAnnoAdv"><tr><td>xGRviaGeneAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to conduct enrichment analysis given a list of gene sets and a list of ontologies</h2>
 
 <h3>Description</h3>
 
-<p><code>xEnricherGenesAdv</code> is supposed to conduct enrichment analysis
+<p><code>xGRviaGeneAnnoAdv</code> is supposed to conduct enrichment analysis
 given a list of gene sets and a list of ontologies. It is an advanced
 version of <code>xEnricherGenes</code>, returning an object of the class
 'ls_eTerm'.
@@ -19,31 +19,30 @@ version of <code>xEnricherGenes</code>, returning an object of the class
 <h3>Usage</h3>
 
 <pre>
-xEnricherGenesAdv(list_vec, background = NULL, check.symbol.identity =
-F,
+xGRviaGeneAnnoAdv(list_vec, background = NULL, gap.max = 0,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 ontologies = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
 "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
 "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
 "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
 "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
-"KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"), p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
-T,
-silent = FALSE, plot = TRUE, fdr.cutoff = 0.05,
-displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease",
+"CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
+"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG",
+"KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental", "KEGGcellular",
+"KEGGorganismal", "KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem",
+"REACTOME_SignalTransduction", "CGL"), size.range = c(10, 2000),
+min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
+"binomial"), p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
+0.01,
+lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = F, verbose = T, silent = FALSE,
+plot = TRUE, fdr.cutoff = 0.05, displayBy = c("zscore", "fdr",
+"pvalue",
+"fc", "or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -53,19 +52,35 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <tr valign="top"><td><code>list_vec</code></td>
 <td>
 <p>an input vector containing gene symbols. Alternatively
-it can be a list of vectors, representing multiple groups of genes</p>
+it can be a list of vectors, representing multiple groups of genomic
+regions. Formatted as &quot;chr:start-end&quot; are genomic regions</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-<p>a background vector containing gene symbols as the
-test background. If NULL, by default all annotatable are used as
-background</p>
+<p>a background vector containing genomic regions
+(formatted as &quot;chr:start-end&quot;) as the test background. If NULL, by
+default all annotatable are used as background</p>
 </td></tr>
-<tr valign="top"><td><code>check.symbol.identity</code></td>
+<tr valign="top"><td><code>gap.max</code></td>
 <td>
-<p>logical to indicate whether to match the
-input data/background via Synonyms for those unmatchable by official
-gene symbols. By default, it sets to false</p>
+<p>the maximum distance to nearby genes. Only those genes
+no far way from this distance will be considered as nearby genes. By
+default, it is 0 meaning that nearby genes are those overlapping with
+genomic regions</p>
+</td></tr>
+<tr valign="top"><td><code>GR.Gene</code></td>
+<td>
+<p>the genomic regions of genes. By default, it is
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>ontologies</code></td>
 <td>
@@ -272,7 +287,7 @@ object
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>, <code>xEnricherGenes</code>,
+<p><code>xRDataLoader</code>, <code>xGRviaGeneAnno</code>,
 <code>xEnrichViewer</code>, <code>xHeatmap</code>
 </p>
 
@@ -285,24 +300,22 @@ object
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-data
-
-# optionally, provide the test background (if not provided, all human genes)
-#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+# Enrichment analysis for GWAS SNPs from ImmunoBase
+## a) provide input data (bed-formatted)
+data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
+input &lt;- read.delim(file=data.file, header=T, stringsAsFactors=F)
+data &lt;- paste0(input$chrom, ':', (input$chromStart+1), '-',
+input$chromEnd)
 
 # b) perform enrichment analysis
-ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+## overlap with gene body
+ls_eTerm &lt;- xGRviaGeneAnnoAdv(data, gap.max=0,
+ontologies=c("REACTOME_ImmuneSystem","REACTOME_SignalTransduction"),
 RData.location=RData.location)
 ls_eTerm
 ## forest plot of enrichment results
-gp &lt;- xEnrichForest(ls_eTerm, top_num=10)
+gp &lt;- xEnrichForest(ls_eTerm, top_num=10, CI.one=F)
+gp
 
 ## End(Not run)
 </pre>

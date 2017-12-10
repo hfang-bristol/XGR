@@ -7,6 +7,8 @@ NEW FEATURES
 
     o Add a new function 'xEnricherGenesAdv' for conducting enrichment analysis given a list of gene sets and a list of ontologies
     
+    o Add a new function 'xGRviaGeneAnnoAdv' for conducting enrichment analysis given a list of genomic regions and a list of ontologies
+    
     o Add a new function 'xEnrichForest' for visualising enrichment results in a forest plot
 
     o Add a new function 'xVisInterpAnimate' for animating irregular data interpolation and visualisation

@@ -59,6 +59,14 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
     if(class(eTerm)=='eTerm'){
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
+		
+		############
+		if(!CI.one){
+			ind <- which(df$CIl>1 | df$CIu<1)
+			df <- df[ind,]
+		}
+		############
+		
 		if(top_num=='auto'){
 			top_num <- sum(df$adjp<FDR.cutoff)
 			if(top_num <= 1){
@@ -99,6 +107,13 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 			
 		}
 		
+		############
+		if(!CI.one){
+			ind <- which(df$CIl>1 | df$CIu<1)
+			df <- df[ind,]
+		}
+		############
+		
 		or <- group <- ontology <- rank <- NULL
 		df <- df %>% dplyr::arrange(-or)
 		if(top_num=='auto'){
@@ -112,11 +127,6 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 
 	##########################
 	##########################
-	if(!CI.one){
-		ind <- which(df$CIl>1 | df$CIu<1)
-		df <- df[ind,]
-	}
-	
 	if(nrow(df)==0){
 		return(NULL)
 	}
@@ -158,7 +168,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 	bp <- ggplot(df, aes(x=name, y=log2(or), ymin=log2(CIl), ymax=log2(CIu), color=fdr))
 	bp <- bp + geom_pointrange() + ylab(expression(log[2]("odds ratio")))
 	bp <- bp + geom_hline(yintercept=0, color='black', linetype='dashed') + coord_flip()
-	bp <- bp + theme_bw() + theme(legend.position="right",axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=10,color="black")) + coord_flip()
+	bp <- bp + theme_bw() + theme(legend.position="right",axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=10,color="black"))
 	bp <- bp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",barwidth=barwidth,barheight=barheight,draw.ulim=FALSE,draw.llim=FALSE))
 	
@@ -194,7 +204,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		}
 		
 		## strip
-		bp <- bp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=10,face="bold.italic"))
+		bp <- bp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=8,face="bold.italic"))
 	}
 	
 	invisible(bp)
