@@ -84,7 +84,7 @@ xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, 
 	}
 	#####################################
 	## update data GR after considering background
-	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
+	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=-1L, minoverlap=0L)
 	if(verbose){
 		now <- Sys.time()
 		message(sprintf("\t%d within background", length(dGR_reduced)), appendLF=T)

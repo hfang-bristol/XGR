@@ -628,7 +628,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	
 		## update annotation GR after considering background
 		aGR_reduced <- base::lapply(aGR_reduced, function(gr){
-			mergeOverlaps(qGR=gr, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
+			mergeOverlaps(qGR=gr, sGR=bGR_reduced, maxgap=-1L, minoverlap=0L)
 		})
 	
 		## restrict to the annotatable only?
@@ -650,11 +650,11 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 	}
 	
 	## update data GR after considering background
-	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
+	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=-1L, minoverlap=0L)
 	
 	## find overlap GR between annotation GR and data GR
 	aGRL <- GenomicRanges::GRangesList(aGR_reduced)
-	oGR_reduced <- mergeOverlaps_GRL(qGR=dGR_reduced, sGRL=aGRL, maxgap=0L, minoverlap=1L)
+	oGR_reduced <- mergeOverlaps_GRL(qGR=dGR_reduced, sGRL=aGRL, maxgap=-1L, minoverlap=0L)
 	#######################################################
 	if(verbose){
 		now <- Sys.time()

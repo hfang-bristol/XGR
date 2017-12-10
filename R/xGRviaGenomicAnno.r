@@ -606,7 +606,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	
 		## update annotation GR after considering background
 		aGR_reduced <- base::lapply(aGR_reduced, function(gr){
-			mergeOverlaps(qGR=gr, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
+			mergeOverlaps(qGR=gr, sGR=bGR_reduced, maxgap=-1L, minoverlap=0L)
 		})
 	
 		## restrict to the annotatable only?
@@ -628,11 +628,11 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 	}
 	
 	## update data GR after considering background
-	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=0L, minoverlap=1L)
+	dGR_reduced <- mergeOverlaps(qGR=dGR_reduced, sGR=bGR_reduced, maxgap=-1L, minoverlap=0L)
 
 	## find overlap GR between annotation GR and data GR
 	oGR_reduced <- base::lapply(aGR_reduced, function(gr){
-		mergeOverlaps(qGR=gr, sGR=dGR_reduced, maxgap=0L, minoverlap=1L)
+		mergeOverlaps(qGR=gr, sGR=dGR_reduced, maxgap=-1L, minoverlap=0L)
 	})
 	
 	#######################################################
