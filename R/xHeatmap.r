@@ -48,12 +48,18 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
     reorder <- match.arg(reorder)
     
 	if(is.null(rownames(data))){
-		rownames(data) <- paste('R', 1:nrow(data), sep=' ')
+		rownames(data) <- paste('R', 1:nrow(data), sep='')
 	}
 	if(is.null(colnames(data))){
-		colnames(data) <- paste('C', 1:ncol(data), sep=' ')
+		colnames(data) <- paste('C', 1:ncol(data), sep='')
 	}
 	mat_val <- data
+	
+	########
+	## make sure rownames and colunames are unique
+	rownames(mat_val) <- make.names(rownames(mat_val), unique=TRUE)
+	colnames(mat_val) <- make.names(colnames(mat_val), unique=TRUE)
+	########
 	
 	flag_factor <- FALSE
 	if(class(unlist(mat_val))=='factor'){
@@ -95,7 +101,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	if(0){
 		mat_val <- mat_val[ind_row, ind_col]
 	}else{
-		mat_tmp <- as.matrix(mat_val[ind_row, ind_col], ncol=length(ind_col))
+		mat_tmp <- matrix(mat_val[ind_row, ind_col], ncol=length(ind_col))
 		rownames(mat_tmp) <- rownames(mat_val)[ind_row]
 		colnames(mat_tmp) <- colnames(mat_val)[ind_col]
 		mat_val <- mat_tmp
@@ -109,7 +115,11 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	if(class(mat_val)=='data.frame'){
 		
 		if(is.null(zlim)){
-			zlim <- c(floor(min(mat_val)*10)/10, ceiling(max(mat_val)*10)/10)
+			zlim <- c(floor(min(mat_val,na.rm=T)*10)/10, ceiling(max(mat_val,na.rm=T)*10)/10)
+			
+			if(zlim[1]==zlim[2]){
+				zlim[1] <- zlim[2]/2
+			}
 		}
 		mat_val[mat_val<=zlim[1]] <- zlim[1]
 		mat_val[mat_val>=zlim[2]] <- zlim[2]
@@ -143,6 +153,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		}
 		
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold",color="black",size=x.text.size,angle=x.rotate,hjust=0), axis.text.y=element_text(face="bold",color="black",size=y.text.size,angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + theme(plot.margin=plot.margin) + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
+		gp <- gp + theme(axis.ticks=element_line(size=0.25),axis.ticks.length=unit(0.1,"cm"))
 		gp <- gp + theme(text=element_text(family=font.family))
 		gp_main <- gp + scale_x_discrete(position="top")
 		

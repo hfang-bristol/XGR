@@ -141,7 +141,7 @@ none
 }
 \examples{
 \dontrun{
-# Load the XGR package and specify the location of built-in data
+# Load the XGR package
 library(XGR)
 data(mtcars)
 data.main <- mtcars[,1:6]

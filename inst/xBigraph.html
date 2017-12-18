@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to obtain communities from a bipartitle graph</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xBigraph"><tr><td>xBigraph</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to obtain communities from a bipartitle graph</h2>
+
+<h3>Description</h3>
+
+<p><code>xBigraph</code> is supposed to obtain communities from a bipartitle
+graph.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xBigraph(g, algorithm = c("louvain", "leading_eigen", "fast_greedy"),
+seed = 825, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a bipartitel
+graoup with a 'type' node attribute</p>
+</td></tr>
+<tr valign="top"><td><code>algorithm</code></td>
+<td>
+<p>the algorithm to initialise community from a projected
+graph. It can be 'louvain' using multi-level optimization,
+'leading_eigen' using leading eigenvector, 'fast_greedy' using greedy
+optimization</p>
+</td></tr>
+<tr valign="top"><td><code>seed</code></td>
+<td>
+<p>an integer specifying the seed</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>It returns an igraph object, appended by node attributes including
+&quot;community&quot; for communit memberships, &quot;contribution&quot; for contribution
+to its community, &quot;xcoord&quot; for x-coordinates, &quot;ycoord&quot; for
+y-coordiates, and by edge attributes including &quot;color&quot; for
+between-community edges ('grey70') and within-community edges
+('grey95').
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input graph will has an equal weight if there is no 'weight' edge
+attribute associated with
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xA2Net</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# 1) generate a random bipartite graph
+set.seed(123)
+g &lt;- sample_bipartite(100, 50, p=0.1)
+V(g)$name &lt;- V(g)
+
+## Not run: 
+# 2) obtain its community
+ig &lt;- xBigraph(g)
+gp &lt;- xA2Net(ig, node.label='name', node.label.size=2,
+node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
+node.label.arrow=0, node.label.force=0.002, node.shape='type',
+node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord',
+node.color='community', node.color.title='Community',
+colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution',
+node.size.range=c(1,4), node.size.title='Contribution', slim=NULL,
+edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

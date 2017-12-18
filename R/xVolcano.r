@@ -50,7 +50,7 @@ xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cut
 	}
 	
 	if(!is.null(top)){
-		if(all(column.label %in% colnames(data))){
+		if(!is.null(column.label) & all(column.label %in% colnames(data))){
 			df$label <- data[,column.label]
 		}else{
 			top <- NULL

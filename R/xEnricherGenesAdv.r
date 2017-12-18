@@ -234,6 +234,9 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 			gp <- gp + theme(legend.title=element_text(size=8))
 		}
 		
+    }else{
+    	mat <- NULL
+    	gp <- NULL
     }
     
     ls_eTerm <- list(df = df_all,

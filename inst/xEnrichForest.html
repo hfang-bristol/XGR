@@ -23,7 +23,7 @@ the wider the CI, the less reliable). It returns an object of class
 xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
 barheight = NULL, wrap.width = NULL, font.family = "sans",
-signature = TRUE)
+signature = TRUE, drop = F)
 </pre>
 
 
@@ -45,8 +45,7 @@ below FDR.cutoff) will be displayed</p>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
 <p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05. This option only works when setting top_num
-(see above) is 'auto'</p>
+default, it is set to 0.05</p>
 </td></tr>
 <tr valign="top"><td><code>CI.one</code></td>
 <td>
@@ -98,6 +97,13 @@ plotted, defaulting to the range of the -log10(FDR)</p>
 <p>logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is
 used to draw this graph</p>
+</td></tr>
+<tr valign="top"><td><code>drop</code></td>
+<td>
+<p>logical to indicate whether all factor levels not used in
+the data will automatically be dropped. If FALSE (by default), all
+factor levels will be shown, regardless of whether or not they appear
+in the data</p>
 </td></tr>
 </table>
 

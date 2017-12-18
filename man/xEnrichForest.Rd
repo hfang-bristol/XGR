@@ -7,7 +7,7 @@
 xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
 barheight = NULL, wrap.width = NULL, font.family = "sans",
-signature = TRUE)
+signature = TRUE, drop = F)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
@@ -19,8 +19,7 @@ adjusted p-values). If it is 'auto', only the significant terms (see
 below FDR.cutoff) will be displayed}
 
 \item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05. This option only works when setting top_num
-(see above) is 'auto'}
+default, it is set to 0.05}
 
 \item{CI.one}{logical to indicate whether to allow the inclusion of one
 in CI. By default, it is TURE (allowed)}
@@ -54,6 +53,11 @@ plotted, defaulting to the range of the -log10(FDR)}
 \item{signature}{logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is
 used to draw this graph}
+
+\item{drop}{logical to indicate whether all factor levels not used in
+the data will automatically be dropped. If FALSE (by default), all
+factor levels will be shown, regardless of whether or not they appear
+in the data}
 }
 \value{
 an object of class "ggplot"
