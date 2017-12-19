@@ -2,7 +2,7 @@
 #'
 #' \code{xBigraph} is supposed to obtain communities from a bipartitle graph.
 #'
-#' @param g an object of class "igraph" (or "graphNEL") for a bipartitel graoup with a 'type' node attribute
+#' @param g an object of class "igraph" (or "graphNEL") for a bipartitel graph with a 'type' node attribute
 #' @param algorithm the algorithm to initialise community from a projected graph. It can be 'louvain' using multi-level optimization, 'leading_eigen' using leading eigenvector, 'fast_greedy' using greedy optimization
 #' @param seed an integer specifying the seed
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
@@ -21,6 +21,9 @@
 #' # 2) obtain its community
 #' ig <- xBigraph(g)
 #' gp <- xA2Net(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,4), node.size.title='Contribution', slim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
+#' 
+#' ## make it discrete for the colorbar
+#' gp + scale_colour_gradientn(colors=xColormap('jet')(64),limits=c(1,3),breaks=seq(1,3)) + guides(color=guide_legend(title="Community"))
 #' }
 
 xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy"), seed=825, verbose=TRUE)
@@ -232,8 +235,8 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy"), se
 			Qnow <- sum(Qcom)
 			if(abs(Qnow) < .Machine$double.eps){Qnow <- 0}
 			Qhist <- c(Qhist,Qnow)
-	
-			print(paste("Q =",Qnow,sep=" "))
+
+			#print(paste("Q =",Qnow,sep=" "))
 			if(Qnow != 0){
 				deltaQ <- Qnow - Qthen
 			}

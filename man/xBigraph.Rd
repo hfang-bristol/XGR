@@ -9,7 +9,7 @@ seed = 825, verbose = TRUE)
 }
 \arguments{
 \item{g}{an object of class "igraph" (or "graphNEL") for a bipartitel
-graoup with a 'type' node attribute}
+graph with a 'type' node attribute}
 
 \item{algorithm}{the algorithm to initialise community from a projected
 graph. It can be 'louvain' using multi-level optimization,
@@ -54,6 +54,11 @@ node.color='community', node.color.title='Community',
 colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution',
 node.size.range=c(1,4), node.size.title='Contribution', slim=NULL,
 edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
+
+## make it discrete for the colorbar
+gp +
+scale_colour_gradientn(colors=xColormap('jet')(64),limits=c(1,3),breaks=seq(1,3))
++ guides(color=guide_legend(title="Community"))
 }
 }
 \seealso{

@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to obtain communities from a bipartitle graph</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xBiheatmap"><tr><td>xBiheatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to obtain communities from a bipartitle graph</h2>
+
+<h3>Description</h3>
+
+<p><code>xBiheatmap</code> is supposed to obtain communities from a bipartitle
+graph.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xBiheatmap(g, colormap = "spectral", ncolors = 64, zlim = NULL,
+barwidth = 0.3, barheight = NULL, nbin = 64, legend.title = "",
+x.rotate = 60, x.text.size = 3, y.text.size = 3, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 0.5,
+plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"), font.family = "sans",
+na.color = "transparent", intercept.color = "grey85",
+intercept.size = 0.3)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; for a bipartitel graph with node
+attributes 'type', 'community' and 'contribution'</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the finite values of displayed
+matrix</p>
+</td></tr>
+<tr valign="top"><td><code>barwidth</code></td>
+<td>
+<p>the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>barheight</code></td>
+<td>
+<p>the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>nbin</code></td>
+<td>
+<p>the number of bins for drawing colorbar</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the title of the colorbar. By default, it is &rdquo;</p>
+</td></tr>
+<tr valign="top"><td><code>x.rotate</code></td>
+<td>
+<p>the angle to rotate the x tick labelings. By default,
+it is 60</p>
+</td></tr>
+<tr valign="top"><td><code>x.text.size</code></td>
+<td>
+<p>the text size of the x tick labelings. By default,
+it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>y.text.size</code></td>
+<td>
+<p>the text size of the y tick labelings. By default,
+it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>legend.text.size</code></td>
+<td>
+<p>the text size of the legend tick labelings. By
+default, it is 5</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title.size</code></td>
+<td>
+<p>the text size of the legend titles. By
+default, it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>the number specifying the shape. By default, it is 19</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>the number specifying the shape size. By default, it is 2</p>
+</td></tr>
+<tr valign="top"><td><code>plot.margin</code></td>
+<td>
+<p>the margin (t, r, b, l) around plot. By default, it
+is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>font.family</code></td>
+<td>
+<p>the font family for texts</p>
+</td></tr>
+<tr valign="top"><td><code>na.color</code></td>
+<td>
+<p>the color for NAs. By default, it is 'grey80'</p>
+</td></tr>
+<tr valign="top"><td><code>intercept.color</code></td>
+<td>
+<p>intercept color</p>
+</td></tr>
+<tr valign="top"><td><code>intercept.size</code></td>
+<td>
+<p>intercept size</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a gpplot2 object
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xHeatmap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# 1) generate a random bipartite graph
+set.seed(123)
+g &lt;- sample_bipartite(100, 50, p=0.1)
+V(g)$name &lt;- V(g)
+
+## Not run: 
+# 2) obtain its community
+ig &lt;- xBiheatmap(g)
+gp &lt;- xBiheatmap(ig)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

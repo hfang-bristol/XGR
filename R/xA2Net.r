@@ -331,7 +331,8 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.linehei
 		zlim <- range(df$n.color[!is.na(df$n.color)])
 	}
 	if(zlim[1] != zlim[2]){
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, breaks=c(zlim[1],sum(zlim)/2,zlim[2]), guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,nbin=64,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
+		#gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, breaks=c(zlim[1],sum(zlim)/2,zlim[2]), guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,nbin=64,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
+		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,nbin=64,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
 	}else{
 		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5))
 	}
