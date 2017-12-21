@@ -2,14 +2,14 @@
 % Please edit documentation in R/xBiheatmap.r
 \name{xBiheatmap}
 \alias{xBiheatmap}
-\title{Function to obtain communities from a bipartitle graph}
+\title{Function to visualise bipartitle graph communities using heatmap}
 \usage{
 xBiheatmap(g, colormap = "spectral", ncolors = 64, zlim = NULL,
 barwidth = 0.3, barheight = NULL, nbin = 64, legend.title = "",
 x.rotate = 60, x.text.size = 3, y.text.size = 3, legend.text.size = 4,
 legend.title.size = 6, shape = 19, size = 0.5,
 plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"), font.family = "sans",
-na.color = "transparent", intercept.color = "grey85",
+na.color = "transparent", intercept.color = "grey95",
 intercept.size = 0.3)
 }
 \arguments{
@@ -77,8 +77,8 @@ is unit(c(5.5,5.5,5.5,5.5),"pt")}
 a gpplot2 object
 }
 \description{
-\code{xBiheatmap} is supposed to obtain communities from a bipartitle
-graph.
+\code{xBiheatmap} is supposed to visualise bipartitle graph communities
+using heatmap.
 }
 \examples{
 # 1) generate a random bipartite graph
@@ -88,10 +88,10 @@ V(g)$name <- V(g)
 
 \dontrun{
 # 2) obtain its community
-ig <- xBiheatmap(g)
+ig <- xBigraph(g)
 gp <- xBiheatmap(ig)
 }
 }
 \seealso{
-\code{\link{xHeatmap}}
+\code{\link{xBigraph}}, \code{\link{xHeatmap}}
 }

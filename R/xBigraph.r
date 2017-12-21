@@ -3,10 +3,12 @@
 #' \code{xBigraph} is supposed to obtain communities from a bipartitle graph.
 #'
 #' @param g an object of class "igraph" (or "graphNEL") for a bipartitel graph with a 'type' node attribute
-#' @param algorithm the algorithm to initialise community from a projected graph. It can be 'louvain' using multi-level optimization, 'leading_eigen' using leading eigenvector, 'fast_greedy' using greedy optimization
+#' @param algorithm the algorithm to initialise community from a projected graph. It can be 'louvain' using multi-level optimization, 'leading_eigen' using leading eigenvector, 'fast_greedy' using greedy optimization, and 'walktrap' via short random walks
 #' @param seed an integer specifying the seed
+#' @param glayout a graph layout function. This function can be one of "layout_nicely" (previously "layout.auto"), "layout_randomly" (previously "layout.random"), "layout_in_circle" (previously "layout.circle"), "layout_on_sphere" (previously "layout.sphere"), "layout_with_fr" (previously "layout.fruchterman.reingold"), "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree" (previously "layout.reingold.tilford"), "layout_with_lgl" (previously "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"), "layout_with_sugiyama" (previously "layout.kamada.kawai"), "layout_with_dh" (previously "layout.davidson.harel"), "layout_with_drl" (previously "layout.drl"), "layout_with_gem" (previously "layout.gem"), "layout_with_mds", and "layout_as_bipartite". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
+#' @param edge.color.alternative two alternative colors for edges within the community (grey70 by default) and edges between communities (grey95 by default)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
-#' @return It returns an igraph object, appended by node attributes including "community" for communit memberships, "contribution" for contribution to its community, "xcoord" for x-coordinates, "ycoord" for y-coordiates, and by edge attributes including "color" for between-community edges ('grey70') and within-community edges ('grey95').
+#' @return It returns an igraph object, appended by node attributes including "community" for communit memberships, "contribution" for contribution to its community, "xcoord" for x-coordinates, "ycoord" for y-coordiates, and by edge attributes including "color" for between-community edges ('grey95') and within-community edges ('grey70').
 #' @note The input graph will has an equal weight if there is no 'weight' edge attribute associated with
 #' @export
 #' @seealso \code{\link{xA2Net}}
@@ -23,10 +25,10 @@
 #' gp <- xA2Net(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,4), node.size.title='Contribution', slim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 #' 
 #' ## make it discrete for the colorbar
-#' gp + scale_colour_gradientn(colors=xColormap('jet')(64),limits=c(1,3),breaks=seq(1,3)) + guides(color=guide_legend(title="Community"))
+#' gp + scale_colour_gradientn(colors=xColormap('jet.both')(64),breaks=seq(1,max(V(ig)$community))) + guides(color=guide_legend(title="Community"))
 #' }
 
-xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy"), seed=825, verbose=TRUE)
+xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy","walktrap"), seed=825, glayout=layout_with_kk, edge.color.alternative=c("grey70","grey95"), verbose=TRUE)
 {
     
     startT <- Sys.time()
@@ -120,6 +122,9 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy"), se
 	}else if(algorithm=="fast_greedy"){
 		## greedy optimization of modularity
 		cs0 <- igraph::cluster_fast_greedy(ig_x, weights=E(ig_x)$weight)
+	}else if(algorithm=="walktrap"){
+		## via short random walks
+		cs0 <- igraph::cluster_walktrap(ig_x, weights=E(ig_x)$weight)
 	}
 	
 	## initial condition for ig_x community membership
@@ -332,113 +337,13 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy"), se
 	############
 	############
 	
-	if(1){
-		adj <- as.matrix(xConverter(ig_converted, from='igraph', to='dgCMatrix', verbose=FALSE))
-		
-		type <- community <- contribution <- name <- NULL
-		df_nodes <- igraph::get.data.frame(ig_converted,what="vertices")
-		## sorted by type, community (1,2,3,...), -contribution
-		df_nodes <- df_nodes %>% dplyr::arrange(type,community,-contribution)
-		
-		#############################
-		## append node attributes: xcord, ycord
-		#############################
-		if(1){
-			ls_tmp <- split(x=df_nodes$name, f=df_nodes$community)
-			ls_ig <- lapply(ls_tmp, function(x){
-				g <- dnet::dNetInduce(ig_converted, nodes_query=x, knn=0, largest.comp=TRUE)
-			})
-			
-			## collectively
-			layouts <- lapply(ls_ig, function(g) {
-				igraph::layout_as_bipartite(g, types=as.logical(V(g)$type=='xnode'))
-				igraph::layout_in_circle(g)
-				igraph::layout_with_kk(g)
-			})
-			set.seed(seed)
-			glayout <- igraph::merge_coords(ls_ig, layouts)
-			node.xcoord <- glayout[,1]
-			node.ycoord <- glayout[,2]
-			## scale into [-1,1]
-			if(max(node.xcoord) != min(node.xcoord)){
-				node.xcoord <- (node.xcoord - min(node.xcoord)) / (max(node.xcoord) - min(node.xcoord)) * 2 - 1
-			}
-			if(max(node.ycoord) != min(node.ycoord)){
-				node.ycoord <- (node.ycoord - min(node.ycoord)) / (max(node.ycoord) - min(node.ycoord)) * 2 - 1
-			}
-			glayout <- cbind(node.xcoord, node.ycoord)
-			## glayout sorted by ig_converted
-			g_tmp <- igraph::disjoint_union(ls_ig)
-			ind <- match(V(ig_converted)$name, V(g_tmp)$name)
-			glayout <- glayout[ind,]
-			V(ig_converted)$xcoord <- glayout[,1]
-			V(ig_converted)$ycoord <- glayout[,2]
-			
-			## define edge.color
-			### within and between: grey70 and grey90
-			m <- df_nodes$community
-			names(m) <- df_nodes$name
-    		el <-igraph::as_edgelist(ig_converted, names=T)
-			m1 <- m[el[,1]]
-			m2 <- m[el[,2]]
-			res <- m1!=m2
-			if (!is.null(names(m1))) {
-				names(res) <- paste(names(m1), names(m2), sep = "|")
-			}
-			edge.color <- c("grey70", "grey95")[res+1]
-			E(ig_converted)$color <- edge.color
-			
-			#gp <- xA2Net(ig_converted, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,3), node.size.title='Contribution', slim=c(0,0.1), edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0, title='')
-			
-			if(0){
-				## define color and shape mappings
-				### xnode and ynode
-				col <- c("steelblue", "orange")
-				shape <- c("circle", "square")
-				g <- ig_converted
-				#xVisNet(g, glayout=glayout, vertex.color=col[as.numeric(as.factor(V(g)$type))], vertex.shape=shape[as.numeric(as.factor(V(g)$type))], signature=F, vertex.size=2, edge.color=edge.color)
-			
-				## individually
-				i <- 1
-				g <- ls_ig[[i]]
-				glayout <- igraph::layout_as_bipartite(g, types=as.logical(V(g)$type=='xnode'))
-				glayout <- igraph::layout_in_circle(g)
-				glayout <- glayout[,c(2,1)]
-				# define color and shape mappings
-				col <- c("steelblue", "orange")
-				shape <- c("circle", "square")
-				xVisNet(g, glayout=glayout, vertex.color=col[as.numeric(as.factor(V(g)$type))], vertex.shape=shape[as.numeric(as.factor(V(g)$type))], signature=F)
-			}
-
-		}
-		
-		#############################
-		## heatmap
-		#############################
-		## ynode.memb
-		ynode.memb <- subset(df_nodes, type=='ynode')
-		ynode.order <- ynode.memb$name
-		adj <- adj[ynode.order, ]
-		## xnode.memb
-		xnode.memb <- subset(df_nodes, type=='xnode')
-		xnode.order <- xnode.memb$name
-		adj <- adj[, xnode.order]
-		## rowsep, colsep
-		rowsep <- cumsum(as.vector(table(ynode.memb$community)))
-		colsep <- cumsum(as.vector(table(xnode.memb$community)))
-		if(0){
-			labCol <- as.character(sort(xnode.memb$community))
-			labCol[duplicated(labCol)] <- ""
-			labRow <- as.character(sort(ynode.memb$community))
-			labRow[duplicated(labRow)] <- ""
-		}
-		data <- adj
-		data[data==0] <- NA
-		gp <- xHeatmap(data, colormap="spectral", x.rotate=60, x.text.size=2, y.text.size=2, shape=19, size=0.2, na.color='transparent')
-		gp + geom_vline(xintercept=colsep+0.5,color='grey85',size=0.3) + geom_hline(yintercept=nrow(data)-rowsep+0.5,color='grey85',size=0.3) + theme(axis.ticks=element_line(size=0.25),axis.ticks.length=unit(0.05,"cm"))
-		
-    }
-    ####################################################################################
+	#############################
+	## append node attributes: xcord, ycord
+	## append edge attribute: color
+	#############################
+	ig_converted <- xAddCoords(ig_converted, seed=seed, glayout=glayout, edge.color.alternative=edge.color.alternative, verbose=verbose)
+	
+ ####################################################################################
     endT <- Sys.time()
     if(verbose){
         message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)

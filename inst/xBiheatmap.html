@@ -1,16 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to obtain communities from a bipartitle graph</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise bipartitle graph communities using...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xBiheatmap"><tr><td>xBiheatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to obtain communities from a bipartitle graph</h2>
+<h2>Function to visualise bipartitle graph communities using heatmap</h2>
 
 <h3>Description</h3>
 
-<p><code>xBiheatmap</code> is supposed to obtain communities from a bipartitle
-graph.
+<p><code>xBiheatmap</code> is supposed to visualise bipartitle graph communities
+using heatmap.
 </p>
 
 
@@ -22,7 +22,7 @@ barwidth = 0.3, barheight = NULL, nbin = 64, legend.title = "",
 x.rotate = 60, x.text.size = 3, y.text.size = 3, legend.text.size = 4,
 legend.title.size = 6, shape = 19, size = 0.5,
 plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"), font.family = "sans",
-na.color = "transparent", intercept.color = "grey85",
+na.color = "transparent", intercept.color = "grey95",
 intercept.size = 0.3)
 </pre>
 
@@ -141,7 +141,7 @@ is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
 
 <h3>See Also</h3>
 
-<p><code>xHeatmap</code>
+<p><code>xBigraph</code>, <code>xHeatmap</code>
 </p>
 
 
@@ -155,7 +155,7 @@ V(g)$name &lt;- V(g)
 
 ## Not run: 
 # 2) obtain its community
-ig &lt;- xBiheatmap(g)
+ig &lt;- xBigraph(g)
 gp &lt;- xBiheatmap(ig)
 
 ## End(Not run)
