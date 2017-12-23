@@ -47,6 +47,10 @@ xPolarDot <- function(df, colormap='blue-yellow-red', shape=19, size=2, parallel
     	stop("The function must apply to a 'data frame' object.\n")
     }
 	
+	if(class(df$value)=='factor'){
+		df$value <- as.numeric(as.character(df$value))
+	}
+	
 	name <- value <- rank <- NULL
 	
 	df$rank <- rank(-1*df$value,ties.method="first")

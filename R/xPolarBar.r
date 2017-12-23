@@ -46,6 +46,10 @@ xPolarBar <- function(df, colormap='spectral', size.name=10, size.value=3, paral
     	stop("The function must apply to a 'data frame' object.\n")
     }
 	
+	if(class(df$value)=='factor'){
+		df$value <- as.numeric(as.character(df$value))
+	}
+	
 	name <- value <- label <- NULL
 	
 	my_colors <- xColormap(colormap)(length(df$name))
