@@ -1,24 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to add coordinates according to communities into a...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to add coordinates into a graph according to a node...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xAddCoords"><tr><td>xAddCoords</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to add coordinates according to communities into a graph</h2>
+<h2>Function to add coordinates into a graph according to a node attribute</h2>
 
 <h3>Description</h3>
 
-<p><code>xAddCoords</code> is supposed to add coordinates according to
-communities into a graph.
+<p><code>xAddCoords</code> is supposed to add coordinates into a graph according
+to a node attribute such as community or comp.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xAddCoords(g, seed = 825, glayout = layout_with_kk,
-edge.color.alternative = c("grey70", "grey95"), verbose = TRUE)
+xAddCoords(g, node.attr = NULL, glayout = layout_with_kk,
+edge.color.alternative = c("grey70", "grey95"), seed = 825,
+verbose = TRUE)
 </pre>
 
 
@@ -27,12 +28,13 @@ edge.color.alternative = c("grey70", "grey95"), verbose = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph with a
-'community' node attribute</p>
+<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph with
+such as a 'community' node attribute</p>
 </td></tr>
-<tr valign="top"><td><code>seed</code></td>
+<tr valign="top"><td><code>node.attr</code></td>
 <td>
-<p>an integer specifying the seed</p>
+<p>a charatter specifying a node attribute. If NULL or no
+match, it returns NULL</p>
 </td></tr>
 <tr valign="top"><td><code>glayout</code></td>
 <td>
@@ -56,6 +58,10 @@ in <a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/
 <p>two alternative colors for edges within
 the community (grey70 by default) and edges between communities (grey95
 by default)</p>
+</td></tr>
+<tr valign="top"><td><code>seed</code></td>
+<td>
+<p>an integer specifying the seed</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -92,7 +98,8 @@ V(g)$name &lt;- V(g)
 # 2) obtain and append the community
 cs &lt;- igraph::cluster_louvain(g)
 V(g)$community &lt;- cs$membership
-ig &lt;- xAddCoords(g, edge.color.alternative=c("grey50","grey95"))
+ig &lt;- xAddCoords(g, node.attr="community",
+edge.color.alternative=c("grey50","grey95"))
 gp &lt;- xA2Net(ig, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
 node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord',
@@ -103,8 +110,8 @@ edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 
 ## make it discrete for the colorbar
 gp +
-scale_colour_gradientn(colors=xColormap('jet')(64),limits=c(1,8),breaks=seq(1,8))
-+ guides(color=guide_legend(title="Community"))
+scale_colour_gradientn(colors=xColormap('jet')(64),breaks=seq(1,8)) +
+guides(color=guide_legend(title="Community"))
 
 ## End(Not run)
 </pre>

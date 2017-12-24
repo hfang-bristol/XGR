@@ -3,6 +3,7 @@
 #' \code{xBiheatmap} is supposed to visualise bipartitle graph communities using heatmap.
 #'
 #' @param g an object of class "igraph" for a bipartitel graph with node attributes 'type', 'community' and 'contribution'
+#' @param which.communites a vector specifying which communites are visualised. If NULL (by default), all communites will be used
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the finite values of displayed matrix
@@ -36,10 +37,12 @@
 #' \dontrun{
 #' # 2) obtain its community
 #' ig <- xBigraph(g)
+#' 
+#' # 3) heatmap of its community
 #' gp <- xBiheatmap(ig)
 #' }
 
-xBiheatmap <- function(g, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=3, y.text.size=3, legend.text.size=4, legend.title.size=6, shape=19, size=0.5, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', intercept.color="grey95", intercept.size=0.3)
+xBiheatmap <- function(g, which.communites=NULL, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=3, y.text.size=3, legend.text.size=4, legend.title.size=6, shape=19, size=0.5, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', intercept.color="grey95", intercept.size=0.3)
 {
     
     if (class(g) != "igraph"){
@@ -64,6 +67,16 @@ xBiheatmap <- function(g, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0
 		
 		type <- community <- contribution <- name <- NULL
 		df_nodes <- igraph::get.data.frame(ig,what="vertices")
+		
+		#######
+		# which.communites
+		#######
+		ind <- match(df_nodes$community, which.communites)
+		if(!all(is.na(ind))){
+			df_nodes <- df_nodes[!is.na(ind),]
+		}
+		#######
+				
 		## sorted by type, community (1,2,3,...), -contribution
 		df_nodes <- df_nodes %>% dplyr::arrange(type,community,-contribution)
 		

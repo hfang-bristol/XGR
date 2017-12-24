@@ -57,8 +57,11 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	
 	########
 	## make sure rownames and colunames are unique
-	rownames(mat_val) <- make.names(rownames(mat_val), unique=TRUE)
-	colnames(mat_val) <- make.names(colnames(mat_val), unique=TRUE)
+	## All invalid characters are translated to '"."'
+	if(!(all(!duplicated(rownames(mat_val))) & all(!duplicated(colnames(mat_val))))){
+		rownames(mat_val) <- make.names(rownames(mat_val), unique=TRUE)
+		colnames(mat_val) <- make.names(colnames(mat_val), unique=TRUE)
+	}
 	########
 	
 	flag_factor <- FALSE

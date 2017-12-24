@@ -341,7 +341,7 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy","wal
 	## append node attributes: xcord, ycord
 	## append edge attribute: color
 	#############################
-	ig_converted <- xAddCoords(ig_converted, seed=seed, glayout=glayout, edge.color.alternative=edge.color.alternative, verbose=verbose)
+	ig_converted <- xAddCoords(ig_converted, node.attr="community", seed=seed, glayout=glayout, edge.color.alternative=edge.color.alternative, verbose=verbose)
 	
  ####################################################################################
     endT <- Sys.time()

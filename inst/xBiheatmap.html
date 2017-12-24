@@ -17,13 +17,14 @@ using heatmap.
 <h3>Usage</h3>
 
 <pre>
-xBiheatmap(g, colormap = "spectral", ncolors = 64, zlim = NULL,
-barwidth = 0.3, barheight = NULL, nbin = 64, legend.title = "",
-x.rotate = 60, x.text.size = 3, y.text.size = 3, legend.text.size = 4,
-legend.title.size = 6, shape = 19, size = 0.5,
-plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"), font.family = "sans",
-na.color = "transparent", intercept.color = "grey95",
-intercept.size = 0.3)
+xBiheatmap(g, which.communites = NULL, colormap = "spectral",
+ncolors = 64, zlim = NULL, barwidth = 0.3, barheight = NULL,
+nbin = 64, legend.title = "", x.rotate = 60, x.text.size = 3,
+y.text.size = 3, legend.text.size = 4, legend.title.size = 6,
+shape = 19, size = 0.5, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5),
+"pt"),
+font.family = "sans", na.color = "transparent",
+intercept.color = "grey95", intercept.size = 0.3)
 </pre>
 
 
@@ -34,6 +35,11 @@ intercept.size = 0.3)
 <td>
 <p>an object of class &quot;igraph&quot; for a bipartitel graph with node
 attributes 'type', 'community' and 'contribution'</p>
+</td></tr>
+<tr valign="top"><td><code>which.communites</code></td>
+<td>
+<p>a vector specifying which communites are
+visualised. If NULL (by default), all communites will be used</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -156,6 +162,8 @@ V(g)$name &lt;- V(g)
 ## Not run: 
 # 2) obtain its community
 ig &lt;- xBigraph(g)
+
+# 3) heatmap of its community
 gp &lt;- xBiheatmap(ig)
 
 ## End(Not run)
