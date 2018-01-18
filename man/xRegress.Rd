@@ -20,11 +20,12 @@ have unit variance when calculating PCs}
 regressed out. If NULL (by default), no gression is done}
 }
 \value{
-a list with two componets:
+a list with three componets:
 \itemize{
 \item{\code{regressed}: the regressed data with the same dimension as
 the input data}
 \item{\code{PCs}: a data matrix of PCs X samples}
+\item{\code{Ss}: a vector storing the square roots of the eigenvalues}
 }
 }
 \description{

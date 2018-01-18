@@ -7,10 +7,11 @@
 #' @param scale logical to indicate whether the input data columns should have unit variance when calculating PCs
 #' @param which.PCs a vector specifying which PCs are used for being regressed out. If NULL (by default), no gression is done
 #' @return 
-#' a list with two componets:
+#' a list with three componets:
 #' \itemize{
 #'  \item{\code{regressed}: the regressed data with the same dimension as the input data}
 #'  \item{\code{PCs}: a data matrix of PCs X samples}
+#'  \item{\code{Ss}: a vector storing the square roots of the eigenvalues}
 #' }
 #' @note none
 #' @export
@@ -37,6 +38,7 @@ xRegress <- function(data, center=TRUE, scale=TRUE, which.PCs=NULL)
 	# Identify PCs
 	res <- stats::prcomp(as.matrix(data), center=center, scale.=scale)
 	PCs <- t(res$x)
+	Ss <- res$sdev
 	
 	if(length(which.PCs)==0){
 		regressed.data <- t(data)
@@ -65,7 +67,8 @@ xRegress <- function(data, center=TRUE, scale=TRUE, which.PCs=NULL)
 	}
     
     ls_res <- list(regressed = regressed.data,
-    			   PCs = PCs
+    			   PCs = PCs,
+    			   Ss = Ss
                  )
     
     invisible(ls_res)

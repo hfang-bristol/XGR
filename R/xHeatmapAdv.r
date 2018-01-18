@@ -88,6 +88,10 @@ xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both
 		colnames(data.meta) <- paste('C', 1:ncol(data.meta), sep=' ')
 	}
 	
+	if(class(data.meta)=='matrix'){
+		data.meta <- as.data.frame(data.meta)
+	}
+	
 	## rows reordered according to gp_main
 	main_y_texts <- rev(levels(gp_main$data$gene))
 	main_y_ind <- match(main_y_texts, rownames(data.meta))

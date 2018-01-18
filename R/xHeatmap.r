@@ -104,7 +104,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	if(0){
 		mat_val <- mat_val[ind_row, ind_col]
 	}else{
-		mat_tmp <- matrix(mat_val[ind_row, ind_col], ncol=length(ind_col))
+		mat_tmp <- as.matrix(mat_val[ind_row, ind_col], ncol=length(ind_col))
 		rownames(mat_tmp) <- rownames(mat_val)[ind_row]
 		colnames(mat_tmp) <- colnames(mat_val)[ind_col]
 		mat_val <- mat_tmp
