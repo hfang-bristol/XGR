@@ -1,6 +1,6 @@
 #' Function to create codes annotating nodes in an igraph object
 #'
-#' \code{xA2NetCode} is supposed to create codes annotating nodes in an igraph object. It returns two ggplot2 objects, one for visualing the network with nodes lablelled by codes, the other for listing code meaning in a table
+#' \code{xOBOcode} is supposed to create codes annotating nodes in an igraph object. It returns two ggplot2 objects, one for visualing the network with nodes lablelled by codes, the other for listing code meaning in a table
 #'
 #' @param g an object of class "igraph"
 #' @param node.level a character specifying which node attribute defining the node level. By default, it is 'term_distance'
@@ -38,8 +38,8 @@
 #' a list with 3 components, two ggplot objects (code and table) and an igraph object (ig appended with node attributes 'node.code' and 'node.table')
 #' @note none
 #' @export
-#' @seealso \code{\link{xA2Net}}
-#' @include xA2NetCode.r
+#' @seealso \code{\link{xGGnetwork}}
+#' @include xOBOcode.r
 #' @examples
 #' \dontrun{
 #' # Load the library
@@ -54,18 +54,18 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #'
 #' # 1b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
 #' 
 #' # 1c) visualise the graph with nodes coded and colored by information content (IC)
 #' V(ig)$IC <- -1*log10(V(ig)$nAnno/max(V(ig)$nAnno))
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, node.color='IC', node.color.title='IC', colormap='white-cyan-darkcyan')
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, node.color='IC', node.color.title='IC', colormap='white-cyan-darkcyan')
 #' 
 #' V(ig)$term_anno <- log10(V(ig)$nAnno)
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, node.color='term_anno', node.color.title='# genes\n(log10)', colormap='white-cyan-darkcyan', zlim=c(1,4))
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, node.color='term_anno', node.color.title='# genes\n(log10)', colormap='white-cyan-darkcyan', zlim=c(1,4))
 #' 
 #' 
 #' # load EF (annotating GWAS reported genes)
@@ -83,8 +83,8 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 2b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=4, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=4, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -115,8 +115,8 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 3b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -136,8 +136,8 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 4b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -157,8 +157,8 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 5b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=1, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -178,8 +178,8 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 6b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=2, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
@@ -200,14 +200,14 @@
 #' ig <- igraph::induced.subgraph(g, vids=vids)
 #' V(ig)$anno <- anno$gs[V(ig)$name]
 #' # 7b) visualise the graph with nodes coded
-#' ls_gp <- xA2NetCode(g=ig, node.level='term_distance', node.level.value=3, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-#' pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+#' ls_gp <- xOBOcode(g=ig, node.level='term_distance', node.level.value=3, node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+#' pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 #' print(ls_gp$code + coord_equal(ratio=1))
 #' print(ls_gp$table)
 #' dev.off()
 #' }
 
-xA2NetCode <- function(g, node.level='term_distance', node.level.value=2, node.label.size=2, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0.01, node.label.force=0, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-grey', ncolors=64, zlim=NULL, node.size.range=4, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.4, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02, node.table='term_name', node.table.wrap=50, table.base.size=7, table.row.space=2, table.nrow=55, table.ncol=NULL, root.code='RT')
+xOBOcode <- function(g, node.level='term_distance', node.level.value=2, node.label.size=2, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0.01, node.label.force=0, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-grey', ncolors=64, zlim=NULL, node.size.range=4, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.4, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02, node.table='term_name', node.table.wrap=50, table.base.size=7, table.row.space=2, table.nrow=55, table.ncol=NULL, root.code='RT')
 {
     
    	if(any(class(g) %in% c("igraph"))){
@@ -289,7 +289,7 @@ xA2NetCode <- function(g, node.level='term_distance', node.level.value=2, node.l
 	}
 	#################
 	## gp_code
-	gp_code <- xA2Net(g=ig, node.label='node.code', label.wrap.width=30, node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord=node.xcoord, node.ycoord=node.ycoord, node.color=node.color, node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.size=edge.size, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow=edge.arrow, edge.arrow.gap=edge.arrow.gap)
+	gp_code <- xGGnetwork(g=ig, node.label='node.code', label.wrap.width=30, node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord=node.xcoord, node.ycoord=node.ycoord, node.color=node.color, node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.size=edge.size, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow=edge.arrow, edge.arrow.gap=edge.arrow.gap)
     #################
     
 	## node.table

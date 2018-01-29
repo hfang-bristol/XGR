@@ -66,7 +66,7 @@ V(g)$name <- V(g)
 \dontrun{
 # 2) obtain its community
 ig <- xBigraph(g)
-gp <- xA2Net(ig, node.label='name', node.label.size=2,
+gp <- xGGnetwork(ig, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
 node.label.arrow=0, node.label.force=0.002, node.shape='type',
 node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord',
@@ -82,5 +82,5 @@ scale_colour_gradientn(colors=xColormap('jet.both')(64),breaks=seq(1,max(V(ig)$c
 }
 }
 \seealso{
-\code{\link{xA2Net}}
+\code{\link{xGGnetwork}}
 }

@@ -69,10 +69,7 @@ Collate:
     'xEnrichMatrix.r'
     'xVolcano.r'
     'xGraphML.r'
-    'xA2Net.r'
-    'xA2NetCode.r'
     'xSimplifyNet.r'
-    'xIOcreate.r'
     'xHeatmap.r'
     'xCorrelation.r'
     'xPolarDot.r'
@@ -91,5 +88,7 @@ Collate:
     'xAddCoords.r'
     'xRegress.r'
     'xGraphSplit.r'
+    'xGGnetwork.r'
+    'xOBOcode.r'
 License: GPL-2
 biocViews: Bioinformatics

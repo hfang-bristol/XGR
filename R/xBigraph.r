@@ -11,7 +11,7 @@
 #' @return It returns an igraph object, appended by node attributes including "community" for communit memberships, "contribution" for contribution to its community, "xcoord" for x-coordinates, "ycoord" for y-coordiates, and by edge attributes including "color" for between-community edges ('grey95') and within-community edges ('grey70').
 #' @note The input graph will has an equal weight if there is no 'weight' edge attribute associated with
 #' @export
-#' @seealso \code{\link{xA2Net}}
+#' @seealso \code{\link{xGGnetwork}}
 #' @include xBigraph.r
 #' @examples
 #' # 1) generate a random bipartite graph
@@ -22,7 +22,7 @@
 #' \dontrun{
 #' # 2) obtain its community
 #' ig <- xBigraph(g)
-#' gp <- xA2Net(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,4), node.size.title='Contribution', slim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
+#' gp <- xGGnetwork(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,4), node.size.title='Contribution', slim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 #' 
 #' ## make it discrete for the colorbar
 #' gp + scale_colour_gradientn(colors=xColormap('jet.both')(64),breaks=seq(1,max(V(ig)$community))) + guides(color=guide_legend(title="Community"))

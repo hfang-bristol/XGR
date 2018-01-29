@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xA2Net"><tr><td>xA2Net</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGGnetwork"><tr><td>xGGnetwork</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise an igraph object using ggnetwork</h2>
 
 <h3>Description</h3>
 
-<p><code>xA2Net</code> is supposed to visualise an igraph object using
+<p><code>xGGnetwork</code> is supposed to visualise an igraph object using
 ggnetwork.
 </p>
 
@@ -17,7 +17,7 @@ ggnetwork.
 <h3>Usage</h3>
 
 <pre>
-xA2Net(g, node.label = NULL, label.wrap.width = NULL,
+xGGnetwork(g, node.label = NULL, label.wrap.width = NULL,
 label.wrap.lineheight = 0.8, node.label.size = NULL,
 node.label.fontface = "plain", node.label.color = "darkblue",
 node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
@@ -39,7 +39,10 @@ edge.arrow.gap = 0.02)
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;</p>
+<p>an object of class &quot;igraph&quot;. For an advanced use, it can be a
+list of igraph objects; in this case, multiple panels will be shown
+(particularly useful when visualising the same network but color-coded
+differently)</p>
 </td></tr>
 <tr valign="top"><td><code>node.label</code></td>
 <td>
@@ -217,7 +220,7 @@ default, it is 2</p>
 
 <h3>See Also</h3>
 
-<p><code>xA2Net</code>
+<p><code>xGGnetwork</code>
 </p>
 
 
@@ -240,7 +243,7 @@ ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
 
 # visualise the graph with vertices being color-coded
 V(ig)$degree &lt;- igraph::degree(ig)
-gp &lt;- xA2Net(g=ig, node.label='term_id', label.wrap.width=30,
+gp &lt;- xGGnetwork(g=ig, node.label='term_id', label.wrap.width=30,
 node.label.size=2, node.label.color='black', node.label.alpha=0.8,
 node.label.padding=0, node.label.arrow=0, node.label.force=1,
 node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
@@ -249,7 +252,9 @@ colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10),
 node.size.range=3,
 edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
 title='')
-gp &lt;- xA2Net(g=ls_ig, node.label='term_id', label.wrap.width=30,
+# advanced use: visualise the list of graphs
+ls_ig &lt;- list(ig, ig)
+gp &lt;- xGGnetwork(g=ls_ig, node.label='term_id', label.wrap.width=30,
 node.label.size=2, node.label.color='black', node.label.alpha=0.8,
 node.label.padding=0, node.label.arrow=0, node.label.force=1,
 node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
@@ -265,7 +270,7 @@ glayout &lt;- igraph::layout_with_kk(g)
 V(g)$xcoord &lt;- glayout[,1]
 V(g)$ycoord &lt;- glayout[,2]
 V(g)$degree &lt;- igraph::degree(g)
-gp &lt;- xA2Net(g=g, node.label='name', node.label.size=2,
+gp &lt;- xGGnetwork(g=g, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
 node.label.arrow=0, node.label.force=0.01, node.shape=19,
 node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',
@@ -273,7 +278,7 @@ node.color.title='5-star\nrating', colormap='yellow-red', ncolors=64,
 zlim=c(0,5), node.size='degree', node.size.title='Degree', slim=c(0,5),
 edge.color="orange",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0.025,
 title='')
-gp_rating &lt;- xA2Net(g=g, node.label='name', node.label.size=2,
+gp_rating &lt;- xGGnetwork(g=g, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1,
 node.label.arrow=0, node.label.force=0.01, node.shape=19,
 node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',

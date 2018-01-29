@@ -7,7 +7,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return It returns a list of igraph objects.
 #' @export
-#' @seealso \code{\link{xA2Net}}
+#' @seealso \code{\link{xGraphSplit}}
 #' @include xGraphSplit.r
 #' @examples
 #' # 1) generate a random bipartite graph

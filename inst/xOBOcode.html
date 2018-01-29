@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xA2NetCode"><tr><td>xA2NetCode</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xOBOcode"><tr><td>xOBOcode</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to create codes annotating nodes in an igraph object</h2>
 
 <h3>Description</h3>
 
-<p><code>xA2NetCode</code> is supposed to create codes annotating nodes in an
+<p><code>xOBOcode</code> is supposed to create codes annotating nodes in an
 igraph object. It returns two ggplot2 objects, one for visualing the
 network with nodes lablelled by codes, the other for listing code
 meaning in a table
@@ -19,7 +19,7 @@ meaning in a table
 <h3>Usage</h3>
 
 <pre>
-xA2NetCode(g, node.level = "term_distance", node.level.value = 2,
+xOBOcode(g, node.level = "term_distance", node.level.value = 2,
 node.label.size = 2, node.label.color = "darkblue",
 node.label.alpha = 0.8, node.label.padding = 0, node.label.arrow =
 0.01,
@@ -216,7 +216,7 @@ igraph object (ig appended with node attributes 'node.code' and
 
 <h3>See Also</h3>
 
-<p><code>xA2Net</code>
+<p><code>xGGnetwork</code>
 </p>
 
 
@@ -238,25 +238,24 @@ vids &lt;- V(g)[unique(unlist(neighs.out))]$name
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 
 # 1b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=2, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
 
 # 1c) visualise the graph with nodes coded and colored by information content (IC)
 V(ig)$IC &lt;- -1*log10(V(ig)$nAnno/max(V(ig)$nAnno))
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=2, node.shape=19, node.size.range=4, node.color='IC',
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
+node.shape=19, node.size.range=4, node.color='IC',
 node.color.title='IC', colormap='white-cyan-darkcyan')
 
 V(ig)$term_anno &lt;- log10(V(ig)$nAnno)
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=2, node.shape=19, node.size.range=4,
-node.color='term_anno', node.color.title='# genes\n(log10)',
-colormap='white-cyan-darkcyan', zlim=c(1,4))
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
+node.shape=19, node.size.range=4, node.color='term_anno',
+node.color.title='# genes\n(log10)', colormap='white-cyan-darkcyan',
+zlim=c(1,4))
 
 
 # load EF (annotating GWAS reported genes)
@@ -278,10 +277,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 2b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=4, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=4,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
@@ -321,10 +319,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 3b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=1, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
@@ -348,10 +345,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 4b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=1, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
@@ -375,10 +371,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 5b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=1, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
@@ -402,10 +397,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 6b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=2, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()
@@ -430,10 +424,9 @@ vids &lt;- intersect(nodeClan, nodeAnno)
 ig &lt;- igraph::induced.subgraph(g, vids=vids)
 V(ig)$anno &lt;- anno$gs[V(ig)$name]
 # 7b) visualise the graph with nodes coded
-ls_gp &lt;- xA2NetCode(g=ig, node.level='term_distance',
-node.level.value=3, node.shape=19, node.size.range=4,
-edge.color.alpha=0.2)
-pdf('xA2NetCode.pdf', useDingbats=FALSE, width=8, height=8)
+ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=3,
+node.shape=19, node.size.range=4, edge.color.alpha=0.2)
+pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
 print(ls_gp$code + coord_equal(ratio=1))
 print(ls_gp$table)
 dev.off()

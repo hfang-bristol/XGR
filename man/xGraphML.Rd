@@ -92,7 +92,8 @@ it is #00000033}
 file. By default, it is 'xGraphML'}
 }
 \value{
-invisible
+invisible (a string storing graphml-formatted content). If the filename
+is not NULL, a graphml-formatted file is also output.
 }
 \description{
 \code{xGraphML} is supposed to generate a graphml file from a graph
@@ -107,20 +108,33 @@ none
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
-# load REACTOME
-# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+# 1) load REACTOME
+# 1a) restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
 g <- xRDataLoader(RData.customised='ig.REACTOME',
 RData.location=RData.location)
 neighs.out <- igraph::neighborhood(g, order=vcount(g),
 nodes="R-HSA-168256", mode="out")
 nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
 ig <- igraph::induced.subgraph(g, vids=nodeInduced)
-
-# 4) visualise the graph with vertices being color-coded by the pattern
+# visualise the graph with vertices being color-coded by the pattern
 V(ig)$pattern <- runif(vcount(ig))
 xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
 node.size=10, node.label.size=6)
 
+# 1b) restricted to Signal Transduction ('R-HSA-162582')
+g <- xRDataLoader(RData.customised='ig.REACTOME',
+RData.location=RData.location)
+neighs.out <- igraph::neighborhood(g, order=vcount(g),
+nodes="R-HSA-162582", mode="out")
+nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
+ig <- igraph::induced.subgraph(g, vids=nodeInduced)
+# visualise the graph with vertices being color-coded by the pattern
+V(ig)$pattern <- runif(vcount(ig))
+xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
+node.size=8, node.label.size=4)
+
+###########################
+# visualise gene network
 glayout <- igraph::layout_with_kk(ig)
 V(ig)$xcoord <- glayout[,1]
 V(ig)$ycoord <- glayout[,2]

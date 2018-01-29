@@ -61,7 +61,7 @@ cs <- igraph::cluster_louvain(g)
 V(g)$community <- cs$membership
 ig <- xAddCoords(g, node.attr="community",
 edge.color.alternative=c("grey50","grey95"))
-gp <- xA2Net(ig, node.label='name', node.label.size=2,
+gp <- xGGnetwork(ig, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
 node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord',
 node.ycoord='ycoord', node.color='community',
@@ -76,5 +76,5 @@ guides(color=guide_legend(title="Community"))
 }
 }
 \seealso{
-\code{\link{xA2Net}}
+\code{\link{xGGnetwork}}
 }

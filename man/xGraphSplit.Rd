@@ -37,5 +37,5 @@ ls_ig <- xGraphSplit(g, node.attr="community")
 }
 }
 \seealso{
-\code{\link{xA2Net}}
+\code{\link{xGraphSplit}}
 }

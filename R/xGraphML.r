@@ -25,7 +25,7 @@
 #' @param edge.width the edge width. By default, it is 1
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML'
 #' @return
-#' invisible
+#' invisible (a string storing graphml-formatted content). If the filename is not NULL, a graphml-formatted file is also output.
 #' @note none
 #' @export
 #' @seealso \code{\link{xGraphML}}
@@ -36,17 +36,27 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #' 
-#' # load REACTOME
-#' # restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+#' # 1) load REACTOME
+#' # 1a) restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
 #' g <- xRDataLoader(RData.customised='ig.REACTOME', RData.location=RData.location)
 #' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="R-HSA-168256", mode="out")
 #' nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
 #' ig <- igraph::induced.subgraph(g, vids=nodeInduced)
-#'
-#' # 4) visualise the graph with vertices being color-coded by the pattern
+#' # visualise the graph with vertices being color-coded by the pattern
 #' V(ig)$pattern <- runif(vcount(ig))
 #' xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr", node.size=10, node.label.size=6)
 #' 
+#' # 1b) restricted to Signal Transduction ('R-HSA-162582')
+#' g <- xRDataLoader(RData.customised='ig.REACTOME', RData.location=RData.location)
+#' neighs.out <- igraph::neighborhood(g, order=vcount(g), nodes="R-HSA-162582", mode="out")
+#' nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
+#' ig <- igraph::induced.subgraph(g, vids=nodeInduced)
+#' # visualise the graph with vertices being color-coded by the pattern
+#' V(ig)$pattern <- runif(vcount(ig))
+#' xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr", node.size=8, node.label.size=4)
+#'
+#' ###########################
+#' # visualise gene network
 #' glayout <- igraph::layout_with_kk(ig)
 #' V(ig)$xcoord <- glayout[,1]
 #' V(ig)$ycoord <- glayout[,2]
@@ -415,6 +425,7 @@ xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=
     
     if(!is.null(filename)){
 		############################
+		filename <- gsub('.graphml$', '', filename)
 		outputfile <- paste0(filename, ".graphml")
 		fileConn <- base::file(outputfile)
 		base::writeLines(output, fileConn)

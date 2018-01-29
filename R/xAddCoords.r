@@ -10,7 +10,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return It returns an igraph object, appended by node attributes including "xcoord" for x-coordinates, "ycoord" for y-coordiates, and by edge attributes including "color" for between-community edges ('grey95') and within-community edges ('grey70').
 #' @export
-#' @seealso \code{\link{xA2Net}}
+#' @seealso \code{\link{xGGnetwork}}
 #' @include xAddCoords.r
 #' @examples
 #' # 1) generate a random bipartite graph
@@ -23,7 +23,7 @@
 #' cs <- igraph::cluster_louvain(g)
 #' V(g)$community <- cs$membership
 #' ig <- xAddCoords(g, node.attr="community", edge.color.alternative=c("grey50","grey95"))
-#' gp <- xA2Net(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
+#' gp <- xGGnetwork(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 #' 
 #' ## make it discrete for the colorbar
 #' gp + scale_colour_gradientn(colors=xColormap('jet')(64),breaks=seq(1,8)) + guides(color=guide_legend(title="Community"))
@@ -137,7 +137,7 @@ xAddCoords <- function(g, node.attr=NULL, glayout=layout_with_kk, edge.color.alt
 		edge.color <- edge.color.alternative[res+1]
 		E(ig)$color <- edge.color
 
-		#gp <- xA2Net(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,3), node.size.title='Contribution', slim=c(0,0.1), edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0, title='')
+		#gp <- xGGnetwork(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.shape='type', node.shape.title='Type', node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, node.size='contribution', node.size.range=c(1,3), node.size.title='Contribution', slim=c(0,0.1), edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0, title='')
 		
     }
     

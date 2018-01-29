@@ -1,8 +1,8 @@
 #' Function to visualise an igraph object using ggnetwork
 #'
-#' \code{xA2Net} is supposed to visualise an igraph object using ggnetwork.
+#' \code{xGGnetwork} is supposed to visualise an igraph object using ggnetwork.
 #'
-#' @param g an object of class "igraph"
+#' @param g an object of class "igraph". For an advanced use, it can be a list of igraph objects; in this case, multiple panels will be shown (particularly useful when visualising the same network but color-coded differently)
 #' @param node.label either a vector labelling nodes or a character specifying which node attribute used for the labelling. If NULL (by default), no node labelling
 #' @param label.wrap.width a positive integer specifying wrap width of node labelling
 #' @param label.wrap.lineheight line height spacing for text in ggplot. By default it is 0.8
@@ -38,8 +38,8 @@
 #' a ggplot object, appended with 'data_nodes' and 'data_edges'
 #' @note none
 #' @export
-#' @seealso \code{\link{xA2Net}}
-#' @include xA2Net.r
+#' @seealso \code{\link{xGGnetwork}}
+#' @include xGGnetwork.r
 #' @examples
 #' \dontrun{
 #' # Load the library
@@ -55,8 +55,10 @@
 #'
 #' # visualise the graph with vertices being color-coded
 #' V(ig)$degree <- igraph::degree(ig)
-#' gp <- xA2Net(g=ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
-#' gp <- xA2Net(g=ls_ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
+#' gp <- xGGnetwork(g=ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
+#' # advanced use: visualise the list of graphs
+#' ls_ig <- list(ig, ig)
+#' gp <- xGGnetwork(g=ls_ig, node.label='term_id', label.wrap.width=30, node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=1, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='degree', node.color.title='Degree', colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10), node.size.range=3, edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02, title='')
 #' 
 #' ###########################
 #' # visualise gene network
@@ -64,11 +66,11 @@
 #' V(g)$xcoord <- glayout[,1]
 #' V(g)$ycoord <- glayout[,2]
 #' V(g)$degree <- igraph::degree(g)
-#' gp <- xA2Net(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='yellow-red', ncolors=64, zlim=c(0,5), node.size='degree', node.size.title='Degree', slim=c(0,5), edge.color="orange",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0.025, title='')
-#' gp_rating <- xA2Net(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02, title='')
+#' gp <- xGGnetwork(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='yellow-red', ncolors=64, zlim=c(0,5), node.size='degree', node.size.title='Degree', slim=c(0,5), edge.color="orange",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0.025, title='')
+#' gp_rating <- xGGnetwork(g=g, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1, node.label.arrow=0, node.label.force=0.01, node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02, title='')
 #' }
 
-xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lineheight=0.8, node.label.size=NULL, node.label.fontface='plain', node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.shape.title=NULL, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, na.color='grey80', node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
+xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lineheight=0.8, node.label.size=NULL, node.label.fontface='plain', node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.shape.title=NULL, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, na.color='grey80', node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
 {
     
    	if(any(class(g) %in% c("igraph"))){
@@ -369,6 +371,7 @@ xA2Net <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.linehei
     }
     gp <- gp + theme(legend.title=element_text(size=8,face="bold"),legend.text=element_text(size=6))
     
+    ## facet by 'trait' artificially added 
     if(length(ls_ig)>1){
     	trait <- NULL
     	gp <- gp + facet_wrap(~trait)
