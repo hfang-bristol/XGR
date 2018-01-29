@@ -33,6 +33,20 @@ NEW FEATURES
 
     o Add a new function 'xVolcano' for drawing a volcano plot
 
+    o Add a new function 'xAddCoords' for adding coordinates into a graph by a node attribute
+
+    o Add a new function 'xGraphSplit' for splitting a graph by a node attribute
+    
+    o Add a new function 'xRegress' for regressing out data by principle components
+    
+    o Add functions ('xGGnetwork' and 'xOBOcode') enabling ggplot-like visualisation
+    
+    o Add functions ('xGScore' and 'xGScoreAdv') enabling extraction of genomic scores  
+
+    o Add functions ('xBigraph' and 'xBiheatmap') supporting bigraph analysis
+
+    o Add functions ('xGR2xGenes', 'xGR2xGeneScores' and 'xGR2xNet') supporing genomic region analysis using the crosslink info
+    
 	
 CHANGES IN VERSION 1.0.10
 -----------------------

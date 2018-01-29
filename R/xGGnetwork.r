@@ -283,7 +283,8 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 		E(ig)$e.color <- edge.color
 		###########################
 		
-		gnet <- ggnetwork::ggnetwork(intergraph::asNetwork(ig), layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
+		#gnet <- ggnetwork::ggnetwork(intergraph::asNetwork(ig), layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
+		gnet <- ggnetwork::ggnetwork(ig, layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
 		data.frame(gnet, trait=rep(names(ls_ig)[i],nrow(gnet)), stringsAsFactors=F)
 	})
     df <- do.call(rbind, ls_df)

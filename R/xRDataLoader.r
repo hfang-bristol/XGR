@@ -24,6 +24,8 @@
 #' @importFrom BiocGenerics unlist
 #' @importFrom plot3D image2D persp3D image3D contour3D
 #' @importFrom dplyr select filter arrange mutate group_by summarise desc n
+#' @importFrom ggnetwork ggnetwork geom_nodes geom_edges
+#' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom XML htmlTreeParse xmlGetAttr
 #' @importFrom GenomicScores scores
 #' @seealso \code{\link{xRDataLoader}}
