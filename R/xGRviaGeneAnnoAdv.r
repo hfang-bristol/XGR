@@ -1,6 +1,6 @@
-#' Function to conduct enrichment analysis given a list of gene sets and a list of ontologies
+#' Function to conduct region-based enrichment analysis given a list of genomic region sets and a list of ontologies
 #'
-#' \code{xGRviaGeneAnnoAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xEnricherGenes}, returning an object of the class 'ls_eTerm'.
+#' \code{xGRviaGeneAnnoAdv} is supposed to conduct enrichment analysis given a list of gene sets and a list of ontologies. It is an advanced version of \code{xGRviaGeneAnno}, returning an object of the class 'ls_eTerm'.
 #'
 #' @param list_vec an input vector containing gene symbols. Alternatively it can be a list of vectors, representing multiple groups of genomic regions. Formatted as "chr:start-end" are genomic regions
 #' @param background a background vector containing genomic regions (formatted as "chr:start-end") as the test background. If NULL, by default all annotatable are used as background

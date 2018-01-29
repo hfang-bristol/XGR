@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGRviaGeneAnnoAdv.r
 \name{xGRviaGeneAnnoAdv}
 \alias{xGRviaGeneAnnoAdv}
-\title{Function to conduct enrichment analysis given a list of gene sets and a list of ontologies}
+\title{Function to conduct region-based enrichment analysis given a list of genomic region sets and a list of ontologies}
 \usage{
 xGRviaGeneAnnoAdv(list_vec, background = NULL, gap.max = 0,
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
@@ -206,7 +206,7 @@ object}
 \description{
 \code{xGRviaGeneAnnoAdv} is supposed to conduct enrichment analysis
 given a list of gene sets and a list of ontologies. It is an advanced
-version of \code{xEnricherGenes}, returning an object of the class
+version of \code{xGRviaGeneAnno}, returning an object of the class
 'ls_eTerm'.
 }
 \note{

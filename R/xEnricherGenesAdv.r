@@ -244,7 +244,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     			   gp = gp
                  )
     class(ls_eTerm) <- "ls_eTerm"
-                 
+    
     ####################################################################################
     endT <- Sys.time()
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))

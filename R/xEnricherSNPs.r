@@ -156,6 +156,13 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
         	g <- ig
         }
         
+        ########################
+        # add a new node attribute 'term_namespace'
+        ########################
+		if(is.null(V(g)$term_namespace)){
+			V(g)$term_namespace <- ontology
+		}
+        
 		#########
 		## load annotation information
 		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, verbose=verbose)
