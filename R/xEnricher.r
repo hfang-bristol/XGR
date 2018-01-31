@@ -967,6 +967,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                   or       = ors,
                   CIl      = CIl,
                   CIu	   = CIu,
+                  cross	   = cross,
                   call     = match.call()
                  )
     class(eTerm) <- "eTerm"

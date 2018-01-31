@@ -22,7 +22,8 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 
 <pre>
 xEnricherGenes(data, background = NULL, check.symbol.identity = F,
-ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
+ontology = c("GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam",
+"DO",
 "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
 "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
 "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
@@ -70,7 +71,8 @@ gene symbols. By default, it sets to false</p>
 <td>
 <p>the ontology supported currently. It can be &quot;GOBP&quot; for
 Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
-Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PS&quot; for
+Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PSG&quot; for
+phylostratigraphy (phylostratific age), &quot;PS&quot; for sTOL-based
 phylostratific age information, &quot;PS2&quot; for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
 information), &quot;SF&quot; for SCOP domain superfamilies, &quot;Pfam&quot; for Pfam

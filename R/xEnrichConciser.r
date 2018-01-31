@@ -61,6 +61,9 @@ xEnrichConciser <- function(eTerm, cutoff=c(0.9,0.5), verbose=T)
 		eTerm$zscore <- eTerm$zscore[flag]
 		eTerm$pvalue <- eTerm$pvalue[flag]
 		eTerm$adjp <- eTerm$adjp[flag]
+		eTerm$or <- eTerm$or[flag]
+		eTerm$CIl <- eTerm$CIl[flag]
+		eTerm$CIu <- eTerm$CIu[flag]
 		eTerm$cross <- eTerm$cross[flag, flag]
 		
 		res <- eTerm

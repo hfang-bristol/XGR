@@ -6,8 +6,10 @@
 \usage{
 xEnricherGenesAdv(list_vec, background = NULL, check.symbol.identity =
 F,
-ontologies = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
-"HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
+ontologies = c("GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF",
+"Pfam",
+"DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH",
+"MsigdbC1",
 "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
 "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
 "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
@@ -44,8 +46,9 @@ gene symbols. By default, it sets to false}
 
 \item{ontologies}{the ontologies supported currently. It can be "GOBP"
 for Gene Ontology Biological Process, "GOMF" for Gene Ontology
-Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS"
-for phylostratific age information, "PS2" for the collapsed PS version
+Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PSG"
+for phylostratigraphy (phylostratific age), "PS" for sTOL-based
+phylostratific age information, "PS2" for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
 information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam
 domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype
