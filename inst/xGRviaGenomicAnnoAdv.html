@@ -58,8 +58,12 @@ gap.max = 50000, max.distance = NULL, p.adjust.method = c("BH", "BY",
 "EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
-"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno"),
-parallel = TRUE, multicores = NULL, verbose = T,
+"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno",
+"FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "FANTOM5_CAT_DO",
+"FANTOM5_CAT_EFO",
+"FANTOM5_CAT_HPO", "FANTOM5_CAT_MESH", "FANTOM5_CAT_PICS"), parallel =
+TRUE,
+multicores = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -677,6 +681,51 @@ of TSS), &quot;Genic_5UTRs&quot;, &quot;Genic_firstexons&quot; (first exons),
 &quot;Genic_intergenic&quot; (the intergenic regions exclude the previous list of
 annotations), and &quot;Genic_lncRNA&quot; (GENCODE long non-coding RNA (lncRNA)
 transcripts). 
+</p>
+</li></ul>
+
+<p>17. FANTOM5 sample-ontology-enriched CAT genes
+</p>
+
+<ul>
+<li><p><code>FANTOM5_CAT_Cell</code>: a list (173 cell types) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a cell type.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_Tissue</code>: a list (174 tissues) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a tissue.
+</p>
+</li></ul>
+
+<p>18. FANTOM5 trait-associated CAT genes
+</p>
+
+<ul>
+<li><p><code>FANTOM5_CAT_DO</code>: a list (299 traits grouped by disease
+ontology) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_EFO</code>: a list (93 traits grouped by experiment
+factor ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_HPO</code>: a list (176 traits grouped by human
+phenotype ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_MESH</code>: a list (210 traits grouped by Medical
+Subject Headings) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_PICS</code>: a list (39 traits grouped by PICS
+dieases) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.
 </p>
 </li></ul>
 

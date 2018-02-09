@@ -174,7 +174,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 					## order by the length of names
 					rname_ordered <- rownames(mat)[order(-nchar(rownames(mat)))]
 					## order by the evolutionary ages
-					if(names(ls_df)[i]=='PS2'){
+					if(names(ls_df)[i]=='PS2' || names(ls_df)[i]=='PSG'){
 						df_tmp <- unique(df[,c('id','name')])
 						df_tmp <- df_tmp[with(df_tmp, order(as.numeric(df_tmp$id))),]
 						rname_ordered <- df_tmp$name

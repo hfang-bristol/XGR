@@ -125,7 +125,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		}else{
 			top_num <- as.integer(top_num)
 			df_tmp <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=order(or,decreasing=T),add=TRUE) %>% dplyr::filter(rank<=top_num))
-			df <- subset(df, df$id %in% df_tmp$id)
+			df <- subset(df, df$name %in% df_tmp$name)
 			df <- subset(df, df$adjp<FDR.cutoff)
 		}
 		
