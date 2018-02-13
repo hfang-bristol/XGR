@@ -10,6 +10,7 @@
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param which.distance which terms with the distance away from the ontology root (if any) is used to restrict terms in consideration. By default, it sets to 'NULL' to consider all distances
 #' @param test the test statistic used. It can be "fisher" for using fisher's exact test, "hypergeo" for using hypergeometric test, or "binomial" for using binomial test. Fisher's exact test is to test the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not), and thus compare sampling to the left part of background (after sampling without replacement). Hypergeometric test is to sample at random (without replacement) from the background containing annotated and non-annotated genes, and thus compare sampling to background. Unlike hypergeometric test, binomial test is to sample at random (with replacement) from the background with the constant probability. In terms of the ease of finding the significance, they are in order: hypergeometric test > fisher's exact test > binomial test. In other words, in terms of the calculated p-value, hypergeometric test < fisher's exact test < binomial test
+#' @param background.annotatable.only logical to indicate whether the background is further restricted to the annotatable. By default, it is NULL: if ontology.algorithm is not 'none', it is always TRUE; otherwise, it depends on the background (if not provided, it will be TRUE; otherwise FALSE). Surely, it can be explicitly stated
 #' @param p.tail the tail used to calculate p-values. It can be either "two-tails" for the significance based on two-tails (ie both over- and under-overrepresentation)  or "one-tail" (by default) for the significance based on one tail (ie only over-representation)
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param ontology.algorithm the algorithm used to account for the hierarchy of the ontology. It can be one of "none", "pc", "elim" and "lea". For details, please see 'Note' below
@@ -87,7 +88,7 @@
 #' xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore", node.info=c("full_term_name"))
 #' }
 
-xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=TRUE, verbose=T)
+xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=TRUE, verbose=T)
 {
 
     ####################################################################################
@@ -406,18 +407,35 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         message(sprintf("Next, prepare enrichment analysis (%s) ...", as.character(now)), appendLF=T)
     }
     
+    #############################
+    if(ontology.algorithm!="none"){
+    	background.annotatable.only <- T
+    }else{
+    	if(is.null(background.annotatable.only)){
+    		if(length(background)==0){
+    			background.annotatable.only <- T
+    		}
+    	}
+    }
+    ## now background.annotatable.only can be T or F only
+    #############################
+        
     terms <- names(gs)
-    genes.universe <- unique(unlist(gs[terms]))
+    if(background.annotatable.only){
+    	genes.universe <- unique(unlist(gs[terms]))
+    }else{
+    	genes.universe <- background
+    }
     genes.group <- intersect(genes.universe, data)
 
     if(length(genes.group)==0){
         #stop("There is no gene being used.\n")
         warnings("There is no gene being used.\n")
         return(NULL)
-    }else{    
+    }else{
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("\tThere are %d genes/SNPs of interest tested against %d genes/SNPs as the background (%s)", length(genes.group), length(genes.universe), as.character(now)), appendLF=T)
+			message(sprintf("\tThere are %d genes/SNPs of interest tested against %d genes/SNPs as the background (annotatable only? %s) (%s)", length(genes.group), length(genes.universe), background.annotatable.only, as.character(now)), appendLF=T)
 		}
     }
 

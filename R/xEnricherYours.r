@@ -8,7 +8,7 @@
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param test the test statistic used. It can be "fisher" for using fisher's exact test, "hypergeo" for using hypergeometric test, or "binomial" for using binomial test. Fisher's exact test is to test the independence between gene group (genes belonging to a group or not) and gene annotation (genes annotated by a term or not), and thus compare sampling to the left part of background (after sampling without replacement). Hypergeometric test is to sample at random (without replacement) from the background containing annotated and non-annotated genes, and thus compare sampling to background. Unlike hypergeometric test, binomial test is to sample at random (with replacement) from the background with the constant probability. In terms of the ease of finding the significance, they are in order: hypergeometric test > fisher's exact test > binomial test. In other words, in terms of the calculated p-value, hypergeometric test < fisher's exact test < binomial test
-#' @param background.annotatable.only logical to indicate whether the background is further restricted to annotatable genes (covered by 'annotation.file'). In other words, if the background is provided, the background genes are those after being overlapped with annotatable genes. Notably, if only one annotation is provided in 'annotation.file', it should be false
+#' @param background.annotatable.only logical to indicate whether the background is further restricted to the annotatable (covered by 'annotation.file'). By default, it is NULL: if the background not provided, it will be TRUE; otherwise FALSE. Surely, it can be explicitly stated. Notably, if only one annotation is provided in 'annotation.file', it should be false (also the background.file should be provided)
 #' @param p.tail the tail used to calculate p-values. It can be either "two-tails" for the significance based on two-tails (ie both over- and under-overrepresentation)  or "one-tail" (by default) for the significance based on one tail (ie only over-representation)
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
@@ -88,7 +88,7 @@
 #' print(bp)
 #' }
 
-xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=T, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T, silent=FALSE)
+xEnricherYours <- function(data.file, annotation.file, background.file=NULL, size.range=c(10,2000), min.overlap=3, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), verbose=T, silent=FALSE)
 {
     startT <- Sys.time()
     if(!silent){
@@ -157,15 +157,20 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     	stop("The file 'annotation.file' must be provided!\n")
     }
     
-    ###################################
-    # only works when "background.file" is not NULL and "background.annotatable.only" is false
-	if(background.annotatable.only==FALSE){
-		if(!is.null(background.file)){
-			tmp <- cbind(background.file, rep('BG',length(background.file)))
-			input <- rbind(input, tmp)
+    #######################################
+    ## not needed any more
+    if(0){
+		###################################
+		# only works when "background.file" is not NULL and "background.annotatable.only" is false
+		if(background.annotatable.only==FALSE){
+			if(!is.null(background.file)){
+				tmp <- cbind(background.file, rep('BG',length(background.file)))
+				input <- rbind(input, tmp)
+			}
 		}
-	}
-    ###################################    
+		###################################
+    }
+    #######################################
     ## define annotation information
 	anno <- split(x=input[,1], f=input[,2])
     
@@ -186,7 +191,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
         message(sprintf("'xEnricher' is being called (%s):", as.character(now)), appendLF=T)
         message(sprintf("#######################################################", appendLF=T))
     }
-    eTerm <- xEnricher(data=data, annotation=anno, g=g, background=background, size.range=size.range, min.overlap=min.overlap, test=test, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm="none",true.path.rule=F, verbose=verbose)
+    eTerm <- xEnricher(data=data, annotation=anno, g=g, background=background, size.range=size.range, min.overlap=min.overlap, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm="none",true.path.rule=F, verbose=verbose)
 	
 	if(verbose){
         now <- Sys.time()

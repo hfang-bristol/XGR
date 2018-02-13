@@ -47,7 +47,7 @@ the link of a GR to a gene. A user-input matrix or data frame with 4
 columns: 1st column for genomic regions (formatted as "chr:start-end",
 genome build 19), 2nd column for Genes, 3rd for crosslink score
 (crosslinking a genomic region to a gene, such as -log10 significance
-level), and 4th for contexts (optional; if nor provided, it will be
+level), and 4th for contexts (optional; if not provided, it will be
 added as 'C'). Alternatively, it can be a file containing these 4
 columns. Required, otherwise it will return NULL}
 

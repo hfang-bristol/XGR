@@ -35,7 +35,10 @@ GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
 "EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
-"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno"), details =
+"EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno",
+"FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "FANTOM5_CAT_DO",
+"FANTOM5_CAT_EFO",
+"FANTOM5_CAT_HPO", "FANTOM5_CAT_MESH", "FANTOM5_CAT_PICS"), details =
 F,
 verbose = T, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata_dev")
@@ -396,6 +399,33 @@ of TSS), "Genic_5UTRs", "Genic_firstexons" (first exons),
 "Genic_intergenic" (the intergenic regions exclude the previous list of
 annotations), and "Genic_lncRNA" (GENCODE long non-coding RNA (lncRNA)
 transcripts). }
+}
+17. FANTOM5 sample-ontology-enriched CAT genes
+\itemize{
+\item{\code{FANTOM5_CAT_Cell}: a list (173 cell types) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a cell type.}
+\item{\code{FANTOM5_CAT_Tissue}: a list (174 tissues) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a tissue.}
+}
+18. FANTOM5 trait-associated CAT genes
+\itemize{
+\item{\code{FANTOM5_CAT_DO}: a list (299 traits grouped by disease
+ontology) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.}
+\item{\code{FANTOM5_CAT_EFO}: a list (93 traits grouped by experiment
+factor ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.}
+\item{\code{FANTOM5_CAT_HPO}: a list (176 traits grouped by human
+phenotype ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.}
+\item{\code{FANTOM5_CAT_MESH}: a list (210 traits grouped by Medical
+Subject Headings) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.}
+\item{\code{FANTOM5_CAT_PICS}: a list (39 traits grouped by PICS
+dieases) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.}
 }
 }
 \examples{

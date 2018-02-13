@@ -62,10 +62,10 @@ whether it is numeric or character)}
 shaping}
 
 \item{node.xcoord}{a vector specifying x coordinates. If NULL, it will
-be created using igraph::layout_with_kk}
+be created using igraph::layout_as_tree}
 
 \item{node.ycoord}{a vector specifying y coordinates. If NULL, it will
-be created using igraph::layout_with_kk}
+be created using igraph::layout_as_tree}
 
 \item{node.color}{a character specifying which node attribute used for
 node coloring}
@@ -138,6 +138,7 @@ none
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
+###########################
 # load REACTOME
 # restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
 g <- xRDataLoader(RData.customised='ig.REACTOME',
@@ -168,6 +169,45 @@ node.color='degree', node.color.title='Degree',
 colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10),
 node.size.range=3,
 edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+
+###########################
+# load PhasedTargets
+# restricted to disease ('EFO:0000408') or immune system disease ('EFO:0000540')
+g <- xRDataLoader(RData.customised='ig.PhasedTargets',
+RData.location=RData.location)
+neighs.out <- igraph::neighborhood(g, order=vcount(g),
+nodes="EFO:0000408", mode="out")
+nodeInduced <- V(g)[unique(unlist(neighs.out))]$name
+ig <- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# append with the number of approved and phased targets
+dag <- ig
+V(dag)$num_approved <- sapply(V(ig)$max_phase,function(x)
+sum(x$max_phase>=4))
+V(dag)$num_phased <- sapply(V(ig)$max_phase,function(x)
+sum(x$max_phase>=0))
+# keep nodes with num_approved >=20
+dag_ig <- igraph::induced.subgraph(dag,
+vids=which(V(dag)$num_approved>=20))
+# (optional) further restricted to the direct children of the root
+root <- dnet::dDAGroot(dag_ig)
+neighs.out <- igraph::neighborhood(dag_ig, order=1, nodes=root,
+mode="out")
+nodeInduced <- V(dag_ig)[unique(unlist(neighs.out))]$name
+dag_ig <- igraph::induced.subgraph(dag_ig, vids=nodeInduced)
+# nodes colored by num_approved
+V(dag_ig)$node_color <- log2(V(dag_ig)$num_approved)
+glayout <- igraph::layout_with_kk(dag_ig)
+V(dag_ig)$xcoord <- glayout[,1]
+V(dag_ig)$ycoord <- glayout[,2]
+gp <- xGGnetwork(g=dag_ig, node.label='term_name', label.wrap.width=30,
+node.label.size=2, node.label.color='black', node.label.alpha=0.9,
+node.label.padding=0, node.label.arrow=0, node.label.force=0.5,
+node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
+node.color='node_color', node.color.title='Approved\\n(log2-scale)',
+colormap='ggplot2.top', ncolors=64, node.size.range=3,
+edge.color="orange",edge.color.alpha=0.5,edge.curve=0.05,edge.arrow.gap=0.02,
 title='')
 
 ###########################

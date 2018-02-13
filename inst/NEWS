@@ -7,6 +7,8 @@ NEW FEATURES
     
     o Fix bugs in the functions 'xEnrichConciser' and 'xEnrichForest'
 
+    o Modify functions ('xEnricher', 'xEnricherGenes', 'xEnricherSNPs', 'xEnricherYours', 'xEnricherGenesAdv', 'xGRviaGeneAnno' and 'xGRviaGeneAnnoAdv') enabling the control of, adding 'background.annotatable.only', how to use the test background 
+
 
 CHANGES IN VERSION 1.1.1
 -----------------------

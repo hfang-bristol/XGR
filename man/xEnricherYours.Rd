@@ -6,7 +6,7 @@
 \usage{
 xEnricherYours(data.file, annotation.file, background.file = NULL,
 size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
-"fisher", "binomial"), background.annotatable.only = T,
+"fisher", "binomial"), background.annotatable.only = NULL,
 p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), verbose = T, silent =
 FALSE)
@@ -65,11 +65,12 @@ calculated p-value, hypergeometric test < fisher's exact test <
 binomial test}
 
 \item{background.annotatable.only}{logical to indicate whether the
-background is further restricted to annotatable genes (covered by
-'annotation.file'). In other words, if the background is provided, the
-background genes are those after being overlapped with annotatable
-genes. Notably, if only one annotation is provided in
-'annotation.file', it should be false}
+background is further restricted to the annotatable (covered by
+'annotation.file'). By default, it is NULL: if the background not
+provided, it will be TRUE; otherwise FALSE. Surely, it can be
+explicitly stated. Notably, if only one annotation is provided in
+'annotation.file', it should be false (also the background.file should
+be provided)}
 
 \item{p.tail}{the tail used to calculate p-values. It can be either
 "two-tails" for the significance based on two-tails (ie both over- and
