@@ -134,7 +134,7 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
     df_all <- do.call(rbind, ls_df)
     
     ## heatmap view
-    if(plot){
+    if(plot & !is.null(df_all)){
 
     	adjp <- NULL
     	
@@ -241,6 +241,9 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 			gp <- gp + theme(legend.title=element_text(size=8))
 		}
 		
+    }else{
+    	mat <- NULL
+    	gp <- NULL
     }
     
     ls_eTerm <- list(df = df_all,
