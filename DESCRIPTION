@@ -91,5 +91,6 @@ Collate:
     'xGGnetwork.r'
     'xOBOcode.r'
     'xGR2xGeneAnno.r'
+    'xGR2xGeneAnnoAdv.r'
 License: GPL-2
 biocViews: Bioinformatics

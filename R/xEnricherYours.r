@@ -102,6 +102,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     test <- match.arg(test)
+    p.tail <- match.arg(p.tail)
     p.adjust.method <- match.arg(p.adjust.method)
     p.tail <- match.arg(p.tail)
     

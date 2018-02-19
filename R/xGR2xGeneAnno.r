@@ -105,6 +105,7 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
     crosslink <- match.arg(crosslink)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
     test <- match.arg(test)
+    p.tail <- match.arg(p.tail)
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)

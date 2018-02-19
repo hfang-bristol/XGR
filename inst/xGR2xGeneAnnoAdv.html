@@ -1,51 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis given a...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis via...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGRviaGeneAnnoAdv"><tr><td>xGRviaGeneAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGR2xGeneAnnoAdv"><tr><td>xGR2xGeneAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct region-based enrichment analysis given a list of genomic region sets and a list of ontologies</h2>
+<h2>Function to conduct region-based enrichment analysis via crosslinked genes given a list of genomic region sets and a list of ontologies</h2>
 
 <h3>Description</h3>
 
-<p><code>xGRviaGeneAnnoAdv</code> is supposed to conduct enrichment analysis
-given a list of gene sets and a list of ontologies. It is an advanced
-version of <code>xGRviaGeneAnno</code>, returning an object of the class
-'ls_eTerm'.
+<p><code>xGR2xGeneAnnoAdv</code> is supposed to conduct enrichment analysis
+given a list of gene sets and a list of ontologies, using crosslinked
+gene annotations. It is an advanced version of <code>xGR2xGeneAnno</code>,
+returning an object of the class 'ls_eTerm'.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xGRviaGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-ontologies = c("GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF",
-"Pfam",
-"DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH",
-"MsigdbC1",
-"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
-"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
-"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease",
-"CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
-"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG",
-"KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental", "KEGGcellular",
-"KEGGorganismal", "KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem",
-"REACTOME_SignalTransduction", "CGL"), size.range = c(10, 2000),
-min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
-"binomial"), background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
-T,
-silent = FALSE, plot = TRUE, fdr.cutoff = 0.05,
-displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer", "nearby"),
+crosslink.customised = NULL, crosslink.top = NULL,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, ontologies =
+c("GOBP",
+"GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI",
+"HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
+"DGIdb",
+"GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP",
+"CreedsDiseaseDN",
+"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
+"CreedsGeneUP", "CreedsGeneDN", "KEGG", "KEGGmetabolism",
+"KEGGgenetic",
+"KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
+"REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
+"CGL"),
+size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"),
+background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
+0.01,
+lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
+"all_shortest_paths"), true.path.rule = F, verbose = T, silent = FALSE,
+plot = TRUE, fdr.cutoff = 0.05, displayBy = c("zscore", "fdr",
+"pvalue",
+"fc", "or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -70,26 +77,48 @@ default all annotatable are used as background</p>
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>gap.max</code></td>
+<tr valign="top"><td><code>crosslink</code></td>
 <td>
-<p>the maximum distance to nearby genes. Only those genes
-no far way from this distance will be considered as nearby genes. By
-default, it is 0 meaning that nearby genes are those overlapping with
-genomic regions</p>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. It can be one of 'genehancer' (enhancer
+genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
+specify the relevant parameters 'nearby.distance.max',
+'nearby.decay.kernel' and 'nearby.decay.exponent' below)</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>the genomic regions of genes. By default, it is
-'UCSC_knownGene', that is, UCSC known genes (together with genomic
-locations) based on human genome assembly hg19. It can be
-'UCSC_knownCanonical', that is, UCSC known canonical genes (together
-with genomic locations) based on human genome assembly hg19.
-Alternatively, the user can specify the customised input. To do so,
-first save your RData file (containing an GR object) into your local
-computer, and make sure the GR object content names refer to Gene
-Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if not provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink.top</code></td>
+<td>
+<p>the number of the top genes defined by 'data' will
+be used for test. By default, it is NULL</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>ontologies</code></td>
 <td>
@@ -305,8 +334,8 @@ object
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>, <code>xGRviaGeneAnno</code>,
-<code>xEnrichViewer</code>, <code>xHeatmap</code>
+<p><code>xGR2xGeneAnno</code>, <code>xEnrichViewer</code>,
+<code>xHeatmap</code>
 </p>
 
 
@@ -327,7 +356,7 @@ input$chromEnd)
 
 # b) perform enrichment analysis
 ## overlap with gene body
-ls_eTerm &lt;- xGRviaGeneAnnoAdv(data, gap.max=0,
+ls_eTerm &lt;- xGR2xGeneAnnoAdv(data, crosslink="genehancer",
 ontologies=c("REACTOME_ImmuneSystem","REACTOME_SignalTransduction"),
 RData.location=RData.location)
 ls_eTerm

@@ -89,6 +89,7 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     format.file <- match.arg(format.file)
     build.conversion <- match.arg(build.conversion)
     test <- match.arg(test)
+   	p.tail <- match.arg(p.tail)
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)

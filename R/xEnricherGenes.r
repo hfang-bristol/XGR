@@ -113,6 +113,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     #ontology <- match.arg(ontology)
     ontology <- ontology[1]
     test <- match.arg(test)
+    p.tail <- match.arg(p.tail)
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)
