@@ -1,13 +1,17 @@
-#' Function to conduct region-based enrichment analysis using nearby gene annotations
+#' Function to conduct region-based enrichment analysis via crosslinked genes
 #'
-#' \code{xGRviaGeneAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using nearby gene annotations. To do so, nearby genes are first defined within the maximum gap between genomic regions and gene location. Enrichment analysis is based on either Fisher's exact test or Hypergeometric test for estimating the significance of overlapped nearby genes. Test background can be provided; by default, the annotatable genes will be used. 
+#' \code{xGR2xGeneAnno} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using crosslinked gene annotations. To do so, crosslinked genes are first defined. Currently supported built-in crosslink info is enhancer genes and nearby genes (purely), though the user can customise it via 'crosslink.customised'; if so, it has priority over the built-in data. Enrichment analysis is then based on either Fisher's exact test or Hypergeometric test for estimating the significance of overlapped crosslinked genes. Test background can be provided; by default, the annotatable genes will be used. 
 #'
-#' @param data.file an input data file, containing a list of genomic regions to test. If the input file is formatted as a 'data.frame' (specified by the parameter 'format.file' below), the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. If the format is indicated as "chr:start-end", instead of using the first 3 columns, only the first column will be used and processed. If the file also contains other columns, these additional columns will be ignored. Alternatively, the input file can be the content itself assuming that input file has been read. Note: the file should use the tab delimiter as the field separator between columns
-#' @param background.file an input background file containing a list of genomic regions as the test background. The file format is the same as 'data.file'. By default, it is NULL meaning all annotatable genes are used as background
-#' @param format.file the format for input files. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
+#' @param data input genomic regions (GR). If formatted as "chr:start-end" (see the next parameter 'format' below), GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. If formatted as a 'data.frame', the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. The data could also be an object of 'GRanges' (in this case, formatted as 'GRanges')
+#' @param background an input background containing a list of genomic regions as the test background. The file format is the same as 'data' above. By default, it is NULL meaning all annotatable genes are used as background
+#' @param format the format of the input data. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
-#' @param gap.max the maximum distance to nearby genes. Only those genes no far way from this distance will be considered as nearby genes. By default, it is 0 meaning that nearby genes are those overlapping with genomic regions
-#' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. It can be one of 'genehancer' (enhancer genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also specify the relevant parameters 'nearby.distance.max', 'nearby.decay.kernel' and 'nearby.decay.exponent' below)
+#' @param crosslink.customised the crosslink info with a score quantifying the link of a GR to a gene. A user-input matrix or data frame with 4 columns: 1st column for genomic regions (formatted as "chr:start-end", genome build 19), 2nd column for Genes, 3rd for crosslink score (crosslinking a genomic region to a gene, such as -log10 significance level), and 4th for contexts (optional; if not provided, it will be added as 'C'). Alternatively, it can be a file containing these 4 columns. Required, otherwise it will return NULL
+#' @param crosslink.top the number of the top genes defined by 'data' will be used for test. By default, it is NULL
+#' @param nearby.distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
+#' @param nearby.decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay. If no distance weight is used, please select 'constant'
+#' @param nearby.decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
 #' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PSG" for phylostratigraphy (phylostratific age), "PS" for sTOL-based phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for Experimental Factor Ontology (used to annotate GWAS Catalog genes), Drug-Gene Interaction database ("DGIdb") for druggable categories, tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p" and "GTExV7"), crowd extracted expression of differential signatures from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for 'Genetic Information Processing' pathways, 'KEGGenvironmental' for 'Environmental Information Processing' pathways, 'KEGGcellular' for 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways), 'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies (where x can be 'CellCellCommunication', 'CellCycle', 'CellularResponsesToExternalStimuli', 'ChromatinOrganization', 'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption', 'Disease', 'DNARepair', 'DNAReplication', 'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)', 'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins', 'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem', 'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath', 'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules', 'VesicleMediatedTransport'), and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
@@ -51,20 +55,27 @@
 #' \item{"Notes": the order of the number of significant terms is: "none" > "lea" > "elim" > "pc".}
 #' }
 #' @export
-#' @seealso \code{\link{xEnrichViewer}}, \code{\link{xEnricherGenes}}
-#' @include xGRviaGeneAnno.r
+#' @seealso \code{\link{xGR}}, \code{\link{xGR2xGenes}}, \code{\link{xEnricherGenes}}
+#' @include xGR2xGeneAnno.r
 #' @examples
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' 
-#' # Enrichment analysis for GWAS SNPs from ImmunoBase
-#' ## a) provide input data
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
+#' # 1) provide the genomic regions
+#' ## load ImmunoBase
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+#' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
+#' gr <- ImmunoBase$AS$variant
+#' names(gr) <- NULL
+#' dGR <- xGR(gr, format="GRanges")
 #' 
-#' ## b) perform DO enrichment analysis for nearby genes (with GWAS SNPs)
-#' eTerm <- xGRviaGeneAnno(data.file=data.file, format.file="bed", gap.max=0, ontology="DO", RData.location=RData.location)
+#' ## b) perform DO enrichment analysis
+#' ## enhancer genes
+#' eTerm <- xGR2xGeneAnno(data=dGR, format="GRanges", crosslink="genehancer", ontology="DO", RData.location=RData.location)
+#' ## nearby genes (50kb, decaying rapidly)
+#' eTerm <- xGR2xGeneAnno(data=dGR, format="GRanges", crosslink="nearby", ontology="DO", nearby.distance.max=50000, nearby.decay.kernel="rapid", RData.location=RData.location)
 #'
 #' ## c) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)
@@ -76,9 +87,12 @@
 #' ## e) barplot of significant enrichment results
 #' bp <- xEnrichBarplot(eTerm, top_num=10, displayBy="fc")
 #' print(bp)
+#' 
+#' ## f) forest of significant enrichment results
+#' gp <- xEnrichForest(eTerm, top_num=10)
 #' }
 
-xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), gap.max=0, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), ontology=c("GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontology=c("GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -86,8 +100,10 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
-    format.file <- match.arg(format.file)
+    format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
+    crosslink <- match.arg(crosslink)
+    nearby.decay.kernel <- match.arg(nearby.decay.kernel)
     test <- match.arg(test)
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)
@@ -96,244 +112,50 @@ xGRviaGeneAnno <- function(data.file, background.file=NULL, format.file=c("data.
     ###################
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("First, import the files formatted as '%s' (%s) ...", format.file, as.character(now)), appendLF=T)
+		message(sprintf("First, import the data/background formatted as '%s' (%s) ...", format, as.character(now)), appendLF=T)
 	}
     
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("\timport the data file (%s) ...", as.character(now)), appendLF=T)
-	}
-    ## import data file
-    if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
-        data <- data.file
-    }else if(!is.null(data.file) & any(!is.na(data.file))){
-    	if(length(data.file)==1){
-			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
-			#data <- unique(data[,1])
-		}else{
-			data <- data.file
-		}
-    }else{
-    	stop("The file 'data.file' must be provided!\n")
-    }
-    
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("\timport the background file (%s) ...", as.character(now)), appendLF=T)
-	}
-	## import background file
-    if(is.matrix(background.file) | is.data.frame(background.file) | class(background.file)=="GRanges"){
-        background <- background.file
-    }else if(!is.null(background.file)){
-    	if(length(background.file)==1){
-			background <- utils::read.delim(file=background.file, header=F, row.names=NULL, stringsAsFactors=F)
-			background <- unique(background[,1])
-		}else{
-			background <- background.file
-		}
-    }else{
-    	background <- NULL
-    }
-    
-    ###################
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("Second, construct GenomicRanges object (%s) ...", as.character(now)), appendLF=T)
-	}
-    
-	if(format.file=="data.frame"){
-		## construct data GR
-		if(ncol(data)>=3){
-			data <- data
-		}else if(ncol(data)==2){
-			data <- cbind(data, data[,2])
-		}else{
-			stop("Your input 'data.file' is not as expected!\n")
-		}
-		## make sure positions are numeric
-		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
-		data <- data[ind,]
-		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
-		)
-		
-		if(!is.null(background)){
-			## construct background GR
-			if(ncol(background)>=3){
-				background <- background
-			}else if(ncol(background)==2){
-				background <- cbind(background, background[,2])
-			}else{
-				stop("Your input 'background.file' is not as expected!\n")
-			}
-			## make sure positions are numeric
-			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
-			background <- background[ind,]
-			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
-				ranges = IRanges::IRanges(start=as.numeric(background[,2]), end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(background)))
-			)
-		}else{
-			bGR <- NULL
-		}
-		
-	}else if(format.file=="chr:start-end"){
-		
-		## construct data GR
-		if(is.null(dim(data))){
-			input <- do.call(rbind, strsplit(data, ":|-"))
-		}else{
-			input <- do.call(rbind, strsplit(data[,1], ":|-"))
-		}
-		
-		if(ncol(input)>=3){
-			data <- input
-		}else if(ncol(input)==2){
-			data <- cbind(input, input[,2])
-		}else{
-			stop("Your input 'data.file' does not meet the format 'chr:start-end'!\n")
-		}
-		## make sure positions are numeric
-		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
-		data <- data[ind,]
-		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
-		)
-		
-		if(!is.null(background)){
-			## construct background GR
-			input <- do.call(rbind, strsplit(background[,1], ":|-"))
-			if(ncol(input)>=3){
-				background <- input
-			}else if(ncol(input)==2){
-				background <- cbind(input, input[,2])
-			}else{
-				stop("Your input 'background.file' does not meet the format 'chr:start-end'!\n")
-			}
-			## make sure positions are numeric
-			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
-			background <- background[ind,]
-			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
-				ranges = IRanges::IRanges(start=as.numeric(background[,2]), end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(data)))
-			)
-		}else{
-			bGR <- NULL
-		}
-		
-	}else if(format.file=="bed"){
-		## construct data GR
-		## make sure positions are numeric
-		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
-		data <- data[ind,]
-		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[,2])+1, end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
-		)
-		
-		if(!is.null(background)){
-			## construct background GR
-			## make sure positions are numeric
-			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
-			background <- background[ind,]
-			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
-				ranges = IRanges::IRanges(start=as.numeric(background[,2])+1, end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(data)))
-			)
-		}else{
-			bGR <- NULL
-		}
-		
-	}else if(format.file=="GRanges"){
-		## construct data GR
-		dGR <- data
-		
-		if(!is.null(background)){
-			## construct background GR
-			bGR <- background
-		}else{
-			bGR <- NULL
-		}
-		
-	}
+	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+	bGR <- xGR(data=background, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
 	
 	#####################################
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Third, define nearby genes of interest and genes as the background (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Second, define crosslinked genes based on '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
 	}
     
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("\tload positional information for Genes (%s) ...", as.character(now)), appendLF=T)
-	}
-    gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
-    if(is.null(gr_Gene)){
-    	GR.Gene <- "UCSC_knownGene"
-		if(verbose){
-			message(sprintf("\tinstead, %s will be used", GR.Gene), appendLF=T)
-		}
-    	gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
-    }
+    df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+    df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
 	
-	# lift over
-	if(!is.na(build.conversion)){
-		if(verbose){
-			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
-		}
-		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
-	}
-
-	# genes of interest: get all UCSC genes within defined distance window away from dGR
-	maxgap <- gap.max-1
-	#minoverlap <- 1L # 1b overlaps
-	minoverlap <- 0L
-	subject <- gr_Gene
-	query <- dGR
-	hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
-	dGR_genes <- unique(names(gr_Gene[hits[,2]]))
-	
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("\t%d nearby genes within %d distance are defined (%s) ...", length(dGR_genes), gap.max, as.character(now)), appendLF=T)
-	}
+	##############################
+   	Score <- Gene <- NULL
     
-	### define background GR
-	if(!is.null(bGR)){
-	
-		# lift over
-		if(!is.na(build.conversion)){
-			if(verbose){
-				message(sprintf("\tbackground genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
-			}
-			bGR <- xLiftOver(data.file=bGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
-		}
+    ## dGR_genes
+    df_xGenes_data <- df_xGenes_data %>% dplyr::arrange(-Score)
+	if(is.null(crosslink.top)){
+		crosslink.top <- nrow(df_xGenes_data)
+	}
+	if(crosslink.top > nrow(df_xGenes_data)){
+		crosslink.top <- nrow(df_xGenes_data)
+	}
+	crosslink.top <- as.integer(crosslink.top)
+	crosslink.cutoff <- df_xGenes_data[crosslink.top,'Score']
+    dGR_genes <- df_xGenes_data$Gene[df_xGenes_data$Score >= crosslink.cutoff]
 
-		# genes as the backgournd
-		maxgap <- gap.max-1
-		#minoverlap <- 1L # 1b overlaps
-		minoverlap <- 0L
-		subject <- gr_Gene
-		query <- bGR
-		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
-		bGR_genes <- unique(names(gr_Gene[hits[,2]]))
-		
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("\t%d nearby genes with %d distance are defined as the background (%s) ...", length(bGR_genes), gap.max, as.character(now)), appendLF=T)
-		}
-	
+    ## bGR_genes
+	if(!is.null(df_xGenes_background)){
+		bGR_genes <- (df_xGenes_background %>% dplyr::arrange(-Score))$Gene
 	}else{
 		bGR_genes <- NULL
+	}
+	
+	if(verbose){
+		if(is.null(bGR_genes)){
+			message(sprintf("\t%d (out of %d crosslinked genes) are used.", length(dGR_genes), nrow(df_xGenes_data), as.character(Sys.time())), appendLF=T)
+		}else{
+			message(sprintf("\t%d (out of %d crosslinked genes) and %d background genes are used.", length(dGR_genes), nrow(df_xGenes_data), length(bGR_genes), as.character(Sys.time())), appendLF=T)
+		}
 	}
 	
 	#######################################################

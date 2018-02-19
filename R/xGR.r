@@ -39,6 +39,12 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
     format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
 	
+	###################
+	if(is.null(data)){
+		return(NULL)
+	}
+	###################
+		
     ## import data
     if(is.matrix(data) | is.data.frame(data) | class(data)=="GRanges"){
         data <- data

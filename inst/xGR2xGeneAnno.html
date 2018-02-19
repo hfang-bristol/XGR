@@ -1,21 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis using...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis via...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGRviaGeneAnno"><tr><td>xGRviaGeneAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGR2xGeneAnno"><tr><td>xGR2xGeneAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct region-based enrichment analysis using nearby gene annotations</h2>
+<h2>Function to conduct region-based enrichment analysis via crosslinked genes</h2>
 
 <h3>Description</h3>
 
-<p><code>xGRviaGeneAnno</code> is supposed to conduct region-based enrichment
+<p><code>xGR2xGeneAnno</code> is supposed to conduct region-based enrichment
 analysis for the input genomic region data (genome build h19), using
-nearby gene annotations. To do so, nearby genes are first defined
-within the maximum gap between genomic regions and gene location.
-Enrichment analysis is based on either Fisher's exact test or
+crosslinked gene annotations. To do so, crosslinked genes are first
+defined. Currently supported built-in crosslink info is enhancer genes
+and nearby genes (purely), though the user can customise it via
+'crosslink.customised'; if so, it has priority over the built-in data.
+Enrichment analysis is then based on either Fisher's exact test or
 Hypergeometric test for estimating the significance of overlapped
-nearby genes. Test background can be provided; by default, the
+crosslinked genes. Test background can be provided; by default, the
 annotatable genes will be used.
 </p>
 
@@ -23,11 +25,12 @@ annotatable genes will be used.
 <h3>Usage</h3>
 
 <pre>
-xGRviaGeneAnno(data.file, background.file = NULL,
-format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), ontology =
-c("GOBP",
+xGR2xGeneAnno(data, background = NULL, format = c("data.frame", "bed",
+"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
+"hg18.to.hg19"), crosslink = c("genehancer", "nearby"),
+crosslink.customised = NULL, crosslink.top = NULL,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, ontology = c("GOBP",
 "GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI",
 "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
 "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
@@ -60,35 +63,32 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>data.file</code></td>
+<tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input data file, containing a list of genomic
-regions to test. If the input file is formatted as a 'data.frame'
-(specified by the parameter 'format.file' below), the first three
-columns correspond to the chromosome (1st column), the starting
-chromosome position (2nd column), and the ending chromosome position
-(3rd column). If the format is indicated as 'bed' (browser extensible
-data), the same as 'data.frame' format but the position is 0-based
-offset from chromomose position. If the genomic regions provided are
-not ranged but only the single position, the ending chromosome position
-(3rd column) is allowed not to be provided. If the format is indicated
-as &quot;chr:start-end&quot;, instead of using the first 3 columns, only the
-first column will be used and processed. If the file also contains
-other columns, these additional columns will be ignored. Alternatively,
-the input file can be the content itself assuming that input file has
-been read. Note: the file should use the tab delimiter as the field
-separator between columns</p>
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
 </td></tr>
-<tr valign="top"><td><code>background.file</code></td>
+<tr valign="top"><td><code>background</code></td>
 <td>
-<p>an input background file containing a list of
-genomic regions as the test background. The file format is the same as
-'data.file'. By default, it is NULL meaning all annotatable genes are
-used as background</p>
+<p>an input background containing a list of genomic
+regions as the test background. The file format is the same as 'data'
+above. By default, it is NULL meaning all annotatable genes are used as
+background</p>
 </td></tr>
-<tr valign="top"><td><code>format.file</code></td>
+<tr valign="top"><td><code>format</code></td>
 <td>
-<p>the format for input files. It can be one of
+<p>the format of the input data. It can be one of
 &quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
@@ -97,26 +97,48 @@ used as background</p>
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>gap.max</code></td>
+<tr valign="top"><td><code>crosslink</code></td>
 <td>
-<p>the maximum distance to nearby genes. Only those genes
-no far way from this distance will be considered as nearby genes. By
-default, it is 0 meaning that nearby genes are those overlapping with
-genomic regions</p>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. It can be one of 'genehancer' (enhancer
+genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
+specify the relevant parameters 'nearby.distance.max',
+'nearby.decay.kernel' and 'nearby.decay.exponent' below)</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>the genomic regions of genes. By default, it is
-'UCSC_knownGene', that is, UCSC known genes (together with genomic
-locations) based on human genome assembly hg19. It can be
-'UCSC_knownCanonical', that is, UCSC known canonical genes (together
-with genomic locations) based on human genome assembly hg19.
-Alternatively, the user can specify the customised input. To do so,
-first save your RData file (containing an GR object) into your local
-computer, and make sure the GR object content names refer to Gene
-Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;</p>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if not provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink.top</code></td>
+<td>
+<p>the number of the top genes defined by 'data' will
+be used for test. By default, it is NULL</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>
@@ -380,7 +402,8 @@ maximum of both p-values in these two calculations.
 
 <h3>See Also</h3>
 
-<p><code>xEnrichViewer</code>, <code>xEnricherGenes</code>
+<p><code>xGR</code>, <code>xGR2xGenes</code>,
+<code>xEnricherGenes</code>
 </p>
 
 
@@ -392,13 +415,23 @@ maximum of both p-values in these two calculations.
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
-# Enrichment analysis for GWAS SNPs from ImmunoBase
-## a) provide input data
-data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
+# 1) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+names(gr) &lt;- NULL
+dGR &lt;- xGR(gr, format="GRanges")
 
-## b) perform DO enrichment analysis for nearby genes (with GWAS SNPs)
-eTerm &lt;- xGRviaGeneAnno(data.file=data.file, format.file="bed",
-gap.max=0, ontology="DO", RData.location=RData.location)
+## b) perform DO enrichment analysis
+## enhancer genes
+eTerm &lt;- xGR2xGeneAnno(data=dGR, format="GRanges",
+crosslink="genehancer", ontology="DO", RData.location=RData.location)
+## nearby genes (50kb, decaying rapidly)
+eTerm &lt;- xGR2xGeneAnno(data=dGR, format="GRanges", crosslink="nearby",
+ontology="DO", nearby.distance.max=50000, nearby.decay.kernel="rapid",
+RData.location=RData.location)
 
 ## c) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)
@@ -412,6 +445,9 @@ sep="\t", row.names=FALSE)
 ## e) barplot of significant enrichment results
 bp &lt;- xEnrichBarplot(eTerm, top_num=10, displayBy="fc")
 print(bp)
+
+## f) forest of significant enrichment results
+gp &lt;- xEnrichForest(eTerm, top_num=10)
 
 ## End(Not run)
 </pre>

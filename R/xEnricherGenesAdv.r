@@ -128,7 +128,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     df_all <- do.call(rbind, ls_df)
     
     ## heatmap view
-    if(plot){
+    if(plot & !is.null(df_all)){
 
     	adjp <- NULL
     	

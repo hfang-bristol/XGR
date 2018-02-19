@@ -86,6 +86,11 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	
 	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
 	
+	###################
+	if(is.null(dGR)){
+		return(NULL)
+	}
+	###################
 	####################################################################################
 	df_SGS_customised <- NULL
     if(!is.null(crosslink.customised)){
@@ -300,7 +305,11 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			}
 			
 			if(verbose){
-				message(sprintf("\t%d xGenes from an input list of %d (out of %d) genomic regions are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(unique(res_df$GR)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=T)
+				if(scoring){
+					message(sprintf("\t%d xGenes (out of %d genomic regions) are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=T)
+				}else{
+					message(sprintf("\t%d xGenes from an input list of %d (out of %d) genomic regions are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(unique(res_df$GR)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=T)
+				}
 			}
 			
 		}

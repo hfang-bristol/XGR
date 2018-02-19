@@ -414,6 +414,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     	if(is.null(background.annotatable.only)){
     		if(length(background)==0){
     			background.annotatable.only <- T
+    		}else{
+    			background.annotatable.only <- F
     		}
     	}
     }
