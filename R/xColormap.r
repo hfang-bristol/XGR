@@ -81,7 +81,14 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 		
 		}else if(colormap == "spectral"){
 			palette.name <-colorRampPalette(rev(c('#D53E4F','#F46D43','#FDAE61','#FEE08B','#FFFFBF','#E6F598','#ABDDA4','#66C2A5','#3288BD')), interpolate=interpolate)
-		
+
+		}else if(colormap == "spectral.both"){
+			palette.name <-colorRampPalette(rev(c('#D53E4F','#F46D43','#FDAE61','#FEE08B','#FFFFBF','#E6F598','#ABDDA4','#66C2A5','#3288BD'))[c(-1,-9)], interpolate=interpolate)
+		}else if(colormap == "spectral.top"){
+			palette.name <-colorRampPalette(rev(c('#D53E4F','#F46D43','#FDAE61','#FEE08B','#FFFFBF')), interpolate=interpolate)
+		}else if(colormap == "spectral.bottom"){
+			palette.name <-colorRampPalette(rev(c('#FFFFBF','#E6F598','#ABDDA4','#66C2A5','#3288BD')), interpolate=interpolate)
+			
 		}else if(colormap == "heat"){
 			palette.name <- grDevices::heat.colors
 		}else if(colormap == "terrain"){

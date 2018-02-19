@@ -40,9 +40,9 @@ plot = TRUE, fdr.cutoff = 0.05, displayBy = c("zscore", "fdr",
 "fc", "or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{list_vec}{an input vector containing gene symbols. Alternatively
-it can be a list of vectors, representing multiple groups of genomic
-regions. Formatted as "chr:start-end" are genomic regions}
+\item{list_vec}{an input vector containing genomic regions.
+Alternatively it can be a list of vectors, representing multiple groups
+of genomic regions. Formatted as "chr:start-end" are genomic regions}
 
 \item{background}{a background vector containing genomic regions
 (formatted as "chr:start-end") as the test background. If NULL, by

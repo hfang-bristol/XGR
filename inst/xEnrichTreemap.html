@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a treemap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichTreemap"><tr><td>xEnrichTreemap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using a treemap</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichTreemap</code> is supposed to visualise enrichment results using
+a treemap. The area is proportional to odds ratio, colored by the
+significance level. It returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichTreemap(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
+colormap = "spectral.top", ncolors = 64, zlim = NULL, barwidth = NULL,
+barheight = 0.5, wrap.width = NULL, font.family = "sans", drop = F,
+details = T, treemap.grow = F, treemap.reflow = F,
+treemap.place = "topleft", treemap.color = "black",
+treemap.fontface = "bold.italic", treemap.min.size = 4)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eTerm</code></td>
+<td>
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns (named as
+'group','ontology','name','adjp','or','CIl','CIu')</p>
+</td></tr>
+<tr valign="top"><td><code>top_num</code></td>
+<td>
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (see
+below FDR.cutoff) will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
+</td></tr>
+<tr valign="top"><td><code>CI.one</code></td>
+<td>
+<p>logical to indicate whether to allow the inclusion of one
+in CI. By default, it is TURE (allowed)</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the -log10(FDR)</p>
+</td></tr>
+<tr valign="top"><td><code>barwidth</code></td>
+<td>
+<p>the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>barheight</code></td>
+<td>
+<p>the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of name</p>
+</td></tr>
+<tr valign="top"><td><code>font.family</code></td>
+<td>
+<p>the font family for texts</p>
+</td></tr>
+<tr valign="top"><td><code>drop</code></td>
+<td>
+<p>logical to indicate whether all factor levels not used in
+the data will automatically be dropped. If FALSE (by default), all
+factor levels will be shown, regardless of whether or not they appear
+in the data</p>
+</td></tr>
+<tr valign="top"><td><code>details</code></td>
+<td>
+<p>logical to indicate whether additional information is
+appended to the name</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.grow</code></td>
+<td>
+<p>logical to indicate whether text will be grown as
+well as shrunk to fill the box</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.reflow</code></td>
+<td>
+<p>logical to indicate whether text will be reflowed
+(wrapped) to better fit the box</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.place</code></td>
+<td>
+<p>where inside the box to place the text. Default is
+&quot;centre&quot;; other options are &quot;bottom&quot;, &quot;top&quot;, &quot;topleft&quot;, &quot;topright&quot;,
+etc</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.color</code></td>
+<td>
+<p>the color of the text</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.fontface</code></td>
+<td>
+<p>the fontface of the text</p>
+</td></tr>
+<tr valign="top"><td><code>treemap.min.size</code></td>
+<td>
+<p>the minimum font size, in points. If provided,
+text that would need to be shrunk below this size to fit the box will
+not be drawn. Defaults to 4 pt</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+# provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data
+
+# optionally, provide the test background (if not provided, all human genes)
+#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+
+# 1) Gene-based enrichment analysis using REACTOME pathways
+# perform enrichment analysis
+eTerm &lt;- xEnricherGenes(data, ontology="REACTOME",
+RData.location=RData.location)
+## forest plot of enrichment results
+gp &lt;- xEnrichTreemap(eTerm, top_num=20, FDR.cutoff=0.05,
+treemap.reflow=F, treemap.place="topleft")
+
+# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
+# perform enrichment analysis
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+RData.location=RData.location)
+## forest plot of enrichment results
+gp &lt;- xEnrichTreemap(ls_eTerm, FDR.cutoff=0.1)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
