@@ -107,31 +107,127 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 		names(list_vec) <- list_names
 	}
     
-    ls_df <- lapply(1:length(list_vec), function(i){
+    fast <- T
+    #### call 'xGR2xGeneAnno', very slow if many ontologies are used 
+    if(!fast){
+    
+		ls_df <- lapply(1:length(list_vec), function(i){
 		
-		if(verbose){
-			message(sprintf("Analysing group %d ('%s') (%s) ...", i, names(list_vec)[i], as.character(Sys.time())), appendLF=T)
-		}
-		data <- list_vec[[i]]
-    	
-    	ls_df <- lapply(1:length(ontologies), function(j){
 			if(verbose){
-				message(sprintf("\tontology %d ('%s') (%s) ...", j, ontologies[j], as.character(Sys.time())), appendLF=T)
+				message(sprintf("Analysing group %d ('%s') (%s) ...", i, names(list_vec)[i], as.character(Sys.time())), appendLF=T)
 			}
-			ontology <- ontologies[j]
+			data <- list_vec[[i]]
+		
+			ls_df <- lapply(1:length(ontologies), function(j){
+				if(verbose){
+					message(sprintf("\tontology %d ('%s') (%s) ...", j, ontologies[j], as.character(Sys.time())), appendLF=T)
+				}
+				ontology <- ontologies[j]
 			
-			eTerm <- xGR2xGeneAnno(data=data, background=background, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, crosslink.top=crosslink.top, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, RData.location=RData.location)
-			df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
+				eTerm <- xGR2xGeneAnno(data=data, background=background, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, crosslink.top=crosslink.top, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, RData.location=RData.location)
+				df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
 			
-			if(is.null(df)){
-				return(NULL)
-			}else{
-				cbind(group=rep(names(list_vec)[i],nrow(df)), ontology=rep(ontology,nrow(df)), id=rownames(df), df, stringsAsFactors=F)
-			}
+				if(is.null(df)){
+					return(NULL)
+				}else{
+					cbind(group=rep(names(list_vec)[i],nrow(df)), ontology=rep(ontology,nrow(df)), id=rownames(df), df, stringsAsFactors=F)
+				}
+			})
+			df <- do.call(rbind, ls_df)
 		})
-		df <- do.call(rbind, ls_df)
-	})
-    df_all <- do.call(rbind, ls_df)
+		df_all <- do.call(rbind, ls_df)
+    
+    }else{
+    	#### de novo, very quick
+    	
+    	Score <- Gene <- NULL
+    	
+		###################
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("First, import the background (%s) ...", as.character(now)), appendLF=T)
+		}
+		bGR <- xGR(data=background, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+    	
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Second, define crosslinked genes based on '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
+		}
+    	df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		## bGR_genes
+		if(!is.null(df_xGenes_background)){
+			bGR_genes <- (df_xGenes_background %>% dplyr::arrange(-Score))$Gene
+		}else{
+			bGR_genes <- NULL
+		}
+    	
+		ls_df <- lapply(1:length(list_vec), function(i){
+		
+			if(verbose){
+				message(sprintf("Analysing group %d ('%s') (%s) ...", i, names(list_vec)[i], as.character(Sys.time())), appendLF=T)
+			}
+			data <- list_vec[[i]]
+			
+			dGR <- xGR(data=data, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+			df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+			
+			##############################
+			## dGR_genes
+			df_xGenes_data <- df_xGenes_data %>% dplyr::arrange(-Score)
+			if(is.null(crosslink.top)){
+				crosslink.top <- nrow(df_xGenes_data)
+			}
+			if(crosslink.top > nrow(df_xGenes_data)){
+				crosslink.top <- nrow(df_xGenes_data)
+			}
+			crosslink.top <- as.integer(crosslink.top)
+			crosslink.cutoff <- df_xGenes_data[crosslink.top,'Score']
+			dGR_genes <- df_xGenes_data$Gene[df_xGenes_data$Score >= crosslink.cutoff]
+			##############################
+			
+			if(verbose){
+				if(is.null(bGR_genes)){
+					message(sprintf("\t%d (out of %d crosslinked genes) are used.", length(dGR_genes), nrow(df_xGenes_data), as.character(Sys.time())), appendLF=T)
+				}else{
+					message(sprintf("\t%d (out of %d crosslinked genes) and %d background genes are used.", length(dGR_genes), nrow(df_xGenes_data), length(bGR_genes), as.character(Sys.time())), appendLF=T)
+				}
+			}
+			
+			ls_df <- lapply(1:length(ontologies), function(j){
+				if(verbose){
+					message(sprintf("\tontology %d ('%s') (%s) ...", j, ontologies[j], as.character(Sys.time())), appendLF=T)
+				}
+				ontology <- ontologies[j]
+			
+				#######################################################
+				if(verbose){
+					now <- Sys.time()
+					message(sprintf("\n#######################################################", appendLF=T))
+					message(sprintf("'xEnricherGenes' is being called (%s):", as.character(now)), appendLF=T)
+					message(sprintf("#######################################################", appendLF=T))
+				}
+				eTerm <- xEnricherGenes(data=dGR_genes, background=bGR_genes, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, RData.location=RData.location)
+				if(verbose){
+					now <- Sys.time()
+					message(sprintf("#######################################################", appendLF=T))
+					message(sprintf("'xEnricherGenes' has been finished (%s)!", as.character(now)), appendLF=T)
+					message(sprintf("#######################################################\n", appendLF=T))
+				}
+				####################################################################################
+
+				df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
+				if(is.null(df)){
+					return(NULL)
+				}else{
+					cbind(group=rep(names(list_vec)[i],nrow(df)), ontology=rep(ontology,nrow(df)), id=rownames(df), df, stringsAsFactors=F)
+				}
+			})
+			df <- do.call(rbind, ls_df)
+		})
+		df_all <- do.call(rbind, ls_df)
+    	
+    }
+    
     
     ## heatmap view
     if(plot & !is.null(df_all)){
