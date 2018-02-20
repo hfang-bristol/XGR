@@ -318,6 +318,15 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	
 	df_xGenes <- res_df
 	
+	##### order
+	Context <- GR <- Score <- NULL
+	if(scoring){
+		df_xGenes <- df_xGenes %>% dplyr::arrange(Context, -Score)
+	}else{
+		df_xGenes <- df_xGenes %>% dplyr::arrange(Context, GR, -Score)
+	}
+	
+	
 	####################################
 	## also output igraph (genes with genomic location)
 	if(0){
@@ -338,7 +347,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			
 			## edges
 			relations <- df[,1:3]
-				
+			
 			## nodes
 			df_gr <- data.frame(df[,c("GR","GR")], type=rep('GR',nrow(df)), stringsAsFactors=F)
 			df_gene <- data.frame(df[,c("Gene","Gene_gr")], type=rep('Gene',nrow(df)), stringsAsFactors=F)

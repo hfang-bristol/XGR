@@ -153,7 +153,7 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 			now <- Sys.time()
 			message(sprintf("Second, define crosslinked genes based on '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
 		}
-    	df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+    	df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
 		## bGR_genes
 		if(!is.null(df_xGenes_background)){
 			bGR_genes <- (df_xGenes_background %>% dplyr::arrange(-Score))$Gene
@@ -169,7 +169,7 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 			data <- list_vec[[i]]
 			
 			dGR <- xGR(data=data, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
-			df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+			df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
 			
 			##############################
 			## dGR_genes

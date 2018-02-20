@@ -126,8 +126,8 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
 		message(sprintf("Second, define crosslinked genes based on '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
 	}
     
-    df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
-    df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=TRUE, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+    df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+    df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
 	
 	##############################
    	Score <- Gene <- NULL
