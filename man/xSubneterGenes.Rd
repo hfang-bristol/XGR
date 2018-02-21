@@ -105,7 +105,8 @@ displayed in the screen. By default, it sets to true for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a subgraph with a maximum score, an object of class "igraph"
+a subgraph with a maximum score, an object of class "igraph". It has
+ndoe attributes: significance, score, type
 }
 \description{
 \code{xSubneterGenes} is supposed to identify maximum-scoring

@@ -4,7 +4,7 @@
 \alias{xGR2xGeneScores}
 \title{Function to identify likely modulated seed genes from an input list of genomic regions together with the significance level given the crosslink info}
 \usage{
-xGR2xGeneScores(data, significance.threshold = 5e-05, score.cap = 10,
+xGR2xGeneScores(data, significance.threshold = NULL, score.cap = NULL,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 crosslink = c("genehancer", "nearby"), crosslink.customised = NULL,
 cdf.function = c("original", "empirical"), scoring.scheme = c("max",
@@ -30,7 +30,7 @@ thus scored positively. Instead, those above this are considered
 insignificant and thus receive no score}
 
 \item{score.cap}{the maximum score being capped. By default, it is set
-to 10. If NULL, no capping is applied}
+to NULL, meaning that no capping is applied}
 
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and

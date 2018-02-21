@@ -328,7 +328,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
     df$n.size <- as.numeric(df$n.size)
 
     ## make sure factor    
-    df$n.shape <- factor(df$n.shape, levels=unique(df$n.shape))
+    df$n.shape <- factor(df$n.shape, levels=sort(unique(df$n.shape)))
     
     #############################################################
     n.color <- n.size <- n.shape <- n.label <- n.label.size <- n.label.color <- NULL
@@ -345,6 +345,11 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 	}
 	
 	if(length(unique(df$n.shape))==1){
+		#####################################
+		if(!is.numeric(node.shape)){
+			node.shape <- 19
+		}
+		#####################################		
 		gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size), shape=node.shape)
 	}else{
 		gp <- gp + ggnetwork::geom_nodes(aes(color=n.color,size=n.size, shape=n.shape))
@@ -380,7 +385,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 	}
 	
 	gp <- gp + ggnetwork::theme_blank()
-	gp <- gp + theme(text=element_text(family="sans")) + labs(title=title) + theme(plot.title=element_text(hjust=0.5), plot.margin=unit(rep(0,4),rep("lines",4)))
+	gp <- gp + theme(text=element_text(family="sans")) + labs(title=title) + theme(plot.title=element_text(hjust=0.5,size=10,face="bold"), plot.margin=unit(rep(0,4),rep("lines",4)))
 	
 	if((zlim[1]!=zlim[2]) & (slim[1]!=slim[2])){
 		gp <- gp + theme(legend.position="right")

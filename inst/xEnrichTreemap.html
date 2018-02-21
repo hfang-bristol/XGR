@@ -21,9 +21,10 @@ significance level. It returns an object of class &quot;ggplot&quot;.
 xEnrichTreemap(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "spectral.top", ncolors = 64, zlim = NULL, barwidth = NULL,
 barheight = 0.5, wrap.width = NULL, font.family = "sans", drop = F,
-details = T, treemap.grow = F, treemap.reflow = F,
-treemap.place = "topleft", treemap.color = "black",
-treemap.fontface = "bold.italic", treemap.min.size = 4)
+details = c("name", "name_FDR", "name_FDR_members"), caption = T,
+treemap.grow = F, treemap.reflow = F, treemap.place = "topleft",
+treemap.color = "black", treemap.fontface = "bold.italic",
+treemap.min.size = 4)
 </pre>
 
 
@@ -34,7 +35,7 @@ treemap.fontface = "bold.italic", treemap.min.size = 4)
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns (named as
-'group','ontology','name','adjp','or','CIl','CIu')</p>
+'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
@@ -101,8 +102,15 @@ in the data</p>
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
-<p>logical to indicate whether additional information is
-appended to the name</p>
+<p>how to label. It can be one of 'name', 'name_FDR'
+(FDR/OR also appended to the name), and 'name_FDR_members' (FDR/OR plus
+members appended to the name; in this case, treemap.grow and
+treemap.reflow is forced to be true)</p>
+</td></tr>
+<tr valign="top"><td><code>caption</code></td>
+<td>
+<p>logical to indicate whether the caption is shown on the
+bottom-right</p>
 </td></tr>
 <tr valign="top"><td><code>treemap.grow</code></td>
 <td>

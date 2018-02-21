@@ -12,7 +12,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a subgraph with a maximum score, an object of class "igraph"
+#' a subgraph with a maximum score, an object of class "igraph". It has ndoe attributes: significance, score, type
 #' @note The algorithm identifying a subnetwork is implemented in the dnet package (http://genomemedicine.biomedcentral.com/articles/10.1186/s13073-014-0064-8). In brief, from an input network with input node/gene information (the significant level; p-values or FDR), the way of searching for a maximum-scoring subnetwork is done as follows. Given the threshold of tolerable p-value, it gives positive scores for nodes with p-values below the threshold (nodes of interest), and negative scores for nodes with threshold-above p-values (intolerable). After score transformation, the search for a maximum scoring subnetwork is deduced to find the connected subnetwork that is enriched with positive-score nodes, allowing for a few negative-score nodes as linkers. This objective is met through minimum spanning tree finding and post-processing, previously used as a heuristic solver of prize-collecting Steiner tree problem. The solver is deterministic, only determined by the given tolerable p-value threshold. For identification of the subnetwork with a desired number of nodes, an iterative procedure is also developed to fine-tune tolerable thresholds. This explicit control over the node size may be necessary for guiding follow-up experiments.
 #' @export
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xDefineNet}}
@@ -176,7 +176,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	if(ecount(subnet)>0 && class(subnet)=="igraph"){
 		relations <- igraph::get.data.frame(subnet, what="edges")[,c(1,2)]
 		nodes <- igraph::get.data.frame(subnet, what="vertices")
-		nodes <- cbind(name=nodes$name, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score)
+		nodes <- cbind(name=nodes$name, description=nodes$description, significance=pval[rownames(nodes)], score=nodes$score, type=nodes$type)
 		#nodes <- cbind(name=nodes$name, significance=pval[rownames(nodes)], score=nodes$score)
 		if(is.directed(subnet)){
 			subg <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)

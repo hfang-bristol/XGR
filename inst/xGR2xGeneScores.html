@@ -21,7 +21,7 @@ quantifying the link of a GR to a gene. It returns an object of class
 <h3>Usage</h3>
 
 <pre>
-xGR2xGeneScores(data, significance.threshold = 5e-05, score.cap = 10,
+xGR2xGeneScores(data, significance.threshold = NULL, score.cap = NULL,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 crosslink = c("genehancer", "nearby"), crosslink.customised = NULL,
 cdf.function = c("original", "empirical"), scoring.scheme = c("max",
@@ -57,7 +57,7 @@ insignificant and thus receive no score</p>
 <tr valign="top"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
-to 10. If NULL, no capping is applied</p>
+to NULL, meaning that no capping is applied</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>

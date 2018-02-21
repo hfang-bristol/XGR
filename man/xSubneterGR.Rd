@@ -149,7 +149,7 @@ RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a subgraph with a maximum score, an object of class "igraph". It has
-ndoe attributes: significance, score
+ndoe attributes: significance, score, type
 }
 \description{
 \code{xSubneterGR} is supposed to identify maximum-scoring gene

@@ -7,14 +7,15 @@
 xEnrichTreemap(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "spectral.top", ncolors = 64, zlim = NULL, barwidth = NULL,
 barheight = 0.5, wrap.width = NULL, font.family = "sans", drop = F,
-details = T, treemap.grow = F, treemap.reflow = F,
-treemap.place = "topleft", treemap.color = "black",
-treemap.fontface = "bold.italic", treemap.min.size = 4)
+details = c("name", "name_FDR", "name_FDR_members"), caption = T,
+treemap.grow = F, treemap.reflow = F, treemap.place = "topleft",
+treemap.color = "black", treemap.fontface = "bold.italic",
+treemap.min.size = 4)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
 can be a data frame having all these columns (named as
-'group','ontology','name','adjp','or','CIl','CIu')}
+'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')}
 
 \item{top_num}{the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (see
@@ -57,8 +58,13 @@ the data will automatically be dropped. If FALSE (by default), all
 factor levels will be shown, regardless of whether or not they appear
 in the data}
 
-\item{details}{logical to indicate whether additional information is
-appended to the name}
+\item{details}{how to label. It can be one of 'name', 'name_FDR'
+(FDR/OR also appended to the name), and 'name_FDR_members' (FDR/OR plus
+members appended to the name; in this case, treemap.grow and
+treemap.reflow is forced to be true)}
+
+\item{caption}{logical to indicate whether the caption is shown on the
+bottom-right}
 
 \item{treemap.grow}{logical to indicate whether text will be grown as
 well as shrunk to fill the box}
