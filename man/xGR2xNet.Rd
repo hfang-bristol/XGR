@@ -6,30 +6,33 @@
 \usage{
 xGR2xNet(data, significance.threshold = NULL, score.cap = NULL,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-crosslink = c("genehancer", "nearby"), crosslink.customised = NULL,
-cdf.function = c("original", "empirical"), scoring.scheme = c("max",
-"sum", "sequential"), nearby.distance.max = 50000,
-nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, network = c("STRING_highest", "STRING_high",
-"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
-"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
-"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
-"PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
-"PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
-"KEGG_organismal",
-"KEGG_disease"), network.customised = NULL, seed.genes = T,
-subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
+crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
+"nearby"), crosslink.customised = NULL, cdf.function = c("original",
+"empirical"), scoring.scheme = c("max", "sum", "sequential"),
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2,
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease"),
+network.customised = NULL, seed.genes = T, subnet.significance = 5e-05,
+subnet.size = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{a named input vector containing the sinificance level for
+\item{data}{a named input vector containing the significance level for
 genomic regions (GR). For this named vector, the element names are GR,
 in the format of 'chrN:start-end', where N is either 1-22 or X, start
 (or end) is genomic positional number; for example, 'chr1:13-20', the
 element values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
-column for GR, 2nd column for the significance level.}
+column for GR, 2nd column for the significance level. Also supported is
+the input with GR only (without the significance level)}
 
 \item{significance.threshold}{the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -46,10 +49,7 @@ another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{crosslink}{the built-in crosslink info with a score quantifying
-the link of a GR to a gene. It can be one of 'genehancer' (enhancer
-genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
-specify the relevant parameters 'nearby.distance.max',
-'nearby.decay.kernel' and 'nearby.decay.exponent' below)}
+the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details}
 
 \item{crosslink.customised}{the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4
@@ -157,7 +157,8 @@ RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a subgraph with a maximum score, an object of class "igraph". It has
-node attributes: significance, score
+graph attributes (evidence, gp_evidence) and node attributes
+(significance, score).
 }
 \description{
 \code{xGR2xNet} is supposed to identify maximum-scoring gene subnetwork
@@ -183,12 +184,9 @@ library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # a) provide the seed SNPs with the significance info
-## load ImmunoBase
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr <- ImmunoBase$AS$variant
-df <- as.data.frame(gr, row.names=NULL)
+data(ImmunoBase)
+## only AS GWAS SNPs and their significance info (p-values)
+df <- as.data.frame(ImmunoBase$AS$variant, row.names=NULL)
 GR <- paste0(df$seqnames,':',df$start,'-',df$end)
 data <- cbind(GR=GR, Sig=df$Pvalue)
 

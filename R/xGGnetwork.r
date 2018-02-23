@@ -149,6 +149,9 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 				## layout
 				#glayout <- igraph::layout_with_kk(ig)
 				glayout <- igraph::layout_as_tree(ig,root=dnet::dDAGroot(ig),circular=TRUE,flip.y=TRUE)
+				if(all(is.na(glayout))){
+					glayout <- igraph::layout_with_kk(ig)
+				}
 				glayout <- glayout[,c(2:1)]
 				node.xcoord <- glayout[,1]
 				node.ycoord <- glayout[,2]

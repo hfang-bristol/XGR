@@ -5,7 +5,7 @@
 \alias{print.mSeed}
 \title{Definition for S3 class \code{mSeed}}
 \usage{
-mSeed(GR, Gene)
+mSeed(GR, Gene, Link)
 
 \method{print}{mSeed}(x, ...)
 }
@@ -13,6 +13,8 @@ mSeed(GR, Gene)
 \item{GR}{a data frame}
 
 \item{Gene}{a data frame}
+
+\item{Link}{a data frame}
 
 \item{x}{an object of class \code{mSeed}}
 
@@ -22,7 +24,7 @@ mSeed(GR, Gene)
 an object of S3 class \code{mSeed}
 }
 \description{
-\code{cTarget} has 2 components: GR and Gene.
+\code{cTarget} has 3 components: GR, Gene, Link.
 }
 \examples{
 \dontrun{
@@ -31,7 +33,7 @@ library(XGR)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-mSeed(priority, predictor)
+mSeed(GR, Gene, Link)
 }
 }
 \keyword{S3}

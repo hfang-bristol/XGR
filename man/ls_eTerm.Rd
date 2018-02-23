@@ -24,7 +24,7 @@ ls_eTerm(df, mat, gp)
 an object of S3 class \code{ls_eTerm}
 }
 \description{
-\code{cTarget} has 3 components: df, mat and gp.
+\code{ls_eTerm} has 3 components: df, mat and gp.
 }
 \examples{
 \dontrun{

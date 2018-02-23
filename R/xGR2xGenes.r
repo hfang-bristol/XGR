@@ -5,7 +5,7 @@
 #' @param data input genomic regions (GR). If formatted as "chr:start-end" (see the next parameter 'format' below), GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. If formatted as a 'data.frame', the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. The data could also be an object of 'GRanges' (in this case, formatted as 'GRanges')
 #' @param format the format of the input data. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
-#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. It can be one of 'genehancer' (enhancer genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also specify the relevant parameters 'nearby.distance.max', 'nearby.decay.kernel' and 'nearby.decay.exponent' below)
+#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. It can be one of 'genehancer' (enhancer genes; PMID:28605766), 'nearby' (nearby genes; if so, please also specify the relevant parameters 'nearby.distance.max', 'nearby.decay.kernel' and 'nearby.decay.exponent' below), 'PCHiC_combined' (conformation genes; PMID:27863249), 'GTEx_V6p_combined' (eQTL genes; PMID:29022597)
 #' @param crosslink.customised the crosslink info with a score quantifying the link of a GR to a gene. A user-input matrix or data frame with 4 columns: 1st column for genomic regions (formatted as "chr:start-end", genome build 19), 2nd column for Genes, 3rd for crosslink score (crosslinking a genomic region to a gene, such as -log10 significance level), and 4th for contexts (optional; if not provided, it will be added as 'C'). Alternatively, it can be a file containing these 4 columns. Required, otherwise it will return NULL
 #' @param cdf.function a character specifying how to transform the input crosslink score. It can be one of 'original' (no such transformation), and 'empirical'  for looking at empirical Cumulative Distribution Function (cdf; as such it is converted into pvalue-like values [0,1])
 #' @param scoring logical to indicate whether gene-level scoring will be further calculated. By default, it sets to false
@@ -50,6 +50,10 @@
 #' # 2) using built-in crosslink info
 #' ## enhancer genes
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink="genehancer", RData.location=RData.location)
+#' ## conformation genes
+#' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink="PCHiC_combined", RData.location=RData.location)
+#' ## eQTL genes
+#' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink="GTEx_V6p_combined", RData.location=RData.location)
 #' ## nearby genes (50kb, decaying rapidly)
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink="nearby", nearby.distance.max=50000, nearby.decay.kernel="rapid", RData.location=RData.location)
 #'
@@ -62,11 +66,11 @@
 #' # 3b) define crosslinking genes
 #' # without gene scoring
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, RData.location=RData.location)
-#' # with their scores
+#' # with gene scoring
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=T, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     startT <- Sys.time()
@@ -151,17 +155,27 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			}
 		
 			if(crosslink=="genehancer"){
-				ig <- xRDataLoader('ig.genehancer', verbose=F, RData.location=RData.location)
-				V(ig)$name <- V(ig)$id
-				df_edges <- get.data.frame(ig, what="edges")
-				df_nodes <- get.data.frame(ig, what="vertices")
-				df_nodes <- subset(df_nodes, df_nodes$type=='enhancer')
-				ind <- match(df_edges$from, df_nodes$id)
-				df_edges$GR_score <- as.numeric(df_nodes$score[ind])
-				## final score: Snode * Slink
-				crosslink.customised <- data.frame(GR=df_edges$from, Gene=df_edges$to, Score=df_edges$score * df_edges$GR_score, Context=rep('genehancer',nrow(df_edges)), stringsAsFactors=F)
-				df_SGS_customised <- crosslink.customised
+				if(0){
+					ig <- xRDataLoader('ig.genehancer', verbose=F, RData.location=RData.location)
+					V(ig)$name <- V(ig)$id
+					df_edges <- get.data.frame(ig, what="edges")
+					df_nodes <- get.data.frame(ig, what="vertices")
+					df_nodes <- subset(df_nodes, df_nodes$type=='enhancer')
+					ind <- match(df_edges$from, df_nodes$id)
+					df_edges$GR_score <- as.numeric(df_nodes$score[ind])
+					## final score: Snode * Slink
+					crosslink.customised <- data.frame(GR=df_edges$from, Gene=df_edges$to, Score=df_edges$score * df_edges$GR_score, Context=rep('genehancer',nrow(df_edges)), stringsAsFactors=F)
+					df_SGS_customised <- crosslink.customised
+				}else{
+					df_SGS_customised <- xRDataLoader('crosslink.customised.genehancer', verbose=verbose, RData.location=RData.location)
+				}
 			
+			}else if(crosslink=="PCHiC_combined"){
+				df_SGS_customised <- xRDataLoader('crosslink.customised.PCHiC_combined', verbose=verbose, RData.location=RData.location)
+				
+			}else if(crosslink=="GTEx_V6p_combined"){
+				df_SGS_customised <- xRDataLoader('crosslink.customised.GTEx_V6p_combined', verbose=verbose, RData.location=RData.location)
+				
 			}
 
 			if(!is.null(df_SGS_customised)){
@@ -323,7 +337,12 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	if(scoring){
 		df_xGenes <- df_xGenes %>% dplyr::arrange(Context, -Score)
 	}else{
-		df_xGenes <- df_xGenes %>% dplyr::arrange(Context, GR, -Score)
+		df_xGenes <- df_xGenes %>% dplyr::arrange(-Score)
+		#### sort GR by chromosome, start and end
+		ind <- xGRsort(df_xGenes$GR)
+		df_xGenes <- df_xGenes[ind,]
+		####
+		df_xGenes <- df_xGenes %>% dplyr::arrange(Context)
 	}
 	
 	

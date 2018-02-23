@@ -5,7 +5,8 @@
 \title{Function to conduct region-based enrichment analysis via crosslinked genes given a list of genomic region sets and a list of ontologies}
 \usage{
 xGR2xGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer", "nearby"),
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
+"PCHiC_combined", "GTEx_V6p_combined", "nearby"),
 crosslink.customised = NULL, crosslink.top = NULL,
 nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
 "linear", "constant"), nearby.decay.exponent = 2, ontologies =
@@ -53,10 +54,7 @@ another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{crosslink}{the built-in crosslink info with a score quantifying
-the link of a GR to a gene. It can be one of 'genehancer' (enhancer
-genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
-specify the relevant parameters 'nearby.distance.max',
-'nearby.decay.kernel' and 'nearby.decay.exponent' below)}
+the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details}
 
 \item{crosslink.customised}{the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4

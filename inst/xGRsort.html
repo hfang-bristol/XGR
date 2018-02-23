@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to sort by chromosomes/seqnames, start and end...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGRsort"><tr><td>xGRsort</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to sort by chromosomes/seqnames, start and end coordinates of the intervals.</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRsort</code> is supposed to sort by chromosomes/seqnames, start and
+end coordinates of the intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGRsort(data)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>input genomic regions (GR). GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>index
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRsort</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+
+# a) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+df &lt;- as.data.frame(gr, row.names=NULL)
+chr &lt;- df$seqnames
+start &lt;- df$start
+end &lt;- df$end
+data &lt;- paste(chr,':',start,'-',end, sep='')
+
+# b) create a GRanges object
+ind &lt;- xGRsort(data)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

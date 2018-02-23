@@ -2,11 +2,11 @@
 #'
 #' \code{xGR2xNet} is supposed to identify maximum-scoring gene subnetwork from an input graph with the node information on the significance (measured as p-values or fdr). To do so, it defines seed genes and their scores that take into account the distance to and the significance of input genomic regions (GR). It returns an object of class "igraph". 
 #'
-#' @param data a named input vector containing the sinificance level for genomic regions (GR). For this named vector, the element names are GR, in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20', the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for GR, 2nd column for the significance level. 
+#' @param data a named input vector containing the significance level for genomic regions (GR). For this named vector, the element names are GR, in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20', the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for GR, 2nd column for the significance level. Also supported is the input with GR only (without the significance level)
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insignificant and thus receive no score
 #' @param score.cap the maximum score being capped. By default, it is set to NULL, meaning that no capping is applied
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
-#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. It can be one of 'genehancer' (enhancer genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also specify the relevant parameters 'nearby.distance.max', 'nearby.decay.kernel' and 'nearby.decay.exponent' below)
+#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details
 #' @param crosslink.customised the crosslink info with a score quantifying the link of a GR to a gene. A user-input matrix or data frame with 4 columns: 1st column for genomic regions (formatted as "chr:start-end", genome build 19), 2nd column for Genes, 3rd for crosslink score (crosslinking a genomic region to a gene, such as -log10 significance level), and 4th for contexts (optional; if nor provided, it will be added as 'C'). Alternatively, it can be a file containing these 4 columns. Required, otherwise it will return NULL
 #' @param cdf.function a character specifying how to transform the input crosslink score. It can be one of 'original' (no such transformation), and 'empirical'  for looking at empirical Cumulative Distribution Function (cdf; as such it is converted into pvalue-like values [0,1])
 #' @param scoring.scheme the method used to calculate seed gene scores under a set of GR (also over Contexts if many). It can be one of "sum" for adding up, "max" for the maximum, and "sequential" for the sequential weighting. The sequential weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)
@@ -21,7 +21,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a subgraph with a maximum score, an object of class "igraph". It has node attributes: significance, score
+#' a subgraph with a maximum score, an object of class "igraph". It has graph attributes (evidence, gp_evidence) and node attributes (significance, score).
 #' @note The algorithm identifying a gene subnetwork that is likely modulated by input genomic regions (GR) includes two major steps. The first step is to use \code{\link{xGR2xGeneScores}} for defining and scoring nearby genes that are located within distance window of input GR. The second step is to use \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few less scored genes as linkers.
 #' @export
 #' @seealso \code{\link{xGR2xGeneScores}}, \code{\link{xSubneterGenes}}
@@ -33,11 +33,9 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 #'
 #' # a) provide the seed SNPs with the significance info
-#' ## load ImmunoBase
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
-#' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' gr <- ImmunoBase$AS$variant
-#' df <- as.data.frame(gr, row.names=NULL)
+#' data(ImmunoBase)
+#' ## only AS GWAS SNPs and their significance info (p-values)
+#' df <- as.data.frame(ImmunoBase$AS$variant, row.names=NULL)
 #' GR <- paste0(df$seqnames,':',df$start,'-',df$end)
 #' data <- cbind(GR=GR, Sig=df$Pvalue)
 #' 
@@ -64,7 +62,7 @@
 #' xCircos(g=subnet, entity="Gene", colormap="orange-darkred", ideogram=F, entity.label.side="out", chr.exclude=NULL, RData.location=RData.location)
 #' }
 
-xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -82,34 +80,72 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
     network <- match.arg(network)
     
-    ####################################################################################
-    
-    if(verbose){
-        now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xGR2xGeneScores' is being called to score seed genes (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
-    }
-    
-    mSeed <- xGR2xGeneScores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring.scheme=scoring.scheme, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+	if(is.vector(data) && length(data)>1 && is.null(names(data)) && is.character(data)){
 	
-	if(verbose){
-        now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xGR2xGeneScores' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
-    }
+		####################################################################################
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("\n#######################################################", appendLF=T))
+			message(sprintf("'xGR2xGenes' is being called to score seed genes (%s):", as.character(now)), appendLF=T)
+			message(sprintf("#######################################################", appendLF=T))
+		}
+		df_xGenes <- xGR2xGenes(data=data, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=T, scoring.scheme=scoring.scheme, scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("#######################################################", appendLF=T))
+			message(sprintf("'xGR2xGenes' has been finished (%s)!", as.character(now)), appendLF=T)
+			message(sprintf("#######################################################\n", appendLF=T))
+		}
+		
+		seeds.genes <- df_xGenes$Score
+		names(seeds.genes) <- df_xGenes$Gene
+		
+		##############
+		# rescale to [0.100001 1]
+		rescaleFun <- function(x){
+			0.100001 + 0.9*0.999999*(x - min(x))/(max(x) - min(x))
+		}
+	
+		x <- rescaleFun(seeds.genes)
+		# convert into pvalue by 10^(-x*10)
+		pval <- 10^(-x*10)
+		##############
+		
+		#########
+		df_evidence <- xGR2xGenes(data=data, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, scoring.scheme=scoring.scheme, scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		#########
+		
+	}else{
+	
+		####################################################################################
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("\n#######################################################", appendLF=T))
+			message(sprintf("'xGR2xGeneScores' is being called to score seed genes (%s):", as.character(now)), appendLF=T)
+			message(sprintf("#######################################################", appendLF=T))
+		}
+		mSeed <- xGR2xGeneScores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring.scheme=scoring.scheme, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("#######################################################", appendLF=T))
+			message(sprintf("'xGR2xGeneScores' has been finished (%s)!", as.character(now)), appendLF=T)
+			message(sprintf("#######################################################\n", appendLF=T))
+		}
+	
+		df_Gene <- mSeed$Gene
+		pval <- df_Gene$Pval
+		names(pval) <- df_Gene$Gene
+	
+		#########
+		df_evidence <- mSeed$Link
+		#########
+	}
     
-    ####################################################################################
-	df_Gene <- mSeed$Gene
-	pval <- df_Gene$Pval
-	names(pval) <- df_Gene$Gene
-    
+	####################################################################################
 	if(verbose){
 		now <- Sys.time()
 		message(sprintf("\t\t minimum p-value: %1.2e; maximum p-value: %1.2e", min(pval), max(pval)), appendLF=T)
 	}
-    
     #############################################################################################
     
     if(verbose){
@@ -120,7 +156,26 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
     }
     
     subg <- xSubneterGenes(data=pval, network=network, network.customised=network.customised, seed.genes=seed.genes, subnet.significance=subnet.significance, subnet.size=subnet.size, verbose=verbose, RData.location=RData.location)
-
+	
+	######
+	## append graph attribute 'evidence'
+	ind <- match(df_evidence$Gene, V(subg)$name)
+	evidence <- df_evidence[!is.na(ind), c('GR','Gene','Score')]
+	subg$evidence <- evidence
+	## append graph attribute 'gp_evidence'
+	Gene <- Score <- NULL
+	mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
+	mat <- mat_evidence[,-1]
+	rownames(mat) <- mat_evidence[,1]
+	#### sort by chromosome, start and end
+	ind <- xGRsort(rownames(mat))
+	mat <- mat[ind,]
+	####		
+	gp_evidence <- xHeatmap(mat, reorder="col", colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+	gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="right")
+	subg$gp_evidence <- gp_evidence
+	######
+	
 	if(verbose){
         now <- Sys.time()
         message(sprintf("#######################################################", appendLF=T))

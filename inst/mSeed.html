@@ -9,14 +9,14 @@
 
 <h3>Description</h3>
 
-<p><code>cTarget</code> has 2 components: GR and Gene.
+<p><code>cTarget</code> has 3 components: GR, Gene, Link.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-mSeed(GR, Gene)
+mSeed(GR, Gene, Link)
 
 ## S3 method for class 'mSeed'
 print(x, ...)
@@ -31,6 +31,10 @@ print(x, ...)
 <p>a data frame</p>
 </td></tr>
 <tr valign="top"><td><code>Gene</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>Link</code></td>
 <td>
 <p>a data frame</p>
 </td></tr>
@@ -61,7 +65,7 @@ library(XGR)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-mSeed(priority, predictor)
+mSeed(GR, Gene, Link)
 
 ## End(Not run)
 </pre>

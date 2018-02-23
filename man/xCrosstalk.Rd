@@ -7,21 +7,20 @@
 xCrosstalk(data, entity = c("Gene", "GR"), significance.threshold =
 NULL,
 score.cap = NULL, build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), crosslink = c("genehancer", "nearby"),
-crosslink.customised = NULL, cdf.function = c("original", "empirical"),
-scoring.scheme = c("max", "sum", "sequential"),
-nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
-"linear", "constant"), nearby.decay.exponent = 2, networks = c("KEGG",
-"KEGG_metabolism", "KEGG_genetic", "KEGG_environmental",
-"KEGG_cellular",
-"KEGG_organismal", "KEGG_disease"), seed.genes = T,
-subnet.significance = 0.01, subnet.size = NULL,
-ontologies = c("KEGGenvironmental", "KEGG", "KEGGmetabolism",
-"KEGGgenetic",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease"), size.range = c(10,
-2000),
-min.overlap = 10, fdr.cutoff = 0.05, glayout = layout_with_kk,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"hg18.to.hg19"), crosslink = c("genehancer", "PCHiC_combined",
+"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
+cdf.function = c("original", "empirical"), scoring.scheme = c("max",
+"sum", "sequential"), nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2, networks = c("KEGG", "KEGG_metabolism",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal",
+"KEGG_disease"), seed.genes = T, subnet.significance = 0.01,
+subnet.size = NULL, ontologies = c("KEGGenvironmental", "KEGG",
+"KEGGmetabolism", "KEGGgenetic", "KEGGcellular", "KEGGorganismal",
+"KEGGdisease"), size.range = c(10, 2000), min.overlap = 10,
+fdr.cutoff = 0.05, glayout = layout_with_kk, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -31,7 +30,8 @@ the element names are gene symbols or GR (in the format of
 positional number; for example, 'chr1:13-20'), the element values for
 the significance level (measured as p-value or fdr). Alternatively, it
 can be a matrix or data frame with two columns: 1st column for gene
-symbols or GR, 2nd column for the significance level}
+symbols or GR, 2nd column for the significance level. Also supported is
+the input with GR only (without the significance level)}
 
 \item{entity}{the entity. It can be either "Gene" or "GR"}
 
@@ -50,10 +50,7 @@ another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{crosslink}{the built-in crosslink info with a score quantifying
-the link of a GR to a gene. It can be one of 'genehancer' (enhancer
-genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
-specify the relevant parameters 'nearby.distance.max',
-'nearby.decay.kernel' and 'nearby.decay.exponent' below)}
+the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details}
 
 \item{crosslink.customised}{the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4
@@ -173,12 +170,14 @@ RData files. See \code{\link{xRDataLoader}} for details}
 \value{
 an object of class "cPath", a list with following components:
 \itemize{
-\item{\code{g}: an object of class "igraph". It has graph attribute
-(enrichment), ndoe attributes (crosstalk)}
+\item{\code{ig_paths}: an object of class "igraph". It has graph
+attribute (enrichment, and/or evidence and gp_evidence if entity is
+'GR'), ndoe attributes (crosstalk)}
 \item{\code{gp_paths}: a 'ggplot' object for pathway crosstalk
 visualisation}
 \item{\code{gp_heatmap}: a 'ggplot' object for pathway member gene
 visualisation}
+\item{\code{ig_subg}: an object of class "igraph".}
 }
 }
 \description{
@@ -193,8 +192,65 @@ class "cPath".
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
+# 1) at the gene level
+data(Haploid_regulators)
+## only PD-L1 regulators and thir significance info (FDR)
+data <- subset(Haploid_regulators, Phenotype=='PDL1')[,c('Gene','FDR')]
+## pathway crosstalk
+cPath <- xCrosstalk(data, entity="Gene", network="KEGG",
+subnet.significance=0.05, subnet.size=NULL,
+ontologies="KEGGenvironmental", RData.location=RData.location)
+cPath
+## visualisation
+pdf("xCrosstalk_Gene.pdf", width=7, height=8)
+gp_both <-
+gridExtra::grid.arrange(grobs=list(cPath$gp_paths,cPath$gp_heatmap),
+layout_matrix=cbind(c(1,1,1,1,2)))
+dev.off()
+
+# 2) at the genomic region (SNP) level
+data(ImmunoBase)
+## all ImmunoBase GWAS SNPs and their significance info (p-values)
+ls_df <- lapply(ImmunoBase, function(x) as.data.frame(x$variant))
+df <- do.call(rbind, ls_df)
+data <- unique(cbind(GR=paste0(df$seqnames,':',df$start,'-',df$end),
+Sig=df$Pvalue))
+## pathway crosstalk
+#df_xGenes <- xGR2xGenes(data[as.numeric(data[,2])<5e-8,1], format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
+#mSeed <- xGR2xGeneScores(data, significance.threshold=5e-8, crosslink="PCHiC_combined", RData.location=RData.location)
+#subg <- xGR2xNet(data, significance.threshold=5e-8, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+cPath <- xCrosstalk(data, entity="GR", significance.threshold=5e-8,
+crosslink="PCHiC_combined", networks="KEGG", subnet.significance=0.1,
+ontologies="KEGGenvironmental", RData.location=RData.location)
+cPath
+## visualisation
+pdf("xCrosstalk_SNP.pdf", width=7, height=8)
+gp_both <-
+gridExtra::grid.arrange(grobs=list(cPath$gp_paths,cPath$gp_heatmap),
+layout_matrix=cbind(c(1,1,1,1,2)))
+dev.off()
+
+# 3) at the genomic region (without the significance info) level
+Age_CpG <- xRDataLoader(RData.customised='Age_CpG',
+RData.location=RData.location)[-1,1]
+CgProbes <- xRDataLoader(RData.customised='CgProbes',
+RData.location=RData.location)
+ind <- match(Age_CpG, names(CgProbes))
+gr_CpG <- CgProbes[ind[!is.na(ind)]]
+df <- as.data.frame(gr_CpG)
+data <- paste0(df$seqnames,':',df$start,'-',df$end)
+## pathway crosstalk
+#df_xGenes <- xGR2xGenes(data, format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
+#subg <- xGR2xNet(data, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+cPath <- xCrosstalk(data, entity="GR", crosslink="PCHiC_combined",
+networks="KEGG", subnet.significance=0.1,
+ontologies="KEGGenvironmental", RData.location=RData.location)
+cPath
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xDefineNet}}
+\code{\link{xDefineNet}}, \code{\link{xCombineNet}},
+\code{\link{xSubneterGenes}}, \code{\link{xGR2xNet}},
+\code{\link{xEnricherGenesAdv}}, \code{\link{xGGnetwork}},
+\code{\link{xHeatmap}}
 }

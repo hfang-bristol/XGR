@@ -108,6 +108,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
     }else if(is.matrix(data) | is.data.frame(data)){
         data <- as.matrix(data)
 		data_list <- split(x=data[,2], f=as.character(data[,1]))
+		## keep the miminum p-values per gene
 		res_list <- lapply(data_list, function(x){
 			x <- as.numeric(x)
 			x <- x[!is.na(x)]

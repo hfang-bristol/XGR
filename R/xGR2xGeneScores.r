@@ -6,7 +6,7 @@
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insignificant and thus receive no score
 #' @param score.cap the maximum score being capped. By default, it is set to NULL, meaning that no capping is applied
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
-#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. It can be one of 'genehancer' (enhancer genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also specify the relevant parameters 'nearby.distance.max', 'nearby.decay.kernel' and 'nearby.decay.exponent' below)
+#' @param crosslink the built-in crosslink info with a score quantifying the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details
 #' @param crosslink.customised the crosslink info with a score quantifying the link of a GR to a gene. A user-input matrix or data frame with 4 columns: 1st column for genomic regions (formatted as "chr:start-end", genome build 19), 2nd column for Genes, 3rd for crosslink score (crosslinking a genomic region to a gene, such as -log10 significance level), and 4th for contexts (optional; if nor provided, it will be added as 'C'). Alternatively, it can be a file containing these 4 columns. Required, otherwise it will return NULL
 #' @param cdf.function a character specifying how to transform the input crosslink score. It can be one of 'original' (no such transformation), and 'empirical'  for looking at empirical Cumulative Distribution Function (cdf; as such it is converted into pvalue-like values [0,1])
 #' @param scoring.scheme the method used to calculate seed gene scores under a set of GR (also over Contexts if many). It can be one of "sum" for adding up, "max" for the maximum, and "sequential" for the sequential weighting. The sequential weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)
@@ -19,8 +19,8 @@
 #' an object of class "mSeed", a list with following components:
 #' \itemize{
 #'  \item{\code{GR}: a matrix of nGR X 3 containing GR information, where nGR is the number of GR, and the 3 columns are "GR" (genomic regions), "Score" (the scores for GR calculated based on p-values taking into account the given threshold of the significant level), "Pval" (the input p-values for GR)}
-#'  \item{\code{Gene}: a matrix of nGene X 3 containing Gene information, where nGene is the number of seed genes, and the 3 columns are "Gene" (gene symbol), "Score" (the scores for seed genes), "Pval" (pvalue-like significance level transformed from gene scores)}
-#'  \item{\code{call}: the call that produced this result}
+#'  \item{\code{Gene}: a matrix of nGene X 3 containing Gene information, where nGene is the number of seed genes, and the 3 columns are "Gene" (gene symbol), "Score" (the scores for seed genes), "Pval" (p-value-like significance level transformed from gene scores)}
+#'  \item{\code{Link}: a matrix of nLink X 5 containing GR-Gene link information, where nLink is the number of links, and the 5 columns are "GR" (genomic regions), "Gene" (gene symbol), "Score" (the scores for the link multiplied by the GR score), "Score_GR" (the scores for GR), "Score_link" (the scores for the link), }
 #' }
 #' @note This function uses \code{\link{xGRscores}} and \code{\link{xGR2xGenes}} to define and score seed genes from input genomic regions.
 #' @export
@@ -45,7 +45,7 @@
 #' mSeed <- xGR2xGeneScores(data=data, crosslink="genehancer", RData.location=RData.location)
 #' }
 
-xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -98,6 +98,14 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
     	ind <- match(df_xGenes$GR, df_GR$GR)
     	## Gene2GR
     	score <- df_xGenes$Score * df_GR$Score[ind]
+    	#############
+    	df_link <- data.frame(GR=df_xGenes$GR, Gene=df_xGenes$Gene, Score=score, Score_GR=df_GR$Score[ind], Score_link=df_xGenes$Score, stringsAsFactors=FALSE)
+    	#df_link <- df_link[order(df_link$GR,-df_link$Score,decreasing=FALSE),]
+    	df_link <- df_link[order(-df_link$Score,decreasing=FALSE),]
+		#### sort GR by chromosome, start and end
+		ind <- xGRsort(df_link$GR)
+		df_link <- df_link[ind,]
+    	#############
     	Gene2GR <- data.frame(Gene=df_xGenes$Gene, GR=df_xGenes$GR, Score=score, stringsAsFactors=FALSE)
     	Gene2GR <- Gene2GR[order(Gene2GR$Gene,-Gene2GR$Score,decreasing=FALSE),]
     	
@@ -123,10 +131,11 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
     }
 	
 	##############
-	# rescale to [0 1]
+	# rescale to [0.100001 1]
 	rescaleFun <- function(x){
-		(x - min(x))/(max(x) - min(x))
+		0.100001 + 0.9*0.999999*(x - min(x))/(max(x) - min(x))
 	}
+	
 	x <- rescaleFun(seeds.genes)
 	# convert into pvalue by 10^(-x*10)
 	pval <- 10^(-x*10)
@@ -146,7 +155,8 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
     df_GR <- df_GR[order(df_GR$Score,df_GR$GR,decreasing=TRUE),]
     
     mSeed <- list(GR = df_GR,
-                  Gene = df_Gene
+                  Gene = df_Gene,
+                  Link = df_link
                  )
     class(mSeed) <- "mSeed"
     

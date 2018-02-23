@@ -56,9 +56,10 @@ print.eTerm <- function(x, ...) {
 # mSeed
 ######################################################################
 #' @title Definition for S3 class \code{mSeed}
-#' @description \code{cTarget} has 2 components: GR and Gene.
+#' @description \code{cTarget} has 3 components: GR, Gene, Link.
 #' @param GR a data frame
 #' @param Gene a data frame
+#' @param Link a data frame
 #' @return an object of S3 class \code{mSeed}
 #' @keywords S3 classes
 #' @export
@@ -69,14 +70,14 @@ print.eTerm <- function(x, ...) {
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
-#' mSeed(priority, predictor)
+#' mSeed(GR, Gene, Link)
 #' }
-mSeed <- function(GR, Gene){
+mSeed <- function(GR, Gene, Link){
 	## integrity checks
-	if(class(GR)!='data.frame' | class(Gene)!='data.frame'){
+	if(class(GR)!='data.frame' | class(Gene)!='data.frame' | class(Link)!='data.frame'){
 		stop("The S3 class 'mSeed' object failed to pass integrity checks!\n")
 	}
-	value <- list(GR=GR, Gene=Gene)
+	value <- list(GR=GR, Gene=Gene, Link=Link)
 	class(value) <- "mSeed"
 	return(value)
 }
@@ -88,20 +89,25 @@ print.mSeed <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $GR: a data frame of %d rows X %d columns", dim(x$GR)[1],dim(x$GR)[2]), "\n", sep="")
 	cat(sprintf("  $Gene: a data frame of %d rows X %d columns", dim(x$Gene)[1],dim(x$Gene)[2]), "\n", sep="")
+	cat(sprintf("  $Link: a data frame of %d rows X %d columns", dim(x$Link)[1],dim(x$Link)[2]), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$GR:\n")
-	print(x$GR[1:2,], row.names=FALSE)
+	print(x$GR[1:min(2,nrow(x$GR)),], row.names=FALSE)
 	cat("......\n")
 	cat("$Gene:\n")
-	print(x$Gene[1:2,], row.names=FALSE)
+	print(x$Gene[1:min(2,nrow(x$Gene)),], row.names=FALSE)
 	cat("......\n")
+	cat("$Link:\n")
+	print(x$Link[1:min(2,nrow(x$Link)),], row.names=FALSE)
+	cat("......\n")
+
 }
 
 ######################################################################
 # ls_eTerm
 ######################################################################
 #' @title Definition for S3 class \code{ls_eTerm}
-#' @description \code{cTarget} has 3 components: df, mat and gp.
+#' @description \code{ls_eTerm} has 3 components: df, mat and gp.
 #' @param df a data frame
 #' @param mat a matrix
 #' @param gp a ggplot object
@@ -137,6 +143,52 @@ print.ls_eTerm <- function(x, ...) {
 	cat(sprintf("  $gp: a ggplot object"), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$df:\n")
-	print(x$df[1:2,1:13], row.names=FALSE)
+	print(x$df[1:min(2,nrow(x$df)),1:13], row.names=FALSE)
+	cat("......\n")
+}
+
+######################################################################
+# cPath
+######################################################################
+#' @title Definition for S3 class \code{cPath}
+#' @description \code{cPath} has 4 components: ig_paths, gp_paths, gp_heatmap, ig_subg.
+#' @param ig_paths an igraph object
+#' @param gp_paths a ggplot object
+#' @param gp_heatmap a ggplot object
+#' @param ig_subg an igraph object
+#' @return an object of S3 class \code{cPath}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' \dontrun{
+#' cPath(ig_paths, gp_paths, gp_heatmap, ig_subg)
+#' }
+cPath <- function(ig_paths, gp_paths, gp_heatmap, ig_subg){
+	## integrity checks
+	if(class(ig_paths)!='igraph' | all(class(gp_paths) %in% c('ggplot','gg')) | all(class(gp_heatmap) %in% c('ggplot','gg')) | class(ig_subg)!='igraph'){
+		stop("The S3 class 'cPath' object failed to pass integrity checks!\n")
+	}
+	value <- list(ig_paths=ig_paths, gp_paths=gp_paths, gp_heatmap=gp_heatmap, ig_subg=ig_subg)
+	class(value) <- "cPath"
+	return(value)
+}
+#' @param x an object of class \code{cPath}
+#' @param ... other parameters
+#' @rdname cPath
+#' @export
+print.cPath <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $ig_paths: an igraph object or NULL"), "\n", sep="")
+	cat(sprintf("  $gp_paths: a ggplot object or NULL"), "\n", sep="")
+	cat(sprintf("  $gp_heatmap: a ggplot object or NULL"), "\n", sep="")
+	cat(sprintf("  $ig_subg: ab igraph object or NULL"), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$ig_paths$enrichment:\n")
+	print(x$ig_paths$enrichment[1:min(2,nrow(x$ig_paths$enrichment)),2:13], row.names=FALSE)
 	cat("......\n")
 }

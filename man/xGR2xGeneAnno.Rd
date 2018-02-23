@@ -6,25 +6,23 @@
 \usage{
 xGR2xGeneAnno(data, background = NULL, format = c("data.frame", "bed",
 "chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), crosslink = c("genehancer", "nearby"),
-crosslink.customised = NULL, crosslink.top = NULL,
-nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
-"linear", "constant"), nearby.decay.exponent = 2, ontology = c("GOBP",
-"GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI",
-"HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
-"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
-"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
-"MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
-"DGIdb",
-"GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP",
-"CreedsDiseaseDN",
-"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
-"CreedsGeneUP", "CreedsGeneDN", "KEGG", "KEGGmetabolism",
-"KEGGgenetic",
-"KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
-"REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL"),
+"hg18.to.hg19"), crosslink = c("genehancer", "PCHiC_combined",
+"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
+crosslink.top = NULL, nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2, ontology = c("GOBP", "GOMF", "GOCC", "PSG",
+"PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
+"EF",
+"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
+"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
+"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
+"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
+"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
+"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
+"KEGGenvironmental",
+"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
+"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"),
 background.annotatable.only = NULL, p.tail = c("one-tail",
@@ -65,10 +63,7 @@ another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
 
 \item{crosslink}{the built-in crosslink info with a score quantifying
-the link of a GR to a gene. It can be one of 'genehancer' (enhancer
-genes; PMID:28605766) or 'nearby' (nearby genes; if so, please also
-specify the relevant parameters 'nearby.distance.max',
-'nearby.decay.kernel' and 'nearby.decay.exponent' below)}
+the link of a GR to a gene. See \code{\link{xGR2xGenes}} for details}
 
 \item{crosslink.customised}{the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4
