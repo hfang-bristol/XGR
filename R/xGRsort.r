@@ -31,11 +31,21 @@
 xGRsort <- function(data)
 {
 	data <- gsub(',.*','',data)
+	## gr has unique regions
 	gr <- xGR(data, format='chr:start-end')
 	gr <- GenomeInfoDb::sortSeqlevels(gr)
 	gr <- sort(gr)
-	ind <- match(names(gr), data)
-
-  	invisible(ind)
+	
+	############################
+	## very important (because of non-redundant)
+	df <- data.frame(sid=1:length(gr), gr=names(gr), stringsAsFactors=F)
+	ind <- match(data, df$gr)
+	df <- df[ind, ]
+	df$oid <- 1:length(data)
+	sid <- NULL
+	df <- df %>% dplyr::arrange(sid)
+	############################
+	
+  	invisible(df$oid)
 
 }

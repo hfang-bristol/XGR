@@ -19,8 +19,8 @@ nearby.decay.exponent = 2, networks = c("KEGG", "KEGG_metabolism",
 subnet.size = NULL, ontologies = c("KEGGenvironmental", "KEGG",
 "KEGGmetabolism", "KEGGgenetic", "KEGGcellular", "KEGGorganismal",
 "KEGGdisease"), size.range = c(10, 2000), min.overlap = 10,
-fdr.cutoff = 0.05, glayout = layout_with_kk, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+fdr.cutoff = 0.05, crosstalk.top = NULL, glayout = layout_with_kk,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -143,6 +143,9 @@ default) will be processed}
 \item{fdr.cutoff}{fdr cutoff used to declare the significant terms. By
 default, it is set to 0.05}
 
+\item{crosstalk.top}{the number of the top paths will be returned. By
+default, it is NULL meaning no such restrictions}
+
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this
 function will be called with the graph as the single parameter to
@@ -216,9 +219,14 @@ df <- do.call(rbind, ls_df)
 data <- unique(cbind(GR=paste0(df$seqnames,':',df$start,'-',df$end),
 Sig=df$Pvalue))
 ## pathway crosstalk
-#df_xGenes <- xGR2xGenes(data[as.numeric(data[,2])<5e-8,1], format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
-#mSeed <- xGR2xGeneScores(data, significance.threshold=5e-8, crosslink="PCHiC_combined", RData.location=RData.location)
-#subg <- xGR2xNet(data, significance.threshold=5e-8, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+df_xGenes <- xGR2xGenes(data[as.numeric(data[,2])<5e-8,1],
+format="chr:start-end", crosslink="PCHiC_combined", scoring=T,
+RData.location=RData.location)
+mSeed <- xGR2xGeneScores(data, significance.threshold=5e-8,
+crosslink="PCHiC_combined", RData.location=RData.location)
+subg <- xGR2xNet(data, significance.threshold=5e-8,
+crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1,
+RData.location=RData.location)
 cPath <- xCrosstalk(data, entity="GR", significance.threshold=5e-8,
 crosslink="PCHiC_combined", networks="KEGG", subnet.significance=0.1,
 ontologies="KEGGenvironmental", RData.location=RData.location)

@@ -45,6 +45,8 @@
 #'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared betwene two terms}
 #'  \item{\code{call}: the call that produced this result}
+#'  \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic regions, 'Gene' for crosslinked genes, and 'Score' for the score between the gene and the GR)}
+#'  \item{\code{gp_evidence}: a ggplot object for evidence data}
 #' }
 #' @note The interpretation of the algorithms used to account for the hierarchy of the ontology is:
 #' \itemize{
@@ -172,6 +174,33 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
         message(sprintf("#######################################################", appendLF=T))
         message(sprintf("'xEnricherGenes' has been finished (%s)!", as.character(now)), appendLF=T)
         message(sprintf("#######################################################\n", appendLF=T))
+    }
+    
+    if(!is.null(eTerm)){
+		######
+		## append 'evidence'
+		df_evidence <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=FALSE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		ind <- match(df_evidence$Gene, dGR_genes)
+		evidence <- df_evidence[!is.na(ind), c('GR','Gene','Score')]
+		eTerm$evidence <- evidence
+		## append 'gp_evidence'
+		Gene <- Score <- NULL
+		mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
+		mat <- mat_evidence[,-1]
+		rownames(mat) <- mat_evidence[,1]
+		#### sort by chromosome, start and end
+		ind <- xGRsort(rownames(mat))
+		mat <- mat[ind,]
+		####
+		if(ncol(mat)>=200){
+			reorder <- "none"
+		}else{
+			reorder <- "col"
+		}
+		gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+		gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="right")
+		eTerm$gp_evidence <- gp_evidence
+		###### 
     }
     ####################################################################################
     endT <- Sys.time()

@@ -22,6 +22,7 @@
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param fdr.cutoff fdr cutoff used to declare the significant terms. By default, it is set to 0.05
+#' @param crosstalk.top the number of the top paths will be returned. By default, it is NULL meaning no such restrictions
 #' @param glayout either a function or a numeric matrix configuring how the vertices will be placed on the plot. If layout is a function, this function will be called with the graph as the single parameter to determine the actual coordinates. This function can be one of "layout_nicely" (previously "layout.auto"), "layout_randomly" (previously "layout.random"), "layout_in_circle" (previously "layout.circle"), "layout_on_sphere" (previously "layout.sphere"), "layout_with_fr" (previously "layout.fruchterman.reingold"), "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree" (previously "layout.reingold.tilford"), "layout_with_lgl" (previously "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"), "layout_with_sugiyama" (previously "layout.kamada.kawai"), "layout_with_dh" (previously "layout.davidson.harel"), "layout_with_drl" (previously "layout.drl"), "layout_with_gem" (previously "layout.gem"), "layout_with_mds", and "layout_as_bipartite". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -61,9 +62,9 @@
 #' df <- do.call(rbind, ls_df)
 #' data <- unique(cbind(GR=paste0(df$seqnames,':',df$start,'-',df$end), Sig=df$Pvalue))
 #' ## pathway crosstalk
-#' #df_xGenes <- xGR2xGenes(data[as.numeric(data[,2])<5e-8,1], format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
-#' #mSeed <- xGR2xGeneScores(data, significance.threshold=5e-8, crosslink="PCHiC_combined", RData.location=RData.location)
-#' #subg <- xGR2xNet(data, significance.threshold=5e-8, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+#' df_xGenes <- xGR2xGenes(data[as.numeric(data[,2])<5e-8,1], format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
+#' mSeed <- xGR2xGeneScores(data, significance.threshold=5e-8, crosslink="PCHiC_combined", RData.location=RData.location)
+#' subg <- xGR2xNet(data, significance.threshold=5e-8, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
 #' cPath <- xCrosstalk(data, entity="GR", significance.threshold=5e-8, crosslink="PCHiC_combined", networks="KEGG", subnet.significance=0.1, ontologies="KEGGenvironmental", RData.location=RData.location)
 #' cPath
 #' ## visualisation
@@ -85,7 +86,7 @@
 #' cPath
 #' }
 
-xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, networks=c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), seed.genes=T, subnet.significance=0.01, subnet.size=NULL, ontologies=c("KEGGenvironmental","KEGG","KEGGmetabolism","KEGGgenetic","KEGGcellular","KEGGorganismal","KEGGdisease"), size.range=c(10,2000), min.overlap=10, fdr.cutoff=0.05, glayout=layout_with_kk, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, networks=c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), seed.genes=T, subnet.significance=0.01, subnet.size=NULL, ontologies=c("KEGGenvironmental","KEGG","KEGGmetabolism","KEGGgenetic","KEGGcellular","KEGGorganismal","KEGGdisease"), size.range=c(10,2000), min.overlap=10, fdr.cutoff=0.05, crosstalk.top=NULL, glayout=layout_with_kk, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -178,6 +179,7 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 			names(ls_path) <- df_enrichment$name
 	
 			## remove redundant path
+			### only keep the path whose members are unique in number (>50%)
 			vec_Redundant <- rep(0, length(ls_path))
 			flag_found <- V(ls_path[[1]])$name
 			if(length(ls_path) > 2){
@@ -197,8 +199,26 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 			ls_path <- ls_path[vec_Redundant==0]
 			df_enrichment <- df_enrichment[vec_Redundant==0,]
 			
+			## crosstalk.top
+			if(is.null(crosstalk.top)){
+				crosstalk.top <- nrow(df_enrichment)
+			}
+			if(crosstalk.top > nrow(df_enrichment)){
+				crosstalk.top <- nrow(df_enrichment)
+			}
+			crosstalk.top <- as.integer(crosstalk.top)
+			crosstalk.cutoff <- df_enrichment[crosstalk.top,'or']
+			ind <- which(df_enrichment$or >= crosstalk.cutoff)
+			### update ls_path and df_enrichment
+			ls_path <- ls_path[ind]
+			df_enrichment <- df_enrichment[ind,]
+			
+			## merge into paths
 			if(length(ls_path)>=1){
 			
+				if(verbose){
+					message(sprintf("combination of individual paths (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}
 				## combination of individual paths
 				ls_path_tmp <- lapply(ls_path, function(path){
 					path <- igraph::delete_vertex_attr(path, "score")
@@ -211,6 +231,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				scores[query] <- 1
 				paths <- dnet::dNetFind(subg, scores)
 				
+				if(verbose){
+					message(sprintf("matrix of genes X paths (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}
 				## matrix of genes X paths
 				ls_vec <- lapply(1:length(ls_path), function(j){
 					path <- ls_path[[j]]
@@ -230,6 +253,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					df_res <- df_res[ind,]
 				}
 	
+				if(verbose){
+					message(sprintf("add node attribute 'crosstalk' (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}
 				## add node attribute 'crosstalk'
 				### crosstalk
 				crosstalk <- rep('Not assigned', length(vec_sum))
@@ -246,6 +272,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				vec_crosstalk[!is.na(ind)] <- crosstalk[ind[!is.na(ind)]]
 				V(paths)$crosstalk <- vec_crosstalk
 	
+				if(verbose){
+					message(sprintf("add graph attribute 'enrichment' (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}
 				## add graph attribute 'enrichment'
 				ls_vec <- lapply(ls_path, function(x) V(x)$name)
 				df_enrichment$path_members <- sapply(ls_vec, function(x) paste(x,collapse=", "))
@@ -254,6 +283,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nPath, "]")
 				paths$enrichment <- df_enrichment
 	
+				if(verbose){
+					message(sprintf("visualisation (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}
 				###############
 				## visualisation
 				###############
@@ -275,11 +307,19 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				ind <- match(V(paths)$crosstalk, path_names)
 				vec_crosstalk <- names(path_names)[ind]
 				############
-								
+
+				if(verbose){
+					message(sprintf("gp_paths (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+				}			
 				gp_paths <- xGGnetwork(g=paths, node.label="name", node.label.size=2, node.label.color="black", node.label.alpha=0.8, node.label.padding=0.1, node.label.arrow=0, node.label.force=0.001, node.shape=vec_crosstalk, node.xcoord="xcoord", node.ycoord="ycoord", node.color="color", node.color.title=expression(-log[10]("input")), colormap="jet.top", ncolors=64, node.size.range=5, edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02, title=paste0("Pathway crosstalk involving ",vcount(paths)," genes"), zlim=NULL)
 				#gp_paths
 			
 				if(length(ls_path)>1){
+				
+					if(verbose){
+						message(sprintf("gp_heatmap (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+					}
+				
 					df_heatmap <- 0 + !is.na(df_res)
 					df_heatmap[df_heatmap==0] <- NA
 					for(i in 1:nrow(df_heatmap)){
@@ -299,6 +339,11 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				
 				## update graph attributes 'evidence' and 'gp_evidence'
 				if(!is.null(paths$evidence)){
+				
+					if(verbose){
+						message(sprintf("update graph attribute 'evidence' and 'gp_evidence' (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+					}
+				
 					### update graph attribute 'evidence'
 					ind <- match(V(paths)$name, paths$evidence$Gene)
 					evidence <- paths$evidence[ind[!is.na(ind)], c('GR','Gene','Score')]
@@ -313,9 +358,17 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					mat <- mat[ind,]
 					####
 					
+					if(verbose){
+						message(sprintf("keep the same order columns in mat_heatmap (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+					}
+					#### keep the same order columns in mat_heatmap
 					if(!is.null(mat_heatmap)){
 						ind <- match(colnames(mat_heatmap), colnames(mat))
 						mat <- mat[,ind]
+					}
+					
+					if(verbose){
+						message(sprintf("gp_evidence (%s) ...", as.character(Sys.time())), appendLF=TRUE)
 					}
 					
 					gp_evidence <- xHeatmap(mat, reorder="none", colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')

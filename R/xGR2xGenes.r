@@ -28,6 +28,7 @@
 #' \itemize{
 #'  \item{\code{Gene}: crosslinked genes}
 #'  \item{\code{Score}: gene score summarised over its list of crosslinked GR}
+#'  \item{\code{Pval}: p-value-like significance level transformed from gene scores}
 #'  \item{\code{Context}: the context}
 #' }
 #' @export
@@ -298,6 +299,24 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					
 					df_xGenes$Score <- rescaleFun(df_xGenes$Score)
 				}
+				
+				##############
+				## df_xGenes$Pval
+				##############
+				seeds.genes <- df_xGenes$Score
+				names(seeds.genes) <- df_xGenes$Gene
+				# rescale to [0.100001 1]
+				rescaleFun <- function(x){
+					0.100001 + 0.9*0.99999888888*(x - min(x))/(max(x) - min(x))
+				}
+	
+				x <- rescaleFun(seeds.genes)
+				# convert into pvalue by 10^(-x*10)
+				# [1e-10, 0.0999977]
+				pval <- 10^(-x*10)
+				
+				df_xGenes$Pval <- pval
+				##############
 		
 			}
 	
@@ -344,7 +363,6 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		####
 		df_xGenes <- df_xGenes %>% dplyr::arrange(Context)
 	}
-	
 	
 	####################################
 	## also output igraph (genes with genomic location)

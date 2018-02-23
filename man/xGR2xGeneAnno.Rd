@@ -242,6 +242,10 @@ for the odds ratio}
 for the overlapped-members observed in an individaul term, and
 off-diagnal cell for the overlapped-members shared betwene two terms}
 \item{\code{call}: the call that produced this result}
+\item{\code{evidence}: a data frame with 3 columns ('GR' for genomic
+regions, 'Gene' for crosslinked genes, and 'Score' for the score
+between the gene and the GR)}
+\item{\code{gp_evidence}: a ggplot object for evidence data}
 }
 }
 \description{

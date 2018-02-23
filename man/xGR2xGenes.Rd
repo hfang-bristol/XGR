@@ -104,6 +104,8 @@ If scoring sets to true, a data frame with following columns:
 \item{\code{Gene}: crosslinked genes}
 \item{\code{Score}: gene score summarised over its list of crosslinked
 GR}
+\item{\code{Pval}: p-value-like significance level transformed from
+gene scores}
 \item{\code{Context}: the context}
 }
 }

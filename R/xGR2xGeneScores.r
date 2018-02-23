@@ -133,11 +133,12 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
 	##############
 	# rescale to [0.100001 1]
 	rescaleFun <- function(x){
-		0.100001 + 0.9*0.999999*(x - min(x))/(max(x) - min(x))
+		0.100001 + 0.9*0.99999888888*(x - min(x))/(max(x) - min(x))
 	}
 	
 	x <- rescaleFun(seeds.genes)
 	# convert into pvalue by 10^(-x*10)
+	# [1e-10, 0.0999977]
 	pval <- 10^(-x*10)
 	##############
 	

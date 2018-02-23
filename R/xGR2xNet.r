@@ -90,6 +90,7 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
 			message(sprintf("#######################################################", appendLF=T))
 		}
 		df_xGenes <- xGR2xGenes(data=data, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=T, scoring.scheme=scoring.scheme, scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		#length(unique(df_xGenes$Gene))
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("#######################################################", appendLF=T))
@@ -97,22 +98,12 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
 			message(sprintf("#######################################################\n", appendLF=T))
 		}
 		
-		seeds.genes <- df_xGenes$Score
-		names(seeds.genes) <- df_xGenes$Gene
-		
-		##############
-		# rescale to [0.100001 1]
-		rescaleFun <- function(x){
-			0.100001 + 0.9*0.999999*(x - min(x))/(max(x) - min(x))
-		}
-	
-		x <- rescaleFun(seeds.genes)
-		# convert into pvalue by 10^(-x*10)
-		pval <- 10^(-x*10)
-		##############
+		pval <- df_xGenes$Pval
+		names(pval) <- df_xGenes$Gene
 		
 		#########
 		df_evidence <- xGR2xGenes(data=data, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, scoring.scheme=scoring.scheme, scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+		#length(unique(df_evidence$Gene))
 		#########
 		
 	}else{
@@ -170,8 +161,13 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
 	#### sort by chromosome, start and end
 	ind <- xGRsort(rownames(mat))
 	mat <- mat[ind,]
-	####		
-	gp_evidence <- xHeatmap(mat, reorder="col", colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+	####
+	if(ncol(mat)>=200){
+		reorder <- "none"
+	}else{
+		reorder <- "col"
+	}
+	gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
 	gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="right")
 	subg$gp_evidence <- gp_evidence
 	######
