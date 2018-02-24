@@ -29,7 +29,7 @@
 #' @return
 #' an object of class "cPath", a list with following components:
 #' \itemize{
-#'  \item{\code{ig_paths}: an object of class "igraph". It has graph attribute (enrichment, and/or evidence and gp_evidence if entity is 'GR'), ndoe attributes (crosstalk)}
+#'  \item{\code{ig_paths}: an object of class "igraph". It has graph attribute (enrichment, and/or evidence, gp_evidence and membership if entity is 'GR'), ndoe attributes (crosstalk)}
 #'  \item{\code{gp_paths}: a 'ggplot' object for pathway crosstalk visualisation}
 #'  \item{\code{gp_heatmap}: a 'ggplot' object for pathway member gene visualisation}
 #'  \item{\code{ig_subg}: an object of class "igraph".}
@@ -80,8 +80,8 @@
 #' df <- as.data.frame(gr_CpG)
 #' data <- paste0(df$seqnames,':',df$start,'-',df$end)
 #' ## pathway crosstalk
-#' #df_xGenes <- xGR2xGenes(data, format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
-#' #subg <- xGR2xNet(data, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+#' df_xGenes <- xGR2xGenes(data, format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
+#' subg <- xGR2xNet(data, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
 #' cPath <- xCrosstalk(data, entity="GR", crosslink="PCHiC_combined", networks="KEGG", subnet.significance=0.1, ontologies="KEGGenvironmental", RData.location=RData.location)
 #' cPath
 #' }
@@ -246,13 +246,18 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				colnames(df_res) <- names(ls_path)
 				rownames(df_res) <- V(paths)$name
 				vec_sum <- apply(!is.na(df_res), 1, sum)
-				## order by vec_sum
-				if(length(ls_path)>1){
-					vec_sum <- rev(sort(vec_sum))
-					ind <- match(names(vec_sum), rownames(df_res))
-					df_res <- df_res[ind,]
-				}
-	
+				### construct data.frame 'df_tmp'
+				df_tmp <- data.frame(num=vec_sum, df_res, gene=rownames(df_res), stringsAsFactors=F)
+				### arrange_at, 'num' in ascending order, and other variables except 'num' (select using -one_of("num")) in descending order
+				#df_tmp <- df_tmp %>% dplyr::arrange_at(dplyr::vars(dplyr::desc("num"), -dplyr::one_of("num")))
+				df_tmp <- df_tmp %>% dplyr::arrange_all()
+				colnames(df_tmp)[2:(ncol(df_tmp)-1)] <- colnames(df_res)
+				### update 'vec_sum' and 'df_res'
+				vec_sum <- df_tmp$num
+				names(vec_sum) <- df_tmp$gene
+				df_res <- df_tmp[,2:(ncol(df_tmp)-1)]
+				rownames(df_res) <- df_tmp$gene
+				
 				if(verbose){
 					message(sprintf("add node attribute 'crosstalk' (%s) ...", as.character(Sys.time())), appendLF=TRUE)
 				}
@@ -282,7 +287,7 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				#df_enrichment$label <- paste0(df_enrichment$name, "\nOR=", df_enrichment$or, ",CI=[", df_enrichment$CIl, ",", df_enrichment$CIu, "], FDR=", df_enrichment$adjp, ", n=", df_enrichment$nPath)
 				df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nPath, "]")
 				paths$enrichment <- df_enrichment
-	
+
 				if(verbose){
 					message(sprintf("visualisation (%s) ...", as.character(Sys.time())), appendLF=TRUE)
 				}
@@ -329,9 +334,13 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					mat_heatmap <- t(df_heatmap)
 					ind <- match(rownames(mat_heatmap), df_enrichment$name)
 					rownames(mat_heatmap) <- df_enrichment$label[ind]
-					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap="grey-black", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap="white-skyblue-darkblue", zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
 					gp_heatmap <- gp_heatmap + theme(legend.title=element_text(size=8), legend.position="none")
+					colsep <- cumsum(table(vec_sum))
+					colsep <- colsep[-length(colsep)]
+					gp_heatmap <- gp_heatmap + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5)
 					#gp_heatmap
+					
 				
 				}else{
 					gp_heatmap <- ggplot() + theme_void()
@@ -358,6 +367,12 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					mat <- mat[ind,]
 					####
 					
+					################
+					## obtain rowsep
+					rowsep <- xGRsep(rownames(mat))
+					rowsep <- nrow(mat) - rowsep
+					################
+										
 					if(verbose){
 						message(sprintf("keep the same order columns in mat_heatmap (%s) ...", as.character(Sys.time())), appendLF=TRUE)
 					}
@@ -365,14 +380,39 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					if(!is.null(mat_heatmap)){
 						ind <- match(colnames(mat_heatmap), colnames(mat))
 						mat <- mat[,ind]
+						df_membership <- rbind(mat_heatmap, mat)
+						
+						########################
+						## replace '\n' with ' '
+						rownames(df_membership) <- gsub('\n',' ', rownames(df_membership))
+						########################
+						
+						## add graph attribute 'membership'
+						paths$membership <- df_membership
+						
+						## add graph attribute 'gp_membership'
+						zlim_max <- max(mat_heatmap,na.rm=T)
+						zlim_min <- -zlim_max
+						x <- mat
+						x[!is.na(x)] <- zlim_min
+						y <- rbind(mat_heatmap, x)
+						rownames(y) <- gsub('\n.*',' ', rownames(y))
+						gp_membership <- xHeatmap(y, reorder="none", colormap="grey-grey-white-skyblue-darkblue", zlim=c(zlim_min, zlim_max), ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+						gp_membership <- gp_membership + theme(legend.title=element_text(size=8), legend.position="none") + scale_y_discrete(position="right")
+						gp_membership <- gp_membership + geom_hline(yintercept=rowsep_tmp+0.5,color="grey90",size=0.5) + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5) + geom_hline(yintercept=nrow(mat)+0.5,color="grey50",size=0.5)
+						
+						paths$gp_membership <- gp_membership
 					}
 					
 					if(verbose){
 						message(sprintf("gp_evidence (%s) ...", as.character(Sys.time())), appendLF=TRUE)
 					}
 					
+					## add graph attribute 'gp_evidence'
 					gp_evidence <- xHeatmap(mat, reorder="none", colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
-					gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="right")
+					gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
+					gp_evidence <- gp_evidence + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5) + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5)
+						
 					paths$gp_evidence <- gp_evidence
 				}
 				

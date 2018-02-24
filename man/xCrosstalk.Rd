@@ -174,8 +174,8 @@ RData files. See \code{\link{xRDataLoader}} for details}
 an object of class "cPath", a list with following components:
 \itemize{
 \item{\code{ig_paths}: an object of class "igraph". It has graph
-attribute (enrichment, and/or evidence and gp_evidence if entity is
-'GR'), ndoe attributes (crosstalk)}
+attribute (enrichment, and/or evidence, gp_evidence and membership if
+entity is 'GR'), ndoe attributes (crosstalk)}
 \item{\code{gp_paths}: a 'ggplot' object for pathway crosstalk
 visualisation}
 \item{\code{gp_heatmap}: a 'ggplot' object for pathway member gene
@@ -248,8 +248,10 @@ gr_CpG <- CgProbes[ind[!is.na(ind)]]
 df <- as.data.frame(gr_CpG)
 data <- paste0(df$seqnames,':',df$start,'-',df$end)
 ## pathway crosstalk
-#df_xGenes <- xGR2xGenes(data, format="chr:start-end", crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
-#subg <- xGR2xNet(data, crosslink="PCHiC_combined", network="KEGG", subnet.significance=0.1, RData.location=RData.location)
+df_xGenes <- xGR2xGenes(data, format="chr:start-end",
+crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)
+subg <- xGR2xNet(data, crosslink="PCHiC_combined", network="KEGG",
+subnet.significance=0.1, RData.location=RData.location)
 cPath <- xCrosstalk(data, entity="GR", crosslink="PCHiC_combined",
 networks="KEGG", subnet.significance=0.1,
 ontologies="KEGGenvironmental", RData.location=RData.location)

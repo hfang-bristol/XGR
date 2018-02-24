@@ -162,13 +162,13 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
 	ind <- xGRsort(rownames(mat))
 	mat <- mat[ind,]
 	####
-	if(ncol(mat)>=200){
+	if(ncol(mat)>=0){
 		reorder <- "none"
 	}else{
 		reorder <- "col"
 	}
 	gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
-	gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="right")
+	gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
 	subg$gp_evidence <- gp_evidence
 	######
 	

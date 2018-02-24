@@ -1,12 +1,12 @@
-#' Function to sort by chromosomes/seqnames, start and end coordinates of the intervals.
+#' Function to obtain separator index.
 #'
-#' \code{xGRsort} is supposed to sort by chromosomes/seqnames, start and end coordinates of the intervals. 
+#' \code{xGRsep} is supposed to obtain separator index. 
 #'
 #' @param data input genomic regions (GR). GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'
-#' @return index
+#' @return a vector for separator index
 #' @export
-#' @seealso \code{\link{xGRsort}}
-#' @include xGRsort.r
+#' @seealso \code{\link{xGRsep}}
+#' @include xGRsep.r
 #' @examples
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
@@ -23,26 +23,21 @@
 #' # b) sort index
 #' ind <- xGRsort(cst)
 #' data <- cst[ind]
+#'
+#' # c) get separator index
+#' vec_sep <- xGRsep(data)
 #' }
 
-xGRsort <- function(data)
+xGRsep <- function(data)
 {
-	data <- gsub(',.*','',data)
-	## gr has unique regions
-	gr <- xGR(data, format='chr:start-end')
-	gr <- GenomeInfoDb::sortSeqlevels(gr)
-	gr <- sort(gr)
 	
-	############################
-	## very important (because of non-redundant)
-	df <- data.frame(sid=1:length(gr), gr=names(gr), stringsAsFactors=F)
-	ind <- match(data, df$gr)
-	df <- df[ind, ]
-	df$oid <- 1:length(data)
-	sid <- NULL
-	df <- df %>% dplyr::arrange(sid)
-	############################
+	x <- gsub(":.*|chr","",data)
+	x[x=='X'] <- 23
+	x[x=='Y'] <- 24
+	x <- as.numeric(x)
+	vec_sep <- cumsum(table(x))
+	vec_sep <- vec_sep[-length(vec_sep)]
 	
-  	invisible(df$oid)
+  	invisible(vec_sep)
 
 }

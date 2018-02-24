@@ -23,7 +23,7 @@
 #' @importFrom stats sd median prcomp lm
 #' @importFrom BiocGenerics unlist
 #' @importFrom plot3D image2D persp3D image3D contour3D
-#' @importFrom dplyr select filter arrange mutate group_by summarise desc n
+#' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all
 #' @importFrom ggnetwork ggnetwork geom_nodes geom_edges
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom XML htmlTreeParse xmlGetAttr
