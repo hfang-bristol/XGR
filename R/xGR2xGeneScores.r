@@ -50,7 +50,7 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     build.conversion <- match.arg(build.conversion)
-    crosslink <- match.arg(crosslink)
+    #crosslink <- match.arg(crosslink)
     cdf.function <- match.arg(cdf.function)
     scoring.scheme <- match.arg(scoring.scheme)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)

@@ -92,7 +92,7 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     entity <- match.arg(entity)
     build.conversion <- match.arg(build.conversion)
-    crosslink <- match.arg(crosslink)
+    #crosslink <- match.arg(crosslink)
     cdf.function <- match.arg(cdf.function)
     scoring.scheme <- match.arg(scoring.scheme)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
@@ -399,7 +399,7 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 						rownames(y) <- gsub('\n.*',' ', rownames(y))
 						gp_membership <- xHeatmap(y, reorder="none", colormap="grey-grey-white-skyblue-darkblue", zlim=c(zlim_min, zlim_max), ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
 						gp_membership <- gp_membership + theme(legend.title=element_text(size=8), legend.position="none") + scale_y_discrete(position="right")
-						gp_membership <- gp_membership + geom_hline(yintercept=rowsep_tmp+0.5,color="grey90",size=0.5) + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5) + geom_hline(yintercept=nrow(mat)+0.5,color="grey50",size=0.5)
+						gp_membership <- gp_membership + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5) + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5) + geom_hline(yintercept=nrow(mat)+0.5,color="grey50",size=0.5)
 						
 						paths$gp_membership <- gp_membership
 					}

@@ -104,7 +104,7 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
-    crosslink <- match.arg(crosslink)
+    #crosslink <- match.arg(crosslink)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
     test <- match.arg(test)
     p.tail <- match.arg(p.tail)

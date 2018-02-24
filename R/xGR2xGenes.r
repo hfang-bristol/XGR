@@ -84,7 +84,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
-    crosslink <- match.arg(crosslink)
+    #crosslink <- match.arg(crosslink)
     cdf.function <- match.arg(cdf.function)
     scoring.scheme <- match.arg(scoring.scheme)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
@@ -146,8 +146,18 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		}
 		
 	}
-	
+
 	if(is.null(df_SGS_customised)){
+		
+		default.crosslink <- c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby", "PCHiC_Monocytes","PCHiC_Macrophages_M0","PCHiC_Macrophages_M1","PCHiC_Macrophages_M2","PCHiC_Neutrophils","PCHiC_Megakaryocytes","PCHiC_Endothelial_precursors","PCHiC_Erythroblasts","PCHiC_Fetal_thymus","PCHiC_Naive_CD4_T_cells","PCHiC_Total_CD4_T_cells","PCHiC_Activated_total_CD4_T_cells","PCHiC_Nonactivated_total_CD4_T_cells","PCHiC_Naive_CD8_T_cells","PCHiC_Total_CD8_T_cells","PCHiC_Naive_B_cells","PCHiC_Total_B_cells", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood")
+		ind <- match(default.crosslink, crosslink)
+		crosslink <- default.crosslink[!is.na(ind)]
+		if(length(crosslink)==0){
+			return(NULL)
+		}else{
+			## only keep the first one
+			crosslink <- crosslink[1]
+		}
 		
 		if(crosslink!='nearby'){
 			if(verbose){
@@ -171,12 +181,14 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					df_SGS_customised <- xRDataLoader('crosslink.customised.genehancer', verbose=verbose, RData.location=RData.location)
 				}
 			
-			}else if(crosslink=="PCHiC_combined"){
-				df_SGS_customised <- xRDataLoader('crosslink.customised.PCHiC_combined', verbose=verbose, RData.location=RData.location)
+			}else if(sum(grep("PCHiC_",crosslink,perl=TRUE)) > 0){
+				rdata <- paste0('crosslink.customised.', crosslink)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 				
-			}else if(crosslink=="GTEx_V6p_combined"){
-				df_SGS_customised <- xRDataLoader('crosslink.customised.GTEx_V6p_combined', verbose=verbose, RData.location=RData.location)
-				
+			}else if(sum(grep("GTEx_V6p_",crosslink,perl=TRUE)) > 0){
+				rdata <- paste0('crosslink.customised.', crosslink)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+					
 			}
 
 			if(!is.null(df_SGS_customised)){

@@ -58,11 +58,11 @@ ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
 RData.location=RData.location)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
-cst &lt;- xGRcse(gr)
+cse &lt;- xGRcse(gr)
 
 # b) sort index
-ind &lt;- xGRsort(cst)
-data &lt;- cst[ind]
+ind &lt;- xGRsort(cse)
+data &lt;- cse[ind]
 
 # c) get separator index
 vec_sep &lt;- xGRsep(data)

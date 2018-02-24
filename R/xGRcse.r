@@ -21,7 +21,7 @@
 #' gr <- ImmunoBase$AS$variant
 #'
 #' # b) create a GRanges object
-#' cst <- xGRcse(gr)
+#' cse <- xGRcse(gr)
 #' }
 
 xGRcse <- function(data, format=c("GRanges","data.frame","bed"))
