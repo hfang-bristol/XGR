@@ -251,6 +251,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 				### arrange_at, 'num' in ascending order, and other variables except 'num' (select using -one_of("num")) in descending order
 				#df_tmp <- df_tmp %>% dplyr::arrange_at(dplyr::vars(dplyr::desc("num"), -dplyr::one_of("num")))
 				df_tmp <- df_tmp %>% dplyr::arrange_all()
+				## reverse
+				df_tmp <- df_tmp[nrow(df_tmp):1, ]
+				#######	
 				colnames(df_tmp)[2:(ncol(df_tmp)-1)] <- colnames(df_res)
 				### update 'vec_sum' and 'df_res'
 				vec_sum <- df_tmp$num
@@ -335,9 +338,9 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 					ind <- match(rownames(mat_heatmap), df_enrichment$name)
 					rownames(mat_heatmap) <- df_enrichment$label[ind]
 					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap="white-skyblue-darkblue", zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
-					gp_heatmap <- gp_heatmap + theme(legend.title=element_text(size=8), legend.position="none")
+					gp_heatmap <- gp_heatmap + theme(legend.title=element_text(size=8), legend.position="none") + scale_y_discrete(position="right")
 					colsep <- cumsum(table(vec_sum))
-					colsep <- colsep[-length(colsep)]
+					colsep <- length(vec_sum) - colsep[-length(colsep)]
 					gp_heatmap <- gp_heatmap + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5)
 					#gp_heatmap
 					

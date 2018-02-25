@@ -97,6 +97,6 @@ Collate:
     'xGRsort.r'
     'xGRsep.r'
     'xGRcse.r'
-    'xEnrichHeatmap.r'
+    'xEnrichLadder.r'
 License: GPL-2
 biocViews: Bioinformatics
