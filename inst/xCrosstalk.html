@@ -284,7 +284,7 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
 
 # 1) at the gene level
 data(Haploid_regulators)
-## only PD-L1 regulators and thir significance info (FDR)
+## only PD-L1 regulators and their significance info (FDR)
 data &lt;- subset(Haploid_regulators, Phenotype=='PDL1')[,c('Gene','FDR')]
 ## pathway crosstalk
 cPath &lt;- xCrosstalk(data, entity="Gene", network="KEGG",

@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using heatmap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichHeatmap"><tr><td>xEnrichHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using heatmap</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichHeatmap</code> is supposed to visualise enrichment results using
+heatmap in which rows for terms and columns for its members. It returns
+an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichHeatmap(eTerm, sortBy = c("or", "adjp", "fdr", "pvalue",
+"zscore",
+"fc", "nAnno", "nOverlap", "none"), top_num = 10, FDR.cutoff = 0.05,
+CI.one = T, colormap = "skyblue-darkblue", verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eTerm</code></td>
+<td>
+<p>an object of class &quot;eTerm&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>sortBy</code></td>
+<td>
+<p>which statistics will be used for sorting and viewing
+gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
+(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
+enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
+&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
+&quot;none&quot; for ordering according to ID of terms</p>
+</td></tr>
+<tr valign="top"><td><code>top_num</code></td>
+<td>
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (see
+below FDR.cutoff) will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
+</td></tr>
+<tr valign="top"><td><code>CI.one</code></td>
+<td>
+<p>logical to indicate whether to allow the inclusion of one
+in CI. By default, it is TURE (allowed)</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichViewer</code>, <code>xHeatmap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+data(Haploid_regulators)
+## only IRF1 positive regulators
+data &lt;- subset(Haploid_regulators, Phenotype=='IRF1' &amp;
+MI&lt;0)[,c('Gene')]
+
+# 1) KEGGenvironmental
+eTerm &lt;- xEnricherGenes(data, ontology="KEGGenvironmental",
+size.range=c(10,2000), min.overlap=5, RData.location=RData.location)
+gp_heatmap &lt;- xEnrichHeatmap(eTerm)
+
+# 2) PSG
+eTerm &lt;- xEnricherGenes(data, ontology="PSG", size.range=c(1,20000),
+min.overlap=0, RData.location=RData.location)
+gp_heatmap &lt;- xEnrichHeatmap(eTerm, sortBy="none", top_num="auto",
+FDR.cutoff=1)
+
+# 3) save into the file "xEnrichHeatmap.pdf"
+mat &lt;- xSparseMatrix(gp_heatmap$data)
+pdf("xEnrichHeatmap.pdf", width=2+ncol(mat)*0.075,
+height=2+nrow(mat)*0.1, compress=T)
+print(gp_heatmap)
+dev.off()
+
+## End(Not run)
+</pre>
+
+
+</body></html>

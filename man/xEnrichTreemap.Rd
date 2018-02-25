@@ -17,9 +17,9 @@ treemap.min.size = 4)
 can be a data frame having all these columns (named as
 'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')}
 
-\item{top_num}{the number of the top terms (sorted according to FDR or
-adjusted p-values). If it is 'auto', only the significant terms (see
-below FDR.cutoff) will be displayed}
+\item{top_num}{the number of the top terms (sorted according to OR). If
+it is 'auto', only the significant terms (see below FDR.cutoff) will be
+displayed}
 
 \item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05}
