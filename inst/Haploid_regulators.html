@@ -44,11 +44,14 @@ protein regulators. <em>Nature</em>, 549:106-10.
 <h3>Examples</h3>
 
 <pre>
+## Not run: 
 Haploid_regulators &lt;- xRDataLoader('Haploid_regulators')
 Haploid_regulators[1:5,]
 ## for 'PDL1'
 ind &lt;- grepl('PDL1', Haploid_regulators$Phenotype)
 df &lt;- Haploid_regulators[ind,c('Gene','MI','FDR')]
+
+## End(Not run)
 </pre>
 
 

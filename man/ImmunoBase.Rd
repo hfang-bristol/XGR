@@ -34,11 +34,12 @@ element values for the shortest distance to all associated regions}
 \keyword{datasets}
 
 \examples{
+\dontrun{
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 names(ImmunoBase)
-str(ImmunoBase$AS)
 ImmunoBase$AS$disease
 ImmunoBase$AS$variants
 head(ImmunoBase$AS$genes_variants)
 head(ImmunoBase$AS$genes_regions)
+}
 }

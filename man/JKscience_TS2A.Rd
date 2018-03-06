@@ -35,6 +35,8 @@ regulatory variants upon monocyte gene expression. \emph{Science},
 \keyword{datasets}
 
 \examples{
+\dontrun{
 JKscience_TS2A <- xRDataLoader(RData.customised='JKscience_TS2A')
 JKscience_TS2A[1:5,]
+}
 }

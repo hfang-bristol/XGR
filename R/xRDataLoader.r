@@ -27,7 +27,6 @@
 #' @importFrom ggnetwork ggnetwork geom_nodes geom_edges
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom XML htmlTreeParse xmlGetAttr
-#' @importFrom GenomicScores scores
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples

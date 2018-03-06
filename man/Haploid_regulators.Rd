@@ -31,9 +31,11 @@ protein regulators. \emph{Nature}, 549:106-10.
 \keyword{datasets}
 
 \examples{
+\dontrun{
 Haploid_regulators <- xRDataLoader('Haploid_regulators')
 Haploid_regulators[1:5,]
 ## for 'PDL1'
 ind <- grepl('PDL1', Haploid_regulators$Phenotype)
 df <- Haploid_regulators[ind,c('Gene','MI','FDR')]
+}
 }

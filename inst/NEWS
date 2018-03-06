@@ -13,6 +13,12 @@ NEW FEATURES
     
     o Add a new function 'xEnrichTreemap' for visualising enrichment results in a treemap
     
+    o Add a new function 'xCrosstalk' for active pathway crosstalk identification
+    
+    o Add new functions ('xGRsort', 'xGRsep' and 'xGRcse') for genomic range operations
+
+    o Add a new function 'xEnrichLadder' for ladder-like plot of enrichment results
+
 
 CHANGES IN VERSION 1.1.1
 -----------------------
