@@ -90,7 +90,8 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		}else if(ncol(input)==2){
 			data <- matrix(input[,c(1,2,2)], nrow=nrow(input))
 		}else{
-			stop("Your input 'data' does not meet the format 'chr:start-end'!\n")
+			warning("Your input 'data' does not meet the format 'chr:start-end'!\n")
+			return(NULL)
 		}
 		## make sure positions are numeric
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))

@@ -332,8 +332,7 @@ CgProbes &lt;- xRDataLoader(RData.customised='CgProbes',
 RData.location=RData.location)
 ind &lt;- match(Age_CpG, names(CgProbes))
 gr_CpG &lt;- CgProbes[ind[!is.na(ind)]]
-df &lt;- as.data.frame(gr_CpG)
-data &lt;- paste0(df$seqnames,':',df$start,'-',df$end)
+data &lt;- xGRcse(gr_CpG, format='GRanges')
 ## pathway crosstalk
 df_xGenes &lt;- xGR2xGenes(data, format="chr:start-end",
 crosslink="PCHiC_combined", scoring=T, RData.location=RData.location)

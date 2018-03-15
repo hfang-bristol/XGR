@@ -30,6 +30,12 @@ xGRsort <- function(data)
 	data <- gsub(',.*','',data)
 	## gr has unique regions
 	gr <- xGR(data, format='chr:start-end')
+	
+	## just in case input is not 'chr:start-end' (for example, region names)
+	if(is.null(gr)){
+		return(NULL)
+	}
+	
 	gr <- GenomeInfoDb::sortSeqlevels(gr)
 	gr <- sort(gr)
 	

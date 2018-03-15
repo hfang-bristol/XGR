@@ -371,9 +371,11 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		df_xGenes <- df_xGenes %>% dplyr::arrange(-Score)
 		#### sort GR by chromosome, start and end
 		ind <- xGRsort(df_xGenes$GR)
-		df_xGenes <- df_xGenes[ind,]
-		####
-		df_xGenes <- df_xGenes %>% dplyr::arrange(Context)
+		if(!is.null(ind)){
+			df_xGenes <- df_xGenes[ind,]
+			####
+			df_xGenes <- df_xGenes %>% dplyr::arrange(Context)
+		}
 	}
 	
 	####################################

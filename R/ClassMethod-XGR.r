@@ -20,7 +20,7 @@
 #' @examples
 #' \dontrun{
 #' # Load the library
-#' library(Pi)
+#' library(XGR)
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
