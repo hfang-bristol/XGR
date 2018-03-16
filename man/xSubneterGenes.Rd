@@ -12,12 +12,12 @@ xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
 "KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
 "KEGG_organismal",
-"KEGG_disease"), STRING.only = c(NA, "neighborhood_score",
-"fusion_score",
-"cooccurence_score", "coexpression_score", "experimental_score",
-"database_score", "textmining_score")[1], network.customised = NULL,
-seed.genes = T, subnet.significance = 0.01, subnet.size = NULL,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"KEGG_disease", "REACTOME"), STRING.only = c(NA, "neighborhood_score",
+"fusion_score", "cooccurence_score", "coexpression_score",
+"experimental_score", "database_score", "textmining_score")[1],
+network.customised = NULL, seed.genes = T, subnet.significance = 0.01,
+subnet.size = NULL, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -64,7 +64,8 @@ interactions sourced from KEGG, it can be 'KEGG' for all,
 'KEGG_environmental' for 'Environmental Information Processing'
 pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
-for 'Human Diseases' pathways}
+for 'Human Diseases' pathways. 'REACTOME' for protein-protein
+interactions derived from Reactome pathways}
 
 \item{STRING.only}{the further restriction of STRING by interaction
 type. If NA, no such restriction. Otherwide, it can be one or more of

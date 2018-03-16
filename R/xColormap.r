@@ -34,8 +34,13 @@
 #' palette.name <- xColormap(colormap="ggplot2")
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
+#' 
+#' # 3) define brewer colormap called "RdYlBu"
+#' palette.name <- xColormap(colormap="RdYlBu")
+#' # use the return function "palette.name" to generate 3 default colors used by ggplot2
+#' palette.name(3)
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both"), interpolate=c("spline","linear"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu"), interpolate=c("spline","linear"))
 {
 
 	interpolate <- match.arg(interpolate)
@@ -88,7 +93,10 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			palette.name <-colorRampPalette(rev(c('#D53E4F','#F46D43','#FDAE61','#FEE08B','#FFFFBF')), interpolate=interpolate)
 		}else if(colormap == "spectral.bottom"){
 			palette.name <-colorRampPalette(rev(c('#FFFFBF','#E6F598','#ABDDA4','#66C2A5','#3288BD')), interpolate=interpolate)
-			
+		
+		}else if(colormap == "RdYlBu"){
+			palette.name <-colorRampPalette(rev(c("#A50026","#D73027","#F46D43","#FDAE61","#FEE090","#FFFFBF","#E0F3F8","#ABD9E9","#74ADD1","#4575B4","#313695")), interpolate=interpolate)
+		
 		}else if(colormap == "heat"){
 			palette.name <- grDevices::heat.colors
 		}else if(colormap == "terrain"){

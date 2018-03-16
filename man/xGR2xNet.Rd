@@ -19,9 +19,9 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
 "PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
 "KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
-"KEGG_disease"),
-network.customised = NULL, seed.genes = T, subnet.significance = 5e-05,
-subnet.size = NULL, verbose = T,
+"KEGG_disease",
+"REACTOME"), network.customised = NULL, seed.genes = T,
+subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -122,7 +122,8 @@ interactions sourced from KEGG, it can be 'KEGG' for all,
 'KEGG_environmental' for 'Environmental Information Processing'
 pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
-for 'Human Diseases' pathways}
+for 'Human Diseases' pathways. 'REACTOME' for protein-protein
+interactions derived from Reactome pathways}
 
 \item{network.customised}{an object of class "igraph". By default, it
 is NULL. It is designed to allow the user analysing their customised

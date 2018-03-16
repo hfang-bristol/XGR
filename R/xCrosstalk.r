@@ -14,7 +14,7 @@
 #' @param nearby.distance.max the maximum distance between genes and GR. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby GR per gene
 #' @param nearby.decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay. If no distance weight is used, please select 'constant'
 #' @param nearby.decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
-#' @param networks the built-in network. For direct (pathway-merged) interactions sourced from KEGG, it can be 'KEGG' for all, 'KEGG_metabolism' for pathways grouped into 'Metabolism', 'KEGG_genetic' for 'Genetic Information Processing' pathways, 'KEGG_environmental' for 'Environmental Information Processing' pathways, 'KEGG_cellular' for 'Cellular Processes' pathways, 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease' for 'Human Diseases' pathways
+#' @param networks the built-in network. For direct (pathway-merged) interactions sourced from KEGG, it can be 'KEGG' for all, 'KEGG_metabolism' for pathways grouped into 'Metabolism', 'KEGG_genetic' for 'Genetic Information Processing' pathways, 'KEGG_environmental' for 'Environmental Information Processing' pathways, 'KEGG_cellular' for 'Cellular Processes' pathways, 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease' for 'Human Diseases' pathways. 'REACTOME' for protein-protein interactions derived from Reactome pathways. Pathways Commons pathway-merged network from individual sources, that is, "PCommonsDN_Reactome" for those from Reactome
 #' @param seed.genes logical to indicate whether the identified network is restricted to seed genes (ie input genes with the signficant level). By default, it sets to true
 #' @param subnet.significance the given significance threshold. By default, it is set to NULL, meaning there is no constraint on nodes/genes. If given, those nodes/genes with p-values below this are considered significant and thus scored positively. Instead, those p-values above this given significance threshold are considered insigificant and thus scored negatively
 #' @param subnet.size the desired number of nodes constrained to the resulting subnet. It is not nulll, a wide range of significance thresholds will be scanned to find the optimal significance threshold leading to the desired number of nodes in the resulting subnet. Notably, the given significance threshold will be overwritten by this option
@@ -85,7 +85,7 @@
 #' cPath
 #' }
 
-xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, networks=c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), seed.genes=T, subnet.significance=0.01, subnet.size=NULL, ontologies=c("KEGGenvironmental","KEGG","KEGGmetabolism","KEGGgenetic","KEGGcellular","KEGGorganismal","KEGGdisease"), size.range=c(10,2000), min.overlap=10, fdr.cutoff=0.05, crosstalk.top=NULL, glayout=layout_with_kk, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, networks=c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME","PCommonsDN_Reactome"), seed.genes=T, subnet.significance=0.01, subnet.size=NULL, ontologies=c("KEGGenvironmental","KEGG","KEGGmetabolism","KEGGgenetic","KEGGcellular","KEGGorganismal","KEGGdisease"), size.range=c(10,2000), min.overlap=10, fdr.cutoff=0.05, crosstalk.top=NULL, glayout=layout_with_kk, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -98,7 +98,10 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
     #networks <- match.arg(networks)
     #ontologies <- match.arg(ontologies)
 	
-	default.networks <- c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease")
+	##############################
+	### allow for several networks
+	##############################	
+	default.networks <- c("KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME","PCommonsDN_Reactome")
 	ind <- match(default.networks, networks)
 	networks <- default.networks[!is.na(ind)]
 	

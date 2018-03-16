@@ -60,7 +60,8 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			data <- data
 		}
     }else{
-    	stop("The file 'data' must be provided!\n")
+		warning("The file 'data' must be provided!\n")
+		return(NULL)
     }
 	
     ## construct GR
@@ -71,7 +72,8 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		}else if(ncol(data)==2){
 			data <- cbind(data, data[,2])
 		}else{
-			stop("Your input 'data.file' is not as expected!\n")
+			warning("Your input 'data.file' is not as expected!\n")
+			return(NULL)
 		}
 		## make sure positions are numeric
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
