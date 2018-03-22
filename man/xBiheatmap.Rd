@@ -88,7 +88,7 @@ using heatmap.
 # 1) generate a random bipartite graph
 set.seed(123)
 g <- sample_bipartite(100, 50, p=0.1)
-V(g)$name <- V(g)
+V(g)$name <- paste0('node_',1:vcount(g))
 
 \dontrun{
 # 2) obtain its community
