@@ -1,6 +1,6 @@
 #' Function to define genes from an input list of genomic regions given the crosslink info
 #'
-#' \code{xGR2xGenes} is supposed to define genes crosslinking to an input list of genomic regions (GR). Also required is the crosslink info with a score quantifying the link of a GR to a gene. Currently supported built-in crosslink info is enhancer genes and nearby genes (purely), though the user can customise it via 'crosslink.customised'; if so, it has priority over the built-in data.
+#' \code{xGR2xGenes} is supposed to define genes crosslinking to an input list of genomic regions (GR). Also required is the crosslink info with a score quantifying the link of a GR to a gene. Currently supported built-in crosslink info is enhancer genes, eQTL genes, conformation genes and nearby genes (purely), though the user can customise it via 'crosslink.customised'; if so, it has priority over the built-in data.
 #'
 #' @param data input genomic regions (GR). If formatted as "chr:start-end" (see the next parameter 'format' below), GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. If formatted as a 'data.frame', the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. The data could also be an object of 'GRanges' (in this case, formatted as 'GRanges')
 #' @param format the format of the input data. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
@@ -21,7 +21,7 @@
 #' \itemize{
 #'  \item{\code{GR}: genomic regions}
 #'  \item{\code{Gene}: crosslinked genes}
-#'  \item{\code{Score}: the score between the gene and the GR}
+#'  \item{\code{Score}: the original score between the gene and the GR (if cdf.function is 'original'); otherwise cdf (based on the whole crosslink inputs)}
 #'  \item{\code{Context}: the context}
 #' }
 #' If scoring sets to true, a data frame with following columns:
@@ -149,7 +149,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 
 	if(is.null(df_SGS_customised)){
 		
-		default.crosslink <- c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby", "PCHiC_Monocytes","PCHiC_Macrophages_M0","PCHiC_Macrophages_M1","PCHiC_Macrophages_M2","PCHiC_Neutrophils","PCHiC_Megakaryocytes","PCHiC_Endothelial_precursors","PCHiC_Erythroblasts","PCHiC_Fetal_thymus","PCHiC_Naive_CD4_T_cells","PCHiC_Total_CD4_T_cells","PCHiC_Activated_total_CD4_T_cells","PCHiC_Nonactivated_total_CD4_T_cells","PCHiC_Naive_CD8_T_cells","PCHiC_Total_CD8_T_cells","PCHiC_Naive_B_cells","PCHiC_Total_B_cells", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood")
+		default.crosslink <- c("genehancer","PCHiC_combined","GTEx_V6p_combined","FANTOM5_Cell","FANTOM5_Tissue","nearby", "PCHiC_Monocytes","PCHiC_Macrophages_M0","PCHiC_Macrophages_M1","PCHiC_Macrophages_M2","PCHiC_Neutrophils","PCHiC_Megakaryocytes","PCHiC_Endothelial_precursors","PCHiC_Erythroblasts","PCHiC_Fetal_thymus","PCHiC_Naive_CD4_T_cells","PCHiC_Total_CD4_T_cells","PCHiC_Activated_total_CD4_T_cells","PCHiC_Nonactivated_total_CD4_T_cells","PCHiC_Naive_CD8_T_cells","PCHiC_Total_CD8_T_cells","PCHiC_Naive_B_cells","PCHiC_Total_B_cells", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood")
 		ind <- match(default.crosslink, crosslink)
 		crosslink <- default.crosslink[!is.na(ind)]
 		if(length(crosslink)==0){
@@ -186,6 +186,10 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 				
 			}else if(sum(grep("GTEx_V6p_",crosslink,perl=TRUE)) > 0){
+				rdata <- paste0('crosslink.customised.', crosslink)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+					
+			}else if(sum(grep("FANTOM5_",crosslink,perl=TRUE)) > 0){
 				rdata <- paste0('crosslink.customised.', crosslink)
 				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 					

@@ -1,6 +1,6 @@
-#' Function to identify a gene network from an input network given a list of genomic regions together with the significance level
+#' Function to identify a gene network from an input network given a list of genomic regions
 #'
-#' \code{xGR2xNet} is supposed to identify maximum-scoring gene subnetwork from an input graph with the node information on the significance (measured as p-values or fdr). To do so, it defines seed genes and their scores that take into account the distance to and the significance of input genomic regions (GR). It returns an object of class "igraph". 
+#' \code{xGR2xNet} is supposed to identify maximum-scoring gene subnetwork from an input graph with the node information (genomic regions with or without the significance). To do so, it defines seed genes and their scores that take into account the distance to and the significance of input genomic regions (GR). It returns an object of class "igraph". 
 #'
 #' @param data a named input vector containing the significance level for genomic regions (GR). For this named vector, the element names are GR, in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20', the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for GR, 2nd column for the significance level. Also supported is the input with GR only (without the significance level)
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insignificant and thus receive no score
@@ -81,7 +81,10 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
     network <- match.arg(network)
     
 	if(is.vector(data) && length(data)>1 && is.null(names(data)) && is.character(data)){
-	
+		if(verbose){
+			message(sprintf("The input has GRs only (without the significance level)"), appendLF=TRUE)
+		}
+		
 		####################################################################################
 		if(verbose){
 			now <- Sys.time()

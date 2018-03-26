@@ -82,7 +82,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
+		names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
 		
 	}else if(format=="chr:start-end"){
 		data <- unique(data[!is.na(data)])
@@ -102,7 +102,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
+		names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
 		
 	}else if(format=="bed"){
 		## construct data GR
@@ -113,7 +113,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[,1], ':', data[,2], '-', data[,3], sep='')
+		names(dGR) <- paste(data[ind,1], ':', data[ind,2]+1, '-', data[ind,3], sep='')
 	}else if(format=="GRanges"){
 		dGR <- data
 		

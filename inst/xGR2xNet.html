@@ -5,16 +5,15 @@
 
 <table width="100%" summary="page for xGR2xNet"><tr><td>xGR2xNet</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to identify a gene network from an input network given a list of genomic regions together with the significance level</h2>
+<h2>Function to identify a gene network from an input network given a list of genomic regions</h2>
 
 <h3>Description</h3>
 
 <p><code>xGR2xNet</code> is supposed to identify maximum-scoring gene subnetwork
-from an input graph with the node information on the significance
-(measured as p-values or fdr). To do so, it defines seed genes and
-their scores that take into account the distance to and the
-significance of input genomic regions (GR). It returns an object of
-class &quot;igraph&quot;.
+from an input graph with the node information (genomic regions with or
+without the significance). To do so, it defines seed genes and their
+scores that take into account the distance to and the significance of
+input genomic regions (GR). It returns an object of class &quot;igraph&quot;.
 </p>
 
 

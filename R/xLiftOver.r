@@ -53,11 +53,22 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     ## import data file
     if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
         data <- data.file
-    }else if(!is.null(data.file) & !is.na(data.file)){
-		data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+    }else if(!is.null(data.file) & any(!is.na(data.file))){
+    	if(length(data.file)==1){
+    		if(file.exists(data.file)){
+    			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+    			data <- unique(data[,1])
+    		}else{
+				data <- data.file
+			}
+		}else{
+			data <- data.file
+		}
     }else{
-    	stop("The file 'data.file' must be provided!\n")
+		warning("The file 'data.file' must be provided!\n")
+		return(NULL)
     }
+    
     
     ###################
 	if(verbose){
@@ -99,7 +110,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
 			seqnames=S4Vectors::Rle(data[,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[,2]+1), end=as.numeric(data[,3])),
+			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
 			strand = S4Vectors::Rle(rep('*',nrow(data)))
 		)
 		

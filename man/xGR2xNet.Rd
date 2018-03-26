@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGR2xNet.r
 \name{xGR2xNet}
 \alias{xGR2xNet}
-\title{Function to identify a gene network from an input network given a list of genomic regions together with the significance level}
+\title{Function to identify a gene network from an input network given a list of genomic regions}
 \usage{
 xGR2xNet(data, significance.threshold = NULL, score.cap = NULL,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
@@ -163,11 +163,10 @@ graph attributes (evidence, gp_evidence) and node attributes
 }
 \description{
 \code{xGR2xNet} is supposed to identify maximum-scoring gene subnetwork
-from an input graph with the node information on the significance
-(measured as p-values or fdr). To do so, it defines seed genes and
-their scores that take into account the distance to and the
-significance of input genomic regions (GR). It returns an object of
-class "igraph".
+from an input graph with the node information (genomic regions with or
+without the significance). To do so, it defines seed genes and their
+scores that take into account the distance to and the significance of
+input genomic regions (GR). It returns an object of class "igraph".
 }
 \note{
 The algorithm identifying a gene subnetwork that is likely modulated by

@@ -95,7 +95,8 @@ where nGene is the number of seed genes, and the 3 columns are "Gene"
 information, where nLink is the number of links, and the 5 columns are
 "GR" (genomic regions), "Gene" (gene symbol), "Score" (the scores for
 the link multiplied by the GR score), "Score_GR" (the scores for GR),
-"Score_link" (the scores for the link), }
+"Score_link" (the original scores for the link if cdf.function is
+'original'; otherwise cdf based on the whole crosslink inputs)}
 }
 }
 \description{

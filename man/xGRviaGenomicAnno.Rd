@@ -487,6 +487,15 @@ containing CAT genes harboring at least one trait-associated SNP.}
 dieases) of GenomicRanges objects; each is an GR object containing CAT
 genes harboring at least one trait-associated SNP.}
 }
+19. GWAS Catalog trait-associated SNPs
+\itemize{
+\item{\code{GWAScatalog_alltraits}: a list (390 traits grouped by EFO)
+of GenomicRanges objects; each is an GR object containing
+trait-associated SNPs.}
+\item{\code{GWAScatalog_bloodindex}: a list (29 traits grouped by EFO)
+of GenomicRanges objects; each is an GR object containing
+trait-associated SNPs.}
+}
 }
 \examples{
 \dontrun{

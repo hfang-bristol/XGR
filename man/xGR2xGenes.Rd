@@ -96,7 +96,9 @@ If scoring sets to false, a data frame with following columns:
 \itemize{
 \item{\code{GR}: genomic regions}
 \item{\code{Gene}: crosslinked genes}
-\item{\code{Score}: the score between the gene and the GR}
+\item{\code{Score}: the original score between the gene and the GR (if
+cdf.function is 'original'); otherwise cdf (based on the whole
+crosslink inputs)}
 \item{\code{Context}: the context}
 }
 If scoring sets to true, a data frame with following columns:
@@ -113,9 +115,9 @@ gene scores}
 \code{xGR2xGenes} is supposed to define genes crosslinking to an input
 list of genomic regions (GR). Also required is the crosslink info with
 a score quantifying the link of a GR to a gene. Currently supported
-built-in crosslink info is enhancer genes and nearby genes (purely),
-though the user can customise it via 'crosslink.customised'; if so, it
-has priority over the built-in data.
+built-in crosslink info is enhancer genes, eQTL genes, conformation
+genes and nearby genes (purely), though the user can customise it via
+'crosslink.customised'; if so, it has priority over the built-in data.
 }
 \examples{
 \dontrun{
