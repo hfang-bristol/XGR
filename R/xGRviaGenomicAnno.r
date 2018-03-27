@@ -239,7 +239,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
     }else if(!is.null(annotation.file)){
 		annotation <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
     }else{
-    	message("\t\tThe file 'annotation.file' is not provided, so built-in RData will be used instead!")
+    	if(verbose){
+    		message("\t\tThe file 'annotation.file' is not provided, so built-in RData will be used instead!")
+    	}
     	annotation <- NULL
     }
     
@@ -684,7 +686,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		data_nBases <- length(dGR_reduced)
 		overlap_nBases <- base::sapply(oGR_reduced, length)
 		annotation_nBases <- base::sapply(aGR_reduced, length)
-		background_nBases <- length(bGR_reduced)
+		background_nBases <- max(length(bGR_reduced), max(annotation_nBases))
 		
 		if(verbose){
 			now <- Sys.time()
@@ -736,13 +738,25 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		
 		p.value <- doBinomialTest(X, K, M, N, p.tail)
 		
-		## odds ratio calculated from Fisher's exact test
-		## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
-		cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
-		res <- stats::fisher.test(cTab)
-		or <- as.vector(res$estimate)
-		CIl <- as.vector(res$conf.int)[1]
-		CIu <- as.vector(res$conf.int)[2]
+		#### unable to calculate OR for 'hybrid' resolution
+		if(all(resolution %in% c("bases","regions"))){
+			## odds ratio calculated from Fisher's exact test
+			## Prepare a two-dimensional contingency table: #success in sampling, #success in background, #failure in sampling, and #failure in left part
+			cTab <- matrix(c(X, K-X, M-X, N-M-K+X), nrow=2, dimnames=list(c("anno", "notAnno"), c("group", "notGroup")))
+			
+			if(class(suppressWarnings(try(res <- stats::fisher.test(cTab), T)))=="try-error"){
+				or <- CIl <- CIu <- NA
+			}else{			
+				res <- stats::fisher.test(cTab)
+				or <- as.vector(res$estimate)
+				CIl <- as.vector(res$conf.int)[1]
+				CIu <- as.vector(res$conf.int)[2]		
+			}	
+		
+		}else{
+			or <- CIl <- CIu <- NA
+		}
+		
 		
 		## output
 		c(X, K, M, N, X/K, M/N, (X/K)/(M/N), z.score, p.value, or, CIl, CIu)

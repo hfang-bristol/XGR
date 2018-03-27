@@ -5,6 +5,8 @@ NEW FEATURES
 
     o Populate annotations
     
+    o Fix bugs in the function 'xGRviaGenomicAnno' (disabling OR calculation)
+    
 
 CHANGES IN VERSION 1.1.2
 -----------------------

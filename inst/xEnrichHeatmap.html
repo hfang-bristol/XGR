@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using heatmap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichHeatmap"><tr><td>xEnrichHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using heatmap</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichHeatmap</code> is supposed to visualise enrichment results using
+heatmap. It returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichHeatmap(list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
+"fdr",
+"pvalue", "fc", "or"), colormap = NULL, zlim = NULL, reorder =
+c("none",
+"row", "col", "both"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>list_eTerm</code></td>
+<td>
+<p>an object of class &quot;ls_eTerm&quot;. Alterntively, it can
+be a data frame having all these columns (named as
+'group','ontology','name','adjp') and one of these columns
+(&quot;zscore&quot;,&quot;fdr&quot;,&quot;pvalue&quot;,&quot;fc&quot;,&quot;or&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>fdr.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
+</td></tr>
+<tr valign="top"><td><code>displayBy</code></td>
+<td>
+<p>which statistics will be used for comparison. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; for adjusted p
+value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score,
+&quot;or&quot; for enrichment odd ratio</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the -log10(FDR)</p>
+</td></tr>
+<tr valign="top"><td><code>reorder</code></td>
+<td>
+<p>how to reorder rows and columns. It can be &quot;none&quot; for no
+reordering, &quot;row&quot; for reordering rows according to number of sharings
+(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
+rows and columns</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xHeatmap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+
+# provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data
+
+# optionally, provide the test background (if not provided, all human genes)
+#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+
+# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
+# perform enrichment analysis
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+RData.location=RData.location)
+## heatmap plot of enrichment results
+gp &lt;- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
