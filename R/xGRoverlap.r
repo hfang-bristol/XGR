@@ -36,7 +36,7 @@ xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
-    #GS.annotation <- match.arg(GS.annotation)
+    #GR.annotation <- match.arg(GR.annotation)
     scoring.scheme <- match.arg(scoring.scheme)
 	
 	##########################################
@@ -76,15 +76,15 @@ xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Second, load the genomic annotation '%s' (%s) ...", GS.annotation[1], as.character(now)), appendLF=T)
+				message(sprintf("Second, load the genomic annotation '%s' (%s) ...", GR.annotation[1], as.character(now)), appendLF=T)
 			}
 		
 			GR.annotation <- GR.annotation[1]
-			qGR <- xRDataLoader(GS.annotation, verbose=verbose, RData.location=RData.location)
+			qGR <- xRDataLoader(GR.annotation, verbose=verbose, RData.location=RData.location)
 		}
 	}
 	
-	if(GS.annotation=='RecombinationRate'){
+	if(GR.annotation=='RecombinationRate'){
 		qGR$Value <- qGR$Rate
 	}else if(!is.null(GenomicRanges::mcols(qGR))){
 		## only the first column
@@ -113,7 +113,7 @@ xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		summaryFun <- sum
 	}
 	
-    hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=dGR, subject=oGR, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T)))
+    hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=dGR, subject=oGR, maxgap=-1L, minoverlap=0L, type="any", select="all", ignore.strand=T)))
     ls_vec <- split(x=hits[,2], f=hits[,1])
     ls_res <- lapply(ls_vec, function(x){
     	do.call(summaryFun, list(x))

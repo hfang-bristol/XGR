@@ -57,6 +57,8 @@
 #' ls_eTerm
 #' ## forest plot of enrichment results
 #' gp <- xEnrichForest(ls_eTerm, top_num=10)
+#' ## heatmap plot of enrichment results
+#' gp <- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="or")
 #' }
 
 xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=c("GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -130,111 +132,10 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     
     ## heatmap view
     if(plot & !is.null(df_all)){
-
-    	adjp <- NULL
-    	
-    	gp <- NULL
-    	mat <- NULL
-    	
-    	ls_df <- split(x=df_all[,-12], f=df_all$ontology)
-    	#######
-    	## keep the same order for ontologies as input
-    	ls_df <- ls_df[unique(df_all$ontology)]
-    	#######
-		ls_mat <- lapply(1:length(ls_df), function(i){
 		
-			df <- ls_df[[i]]
-			ind <- which(df$adjp < fdr.cutoff)
-			if(length(ind)>=1){
-				df <- as.data.frame(df %>% dplyr::filter(adjp < fdr.cutoff))
-				
-				if(displayBy=='fdr'){
-					mat <- as.matrix(xSparseMatrix(df[,c('name','group','adjp')], rows=unique(df$name), columns=names(list_vec)))
-					mat[mat==0] <- NA
-					mat <- -log10(mat)
-				}else if(displayBy=='pvalue'){
-					mat <- as.matrix(xSparseMatrix(df[,c('name','group','pvalue')], rows=unique(df$name), columns=names(list_vec)))
-					mat[mat==0] <- NA
-					mat <- -log10(mat)
-				}else if(displayBy=='zscore'){
-					mat <- as.matrix(xSparseMatrix(df[,c('name','group','zscore')], rows=unique(df$name), columns=names(list_vec)))
-					mat[mat==0] <- NA
-				}else if(displayBy=='fc'){
-					mat <- as.matrix(xSparseMatrix(df[,c('name','group','fc')], rows=unique(df$name), columns=names(list_vec)))
-					mat[mat==0] <- NA
-					mat <- log2(mat)
-				}else if(displayBy=='or'){
-					mat <- as.matrix(xSparseMatrix(df[,c('name','group','or')], rows=unique(df$name), columns=names(list_vec)))
-					mat[mat==0] <- NA
-					mat <- log2(mat)
-				}
-				
-				if(nrow(mat)==1){
-					df_mat <- mat
-				}else{
-					
-					## order by the length of names
-					rname_ordered <- rownames(mat)[order(-nchar(rownames(mat)))]
-					## order by the evolutionary ages
-					if(names(ls_df)[i]=='PS2' || names(ls_df)[i]=='PSG'){
-						df_tmp <- unique(df[,c('id','name')])
-						df_tmp <- df_tmp[with(df_tmp, order(as.numeric(df_tmp$id))),]
-						rname_ordered <- df_tmp$name
-					}
-					
-					ind <- match(rname_ordered, rownames(mat))
-					df_mat <- as.matrix(mat[ind,], ncol=ncol(mat))
-					colnames(df_mat) <- colnames(mat)
-					
-					colnames(df_mat) <- colnames(mat)
-				}
-				return(df_mat)
-					
-			}else{
-				return(NULL)
-			}
-			
-		})
-		mat <- do.call(rbind, ls_mat)
-		
-		if(!is.null(mat)){
-			if(displayBy=='fdr' | displayBy=='pvalue'){
-				colormap <- 'grey100-darkorange'
-				zlim <- c(0, ceiling(max(mat[!is.na(mat)])))
-				
-				if(displayBy=='fdr'){
-					legend.title <- expression(-log[10]("FDR"))
-				}else if(displayBy=='pvalue'){
-					legend.title <- expression(-log[10]("p-value"))
-				}
-				
-			}else if(displayBy=='fc' | displayBy=='zscore' | displayBy=='or'){
-				tmp_max <- ceiling(max(mat[!is.na(mat)]))
-				tmp_min <- floor(min(mat[!is.na(mat)]))
-				if(tmp_max>0 & tmp_min<0){
-					colormap <- 'deepskyblue-grey100-darkorange'	
-					tmp <- max(tmp_max, abs(tmp_min))
-					zlim <- c(-tmp, tmp)
-				}else if(tmp_max<=0){
-					colormap <- 'deepskyblue-grey100'	
-					zlim <- c(tmp_min, 0)
-				}else if(tmp_min>=0){
-					colormap <- 'grey100-darkorange'	
-					zlim <- c(0, tmp_max)
-				}
-				
-				if(displayBy=='fc'){
-					legend.title <- expression(log[2]("FC"))
-				}else if(displayBy=='zscore'){	
-					legend.title <- ("Z-score")
-				}else if(displayBy=='or'){	
-					legend.title <- expression(log[2]("OR"))
-				}
-			}
-		
-			gp <- xHeatmap(mat, reorder="none", colormap=colormap, ncolors=64, zlim=zlim, legend.title=legend.title, barwidth=0.4, x.rotate=60, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent',barheight=max(3,min(5,nrow(mat))))
-			gp <- gp + theme(legend.title=element_text(size=8))
-		}
+		gp <- xEnrichHeatmap(list_eTerm=df_all, fdr.cutoff=fdr.cutoff, displayBy=displayBy, colormap=NULL, zlim=NULL, reorder="none")
+		mat <- gp$mat
+		gp$mat <- NULL
 		
     }else{
     	mat <- NULL

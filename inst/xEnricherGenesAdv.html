@@ -316,6 +316,8 @@ RData.location=RData.location)
 ls_eTerm
 ## forest plot of enrichment results
 gp &lt;- xEnrichForest(ls_eTerm, top_num=10)
+## heatmap plot of enrichment results
+gp &lt;- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="or")
 
 ## End(Not run)
 </pre>

@@ -234,6 +234,8 @@ RData.location=RData.location)
 ls_eTerm
 ## forest plot of enrichment results
 gp <- xEnrichForest(ls_eTerm, top_num=10)
+## heatmap plot of enrichment results
+gp <- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="or")
 }
 }
 \seealso{
