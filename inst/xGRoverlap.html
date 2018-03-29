@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract overlap-based scores given a list of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGRoverlap"><tr><td>xGRoverlap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to extract overlap-based scores given a list of genomic regions</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRoverlap</code> is supposed to extract overlap-based scores given a
+list of genomic regions. Scores are extracted for overlapped
+sub-regions only; otherwise NA. It returns a GR object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
+"GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+GR.annotation = c(NA, "RecombinationRate"), scoring.scheme = c("mean",
+"median", "max", "min", "sum"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata_dev")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>the format of the input data. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>GR.annotation</code></td>
+<td>
+<p>the genomic regions of annotation data. By
+default, it is 'NA' to disable this option. Pre-built genomic
+annotation data: 'RecombinationRate' (recombintion rate,
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17943122">http://www.ncbi.nlm.nih.gov/pubmed/17943122</a>)). Beyond pre-built
+annotation data, the user can specify the customised input: load your
+customised GR object directly</p>
+</td></tr>
+<tr valign="top"><td><code>scoring.scheme</code></td>
+<td>
+<p>the method used to calculate scores spanning a
+set of GR. It can be one of &quot;mean&quot;, &quot;median&quot;, &quot;max&quot;, &quot;min&quot; and &quot;sum&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a GenomicRanges object, appended with a meta-column 'GScore'
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+
+# a) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS
+data &lt;- ImmunoBase$AS$variant
+
+# b) extract recombination rate
+gr &lt;- xGRoverlap(data=data, format="GRanges",
+GR.annotation="RecombinationRate", scoring.scheme="mean",
+RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
