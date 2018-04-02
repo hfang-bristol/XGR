@@ -16,12 +16,12 @@
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
-#' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl extendrange dev.off pdf
+#' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl extendrange dev.off pdf col2rgb
 #' @importFrom graphics plot lines legend contour text par
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd median prcomp lm
-#' @importFrom BiocGenerics unlist
+#' @importFrom BiocGenerics unlist start end
 #' @importFrom plot3D image2D persp3D image3D contour3D
 #' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all
 #' @importFrom ggnetwork ggnetwork geom_nodes geom_edges

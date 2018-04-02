@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise genes within a genomic region using...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGRtrack"><tr><td>xGRtrack</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise genes within a genomic region using track plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRtrack</code> is supposed to visualise genes within a genomic region
+using track plot. Genes in query within a genomic region are displayed
+on the gene model track along with nearby genes of desired window or
+number. If scores for genomic region are also provided, the genomic
+score track will be also displayed at the top.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGRtrack(cse.query = NULL, gene.query = NULL, window = 1e+05,
+nearby = NULL, name.scoretrack = "Genomic scores",
+gene.model = c("UCSC_knownGene_model", "UCSC_knownCanonical_model"),
+GR.score = c(NA, "RecombinationRate", "phastCons100way",
+"phyloP100way"),
+GR.score.customised = NULL, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cse.query</code></td>
+<td>
+<p>a genomic region in query. By default it is NULL;
+otherwise provided as 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If provided, it will overwrite the parameter 'gene.query' below</p>
+</td></tr>
+<tr valign="top"><td><code>gene.query</code></td>
+<td>
+<p>which gene in query will be visualised. By default it
+is NULL</p>
+</td></tr>
+<tr valign="top"><td><code>window</code></td>
+<td>
+<p>the maximum distance defining nearby genes around the
+gene in query. By default it is 1e5</p>
+</td></tr>
+<tr valign="top"><td><code>nearby</code></td>
+<td>
+<p>the maximum number defining nearby genes around the gene
+in query. By default it is NULL. If not NULL, it will overwrite the
+parameter 'window' above</p>
+</td></tr>
+<tr valign="top"><td><code>name.scoretrack</code></td>
+<td>
+<p>the name for the score track. By default, it is
+&quot;Genomic scores&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>gene.model</code></td>
+<td>
+<p>the genomic regions of the gene model. By default, it
+is 'UCSC_knownGene_model', that is, UCSC known genes (together with
+genomic locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical_model', that is, UCSC known canonical genes
+(together with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>GR.score</code></td>
+<td>
+<p>the genomic regions together with score data. By
+default, it is 'NA' to disable this option. Pre-built genomic score
+data: 'RecombinationRate' (recombintion rate,
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17943122">http://www.ncbi.nlm.nih.gov/pubmed/17943122</a>)), 'phastCons100way',
+'phyloP100way'.</p>
+</td></tr>
+<tr valign="top"><td><code>GR.score.customised</code></td>
+<td>
+<p>the customised genomic score data. By
+default, it is NA to disable this option; otherwise load your
+customised GR object directly (with the first meta column for scores;
+if not provided, it will be valued at 1). If provided, it will be
+appended to 'GR.score' above</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a Tracks object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRoverlap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
+## given a query gene
+tks &lt;- xGRtrack(gene.query='TNF', nearby=10,
+gene.model="UCSC_knownGene_model",
+GR.score=c(NA,"RecombinationRate","phastCons100way"),
+RData.location=RData.location)
+tks
+## given a query genomic region
+tks &lt;- xGRtrack(cse.query='chr6:31497996-31584798',
+gene.model="UCSC_knownGene_model",
+GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way"),
+RData.location=RData.location)
+
+## also use customised GR.score
+GR.score.customised &lt;- xRDataLoader("RecombinationRate",
+RData.location=RData.location)
+tks &lt;- xGRtrack(gene.query='TNF', nearby=10,
+gene.model="UCSC_knownGene_model", GR.score="RecombinationRate",
+GR.score.customised=GR.score.customised, RData.location=RData.location)
+tks
+
+## End(Not run)
+</pre>
+
+
+</body></html>

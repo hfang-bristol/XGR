@@ -6,9 +6,9 @@
 \usage{
 xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-GR.annotation = c(NA, "RecombinationRate"), scoring.scheme = c("mean",
-"median", "max", "min", "sum"), verbose = T,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), GR.score =
+c(NA,
+"RecombinationRate", "phastCons100way", "phyloP100way"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata_dev")
 }
 \arguments{
@@ -33,15 +33,13 @@ this case, formatted as 'GRanges')}
 another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
 
-\item{GR.annotation}{the genomic regions of annotation data. By
-default, it is 'NA' to disable this option. Pre-built genomic
-annotation data: 'RecombinationRate' (recombintion rate,
-\url{http://www.ncbi.nlm.nih.gov/pubmed/17943122})). Beyond pre-built
-annotation data, the user can specify the customised input: load your
-customised GR object directly}
-
-\item{scoring.scheme}{the method used to calculate scores spanning a
-set of GR. It can be one of "mean", "median", "max", "min" and "sum"}
+\item{GR.score}{the genomic regions together with score data. By
+default, it is 'NA' to disable this option. Pre-built genomic score
+data: 'RecombinationRate' (recombintion rate,
+\url{http://www.ncbi.nlm.nih.gov/pubmed/17943122})), 'phastCons100way',
+'phyloP100way'. Beyond pre-built data, the user can specify the
+customised input: load your customised GR object directly (with the
+first meta column for scores; if not provided, it will be valued at 1)}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
@@ -50,12 +48,16 @@ displayed in the screen. By default, it sets to true for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a GenomicRanges object, appended with a meta-column 'GScore'
+a GenomicRanges object, appended with a meta-column 'GScore'. If input
+data contains only a genomic region, then outputs are all overlapped
+regions from GR.score; otherwise all overlapped regions from input data
+will be output.
 }
 \description{
 \code{xGRoverlap} is supposed to extract overlap-based scores given a
 list of genomic regions. Scores are extracted for overlapped
-sub-regions only; otherwise NA. It returns a GR object.
+sub-regions only, valued at the mean per base; otherwise NA. It returns
+a GR object.
 }
 \examples{
 \dontrun{
@@ -72,8 +74,21 @@ data <- ImmunoBase$AS$variant
 
 # b) extract recombination rate
 gr <- xGRoverlap(data=data, format="GRanges",
-GR.annotation="RecombinationRate", scoring.scheme="mean",
+GR.score="RecombinationRate", RData.location=RData.location)
+
+############################################
+# gene-centric genomic score (per base)
+gr_Gene <- xRDataLoader('UCSC_knownGene',
 RData.location=RData.location)
+## recombination rate
+gr_rr <- xGRoverlap(data=gr_Gene, format="GRanges",
+GR.score="RecombinationRate", RData.location=RData.location)
+## phastCons100way
+gr_phast <- xGRoverlap(data=gr_Gene, format="GRanges",
+GR.score="phastCons100way", RData.location=RData.location)
+## phyloP100way
+gr_phylo <- xGRoverlap(data=gr_Gene, format="GRanges",
+GR.score="phyloP100way", RData.location=RData.location)
 }
 }
 \seealso{

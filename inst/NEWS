@@ -9,7 +9,7 @@ NEW FEATURES
     
     o Add function 'xEnrichHeatmap' for visualising enrichment results in a heatmap
     
-    o Add function 'xGRoverlap' enabling extraction of genomic scores
+    o Add functions ('xGRoverlap' and 'xGRtrack') enabling extraction and analysis of genomic scores
     
 
 CHANGES IN VERSION 1.1.2
