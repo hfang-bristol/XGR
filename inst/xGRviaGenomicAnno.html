@@ -785,6 +785,47 @@ sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions_enrichments.txt", sep="\t",
 row.names=FALSE)
 
+##########################################
+### Advanced use: customised GR.annotation
+##########################################
+FANTOM5_CAT_Cell &lt;- xRDataLoader('FANTOM5_CAT_Cell',
+RData.location=RData.location)
+ls_gr_lncRNA &lt;- lapply(FANTOM5_CAT_Cell, function(x)
+x[grep('lncRNA',x$Category)])
+ls_gr_mRNA &lt;- lapply(FANTOM5_CAT_Cell, function(x)
+x[grep('coding_mRNA',x$Category)])
+GR.annotations &lt;- c("ls_gr_lncRNA","ls_gr_mRNA","FANTOM5_CAT_Cell")
+ls_df &lt;- lapply(1:length(GR.annotations), function(i){
+GR.annotation &lt;- get(GR.annotations[i])
+df &lt;- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
+GR.annotation=GR.annotation, RData.location=RData.location)
+df$group &lt;- GR.annotations[i]
+return(df)
+})
+df &lt;- do.call(rbind, ls_df)
+gp &lt;- xEnrichHeatmap(df, fdr.cutoff=0.05, displayBy="zscore")
+
+##########################################
+### Advanced use: customised EpigenomeAtlas_15Segments
+##########################################
+info &lt;- xRDataLoader('EpigenomeAtlas_15Segments_info',
+RData.location=RData.location)
+GR.annotations &lt;- paste0('EpigenomeAtlas_15Segments_',names(info))
+names(GR.annotations) &lt;- info
+ls_df &lt;- lapply(1:length(GR.annotations), function(i){
+GR.annotation &lt;- GR.annotations[i]
+message(sprintf("Analysing '%s' (%s) ...", names(GR.annotation),
+as.character(Sys.time())), appendLF=T)
+df &lt;- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
+GR.annotation=GR.annotation, RData.location=RData.location, verbose=F)
+df$group &lt;- names(GR.annotation)
+return(df)
+})
+df &lt;- do.call(rbind, ls_df)
+gp &lt;- xEnrichHeatmap(df, fdr.cutoff=0.05, displayBy="fdr",
+reorder="both")
+
+
 ## End(Not run)
 </pre>
 

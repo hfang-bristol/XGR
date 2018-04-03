@@ -36,7 +36,7 @@
 #' gp <- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
 #' }
 
-xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), colormap=NULL, zlim=NULL, reorder=c("none","row","col","both"))
+xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or","adjp"), colormap=NULL, zlim=NULL, reorder=c("none","row","col","both"))
 {
     
     displayBy <- match.arg(displayBy)
@@ -54,6 +54,12 @@ xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fd
 			df <- list_eTerm$df
 			
 		}else if(class(list_eTerm)=='data.frame'){
+			if(displayBy=='fdr'){
+				if(is.null(list_eTerm$fdr)){
+					list_eTerm$fdr <- list_eTerm$adjp
+				}
+			}
+			
 			if(all(c('group','ontology','name','adjp',displayBy) %in% colnames(list_eTerm))){
 				df <- list_eTerm[,c('group','ontology','name','adjp',displayBy)]
 			

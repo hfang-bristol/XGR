@@ -10,6 +10,7 @@
 #' @param gene.model the genomic regions of the gene model. By default, it is 'UCSC_knownGene_model', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical_model', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param GR.score the genomic regions together with score data. By default, it is 'NA' to disable this option. Pre-built genomic score data: 'RecombinationRate' (recombintion rate, \url{http://www.ncbi.nlm.nih.gov/pubmed/17943122})), 'phastCons100way', 'phyloP100way'.
 #' @param GR.score.customised the customised genomic score data. By default, it is NA to disable this option; otherwise load your customised GR object directly (with the first meta column for scores; if not provided, it will be valued at 1). If provided, it will be appended to 'GR.score' above
+#' @param name.scoretrack the name for customised genomic score data. By default, it is "Customised"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return a Tracks object.
@@ -26,18 +27,27 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
 #' ## given a query gene
-#' tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model="UCSC_knownGene_model", GR.score=c(NA,"RecombinationRate","phastCons100way"), RData.location=RData.location)
+#' tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model="UCSC_knownGene_model", GR.score=c("RecombinationRate","phastCons100way"), RData.location=RData.location)
 #' tks
 #' ## given a query genomic region
-#' tks <- xGRtrack(cse.query='chr6:31497996-31584798', gene.model="UCSC_knownGene_model", GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way"), RData.location=RData.location)
+#' tks <- xGRtrack(cse.query='chr6:31497996-31584798', gene.model="UCSC_knownGene_model", GR.score=c("RecombinationRate","phastCons100way"), RData.location=RData.location)
 #' 
 #' ## also use customised GR.score
+#' ### RecombinationRate
 #' GR.score.customised <- xRDataLoader("RecombinationRate", RData.location=RData.location)
 #' tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model="UCSC_knownGene_model", GR.score="RecombinationRate", GR.score.customised=GR.score.customised, RData.location=RData.location)
 #' tks
+#' 
+#' ### GWAS catalog
+#' GWAScatalog <- xRDataLoader('GWAScatalog', RData.location=RData.location)
+#' gwas <- xGR(GWAScatalog$cse_hg19, format="chr:start-end")
+#' ind <- match(names(gwas), GWAScatalog$cse_hg19)
+#' gwas$pvalue <- -log10(GWAScatalog$pvalue[ind])
+#' tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model="UCSC_knownGene_model", GR.score="RecombinationRate", GR.score.customised=gwas, RData.location=RData.location)
+#' tks
 #' }
 
-xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, name.scoretrack="Genomic scores", gene.model=c("UCSC_knownGene_model","UCSC_knownCanonical_model"), GR.score=c(NA, "RecombinationRate","phastCons100way","phyloP100way"), GR.score.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, name.scoretrack="Genomic scores", gene.model=c("UCSC_knownGene_model","UCSC_knownCanonical_model"), GR.score=c(NA, "RecombinationRate","phastCons100way","phyloP100way"), GR.score.customised=NULL, name.customised="Customised", verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
 	if(verbose){
@@ -138,7 +148,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 	gp_score <- NULL
 	
 	default.GR.score <- c("RecombinationRate", "phastCons100way", "phyloP100way")
-	names(default.GR.score) <- c('recombRate', 'phastCons', 'phyloP')
+	names(default.GR.score) <- c('RecombRate', 'PhastCons', 'PhyloP')
 	ind <- match(default.GR.score, GR.score)
 	GR.score <- default.GR.score[!is.na(ind)]
 	ls_gr_anno <- NULL
@@ -165,7 +175,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 	if(class(GR.score.customised)=='GRanges'){
 		gr <- xGRoverlap(data=gr_cse, format="GRanges", GR.score=GR.score.customised, verbose=F, RData.location=RData.location)
 		if(!is.null(gr)){
-			gr$Anno <- 'Customised'
+			gr$Anno <- name.customised
 			GenomicRanges::mcols(gr) <- GenomicRanges::mcols(gr)[,c('GScore','Anno')]
 			ls_gr_anno[[length(ls_gr_anno)+1]] <- gr
 		}
@@ -183,7 +193,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 		colnames(df_end) <- c('x','y','anno')
 		data <- rbind(df_start, df_end)
 	
-		gp_score <- ggplot(data, aes(x=x,y=y,color=anno)) + geom_line(size=0.5) + xlim(xlim) + xlab('') + ylab(name.scoretrack) + facet_grid(anno~., scales="free_y")
+		gp_score <- ggplot(data, aes(x=x,y=y,color=anno)) + geom_point(size=0.25) + geom_line(size=0.5) + xlim(xlim) + xlab('') + ylab(name.scoretrack) + facet_grid(anno~., scales="free_y")
 	
 	}else{
 		gp_score <- ggbio::autoplot(gr_anno, geom="bar", aes(fill=score)) + ggbio::scale_fill_fold_change() + ggbio::theme_alignment() + theme(legend.position="none") + xlim(xlim)

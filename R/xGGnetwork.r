@@ -121,10 +121,16 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
     
 	ls_df <- lapply(1:length(ls_ig), function(i){
     	ig <- ls_ig[[i]]
-    	
+    	    	
 		if(igraph::vcount(ig)==0){
 			return(NULL)
 		}
+    	
+    	###############################
+    	if(is.null(V(ig)$name)){
+    		V(ig)$name <- 1:vcount(ig)
+    	}
+    	###############################
     	
     	########## remove any attributes with the list data type
     	node_attrs <- igraph::vertex_attr_names(ig)

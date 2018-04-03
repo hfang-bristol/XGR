@@ -9,8 +9,9 @@ nearby = NULL, name.scoretrack = "Genomic scores",
 gene.model = c("UCSC_knownGene_model", "UCSC_knownCanonical_model"),
 GR.score = c(NA, "RecombinationRate", "phastCons100way",
 "phyloP100way"),
-GR.score.customised = NULL, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+GR.score.customised = NULL, name.customised = "Customised",
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{cse.query}{a genomic region in query. By default it is NULL;
@@ -60,6 +61,9 @@ displayed in the screen. By default, it sets to true for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{name.scoretrack}{the name for customised genomic score data. By
+default, it is "Customised"}
 }
 \value{
 a Tracks object.
@@ -85,21 +89,33 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## given a query gene
 tks <- xGRtrack(gene.query='TNF', nearby=10,
 gene.model="UCSC_knownGene_model",
-GR.score=c(NA,"RecombinationRate","phastCons100way"),
+GR.score=c("RecombinationRate","phastCons100way"),
 RData.location=RData.location)
 tks
 ## given a query genomic region
 tks <- xGRtrack(cse.query='chr6:31497996-31584798',
 gene.model="UCSC_knownGene_model",
-GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way"),
+GR.score=c("RecombinationRate","phastCons100way"),
 RData.location=RData.location)
 
 ## also use customised GR.score
+### RecombinationRate
 GR.score.customised <- xRDataLoader("RecombinationRate",
 RData.location=RData.location)
 tks <- xGRtrack(gene.query='TNF', nearby=10,
 gene.model="UCSC_knownGene_model", GR.score="RecombinationRate",
 GR.score.customised=GR.score.customised, RData.location=RData.location)
+tks
+
+### GWAS catalog
+GWAScatalog <- xRDataLoader('GWAScatalog',
+RData.location=RData.location)
+gwas <- xGR(GWAScatalog$cse_hg19, format="chr:start-end")
+ind <- match(names(gwas), GWAScatalog$cse_hg19)
+gwas$pvalue <- -log10(GWAScatalog$pvalue[ind])
+tks <- xGRtrack(gene.query='TNF', nearby=10,
+gene.model="UCSC_knownGene_model", GR.score="RecombinationRate",
+GR.score.customised=gwas, RData.location=RData.location)
 tks
 }
 }
