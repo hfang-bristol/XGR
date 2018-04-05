@@ -193,6 +193,10 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				rdata <- paste0('crosslink.customised.', crosslink)
 				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 					
+			}else{
+				## general use
+				rdata <- paste0('crosslink.customised.', crosslink)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 			}
 
 			if(!is.null(df_SGS_customised)){

@@ -343,11 +343,15 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
     	gp <- NULL
     }
     
-    ls_eTerm <- list(df = df_all,
-    			   mat = mat,
-    			   gp = gp
-                 )
-    class(ls_eTerm) <- "ls_eTerm"
+    ls_eTerm <- NULL
+    if(!is.null(df_all)){
+		ls_eTerm <- list(df = df_all,
+					   mat = mat,
+					   gp = gp
+					 )
+		class(ls_eTerm) <- "ls_eTerm"    	
+    }
+    
     ####################################################################################
     endT <- Sys.time()
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
