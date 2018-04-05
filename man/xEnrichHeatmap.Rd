@@ -6,14 +6,16 @@
 \usage{
 xEnrichHeatmap(list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
 "fdr",
-"pvalue", "fc", "or", "adjp"), colormap = NULL, zlim = NULL,
-reorder = c("none", "row", "col", "both"))
+"pvalue", "fc", "or"), colormap = NULL, zlim = NULL, reorder =
+c("none",
+"row", "col", "both"))
 }
 \arguments{
 \item{list_eTerm}{an object of class "ls_eTerm". Alterntively, it can
 be a data frame having all these columns (named as
 'group','ontology','name','adjp') and one of these columns
-("zscore","fdr","pvalue","fc","or")}
+("zscore","fdr","pvalue","fc","or"). Note, the column 'fdr' can be
+inferred from the column 'adjp'}
 
 \item{fdr.cutoff}{FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05}

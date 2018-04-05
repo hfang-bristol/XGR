@@ -19,8 +19,9 @@ heatmap. It returns an object of class &quot;ggplot&quot;.
 <pre>
 xEnrichHeatmap(list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
 "fdr",
-"pvalue", "fc", "or", "adjp"), colormap = NULL, zlim = NULL,
-reorder = c("none", "row", "col", "both"))
+"pvalue", "fc", "or"), colormap = NULL, zlim = NULL, reorder =
+c("none",
+"row", "col", "both"))
 </pre>
 
 
@@ -32,7 +33,8 @@ reorder = c("none", "row", "col", "both"))
 <p>an object of class &quot;ls_eTerm&quot;. Alterntively, it can
 be a data frame having all these columns (named as
 'group','ontology','name','adjp') and one of these columns
-(&quot;zscore&quot;,&quot;fdr&quot;,&quot;pvalue&quot;,&quot;fc&quot;,&quot;or&quot;)</p>
+(&quot;zscore&quot;,&quot;fdr&quot;,&quot;pvalue&quot;,&quot;fc&quot;,&quot;or&quot;). Note, the column 'fdr' can be
+inferred from the column 'adjp'</p>
 </td></tr>
 <tr valign="top"><td><code>fdr.cutoff</code></td>
 <td>

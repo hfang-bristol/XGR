@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichHeatmap} is supposed to visualise enrichment results using heatmap. It returns an object of class "ggplot".
 #'
-#' @param list_eTerm an object of class "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp') and one of these columns ("zscore","fdr","pvalue","fc","or")
+#' @param list_eTerm an object of class "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp') and one of these columns ("zscore","fdr","pvalue","fc","or"). Note, the column 'fdr' can be inferred from the column 'adjp'
 #' @param fdr.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
 #' @param displayBy which statistics will be used for comparison. It can be "fc" for enrichment fold change (by default), "adjp" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score, "or" for enrichment odd ratio
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
@@ -36,7 +36,7 @@
 #' gp <- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
 #' }
 
-xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or","adjp"), colormap=NULL, zlim=NULL, reorder=c("none","row","col","both"))
+xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), colormap=NULL, zlim=NULL, reorder=c("none","row","col","both"))
 {
     
     displayBy <- match.arg(displayBy)

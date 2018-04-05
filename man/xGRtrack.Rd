@@ -56,14 +56,14 @@ customised GR object directly (with the first meta column for scores;
 if not provided, it will be valued at 1). If provided, it will be
 appended to 'GR.score' above}
 
+\item{name.customised}{the name for customised genomic score data. By
+default, it is "Customised"}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
-
-\item{name.scoretrack}{the name for customised genomic score data. By
-default, it is "Customised"}
 }
 \value{
 a Tracks object.
