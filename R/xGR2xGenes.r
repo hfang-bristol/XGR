@@ -89,6 +89,10 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     scoring.scheme <- match.arg(scoring.scheme)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
 	
+	if(class(data)=='GRanges'){
+		names(data) <- NULL
+	}
+	
 	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
 	
 	###################
@@ -108,6 +112,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		###########################	
 		# customised df_SGS
 		###########################
+		df <- NULL
 		if(is.vector(crosslink.customised)){
 			# assume a file
 			df <- utils::read.delim(file=crosslink.customised, header=TRUE, row.names=NULL, stringsAsFactors=FALSE)
@@ -115,7 +120,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			df <- crosslink.customised
 		}
 		
-		if(!is.null(df) & (ncol(df)==4 | ncol(df)==3)){
+		if(!is.null(df) && (ncol(df)==4 | ncol(df)==3)){
 		
 			if(ncol(df)==4){
 				SGS_customised <- df
@@ -220,6 +225,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		}
 		
 		Gene <- Weight <- Score <- NULL
+		dgr <- NULL
 		
 		ls_df_SGS <- split(x=df_SGS_customised, f=df_SGS_customised$Context)
 		ls_res_df <- lapply(1:length(ls_df_SGS), function(j){
@@ -246,33 +252,63 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			df_found <- df_SGS[!is.na(ind), ]
 			#################################
 			
-			system.time({
-			
-			## very slow
-			ls_dgr <- split(x=q2r$gr, f=q2r$dgr)
-			ls_df <- lapply(1:length(ls_dgr), function(i){
-							
-				#################
-				## very important
-				#################
-				if(0){
-				ind <- match(df_SGS$GR, ls_dgr[[i]])
-				df <- df_SGS[!is.na(ind), ]
-				}else{
-				ind <- match(df_found$GR, ls_dgr[[i]])
-				df <- df_found[!is.na(ind), ]
-				}
+			if(1){
+				system.time({
+				
+				## very fast
+				ls_df_found <- split(x=df_found[,c('GR','Gene','Weight')], f=df_found$GR)
+				
+				### df_found_reorder
+				ind <- match(q2r$gr, names(ls_df_found))
+				ls_df_found_reorder <- ls_df_found[ind]
+				df_found_reorder <- do.call(rbind, ls_df_found_reorder)
+				
+				### df_q2r
+				vec_nrow <- sapply(ls_df_found_reorder, nrow)
+				ind_times <- rep(1:nrow(q2r),times=vec_nrow)
+				df_q2r <- q2r[ind_times,]
+				
+				### df
+				df <- cbind(df_q2r, df_found_reorder)
 				
 				#################################
-				## keep maximum weight per gene if there are many overlaps
+				## keep maximum weight per gene and dgr if there are many overlaps
 				#################################
-				df <- as.data.frame(df %>% dplyr::group_by(Gene) %>% dplyr::summarize(Score=max(Weight)))
-				data.frame(GR=rep(names(ls_dgr)[i],nrow(df)), df, stringsAsFactors=F)
-			})
-			df_xGenes <- do.call(rbind, ls_df)
-	
-			})
+				df_xGenes <- as.data.frame(df %>% dplyr::group_by(dgr,Gene) %>% dplyr::summarize(Score=max(Weight)))
+				colnames(df_xGenes) <- c('GR','Gene','Score')
+				
+				})
+				
+			}else{
 
+				system.time({
+			
+				## very slow
+				ls_dgr <- split(x=q2r$gr, f=q2r$dgr)
+				ls_df <- lapply(1:length(ls_dgr), function(i){
+				
+					#################
+					## very important
+					#################
+					if(0){
+					ind <- match(df_SGS$GR, ls_dgr[[i]])
+					df <- df_SGS[!is.na(ind), ]
+					}else{
+					ind <- match(df_found$GR, ls_dgr[[i]])
+					df <- df_found[!is.na(ind), ]
+					}
+				
+					#################################
+					## keep maximum weight per gene if there are many overlaps
+					#################################
+					df <- as.data.frame(df %>% dplyr::group_by(Gene) %>% dplyr::summarize(Score=max(Weight)))
+					data.frame(GR=rep(names(ls_dgr)[i],nrow(df)), df, stringsAsFactors=F)
+				})
+				df_xGenes <- do.call(rbind, ls_df)
+
+				})
+			}
+			
 			########################################
 			# check gene (make sure official symbol)
 			ind <- !is.na(XGR::xSymbol2GeneID(df_xGenes$Gene, details=TRUE, verbose=FALSE, RData.location=RData.location)$Symbol)
