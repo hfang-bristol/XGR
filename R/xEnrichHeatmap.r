@@ -54,25 +54,33 @@ xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fd
 			df <- list_eTerm$df
 			
 		}else if(class(list_eTerm)=='data.frame'){
+			## when displayBy='fdr', always append the column 'fdr' if not provided
 			if(displayBy=='fdr'){
 				if(is.null(list_eTerm$fdr)){
 					list_eTerm$fdr <- list_eTerm$adjp
 				}
 			}
 			
-			if(all(c('group','ontology','name','adjp',displayBy) %in% colnames(list_eTerm))){
-				df <- list_eTerm[,c('group','ontology','name','adjp',displayBy)]
+			##################
+			## always append the column 'id' if not provided
+			if(is.null(list_eTerm$id) & !is.null(list_eTerm$name)){
+				list_eTerm$id <- list_eTerm$name
+			}
+			##################
+						
+			if(all(c('group','ontology','id','name','adjp',displayBy) %in% colnames(list_eTerm))){
+				df <- list_eTerm[,c('group','ontology','id','name','adjp',displayBy)]
 			
-			}else if(all(c('group','name','adjp',displayBy) %in% colnames(list_eTerm))){
-				df <- list_eTerm[,c('group','name','adjp',displayBy)]
+			}else if(all(c('group','id','name','adjp',displayBy) %in% colnames(list_eTerm))){
+				df <- list_eTerm[,c('group','id','name','adjp',displayBy)]
 				df$ontology <- 'ontology'
 			
-			}else if(all(c('ontology','name','adjp',displayBy) %in% colnames(list_eTerm))){
-				df <- list_eTerm[,c('ontology','name','adjp',displayBy)]
+			}else if(all(c('ontology','id','name','adjp',displayBy) %in% colnames(list_eTerm))){
+				df <- list_eTerm[,c('ontology','id','name','adjp',displayBy)]
 				df$group <- 'group'
 			
-			}else if(all(c('name','adjp',displayBy) %in% colnames(list_eTerm))){
-				df <- list_eTerm[,c('name','adjp',displayBy)]
+			}else if(all(c('id','name','adjp',displayBy) %in% colnames(list_eTerm))){
+				df <- list_eTerm[,c('id','name','adjp',displayBy)]
 				df$group <- 'group'
 				df$ontology <- 'ontology'
 			

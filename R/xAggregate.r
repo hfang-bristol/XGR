@@ -2,7 +2,7 @@
 #'
 #' \code{xAggregate} is supposed to aggregate data respecting number of features. Per row, the aggregated is the sum of two items: the number of features, and the sum of all but scaled into [0,0.9999999]
 #'
-#' @param data a data frame. The aggregation is done across columns per row
+#' @param data a data frame. The aggregation is done across columns per row. Each cell should contain positive values or NA; if infinite, it will be replaced with the maximum finite value
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return
 #' a data frame with an appended column called 'Aggregate'
@@ -42,6 +42,10 @@ xAggregate <- function(data, verbose=T)
 	
 	num_nonzero <- apply(data, 1, function(x) sum(!is.na(x)))
 	sum_nonzero <- apply(data, 1, function(x) sum(x,na.rm=T))
+	### avoid Inf
+	tmp <- max(sum_nonzero[!is.infinite(sum_nonzero)])
+	sum_nonzero[is.infinite(sum_nonzero)] <- tmp
+	###
 	scale_sum <- (sum_nonzero - min(sum_nonzero)) / (max(sum_nonzero) - min(sum_nonzero)) * 0.9999999
 	data$Aggregate <- num_nonzero + scale_sum
     

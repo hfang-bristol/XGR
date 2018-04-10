@@ -28,7 +28,8 @@ xAggregate(data, verbose = T)
 <tr valign="top"><td><code>data</code></td>
 <td>
 <p>a data frame. The aggregation is done across columns per
-row</p>
+row. Each cell should contain positive values or NA; if infinite, it
+will be replaced with the maximum finite value</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

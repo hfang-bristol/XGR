@@ -8,7 +8,8 @@ xAggregate(data, verbose = T)
 }
 \arguments{
 \item{data}{a data frame. The aggregation is done across columns per
-row}
+row. Each cell should contain positive values or NA; if infinite, it
+will be replaced with the maximum finite value}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
