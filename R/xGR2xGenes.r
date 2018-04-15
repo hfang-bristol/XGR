@@ -133,7 +133,8 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			############################
 			# remove Gene if NA
 			# remove GR if NA
-			df_SGS_customised <- SGS_customised[!is.na(SGS_customised[,1]) & !is.na(SGS_customised[,2]),]
+			# remove Score if NA
+			df_SGS_customised <- SGS_customised[!is.na(SGS_customised[,1]) & !is.na(SGS_customised[,2]) & !is.na(SGS_customised[,3]),]
 			############################
 			
 			if(verbose){
@@ -203,6 +204,13 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				rdata <- paste0('crosslink.customised.', crosslink)
 				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
 			}
+
+			############################
+			# remove Gene if NA
+			# remove GR if NA
+			# remove Score if NA
+			df_SGS_customised <- df_SGS_customised[!is.na(df_SGS_customised[,1]) & !is.na(df_SGS_customised[,2]) & !is.na(df_SGS_customised[,3]),]
+			############################
 
 			if(!is.null(df_SGS_customised)){
 
