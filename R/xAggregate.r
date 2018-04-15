@@ -42,6 +42,8 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
 		data <- as.data.frame(data)
 	}
 	
+	data_input <- data
+	
 	## whether to bin first
 	if(bin){
 		if(verbose){
@@ -86,7 +88,7 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
 	}
 	
 	scale_sum <- (sum_nonna - min(sum_nonna,na.rm=T)) / (max(sum_nonna,na.rm=T) - min(sum_nonna,na.rm=T)) * 0.9999999
-	data$Aggregate <- num_nonna + scale_sum
+	data_input$Aggregate <- num_nonna + scale_sum
     
   ####################################################################################
     endT <- Sys.time()
@@ -97,5 +99,5 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
-    invisible(data)
+    invisible(data_input)
 }

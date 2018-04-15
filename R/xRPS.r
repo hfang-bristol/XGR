@@ -58,7 +58,7 @@
 #' names(GR_lncRNA) <- NULL
 #' data <- GR_lncRNA
 #' # RPS calculation
-#' dGR <- xRPS(data, format="GRanges", GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way"), RData.location=RData.location)
+#' dGR <- xRPS(data, format="GRanges", GR.annotation=c("FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way"), RData.location=RData.location)
 #' }
 
 xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -226,7 +226,9 @@ xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges")
 		if(verbose){
 			message(sprintf("using the annotation '%s' (%s) ...", 'ENCODE_DNaseI_ClusteredV3', as.character(Sys.time())), appendLF=T)
 		}
-	
+		
+		mdata <- NULL
+		
 		# ENCODE_DNaseI_ClusteredV3: an GR object containing clustered peaks, along with a meta-column 'num_cells' telling how many cell types associated with a clustered peak (125 cell types)
 		gr <- xRDataLoader('ENCODE_DNaseI_ClusteredV3', verbose=F, RData.location=RData.location)
 		## max value
@@ -246,6 +248,8 @@ xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges")
 		if(verbose){
 			message(sprintf("using the annotation '%s' (%s) ...", 'ENCODE_TFBS_ClusteredV3', as.character(Sys.time())), appendLF=T)
 		}
+	
+		mdata <- NULL
 	
 		# ENCODE_TFBS_ClusteredV3: a list (161 transcription factors) of GenomicRanges objects
 		ls_gr <- xRDataLoader('ENCODE_TFBS_ClusteredV3', verbose=F, RData.location=RData.location)

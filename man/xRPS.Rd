@@ -122,7 +122,7 @@ names(GR_lncRNA) <- NULL
 data <- GR_lncRNA
 # RPS calculation
 dGR <- xRPS(data, format="GRanges",
-GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way"),
+GR.annotation=c("FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way"),
 RData.location=RData.location)
 }
 }
