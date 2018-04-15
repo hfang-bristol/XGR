@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate regulatory potential scores for genomic...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xRPS"><tr><td>xRPS</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to calculate regulatory potential scores for genomic regions using genomic annotations</h2>
+
+<h3>Description</h3>
+
+<p><code>xRPS</code> is supposed to calculate regulatory potential scores for
+genomic regions using genomic annotations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xRPS(data, format = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+GR.annotation = c("FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
+"FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "GWAScatalog_alltraits",
+"ENCODE_DNaseI_ClusteredV3", "ENCODE_TFBS_ClusteredV3",
+"EpigenomeAtlas_15Segments", "RecombinationRate", "phastCons100way",
+"phyloP100way"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>the format of the input data. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>GR.annotation</code></td>
+<td>
+<p>the genomic regions of annotation data. Pre-built
+genomic annotation data are detailed in the section 'Note'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a GenomicRanges object appended a metacolumn 'RPS'
+</p>
+
+
+<h3>Note</h3>
+
+<p>The genomic annotation data are described below according to the data
+sources and data types.<br />
+1. FANTOM5 expressed enhancer atlas
+</p>
+
+<ul>
+<li><p><code>FANTOM5_Enhancer_Cell</code>: a list (71 cell types) of
+GenomicRanges objects; each is an GR object containing enhancers
+specifically expressed in a cell type.
+</p>
+</li>
+<li><p><code>FANTOM5_Enhancer_Tissue</code>: a list (41 tissues) of
+GenomicRanges objects; each is an GR object containing enhancers
+specifically expressed in a tissue.
+</p>
+</li></ul>
+
+<p>2. FANTOM5 sample-ontology-enriched CAT genes
+</p>
+
+<ul>
+<li><p><code>FANTOM5_CAT_Cell</code>: a list (173 cell types) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a cell type.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_Tissue</code>: a list (174 tissues) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a tissue.
+</p>
+</li></ul>
+
+<p>3. GWAS Catalog trait-associated SNPs
+</p>
+
+<ul>
+<li><p><code>GWAScatalog_alltraits</code>: a list (390 traits grouped by EFO)
+of GenomicRanges objects; each is an GR object containing
+trait-associated SNPs.
+</p>
+</li></ul>
+
+<p>4. ENCODE DNaseI Hypersensitivity site data
+</p>
+
+<ul>
+<li><p><code>ENCODE_DNaseI_ClusteredV3</code>: a GR object containing
+clustered peaks, along with a meta-column 'num_cells' telling how many
+cell types associated with a clustered peak.
+</p>
+</li></ul>
+
+<p>5. ENCODE Transcription Factor ChIP-seq data
+</p>
+
+<ul>
+<li><p><code>ENCODE_TFBS_ClusteredV3</code>: a list (161 transcription
+factors) of GenomicRanges objects; each is an GR object containing
+clustered peaks per transcription factor, along with a meta-column
+'cells' telling cell types associated with a clustered peak.
+</p>
+</li></ul>
+
+<p>6. Roadmap Epigenomics Core 15-state Genome Segmentation data for 127
+cell types
+</p>
+
+<ul>
+<li><p><code>EpigenomeAtlas_15Segments</code>: a list (127 cell types) of a
+list (15 categories of segments) of GenomicRanges objects; each is an
+GR object containing segments per category in the reference epigenome.
+</p>
+</li></ul>
+
+<p>7. Genomic scores
+</p>
+
+<ul>
+<li><p><code>RecombinationRate</code>: a GR object containing a meta-column
+for recombination rates.
+</p>
+</li>
+<li><p><code>phastCons100way</code>: a GR object containing a meta-column for
+phastCons100way.
+</p>
+</li>
+<li><p><code>phyloP100way</code>: a GR object containing a meta-column for
+phyloP100way.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichViewer</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+
+# transcribed lncRNAs
+FANTOM5_CAT &lt;- xRDataLoader('FANTOM5_CAT',
+RData.location=RData.location)
+GR_lncRNA &lt;- FANTOM5_CAT[grepl('lncRNA',FANTOM5_CAT$Class)]
+names(GR_lncRNA) &lt;- NULL
+data &lt;- GR_lncRNA
+# RPS calculation
+dGR &lt;- xRPS(data, format="GRanges",
+GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way"),
+RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

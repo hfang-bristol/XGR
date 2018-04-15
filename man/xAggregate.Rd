@@ -4,23 +4,35 @@
 \alias{xAggregate}
 \title{Function to aggregate data respecting number of features}
 \usage{
-xAggregate(data, verbose = T)
+xAggregate(data, bin = F, nbin = 10, scale.log = T, verbose = T)
 }
 \arguments{
 \item{data}{a data frame. The aggregation is done across columns per
 row. Each cell should contain positive values or NA; if infinite, it
 will be replaced with the maximum finite value}
 
+\item{bin}{logical to indicate whether the input data per column is
+rank-transformed into the predefined number of discrete bins. By
+default, it sets to false}
+
+\item{nbin}{the number of discrete bins. By default, it sets to 10
+(only works when bin is 10)}
+
+\item{scale.log}{logical to indicate whether the per-row sum is
+log-scaled. By default, it sets to true}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 }
 \value{
-a data frame with an appended column called 'Aggregate'
+a data frame with an appended column 'Aggregate'
 }
 \description{
 \code{xAggregate} is supposed to aggregate data respecting number of
 features. Per row, the aggregated is the sum of two items: the number
-of features, and the sum of all but scaled into [0,0.9999999]
+of features, and the sum of all but scaled into [0,0.9999999]. Also
+supported is the rank-transformation of the input data per column,
+binned into the predefined number of discrete bins.
 }
 \note{
 None
@@ -35,7 +47,6 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 g <- xRDataLoader(RData.customised='ig.PCHiC',
 RData.location=RData.location)
 df <- do.call(cbind, igraph::edge_attr(g))
-
 # aggregate over cell types/states
 data <- df
 data[data<5] <- NA

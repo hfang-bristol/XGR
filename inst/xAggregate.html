@@ -11,14 +11,16 @@
 
 <p><code>xAggregate</code> is supposed to aggregate data respecting number of
 features. Per row, the aggregated is the sum of two items: the number
-of features, and the sum of all but scaled into [0,0.9999999]
+of features, and the sum of all but scaled into [0,0.9999999]. Also
+supported is the rank-transformation of the input data per column,
+binned into the predefined number of discrete bins.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xAggregate(data, verbose = T)
+xAggregate(data, bin = F, nbin = 10, scale.log = T, verbose = T)
 </pre>
 
 
@@ -31,6 +33,22 @@ xAggregate(data, verbose = T)
 row. Each cell should contain positive values or NA; if infinite, it
 will be replaced with the maximum finite value</p>
 </td></tr>
+<tr valign="top"><td><code>bin</code></td>
+<td>
+<p>logical to indicate whether the input data per column is
+rank-transformed into the predefined number of discrete bins. By
+default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>nbin</code></td>
+<td>
+<p>the number of discrete bins. By default, it sets to 10
+(only works when bin is 10)</p>
+</td></tr>
+<tr valign="top"><td><code>scale.log</code></td>
+<td>
+<p>logical to indicate whether the per-row sum is
+log-scaled. By default, it sets to true</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -41,7 +59,7 @@ displayed in the screen. By default, it sets to true for display</p>
 
 <h3>Value</h3>
 
-<p>a data frame with an appended column called 'Aggregate'
+<p>a data frame with an appended column 'Aggregate'
 </p>
 
 
@@ -69,7 +87,6 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 g &lt;- xRDataLoader(RData.customised='ig.PCHiC',
 RData.location=RData.location)
 df &lt;- do.call(cbind, igraph::edge_attr(g))
-
 # aggregate over cell types/states
 data &lt;- df
 data[data&lt;5] &lt;- NA
