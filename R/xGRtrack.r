@@ -61,12 +61,13 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 		}
     	gene.model <- xRDataLoader(RData.customised=gene.model, verbose=verbose, RData.location=RData.location)
     }
-    grl_gene <- split(gr_gene, gr_gene$Symbol)
+    grl_gene <- GenomicRanges::split(gr_gene, gr_gene$Symbol)
     
 	########################################
 	if(is.null(cse.query)){
 		if(!is.null(gene.query)){
 			ind <- match(gene.query, names(grl_gene))
+			
 			if(length(ind) == 0 | is.na(ind)){
 				warning(sprintf("\tNo found for queried %s", gene.query), appendLF=TRUE)
 				return(NULL)
@@ -74,11 +75,20 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 				gr_tmp <- BiocGenerics::unlist(grl_gene[ind[!is.na(ind)]])
 				
 				if(is.null(nearby)){
+				
+					if(verbose){
+						message(sprintf("View for the window %d centered on the gene %s (%s) ...", window, gene.query, as.character(Sys.time())), appendLF=TRUE)
+					}
+				
 					## a window (eg 1e6) of upstream and downstream from the gene in query
 					q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=gr_gene, subject=gr_tmp, maxgap=window-1, minoverlap=0L, type="any", select="all", ignore.strand=TRUE))))
 					genes_tmp <- unique(gr_gene$Symbol[q2r[,1]])
 					
 				}else{
+					
+					if(verbose){
+						message(sprintf("View for the gene %s and its %d nearby genes (%s) ...", gene.query, nearby, as.character(Sys.time())), appendLF=TRUE)
+					}
 					
 					Symbol <- Dist <- NULL
 					
@@ -92,7 +102,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 
 				grl_subset <- grl_gene[genes_tmp]
 				gr_subset <- BiocGenerics::unlist(grl_subset)
-
+				
 				chr <- unique(as.character(GenomeInfoDb::seqnames(gr_subset)))
 				xlim <- c(min(BiocGenerics::start(gr_subset)), max(BiocGenerics::end(gr_subset)))
 				cse.query <- paste0(chr,':',xlim[1],'-',xlim[2])
@@ -108,9 +118,15 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 		}
 	
 	}else{
+	
 		gr_cse <- xGR(cse.query, format='chr:start-end')
 		
 		if(!is.null(gr_cse)){
+			
+			if(verbose){
+				message(sprintf("View for %s (%s) ...", cse.query, as.character(Sys.time())), appendLF=TRUE)
+			}
+		
 			q2r <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=gr_gene, subject=gr_cse, maxgap=-1L, minoverlap=0L, type="any", select="all", ignore.strand=T)))
 			genes_tmp <- unique(gr_gene$Symbol[q2r[,1]])
 			grl_subset <- grl_gene[genes_tmp]
@@ -184,7 +200,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 	gr_anno <- BiocGenerics::unlist(GenomicRanges::GRangesList(ls_gr_anno))
 		
 	x <- y <- anno <- score <- NULL
-		
+
 	if(1){
 		df <- as.data.frame(gr_anno, row.names=NULL)
 		df_start <- df[,c('start','GScore','Anno')]
@@ -230,7 +246,7 @@ xGRtrack <- function(cse.query=NULL, gene.query=NULL, window=1e5, nearby=NULL, n
 		}
 	
 	####################
-	xlim <- c(min(start(gr_cse)), max(end(gr_cse)))
+	xlim <- c(min(GenomicRanges::start(gr_cse)), max(GenomicRanges::end(gr_cse)))
 	if(is.null(gp_score)){
 		tks <- suppressWarnings(suppressMessages(ggbio::tracks(gp_model, xlab=cse.query, xlim=xlim)))
 	}else{
