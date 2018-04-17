@@ -104,5 +104,6 @@ Collate:
     'xGRtrack.r'
     'xAggregate.r'
     'xRPS.r'
+    'xGRmanhattan.r'
 License: GPL-2
 biocViews: Bioinformatics
