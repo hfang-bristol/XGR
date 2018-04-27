@@ -8,10 +8,11 @@ xGRtrack(cse.query = NULL, gene.query = NULL, window = 1e+05,
 nearby = NULL, name.scoretrack = "Genomic scores",
 gene.model = c("UCSC_knownGene_model", "UCSC_knownCanonical_model"),
 GR.score = c(NA, "RecombinationRate", "phastCons100way",
-"phyloP100way"),
-GR.score.customised = NULL, name.customised = "Customised",
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"phyloP100way",
+"GERP"), GR.score.customised = NULL, name.customised = "Customised",
+type.customised = c("point", "line"), label.size = 2,
+label.col = "black", label.force = 0.05, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{cse.query}{a genomic region in query. By default it is NULL;
@@ -48,16 +49,27 @@ without extension), plus specify your file RData path in
 default, it is 'NA' to disable this option. Pre-built genomic score
 data: 'RecombinationRate' (recombintion rate,
 \url{http://www.ncbi.nlm.nih.gov/pubmed/17943122})), 'phastCons100way',
-'phyloP100way'.}
+'phyloP100way', 'GERP'.}
 
 \item{GR.score.customised}{the customised genomic score data. By
 default, it is NA to disable this option; otherwise load your
 customised GR object directly (with the first meta column for scores;
 if not provided, it will be valued at 1). If provided, it will be
-appended to 'GR.score' above}
+appended to 'GR.score' above. Also supported is the labelling by
+providing a meta-column called 'Label'. It can be also a list of GR
+objects}
 
 \item{name.customised}{the name for customised genomic score data. By
 default, it is "Customised"}
+
+\item{type.customised}{how to plot customised genomic score data. It
+can be "point" or "line"}
+
+\item{label.size}{label size}
+
+\item{label.col}{label color}
+
+\item{label.force}{the repelling force between overlapping labels}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
@@ -98,15 +110,6 @@ gene.model="UCSC_knownGene_model",
 GR.score=c("RecombinationRate","phastCons100way"),
 RData.location=RData.location)
 
-## also use customised GR.score
-### RecombinationRate
-GR.score.customised <- xRDataLoader("RecombinationRate",
-RData.location=RData.location)
-tks <- xGRtrack(gene.query='TNF', nearby=10,
-gene.model="UCSC_knownGene_model", GR.score="RecombinationRate",
-GR.score.customised=GR.score.customised, RData.location=RData.location)
-tks
-
 ### GWAS catalog
 GWAScatalog <- xRDataLoader('GWAScatalog',
 RData.location=RData.location)
@@ -116,6 +119,37 @@ gwas$pvalue <- -log10(GWAScatalog$pvalue[ind])
 tks <- xGRtrack(gene.query='TNF', nearby=10,
 gene.model="UCSC_knownGene_model", GR.score="RecombinationRate",
 GR.score.customised=gwas, RData.location=RData.location)
+tks
+
+##########################
+## Advanced use: customised GR.score
+##########################
+gene.model <- xRDataLoader("UCSC_knownGene_model",
+RData.location=RData.location)
+
+### LDblock_GR
+LDblock_GR <- xRDataLoader("LDblock_GR", RData.location=RData.location)
+gr <- LDblock_GR
+GenomicRanges::mcols(gr) <- NULL
+maf <- distance <- cadd <- gr
+maf$maf <- LDblock_GR$maf
+distance$distance <- LDblock_GR$distance
+cadd$cadd <- LDblock_GR$cadd
+### GR.score.customised as a list of GR objects
+GR.score.customised <- list(maf=maf, distance=distance, cadd=cadd)
+tks <- xGRtrack(gene.query='TNF', window=1e0, gene.model=gene.model,
+GR.score=NA, GR.score.customised=GR.score.customised,
+type.customised='point', RData.location=RData.location)
+tks
+
+### the built-in provided as the customised
+customised <-
+c("RecombinationRate","phastCons100way","phyloP100way","GERP","dbSNP_GWAS")
+GR.score.customised <- lapply(customised, function(x) xRDataLoader(x,
+RData.location=RData.location))
+tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model=gene.model,
+GR.score=NA, GR.score.customised=GR.score.customised,
+type.customised='line', RData.location=RData.location)
 tks
 }
 }

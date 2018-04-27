@@ -8,6 +8,11 @@
 #' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
 #' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param x.rotate the angle to rotate the x tick labelings. By default, it is 60
+#' @param x.text.size the text size of the x tick labelings. By default, it is 6
+#' @param y.text.size the text size of the y tick labelings. By default, it is 6
+#' @param shape the number specifying the shape. By default, it is 19
+#' @param size the number specifying the shape size. By default, it is 2
 #' @param verbose logical to indicate whether the messages will be displayed in the screen
 #' @return an object of class "ggplot"
 #' @note none
@@ -31,6 +36,7 @@
 #' # 2) PSG
 #' eTerm <- xEnricherGenes(data, ontology=c("PSG","Approved","GWAS","CGL")[1], size.range=c(1,20000), min.overlap=0, RData.location=RData.location)
 #' gp_ladder <- xEnrichLadder(eTerm, sortBy="none", top_num="auto", FDR.cutoff=1)
+#' gp_ladder+ coord_flip()
 #' 
 #' # 3) save into the file "xEnrichLadder.pdf"
 #' mat <- xSparseMatrix(gp_ladder$data)
@@ -39,7 +45,7 @@
 #' dev.off()
 #' }
 
-xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="skyblue-darkblue", verbose=T)
+xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="skyblue-darkblue", x.rotate=60, x.text.size=6, y.text.size=6, shape=19, size=2, verbose=T)
 {
 
     sortBy <- match.arg(sortBy)
@@ -127,7 +133,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 					mat_heatmap <- t(df_heatmap)
 					ind <- match(rownames(mat_heatmap), df_enrichment$name)
 					rownames(mat_heatmap) <- df_enrichment$label[ind]
-					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap=colormap, zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap=colormap, zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=x.rotate, x.text.size=x.text.size, y.text.size=y.text.size, shape=shape, size=size, na.color='transparent')
 					gp_heatmap <- gp_heatmap + theme(legend.title=element_text(size=8), legend.position="none") + scale_y_discrete(position="right")
 					colsep <- cumsum(table(vec_sum))
 					colsep <- length(vec_sum) - colsep[-length(colsep)]

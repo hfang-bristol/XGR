@@ -192,3 +192,45 @@ print.cPath <- function(x, ...) {
 	print(x$ig_paths$enrichment[1:min(2,nrow(x$ig_paths$enrichment)),2:13], row.names=FALSE)
 	cat("......\n")
 }
+
+######################################################################
+# bLD
+######################################################################
+#' @title Definition for S3 class \code{bLD}
+#' @description \code{bLD} has 4 components: best, block.
+#' @param best an GenomicRanges object
+#' @param block a list of GenomicRanges objects
+#' @return an object of S3 class \code{bLD}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' \dontrun{
+#' bLD(best, block)
+#' }
+bLD <- function(best, block){
+	## integrity checks
+	if(class(best)!='GRanges' | class(block)!='list'){
+		stop("The S3 class 'bLD' object failed to pass integrity checks!\n")
+	}
+	value <- list(best=best, block=block)
+	class(value) <- "bLD"
+	return(value)
+}
+#' @param x an object of class \code{bLD}
+#' @param ... other parameters
+#' @rdname bLD
+#' @export
+print.bLD <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $best: an GenomicRanges object or NULL"), "\n", sep="")
+	cat(sprintf("  $block: a list of GenomicRanges objects or NULL"), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$best:\n")
+	print(x$best)
+	cat("......\n")
+}

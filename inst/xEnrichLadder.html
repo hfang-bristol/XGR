@@ -22,7 +22,8 @@ It returns an object of class &quot;ggplot&quot;.
 xEnrichLadder(eTerm, sortBy = c("or", "adjp", "fdr", "pvalue",
 "zscore", "fc",
 "nAnno", "nOverlap", "none"), top_num = 10, FDR.cutoff = 0.05,
-CI.one = T, colormap = "skyblue-darkblue", verbose = T)
+CI.one = T, colormap = "skyblue-darkblue", x.rotate = 60,
+x.text.size = 6, y.text.size = 6, shape = 19, size = 2, verbose = T)
 </pre>
 
 
@@ -70,6 +71,29 @@ hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>x.rotate</code></td>
+<td>
+<p>the angle to rotate the x tick labelings. By default,
+it is 60</p>
+</td></tr>
+<tr valign="top"><td><code>x.text.size</code></td>
+<td>
+<p>the text size of the x tick labelings. By default,
+it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>y.text.size</code></td>
+<td>
+<p>the text size of the y tick labelings. By default,
+it is 6</p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>the number specifying the shape. By default, it is 19</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>the number specifying the shape size. By default, it is 2</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -121,6 +145,7 @@ ontology=c("PSG","Approved","GWAS","CGL")[1], size.range=c(1,20000),
 min.overlap=0, RData.location=RData.location)
 gp_ladder &lt;- xEnrichLadder(eTerm, sortBy="none", top_num="auto",
 FDR.cutoff=1)
+gp_ladder+ coord_flip()
 
 # 3) save into the file "xEnrichLadder.pdf"
 mat &lt;- xSparseMatrix(gp_ladder$data)

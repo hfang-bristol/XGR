@@ -28,6 +28,14 @@
 xGRsort <- function(data)
 {
 	data <- gsub(',.*','',data)
+	
+	## have to be formatted as chr:start-end
+    input <- do.call(rbind, strsplit(data, ":|-|,"))
+    if(ncol(input)==2) {
+     	data <- paste(input[,1], ":", input[,2], "-", input[,2], sep="")
+    }
+	##
+	
 	## gr has unique regions
 	suppressWarnings(gr <- xGR(data, format='chr:start-end'))
 	

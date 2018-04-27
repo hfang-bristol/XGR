@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to obtain LD blocks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xLDblock"><tr><td>xLDblock</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to obtain LD blocks</h2>
+
+<h3>Description</h3>
+
+<p><code>xLDblock</code> is supposed to obtain LD blocks for a list of Lead SNPs
+together with the significance level.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xLDblock(data, include.LD = c("AFR", "AMR", "EAS", "EUR", "SAS"),
+LD.customised = NULL, LD.r2 = 0.8, GR.SNP = "LDblock_GR", verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a named input vector containing the significance level for
+nodes (dbSNP). For this named vector, the element names are dbSNP
+(starting with rs or in the format of 'chrN:xxx', where N is either
+1-22 or X, xxx is number; for example, 'chr16:28525386'), the element
+values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for dbSNP, 2nd column for the significance level.</p>
+</td></tr>
+<tr valign="top"><td><code>include.LD</code></td>
+<td>
+<p>additional SNPs in LD with Lead SNPs are also
+included. By default, it is 'NA' to disable this option. Otherwise, LD
+SNPs will be included based on one or more of 26 populations and 5
+super populations from 1000 Genomics Project data (phase 3). The
+population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
+&quot;EUR&quot;, &quot;SAS&quot;). Explanations for population code can be found at
+<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
+</td></tr>
+<tr valign="top"><td><code>LD.customised</code></td>
+<td>
+<p>a user-input matrix or data frame with 3
+compulsory columns: 1st column for Lead SNPs, 2nd column for LD SNPs,
+and 3rd for LD r2 value. The recommended columns are 'maf', 'distance'
+(to the nearest gene) and 'cadd'. It is designed to allow the user
+analysing their precalcuated LD info. This customisation (if provided)
+has the high priority over built-in LD SNPs</p>
+</td></tr>
+<tr valign="top"><td><code>LD.r2</code></td>
+<td>
+<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
+in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
+be any value from 0.1 to 1</p>
+</td></tr>
+<tr valign="top"><td><code>GR.SNP</code></td>
+<td>
+<p>the genomic regions of SNPs. By default, it is
+'LDblock_GR', that is, SNPs from dbSNP (version 150) restricted to GWAS
+SNPs and their LD SNPs (hg19). Note: you can also load your customised
+GR object directly</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;bLD&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>best</code>: an GR object. It has optional meta-columns 'maf',
+'distance' (to the nearest gene) and 'cadd', and compulsory
+meta-columns 'pval', 'score' (-log10(pval)), 'upstream' (the lower
+boundary away from the best SNP, non-positive value), 'downstream' (the
+upper boundary away from the best SNP, non-negative value) and 'num'
+(the number of SNPs in the block)
+</p>
+</li>
+<li><p><code>block</code>: a list of GR objects, each element corresponding to
+a block for the best SNP with optional meta-columns 'maf', 'distance'
+(to the nearest gene) and 'cadd', and compulsory meta-columns 'pval',
+'score' (-log10(pval)*R2, based on pval for its lead SNP)
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>None
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xLDblock</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+
+## Not run: 
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+data(ImmunoBase)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]
+
+# b) get LD block (EUR population)
+bLD &lt;- xLDblock(data, include.LD="EUR", LD.r2=0.8,
+RData.location=RData.location)
+
+# c1) manhattan plot of the best
+best &lt;- bLD$best
+best$value &lt;- best$score
+gp &lt;- xGRmanhattan(best, top=length(best))
+gp
+# c2) manhattan plot of all LD block
+lgr_block &lt;- bLD$block
+grl_block &lt;- GenomicRanges::GRangesList(lgr_block)
+gr_block &lt;- BiocGenerics::unlist(grl_block,use.names=F)
+gr_block$value &lt;- gr_block$score
+top.label.query &lt;- names(gr_block)[!is.na(gr_block$pval)]
+#gr_block &lt;- gr_block[as.character(GenomicRanges::seqnames(gr_block)) %in% c('chr1','chr2')]
+gp &lt;- xGRmanhattan(gr_block, top=length(gr_block),
+top.label.query=top.label.query)
+
+# d) track plot of LD block
+gr_block &lt;- bLD$block[[1]]
+df_mcols &lt;- GenomicRanges::mcols(gr_block)[,c('score','maf','cadd')]
+## GR.score.customised
+gr &lt;- gr_block
+GenomicRanges::mcols(gr) &lt;- NULL
+ls_gr &lt;- lapply(colnames(df_mcols), function(x) {res &lt;- gr; res$value
+&lt;- df_mcols[,x]; res})
+names(ls_gr) &lt;- colnames(df_mcols)
+ls_gr$score$Label &lt;- names(gr_block)
+ls_gr$score$Label[is.na(gr_block$pval)] &lt;-''
+GR.score.customised &lt;- ls_gr
+## cse.query
+chr &lt;- unique(as.character(GenomicRanges::seqnames(gr_block)))
+xlim &lt;- range(GenomicRanges::start(gr_block))
+cse.query &lt;- paste0(chr,':',xlim[1],'-',xlim[2])
+#cse.query &lt;- paste0(chr,':',xlim[1]-1e4,'-',xlim[2]+1e4)
+## xGRtrack
+tks &lt;- xGRtrack(cse.query=cse.query, GR.score="RecombinationRate",
+GR.score.customised=GR.score.customised, RData.location=RData.location)
+tks
+
+###############
+# Advanced use: get LD block (based on customised LD and SNP data)
+###############
+LD.customised &lt;- xRDataLoader('LDblock_EUR',
+RData.location=RData.location)
+GR.SNP &lt;- xRDataLoader('LDblock_GR', RData.location=RData.location)
+bLD &lt;- xLDblock(data, LD.customised=LD.customised, LD.r2=0.8,
+GR.SNP=GR.SNP, RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

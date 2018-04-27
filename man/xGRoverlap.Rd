@@ -8,8 +8,9 @@ xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), GR.score =
 c(NA,
-"RecombinationRate", "phastCons100way", "phyloP100way"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata_dev")
+"RecombinationRate", "phastCons100way", "phyloP100way", "GERP"),
+verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata_dev")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -37,7 +38,7 @@ another. The conversions supported are "hg38.to.hg19" and
 default, it is 'NA' to disable this option. Pre-built genomic score
 data: 'RecombinationRate' (recombintion rate,
 \url{http://www.ncbi.nlm.nih.gov/pubmed/17943122})), 'phastCons100way',
-'phyloP100way'. Beyond pre-built data, the user can specify the
+'phyloP100way', 'GERP'. Beyond pre-built data, the user can specify the
 customised input: load your customised GR object directly (with the
 first meta column for scores; if not provided, it will be valued at 1)}
 

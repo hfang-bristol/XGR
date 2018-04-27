@@ -7,7 +7,8 @@
 xEnrichLadder(eTerm, sortBy = c("or", "adjp", "fdr", "pvalue",
 "zscore", "fc",
 "nAnno", "nOverlap", "none"), top_num = 10, FDR.cutoff = 0.05,
-CI.one = T, colormap = "skyblue-darkblue", verbose = T)
+CI.one = T, colormap = "skyblue-darkblue", x.rotate = 60,
+x.text.size = 6, y.text.size = 6, shape = 19, size = 2, verbose = T)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -39,6 +40,19 @@ hyphen-separated HTML color names, e.g. "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}
+
+\item{x.rotate}{the angle to rotate the x tick labelings. By default,
+it is 60}
+
+\item{x.text.size}{the text size of the x tick labelings. By default,
+it is 6}
+
+\item{y.text.size}{the text size of the y tick labelings. By default,
+it is 6}
+
+\item{shape}{the number specifying the shape. By default, it is 19}
+
+\item{size}{the number specifying the shape size. By default, it is 2}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen}
@@ -77,6 +91,7 @@ ontology=c("PSG","Approved","GWAS","CGL")[1], size.range=c(1,20000),
 min.overlap=0, RData.location=RData.location)
 gp_ladder <- xEnrichLadder(eTerm, sortBy="none", top_num="auto",
 FDR.cutoff=1)
+gp_ladder+ coord_flip()
 
 # 3) save into the file "xEnrichLadder.pdf"
 mat <- xSparseMatrix(gp_ladder$data)

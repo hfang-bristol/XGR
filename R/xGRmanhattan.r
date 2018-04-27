@@ -73,7 +73,8 @@ xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybro
 	## for sorting
 	chrlabs <- paste('chr', as.character(c(1:22,'X','Y')), sep='')
 	#######
-	if(chromosome.only){
+	#if(chromosome.only){
+	if(1){
 		ind <- chrlabs %in% unique(as.character(gr@seqnames@values))
 		chrlabs <- chrlabs[ind]
 	}
@@ -101,7 +102,7 @@ xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybro
 			names(cols) <- chrs
 			bp <- bp + scale_color_manual(values=cols) + theme(legend.position="none")
 		}else if(length(color)==1){
-			chrs <- levels(df[,1])
+			chrs <- levels(df_data[,1])
 			N <- length(chrs)
 			cols <- xColormap(color)(N)
 			names(cols) <- chrs
