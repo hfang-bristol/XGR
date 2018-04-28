@@ -5,7 +5,8 @@
 \title{Function to create a GRanges object given a list of genomic regions}
 \usage{
 xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), verbose = T,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), add.name = T,
+remove.mcol = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -29,6 +30,11 @@ this case, formatted as 'GRanges')}
 \item{build.conversion}{the conversion from one genome build to
 another. The conversions supported are "hg38.to.hg19" and
 "hg18.to.hg19". By default it is NA (no need to do so)}
+
+\item{add.name}{logical to add names. By default, it sets to true}
+
+\item{remove.mcol}{logical to remove meta-columns. By default, it sets
+to false}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

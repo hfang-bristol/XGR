@@ -20,7 +20,8 @@ manhattan plot. It returns an object of class &quot;ggplot&quot;.
 xGRmanhattan(gr, chromosome.only = TRUE, color = c("royalblue",
 "sandybrown"), y.scale = c("normal", "sqrt", "log"), y.lab = NULL,
 top = NULL, top.label.type = c("text", "box"), top.label.size = 2,
-top.label.col = "black", top.label.query = NULL,
+top.label.col = "black", top.label.force = 0.05, top.label.query =
+NULL,
 label.query.only = FALSE, top.label.chr = T, verbose = TRUE)
 </pre>
 
@@ -72,6 +73,10 @@ drawing a box around the labels , and &quot;text&quot; for the text only</p>
 <tr valign="top"><td><code>top.label.col</code></td>
 <td>
 <p>the highlight label color</p>
+</td></tr>
+<tr valign="top"><td><code>top.label.force</code></td>
+<td>
+<p>the repelling force between overlapping labels</p>
 </td></tr>
 <tr valign="top"><td><code>top.label.query</code></td>
 <td>

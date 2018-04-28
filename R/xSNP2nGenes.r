@@ -45,7 +45,7 @@
 #' df_nGenes <- xSNP2nGenes(data=data, distance.max=200000, decay.kernel="slow", decay.exponent=2, include.TAD='GM12878', RData.location=RData.location)
 #' }
 
-xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     decay.kernel <- match.arg(decay.kernel)

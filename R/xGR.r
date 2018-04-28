@@ -5,6 +5,8 @@
 #' @param data input genomic regions (GR). If formatted as "chr:start-end" (see the next parameter 'format' below), GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. If formatted as a 'data.frame', the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. The data could also be an object of 'GRanges' (in this case, formatted as 'GRanges')
 #' @param format the format of the input data. It can be one of "chr:start-end", "data.frame", "bed" or "GRanges"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
+#' @param add.name logical to add names. By default, it sets to true
+#' @param remove.mcol logical to remove meta-columns. By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return a GenomicRanges object 
@@ -32,7 +34,7 @@
 #' GR <- xGR(data=data, format="chr:start-end", RData.location=RData.location)
 #' }
 
-xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -82,7 +84,9 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
+		if(add.name){
+			names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
+		}
 		
 	}else if(format=="chr:start-end"){
 		data <- unique(data[!is.na(data)])
@@ -102,7 +106,9 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
+		if(add.name){
+			names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
+		}
 		
 	}else if(format=="bed"){
 		## construct data GR
@@ -113,11 +119,18 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
 			strand = S4Vectors::Rle(rep('*',length(ind)))
 		)
-		names(dGR) <- paste(data[ind,1], ':', data[ind,2]+1, '-', data[ind,3], sep='')
+		if(add.name){
+			names(dGR) <- paste(data[ind,1], ':', data[ind,2]+1, '-', data[ind,3], sep='')
+		}
+		
 	}else if(format=="GRanges"){
 		dGR <- data
 		
-		if(is.null(names(dGR))){
+		if(remove.mcol){
+			GenomicRanges::mcols(dGR) <- NULL
+		}
+		
+		if(is.null(names(dGR)) & add.name){
 			df <- as.data.frame(dGR, row.names=NULL)
 			names(dGR) <- paste(df$seqnames,':',df$start,'-',df$end, sep='')
 		}

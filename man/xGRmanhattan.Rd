@@ -7,7 +7,8 @@
 xGRmanhattan(gr, chromosome.only = TRUE, color = c("royalblue",
 "sandybrown"), y.scale = c("normal", "sqrt", "log"), y.lab = NULL,
 top = NULL, top.label.type = c("text", "box"), top.label.size = 2,
-top.label.col = "black", top.label.query = NULL,
+top.label.col = "black", top.label.force = 0.05, top.label.query =
+NULL,
 label.query.only = FALSE, top.label.chr = T, verbose = TRUE)
 }
 \arguments{
@@ -37,6 +38,8 @@ drawing a box around the labels , and "text" for the text only}
 \item{top.label.size}{the highlight label size}
 
 \item{top.label.col}{the highlight label color}
+
+\item{top.label.force}{the repelling force between overlapping labels}
 
 \item{top.label.query}{which top genes in query will be labelled. By
 default, it sets to NULL meaning all top genes will be displayed. If

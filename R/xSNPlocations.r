@@ -31,7 +31,7 @@
 #' snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 #' }
 
-xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
 	## replace '_' with ':'

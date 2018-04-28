@@ -18,7 +18,8 @@ genomic regions.
 
 <pre>
 xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), verbose = T,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), add.name = T,
+remove.mcol = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -52,6 +53,15 @@ this case, formatted as 'GRanges')</p>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>add.name</code></td>
+<td>
+<p>logical to add names. By default, it sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>remove.mcol</code></td>
+<td>
+<p>logical to remove meta-columns. By default, it sets
+to false</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

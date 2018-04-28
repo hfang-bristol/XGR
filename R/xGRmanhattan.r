@@ -11,6 +11,7 @@
 #' @param top.label.type how to label the top targets. It can be "box" drawing a box around the labels , and "text" for the text only
 #' @param top.label.size the highlight label size
 #' @param top.label.col the highlight label color
+#' @param top.label.force the repelling force between overlapping labels
 #' @param top.label.query which top genes in query will be labelled. By default, it sets to NULL meaning all top genes will be displayed. If labels in query can not be found, then all will be displayed
 #' @param label.query.only logical to indicate whether only those in query will be displayed. By default, it sets to FALSE. It only works when labels in query are enabled/found
 #' @param top.label.chr logical to indicate whether the top hit per chromosome will be displayed. By default, it sets to TRUE. It only works when the parameter 'top' is null
@@ -39,7 +40,7 @@
 #' gp
 #' }
 
-xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybrown"), y.scale=c("normal","sqrt","log"), y.lab=NULL, top=NULL, top.label.type=c("text","box"), top.label.size=2, top.label.col="black", top.label.query=NULL, label.query.only=FALSE, top.label.chr=T, verbose=TRUE)
+xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybrown"), y.scale=c("normal","sqrt","log"), y.lab=NULL, top=NULL, top.label.type=c("text","box"), top.label.size=2, top.label.col="black", top.label.force=0.05, top.label.query=NULL, label.query.only=FALSE, top.label.chr=T, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -85,7 +86,7 @@ xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybro
 	value <- seqnames <- NULL
 	###############################
 	## calling ggbio::autoplot
-	suppressMessages(ggp <- ggbio::autoplot(object=gr, aes(y=value,color=seqnames,alpha=value), coord=c("genome","default")[1], geom='point', layout=c("linear","circle")[1], space.skip=0.01))
+	suppressMessages(ggp <- ggbio::autoplot(object=gr, aes(y=value,color=seqnames), coord=c("genome","default")[1], geom='point', layout=c("linear","circle")[1], space.skip=0.01))
 	
 	## extract ggplot
 	bp <- ggp@ggplot
@@ -179,9 +180,9 @@ xGRmanhattan <- function(gr, chromosome.only=TRUE, color=c("royalblue","sandybro
 		midpoint <- value <- label <- NULL
 		if(!is.null(df_highlight)){
 			if(top.label.type=="text"){
-				bp <- bp + ggrepel::geom_text_repel(data=df_highlight, aes(x=midpoint,y=value,label=label), size=top.label.size, color=top.label.col, fontface='bold.italic', point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
+				bp <- bp + ggrepel::geom_text_repel(data=df_highlight, aes(x=midpoint,y=value,label=label), size=top.label.size, color=top.label.col, force=top.label.force, fontface='bold.italic', point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
 			}else if(top.label.type=="box"){
-				bp <- bp + ggrepel::geom_label_repel(data=df_highlight, aes(x=midpoint,y=value,label=label), size=top.label.size, color=top.label.col, fontface='bold.italic', box.padding=unit(0.2,"lines"), point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
+				bp <- bp + ggrepel::geom_label_repel(data=df_highlight, aes(x=midpoint,y=value,label=label), size=top.label.size, color=top.label.col, force=top.label.force, fontface='bold.italic', box.padding=unit(0.2,"lines"), point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
 			}
 		}
 	}

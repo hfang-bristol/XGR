@@ -227,8 +227,8 @@ bLD <- function(best, block){
 #' @export
 print.bLD <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
-	cat(sprintf("  $best: an GenomicRanges object or NULL"), "\n", sep="")
-	cat(sprintf("  $block: a list of GenomicRanges objects or NULL"), "\n", sep="")
+	cat(sprintf("  $best: an GR object or NULL"), "\n", sep="")
+	cat(sprintf("  $block: a list of GR objects or NULL"), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$best:\n")
 	print(x$best)
