@@ -87,7 +87,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 </p>
 
 <ul>
-<li><p><code>best</code>: an GR object. It has optional meta-columns 'maf',
+<li><p><code>best</code>: a GR object. It has optional meta-columns 'maf',
 'distance' (to the nearest gene) and 'cadd', and compulsory
 meta-columns 'pval', 'score' (-log10(pval)), 'upstream' (the lower
 boundary away from the best SNP, non-positive value), 'downstream' (the
@@ -95,10 +95,11 @@ upper boundary away from the best SNP, non-negative value) and 'num'
 (the number of SNPs in the block)
 </p>
 </li>
-<li><p><code>block</code>: a list of GR objects, each element corresponding to
-a block for the best SNP with optional meta-columns 'maf', 'distance'
-(to the nearest gene) and 'cadd', and compulsory meta-columns 'pval',
-'score' (-log10(pval)*R2, based on pval for its lead SNP)
+<li><p><code>block</code>: a GRL object, each element corresponding to a block
+for the best SNP with optional meta-columns 'maf', 'distance' (to the
+nearest gene) and 'cadd', and compulsory meta-columns 'pval', 'score'
+(-log10(pval)*R2, based on pval for its lead SNP), 'best' (the best
+SNP) and 'distance_to_best' (to the best SNP)
 </p>
 </li></ul>
 
@@ -144,8 +145,7 @@ best$value &lt;- best$score
 gp &lt;- xGRmanhattan(best, top=length(best))
 gp
 # c2) manhattan plot of all LD block
-lgr_block &lt;- bLD$block
-grl_block &lt;- GenomicRanges::GRangesList(lgr_block)
+grl_block &lt;- bLD$block
 gr_block &lt;- BiocGenerics::unlist(grl_block,use.names=F)
 gr_block$value &lt;- gr_block$score
 top.label.query &lt;- names(gr_block)[!is.na(gr_block$pval)]
@@ -153,21 +153,18 @@ top.label.query &lt;- names(gr_block)[!is.na(gr_block$pval)]
 gp &lt;- xGRmanhattan(gr_block, top=length(gr_block),
 top.label.query=top.label.query)
 
-# d) track plot of LD block
+# d) track plot of 1st LD block
 gr_block &lt;- bLD$block[[1]]
-df_mcols &lt;- GenomicRanges::mcols(gr_block)[,c('score','maf','cadd')]
-## GR.score.customised
-gr &lt;- gr_block
-GenomicRanges::mcols(gr) &lt;- NULL
-ls_gr &lt;- lapply(colnames(df_mcols), function(x) {res &lt;- gr; res$value
-&lt;- df_mcols[,x]; res})
-names(ls_gr) &lt;- colnames(df_mcols)
+cnames &lt;- c('score','maf','cadd')
+ls_gr &lt;- lapply(cnames, function(x) gr_block[,x])
+names(ls_gr) &lt;- cnames
 ls_gr$score$Label &lt;- names(gr_block)
 ls_gr$score$Label[is.na(gr_block$pval)] &lt;-''
 GR.score.customised &lt;- ls_gr
 ## cse.query
-chr &lt;- unique(as.character(GenomicRanges::seqnames(gr_block)))
-xlim &lt;- range(GenomicRanges::start(gr_block))
+df_block &lt;- as.data.frame(gr_block)
+chr &lt;- unique(df_block$seqnames)
+xlim &lt;- range(df_block$start)
 cse.query &lt;- paste0(chr,':',xlim[1],'-',xlim[2])
 #cse.query &lt;- paste0(chr,':',xlim[1]-1e4,'-',xlim[2]+1e4)
 ## xGRtrack

@@ -1,17 +1,18 @@
 #' Function to generate randomly sampled LD blocks
 #'
-#' \code{xLDsampling} is supposed to generate randomly sampled LD blocks. A sample block has the same boundary range as the observed, and can respect maf of the best SNP, and/or distance of the best SNP to the nearest gene. Also it can be restricted to the same chromosome. It returns a GRL object.
+#' \code{xLDsampling} is supposed to generate randomly sampled LD blocks. A sample block has the same boundary range as the observed, and can respect maf of the best SNP, and/or distance of the best SNP to the nearest gene. Also it can be restricted to the same chromosome. For each null LD block, it can preserve the boundary only or exactly preserve the relative SNP locations. It returns a GRL object.
 #'
-#' @param bLD a bLD object, containing a set of blocks based on which to generate a null distribution. Alternatively, it can be a GR object with meta-columns (maf, distance, upstream, downstream)
+#' @param bLD a bLD object, containing a set of blocks based on which to generate a null distribution
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 150) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 150) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised GR object directly
 #' @param num.samples the number of samples randomly generated
 #' @param respect how to respect the properties of to-be-sampled LD blocks. It can be one of 'maf' (respecting the maf of the best SNP), 'distance' (respecting the distance of the best SNP to the nearest gene), and 'both' (respecting the maf and distance)
 #' @param restrict.chr logical to restrict to the same chromosome. By default, it sets to false
+#' @param preserve how to preserve the resulting null LD block. It can be one of 'boundary' (preserving the boundary of the LD block), and 'exact' (exactly preserving the relative SNP locations within the LD block)
 #' @param seed an integer specifying the seed
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' a GRL object, each containing an GR oject storing an instance of sampled blocks.
+#' a GRL object, each containing an GR oject storing an instance of sampled blocks (with a meta-column 'best' for the identity, and a meta-column 'B' for the instance sequence).
 #' @export
 #' @seealso \code{\link{xLDsampling}}
 #' @include xLDsampling.r
@@ -40,10 +41,10 @@
 #' ## Advanced use: customised GR.SNP
 #' ##########################
 #' GR.SNP <- xRDataLoader("dbSNP_GWAS", RData.location=RData.location)
-#' grl <- xLDsampling(bLD, GR.SNP=GR.SNP, respect="both", restrict.chr=T, RData.location=RData.location)
+#' grl <- xLDsampling(bLD, GR.SNP=GR.SNP, respect="both", restrict.chr=T, preserve="exact", RData.location=RData.location)
 #' }
 
-xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), num.samples=20000, respect=c("maf","distance","both"), restrict.chr=F, seed=825, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), num.samples=2000, respect=c("maf","distance","both"), restrict.chr=F, preserve=c("boundary","exact"), seed=825, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -55,16 +56,11 @@ xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     respect <- match.arg(respect)
+    preserve <- match.arg(preserve)
 	
 	if(class(bLD) == "bLD"){
 		gr_best <- bLD$best
-	}else if(class(bLD) == "GRanges"){
-		if(all(colnames(as.data.frame(bLD)) %in% c("maf","distance","upstream","downstream"))){
-			gr_best <- bLD
-		}else{
-			warning(sprintf("The input GR object must contain meta-columns (maf,distance,upstream,downstream)\n"))
-			return(NULL)
-		}
+		grl_block <- bLD$block
 	}else{
 		return(NULL)
 	}
@@ -95,7 +91,7 @@ xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 		#####################################
 		ind <- which(!is.na(gr_bg$maf))
 		df_bg <- GenomicRanges::as.data.frame(gr_bg[ind], row.names=NULL)
-		df_best <- GenomicRanges::as.data.frame(gr_best, row.names=NULL)
+		df_best <- GenomicRanges::as.data.frame(gr_best)
 		
 		if(verbose){
 			message(sprintf("%d blocks sampled from %d SNPs over %d times (%s)...", nrow(df_best), nrow(df_bg), num.samples, as.character(Sys.time())), appendLF=T)
@@ -109,6 +105,8 @@ xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 			if(restrict.chr){
 				message(sprintf("\trestrict to the same chromosome"), appendLF=T)
 			}
+			
+			message(sprintf("\tpreserve '%s'", preserve), appendLF=T)
 		}
 		#####################################
 		
@@ -146,8 +144,15 @@ xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 			## ind_sample
 			ind_sample <- base::sample(ind, num.samples, replace=T)
 			
-			y <- df_sample$start[ind_sample]
-			data.frame(chr=df_sample$seqnames[ind_sample], start=y+df_best$upstream[i], end=y+df_best$downstream[i], b=1:num.samples, stringsAsFactors=F)
+			if(preserve=="boundary"){
+				y <- df_sample$start[ind_sample]
+				res <- data.frame(chr=df_sample$seqnames[ind_sample], start=y+df_best$upstream[i], end=y+df_best$downstream[i], best=rownames(df_best)[i], B=1:num.samples, stringsAsFactors=F)
+			}else if(preserve=="exact"){		
+				distance_to_best <- grl_block[[i]]$distance_to_best
+				ind_sample_rep <- rep(ind_sample, each=length(distance_to_best))
+				y <- df_sample$start[ind_sample_rep]+rep(distance_to_best,num.samples)
+				res <- data.frame(chr=df_sample$seqnames[ind_sample_rep], start=y, end=y, best=rownames(df_best)[i], B=rep(1:num.samples,each=length(distance_to_best)), stringsAsFactors=F)
+			}
 		})
 		df <- do.call(rbind, ls_df)
 		})
@@ -160,7 +165,9 @@ xLDsampling <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 			ranges = IRanges::IRanges(start=df[,2], end=df[,3]),
 			strand = S4Vectors::Rle(rep('*',nrow(df)))
 		)
-		grl <- GenomicRanges::split(gr, df$b)
+		gr$best <- df$best
+		gr$B <- df$B
+		grl <- GenomicRanges::split(gr, gr$B)
 		})
 		
 	}

@@ -189,13 +189,10 @@ gene.model &lt;- xRDataLoader("UCSC_knownGene_model",
 RData.location=RData.location)
 
 ### LDblock_GR
-LDblock_GR &lt;- xRDataLoader("LDblock_GR", RData.location=RData.location)
-gr &lt;- LDblock_GR
-GenomicRanges::mcols(gr) &lt;- NULL
-maf &lt;- distance &lt;- cadd &lt;- gr
-maf$maf &lt;- LDblock_GR$maf
-distance$distance &lt;- LDblock_GR$distance
-cadd$cadd &lt;- LDblock_GR$cadd
+gr &lt;- xRDataLoader("LDblock_GR", RData.location=RData.location)
+maf &lt;- gr[,'maf']
+distance &lt;- gr[,'distance']
+cadd &lt;- gr[,'cadd']
 ### GR.score.customised as a list of GR objects
 GR.score.customised &lt;- list(maf=maf, distance=distance, cadd=cadd)
 tks &lt;- xGRtrack(gene.query='TNF', window=1e0, gene.model=gene.model,

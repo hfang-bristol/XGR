@@ -6,14 +6,13 @@
 \usage{
 xLDsampling(bLD, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
 "dbSNP_Single"),
-num.samples = 20000, respect = c("maf", "distance", "both"),
-restrict.chr = F, seed = 825, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+num.samples = 2000, respect = c("maf", "distance", "both"),
+restrict.chr = F, preserve = c("boundary", "exact"), seed = 825,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{bLD}{a bLD object, containing a set of blocks based on which to
-generate a null distribution. Alternatively, it can be a GR object with
-meta-columns (maf, distance, upstream, downstream)}
+generate a null distribution}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 150) restricted to GWAS
@@ -32,6 +31,11 @@ gene), and 'both' (respecting the maf and distance)}
 \item{restrict.chr}{logical to restrict to the same chromosome. By
 default, it sets to false}
 
+\item{preserve}{how to preserve the resulting null LD block. It can be
+one of 'boundary' (preserving the boundary of the LD block), and
+'exact' (exactly preserving the relative SNP locations within the LD
+block)}
+
 \item{seed}{an integer specifying the seed}
 
 \item{verbose}{logical to indicate whether the messages will be
@@ -42,14 +46,16 @@ RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a GRL object, each containing an GR oject storing an instance of
-sampled blocks.
+sampled blocks (with a meta-column 'best' for the identity, and a
+meta-column 'B' for the instance sequence).
 }
 \description{
 \code{xLDsampling} is supposed to generate randomly sampled LD blocks.
 A sample block has the same boundary range as the observed, and can
 respect maf of the best SNP, and/or distance of the best SNP to the
-nearest gene. Also it can be restricted to the same chromosome. It
-returns a GRL object.
+nearest gene. Also it can be restricted to the same chromosome. For
+each null LD block, it can preserve the boundary only or exactly
+preserve the relative SNP locations. It returns a GRL object.
 }
 \examples{
 \dontrun{
@@ -79,7 +85,7 @@ RData.location=RData.location)
 ##########################
 GR.SNP <- xRDataLoader("dbSNP_GWAS", RData.location=RData.location)
 grl <- xLDsampling(bLD, GR.SNP=GR.SNP, respect="both", restrict.chr=T,
-RData.location=RData.location)
+preserve="exact", RData.location=RData.location)
 }
 }
 \seealso{

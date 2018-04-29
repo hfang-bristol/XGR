@@ -198,8 +198,8 @@ print.cPath <- function(x, ...) {
 ######################################################################
 #' @title Definition for S3 class \code{bLD}
 #' @description \code{bLD} has 4 components: best, block.
-#' @param best an GenomicRanges object
-#' @param block a list of GenomicRanges objects
+#' @param best a GR object
+#' @param block a GRL object
 #' @return an object of S3 class \code{bLD}
 #' @keywords S3 classes
 #' @export
@@ -214,7 +214,7 @@ print.cPath <- function(x, ...) {
 #' }
 bLD <- function(best, block){
 	## integrity checks
-	if(class(best)!='GRanges' | class(block)!='list'){
+	if(class(best)!='GRanges' | class(block)!='GRangesList'){
 		stop("The S3 class 'bLD' object failed to pass integrity checks!\n")
 	}
 	value <- list(best=best, block=block)
@@ -227,10 +227,13 @@ bLD <- function(best, block){
 #' @export
 print.bLD <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
-	cat(sprintf("  $best: an GR object or NULL"), "\n", sep="")
-	cat(sprintf("  $block: a list of GR objects or NULL"), "\n", sep="")
+	cat(sprintf("  $best: a GR object or NULL"), "\n", sep="")
+	cat(sprintf("  $block: a GRL object or NULL"), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$best:\n")
-	print(x$best)
+	print(head(x$best,1))
+	cat("......\n")
+	cat("$block:\n")
+	print(x$block)
 	cat("......\n")
 }

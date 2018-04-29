@@ -10,9 +10,9 @@ bLD(best, block)
 \method{print}{bLD}(x, ...)
 }
 \arguments{
-\item{best}{an GenomicRanges object}
+\item{best}{a GR object}
 
-\item{block}{a list of GenomicRanges objects}
+\item{block}{a GRL object}
 
 \item{x}{an object of class \code{bLD}}
 

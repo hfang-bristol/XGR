@@ -50,16 +50,17 @@ RData files. See \code{\link{xRDataLoader}} for details}
 \value{
 an object of class "bLD", a list with following components:
 \itemize{
-\item{\code{best}: an GR object. It has optional meta-columns 'maf',
+\item{\code{best}: a GR object. It has optional meta-columns 'maf',
 'distance' (to the nearest gene) and 'cadd', and compulsory
 meta-columns 'pval', 'score' (-log10(pval)), 'upstream' (the lower
 boundary away from the best SNP, non-positive value), 'downstream' (the
 upper boundary away from the best SNP, non-negative value) and 'num'
 (the number of SNPs in the block)}
-\item{\code{block}: a list of GR objects, each element corresponding to
-a block for the best SNP with optional meta-columns 'maf', 'distance'
-(to the nearest gene) and 'cadd', and compulsory meta-columns 'pval',
-'score' (-log10(pval)*R2, based on pval for its lead SNP)}
+\item{\code{block}: a GRL object, each element corresponding to a block
+for the best SNP with optional meta-columns 'maf', 'distance' (to the
+nearest gene) and 'cadd', and compulsory meta-columns 'pval', 'score'
+(-log10(pval)*R2, based on pval for its lead SNP), 'best' (the best
+SNP) and 'distance_to_best' (to the best SNP)}
 }
 }
 \description{
@@ -94,8 +95,7 @@ best$value <- best$score
 gp <- xGRmanhattan(best, top=length(best))
 gp
 # c2) manhattan plot of all LD block
-lgr_block <- bLD$block
-grl_block <- GenomicRanges::GRangesList(lgr_block)
+grl_block <- bLD$block
 gr_block <- BiocGenerics::unlist(grl_block,use.names=F)
 gr_block$value <- gr_block$score
 top.label.query <- names(gr_block)[!is.na(gr_block$pval)]
@@ -103,21 +103,18 @@ top.label.query <- names(gr_block)[!is.na(gr_block$pval)]
 gp <- xGRmanhattan(gr_block, top=length(gr_block),
 top.label.query=top.label.query)
 
-# d) track plot of LD block
+# d) track plot of 1st LD block
 gr_block <- bLD$block[[1]]
-df_mcols <- GenomicRanges::mcols(gr_block)[,c('score','maf','cadd')]
-## GR.score.customised
-gr <- gr_block
-GenomicRanges::mcols(gr) <- NULL
-ls_gr <- lapply(colnames(df_mcols), function(x) {res <- gr; res$value
-<- df_mcols[,x]; res})
-names(ls_gr) <- colnames(df_mcols)
+cnames <- c('score','maf','cadd')
+ls_gr <- lapply(cnames, function(x) gr_block[,x])
+names(ls_gr) <- cnames
 ls_gr$score$Label <- names(gr_block)
 ls_gr$score$Label[is.na(gr_block$pval)] <-''
 GR.score.customised <- ls_gr
 ## cse.query
-chr <- unique(as.character(GenomicRanges::seqnames(gr_block)))
-xlim <- range(GenomicRanges::start(gr_block))
+df_block <- as.data.frame(gr_block)
+chr <- unique(df_block$seqnames)
+xlim <- range(df_block$start)
 cse.query <- paste0(chr,':',xlim[1],'-',xlim[2])
 #cse.query <- paste0(chr,':',xlim[1]-1e4,'-',xlim[2]+1e4)
 ## xGRtrack

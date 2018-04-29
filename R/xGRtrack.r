@@ -50,13 +50,10 @@
 #' gene.model <- xRDataLoader("UCSC_knownGene_model", RData.location=RData.location)
 #' 
 #' ### LDblock_GR
-#' LDblock_GR <- xRDataLoader("LDblock_GR", RData.location=RData.location)
-#' gr <- LDblock_GR
-#' GenomicRanges::mcols(gr) <- NULL
-#' maf <- distance <- cadd <- gr
-#' maf$maf <- LDblock_GR$maf
-#' distance$distance <- LDblock_GR$distance
-#' cadd$cadd <- LDblock_GR$cadd
+#' gr <- xRDataLoader("LDblock_GR", RData.location=RData.location)
+#' maf <- gr[,'maf']
+#' distance <- gr[,'distance']
+#' cadd <- gr[,'cadd']
 #' ### GR.score.customised as a list of GR objects
 #' GR.score.customised <- list(maf=maf, distance=distance, cadd=cadd)
 #' tks <- xGRtrack(gene.query='TNF', window=1e0, gene.model=gene.model, GR.score=NA, GR.score.customised=GR.score.customised, type.customised='point', RData.location=RData.location)
