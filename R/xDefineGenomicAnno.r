@@ -2,7 +2,7 @@
 #'
 #' \code{xDefineGenomicAnno} is supposed to define genomic annotations. It returns an object of class "GenomicRangesList" (GRL).
 #'
-#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed in the section 'Note'. Alternatively, the user can also directly provide a customised GR object (or a list of GR objects)
+#' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed in the section 'Note'. Alternatively, the user can also directly provide a customised GR object (or a list of GR objects or a GRL object)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -164,33 +164,40 @@ xDefineGenomicAnno <- function(GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_Cl
     
     grl <- NULL
     
-    lgr <- NULL
-	if(class(GR.annotation) == "list"){
-		lgr <- GR.annotation
+    if(class(GR.annotation) == "GenomicRangesList"){
+    	grl <- GR.annotation
+    	
+    }else{
+    
+		lgr <- NULL
+		if(class(GR.annotation) == "list"){
+			lgr <- GR.annotation
 		
-		if(!all(sapply(lgr, function(x) class(x) == "GRanges"))){
-			lgr <- NULL
-		}
+			if(!all(sapply(lgr, function(x) class(x) == "GRanges"))){
+				lgr <- NULL
+			}
 		
-	}else if(class(GR.annotation) == "GRanges"){
-		lgr <- list(Customised=GR.annotation)
+		}else if(class(GR.annotation) == "GRanges"){
+			lgr <- list(Customised=GR.annotation)
 	
-	}else{
+		}else{
 	
-		if(length(GR.annotation)>1){
-			GR.annotation <- GR.annotation[1]
+			if(length(GR.annotation)>1){
+				GR.annotation <- GR.annotation[1]
+			}
+	
+			if(!is.na(GR.annotation)){
+				lgr <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+			}
 		}
 	
-		if(!is.na(GR.annotation)){
-			lgr <- xRDataLoader(RData.customised=GR.annotation, verbose=verbose, RData.location=RData.location)
+		if(class(lgr) == "list"){
+			## Remove null elements in a list
+			lgr <- base::Filter(base::Negate(is.null), lgr)
+			grl <- GenomicRanges::GRangesList(lgr)	
 		}
+	
 	}
 	
-	if(class(lgr) == "list"){
-		## Remove null elements in a list
-		lgr <- base::Filter(base::Negate(is.null), lgr)
-		grl <- GenomicRanges::GRangesList(lgr)	
-	}
-		
 	invisible(grl)
 }

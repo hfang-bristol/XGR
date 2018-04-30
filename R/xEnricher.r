@@ -104,7 +104,8 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     if (is.vector(data)){
         data <- unique(data)
     }else{
-        stop("The input data must be a vector.\n")
+        warnings("The input data must be a vector.\n")
+        return(NULL)
     }
     
     if(class(annotation)=="GS"){
@@ -118,13 +119,15 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 		})
 		names(originAnnos) <- colnames(annotation)
     }else{
-    	stop("The input annotation must be either 'GS' or 'list' or 'dgCMatrix' object.\n")
+    	warnings("The input annotation must be either 'GS' or 'list' or 'dgCMatrix' object.\n")
+    	return(NULL)
     }
     annotation <- originAnnos
 
     ig <- g
     if (class(ig) != "igraph"){
-        stop("The function must apply to the 'igraph' object.\n")
+        warnings("The function must apply to the 'igraph' object.\n")
+        return(NULL)
     }else{
 		
 		if(verbose){

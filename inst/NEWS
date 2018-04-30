@@ -10,7 +10,9 @@ NEW FEATURES
     o Add functions ('xLDblock', 'xLDsampling' and 'xLDenricher') for LD block operations
 
     o Add function 'xDefineGenomicAnno' for defining genomic annotations
-        
+    
+    o Add function 'xDefineOntology' for defining ontology and its annotations
+
 
 CHANGES IN VERSION 1.1.3
 -----------------------

@@ -109,5 +109,6 @@ Collate:
     'xLDsampling.r'
     'xLDenricher.r'
     'xDefineGenomicAnno.r'
+    'xDefineOntology.r'
 License: GPL-2
 biocViews: Bioinformatics

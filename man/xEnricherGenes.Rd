@@ -5,21 +5,8 @@
 \title{Function to conduct enrichment analysis given a list of genes and the ontology in query}
 \usage{
 xEnricherGenes(data, background = NULL, check.symbol.identity = F,
-ontology = c("GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam",
-"DO",
-"HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
-"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
-"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
-"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
-"KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"),
+ontology = NA, size.range = c(10, 2000), min.overlap = 3,
+which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
 background.annotatable.only = NULL, p.tail = c("one-tail",
 "two-tails"),
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
@@ -41,45 +28,9 @@ background}
 input data/background via Synonyms for those unmatchable by official
 gene symbols. By default, it sets to false}
 
-\item{ontology}{the ontology supported currently. It can be "GOBP" for
-Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular
-Function, "GOCC" for Gene Ontology Cellular Component, "PSG" for
-phylostratigraphy (phylostratific age), "PS" for sTOL-based
-phylostratific age information, "PS2" for the collapsed PS version
-(inferred ancestors being collapsed into one with the known taxonomy
-information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam
-domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype
-Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance,
-"HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human
-Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for
-Experimental Factor Ontology (used to annotate GWAS Catalog genes),
-Drug-Gene Interaction database ("DGIdb") for druggable categories,
-tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p"
-and "GTExV7"), crowd extracted expression of differential signatures
-from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
-"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
-"CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for
-all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
-'Genetic Information Processing' pathways, 'KEGGenvironmental' for
-'Environmental Information Processing' pathways, 'KEGGcellular' for
-'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
-Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
-'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies
-(where x can be 'CellCellCommunication', 'CellCycle',
-'CellularResponsesToExternalStimuli', 'ChromatinOrganization',
-'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption',
-'Disease', 'DNARepair', 'DNAReplication',
-'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)',
-'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins',
-'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem',
-'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath',
-'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules',
-'VesicleMediatedTransport'), and the molecular signatures database
-(Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
-"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
-"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
-"MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
-"MsigdbC7")}
+\item{ontology}{the ontology supported currently. By default, it is
+'NA' to disable this option. Pre-built ontology and annotation data are
+detailed in \code{\link{xDefineOntology}}.}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
@@ -289,5 +240,5 @@ node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xEnricher}}
+\code{\link{xDefineOntology}}, \code{\link{xEnricher}}
 }

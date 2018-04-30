@@ -31,29 +31,15 @@ xGR2xGeneAnno(data, background = NULL, format = c("data.frame", "bed",
 "GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
 crosslink.top = NULL, nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, ontology = c("GOBP", "GOMF", "GOCC", "PSG",
-"PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
-"EF",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
-"KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"),
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
+nearby.decay.exponent = 2, ontology = NA, size.range = c(10, 2000),
+min.overlap = 3, which.distance = NULL, test = c("hypergeo", "fisher",
+"binomial"), background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -137,45 +123,9 @@ default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>
-<p>the ontology supported currently. It can be &quot;GOBP&quot; for
-Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
-Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PSG&quot; for
-phylostratigraphy (phylostratific age), &quot;PS&quot; for sTOL-based
-phylostratific age information, &quot;PS2&quot; for the collapsed PS version
-(inferred ancestors being collapsed into one with the known taxonomy
-information), &quot;SF&quot; for SCOP domain superfamilies, &quot;Pfam&quot; for Pfam
-domain families, &quot;DO&quot; for Disease Ontology, &quot;HPPA&quot; for Human Phenotype
-Phenotypic Abnormality, &quot;HPMI&quot; for Human Phenotype Mode of Inheritance,
-&quot;HPCM&quot; for Human Phenotype Clinical Modifier, &quot;HPMA&quot; for Human
-Phenotype Mortality Aging, &quot;MP&quot; for Mammalian Phenotype, &quot;EF&quot; for
-Experimental Factor Ontology (used to annotate GWAS Catalog genes),
-Drug-Gene Interaction database (&quot;DGIdb&quot;) for druggable categories,
-tissue-specific eQTL-containing genes from GTEx (&quot;GTExV4&quot;, &quot;GTExV6p&quot;
-and &quot;GTExV7&quot;), crowd extracted expression of differential signatures
-from CREEDS (&quot;CreedsDisease&quot;, &quot;CreedsDiseaseUP&quot;, &quot;CreedsDiseaseDN&quot;,
-&quot;CreedsDrug&quot;, &quot;CreedsDrugUP&quot;, &quot;CreedsDrugDN&quot;, &quot;CreedsGene&quot;,
-&quot;CreedsGeneUP&quot; and &quot;CreedsGeneDN&quot;), KEGG pathways (including 'KEGG' for
-all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
-'Genetic Information Processing' pathways, 'KEGGenvironmental' for
-'Environmental Information Processing' pathways, 'KEGGcellular' for
-'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
-Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
-'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies
-(where x can be 'CellCellCommunication', 'CellCycle',
-'CellularResponsesToExternalStimuli', 'ChromatinOrganization',
-'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption',
-'Disease', 'DNARepair', 'DNAReplication',
-'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)',
-'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins',
-'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem',
-'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath',
-'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules',
-'VesicleMediatedTransport'), and the molecular signatures database
-(Msigdb, including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;,
-&quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;,
-&quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;,
-&quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;,
-&quot;MsigdbC7&quot;)</p>
+<p>the ontology supported currently. By default, it is
+'NA' to disable this option. Pre-built ontology and annotation data are
+detailed in <code>xDefineOntology</code>.</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>

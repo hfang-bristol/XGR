@@ -5,7 +5,7 @@
 #' @param data an input vector containing gene symbols
 #' @param background a background vector containing gene symbols as the test background. If NULL, by default all annotatable are used as background
 #' @param check.symbol.identity logical to indicate whether to match the input data/background via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
-#' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PSG" for phylostratigraphy (phylostratific age), "PS" for sTOL-based phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for Experimental Factor Ontology (used to annotate GWAS Catalog genes), Drug-Gene Interaction database ("DGIdb") for druggable categories, tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p" and "GTExV7"), crowd extracted expression of differential signatures from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for 'Genetic Information Processing' pathways, 'KEGGenvironmental' for 'Environmental Information Processing' pathways, 'KEGGcellular' for 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways), 'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies (where x can be 'CellCellCommunication', 'CellCycle', 'CellularResponsesToExternalStimuli', 'ChromatinOrganization', 'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption', 'Disease', 'DNARepair', 'DNAReplication', 'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)', 'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins', 'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem', 'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath', 'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules', 'VesicleMediatedTransport'), and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
+#' @param ontology the ontology supported currently. By default, it is 'NA' to disable this option. Pre-built ontology and annotation data are detailed in \code{\link{xDefineOntology}}.
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param which.distance which terms with the distance away from the ontology root (if any) is used to restrict terms in consideration. By default, it sets to 'NULL' to consider all distances
@@ -49,7 +49,7 @@
 #' \item{"Notes": the order of the number of significant terms is: "none" > "lea" > "elim" > "pc".}
 #' }
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xEnricher}}
+#' @seealso \code{\link{xDefineOntology}}, \code{\link{xEnricher}}
 #' @include xEnricherGenes.r
 #' @examples
 #' \dontrun{
@@ -98,7 +98,7 @@
 #' xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 #' }
 
-xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=c("GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -128,100 +128,22 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     if (is.vector(data)){
         data <- unique(data)
     }else{
-        stop("The input data must be a vector.\n")
+        warnings("The input data must be a vector.\n")
+        return(NULL)
     }
     
     data <- as.character(data)
     
-    if(!is.na(ontology)){
-	
-		if(verbose){
-			now <- Sys.time()
-			message(sprintf("Load the ontology %s and its gene annotations (%s) ...", ontology, as.character(now)), appendLF=T)
-		}
-
-		#########
-		## load GS information
-		## flag the simplified version of PS
-		flag_PS2 <- FALSE
-		if(ontology=="PS2"){
-			flag_PS2 <- TRUE
-			ontology <- "PS"
-		}
-		
-		## flag the simplified version of REACTOME
-		flag_REACTOME <- FALSE
-		if(grepl('REACTOME_', ontology)){
-			flag_REACTOME <- TRUE
-			ontology_REACTOME <- ontology
-			ontology <- "REACTOME"
-		}
-		
-		GS <- xRDataLoader(RData.customised=paste('org.Hs.eg', ontology, sep=''), RData.location=RData.location, verbose=verbose)
-		
-		################
-		if(flag_PS2){
-			tmp <- as.character(unique(GS$set_info$name))
-			inds <- sapply(tmp,function(x) which(GS$set_info$name==x))
-		
-			## new set_info
-			set_info <- data.frame()
-			for(i in 1:length(inds)){
-				set_info<- rbind(set_info,as.matrix(GS$set_info[max(inds[[i]]),]))
-			}
-			## new gs
-			gs <- list()
-			for(i in 1:length(inds)){
-				gs[[i]] <- unlist(GS$gs[inds[[i]]], use.names=F)
-			}
-			names(gs) <- rownames(set_info)
-		
-			## new GS
-			GS$set_info <- set_info
-			GS$gs <- gs
-		}
-		
-		if(flag_REACTOME){
-			flag <- unlist(strsplit(ontology_REACTOME, '_'))[2]
-			if(flag %in% GS$set_info$namespace){
-				## new GS
-				GS$set_info <- GS$set_info[GS$set_info$namespace==flag, ]
-				ind <- match(names(GS$gs), GS$set_info$setID)
-				GS$gs <- GS$gs[!is.na(ind)]
-			}
-		}
-		################
-		
-		#########
-		## get annotation information
-		anno <- GS$gs
-
-		#########
-		## get ontology information
-		## check the eligibility for the ontology
-		all.ontologies <- c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP","EF")
-		flag_ontology <- ontology %in% all.ontologies
-    	
-    	if(flag_ontology){
-			g <- xRDataLoader(RData.customised=paste('ig.', ontology, sep=''), RData.location=RData.location, verbose=verbose)
-			if(is.null(V(g)$term_namespace)){
-				V(g)$term_namespace <- ontology
-			}
-			
-		}else{
-			# force ontology.algorithm to be 'none'
-			ontology.algorithm <- 'none'
-		
-			nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=F)
-			nodes <- rbind(nodes, c('root','root','root','root','root'))
-			relations <- data.frame(from='root', to=nodes$name)
-			g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
-		}
-	
-	}else{
-		stop("There is no input for the ontology.\n")
+    #################################
+ 	aOnto <- xDefineOntology(ontology, verbose=verbose, RData.location=RData.location)
+ 	g <- aOnto$g
+ 	anno <- aOnto$anno
+ 	if(is.null(g)){
+		warnings("There is no input for the ontology.\n")
+        return(NULL)
 	}   
-    
+    #################################
+        
     ## convert gene symbol to entrz gene for both input data of interest and the input background (if given)
     if(verbose){
 		now <- Sys.time()

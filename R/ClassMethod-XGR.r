@@ -197,7 +197,7 @@ print.cPath <- function(x, ...) {
 # bLD
 ######################################################################
 #' @title Definition for S3 class \code{bLD}
-#' @description \code{bLD} has 4 components: best, block.
+#' @description \code{bLD} has 2 components: best, block.
 #' @param best a GR object
 #' @param block a GRL object
 #' @return an object of S3 class \code{bLD}
@@ -235,5 +235,48 @@ print.bLD <- function(x, ...) {
 	cat("......\n")
 	cat("$block:\n")
 	print(x$block)
+	cat("......\n")
+}
+
+######################################################################
+# aOnto
+######################################################################
+#' @title Definition for S3 class \code{aOnto}
+#' @description \code{aOnto} has 2 components: g, anno.
+#' @param g an igraph object
+#' @param anno a list
+#' @return an object of S3 class \code{aOnto}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' \dontrun{
+#' aOnto(g, anno)
+#' }
+aOnto <- function(g, anno){
+	## integrity checks
+	if(class(g)!='igraph' | class(anno)!='list'){
+		stop("The S3 class 'aOnto' object failed to pass integrity checks!\n")
+	}
+	value <- list(g=g, anno=anno)
+	class(value) <- "aOnto"
+	return(value)
+}
+#' @param x an object of class \code{aOnto}
+#' @param ... other parameters
+#' @rdname aOnto
+#' @export
+print.aOnto <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $g: an igraph object or NULL"), "\n", sep="")
+	cat(sprintf("  $anno: a list with %d length or NULL", length(x$anno)), "\n", sep="")
+	
+	cat("\n--------------------------------------------------\n")
+	cat("$g:\n")
+	print(x$g)
 	cat("......\n")
 }

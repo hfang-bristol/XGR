@@ -43,7 +43,7 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 default, it is 'NA' to disable this option. Pre-built genomic
 annotation data are detailed in the section 'Note'. Alternatively, the
 user can also directly provide a customised GR object (or a list of GR
-objects)}
+objects or a GRL object)}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
