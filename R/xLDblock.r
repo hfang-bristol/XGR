@@ -6,7 +6,7 @@
 #' @param include.LD additional SNPs in LD with Lead SNPs are also included. By default, it is 'NA' to disable this option. Otherwise, LD SNPs will be included based on one or more of 26 populations and 5 super populations from 1000 Genomics Project data (phase 3). The population can be one of 5 super populations ("AFR", "AMR", "EAS", "EUR", "SAS"). Explanations for population code can be found at \url{http://www.1000genomes.org/faq/which-populations-are-part-your-study}
 #' @param LD.customised a user-input matrix or data frame with 3 compulsory columns: 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2 value. The recommended columns are 'maf', 'distance' (to the nearest gene) and 'cadd'. It is designed to allow the user analysing their precalcuated LD info. This customisation (if provided) has the high priority over built-in LD SNPs
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.1 to 1
-#' @param GR.SNP the genomic regions of SNPs. By default, it is 'LDblock_GR', that is, SNPs from dbSNP (version 150) restricted to GWAS SNPs and their LD SNPs (hg19). Note: you can also load your customised GR object directly
+#' @param GR.SNP the genomic regions of SNPs. By default, it is 'LDblock_GR', that is, SNPs from dbSNP (version 150) restricted to GWAS SNPs and their LD SNPs (hg19). Beyond it, the user can also directly provide a customised GR object
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
@@ -20,10 +20,8 @@
 #' @seealso \code{\link{xLDblock}}
 #' @include xLDblock.r
 #' @examples
-#' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #'
 #' \dontrun{
@@ -32,7 +30,7 @@
 #' data(ImmunoBase)
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' gr <- ImmunoBase$AS$variant
-#' data <- GenomicRanges::mcols(gr)[,c(1,3)]
+#' data <- GenomicRanges::mcols(gr)[,c('Variant','Pvalue')]
 #'
 #' # b) get LD block (EUR population)
 #' bLD <- xLDblock(data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)

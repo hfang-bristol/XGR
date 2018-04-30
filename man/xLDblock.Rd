@@ -38,8 +38,8 @@ be any value from 0.1 to 1}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'LDblock_GR', that is, SNPs from dbSNP (version 150) restricted to GWAS
-SNPs and their LD SNPs (hg19). Note: you can also load your customised
-GR object directly}
+SNPs and their LD SNPs (hg19). Beyond it, the user can also directly
+provide a customised GR object}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
@@ -71,10 +71,8 @@ together with the significance level.
 None
 }
 \examples{
-\dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
 \dontrun{
@@ -83,7 +81,7 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 data(ImmunoBase)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
-data <- GenomicRanges::mcols(gr)[,c(1,3)]
+data <- GenomicRanges::mcols(gr)[,c('Variant','Pvalue')]
 
 # b) get LD block (EUR population)
 bLD <- xLDblock(data, include.LD="EUR", LD.r2=0.8,

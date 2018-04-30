@@ -61,10 +61,8 @@ each null LD block, it can preserve the boundary only or exactly
 preserve the relative SNP locations. It returns a GRL object.
 }
 \examples{
-\dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
 \dontrun{
@@ -73,7 +71,7 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 data(ImmunoBase)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr <- ImmunoBase$AS$variant
-data <- GenomicRanges::mcols(gr)[,c(1,3)]
+data <- GenomicRanges::mcols(gr)[,c('Variant','Pvalue')]
 
 # b) get LD block (EUR population)
 bLD <- xLDblock(data, include.LD="EUR", LD.r2=0.8,

@@ -8,6 +8,8 @@ NEW FEATURES
     o Add function 'xGRmanhattan' for genomic region manhattan plot
 
     o Add functions ('xLDblock', 'xLDsampling' and 'xLDenricher') for LD block operations
+
+    o Add function 'xDefineGenomicAnno' for defining genomic annotations
         
 
 CHANGES IN VERSION 1.1.3

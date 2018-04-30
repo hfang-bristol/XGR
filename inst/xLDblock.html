@@ -65,8 +65,8 @@ be any value from 0.1 to 1</p>
 <td>
 <p>the genomic regions of SNPs. By default, it is
 'LDblock_GR', that is, SNPs from dbSNP (version 150) restricted to GWAS
-SNPs and their LD SNPs (hg19). Note: you can also load your customised
-GR object directly</p>
+SNPs and their LD SNPs (hg19). Beyond it, the user can also directly
+provide a customised GR object</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -120,11 +120,8 @@ SNP) and 'distance_to_best' (to the best SNP)
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-
-## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 
 ## Not run: 
@@ -133,7 +130,7 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 data(ImmunoBase)
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 gr &lt;- ImmunoBase$AS$variant
-data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]
+data &lt;- GenomicRanges::mcols(gr)[,c('Variant','Pvalue')]
 
 # b) get LD block (EUR population)
 bLD &lt;- xLDblock(data, include.LD="EUR", LD.r2=0.8,

@@ -108,5 +108,6 @@ Collate:
     'xLDblock.r'
     'xLDsampling.r'
     'xLDenricher.r'
+    'xDefineGenomicAnno.r'
 License: GPL-2
 biocViews: Bioinformatics
