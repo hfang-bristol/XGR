@@ -326,13 +326,13 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 				
 				####
 				# add 'distance_to_best'
-				ld_gr$distance_to_best <- GenomicRanges::start(best_gr) - GenomicRanges::start(ld_gr)
+				ld_gr$distance_to_best <- GenomicRanges::start(ld_gr) - GenomicRanges::start(best_gr)
 				####
 				
 				## calculate upstream and downstream
-				updown_dist <- range(ld_gr$distance_to_best <- GenomicRanges::start(best_gr) - GenomicRanges::start(ld_gr))
-				best_gr$upstream <- min(0, updown_dist[1])
-				best_gr$downstream <- max(0, updown_dist[2])
+				updown_dist <- range(ld_gr$distance_to_best)
+				best_gr$upstream <- updown_dist[1]
+				best_gr$downstream <- updown_dist[2]
 			
 			}else{
 				ld_gr <- best_gr

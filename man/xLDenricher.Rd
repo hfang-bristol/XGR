@@ -68,7 +68,10 @@ default, it sets to false}
 \item{preserve}{how to preserve the resulting null LD block. It can be
 one of 'boundary' (preserving the boundary of the LD block), and
 'exact' (exactly preserving the relative SNP locations within the LD
-block)}
+block). Notably, no huge difference for the boundary preserving when
+enrichment analysis invovles region-based genomic annotations, but it
+may make difference when genomic annatations are largely SNP-based
+(such as eQTLs)}
 
 \item{seed}{an integer specifying the seed}
 

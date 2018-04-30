@@ -7,7 +7,7 @@ NEW FEATURES
     
     o Add function 'xGRmanhattan' for genomic region manhattan plot
 
-    o Add functions ('xLDblock' and 'xLDsampling') for LD block operations
+    o Add functions ('xLDblock', 'xLDsampling' and 'xLDenricher') for LD block operations
         
 
 CHANGES IN VERSION 1.1.3

@@ -67,7 +67,10 @@ default, it sets to false</p>
 <p>how to preserve the resulting null LD block. It can be
 one of 'boundary' (preserving the boundary of the LD block), and
 'exact' (exactly preserving the relative SNP locations within the LD
-block)</p>
+block). Notably, no huge difference for the boundary preserving when
+enrichment analysis invovles region-based genomic annotations, but it
+may make difference when genomic annatations are largely SNP-based
+(such as eQTLs)</p>
 </td></tr>
 <tr valign="top"><td><code>seed</code></td>
 <td>

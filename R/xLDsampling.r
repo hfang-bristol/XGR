@@ -7,7 +7,7 @@
 #' @param num.samples the number of samples randomly generated
 #' @param respect how to respect the properties of to-be-sampled LD blocks. It can be one of 'maf' (respecting the maf of the best SNP), 'distance' (respecting the distance of the best SNP to the nearest gene), and 'both' (respecting the maf and distance)
 #' @param restrict.chr logical to restrict to the same chromosome. By default, it sets to false
-#' @param preserve how to preserve the resulting null LD block. It can be one of 'boundary' (preserving the boundary of the LD block), and 'exact' (exactly preserving the relative SNP locations within the LD block)
+#' @param preserve how to preserve the resulting null LD block. It can be one of 'boundary' (preserving the boundary of the LD block), and 'exact' (exactly preserving the relative SNP locations within the LD block). Notably, no huge difference for the boundary preserving when enrichment analysis invovles region-based genomic annotations, but it may make difference when genomic annatations are largely SNP-based (such as eQTLs)
 #' @param seed an integer specifying the seed
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details

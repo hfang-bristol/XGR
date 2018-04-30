@@ -7,7 +7,7 @@
 #' @param num.samples the number of samples randomly generated
 #' @param respect how to respect the properties of to-be-sampled LD blocks. It can be one of 'maf' (respecting the maf of the best SNP), 'distance' (respecting the distance of the best SNP to the nearest gene), and 'both' (respecting the maf and distance)
 #' @param restrict.chr logical to restrict to the same chromosome. By default, it sets to false
-#' @param preserve how to preserve the resulting null LD block. It can be one of 'boundary' (preserving the boundary of the LD block), and 'exact' (exactly preserving the relative SNP locations within the LD block)
+#' @param preserve how to preserve the resulting null LD block. It can be one of 'boundary' (preserving the boundary of the LD block), and 'exact' (exactly preserving the relative SNP locations within the LD block). Notably, no huge difference for the boundary preserving when enrichment analysis invovles region-based genomic annotations, but it may make difference when genomic annatations are largely SNP-based (such as eQTLs)
 #' @param seed an integer specifying the seed
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
 #' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed in the section 'Note'. Beyond pre-built annotation data, the user can specify the customised input. To do so, first save your RData file (a list of GR objects, each is an GR object correponding to an annotation) into your local computer. Then, tell "GR.annotation" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
@@ -181,17 +181,26 @@
 #' bp <- xEnrichBarplot(eTerm, top_num='auto', displayBy="fdr")
 #' bp
 #'
-#' ## f) save enrichment results to the file called 'LD_enrichments.txt'
+#' ## f) forest plot of enrichment results
+#' gp <- xEnrichForest(eTerm, FDR.cutoff=0.01)
+#'
+#' ## g) save enrichment results to the file called 'LD_enrichments.txt'
 #' output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp", details=TRUE)
 #' utils::write.table(output, file="LD_enrichments.txt", sep="\t", row.names=FALSE)
 #' 
-#' ## g) compare boundary and exact
+#' ## h) compare boundary and exact
 #' GR.SNP <- xRDataLoader("dbSNP_GWAS", RData.location=RData.location)
-#' GR.annotation <- xRDataLoader("FANTOM5_Enhancer_Cell", RData.location=RData.location)
+#' GR.annotation <- xRDataLoader("FANTOM5_CAT_Cell", RData.location=RData.location)
 #' eTerm_boundary <- xLDenricher(bLD, GR.SNP=GR.SNP, GR.annotation=GR.annotation, num.samples=20000, preserve="boundary", RData.location=RData.location)
 #' eTerm_exact <- xLDenricher(bLD, GR.SNP=GR.SNP, GR.annotation=GR.annotation, num.samples=20000, preserve="exact", RData.location=RData.location)
-#' list_eTerm <- list(boundary=eTerm_boundary, exact=eTerm_exact)
-#' bp <- xEnrichCompare(list_eTerm, displayBy="zscore")
+#' ls_eTerm <- list(boundary=eTerm_boundary, exact=eTerm_exact)
+#' ### barplot
+#' bp <- xEnrichCompare(ls_eTerm, displayBy="zscore")
+#' ### forest plot
+#' eTerm_boundary$group <- 'boundary'
+#' eTerm_exact$group <- 'exact'
+#' df <- rbind(eTerm_boundary, eTerm_exact)
+#' gp <- xEnrichForest(df, FDR.cutoff=0.01)
 #' }
 
 xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), num.samples=2000, respect=c("maf","distance","both"), restrict.chr=F, preserve=c("boundary","exact"), seed=825, p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_ClusteredV3","ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS","ENCODE_DNaseI_ClusteredV3","ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone","SYDH_Histone","UW_Histone","FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_Enhancer_Extensive","FANTOM5_Enhancer","Segment_Combined_Gm12878","Segment_Combined_H1hesc","Segment_Combined_Helas3","Segment_Combined_Hepg2","Segment_Combined_Huvec","Segment_Combined_K562","TFBS_Conserved","TS_miRNA","TCGA", "ReMap_Public_TFBS","ReMap_Public_mergedTFBS","ReMap_PublicAndEncode_mergedTFBS","ReMap_Encode_TFBS", "Blueprint_BoneMarrow_Histone","Blueprint_CellLine_Histone","Blueprint_CordBlood_Histone","Blueprint_Thymus_Histone","Blueprint_VenousBlood_Histone","Blueprint_DNaseI","Blueprint_Methylation_hyper","Blueprint_Methylation_hypo","EpigenomeAtlas_15Segments_E029", "EpigenomeAtlas_15Segments_E030", "EpigenomeAtlas_15Segments_E031", "EpigenomeAtlas_15Segments_E032", "EpigenomeAtlas_15Segments_E033", "EpigenomeAtlas_15Segments_E034", "EpigenomeAtlas_15Segments_E035", "EpigenomeAtlas_15Segments_E036", "EpigenomeAtlas_15Segments_E037", "EpigenomeAtlas_15Segments_E038", "EpigenomeAtlas_15Segments_E039", "EpigenomeAtlas_15Segments_E040", "EpigenomeAtlas_15Segments_E041", "EpigenomeAtlas_15Segments_E042", "EpigenomeAtlas_15Segments_E043", "EpigenomeAtlas_15Segments_E044", "EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046", "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048", "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051", "EpigenomeAtlas_15Segments_E062", "CpG_anno","Genic_anno", "FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","FANTOM5_CAT_DO","FANTOM5_CAT_EFO","FANTOM5_CAT_HPO","FANTOM5_CAT_MESH","FANTOM5_CAT_PICS"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -313,6 +322,9 @@ xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 	
 	## ratio
 	ratio <- obs/exp_mean
+	### just in case: obs=0 & exp=0
+	ratio[obs==0 & exp_mean==0] <- 1
+	###
 	
     ## zscore
     zscore <- (obs-exp_mean)/exp_std
@@ -329,6 +341,23 @@ xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
  	
  	####################
  	or <- CIl <- CIu <- NA
+ 	if(1){
+		ls_df <- apply(a2B, 1, function(x){
+			y <- stats::t.test(x)
+			data.frame(mean=y$estimate, conf_lower=y$conf.int[1], conf_upper=y$conf.int[2], stringsAsFactors=F)
+		})
+		res_df <- do.call(rbind, ls_df)
+		or <- obs / res_df[,1]
+		CIu <- obs / res_df[,2]
+		CIl <- obs / res_df[,3]
+		
+		### just in case: obs=0 & exp=0
+		ind <- which(obs==0 & res_df[,1]==0)
+		or[ind] <- 1
+		CIu[ind] <- 1
+		CIu[ind] <- 1
+		###
+ 	}
  	####################
  
 	enrichment_df <- data.frame(names(aGRL), sapply(aGR,length), length(gr_observed), obs, exp_mean, exp_std, ratio, zscore, pvalue, or, CIl, CIu, row.names=NULL, stringsAsFactors=F)
