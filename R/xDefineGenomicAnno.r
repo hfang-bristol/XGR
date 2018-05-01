@@ -61,7 +61,6 @@
 #'  \item{\code{ReMap_PublicAndEncode_TFBS}: a list (2825 combinations of GSE/ENCODE studies and transcription factors and cell types) of GenomicRanges objects; each is an GR object containing identified peaks per GSE/ENCODE study per transcripton factor per cell type.}
 #'  \item{\code{ReMap_Public_mergedTFBS}: a list (331 transcription factors under GSE studies) of GenomicRanges objects; each is an GR object containing merged peaks per transcripton factor.}
 #'  \item{\code{ReMap_Encode_mergedTFBS}: a list (279 transcription factors under ENCODE) of GenomicRanges objects; each is an GR object containing merged peaks per transcripton factor.}
-#' }
 #'  \item{\code{ReMap_PublicAndEncode_mergedTFBS}: a list (485 transcription factors under GSE studies and ENCODE) of GenomicRanges objects; each is an GR object containing identified peaks per transcripton factor.}
 #' }
 #' 10. Blueprint Histone Modification ChIP-seq data
