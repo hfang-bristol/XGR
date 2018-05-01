@@ -17,7 +17,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
@@ -39,7 +39,7 @@
 #' gr_phylo <- xGRoverlap(data=gr_Gene, format="GRanges", GR.score="phyloP100way", RData.location=RData.location)
 #' }
 
-xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way","GERP"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata_dev")
+xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way","GERP"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one

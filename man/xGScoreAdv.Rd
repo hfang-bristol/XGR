@@ -9,7 +9,7 @@ xGScoreAdv(data, format = c("data.frame", "bed", "chr:start-end",
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GS.annotation = c("fitCons", "phastCons", "phyloP", "mcap", "cadd"),
 GR.annotation = NA, details = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata_dev")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -95,7 +95,7 @@ Pre-built genomic annotation data are detailed in
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # a) provide the genomic regions
 ## load ImmunoBase

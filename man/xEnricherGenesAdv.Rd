@@ -164,7 +164,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)

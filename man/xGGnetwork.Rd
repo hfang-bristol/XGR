@@ -136,7 +136,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 ###########################
 # load REACTOME

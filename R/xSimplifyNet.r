@@ -16,7 +16,7 @@
 #' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' g <- xRDataLoader(RData.customised='ig.DO', RData.location=RData.location)
 #' ig <- xSimplifyNet(g)

@@ -22,7 +22,7 @@
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' eTerm(term_info, annotation, g, data, background, overlap, fc, zscore, pvalue, adjp, cross)
 #' }
@@ -68,7 +68,7 @@ print.eTerm <- function(x, ...) {
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' mSeed(GR, Gene, Link)
 #' }
@@ -119,7 +119,7 @@ print.mSeed <- function(x, ...) {
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ls_eTerm(df, mat, gp)
 #' }
@@ -164,7 +164,7 @@ print.ls_eTerm <- function(x, ...) {
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' cPath(ig_paths, gp_paths, gp_heatmap, ig_subg)
 #' }
@@ -208,7 +208,7 @@ print.cPath <- function(x, ...) {
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' bLD(best, block)
 #' }
@@ -253,7 +253,7 @@ print.bLD <- function(x, ...) {
 #' # Load the library
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' aOnto(g, anno)
 #' }

@@ -57,7 +57,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
 #' # SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 #' # a) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')

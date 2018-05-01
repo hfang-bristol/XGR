@@ -33,7 +33,7 @@
 #' \dontrun{
 #' library(XGR)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' g <- erdos.renyi.game(20, 1/10)
 #' glayout <- layout_with_kk(g)

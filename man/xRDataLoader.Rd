@@ -54,7 +54,7 @@ displayed in the screen. By default, it sets to TRUE for display}
 \item{RData.location}{the characters to tell the location of built-in
 RData files. By default, it remotely locates at
 \url{http://galahad.well.ox.ac.uk/bigdata}; the development version
-locates at \url{http://galahad.well.ox.ac.uk/bigdata_dev}. For the user
+locates at \url{http://galahad.well.ox.ac.uk/bigdata}. For the user
 equipped with fast internet connection, this option can be just left as
 default. But it is always advisable to download these files locally.
 Especially when the user needs to run this function many times, there

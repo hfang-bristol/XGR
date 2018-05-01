@@ -18,7 +18,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
@@ -30,7 +30,7 @@
 #' gr <- xGScore(data=data, format="GRanges", GS.annotation="fitCons", scoring.scheme="mean", RData.location=RData.location)
 #' }
 
-xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), scoring.scheme=c("mean","median","max","min","sum"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata_dev")
+xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), scoring.scheme=c("mean","median","max","min","sum"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -64,8 +64,8 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 	}
 	
 	#############
-	## replace '/var/www/bigdata_dev' with RData.location
-	gsco@data_dirpath <- gsub('/var/www/bigdata_dev', RData.location, gsco@data_dirpath)
+	## replace '/var/www/bigdata' with RData.location
+	gsco@data_dirpath <- gsub('/var/www/bigdata', RData.location, gsco@data_dirpath)
 	#############
 	
 	if(verbose){
@@ -86,7 +86,7 @@ xGScore <- function(data, format=c("chr:start-end","data.frame","bed","GRanges")
 		h1 <- getLinks()
 		XML::htmlTreeParse(url, handlers=h1)
 		res <- h1$links()
-		vec_files <- res[!(res %in% c("?C=N;O=D", "?C=M;O=A", "?C=S;O=A", "?C=D;O=A", "/bigdata_dev/", "/bigdata/"))]
+		vec_files <- res[!(res %in% c("?C=N;O=D", "?C=M;O=A", "?C=S;O=A", "?C=D;O=A", "/bigdata/", "/bigdata/"))]
 		
 		## create a new directory to hold the downloads
 		my_dir <- file.path(getwd(), GS.annotation)

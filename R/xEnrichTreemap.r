@@ -31,7 +31,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' library(treemapify)
 #' 
 #' # provide the input Genes of interest (eg 100 randomly chosen human genes)

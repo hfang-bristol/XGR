@@ -68,7 +68,7 @@
 #' 
 #' # Using ImmunoBase SNPs and associations/annotations with disease traits
 #' ## get ImmunoBase
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' ## get disease associated variants/SNPs
 #' variants_list <- lapply(ImmunoBase, function(x) cbind(SNP=names(x$variants), Disease=rep(x$disease,length(x$variants))))

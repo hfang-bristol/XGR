@@ -34,7 +34,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' }
 
 xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cutoff.fdr=5e-2, colors=c("#EEEEEE","darkgrey","pink","red"), column.label=NULL, top=10, top.direction=c('both','up','down'), label.size=2, label.color='black', label.alpha=0.8, label.padding=0.5, label.arrow=0.01, label.force=0.5, xlim=NULL, ylim=NULL, y.scale=c("normal","log"), xlab=expression(log[2]("fold change")), ylab=expression(-log[10]("FDR")), font.family="sans", signature=TRUE)

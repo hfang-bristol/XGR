@@ -143,7 +143,7 @@ subgraph.
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
 # a) provide the input SNPs of interest (eg 8 randomly chosen SNPs)

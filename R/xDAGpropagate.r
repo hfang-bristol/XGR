@@ -21,7 +21,7 @@
 #' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # 1) EF ontology
 #' # ig.EF (an object of class "igraph" storing as a directed graph)

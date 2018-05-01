@@ -97,7 +97,7 @@ The input graph will treat as an unweighted graph if there is no
 library(XGR)
 }
 
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # STRING (high quality)
 g <- xDefineNet(network="STRING_high", RData.location=RData.location)

@@ -18,7 +18,7 @@
 #' # Load the library
 #' library(XGR)
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' # HiC-gene pairs per cell types/states
 #' g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location)
 #' df <- do.call(cbind, igraph::edge_attr(g))

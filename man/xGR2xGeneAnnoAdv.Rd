@@ -197,7 +197,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 ## a) provide input data (bed-formatted)

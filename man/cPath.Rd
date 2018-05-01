@@ -33,7 +33,7 @@ an object of S3 class \code{cPath}
 # Load the library
 library(XGR)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 cPath(ig_paths, gp_paths, gp_heatmap, ig_subg)
 }

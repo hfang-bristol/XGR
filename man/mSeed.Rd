@@ -31,7 +31,7 @@ an object of S3 class \code{mSeed}
 # Load the library
 library(XGR)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 mSeed(GR, Gene, Link)
 }

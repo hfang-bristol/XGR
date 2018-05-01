@@ -37,12 +37,12 @@
 #' @examples
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' 
 #' \dontrun{
 #' # Enrichment analysis for GWAS SNPs from ImmunoBase
 #' ## a) provide input data
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata_dev/ImmunoBase_GWAS.bed"
+#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 #' 
 #' ## b) perform enrichment analysis using FANTOM expressed enhancers
 #' ### one-tail p-value calculation (by default)

@@ -28,7 +28,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
@@ -47,7 +47,7 @@
 #' res_df <- xGScoreAdv(data=data, format="GRanges", GS.annotation="phyloP", GR.annotation="Genic_anno", RData.location=RData.location)
 #' }
 
-xGScoreAdv <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), GR.annotation=NA, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata_dev")
+xGScoreAdv <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GS.annotation=c("fitCons","phastCons","phyloP","mcap","cadd"), GR.annotation=NA, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)

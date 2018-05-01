@@ -14,7 +14,7 @@
 #' @examples
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' \dontrun{
 #' aOnto <- xDefineOntology("HPPA", RData.location=RData.location)

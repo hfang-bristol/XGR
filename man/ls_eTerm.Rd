@@ -31,7 +31,7 @@ an object of S3 class \code{ls_eTerm}
 # Load the library
 library(XGR)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 ls_eTerm(df, mat, gp)
 }

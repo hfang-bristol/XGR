@@ -29,7 +29,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' xEnrichMatrix(list_eTerm, method="circle", displayBy="adjp", FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder="row", colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
 #' xEnrichMatrix(list_eTerm, method="pie", displayBy="adjp", FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder="row", colormap="grey-grey", ncolors=1, zlim=c(0,8), cl.pos="n", cl.ratio=0.1, cl.align.text="c", tl.col="black", tl.cex=0.7, tl.srt=90, title=paste0(ontology,": log10(FDR)"))
 #' gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)

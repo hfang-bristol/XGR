@@ -153,12 +153,11 @@ Pre-built genomic annotation data are detailed in
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # Enrichment analysis for GWAS SNPs from ImmunoBase
 ## a) provide input data
-data.file <-
-"http://galahad.well.ox.ac.uk/bigdata_dev/ImmunoBase_GWAS.bed"
+data.file <- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
 
 ## b) perform enrichment analysis using FANTOM expressed enhancers
 eTerm <- xGRviaGenomicAnnoAdv(data.file=data.file, format.file="bed",

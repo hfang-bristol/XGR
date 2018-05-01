@@ -112,7 +112,7 @@ phyloP100way.}
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # transcribed lncRNAs
 FANTOM5_CAT <- xRDataLoader('FANTOM5_CAT',

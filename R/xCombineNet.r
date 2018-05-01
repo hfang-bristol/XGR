@@ -19,7 +19,7 @@
 #' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' g1 <- xDefineNet(network="KEGG_environmental", RData.location=RData.location)
 #' g2 <- xDefineNet(network="KEGG_organismal", RData.location=RData.location)

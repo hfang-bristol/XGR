@@ -17,7 +17,7 @@
 #' \dontrun{
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
 #' # Provide UCSC genes (hg19)
 #' UCSC_genes <- xRDataLoader(RData.customised='UCSC_genes', RData.location=RData.location)

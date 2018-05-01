@@ -106,7 +106,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # 1) load REACTOME
 # 1a) restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')

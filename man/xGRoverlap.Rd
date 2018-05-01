@@ -9,8 +9,7 @@ xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), GR.score =
 c(NA,
 "RecombinationRate", "phastCons100way", "phyloP100way", "GERP"),
-verbose = T, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata_dev")
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -64,7 +63,7 @@ a GR object.
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # a) provide the genomic regions
 ## load ImmunoBase

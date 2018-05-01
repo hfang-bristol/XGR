@@ -239,7 +239,7 @@ maximum of both p-values in these two calculations.}
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 # 1) provide the genomic regions
 ## load ImmunoBase

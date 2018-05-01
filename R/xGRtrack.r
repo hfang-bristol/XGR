@@ -28,7 +28,7 @@
 #' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ## given a query gene
 #' tks <- xGRtrack(gene.query='TNF', nearby=10, gene.model="UCSC_knownGene_model", GR.score=c("RecombinationRate","phastCons100way"), RData.location=RData.location)

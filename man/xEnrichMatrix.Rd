@@ -88,7 +88,7 @@ none
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 xEnrichMatrix(list_eTerm, method="circle", displayBy="adjp",
 FDR.cutoff=0.05, wrap.width=50, sharings=NULL, reorder="row",
 colormap="black-yellow-red", ncolors=16, zlim=c(0,8), cl.pos="b",

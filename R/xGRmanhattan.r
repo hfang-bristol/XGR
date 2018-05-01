@@ -27,7 +27,7 @@
 #' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ### GWAS catalog
 #' GWAScatalog <- xRDataLoader('GWAScatalog', RData.location=RData.location)

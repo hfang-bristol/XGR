@@ -130,7 +130,7 @@ subgraph.
 \dontrun{
 # Load the XGR package and specify the location of built-in data
 library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev/"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # Gene-based similarity analysis using Mammalian Phenotype Ontology (MP)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
