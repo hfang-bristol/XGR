@@ -2,7 +2,7 @@
 % Please edit documentation in R/xLDenricher.r
 \name{xLDenricher}
 \alias{xLDenricher}
-\title{Function to conduct region-based enrichment analysis using genomic annotations via sampling}
+\title{Function to conduct LD-based enrichment analysis using genomic annotations via sampling}
 \usage{
 xLDenricher(bLD, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
 "dbSNP_Single"),
@@ -90,16 +90,16 @@ blocks overlapped with annotation data}
 }
 }
 \description{
-\code{xLDenricher} is supposed to conduct region-based enrichment
-analysis for the input genomic region data (genome build h19), using
-genomic annotations (eg active chromatin, transcription factor binding
+\code{xLDenricher} is supposed to conduct LD-based enrichment analysis
+for the input genomic region data (genome build h19), using genomic
+annotations (eg active chromatin, transcription factor binding
 sites/motifs, conserved sites). Enrichment analysis is achieved by
 comparing the observed overlaps against the expected overlaps which are
-estimated from the null distribution. The null distribution is
-generated via sampling, that is, randomly generating samples for data
-genomic regions from background genomic regions. Background genomic
-regions can be provided by the user; by default, the annotatable
-genomic regions will be used.
+estimated from the null distribution. The null LD block is generated
+via sampling from the background (for example, all GWAS SNPs or all
+common SNPs), respecting the maf of the best SNP and/or the distance of
+the best SNP to the nearest gene, restricting the same chromosome or
+not.
 }
 \note{
 Pre-built genomic annotation data are detailed in
@@ -123,7 +123,7 @@ bLD <- xLDblock(data, include.LD="EUR", LD.r2=0.8,
 RData.location=RData.location)
 
 ## c) perform enrichment analysis using FANTOM expressed enhancers
-eTerm <- xLDenricher(bLD, GR.annotation="FANTOM5_Enhancer_Cell",
+eTerm <- xLDenricher(bLD, GR.annotation="ReMap_Encode_mergedTFBS",
 RData.location=RData.location)
 
 ## d) view enrichment results for the top significant terms

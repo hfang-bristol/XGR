@@ -1,24 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis using...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct LD-based enrichment analysis using...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xLDenricher"><tr><td>xLDenricher</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct region-based enrichment analysis using genomic annotations via sampling</h2>
+<h2>Function to conduct LD-based enrichment analysis using genomic annotations via sampling</h2>
 
 <h3>Description</h3>
 
-<p><code>xLDenricher</code> is supposed to conduct region-based enrichment
-analysis for the input genomic region data (genome build h19), using
-genomic annotations (eg active chromatin, transcription factor binding
+<p><code>xLDenricher</code> is supposed to conduct LD-based enrichment analysis
+for the input genomic region data (genome build h19), using genomic
+annotations (eg active chromatin, transcription factor binding
 sites/motifs, conserved sites). Enrichment analysis is achieved by
 comparing the observed overlaps against the expected overlaps which are
-estimated from the null distribution. The null distribution is
-generated via sampling, that is, randomly generating samples for data
-genomic regions from background genomic regions. Background genomic
-regions can be provided by the user; by default, the annotatable
-genomic regions will be used.
+estimated from the null distribution. The null LD block is generated
+via sampling from the background (for example, all GWAS SNPs or all
+common SNPs), respecting the maf of the best SNP and/or the distance of
+the best SNP to the nearest gene, restricting the same chromosome or
+not.
 </p>
 
 
@@ -202,7 +202,7 @@ bLD &lt;- xLDblock(data, include.LD="EUR", LD.r2=0.8,
 RData.location=RData.location)
 
 ## c) perform enrichment analysis using FANTOM expressed enhancers
-eTerm &lt;- xLDenricher(bLD, GR.annotation="FANTOM5_Enhancer_Cell",
+eTerm &lt;- xLDenricher(bLD, GR.annotation="ReMap_Encode_mergedTFBS",
 RData.location=RData.location)
 
 ## d) view enrichment results for the top significant terms

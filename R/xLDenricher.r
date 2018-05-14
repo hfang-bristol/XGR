@@ -1,6 +1,6 @@
-#' Function to conduct region-based enrichment analysis using genomic annotations via sampling
+#' Function to conduct LD-based enrichment analysis using genomic annotations via sampling
 #'
-#' \code{xLDenricher} is supposed to conduct region-based enrichment analysis for the input genomic region data (genome build h19), using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is achieved by comparing the observed overlaps against the expected overlaps which are estimated from the null distribution. The null distribution is generated via sampling, that is, randomly generating samples for data genomic regions from background genomic regions. Background genomic regions can be provided by the user; by default, the annotatable genomic regions will be used. 
+#' \code{xLDenricher} is supposed to conduct LD-based enrichment analysis for the input genomic region data (genome build h19), using genomic annotations (eg active chromatin, transcription factor binding sites/motifs, conserved sites). Enrichment analysis is achieved by comparing the observed overlaps against the expected overlaps which are estimated from the null distribution. The null LD block is generated via sampling from the background (for example, all GWAS SNPs or all common SNPs), respecting the maf of the best SNP and/or the distance of the best SNP to the nearest gene, restricting the same chromosome or not. 
 #'
 #' @param bLD a bLD object, containing a set of blocks based on which to generate a null distribution
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 150) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 150) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised GR object directly
@@ -51,7 +51,7 @@
 #' bLD <- xLDblock(data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
 #' 
 #' ## c) perform enrichment analysis using FANTOM expressed enhancers
-#' eTerm <- xLDenricher(bLD, GR.annotation="FANTOM5_Enhancer_Cell", RData.location=RData.location)
+#' eTerm <- xLDenricher(bLD, GR.annotation="ReMap_Encode_mergedTFBS", RData.location=RData.location)
 #'
 #' ## d) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)

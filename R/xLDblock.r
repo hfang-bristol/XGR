@@ -217,6 +217,17 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 		
 	}
 	
+	####################
+	## add self-self
+	####################
+	df_tmp <- data.frame(Lead=leads, LD=leads, R2=rep(1,length(leads)), distance=rep(0,length(leads)), stringsAsFactors=F)
+	if(nrow(LLR) == 0){
+		LLR <- df_tmp
+	}else{
+		LLR <- rbind(df_tmp, LLR)
+	}
+	####################
+
 	R2 <- Lead <- LD <- pval <- maf <- score <- index <- distance_to_best <- NULL
 	
 	gr_best <- NULL
@@ -264,16 +275,24 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 		ls_block <- igraph::groups(igraph::components(g, mode=c("weak","strong")))
 	
 		if(verbose){
-			message(sprintf("\tLD blocks: %d (%s)", length(ls_block), as.character(Sys.time())), appendLF=T)
+			message(sprintf("\t%d LD blocks (%s)", length(ls_block), as.character(Sys.time())), appendLF=T)
 		}
-	
+		
 		ls_best_block <- lapply(ls_block, function(x){
+		
+			message(sprintf("\tLD block for %s (%s)", paste0(x,collapse=','), as.character(Sys.time())), appendLF=T)
+			
 			ind <- match(Lead_Sig$SNP, x)
 			y <- Lead_Sig[!is.na(ind),]
 			
 			## gr for all input SNPs
 			ind <- match(names(LDblock_GR_lead), y$SNP)
 			gr <- LDblock_GR_lead[!is.na(ind)]
+			##################
+			if(length(gr)==0){
+				return(NULL)
+			}
+			##################
 			gr$pval <- y$Sig[ind[!is.na(ind)]]
 			
 			## best_gr
@@ -285,16 +304,24 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 			ind <- match(LLR$Lead, x)
 			ind <- which(!is.na(ind))
 			df_block <- as.data.frame(LLR %>% dplyr::slice(ind) %>% dplyr::filter(R2>=LD.r2) %>% dplyr::arrange(Lead,-R2))[,c('Lead','LD','R2')]
-			df_tmp <- data.frame(Lead=x, LD=x, R2=rep(1,length(x)), stringsAsFactors=1)
-			if(nrow(df_block) == 0){
-				df_block <- df_tmp
-			}else{
-				df_block <- rbind(df_tmp, df_block)
+			if(0){
+				df_tmp <- data.frame(Lead=x, LD=x, R2=rep(1,length(x)), stringsAsFactors=F)
+				if(nrow(df_block) == 0){
+					df_block <- df_tmp
+				}else{
+					df_block <- rbind(df_tmp, df_block)
+				}
 			}
 			## append 'pval' and 'score'
 			ind <- match(df_block$Lead, y$SNP)
 			df_block$pval <- y$Sig[ind]
 			df_block$score <- -log10(df_block$pval) * df_block$R2
+			
+			##########
+			ind1 <- match(df_block$LD, names(LDblock_GR_both))
+			ind2 <- match(df_block$Lead, names(LDblock_GR_both))
+			df_block <- df_block[!is.na(ind1) & !is.na(ind2),]
+			##########
 			
 			if(nrow(df_block) > 0){
 				
@@ -351,6 +378,14 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 			
 			return(res)
 		})
+		
+		#################
+		## Remove null elements in a list
+		ls_best_block <- base::Filter(base::Negate(is.null), ls_best_block)
+		if(length(ls_best_block)==0){
+			return(NULL)
+		}
+		#################
 		
 		# gr_best
 		ls_best_gr <- lapply(ls_best_block, function(x) x$best)
