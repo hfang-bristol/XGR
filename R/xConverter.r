@@ -83,7 +83,6 @@ xConverter <- function (obj, from=c("dgCMatrix","igraph"), to=c("igraph","dgCMat
             tmp <- ttmp
         }
 		
-		        
         ## weighted or not
         weight_flag <- T
         if(all(adjM[tmp]==1)){

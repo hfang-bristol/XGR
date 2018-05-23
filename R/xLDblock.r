@@ -279,8 +279,10 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 		}
 		
 		ls_best_block <- lapply(ls_block, function(x){
-		
-			message(sprintf("\tLD block for %s (%s)", paste0(x,collapse=','), as.character(Sys.time())), appendLF=T)
+			
+			if(0){
+				message(sprintf("\tLD block for %s (%s)", paste0(x,collapse=','), as.character(Sys.time())), appendLF=T)
+			}
 			
 			ind <- match(Lead_Sig$SNP, x)
 			y <- Lead_Sig[!is.na(ind),]

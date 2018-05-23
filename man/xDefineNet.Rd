@@ -14,11 +14,11 @@ xDefineNet(network = c("STRING_highest", "STRING_high",
 "PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
 "KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
 "KEGG_disease",
-"REACTOME"), STRING.only = c(NA, "neighborhood_score", "fusion_score",
-"cooccurence_score", "coexpression_score", "experimental_score",
-"database_score", "textmining_score")[1], weighted = FALSE,
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"REACTOME", "TRRUST"), STRING.only = c(NA, "neighborhood_score",
+"fusion_score", "cooccurence_score", "coexpression_score",
+"experimental_score", "database_score", "textmining_score")[1],
+weighted = FALSE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{network}{the built-in network. Currently two sources of network
@@ -59,7 +59,8 @@ interactions sourced from KEGG, it can be 'KEGG' for all,
 pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
 for 'Human Diseases' pathways. 'REACTOME' for protein-protein
-interactions derived from Reactome pathways}
+interactions derived from Reactome pathways. 'TRRUST' for TRRUST
+curated TF-target relations}
 
 \item{STRING.only}{the further restriction of STRING by interaction
 type. If NA, no such restriction. Otherwide, it can be one or more of
