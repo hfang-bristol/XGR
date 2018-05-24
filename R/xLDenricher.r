@@ -233,7 +233,7 @@ xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 	pvals <- enrichment_df$pvalue
 	adjpvals <- stats::p.adjust(pvals, method=p.adjust.method)
 	enrichment_df$adjp <- adjpvals
-
+	
 	####################################################################################
 	
 	enrichment_df$zscore <- signif(enrichment_df$zscore, digits=3)

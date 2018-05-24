@@ -4,7 +4,7 @@
 \alias{xRWkernel}
 \title{Function to calculate random walk kernel on the input graph}
 \usage{
-xRWkernel(g, steps = 4, a = 2, verbose = TRUE)
+xRWkernel(g, steps = 4, chance = 2, verbose = TRUE)
 }
 \arguments{
 \item{g}{an object of class "igraph" or "graphNEL". It will be a
@@ -14,35 +14,39 @@ directions are ignored for directed graphs}
 \item{steps}{an integer specifying the number of steps that random walk
 performs. By default, it is 4}
 
-\item{a}{an integer specifying the chance of remaining at the same
-vertex. By default, it is 2, the higher the higher change}
+\item{chance}{an integer specifying the chance of remaining at the same
+vertex. By default, it is 2, the higher the higher chance}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 }
 \value{
-It returns a connectivity matrix for pairwise affinity between nodes
+It returns a sparse matrix for pairwise affinity between nodes via
+short random walks
 }
 \description{
 \code{xRWkernel} is supposed to calculate a weighted random walk kernel
-(a predefined number of steps) for estimating pairwise connectivity
+(at a predefined number of steps) for estimating pairwise affinity
 between nodes.
 }
 \note{
 The input graph will treat as an unweighted graph if there is no
-'weight' edge attribute associated with
+'weight' edge attribute associated with. The edge direction is not
+considered for the purpose of defining pairwise affinity; that is,
+adjacency matrix and its laplacian version are both symmetric.
 }
 \examples{
 # 1) generate a random graph according to the ER model
-set.seed(123)
+set.seed(825)
 g <- erdos.renyi.game(10, 3/10)
 V(g)$name <- paste0('n',1:vcount(g))
 
 \dontrun{
-# 2) obtain the pre-computated affinity matrix
-mat <- xRWkernel(g)
+# 2) pre-computate affinity matrix between all nodes
+Amatrix <- xRWkernel(g)
 # visualise affinity matrix
-visHeatmapAdv(as.matrix(mat), colormap="wyr", KeyValueName="Affinity")
+visHeatmapAdv(as.matrix(Amatrix), colormap="wyr",
+KeyValueName="Affinity")
 }
 }
 \seealso{

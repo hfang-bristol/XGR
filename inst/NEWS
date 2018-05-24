@@ -13,6 +13,10 @@ NEW FEATURES
     
     o Add function 'xDefineOntology' for defining ontology and its annotations
 
+    o Add function 'xBiproject' for bigraph projection
+    
+    o Add functions ('xRWenricher' and 'xRWkernel') for network enrichment analysis
+
 
 CHANGES IN VERSION 1.1.3
 -----------------------
