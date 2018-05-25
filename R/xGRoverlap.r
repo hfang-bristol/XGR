@@ -42,6 +42,13 @@
 xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.score=c(NA,"RecombinationRate","phastCons100way","phyloP100way","GERP"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
+    startT <- Sys.time()
+    if(verbose){
+        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+        message("", appendLF=TRUE)
+    }
+    ####################################################################################
+	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     format <- match.arg(format)
     build.conversion <- match.arg(build.conversion)
@@ -113,8 +120,12 @@ xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 		##########################################
 		if(verbose){
-			now <- Sys.time()
-			message(sprintf("Last, calculate the '%s' scores for %d genomic regions (%s) ...", GR.score, length(dGR), as.character(now)), appendLF=T)
+			if(class(GR.score) == "GRanges"){
+				message(sprintf("Last, calculate the customised scores for %d genomic regions (%s) ...", length(dGR), as.character(Sys.time())), appendLF=T)
+			}else{
+				message(sprintf("Last, calculate the '%s' scores for %d genomic regions (%s) ...", GR.score, length(dGR), as.character(Sys.time())), appendLF=T)
+			}
+			
 		}
 	
 		hits <- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query=dGR, subject=oGR, maxgap=-1L, minoverlap=0L, type="any", select="all", ignore.strand=T)))
@@ -131,6 +142,16 @@ xGRoverlap <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		dGR$GScore <- NA
 		dGR$GScore[as.numeric(names(vec_res))] <- vec_res
 	}
+	
+ 	####################################################################################
+    endT <- Sys.time()
+    if(verbose){
+        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
+    }
+    
+    runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+
 	
 	return(dGR)
 }

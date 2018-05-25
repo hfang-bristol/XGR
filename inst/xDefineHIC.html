@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract promoter capture HiC-gene pairs given a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xDefineHIC"><tr><td>xDefineHIC</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to extract promoter capture HiC-gene pairs given a list of SNPs</h2>
+
+<h3>Description</h3>
+
+<p><code>xDefineHIC</code> is supposed to extract HiC-gene pairs given a list of
+SNPs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xDefineHIC(data = NULL, entity = c("SNP", "chr:start-end",
+"data.frame",
+"bed", "GRanges"), include.HiC = c(NA, "Monocytes", "Macrophages_M0",
+"Macrophages_M1", "Macrophages_M2", "Neutrophils", "Megakaryocytes",
+"Endothelial_precursors", "Erythroblasts", "Fetal_thymus",
+"Naive_CD4_T_cells", "Total_CD4_T_cells",
+"Activated_total_CD4_T_cells",
+"Nonactivated_total_CD4_T_cells", "Naive_CD8_T_cells",
+"Total_CD8_T_cells",
+"Naive_B_cells", "Total_B_cells", "PE.Monocytes", "PE.Macrophages_M0",
+"PE.Macrophages_M1", "PE.Macrophages_M2", "PE.Neutrophils",
+"PE.Megakaryocytes", "PE.Erythroblasts", "PE.Naive_CD4_T_cells",
+"PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP =
+c("dbSNP_GWAS",
+"dbSNP_Common", "dbSNP_Single"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>NULL or an input vector containing SNPs. If NULL, all SNPs
+will be considered. If a input vector containing SNPs, SNPs should be
+provided as dbSNP ID (ie starting with rs) or in the format of
+'chrN:xxx', where N is either 1-22 or X, xxx is number; for example,
+'chr16:28525386'. Alternatively, it can be other formats/entities (see
+the next parameter 'entity')</p>
+</td></tr>
+<tr valign="top"><td><code>entity</code></td>
+<td>
+<p>the data entity. By default, it is &quot;SNP&quot;. For general
+use, it can also be one of &quot;chr:start-end&quot;, &quot;data.frame&quot;, &quot;bed&quot; or
+&quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>include.HiC</code></td>
+<td>
+<p>genes linked to input SNPs are also included. By
+default, it is 'NA' to disable this option. Otherwise, those genes
+linked to SNPs will be included according to Promoter Capture HiC
+(PCHiC) datasets. Pre-built HiC datasets are detailed in the section
+'Note'</p>
+</td></tr>
+<tr valign="top"><td><code>GR.SNP</code></td>
+<td>
+<p>the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If input data is NULL, a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>from</code>: baited genomic regions (baits)
+</p>
+</li>
+<li><p><code>to</code>: preyed (other end) genomic regions of interactions
+(preys)
+</p>
+</li>
+<li><p><code>score</code>: CHiCAGO scores quantifying the strength of physical
+interactions between harbors and partners
+</p>
+</li></ul>
+
+<p>If input data is not NULL, a list with two components: &quot;df&quot; and &quot;ig&quot;.
+&quot;df&quot; is a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>from</code>: 'from/bait' genomic regions
+</p>
+</li>
+<li><p><code>to</code>: 'to/prey' genomic regions
+</p>
+</li>
+<li><p><code>score</code>: CHiCAGO scores quantifying the strength of physical
+interactions between baits and preys
+</p>
+</li>
+<li><p><code>from_genes</code>: genes associated with 'from/bait' genomic
+regions
+</p>
+</li>
+<li><p><code>to_genes</code>: genes associated with 'to/prey' genomic regions
+</p>
+</li>
+<li><p><code>SNP</code>: input SNPs (in query)
+</p>
+</li>
+<li><p><code>SNP_end</code>: specify which end SNPs in query fall into (either
+'bait/from' or 'prey/to')
+</p>
+</li>
+<li><p><code>SNP_harbor</code>: genomic regions harbors the SNPs in query
+</p>
+</li>
+<li><p><code>Context</code>: the context in which PCHiC data was generated
+</p>
+</li></ul>
+
+<p>&quot;ig&quot; is an object of both classes &quot;igraph&quot; and &quot;PCHiC&quot;, a direct graph
+with nodes for genomic regions and edges for CHiCAGO scores between
+them. Also added node attribute is 1) 'target' storing genes assocated
+and 2) 'SNP' for input SNPs (if the node harboring input SNPs). If
+several cell types are queried, &quot;ig&quot; is actually a list of
+&quot;igraph&quot;/&quot;PCHiC&quot; objects.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Pre-built HiC datasets are described below according to the data
+sources.<br />
+1. Promoter Capture HiC datasets in 17 primary blood cell types.
+Sourced from Cell 2016, 167(5):1369-1384.e19
+</p>
+
+<ul>
+<li><p><code>Monocytes</code>: physical interactions (CHiCAGO score &gt;=5) of
+promoters (baits) with the other end (preys) in Monocytes.
+</p>
+</li>
+<li><p><code>Macrophages_M0</code>: promoter interactomes in Macrophages M0.
+</p>
+</li>
+<li><p><code>Macrophages_M1</code>: promoter interactomes in Macrophages M1.
+</p>
+</li>
+<li><p><code>Macrophages_M2</code>: promoter interactomes in Macrophages M2.
+</p>
+</li>
+<li><p><code>Neutrophils</code>: promoter interactomes in Neutrophils.
+</p>
+</li>
+<li><p><code>Megakaryocytes</code>: promoter interactomes in Megakaryocytes.
+</p>
+</li>
+<li><p><code>Endothelial_precursors</code>: promoter interactomes in
+Endothelial precursors.
+</p>
+</li>
+<li><p><code>Erythroblasts</code>: promoter interactomes in Erythroblasts.
+</p>
+</li>
+<li><p><code>Fetal_thymus</code>: promoter interactomes in Fetal thymus.
+</p>
+</li>
+<li><p><code>Naive_CD4_T_cells</code>: promoter interactomes in Naive CD4+ T
+cells.
+</p>
+</li>
+<li><p><code>Total_CD4_T_cells</code>: promoter interactomes in Total CD4+ T
+cells.
+</p>
+</li>
+<li><p><code>Activated_total_CD4_T_cells</code>: promoter interactomes in
+Activated total CD4+ T cells.
+</p>
+</li>
+<li><p><code>Nonactivated_total_CD4_T_cells</code>: promoter interactomes in
+Nonactivated total CD4+ T cells.
+</p>
+</li>
+<li><p><code>Naive_CD8_T_cells</code>: promoter interactomes in Naive CD8+ T
+cells.
+</p>
+</li>
+<li><p><code>Total_CD8_T_cells</code>: promoter interactomes in Total CD8+ T
+cells.
+</p>
+</li>
+<li><p><code>Naive_B_cells</code>: promoter interactomes in Naive B cells.
+</p>
+</li>
+<li><p><code>Total_B_cells</code>: promoter interactomes in Total B cells.
+</p>
+</li>
+<li><p><code>Combined</code>: promoter interactomes combined above; with score
+for the number of significant cell types plus scaled average.
+</p>
+</li></ul>
+
+<p>2. Promoter Capture HiC datasets (involving active promoters and
+enhancers) in 9 primary blood cell types. Sourced from Cell 2016,
+167(5):1369-1384.e19
+</p>
+
+<ul>
+<li><p><code>PE.Monocytes</code>: physical interactions (CHiCAGO score &gt;=5) of
+promoters (baits) with the other end (enhancers as preys) in
+Monocytes.
+</p>
+</li>
+<li><p><code>PE.Macrophages_M0</code>: promoter-enhancer interactomes in
+Macrophages M0.
+</p>
+</li>
+<li><p><code>PE.Macrophages_M1</code>: promoter-enhancer interactomes in
+Macrophages M1.
+</p>
+</li>
+<li><p><code>PE.Macrophages_M2</code>: promoter-enhancer interactomes in
+Macrophages M2.
+</p>
+</li>
+<li><p><code>PE.Neutrophils</code>: promoter-enhancer interactomes in
+Neutrophils.
+</p>
+</li>
+<li><p><code>PE.Megakaryocytes</code>: promoter-enhancer interactomes in
+Megakaryocytes.
+</p>
+</li>
+<li><p><code>PE.Erythroblasts</code>: promoter-enhancer interactomes in
+Erythroblasts.
+</p>
+</li>
+<li><p><code>PE.Naive_CD4_T_cells</code>: promoter-enhancer interactomes in
+Naive CD4+ T cells.
+</p>
+</li>
+<li><p><code>PE.Naive_CD8_T_cells</code>: promoter-enhancer interactomes in
+Naive CD8+ T cells.
+</p>
+</li>
+<li><p><code>Combined_PE</code>: promoter interactomes combined above; with
+score for the number of significant cell types plus scaled average.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+# a) provide the SNPs with the significance info
+data(ImmunoBase)
+data &lt;- names(ImmunoBase$AS$variants)
+
+# b) extract HiC-gene pairs given a list of AS SNPs
+PCHiC &lt;- xDefineHIC(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS",
+RData.location=RData.location)
+head(PCHiC$df)
+
+# c) visualise the interaction (a directed graph: bait-&gt;prey)
+g &lt;- PCHiC$ig
+## a node with SNPs colored in 'skyblue' and the one without SNPs in 'pink'
+## the width in an edge is proportional to the interaction strength
+xPCHiCplot(g, vertex.label.cex=0.5)
+xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

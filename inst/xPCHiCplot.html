@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise promoter capture HiC data using...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xPCHiCplot"><tr><td>xPCHiCplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise promoter capture HiC data using different network layouts</h2>
+
+<h3>Description</h3>
+
+<p><code>xPCHiCplot</code> is supposed to visualise promoter capture HiC data
+using different network layouts.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xPCHiCplot(g, node.info = c("smart", "none", "GR", "GR_SNP",
+"GR_SNP_target",
+"SNP_target"), node.colors = c("skyblue", "pink1"), nodes.query = NULL,
+newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = "sphere", vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.font = 2, vertex.label.dist = 0.3,
+vertex.label.color = "black", edge.arrow.size = 0.5, edge.width = NULL,
+edge.color = "grey", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of both classes &quot;igraph&quot; and &quot;PCHiC&quot; (part of the
+results from <code>xDefineHIC</code>)</p>
+</td></tr>
+<tr valign="top"><td><code>node.info</code></td>
+<td>
+<p>tells the information used to label nodes. It can be
+one of &quot;none&quot; for no node labeling, &quot;GR&quot; for only using genomic regions
+(GR), &quot;GR_SNP&quot; for using GR and SNP (if any), &quot;GR_SNP_target&quot; for using
+GR and SNP (if any) and target genes (if any), &quot;SNP_target&quot; for using
+SNP (if any) and target genes (if any), and &quot;smart&quot; (by default) for
+only using GR if both SNP and target genes are not available (otherwise
+GR will be hidden)</p>
+</td></tr>
+<tr valign="top"><td><code>node.colors</code></td>
+<td>
+<p>colors used to flag which nodes contain SNP or not.
+By default, a node harboring an SNP will be colored in 'skyblue' and
+the node without an SNP in 'pink'</p>
+</td></tr>
+<tr valign="top"><td><code>nodes.query</code></td>
+<td>
+<p>nodes in query for which edges attached to them will
+be displayed. By default, it sets to NULL meaning no such restriction</p>
+</td></tr>
+<tr valign="top"><td><code>newpage</code></td>
+<td>
+<p>logical to indicate whether to open a new page. By
+default, it sets to true for opening a new page</p>
+</td></tr>
+<tr valign="top"><td><code>signature</code></td>
+<td>
+<p>logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE</p>
+</td></tr>
+<tr valign="top"><td><code>glayout</code></td>
+<td>
+<p>either a function or a numeric matrix configuring how
+the vertices will be placed on the plot. If layout is a function, this
+function will be called with the graph as the single parameter to
+determine the actual coordinates. This function can be one of
+&quot;layout_nicely&quot; (previously &quot;layout.auto&quot;), &quot;layout_randomly&quot;
+(previously &quot;layout.random&quot;), &quot;layout_in_circle&quot; (previously
+&quot;layout.circle&quot;), &quot;layout_on_sphere&quot; (previously &quot;layout.sphere&quot;),
+&quot;layout_with_fr&quot; (previously &quot;layout.fruchterman.reingold&quot;),
+&quot;layout_with_kk&quot; (previously &quot;layout.kamada.kawai&quot;), &quot;layout_as_tree&quot;
+(previously &quot;layout.reingold.tilford&quot;), &quot;layout_with_lgl&quot; (previously
+&quot;layout.lgl&quot;), &quot;layout_with_graphopt&quot; (previously &quot;layout.graphopt&quot;),
+&quot;layout_with_sugiyama&quot; (previously &quot;layout.kamada.kawai&quot;),
+&quot;layout_with_dh&quot; (previously &quot;layout.davidson.harel&quot;),
+&quot;layout_with_drl&quot; (previously &quot;layout.drl&quot;), &quot;layout_with_gem&quot;
+(previously &quot;layout.gem&quot;), &quot;layout_with_mds&quot;. A full explanation of
+these layouts can be found in
+<a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/layout_nicely.html</a></p>
+</td></tr>
+<tr valign="top"><td><code>vertex.frame.color</code></td>
+<td>
+<p>the color of the frame of the vertices. If it
+is NA, then there is no frame</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.size</code></td>
+<td>
+<p>the size of each vertex. If it is a vector, each
+vertex may differ in size</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.color</code></td>
+<td>
+<p>the fill color of the vertices. If it is NA, then
+there is no fill color</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.shape</code></td>
+<td>
+<p>the shape of each vertex. It can be one of
+&quot;circle&quot;, &quot;square&quot;, &quot;csquare&quot;, &quot;rectangle&quot;, &quot;crectangle&quot;, &quot;vrectangle&quot;,
+&quot;pie&quot; (<a href="http://igraph.org/r/doc/vertex.shape.pie.html">http://igraph.org/r/doc/vertex.shape.pie.html</a>), &quot;sphere&quot;,
+and &quot;none&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label</code></td>
+<td>
+<p>the label of the vertices. If it is NA, then there
+is no label. The default vertex labels are the name attribute of the
+nodes</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.cex</code></td>
+<td>
+<p>the font size of vertex labels.</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.font</code></td>
+<td>
+<p>the font of vertex labels. It is interpreted
+the same way as the the 'font' graphical parameter: 1 is plain text, 2
+is bold face, 3 is italic, 4 is bold and italic and 5 specifies the
+symbol font.</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.dist</code></td>
+<td>
+<p>the distance of the label from the center of
+the vertex. If it is 0 then the label is centered on the vertex. If it
+is 1 then the label is displayed beside the vertex.</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.color</code></td>
+<td>
+<p>the color of vertex labels.</p>
+</td></tr>
+<tr valign="top"><td><code>edge.arrow.size</code></td>
+<td>
+<p>the size of the arrows for the directed edge.
+The default value is 0.5.</p>
+</td></tr>
+<tr valign="top"><td><code>edge.width</code></td>
+<td>
+<p>the width of the directed edge. If NULL, the width
+edge is proportional to CHiCAGO scores (quantifying the strength of
+physical interactions).</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>the color of the directed edge. The default value is
+'grey'.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters. See
+<a href="http://igraph.org/r/doc/plot.common.html">http://igraph.org/r/doc/plot.common.html</a> for the complete list.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an igraph object
+</p>
+
+
+<h3>Note</h3>
+
+
+<ul>
+<li><p><code>edge arrow</code>: interactions are represented as a direct graph
+(bait-prey)
+</p>
+</li>
+<li><p><code>edge thickness</code>: the thickness in an edge is proportional
+to the interaction strength
+</p>
+</li>
+<li><p><code>node color</code>: a node is colored in pink if it harbors SNPs
+in query; otherwise skyblue
+</p>
+</li>
+<li><p><code>node label</code>: a node is labelled with three pieces of
+information (if any): genomic regions, SNPs in query, genes associated
+(marked by an @ icon)
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xDefineHIC</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+# a) provide the SNPs with the significance info
+data(ImmunoBase)
+data &lt;- names(ImmunoBase$AS$variants)
+
+# b) extract HiC-gene pairs given a list of AS SNPs
+PCHiC &lt;- xDefineHIC(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS",
+RData.location=RData.location)
+head(PCHiC$df)
+
+# c) visualise the interaction (a directed graph: bait-&gt;prey)
+g &lt;- PCHiC$ig
+## a node with SNPs colored in 'skyblue' and the one without SNPs in 'pink'
+## the width in an edge is proportional to the interaction strength
+xPCHiCplot(g, vertex.shape="sphere")
+xPCHiCplot(g, glayout=layout_in_circle, vertex.shape="sphere")
+
+# d) control node labelling info
+xPCHiCplot(g, node.info="GR_SNP_target")
+xPCHiCplot(g, node.info="GR_SNP")
+xPCHiCplot(g, node.info="SNP_target")
+xPCHiCplot(g, node.info='SNP_target', vertex.label.cex=0.5)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

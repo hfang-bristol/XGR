@@ -102,7 +102,7 @@ xRWenricher <- function(data, g, Amatrix=NULL, num.permutation=2000, nbin=10, st
 	diag(Amatrix) <- 0
 
     if(verbose){
-        message(sprintf("First, calculate the observed affinity between nodes (%s) ...", num.permutation, as.character(Sys.time())), appendLF=TRUE)
+        message(sprintf("First, calculate the observed affinity between %d given nodes (%s) ...", num.permutation, length(nodes_mapped), as.character(Sys.time())), appendLF=TRUE)
     }
     
 	## observed affinity averaged
@@ -111,12 +111,12 @@ xRWenricher <- function(data, g, Amatrix=NULL, num.permutation=2000, nbin=10, st
 	obs <- mean(y[lower.tri(y,diag=F)])
 
     if(verbose){
-        message(sprintf("Second, permute nodes (%d times) respecting centrality (defined as the mean pairwise affinity to all other nodes) (%s) ...", num.permutation, as.character(Sys.time())), appendLF=TRUE)
+        message(sprintf("Second, permute nodes (%d times) from %d nodes respecting centrality (defined as the mean pairwise affinity to all other nodes) (%s) ...", num.permutation, vcount(ig), as.character(Sys.time())), appendLF=TRUE)
     }
 
 	## equally binned
 	vec_rowsum <- Matrix::rowSums(Amatrix)
-	breaks <- quantile(vec_rowsum, seq(0, 1, 1/nbin))
+	breaks <- stats::quantile(vec_rowsum, seq(0, 1, 1/nbin))
 	cut_index <- as.numeric(cut(vec_rowsum, breaks=breaks))
 	cut_index[is.na(cut_index)] <- 1
 	### append onto ig

@@ -9,9 +9,9 @@ NEW FEATURES
 
     o Add functions ('xLDblock', 'xLDsampling' and 'xLDenricher') for LD block operations
 
-    o Add function 'xDefineGenomicAnno' for defining genomic annotations
-    
-    o Add function 'xDefineOntology' for defining ontology and its annotations
+    o Add functions ('xDefineOntology', 'xDefineGenomicAnno', 'xDefineEQTL' and 'xDefineHIC') for defining ontology and its annotations, genomic annotations, eQTL and promoter capture Hi-C datasets
+
+    o Add function 'xPCHiCplot' for visualising promoter capture Hi-C datasets
 
     o Add function 'xBiproject' for bigraph projection
     
