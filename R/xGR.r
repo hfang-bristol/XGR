@@ -7,6 +7,7 @@
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param add.name logical to add names. By default, it sets to true
 #' @param remove.mcol logical to remove meta-columns. By default, it sets to false
+#' @param include.strand logical to include strand. By default, it sets to false. It only works when the format is "data.frame" or "bed" and the input data has 4 columns
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return a GenomicRanges object 
@@ -34,7 +35,7 @@
 #' GR <- xGR(data=data, format="chr:start-end", RData.location=RData.location)
 #' }
 
-xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, include.strand=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -77,13 +78,30 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 			warning("Your input 'data.file' is not as expected!\n")
 			return(NULL)
 		}
+		
+		###################
+		if(include.strand){
+			if(ncol(data)<=3){
+				include.strand <- F
+			}
+		}
+		###################
+				
 		## make sure positions are numeric
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
-		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[ind,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
-			strand = S4Vectors::Rle(rep('*',length(ind)))
-		)
+		if(include.strand){
+			dGR <- GenomicRanges::GRanges(
+				seqnames=S4Vectors::Rle(data[ind,1]),
+				ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
+				strand = S4Vectors::Rle(data[ind,4])
+			)
+		}else{
+			dGR <- GenomicRanges::GRanges(
+				seqnames=S4Vectors::Rle(data[ind,1]),
+				ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
+				strand = S4Vectors::Rle(rep('*',length(ind)))
+			)
+		}
 		if(add.name){
 			names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
 		}
@@ -111,14 +129,32 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		}
 		
 	}else if(format=="bed"){
+	
+		###################
+		if(include.strand){
+			if(ncol(data)<=3){
+				include.strand <- F
+			}
+		}
+		###################
+	
 		## construct data GR
 		## make sure positions are numeric
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
-		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[ind,1]),
-			ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
-			strand = S4Vectors::Rle(rep('*',length(ind)))
-		)
+		if(include.strand){
+			dGR <- GenomicRanges::GRanges(
+				seqnames=S4Vectors::Rle(data[ind,1]),
+				ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
+				strand = S4Vectors::Rle(data[ind,4])
+			)
+		}else{
+			dGR <- GenomicRanges::GRanges(
+				seqnames=S4Vectors::Rle(data[ind,1]),
+				ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
+				strand = S4Vectors::Rle(rep('*',length(ind)))
+			)
+		}
+		
 		if(add.name){
 			names(dGR) <- paste(data[ind,1], ':', data[ind,2]+1, '-', data[ind,3], sep='')
 		}

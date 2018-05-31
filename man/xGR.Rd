@@ -6,7 +6,7 @@
 \usage{
 xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), add.name = T,
-remove.mcol = F, verbose = T,
+remove.mcol = F, include.strand = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -35,6 +35,10 @@ another. The conversions supported are "hg38.to.hg19" and
 
 \item{remove.mcol}{logical to remove meta-columns. By default, it sets
 to false}
+
+\item{include.strand}{logical to include strand. By default, it sets to
+false. It only works when the format is "data.frame" or "bed" and the
+input data has 4 columns}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

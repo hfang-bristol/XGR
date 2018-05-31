@@ -25,7 +25,7 @@ MICA divided by the sum of IC at pairs of terms, "Schlicker" for
 weighted version of 'Lin' by the 1-prob(MICA) (see
 \url{http://www.ncbi.nlm.nih.gov/pubmed/16776819}), "Jiang" for 1 -
 difference between the sum of IC at pairs of terms and 2*IC at MICA
-(see \url{http://arxiv.org/pdf/cmp-lg/9709008.pdf}), "Pesquita" for
+(see \url{https://arxiv.org/pdf/cmp-lg/9709008.pdf}), "Pesquita" for
 graph information content similarity related to Tanimoto-Jacard index
 (ie. summed information content of common ancestors divided by summed
 information content of all ancestors of term1 and term2 (see

@@ -19,7 +19,7 @@ genomic regions.
 <pre>
 xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), add.name = T,
-remove.mcol = F, verbose = T,
+remove.mcol = F, include.strand = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -62,6 +62,12 @@ another. The conversions supported are &quot;hg38.to.hg19&quot; and
 <td>
 <p>logical to remove meta-columns. By default, it sets
 to false</p>
+</td></tr>
+<tr valign="top"><td><code>include.strand</code></td>
+<td>
+<p>logical to include strand. By default, it sets to
+false. It only works when the format is &quot;data.frame&quot; or &quot;bed&quot; and the
+input data has 4 columns</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
