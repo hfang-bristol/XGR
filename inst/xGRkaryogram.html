@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise genomic regions using karyogram plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGRkaryogram"><tr><td>xGRkaryogram</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise genomic regions using karyogram plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRkaryogram</code> is supposed to visualise genomic regions using
+manhattan plot. It returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGRkaryogram(gr, cytoband = F, color = "royalblue", size = 0.5,
+label = F, label.size = 2, label.col = "magenta", label.force = 0.05,
+label.query = NULL, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>gr</code></td>
+<td>
+<p>a GenomicRange object. If the meta-column 'label' is not
+provided, it will the name of this object</p>
+</td></tr>
+<tr valign="top"><td><code>cytoband</code></td>
+<td>
+<p>logical to indicate whether cytoband will be displayed.
+By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>color</code></td>
+<td>
+<p>the rect color. By default it is 'royalblue'</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>the rect size</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>logical to indicate whether to label the rect. By default,
+it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>label.size</code></td>
+<td>
+<p>the label size</p>
+</td></tr>
+<tr valign="top"><td><code>label.col</code></td>
+<td>
+<p>the label color ('magenta' by default)</p>
+</td></tr>
+<tr valign="top"><td><code>label.force</code></td>
+<td>
+<p>the repelling force between overlapping labels</p>
+</td></tr>
+<tr valign="top"><td><code>label.query</code></td>
+<td>
+<p>only query will be labelled. By default, it sets to
+NULL meaning all will be displayed. If labels in query can not be
+found, then all will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRkaryogram</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+### GWAS catalog
+GWAScatalog &lt;- xRDataLoader('GWAScatalog',
+RData.location=RData.location)
+gwas &lt;- xGR(GWAScatalog$cse_hg19, format="chr:start-end")
+ind &lt;- match(names(gwas), GWAScatalog$cse_hg19)
+names(gwas) &lt;- GWAScatalog$snp_id_current[ind]
+gwas$label &lt;- names(gwas)
+gp &lt;- xGRkaryogram(gwas)
+gp
+
+## End(Not run)
+</pre>
+
+
+</body></html>

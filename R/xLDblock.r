@@ -47,6 +47,15 @@
 #' top.label.query <- names(gr_block)[!is.na(gr_block$pval)]
 #' #gr_block <- gr_block[as.character(GenomicRanges::seqnames(gr_block)) %in% c('chr1','chr2')]
 #' gp <- xGRmanhattan(gr_block, top=length(gr_block), top.label.query=top.label.query)
+#' # c3) karyogram plot of the best
+#' kp <- xGRkaryogram(gr=best,cytoband=T,label=T)
+#' kp
+#' # c4) circle plot of the best
+#' gr_ideo <- xRDataLoader(RData.customised="hg19_ideogram", RData.location=RData.location)$ideogram
+#' #cp <- ggbio() + circle(kp$gr, geom="rect", color="steelblue", size=0.5)
+#' cp <- ggbio() + circle(kp$gr, aes(x=start, y=num), geom="point", color="steelblue", size=0.5)
+#' cp <- cp + circle(gr_ideo, geom="ideo", fill="gray70") + circle(gr_ideo, geom="scale", size=1.5) + circle(gr_ideo, geom="text", aes(label=seqnames), vjust=0, size=3)
+#' cp
 #' 
 #' # d) track plot of 1st LD block
 #' gr_block <- bLD$block[[1]]

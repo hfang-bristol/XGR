@@ -5,7 +5,7 @@ NEW FEATURES
 
     o Add function 'xRPS' for calculating regulatory potential scores
     
-    o Add function 'xGRmanhattan' for genomic region manhattan plot
+    o Add functions ('xGRmanhattan' and 'xGRkaryogram') for genomic region manhattan and karyogram plot
 
     o Add functions ('xLDblock', 'xLDsampling' and 'xLDenricher') for LD block operations
 

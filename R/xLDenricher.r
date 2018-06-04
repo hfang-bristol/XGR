@@ -100,7 +100,7 @@ xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 		message(sprintf("First, load GR annotations (%s) ...", as.character(Sys.time())), appendLF=T)
 	}
 	
-	aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)	
+	aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)
 	if(is.null(aGRL)){
 		return(NULL)
 	}
@@ -127,7 +127,7 @@ xLDenricher <- function(bLD, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"
 	#######################################################
 	
 	if(verbose){
-		message(sprintf("Third, perform enrichment analysis (%s) ...", as.character(now <- Sys.time())), appendLF=T)
+		message(sprintf("Third, perform enrichment analysis (%s) ...", as.character(Sys.time())), appendLF=T)
 	}
 	
 	queryHits <- subjectHits <- B <- n <- best <- NULL
