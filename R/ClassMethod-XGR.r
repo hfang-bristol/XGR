@@ -280,3 +280,50 @@ print.aOnto <- function(x, ...) {
 	print(x$g)
 	cat("......\n")
 }
+
+######################################################################
+# DR
+######################################################################
+#' @title Definition for S3 class \code{DR}
+#' @description \code{DR} has 3 components: df, index, gp.
+#' @param df a data frame
+#' @param index a data frame
+#' @param gp a ggplot object
+#' @return an object of S3 class \code{DR}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' DR(df, index, gp)
+#' }
+DR <- function(df, index, gp){
+	## integrity checks
+	if(class(df)!='data.frame' | class(index)!='data.frame' | any(class(gp)!='ggplot')){
+		stop("The S3 class 'DR' object failed to pass integrity checks!\n")
+	}
+	value <- list(df=df, index=index, gp=gp)
+	class(value) <- "DR"
+	return(value)
+}
+#' @param x an object of class \code{DR}
+#' @param ... other parameters
+#' @rdname DR
+#' @export
+print.DR <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $df: a data frame of %d rows X %d columns", dim(x$df)[1],dim(x$df)[2]), "\n", sep="")
+	cat(sprintf("  $index: a data frame of %d rows X %d columns", dim(x$index)[1],dim(x$index)[2]), "\n", sep="")
+	cat(sprintf("  $gp: a ggplot object"), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$df:\n")
+	print(head(x$df,2))
+	cat("......\n")
+	cat("$index:\n")
+	print(head(x$index,2))
+	cat("......\n")
+}

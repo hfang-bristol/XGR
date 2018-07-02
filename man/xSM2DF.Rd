@@ -31,7 +31,7 @@ None
 input.file <- rbind(c('R1','C1',1), c('R2','C1',1), c('R2','C2',1),
 c('R3','C2',2), c('R4','C1',1))
 data <- xSparseMatrix(input.file)
-# convert into a data frame a full matrix
+# convert into a data frame
 res_df <- xSM2DF(data)
 res_df
 }

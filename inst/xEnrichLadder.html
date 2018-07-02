@@ -23,7 +23,8 @@ xEnrichLadder(eTerm, sortBy = c("or", "adjp", "fdr", "pvalue",
 "zscore", "fc",
 "nAnno", "nOverlap", "none"), top_num = 10, FDR.cutoff = 0.05,
 CI.one = T, colormap = "skyblue-darkblue", x.rotate = 60,
-x.text.size = 6, y.text.size = 6, shape = 19, size = 2, verbose = T)
+x.text.size = 6, y.text.size = 6, shape = 19, size = 2,
+label = c("concise", "full"), verbose = T)
 </pre>
 
 
@@ -94,6 +95,11 @@ it is 6</p>
 <tr valign="top"><td><code>size</code></td>
 <td>
 <p>the number specifying the shape size. By default, it is 2</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>how to label gene sets (terms). It can be &quot;concise&quot; or
+&quot;full&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

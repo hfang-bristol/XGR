@@ -17,6 +17,8 @@ NEW FEATURES
     
     o Add functions ('xRWenricher' and 'xRWkernel') for network enrichment analysis
 
+    o Add function 'xRepurpose' for drug repurposing
+    
 
 CHANGES IN VERSION 1.1.3
 -----------------------

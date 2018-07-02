@@ -66,8 +66,11 @@ xGRkaryogram <- function(gr, cytoband=F, color="royalblue", size=0.5, label=F, l
 	if(cytoband){
 		gp <- ggplot(gr_cytoband) + ggbio::layout_karyogram(cytoband=T)
 	}else{
-		gp <- ggbio::autoplot(GenomeInfoDb::seqinfo(gr))
+		gp <- ggbio::autoplot(GenomeInfoDb::seqinfo(gr), layout="karyogram")
 	}
+	
+	gp <- gp + theme(strip.background=element_rect(fill="transparent",color="transparent"))
+	
 	gp <- suppressMessages(gp + ggbio::layout_karyogram(gr, geom=c("rect","point")[1], ylim=c(10,40), color=color, size=size))
 	#gp <- suppressMessages(gp + ggbio::layout_karyogram(gr, aes(x=start, y=num), geom=c("rect","point")[1], ylim=c(10,40), color=color, size=size))
 	

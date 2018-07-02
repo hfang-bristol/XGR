@@ -13,6 +13,7 @@
 #' @param y.text.size the text size of the y tick labelings. By default, it is 6
 #' @param shape the number specifying the shape. By default, it is 19
 #' @param size the number specifying the shape size. By default, it is 2
+#' @param label how to label gene sets (terms). It can be "concise" or "full"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen
 #' @return an object of class "ggplot"
 #' @note none
@@ -45,10 +46,11 @@
 #' dev.off()
 #' }
 
-xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="skyblue-darkblue", x.rotate=60, x.text.size=6, y.text.size=6, shape=19, size=2, verbose=T)
+xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="skyblue-darkblue", x.rotate=60, x.text.size=6, y.text.size=6, shape=19, size=2, label=c('concise','full'), verbose=T)
 {
 
     sortBy <- match.arg(sortBy)
+    label <- match.arg(label)
     
     gp_heatmap <- NULL
     
@@ -74,10 +76,18 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 			}
 		}
 		df_enrichment <- xEnrichViewer(eTerm, top_num=top_num, sortBy=sortBy, details=T)
-
+	
+	}else if(class(eTerm)=='data.frame'){
+		df_enrichment <- eTerm
+	}
+	
 		if(!is.null(df_enrichment)){
-
-			df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", P=", df_enrichment$pvalue, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
+			
+			if(label=='concise'){
+				df_enrichment$label <- paste0(df_enrichment$name, " [OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "]")
+			}else{
+				df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", P=", df_enrichment$pvalue, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
+			}
 	
 			## list of individual paths
 			ls_path <- lapply(1:nrow(df_enrichment), function(j){
@@ -142,7 +152,6 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 				}
 			}
 		}
-	}
 
     return(gp_heatmap)
 }
