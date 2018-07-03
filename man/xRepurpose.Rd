@@ -5,8 +5,8 @@
 \title{Function to obtain repurposing matrix}
 \usage{
 xRepurpose(data, phase.min = 3, target.max = 5, plot = TRUE,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-...)
+verbose = T, ChEMBL = c("ChEMBL_v24", "ChEMBL_v23"),
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}
@@ -22,6 +22,10 @@ genes}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
+
+\item{ChEMBL}{the drug therapeutic targets from ChEMBL. It can be
+"ChEMBL_v24" for the version 24 (by default), and the version 23. Note:
+you can also load your customised object directly}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

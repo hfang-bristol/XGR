@@ -7,6 +7,7 @@
 #' @param target.max the maximum number of targets per drug allowed. By default it is 5. It is used to define non-promoscuous drug target genes
 #' @param plot logical to indicate whether heatmap plot is drawn
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
+#' @param ChEMBL the drug therapeutic targets from ChEMBL. It can be "ChEMBL_v24" for the version 24 (by default), and the version 23. Note: you can also load your customised object directly
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @param ... additional graphic parameters for xHeatmap
 #' @return 
@@ -39,8 +40,26 @@
 #' write.table(DR$index, file="xRepurpose_index.txt", sep="\t", row.names=F, quote=F)
 #' }
 
-xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, ChEMBL=c("ChEMBL_v24","ChEMBL_v23"), RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
+    
+	if(class(ChEMBL) == "data.frame"){
+			ChEMBL <- ChEMBL
+	}else{
+		ChEMBL <- xRDataLoader(RData.customised=ChEMBL[1], verbose=verbose, RData.location=RData.location)
+		if(is.null(ChEMBL)){
+			ChEMBL <- "ChEMBL_v24"
+			if(verbose){
+				message(sprintf("Instead, %s will be used", ChEMBL), appendLF=T)
+			}
+			ChEMBL <- xRDataLoader(RData.customised=ChEMBL, verbose=verbose, RData.location=RData.location)
+		}
+    }
+    
+	if(!(all(c('target_number','efo_term','phase','pref_name_drug','Symbol') %in% colnames(ChEMBL)))){
+		warnings("The input data.frame does not contain required columns: c('target_number','efo_term','phase','pref_name_drug','Symbol').\n")
+		return(NULL)
+	}
     
 	phase.min <- as.integer(phase.min)
 	if(phase.min>4 | phase.min<0){
@@ -51,9 +70,8 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, RD
 		target.max <- 5
 	}
 	
-	target_number <- efo_id <- efo_term <- phase <- pref_name_drug <- Symbol <- NULL    
-	ChEMBL <- xRDataLoader(RData='ChEMBL', RData.location=RData.location)
-	df_chembl <- unique(ChEMBL %>% dplyr::filter(target_number<=target.max) %>% dplyr::select(efo_id,efo_term,phase,pref_name_drug,Symbol))
+	target_number <- efo_term <- phase <- pref_name_drug <- Symbol <- NULL    
+	df_chembl <- unique(ChEMBL %>% dplyr::filter(target_number<=target.max) %>% dplyr::select(efo_term,phase,pref_name_drug,Symbol))
 	
 	################################################################
 	### UFTword
@@ -80,7 +98,7 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, RD
     
     ## maximum phased drug per target (per disease)
     df <- df_chembl %>% dplyr::filter(phase>=phase.min) %>% dplyr::arrange(-phase)
-    df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_id","Symbol")]),]
+    df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_term","Symbol")]),]
     
 	####################
 	if(0){
