@@ -18,8 +18,9 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
 "KEGGenvironmental",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), verbose
-= T,
+"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL",
+"SIFTS2GOBP",
+"SIFTS2GOMF", "SIFTS2GOCC"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -61,7 +62,9 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
 "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
 "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
-"MsigdbC7")}
+"MsigdbC7"), and the SIFTS database ("SIFTS2GOBP" for Gene Ontology
+Biological Process, "SIFTS2GOMF" for Gene Ontology Molecular Function,
+"SIFTS2GOCC" for Gene Ontology Cellular Component)}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}

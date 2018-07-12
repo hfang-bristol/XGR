@@ -101,9 +101,11 @@ top.label.query <- names(gr_block)[!is.na(gr_block$pval)]
 gp <- xGRmanhattan(gr_block, top=length(gr_block),
 top.label.query=top.label.query)
 # c3) karyogram plot of the best
-kp <- xGRkaryogram(gr=best,cytoband=T,label=T)
+kp <- xGRkaryogram(gr=best,cytoband=T,label=T,
+RData.location=RData.location)
 kp
 # c4) circle plot of the best
+library(ggbio)
 gr_ideo <- xRDataLoader(RData.customised="hg19_ideogram",
 RData.location=RData.location)$ideogram
 #cp <- ggbio() + circle(kp$gr, geom="rect", color="steelblue", size=0.5)

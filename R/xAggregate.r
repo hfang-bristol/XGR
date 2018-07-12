@@ -4,7 +4,7 @@
 #'
 #' @param data a data frame. The aggregation is done across columns per row. Each cell should contain positive values or NA; if infinite, it will be replaced with the maximum finite value
 #' @param bin logical to indicate whether the input data per column is rank-transformed into the predefined number of discrete bins. By default, it sets to false
-#' @param nbin the number of discrete bins. By default, it sets to 10 (only works when bin is 10)
+#' @param nbin the number of discrete bins. By default, it sets to 10 (only works when bin is true)
 #' @param scale.log logical to indicate whether the per-row sum is log-scaled. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return

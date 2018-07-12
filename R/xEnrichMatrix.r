@@ -20,7 +20,7 @@
 #' @param font.family the font family for texts
 #' @param ... additional graphic parameters for corrplot::corrplot
 #' @return 
-#' If the method is 'gpplot2', it returns a ggplot object. Otherwise, it is a data frame
+#' If the method is 'ggplot2', it returns a ggplot object. Otherwise, it is a data frame
 #' @note none
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}

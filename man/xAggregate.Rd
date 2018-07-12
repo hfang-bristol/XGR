@@ -16,7 +16,7 @@ rank-transformed into the predefined number of discrete bins. By
 default, it sets to false}
 
 \item{nbin}{the number of discrete bins. By default, it sets to 10
-(only works when bin is 10)}
+(only works when bin is true)}
 
 \item{scale.log}{logical to indicate whether the per-row sum is
 log-scaled. By default, it sets to true}

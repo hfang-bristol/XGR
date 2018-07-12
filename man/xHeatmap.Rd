@@ -84,7 +84,7 @@ is unit(c(5.5,5.5,5.5,5.5),"pt")}
 supraHex::visTreeBootstrap}
 }
 \value{
-a gpplot2 object
+a ggplot2 object
 }
 \description{
 \code{xHeatmap} is supposed to draw heatmap using ggplot2.

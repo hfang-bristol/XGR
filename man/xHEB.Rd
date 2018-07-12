@@ -35,7 +35,7 @@ input graph, it will be 'RdPu' (RColorBrewer::display.brewer.all());
 otherwise 'skyblue'}
 }
 \value{
-a gpplot2 object
+a ggplot2 object
 }
 \description{
 \code{xHEB} is supposed to visualise a graph with communities using

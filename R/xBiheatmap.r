@@ -24,7 +24,7 @@
 #' @param intercept.color intercept color
 #' @param intercept.size intercept size
 #' @return 
-#' a gpplot2 object
+#' a ggplot2 object
 #' @export
 #' @seealso \code{\link{xBigraph}}, \code{\link{xHeatmap}}
 #' @include xBiheatmap.r

@@ -74,7 +74,7 @@ it is 45}
 \item{...}{additional graphic parameters for corrplot::corrplot}
 }
 \value{
-If the method is 'gpplot2', it returns a ggplot object. Otherwise, it
+If the method is 'ggplot2', it returns a ggplot object. Otherwise, it
 is a data frame
 }
 \description{

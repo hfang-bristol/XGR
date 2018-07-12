@@ -11,7 +11,7 @@
 #' @param edge.width the width of edges
 #' @param edge.palette the palette defining edge color. It is correponding to the edge attribute 'weight' for the input graph (if any). By default, it is NULL: if the edge attribute 'weight' exists for the input graph, it will be 'RdPu' (RColorBrewer::display.brewer.all()); otherwise 'skyblue'
 #' @return
-#' a gpplot2 object
+#' a ggplot2 object
 #' @export
 #' @seealso \code{\link{xHEB}}
 #' @include xHEB.r

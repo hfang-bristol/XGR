@@ -160,6 +160,36 @@ height=2+nrow(mat)*0.1, compress=T)
 print(gp_ladder)
 dev.off()
 
+# 4) SIFTS2GOMF
+## df_fpocket
+SIFTS_fpocket &lt;-
+xRDataLoader(RData='SIFTS_fpocket.RData',RData.location=RData.location)
+df_fpocket &lt;- as.data.frame(SIFTS_fpocket %&gt;%
+dplyr::group_by(Symbol,PDB_code) %&gt;%
+dplyr::summarise(num_pockets=n()))
+## gp_ladder
+set.seed(825)
+data &lt;- as.character(sample(unique(df_fpocket$Symbol), 100))
+eTerm &lt;- xEnricherGenes(data=data, ontology="SIFTS2GOMF",
+RData.location=RData.location)
+gp_ladder &lt;- xEnrichLadder(eTerm, sortBy="none", top_num=5,
+FDR.cutoff=0.01, x.rotate=90)
+#gp_ladder + coord_flip()
+## data_matrix
+df_gp_ladder &lt;- unique(gp_ladder$data[,c('sample','x')])
+ind &lt;- match(df_fpocket$Symbol, df_gp_ladder$sample)
+df_res &lt;- df_fpocket[!is.na(ind),]
+df_res$x &lt;- df_gp_ladder$x[ind[!is.na(ind)]]
+data_matrix &lt;- df_res %&gt;% tidyr::spread(PDB_code, num_pockets) %&gt;%
+dplyr::arrange(x)
+rownames(data_matrix) &lt;- data_matrix$Symbol
+data_matrix &lt;- data_matrix[,c(-1,-2)]
+## gp_pdb
+gp_pdb &lt;- xHeatmap(t(data_matrix), reorder="row", colormap="jet.top",
+x.rotate=90, shape=19, size=1, x.text.size=6,y.text.size=5,
+na.color='transparent', legend.title='# pockets')
+#gp_pdb + coord_flip()
+
 ## End(Not run)
 </pre>
 

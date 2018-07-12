@@ -31,8 +31,9 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
 "KEGGenvironmental",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL"), verbose
-= T,
+"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL",
+"SIFTS2GOBP",
+"SIFTS2GOMF", "SIFTS2GOCC"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -80,7 +81,9 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 &quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;,
 &quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;,
 &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;,
-&quot;MsigdbC7&quot;)</p>
+&quot;MsigdbC7&quot;), and the SIFTS database (&quot;SIFTS2GOBP&quot; for Gene Ontology
+Biological Process, &quot;SIFTS2GOMF&quot; for Gene Ontology Molecular Function,
+&quot;SIFTS2GOCC&quot; for Gene Ontology Cellular Component)</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

@@ -78,7 +78,7 @@ is unit(c(5.5,5.5,5.5,5.5),"pt")}
 \item{intercept.size}{intercept size}
 }
 \value{
-a gpplot2 object
+a ggplot2 object
 }
 \description{
 \code{xBiheatmap} is supposed to visualise bipartitle graph communities

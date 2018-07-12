@@ -48,9 +48,10 @@
 #' #gr_block <- gr_block[as.character(GenomicRanges::seqnames(gr_block)) %in% c('chr1','chr2')]
 #' gp <- xGRmanhattan(gr_block, top=length(gr_block), top.label.query=top.label.query)
 #' # c3) karyogram plot of the best
-#' kp <- xGRkaryogram(gr=best,cytoband=T,label=T)
+#' kp <- xGRkaryogram(gr=best,cytoband=T,label=T, RData.location=RData.location)
 #' kp
 #' # c4) circle plot of the best
+#' library(ggbio)
 #' gr_ideo <- xRDataLoader(RData.customised="hg19_ideogram", RData.location=RData.location)$ideogram
 #' #cp <- ggbio() + circle(kp$gr, geom="rect", color="steelblue", size=0.5)
 #' cp <- ggbio() + circle(kp$gr, aes(x=start, y=num), geom="point", color="steelblue", size=0.5)
@@ -175,7 +176,7 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 				message(sprintf("\tpopulation '%s' (%s) ...", x, as.character(Sys.time())), appendLF=T)
 			}
 		
-			data_ld <- xRDataLoader(paste0("LDblock_", x), RData.location=RData.location, verbose=F)
+			data_ld <- xRDataLoader(paste0("LDblock_", x), RData.location=RData.location, verbose=verbose)
 			ind <- match(data_ld$Lead, leads)
 			ind_lead <- which(!is.na(ind))
 			
@@ -203,6 +204,8 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 		if(!is.null(LLR)){
 			flag <- LLR[,3]>=LD.r2
 			if(sum(flag)>0){
+				
+				LLR <- LLR[,1:3]
 				colnames(LLR)[1:3] <- c("Lead", "LD", "R2")
 				
 				ind <- match(LLR$Lead, leads)
@@ -229,7 +232,8 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
 	####################
 	## add self-self
 	####################
-	df_tmp <- data.frame(Lead=leads, LD=leads, R2=rep(1,length(leads)), distance=rep(0,length(leads)), stringsAsFactors=F)
+	#df_tmp <- data.frame(Lead=leads, LD=leads, R2=rep(1,length(leads)), distance=rep(0,length(leads)), stringsAsFactors=F)
+	df_tmp <- data.frame(Lead=leads, LD=leads, R2=rep(1,length(leads)), stringsAsFactors=F)
 	if(nrow(LLR) == 0){
 		LLR <- df_tmp
 	}else{

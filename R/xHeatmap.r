@@ -26,7 +26,7 @@
 #' @param label.color the label color
 #' @param ... additional graphic parameters for supraHex::visTreeBootstrap
 #' @return 
-#' a gpplot2 object
+#' a ggplot2 object
 #' @note none
 #' @export
 #' @seealso \code{\link{xHeatmap}}

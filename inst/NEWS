@@ -3,6 +3,8 @@ CHANGES IN VERSION 1.1.4
 
 NEW FEATURES
 
+    o Populate annotations
+
     o Add function 'xRPS' for calculating regulatory potential scores
     
     o Add functions ('xGRmanhattan' and 'xGRkaryogram') for genomic region manhattan and karyogram plot
