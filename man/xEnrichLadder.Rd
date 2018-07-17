@@ -107,10 +107,12 @@ dev.off()
 # 4) SIFTS2GOMF
 ## df_fpocket
 SIFTS_fpocket <-
-xRDataLoader(RData='SIFTS_fpocket.RData',RData.location=RData.location)
+xRDataLoader(RData='SIFTS_fpocket',RData.location=RData.location)
 df_fpocket <- as.data.frame(SIFTS_fpocket \%>\%
-dplyr::group_by(Symbol,PDB_code) \%>\%
-dplyr::summarise(num_pockets=n()))
+dplyr::filter(druggable=='Y') \%>\% dplyr::group_by(Symbol,PDB_code)
+\%>\% dplyr::summarise(num_pockets=n()) \%>\%
+dplyr::arrange(Symbol,desc(num_pockets),PDB_code))
+df_fpocket <- df_fpocket[!duplicated(df_fpocket$Symbol), ]
 ## gp_ladder
 set.seed(825)
 data <- as.character(sample(unique(df_fpocket$Symbol), 100))
@@ -133,6 +135,25 @@ gp_pdb <- xHeatmap(t(data_matrix), reorder="row", colormap="jet.top",
 x.rotate=90, shape=19, size=1, x.text.size=6,y.text.size=5,
 na.color='transparent', legend.title='# pockets')
 #gp_pdb + coord_flip()
+## plot_combined
+#plot_combined <- cowplot::plot_grid(gp_ladder, gp_pdb, align="h", ncol=1, rel_heights=c(2,3))
+
+## enrichment analysis
+SIFTS_fpocket <-
+xRDataLoader(RData='SIFTS_fpocket',RData.location=RData.location)
+annotation.file <- SIFTS_fpocket[!duplicated(SIFTS_fpocket$Symbol),
+c('Symbol','druggable')]
+### 100 randomly chosen human genes
+org.Hs.eg <- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+### optionally, provide the test background (if not provided, all human genes)
+background <- as.character(org.Hs.eg$gene_info$Symbol)
+### perform enrichment analysis
+eTerm <- xEnricherYours(data.file=data,
+annotation.file=annotation.file, background.file=background,
+size.range=c(10,20000))
 }
 }
 \seealso{
