@@ -113,6 +113,10 @@ dplyr::filter(druggable=='Y') \%>\% dplyr::group_by(Symbol,PDB_code)
 \%>\% dplyr::summarise(num_pockets=n()) \%>\%
 dplyr::arrange(Symbol,desc(num_pockets),PDB_code))
 df_fpocket <- df_fpocket[!duplicated(df_fpocket$Symbol), ]
+## mat_fpocket
+mat_fpocket <- df_fpocket \%>\% tidyr::spread(Symbol, num_pockets)
+rownames(mat_fpocket) <- mat_fpocket[,1]
+mat_fpocket <- mat_fpocket[,-1]
 ## gp_ladder
 set.seed(825)
 data <- as.character(sample(unique(df_fpocket$Symbol), 100))
@@ -122,14 +126,12 @@ gp_ladder <- xEnrichLadder(eTerm, sortBy="none", top_num=5,
 FDR.cutoff=0.01, x.rotate=90)
 #gp_ladder + coord_flip()
 ## data_matrix
-df_gp_ladder <- unique(gp_ladder$data[,c('sample','x')])
-ind <- match(df_fpocket$Symbol, df_gp_ladder$sample)
-df_res <- df_fpocket[!is.na(ind),]
-df_res$x <- df_gp_ladder$x[ind[!is.na(ind)]]
-data_matrix <- df_res \%>\% tidyr::spread(PDB_code, num_pockets) \%>\%
-dplyr::arrange(x)
-rownames(data_matrix) <- data_matrix$Symbol
-data_matrix <- data_matrix[,c(-1,-2)]
+ind <- match(colnames(gp_ladder$matrix), colnames(mat_fpocket))
+data_matrix <- mat_fpocket[,ind[!is.na(ind)]]
+ind <- which(apply(!is.na(data_matrix), 1, sum)!=0)
+data_matrix <- data_matrix[ind,]
+ind <- match(data, colnames(data_matrix))
+data_matrix <- data_matrix[,ind[!is.na(ind)]]
 ## gp_pdb
 gp_pdb <- xHeatmap(t(data_matrix), reorder="row", colormap="jet.top",
 x.rotate=90, shape=19, size=1, x.text.size=6,y.text.size=5,

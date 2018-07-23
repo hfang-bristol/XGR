@@ -8,6 +8,8 @@
 #' @param plot logical to indicate whether heatmap plot is drawn
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param ChEMBL the drug therapeutic targets from ChEMBL. It can be "ChEMBL_v24" for the version 24 (by default), and the version 23. Note: you can also load your customised object directly
+#' @param restricted the disease areas restricted to. By default it is NULL
+#' @param excluded the disease areas that are excluded. By default it is NULL
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @param ... additional graphic parameters for xHeatmap
 #' @return 
@@ -40,7 +42,7 @@
 #' write.table(DR$index, file="xRepurpose_index.txt", sep="\t", row.names=F, quote=F)
 #' }
 
-xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, ChEMBL=c("ChEMBL_v24","ChEMBL_v23"), RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, ChEMBL=c("ChEMBL_v24","ChEMBL_v23"), restricted=NULL, excluded=NULL, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
     
 	if(class(ChEMBL) == "data.frame"){
@@ -101,14 +103,14 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
     df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_term","Symbol")]),]
     
 	####################
-	if(0){
-		restricted <- c("crohn's disease","multiple sclerosis","osteoarthritis","psoriasis","rheumatoid arthritis","systemic lupus erythematosus","type i diabetes mellitus","ulcerative colitis")
+	if(!is.null(restricted)){
+		#restricted <- c("Crohn's disease","Multiple sclerosis","Osteoarthritis","Psoriasis","Rheumatoid arthritis","Systemic lupus erythematosus","Type i diabetes mellitus","Ulcerative colitis")
 		ind <- match(df_target_efo_phase_drug$efo_term, restricted)
 		df_target_efo_phase_drug <- df_target_efo_phase_drug[!is.na(ind), ]
 	}
-	if(0){
-		restricted <- c("crohn's disease","immune system disease","multiple sclerosis","osteoarthritis","psoriasis","rheumatoid arthritis","systemic lupus erythematosus","type i diabetes mellitus","ulcerative colitis")
-		ind <- match(df_target_efo_phase_drug$efo_term, restricted)
+	if(!is.null(excluded)){
+		#excluded <- c("Cancer","Immune system disease")
+		ind <- match(df_target_efo_phase_drug$efo_term, excluded)
 		df_target_efo_phase_drug <- df_target_efo_phase_drug[is.na(ind), ]
 	}
 	####################
@@ -152,6 +154,14 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
 	data_label <- df_label %>% tidyr::spread(sample, index)
 	rownames(data_label) <- data_label$gene
 	data_label <- data_label[,-1]
+    
+    ############
+    # by default, ordered by the input data
+    ind <- match(data, rownames(data_matrix))
+    data_matrix <- data_matrix[ind[!is.na(ind)], ]
+    data_label <- data_label[ind[!is.na(ind)], ]
+    ############
+    
     
     ## heatmap view
     if(plot){
