@@ -133,7 +133,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 			})
 			names(ls_path) <- df_enrichment$name
 			
-			## only works if there are no less than 2 terms
+			## works if 1 term or more
 			if(length(ls_path)>=1){
 				
 				all_genes <- unique(unlist(ls_path))
@@ -160,7 +160,8 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 				### update 'vec_sum' and 'df_res'
 				vec_sum <- df_tmp$num
 				names(vec_sum) <- df_tmp$gene
-				df_res <- df_tmp[,2:(ncol(df_tmp)-1)]
+				df_res <- df_tmp %>% dplyr::select(2:(ncol(df_tmp)-1))
+				#df_res <- df_tmp[,2:(ncol(df_tmp)-1)]
 				rownames(df_res) <- df_tmp$gene
 
 				if(verbose){
@@ -185,6 +186,13 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 					colsep <- cumsum(table(vec_sum))
 					colsep <- length(vec_sum) - colsep[-length(colsep)]
 					gp_heatmap <- gp_heatmap + geom_vline(xintercept=colsep+0.5,color="grey90",size=0.5)
+					
+					## append 'matrix'
+					gene <- sample <- val <- NULL
+					data_matrix <- gp_heatmap$data %>% dplyr::select(gene,sample,val) %>% tidyr::spread(sample, val)
+					rownames(data_matrix) <- data_matrix$gene
+					data_matrix <- data_matrix[,-1]
+					gp_heatmap$matrix <- data_matrix
 					#gp_heatmap
 				}
 			}
