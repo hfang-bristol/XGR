@@ -160,7 +160,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		
 		#######################
 		if(!is.null(data.label)){
-			mat_label <- as.data.frame(data.label[ind_row, ind_col])
+			mat_label <- as.data.frame(data.label[ind_row, ind_col], stringsAsFactors=F)
 			gene <- sample <- val <- NULL
 			df_label <- suppressWarnings(mat_label %>% dplyr::mutate(gene=rownames(mat_label)) %>% tidyr::gather(sample, val, -gene))
 			df_label$gene <- factor(df_label$gene, levels=rev(rownames(mat_label)))

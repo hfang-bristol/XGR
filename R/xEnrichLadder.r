@@ -129,7 +129,12 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 			}else{
 				df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", P=", df_enrichment$pvalue, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
 			}
-	
+			
+			###############
+			## remove those rows with equal name
+			df_enrichment <- df_enrichment[!duplicated(df_enrichment$name),]
+			###############
+						
 			## list of individual paths
 			ls_path <- lapply(1:nrow(df_enrichment), function(j){
 				x <- df_enrichment$members[j]
