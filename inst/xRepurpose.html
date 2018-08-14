@@ -18,7 +18,7 @@ query list of genes. It returns an object of the class 'DR'.
 
 <pre>
 xRepurpose(data, phase.min = 3, target.max = 5, plot = TRUE,
-verbose = T, ChEMBL = c("ChEMBL_v24", "ChEMBL_v23"), restricted = NULL,
+verbose = T, DTT = c("ChEMBL_v24", "ChEMBL_v23"), restricted = NULL,
 excluded = NULL, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata",
 ...)
@@ -52,11 +52,12 @@ genes</p>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>ChEMBL</code></td>
+<tr valign="top"><td><code>DTT</code></td>
 <td>
-<p>the drug therapeutic targets from ChEMBL. It can be
-&quot;ChEMBL_v24&quot; for the version 24 (by default), and the version 23. Note:
-you can also load your customised object directly</p>
+<p>the drug therapeutic targets. It can be &quot;ChEMBL_v24&quot; for the
+version 24 (by default), and the version 23. Note: you can also load
+your customised object directly with columns
+('target_number','efo_term','phase','pref_name_drug','Symbol')</p>
 </td></tr>
 <tr valign="top"><td><code>restricted</code></td>
 <td>

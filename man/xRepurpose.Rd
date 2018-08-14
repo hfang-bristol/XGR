@@ -5,7 +5,7 @@
 \title{Function to obtain repurposing matrix}
 \usage{
 xRepurpose(data, phase.min = 3, target.max = 5, plot = TRUE,
-verbose = T, ChEMBL = c("ChEMBL_v24", "ChEMBL_v23"), restricted = NULL,
+verbose = T, DTT = c("ChEMBL_v24", "ChEMBL_v23"), restricted = NULL,
 excluded = NULL, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata",
 ...)
@@ -25,9 +25,10 @@ genes}
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
-\item{ChEMBL}{the drug therapeutic targets from ChEMBL. It can be
-"ChEMBL_v24" for the version 24 (by default), and the version 23. Note:
-you can also load your customised object directly}
+\item{DTT}{the drug therapeutic targets. It can be "ChEMBL_v24" for the
+version 24 (by default), and the version 23. Note: you can also load
+your customised object directly with columns
+('target_number','efo_term','phase','pref_name_drug','Symbol')}
 
 \item{restricted}{the disease areas restricted to. By default it is
 NULL}

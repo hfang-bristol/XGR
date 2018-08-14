@@ -7,7 +7,7 @@
 #' @param target.max the maximum number of targets per drug allowed. By default it is 5. It is used to define non-promoscuous drug target genes
 #' @param plot logical to indicate whether heatmap plot is drawn
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
-#' @param ChEMBL the drug therapeutic targets from ChEMBL. It can be "ChEMBL_v24" for the version 24 (by default), and the version 23. Note: you can also load your customised object directly
+#' @param DTT the drug therapeutic targets. It can be "ChEMBL_v24" for the version 24 (by default), and the version 23. Note: you can also load your customised object directly with columns ('target_number','efo_term','phase','pref_name_drug','Symbol')
 #' @param restricted the disease areas restricted to. By default it is NULL
 #' @param excluded the disease areas that are excluded. By default it is NULL
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -42,13 +42,13 @@
 #' write.table(DR$index, file="xRepurpose_index.txt", sep="\t", row.names=F, quote=F)
 #' }
 
-xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, ChEMBL=c("ChEMBL_v24","ChEMBL_v23"), restricted=NULL, excluded=NULL, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, DTT=c("ChEMBL_v24","ChEMBL_v23"), restricted=NULL, excluded=NULL, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
     
-	if(class(ChEMBL) == "data.frame"){
-			ChEMBL <- ChEMBL
+	if(class(DTT) == "data.frame"){
+			ChEMBL <- DTT
 	}else{
-		ChEMBL <- xRDataLoader(RData.customised=ChEMBL[1], verbose=verbose, RData.location=RData.location)
+		ChEMBL <- xRDataLoader(RData.customised=DTT[1], verbose=verbose, RData.location=RData.location)
 		if(is.null(ChEMBL)){
 			ChEMBL <- "ChEMBL_v24"
 			if(verbose){
@@ -85,8 +85,10 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
 	  	})
 	}
 	################################################################
-    df_chembl$pref_name_drug <- UFTword(tolower(df_chembl$pref_name_drug))
-	df_chembl$efo_term <- UFTword(tolower(df_chembl$efo_term))
+	if(class(DTT) != "data.frame"){
+    	df_chembl$pref_name_drug <- UFTword(tolower(df_chembl$pref_name_drug))
+		df_chembl$efo_term <- UFTword(tolower(df_chembl$efo_term))
+	}
 	
 	####################
 	## restrict to data
@@ -100,7 +102,8 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
     
     ## maximum phased drug per target (per disease)
     df <- df_chembl %>% dplyr::filter(phase>=phase.min) %>% dplyr::arrange(-phase)
-    df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_term","Symbol")]),]
+    #df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_term","Symbol")]),]
+    df_target_efo_phase_drug <- df[!duplicated(df[,c("efo_term","Symbol","pref_name_drug")]),]
     
 	####################
 	if(!is.null(restricted)){
@@ -122,7 +125,7 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
 
 	ls_uid <- split(x=df_target_efo_phase_drug$pref_name_drug, f=df_target_efo_phase_drug$uid)
 	ls_uid <- lapply(ls_uid,function(x){
-		paste(x,collapse=',')
+		paste(sort(x),collapse=',')
 	})
 	vec_uid <- unlist(ls_uid)
 	vec_tmp <- sort(unique(vec_uid))
@@ -131,7 +134,7 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, Ch
 	###########################
     
     ## 1st: data_matrix
-	df <- df_target_efo_phase_drug[,c('Symbol','efo_term','phase')]
+	df <- unique(df_target_efo_phase_drug[,c('Symbol','efo_term','phase')])
 	data_matrix <- df %>% tidyr::spread(efo_term, phase)
 	rownames(data_matrix) <- data_matrix$Symbol
 	data_matrix <- data_matrix[,-1]
