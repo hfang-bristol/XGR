@@ -43,7 +43,7 @@
 #' 
 #' # 4) use font family (Arial)
 #' \dontrun{
-#' source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+#' BiocManager::install("extrafont")
 #' library(extrafont)
 #' font_import()
 #' fonttable()

@@ -5,8 +5,8 @@
 \title{Function to visualise genomic regions using karyogram plot}
 \usage{
 xGRkaryogram(gr, cytoband = F, color = "royalblue", size = 0.5,
-label = F, label.size = 2, label.col = "magenta", label.force = 0.05,
-label.query = NULL, verbose = T,
+label = F, label.size = 2, label.col = "magenta",
+label.force = 0.05, label.query = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

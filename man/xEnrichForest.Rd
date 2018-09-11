@@ -5,9 +5,9 @@
 \title{Function to visualise enrichment results using a forest plot}
 \usage{
 xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
-colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
-barheight = NULL, wrap.width = NULL, font.family = "sans",
-signature = TRUE, drop = F)
+colormap = "ggplot2.top", ncolors = 64, zlim = NULL,
+barwidth = 0.5, barheight = NULL, wrap.width = NULL,
+font.family = "sans", signature = TRUE, drop = F)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it

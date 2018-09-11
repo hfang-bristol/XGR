@@ -4,9 +4,8 @@
 \alias{xSymbol2GeneID}
 \title{Function to convert gene symbols to entrez geneid}
 \usage{
-xSymbol2GeneID(data, check.symbol.identity = F, details = F, verbose =
-T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xSymbol2GeneID(data, check.symbol.identity = F, details = F,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}

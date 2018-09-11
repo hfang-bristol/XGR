@@ -5,8 +5,7 @@
 \title{Function to calculate per base scores given a list of genomic regions in terms of overlaps with genomic annotations}
 \usage{
 xGScoreAdv(data, format = c("data.frame", "bed", "chr:start-end",
-"GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GS.annotation = c("fitCons", "phastCons", "phyloP", "mcap", "cadd"),
 GR.annotation = NA, details = F, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")

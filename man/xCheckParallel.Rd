@@ -24,9 +24,7 @@ should be used and how
 \note{
 Whether parallel computation with multicores is used is
 system-specific. Also, it will depend on whether these two packages
-"foreach" and "doParallel" have been installed. It can be installed
-via: \code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doParallel"))}.
+"foreach" and "doParallel" have been installed.
 }
 \examples{
 \dontrun{

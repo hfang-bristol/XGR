@@ -8,10 +8,10 @@ xGRtrack(cse.query = NULL, gene.query = NULL, window = 1e+05,
 nearby = NULL, name.scoretrack = "Genomic scores",
 gene.model = c("UCSC_knownGene_model", "UCSC_knownCanonical_model"),
 GR.score = c(NA, "RecombinationRate", "phastCons100way",
-"phyloP100way",
-"GERP"), GR.score.customised = NULL, name.customised = "Customised",
-type.customised = c("point", "line"), label.size = 2,
-label.col = "black", label.force = 0.05, verbose = TRUE,
+"phyloP100way", "GERP"), GR.score.customised = NULL,
+name.customised = "Customised", type.customised = c("point", "line"),
+label.size = 2, label.col = "black", label.force = 0.05,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

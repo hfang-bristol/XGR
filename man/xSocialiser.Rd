@@ -77,10 +77,7 @@ just used for understanding scripts}
 \item{parallel}{logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
 does so. It will depend on whether these two packages "foreach" and
-"doParallel" have been installed. It can be installed via:
-\code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doParallel"))}. If not yet installed, this option
-will be disabled}
+"doParallel" have been installed}
 
 \item{multicores}{an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.

@@ -5,10 +5,9 @@
 \title{Function to obtain repurposing matrix}
 \usage{
 xRepurpose(data, phase.min = 3, target.max = 5, plot = TRUE,
-verbose = T, DTT = c("ChEMBL_v24", "ChEMBL_v23"), restricted = NULL,
-excluded = NULL, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata",
-...)
+verbose = T, DTT = c("ChEMBL_v24", "ChEMBL_v23"),
+restricted = NULL, excluded = NULL,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}

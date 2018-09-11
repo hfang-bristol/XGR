@@ -6,16 +6,15 @@
 \usage{
 xSocialiserDAGplot(g, query, displayBy = c("IC", "none"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-height = 7, width = 7, margin = rep(0.1, 4), colormap = c("yr", "bwr",
-"jet", "gbr", "wyr", "br", "rainbow", "wb", "lightyellow-orange"),
+height = 7, width = 7, margin = rep(0.1, 4), colormap = c("yr",
+"bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"),
 ncolors = 40, zlim = NULL, colorbar = T, colorbar.fraction = 0.1,
 newpage = T, layout.orientation = c("top_bottom", "left_right",
 "bottom_top", "right_left"), node.info = c("none", "term_id",
-"term_name",
-"both", "full_term_name"), wrap.width = NULL, graph.node.attrs = NULL,
-graph.edge.attrs = NULL, node.attrs = NULL, output.format =
-c("Ragraph",
-"igraph"))
+"term_name", "both", "full_term_name"), wrap.width = NULL,
+graph.node.attrs = NULL, graph.edge.attrs = NULL,
+node.attrs = NULL, output.format = c("Ragraph", "igraph"))
 }
 \arguments{
 \item{g}{an object of class "igraph" (resulting from similarity

@@ -5,14 +5,13 @@
 \title{Function to generate a graphml file from a graph object of class "igraph"}
 \usage{
 xGraphML(g, node.label = NULL, label.wrap.width = NULL,
-node.label.size = 12, node.label.color = "#000000", node.tooltip =
-NULL,
-node.link = NULL, node.xcoord = "xcoord", node.ycoord = "ycoord",
-node.color.na = "#dddddd", node.color = NULL,
-colormap = "grey-orange-darkred", ncolors = 64, nlegend = 11,
-legend.label.size = 10, legend.interval = 0.05, zlim = NULL,
-node.size = 30, node.coord.scale = 300, edge.color = "#00000033",
-edge.width = 1, filename = "xGraphML")
+node.label.size = 12, node.label.color = "#000000",
+node.tooltip = NULL, node.link = NULL, node.xcoord = "xcoord",
+node.ycoord = "ycoord", node.color.na = "#dddddd",
+node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
+nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
+zlim = NULL, node.size = 30, node.coord.scale = 300,
+edge.color = "#00000033", edge.width = 1, filename = "xGraphML")
 }
 \arguments{
 \item{g}{an object of class "igraph"}

@@ -19,25 +19,23 @@ class &quot;cPath&quot;.
 <h3>Usage</h3>
 
 <pre>
-xCrosstalk(data, entity = c("Gene", "GR"), significance.threshold =
-NULL,
-score.cap = NULL, build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), crosslink = c("genehancer", "PCHiC_combined",
-"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
-cdf.function = c("original", "empirical"), scoring.scheme = c("max",
-"sum", "sequential"), nearby.distance.max = 50000,
-nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, networks = c("KEGG", "KEGG_metabolism",
-"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
-"KEGG_organismal",
-"KEGG_disease", "REACTOME", "PCommonsDN_Reactome"), seed.genes = T,
+xCrosstalk(data, entity = c("Gene", "GR"),
+significance.threshold = NULL, score.cap = NULL,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
+"nearby"), crosslink.customised = NULL, cdf.function = c("original",
+"empirical"), scoring.scheme = c("max", "sum", "sequential"),
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2,
+networks = c("KEGG", "KEGG_metabolism", "KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease",
+"REACTOME", "PCommonsDN_Reactome"), seed.genes = T,
 subnet.significance = 0.01, subnet.size = NULL,
 ontologies = c("KEGGenvironmental", "KEGG", "KEGGmetabolism",
-"KEGGgenetic",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease"), size.range = c(10,
-2000),
-min.overlap = 10, fdr.cutoff = 0.05, crosstalk.top = NULL,
-glayout = layout_with_kk, verbose = T,
+"KEGGgenetic", "KEGGcellular", "KEGGorganismal", "KEGGdisease"),
+size.range = c(10, 2000), min.overlap = 10, fdr.cutoff = 0.05,
+crosstalk.top = NULL, glayout = layout_with_kk, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 

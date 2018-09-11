@@ -49,7 +49,7 @@
 #' xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 #' 
 #' # 5) use font family (Arial)
-#' source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+#' BiocManager::install("extrafont")
 #' library(extrafont)
 #' font_import()
 #' fonttable()

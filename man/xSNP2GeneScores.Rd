@@ -4,14 +4,14 @@
 \alias{xSNP2GeneScores}
 \title{Function to identify likely modulated seed genes given a list of SNPs together with the significance level (e.g. GWAS reported p-values)}
 \usage{
-xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
-0.8,
-significance.threshold = 5e-05, score.cap = 10, distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid", "constant"),
-decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
-"dbSNP_Single"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
-"NPC"), scoring.scheme = c("max", "sum", "sequential"), verbose = T,
+xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL,
+LD.r2 = 0.8, significance.threshold = 5e-05, score.cap = 10,
+distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
+"constant"), decay.exponent = 2, GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common", "dbSNP_Single"), GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), include.TAD = c("none", "GM12878", "IMR90",
+"MSC", "TRO", "H1", "MES", "NPC"), scoring.scheme = c("max", "sum",
+"sequential"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

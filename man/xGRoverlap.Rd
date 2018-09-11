@@ -5,11 +5,10 @@
 \title{Function to extract overlap-based scores given a list of genomic regions}
 \usage{
 xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
-"GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), GR.score =
-c(NA,
-"RecombinationRate", "phastCons100way", "phyloP100way", "GERP"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+GR.score = c(NA, "RecombinationRate", "phastCons100way",
+"phyloP100way", "GERP"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"

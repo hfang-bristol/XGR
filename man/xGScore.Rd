@@ -5,11 +5,10 @@
 \title{Function to extract scores given a list of genomic regions}
 \usage{
 xGScore(data, format = c("chr:start-end", "data.frame", "bed",
-"GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GS.annotation = c("fitCons", "phastCons", "phyloP", "mcap", "cadd"),
-scoring.scheme = c("mean", "median", "max", "min", "sum"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+scoring.scheme = c("mean", "median", "max", "min", "sum"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"

@@ -8,8 +8,8 @@ xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL,
 background.file = NULL, format.file = c("data.frame", "bed",
 "chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
 "hg18.to.hg19"), background.annotatable.only = F, num.samples = 1000,
-gap.max = 50000, max.distance = NULL, p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), GR.annotation = NA,
+gap.max = 50000, max.distance = NULL, p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = NA,
 parallel = TRUE, multicores = NULL, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
@@ -99,10 +99,7 @@ object (or a list of GR objects)}
 \item{parallel}{logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
 does so. It will depend on whether these two packages "foreach" and
-"doParallel" have been installed. It can be installed via:
-\code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doParallel"))}. If not yet installed, this option
-will be disabled}
+"doParallel" have been installed}
 
 \item{multicores}{an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.

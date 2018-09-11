@@ -6,8 +6,7 @@
 \title{Definition for S3 class \code{eTerm}}
 \usage{
 eTerm(term_info, annotation, g, data, background, overlap, fc, zscore,
-pvalue,
-adjp, cross)
+pvalue, adjp, cross)
 
 \method{print}{eTerm}(x, ...)
 }

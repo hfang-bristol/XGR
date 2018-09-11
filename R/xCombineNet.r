@@ -70,6 +70,16 @@ xCombineNet <- function(list_ig, combineBy=c('union','intersect'), attrBy=c("int
 	})
 	df_node <- unique(do.call(rbind, ls_node))
 	
+	#########
+	# make sure unique name in df_node
+	#########
+	if(any(duplicated(df_node$name))){
+		name <- NULL
+		df_node <- df_node[!duplicated(df_node$name),] %>% dplyr::select(name)
+		node_attr <- 'name'
+	}
+	#########
+			
 	## df_edge
 	ls_edge <- lapply(1:length(ls_ig), function(i){
 		ig <- ls_ig[[i]]

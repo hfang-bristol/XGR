@@ -5,8 +5,8 @@
 \title{Function to obtain LD blocks}
 \usage{
 xLDblock(data, include.LD = c("AFR", "AMR", "EAS", "EUR", "SAS"),
-LD.customised = NULL, LD.r2 = 0.8, GR.SNP = "LDblock_GR", verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+LD.customised = NULL, LD.r2 = 0.8, GR.SNP = "LDblock_GR",
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for

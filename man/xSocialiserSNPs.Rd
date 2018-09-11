@@ -7,9 +7,8 @@
 xSocialiserSNPs(data, ontology = c("EF", "EF_disease", "EF_phenotype",
 "EF_bp"), include.LD = NA, LD.r2 = 0.8, measure = c("BM.average",
 "BM.max", "BM.complete", "average", "max"), method.term = c("Resnik",
-"Lin",
-"Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE,
-fast = TRUE, parallel = TRUE, multicores = NULL,
+"Lin", "Schlicker", "Jiang", "Pesquita"), rescale = TRUE,
+force = TRUE, fast = TRUE, parallel = TRUE, multicores = NULL,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 true.path.rule = T, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
@@ -90,10 +89,7 @@ just used for understanding scripts}
 \item{parallel}{logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
 does so. It will depend on whether these two packages "foreach" and
-"doParallel" have been installed. It can be installed via:
-\code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doParallel"))}. If not yet installed, this option
-will be disabled}
+"doParallel" have been installed}
 
 \item{multicores}{an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.

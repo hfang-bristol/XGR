@@ -5,14 +5,14 @@
 \title{Function to visualise promoter capture HiC data using different network layouts}
 \usage{
 xPCHiCplot(g, node.info = c("smart", "none", "GR", "GR_SNP",
-"GR_SNP_target",
-"SNP_target"), node.colors = c("skyblue", "pink1"), nodes.query = NULL,
-newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
-vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
-vertex.shape = "sphere", vertex.label = NULL, vertex.label.cex = NULL,
+"GR_SNP_target", "SNP_target"), node.colors = c("skyblue", "pink1"),
+nodes.query = NULL, newpage = TRUE, signature = TRUE,
+glayout = layout_with_kk, vertex.frame.color = NA,
+vertex.size = NULL, vertex.color = NULL, vertex.shape = "sphere",
+vertex.label = NULL, vertex.label.cex = NULL,
 vertex.label.font = 2, vertex.label.dist = 0.3,
-vertex.label.color = "black", edge.arrow.size = 0.5, edge.width = NULL,
-edge.color = "grey", ...)
+vertex.label.color = "black", edge.arrow.size = 0.5,
+edge.width = NULL, edge.color = "grey", ...)
 }
 \arguments{
 \item{g}{an object of both classes "igraph" and "PCHiC" (part of the

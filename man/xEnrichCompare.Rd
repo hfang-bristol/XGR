@@ -5,9 +5,9 @@
 \title{Function to compare enrichment results using side-by-side barplots}
 \usage{
 xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
-"pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 2.5,
-wrap.width = NULL, sharings = NULL, font.family = "sans",
-facet = TRUE, signature = TRUE)
+"pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
+bar.label.size = 2.5, wrap.width = NULL, sharings = NULL,
+font.family = "sans", facet = TRUE, signature = TRUE)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects}

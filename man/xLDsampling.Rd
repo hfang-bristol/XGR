@@ -5,10 +5,10 @@
 \title{Function to generate randomly sampled LD blocks}
 \usage{
 xLDsampling(bLD, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
-"dbSNP_Single"),
-num.samples = 2000, respect = c("maf", "distance", "both"),
-restrict.chr = F, preserve = c("boundary", "exact"), seed = 825,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"dbSNP_Single"), num.samples = 2000, respect = c("maf", "distance",
+"both"), restrict.chr = F, preserve = c("boundary", "exact"),
+seed = 825, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{bLD}{a bLD object, containing a set of blocks based on which to

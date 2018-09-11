@@ -5,12 +5,10 @@
 \title{Function to conduct LD-based enrichment analysis using genomic annotations via sampling}
 \usage{
 xLDenricher(bLD, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
-"dbSNP_Single"),
-num.samples = 2000, respect = c("maf", "distance", "both"),
-restrict.chr = F, preserve = c("exact", "boundary"), seed = 825,
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-GR.annotation = NA, verbose = T,
+"dbSNP_Single"), num.samples = 2000, respect = c("maf", "distance",
+"both"), restrict.chr = F, preserve = c("exact", "boundary"),
+seed = 825, p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), GR.annotation = NA, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

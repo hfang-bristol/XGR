@@ -4,15 +4,13 @@
 \alias{xGRviaGenomicAnno}
 \title{Function to conduct region-based enrichment analysis using genomic annotations via binomial test}
 \usage{
-xGRviaGenomicAnno(data.file, annotation.file = NULL, background.file =
-NULL,
-format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-resolution = c("bases", "regions", "hybrid"),
+xGRviaGenomicAnno(data.file, annotation.file = NULL,
+background.file = NULL, format.file = c("data.frame", "bed",
+"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
+"hg18.to.hg19"), resolution = c("bases", "regions", "hybrid"),
 background.annotatable.only = T, p.tail = c("one-tail", "two-tails"),
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-GR.annotation = NA, verbose = T,
+"hommel"), GR.annotation = NA, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

@@ -7,9 +7,9 @@
 xGRmanhattan(gr, chromosome.only = TRUE, color = c("royalblue",
 "sandybrown"), y.scale = c("normal", "sqrt", "log"), y.lab = NULL,
 top = NULL, top.label.type = c("text", "box"), top.label.size = 2,
-top.label.col = "black", top.label.force = 0.05, top.label.query =
-NULL,
-label.query.only = FALSE, top.label.chr = T, verbose = TRUE)
+top.label.col = "black", top.label.force = 0.05,
+top.label.query = NULL, label.query.only = FALSE,
+top.label.chr = T, verbose = TRUE)
 }
 \arguments{
 \item{gr}{a GenomicRange object with a meta-column 'value'. If the

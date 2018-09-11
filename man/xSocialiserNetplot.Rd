@@ -7,13 +7,13 @@
 xSocialiserNetplot(g, query, displayBy = c("IC", "none"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 node.info = c("none", "term_id", "term_name", "both",
-"full_term_name"),
-wrap.width = 15, colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr",
-"rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = T,
-newpage = T, glayout = layout_as_tree, vertex.frame.color = NA,
-vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
-vertex.label = NULL, vertex.label.cex = NULL, vertex.label.dist = 0.3,
-vertex.label.color = "blue", edge.arrow.size = 0.3, ...)
+"full_term_name"), wrap.width = 15, colormap = c("yr", "jet", "gbr",
+"wyr", "br", "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL,
+colorbar = T, newpage = T, glayout = layout_as_tree,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.dist = 0.3, vertex.label.color = "blue",
+edge.arrow.size = 0.3, ...)
 }
 \arguments{
 \item{g}{an object of class "igraph" (resulting from similarity

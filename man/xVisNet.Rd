@@ -5,11 +5,11 @@
 \title{Function to visualise a graph object of class "igraph"}
 \usage{
 xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
-"br",
-"bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL, colorbar = TRUE,
-newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
-vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
-vertex.shape = NULL, vertex.label = NULL, vertex.label.cex = NULL,
+"br", "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL,
+colorbar = TRUE, newpage = TRUE, signature = TRUE,
+glayout = layout_with_kk, vertex.frame.color = NA,
+vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
+vertex.label = NULL, vertex.label.cex = NULL,
 vertex.label.dist = 0.3, vertex.label.color = "blue",
 vertex.label.family = "sans", edge.arrow.size = 0.3, ...)
 }
@@ -140,7 +140,7 @@ names(pattern) <- V(g)$name
 xVisNet(g=g, pattern=pattern, colormap="bwr", vertex.shape="sphere")
 
 # 5) use font family (Arial)
-source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+BiocManager::install("extrafont")
 library(extrafont)
 font_import()
 fonttable()

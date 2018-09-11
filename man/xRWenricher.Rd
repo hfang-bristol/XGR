@@ -4,8 +4,8 @@
 \alias{xRWenricher}
 \title{Function to perform connectivity enrichment analysis on the input graph}
 \usage{
-xRWenricher(data, g, Amatrix = NULL, num.permutation = 2000, nbin = 10,
-steps = 4, chance = 2, seed = 825, verbose = TRUE)
+xRWenricher(data, g, Amatrix = NULL, num.permutation = 2000,
+nbin = 10, steps = 4, chance = 2, seed = 825, verbose = TRUE)
 }
 \arguments{
 \item{data}{a vector containing node names}

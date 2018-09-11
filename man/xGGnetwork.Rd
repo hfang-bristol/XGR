@@ -7,17 +7,15 @@
 xGGnetwork(g, node.label = NULL, label.wrap.width = NULL,
 label.wrap.lineheight = 0.8, node.label.size = NULL,
 node.label.fontface = "plain", node.label.color = "darkblue",
-node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
-0.01,
-node.label.force = 1, node.shape = 19, node.shape.title = NULL,
-node.xcoord = NULL, node.ycoord = NULL, node.color = NULL,
-node.color.title = NULL, colormap = "grey-orange-darkred", ncolors =
-64,
-zlim = NULL, na.color = "grey80", node.size = NULL,
-node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
-title = "", edge.size = 0.5, edge.color = "black",
-edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
-edge.arrow.gap = 0.02)
+node.label.alpha = 0.8, node.label.padding = 1,
+node.label.arrow = 0.01, node.label.force = 1, node.shape = 19,
+node.shape.title = NULL, node.xcoord = NULL, node.ycoord = NULL,
+node.color = NULL, node.color.title = NULL,
+colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
+na.color = "grey80", node.size = NULL, node.size.title = NULL,
+node.size.range = c(1, 4), slim = NULL, title = "",
+edge.size = 0.5, edge.color = "black", edge.color.alpha = 0.5,
+edge.curve = 0.1, edge.arrow = 2, edge.arrow.gap = 0.02)
 }
 \arguments{
 \item{g}{an object of class "igraph". For an advanced use, it can be a

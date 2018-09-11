@@ -6,8 +6,9 @@
 \usage{
 xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
 "zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, bar.color = "lightyellow-orange", bar.width = 0.8,
-wrap.width = NULL, font.family = "sans", signature = TRUE)
+bar.label.size = 3, bar.color = "lightyellow-orange",
+bar.width = 0.8, wrap.width = NULL, font.family = "sans",
+signature = TRUE)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -82,7 +83,7 @@ print(bp)
 
 # 4) use font family (Arial)
 \dontrun{
-source("http://bioconductor.org/biocLite.R"); biocLite("extrafont")
+BiocManager::install("extrafont")
 library(extrafont)
 font_import()
 fonttable()

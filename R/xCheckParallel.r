@@ -6,7 +6,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return TRUE for using parallel computing; FALSE otherwise
 #' @note
-#' Whether parallel computation with multicores is used is system-specific. Also, it will depend on whether these two packages "foreach" and "doParallel" have been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("foreach","doParallel"))}.
+#' Whether parallel computation with multicores is used is system-specific. Also, it will depend on whether these two packages "foreach" and "doParallel" have been installed.
 #' @export
 #' @seealso \code{\link{xDAGsim}}, \code{\link{xSocialiser}}, \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}, \code{\link{xGRviaGenomicAnnoAdv}}
 #' @include xCheckParallel.r

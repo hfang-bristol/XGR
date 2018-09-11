@@ -13,16 +13,13 @@ nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
 size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"),
 background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T, silent = FALSE,
-plot = TRUE, fdr.cutoff = 0.05, displayBy = c("zscore", "fdr",
-"pvalue",
-"fc", "or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F, verbose = T, silent = FALSE, plot = TRUE,
+fdr.cutoff = 0.05, displayBy = c("zscore", "fdr", "pvalue", "fc",
+"or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{list_vec}{an input vector containing genomic regions.

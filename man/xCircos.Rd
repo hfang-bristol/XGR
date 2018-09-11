@@ -6,8 +6,8 @@
 \usage{
 xCircos(g, entity = c("SNP", "Gene", "Both"), top_num = 50,
 colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
-"lightyellow-orange"), rescale = T, nodes.query = NULL, ideogram = T,
-chr.exclude = "auto", entity.label.cex = 0.7,
+"lightyellow-orange"), rescale = T, nodes.query = NULL,
+ideogram = T, chr.exclude = "auto", entity.label.cex = 0.7,
 entity.label.side = c("in", "out"), entity.label.track = 1,
 entity.label.query = NULL, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
 "dbSNP_Single"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
