@@ -135,6 +135,11 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, DT
     
     ## 1st: data_matrix
 	df <- unique(df_target_efo_phase_drug[,c('Symbol','efo_term','phase')])
+	#########
+	## important: remove the duplicated in terms of 'Symbol' and 'efo_term'
+	## thus, drug with the minimum phase
+	df <- df[!duplicated(df[,c('Symbol','efo_term')]),]
+	#########
 	data_matrix <- df %>% tidyr::spread(efo_term, phase)
 	rownames(data_matrix) <- data_matrix$Symbol
 	data_matrix <- data_matrix[,-1]
@@ -165,7 +170,26 @@ xRepurpose <- function(data, phase.min=3, target.max=5, plot=TRUE, verbose=T, DT
     data_label <- data_label[ind[!is.na(ind)], ]
     ############
     
-    
+    #################
+    # if restricterd is not null, all is shown
+    if(!is.null(restricted)){
+    	## update data_matrix
+    	data_matrix_tmp <- matrix(NA, nrow=nrow(data_matrix), ncol=length(restricted))
+    	rownames(data_matrix_tmp) <- rownames(data_matrix)
+    	colnames(data_matrix_tmp) <- restricted
+    	ind <- match(colnames(data_matrix_tmp), colnames(data_matrix))
+    	data_matrix_tmp[,!is.na(ind)] <- data.matrix(data_matrix[,ind[!is.na(ind)]])
+    	data_matrix <- as.data.frame(data_matrix_tmp)
+    	## update data_label
+    	data_label_tmp <- matrix(NA, nrow=nrow(data_label), ncol=length(restricted))
+    	rownames(data_label_tmp) <- rownames(data_label)
+    	colnames(data_label_tmp) <- restricted
+    	ind <- match(colnames(data_label_tmp), colnames(data_label))
+    	data_label_tmp[,!is.na(ind)] <- data.matrix(data_label[,ind[!is.na(ind)]])
+    	data_label <- as.data.frame(data_label_tmp)
+    }
+    #################
+        
     ## heatmap view
     if(plot){
 		gp_new <- xHeatmap(data_matrix, data.label=data_label, ...)

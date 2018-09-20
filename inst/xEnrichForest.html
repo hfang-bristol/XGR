@@ -23,7 +23,9 @@ the wider the CI, the less reliable). It returns an object of class
 xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
 colormap = "ggplot2.top", ncolors = 64, zlim = NULL,
 barwidth = 0.5, barheight = NULL, wrap.width = NULL,
-font.family = "sans", signature = TRUE, drop = F)
+font.family = "sans", signature = TRUE, drop = F,
+sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
+"nOverlap", "none"))
 </pre>
 
 
@@ -104,6 +106,16 @@ used to draw this graph</p>
 the data will automatically be dropped. If FALSE (by default), all
 factor levels will be shown, regardless of whether or not they appear
 in the data</p>
+</td></tr>
+<tr valign="top"><td><code>sortBy</code></td>
+<td>
+<p>which statistics will be used for sorting and viewing
+gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
+(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
+enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
+&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
+&quot;none&quot; for ordering according to ID of terms. It only works when the
+input is an eTerm object</p>
 </td></tr>
 </table>
 

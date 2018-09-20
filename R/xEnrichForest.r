@@ -15,6 +15,7 @@
 #' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @param drop logical to indicate whether all factor levels not used in the data will automatically be dropped. If FALSE (by default), all factor levels will be shown, regardless of whether or not they appear in the data
+#' @param sortBy which statistics will be used for sorting and viewing gene sets (terms). It can be "adjp" or "fdr" for adjusted p value (FDR), "pvalue" for p value, "zscore" for enrichment z-score, "fc" for enrichment fold change, "nAnno" for the number of sets (terms), "nOverlap" for the number in overlaps, "or" for the odds ratio, and "none" for ordering according to ID of terms. It only works when the input is an eTerm object
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -49,7 +50,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE, drop=F)
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE, drop=F, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
 {
     
     if(is.null(eTerm)){
@@ -74,7 +75,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 				top_num <- 10
 			}
 		}
-		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="or")
+		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy=sortBy)
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
@@ -166,7 +167,11 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 	df$fdr[df$fdr>=zlim[2]] <- zlim[2]
 	
 	## order by 'or', 'adjp'
-	df <- df[with(df,order(group, ontology, or, fdr)),]
+	if(class(eTerm)=='eTerm' & sortBy!='or'){
+		df <- df[with(df,order(group, ontology)),]
+	}else{
+		df <- df[with(df,order(group, ontology, or, fdr)),]
+	}
 	df$name <- factor(df$name, levels=unique(df$name))
 
 	###########################################

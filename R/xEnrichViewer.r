@@ -22,7 +22,8 @@
 #'  \item{\code{CIl}: a vector containing lower bound confidence interval for the odds ratio}
 #'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{distance}: term distance or other information; optional, it is only appended when "details" is true}
-#'  \item{\code{members}: members (represented as Gene Symbols) in overlaps; optional, it is only appended when "details" is true}
+#'  \item{\code{members_Overlap}: members (represented as Gene Symbols) in overlaps; optional, it is only appended when "details" is true}
+#'  \item{\code{members_Anno}: members (represented as Gene Symbols) in annotations; optional, it is only appended when "details" is true}
 #' }
 #' @note none
 #' @export
@@ -83,7 +84,8 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   CIu         	= as.numeric(eTerm$CIu),
 							   distance     = eTerm$term_info$distance,
 							   namespace    = eTerm$term_info$namespace,
-							   members      = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
+							   members_Overlap = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
+							   members_Anno = sapply(eTerm$annotation, function(x) paste(sort(x),collapse=', ')),
 							   stringsAsFactors=F
 							  )
 		}else{
@@ -99,7 +101,8 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 							   CIu         	= as.numeric(eTerm$CIu),
 							   distance     = eTerm$term_info$distance,
 							   namespace    = eTerm$term_info$namespace,
-							   members      = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
+							   members_Overlap = sapply(eTerm$overlap, function(x) paste(sort(x),collapse=', ')),
+							   members_Anno = sapply(eTerm$annotation, function(x) paste(sort(x),collapse=', ')),
 							   stringsAsFactors=F
 							  )
 		}
@@ -108,7 +111,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
 	}
 	    
     if(details == T){
-        res <- tab[,c(1:13)]
+        res <- tab[,c(1:14)]
     }else{
         res <- tab[,c(1:10)]
     }

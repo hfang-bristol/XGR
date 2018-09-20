@@ -29,7 +29,8 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "KEGGgenetic",
 "KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
 "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"), verbose = T,
+"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"),
+anno.identity = c("GeneID", "Symbol"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -80,6 +81,11 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 &quot;MsigdbC7&quot;), and the SIFTS database (&quot;SIFTS2GOBP&quot; for Gene Ontology
 Biological Process, &quot;SIFTS2GOMF&quot; for Gene Ontology Molecular Function,
 &quot;SIFTS2GOCC&quot; for Gene Ontology Cellular Component)</p>
+</td></tr>
+<tr valign="top"><td><code>anno.identity</code></td>
+<td>
+<p>identity for gene annotations. It can be &quot;GeneID&quot;
+for Gene ID and &quot;Symbol&quot; for gene symbol</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

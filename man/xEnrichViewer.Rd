@@ -47,8 +47,10 @@ for the odds ratio}
 for the odds ratio}
 \item{\code{distance}: term distance or other information; optional, it
 is only appended when "details" is true}
-\item{\code{members}: members (represented as Gene Symbols) in
+\item{\code{members_Overlap}: members (represented as Gene Symbols) in
 overlaps; optional, it is only appended when "details" is true}
+\item{\code{members_Anno}: members (represented as Gene Symbols) in
+annotations; optional, it is only appended when "details" is true}
 }
 }
 \description{

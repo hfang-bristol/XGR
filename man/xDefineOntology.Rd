@@ -16,7 +16,8 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "KEGGgenetic",
 "KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
 "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"), verbose = T,
+"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"),
+anno.identity = c("GeneID", "Symbol"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -61,6 +62,9 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 "MsigdbC7"), and the SIFTS database ("SIFTS2GOBP" for Gene Ontology
 Biological Process, "SIFTS2GOMF" for Gene Ontology Molecular Function,
 "SIFTS2GOCC" for Gene Ontology Cellular Component)}
+
+\item{anno.identity}{identity for gene annotations. It can be "GeneID"
+for Gene ID and "Symbol" for gene symbol}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}

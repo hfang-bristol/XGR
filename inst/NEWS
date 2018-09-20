@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.1.5
+-----------------------
+
+NEW FEATURES
+
+    o Add a new function 'xEnrichRadial' for radial-like plot of enrichment results
+
+
 CHANGES IN VERSION 1.1.4
 -----------------------
 

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using radial-like...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichRadial"><tr><td>xEnrichRadial</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using radial-like plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichRadial</code> is supposed to visualise enrichment results using
+radial-like plot. It returns three ggplot2 objects, the first for
+visualing the network with nodes lablelled by codes, the second for
+listing code meaning in a table, and the third for the network with
+nodes colored/sized with enrichment results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichRadial(eTerm, ig = NULL, fixed = T, node.color = c("or",
+"adjp", "zscore"), colormap = "grey-orange-darkred", zlim = NULL,
+node.size = c("adjp", "or", "zscore"), slim = NULL,
+node.size.range = c(1, 3), edge.color = "skyblue",
+edge.color.alpha = 0.5, edge.curve = 0.05, edge.arrow.gap = 0.02,
+...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eTerm</code></td>
+<td>
+<p>an object of class &quot;eTerm&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>ig</code></td>
+<td>
+<p>the igraph object. If provided, only those terms within it
+will be visualised. By default, it is NULL meaning no surch
+restriction</p>
+</td></tr>
+<tr valign="top"><td><code>fixed</code></td>
+<td>
+<p>logical to indicate whether all terms in ig will be
+visualised. By default, it is TURE; otherwise only overlapped terms
+from eTerm will be visualised</p>
+</td></tr>
+<tr valign="top"><td><code>node.color</code></td>
+<td>
+<p>which statistics will be used for node coloring. It
+can be &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and
+&quot;zscore&quot; for enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum values for which colors should be
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>node.size</code></td>
+<td>
+<p>which statistics will be used for node size. It can be
+&quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and &quot;zscore&quot;
+for enrichment z-score</p>
+</td></tr>
+<tr valign="top"><td><code>slim</code></td>
+<td>
+<p>the minimum and maximum values for which sizes should be
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>node.size.range</code></td>
+<td>
+<p>the range of actual node size</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>a character specifying which edge attribute defining
+the the edge colors</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color.alpha</code></td>
+<td>
+<p>the 0-1 value specifying transparency of edge
+colors</p>
+</td></tr>
+<tr valign="top"><td><code>edge.curve</code></td>
+<td>
+<p>a numeric value specifying the edge curve. 0 for the
+straight line</p>
+</td></tr>
+<tr valign="top"><td><code>edge.arrow.gap</code></td>
+<td>
+<p>a gap between the arrow and the node</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters used in xGGnetwork</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a list with 3 components, three ggplot objects (code, table, data) and
+an igraph object (ig appended with node attributes 'zscore', 'adjp' and
+'or')
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichViewer</code>, <code>xOBOcode</code>,
+<code>xGGnetwork</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+ls_res &lt;- xEnrichRadial(eTerm, ig, fixed=T, node.color="or",
+colormap="grey-orange-darkred", zlim=c(0,7), node.size="adjp",
+slim=c(0,30), node.size.range=c(1,3))
+pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
+print(ls_res$data + coord_equal(ratio=1.3))
+print(ls_res$code + coord_equal(ratio=1.3))
+print(ls_res$table)
+dev.off()
+
+## End(Not run)
+</pre>
+
+
+</body></html>

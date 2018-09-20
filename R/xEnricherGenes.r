@@ -141,7 +141,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
  	if(is.null(g)){
 		warnings("There is no input for the ontology.\n")
         return(NULL)
-	}   
+	}
     #################################
         
     ## convert gene symbol to entrz gene for both input data of interest and the input background (if given)
@@ -184,6 +184,14 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 		eTerm$data <- allSymbol[match(eTerm$data,allGeneID)]
 		## background
 		eTerm$background <- allSymbol[match(eTerm$background,allGeneID)]		
+		
+		## annotation
+		annotation <- eTerm$annotation
+		annotation_symbols <- lapply(annotation,function(x){
+			ind <- match(x, allGeneID)
+			allSymbol[ind]
+		})
+		eTerm$annotation <- annotation_symbols
 	}
 	
 	if(verbose){
