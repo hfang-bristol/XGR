@@ -25,7 +25,8 @@ font.family = "sans", drop = F, details = c("name", "name_FDR",
 "name_FDR_members"), caption = T, treemap.grow = F,
 treemap.reflow = F, treemap.place = "topleft",
 treemap.color = "black", treemap.fontface = "bold.italic",
-treemap.min.size = 4)
+treemap.min.size = 4, area = c("adjp", "or"), area.fill = c("or",
+"adjp", "zscore"))
 </pre>
 
 
@@ -36,7 +37,7 @@ treemap.min.size = 4)
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns (named as
-'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')</p>
+'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
@@ -142,6 +143,17 @@ etc</p>
 <p>the minimum font size, in points. If provided,
 text that would need to be shrunk below this size to fit the box will
 not be drawn. Defaults to 4 pt</p>
+</td></tr>
+<tr valign="top"><td><code>area</code></td>
+<td>
+<p>which statistics will be used for the area. It can be
+&quot;adjp&quot; for adjusted p value (FDR) and &quot;or&quot; for odds ratio</p>
+</td></tr>
+<tr valign="top"><td><code>area.fill</code></td>
+<td>
+<p>which statistics will be used for the area fill color.
+It can be &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR)
+and &quot;zscore&quot; for enrichment z-score</p>
 </td></tr>
 </table>
 

@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichRadial} is supposed to visualise enrichment results using radial-like plot. It returns three ggplot2 objects, the first for visualing the network with nodes lablelled by codes, the second for listing code meaning in a table, and the third for the network with nodes colored/sized with enrichment results.
 #'
-#' @param eTerm an object of class "eTerm"
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','name','adjp','or','zscore')
 #' @param ig the igraph object. If provided, only those terms within it will be visualised. By default, it is NULL meaning no surch restriction
 #' @param fixed logical to indicate whether all terms in ig will be visualised. By default, it is TURE; otherwise only overlapped terms from eTerm will be visualised
 #' @param node.color which statistics will be used for node coloring. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
@@ -36,9 +36,9 @@
 #' dev.off()
 #' }
 
-xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zscore"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","or","zscore"), slim=NULL, node.size.range=c(1,3), edge.color="skyblue", edge.color.alpha=0.5, edge.curve=0.05, edge.arrow.gap=0.02, ...)
+xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zscore"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","or","zscore"), slim=NULL, node.size.range=c(0.5,3.5), edge.color="skyblue", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow.gap=0.02, ...)
 {
-
+	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     node.color <- match.arg(node.color)
     node.size <- match.arg(node.size)
     
@@ -46,10 +46,33 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
     gp_code <- NULL
     gp_table <- NULL
     
+    if(is.null(eTerm)){
+        warnings("There is no enrichment in the 'eTerm' object.\n")
+        return(NULL)
+    }
+    
     if(class(eTerm)=='eTerm'){
-		df_enrichment <- xEnrichViewer(eTerm, top_num="all", sortBy="or")
-	}else if(class(eTerm)=='data.frame'){
-		df_enrichment <- eTerm
+		df_enrichment_group <- xEnrichViewer(eTerm, top_num="all", sortBy="or")
+		df_enrichment_group$group <- 'group'
+	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	
+		if(class(eTerm)=='ls_eTerm'){
+			df_enrichment_group <- eTerm$df
+			
+		}else if(class(eTerm)=='data.frame'){
+			if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
+				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore')]
+			}else if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
+				df_enrichment_group <- eTerm[,c('name','adjp','or','zscore')]
+				df_enrichment_group$group <- 'group'
+			}
+		}
+	}
+	
+	if(class(df_enrichment_group$group)=='factor'){
+		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
+			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
+		}
 	}
 	
 	##########################################################
@@ -57,11 +80,13 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 	if(class(ig)!="igraph"){
 		if(class(eTerm)=='eTerm'){
 			ig <- eTerm$g
+		}else{
+			return(NULL)
 		}
 	}
 	
 	if(!fixed){
-		ind <- match(V(ig)$term_name, df_enrichment$name)
+		ind <- match(V(ig)$term_name, df_enrichment_group$name)
 		nodes_query <- V(ig)$name[!is.na(ind)]
 		if(class(suppressWarnings(try(subg <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), T)))=="try-error"){
 			subg <- NULL
@@ -76,58 +101,65 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 		gp_code <- gp_code_table$code
 		gp_table <- gp_code_table$table
 		
-		## gp_data
-		V(subg)$zscore <- 0
-		ind <- match(V(subg)$term_name, df_enrichment$name)
-		V(subg)$zscore[!is.na(ind)] <- df_enrichment$zscore[ind[!is.na(ind)]]
+		#########################
+		## replace those infinite
+		df_enrichment_group$or[is.infinite(df_enrichment_group$or)] <- max(df_enrichment_group$or[!is.infinite(df_enrichment_group$or)])
+		#########################
+		
+		ls_df <- split(x=df_enrichment_group[,c("name","zscore","adjp","or")], f=df_enrichment_group$group)
+		ls_ig <- lapply(ls_df, function(df_enrichment){
+			V(subg)$zscore <- 0
+			ind <- match(V(subg)$term_name, df_enrichment$name)
+			V(subg)$zscore[!is.na(ind)] <- df_enrichment$zscore[ind[!is.na(ind)]]
 
-		V(subg)$adjp <- 0
-		ind <- match(V(subg)$term_name, df_enrichment$name)
-		V(subg)$adjp[!is.na(ind)] <- -1*log10(df_enrichment$adjp)[ind[!is.na(ind)]]
+			V(subg)$adjp <- 0
+			ind <- match(V(subg)$term_name, df_enrichment$name)
+			V(subg)$adjp[!is.na(ind)] <- -1*log10(df_enrichment$adjp)[ind[!is.na(ind)]]
 	
-		V(subg)$or <- 0
-		ind <- match(V(subg)$term_name, df_enrichment$name)
-		V(subg)$or[!is.na(ind)] <- log2(df_enrichment$or)[ind[!is.na(ind)]]
-		V(subg)$or[is.infinite(V(subg)$or)] <- max(V(subg)$or[!is.infinite(V(subg)$or)])
+			V(subg)$or <- 0
+			ind <- match(V(subg)$term_name, df_enrichment$name)
+			V(subg)$or[!is.na(ind)] <- log2(df_enrichment$or)[ind[!is.na(ind)]]
+			subg
+		})
 		
 		if(node.color=="or"){
 			node.color.title <- expression(log[2](OR))
 			if(is.null(zlim)){
-				zlim <- c(0, ceiling(max(V(subg)$or)))
+				zlim <- c(0, ceiling(max(log2(df_enrichment_group$or))))
 			}
 		}else if(node.color=="adjp"){
 			node.color.title <- expression(-log[10](FDR))
 			if(is.null(zlim)){
-				zlim <- c(0, ceiling(max(V(subg)$adjp)))
+				zlim <- c(0, ceiling(max(-1*log10(df_enrichment_group$adjp))))
 			}
 		}else if(node.color=="zscore"){
 			node.color.title <- "Z-score"
 			if(is.null(zlim)){
-				zlim <- c(0, ceiling(max(V(subg)$zscore)))
+				zlim <- c(0, ceiling(max(df_enrichment_group$zscore)))
 			}
 		}
 		
 		if(node.size=="or"){
 			node.size.title <- expression(log[2](OR))
 			if(is.null(slim)){
-				slim <- c(0, ceiling(max(V(subg)$or)))
+				slim <- c(0, ceiling(max(log2(df_enrichment_group$or))))
 			}
 		}else if(node.size=="adjp"){
 			node.size.title <- expression(-log[10](FDR))
 			if(is.null(slim)){
-				slim <- c(0, ceiling(max(V(subg)$adjp)))
+				slim <- c(0, ceiling(max(-1*log10(df_enrichment_group$adjp))))
 			}
 		}else if(node.size=="zscore"){
 			node.size.title <- "Z-score"
 			if(is.null(slim)){
-				slim <- c(0, ceiling(max(V(subg)$zscore)))
+				slim <- c(0, ceiling(max(df_enrichment_group$zscore)))
 			}
 		}
 		
-		gp_data <- xGGnetwork(g=subg, node.color=node.color, node.color.title=node.color.title, colormap=colormap, zlim=zlim, node.size=node.size, node.size.title=node.size.title, slim=slim, node.size.range=node.size.range, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap, ...)
+		gp_data <- xGGnetwork(g=ls_ig, node.color=node.color, node.color.title=node.color.title, colormap=colormap, zlim=zlim, node.size=node.size, node.size.title=node.size.title, slim=slim, node.size.range=node.size.range, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap, ...)
 	}
 	
-	ls_gp <- list(code=gp_code, table=gp_table, data=gp_data, ig=subg)
+	ls_gp <- list(code=gp_code, table=gp_table, data=gp_data, ig=ls_ig)
 	
     return(ls_gp)
 }

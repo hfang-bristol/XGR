@@ -137,7 +137,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 						
 			## list of individual paths
 			ls_path <- lapply(1:nrow(df_enrichment), function(j){
-				x <- df_enrichment$members[j]
+				x <- df_enrichment$members_Overlap[j]
 				query <- unlist(strsplit(x, ", "))
 			})
 			names(ls_path) <- df_enrichment$name

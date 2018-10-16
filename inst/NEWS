@@ -3,6 +3,8 @@ CHANGES IN VERSION 1.1.5
 
 NEW FEATURES
 
+    o Populate annotations
+    
     o Add a new function 'xEnrichRadial' for radial-like plot of enrichment results
 
 

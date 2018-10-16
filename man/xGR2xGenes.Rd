@@ -44,7 +44,9 @@ specify the relevant parameters 'nearby.distance.max',
 'PCHiC_combined' (conformation genes; PMID:27863249),
 'GTEx_V6p_combined' (eQTL genes; PMID:29022597),
 'eQTL_scRNAseq_combined' (eQTL genes; PMID:29610479),
-'eQTL_ImmuneCells_combined' (eQTL genes; PMID:29610479)}
+'eQTL_jpRNAseq_combined' (eQTL genes; PMID:28553958),
+'eQTL_ImmuneCells_combined' (eQTL genes;
+PMID:24604202,22446964,26151758,28248954,24013639)}
 
 \item{crosslink.customised}{the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4

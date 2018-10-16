@@ -321,7 +321,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 		
 		#gnet <- ggnetwork::ggnetwork(intergraph::asNetwork(ig), layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
 		gnet <- ggnetwork::ggnetwork(ig, layout=cbind(node.xcoord,node.ycoord), arrow.gap=edge.arrow.gap, cell.jitter=0.75)
-		data.frame(gnet, trait=rep(names(ls_ig)[i],nrow(gnet)), stringsAsFactors=F)
+		data.frame(gnet, group=rep(names(ls_ig)[i],nrow(gnet)), stringsAsFactors=F)
 	})
     df <- do.call(rbind, ls_df)
     
@@ -330,7 +330,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 	df[i] <- lapply(df[i], as.character)
 
     ## ordered according to the input
-    df$trait <- factor(df$trait, levels=names(ls_ig))
+    df$group <- factor(df$group, levels=names(ls_ig))
 
     ## make sure numeric
     df$n.color <- as.numeric(df$n.color)
@@ -413,10 +413,10 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
     }
     gp <- gp + theme(legend.title=element_text(size=8,face="bold"),legend.text=element_text(size=6))
     
-    ## facet by 'trait' artificially added 
+    ## facet by 'group' artificially added 
     if(length(ls_ig)>1){
-    	trait <- NULL
-    	gp <- gp + facet_wrap(~trait)
+    	group <- NULL
+    	gp <- gp + facet_wrap(~group)
 		gp <- gp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="bold"), strip.placement="inside", panel.spacing=unit(0,"lines"))
     }
     

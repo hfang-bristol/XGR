@@ -11,12 +11,13 @@ font.family = "sans", drop = F, details = c("name", "name_FDR",
 "name_FDR_members"), caption = T, treemap.grow = F,
 treemap.reflow = F, treemap.place = "topleft",
 treemap.color = "black", treemap.fontface = "bold.italic",
-treemap.min.size = 4)
+treemap.min.size = 4, area = c("adjp", "or"), area.fill = c("or",
+"adjp", "zscore"))
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
 can be a data frame having all these columns (named as
-'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')}
+'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')}
 
 \item{top_num}{the number of the top terms (sorted according to OR). If
 it is 'auto', only the significant terms (see below FDR.cutoff) will be
@@ -84,6 +85,13 @@ etc}
 \item{treemap.min.size}{the minimum font size, in points. If provided,
 text that would need to be shrunk below this size to fit the box will
 not be drawn. Defaults to 4 pt}
+
+\item{area}{which statistics will be used for the area. It can be
+"adjp" for adjusted p value (FDR) and "or" for odds ratio}
+
+\item{area.fill}{which statistics will be used for the area fill color.
+It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR)
+and "zscore" for enrichment z-score}
 }
 \value{
 an object of class "ggplot"

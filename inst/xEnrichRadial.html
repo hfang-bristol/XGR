@@ -23,8 +23,8 @@ nodes colored/sized with enrichment results.
 xEnrichRadial(eTerm, ig = NULL, fixed = T, node.color = c("or",
 "adjp", "zscore"), colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "or", "zscore"), slim = NULL,
-node.size.range = c(1, 3), edge.color = "skyblue",
-edge.color.alpha = 0.5, edge.curve = 0.05, edge.arrow.gap = 0.02,
+node.size.range = c(0.5, 3.5), edge.color = "skyblue",
+edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
 ...)
 </pre>
 
@@ -34,7 +34,9 @@ edge.color.alpha = 0.5, edge.curve = 0.05, edge.arrow.gap = 0.02,
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot;</p>
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns (named as
+'group','name','adjp','or','zscore')</p>
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>

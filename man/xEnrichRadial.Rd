@@ -7,12 +7,14 @@
 xEnrichRadial(eTerm, ig = NULL, fixed = T, node.color = c("or",
 "adjp", "zscore"), colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "or", "zscore"), slim = NULL,
-node.size.range = c(1, 3), edge.color = "skyblue",
-edge.color.alpha = 0.5, edge.curve = 0.05, edge.arrow.gap = 0.02,
+node.size.range = c(0.5, 3.5), edge.color = "skyblue",
+edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
 ...)
 }
 \arguments{
-\item{eTerm}{an object of class "eTerm"}
+\item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
+can be a data frame having all these columns (named as
+'group','name','adjp','or','zscore')}
 
 \item{ig}{the igraph object. If provided, only those terms within it
 will be visualised. By default, it is NULL meaning no surch

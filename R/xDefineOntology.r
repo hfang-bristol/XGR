@@ -115,19 +115,35 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 		#########
 		## get ontology information
 		## check the eligibility for the ontology
-		all.ontologies <- c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP","EF","SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC")
+		all.ontologies <- c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP","EF","SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC","REACTOME")
 		flag_ontology <- ontology %in% all.ontologies
     	
     	if(flag_ontology){
     		#######################################
     		ontology <- gsub('^SIFTS2','',ontology)
     		#######################################
-    		    	
+    		
 			g <- xRDataLoader(RData.customised=paste('ig.', ontology, sep=''), RData.location=RData.location, verbose=verbose)
 			if(is.null(V(g)$term_namespace)){
 				V(g)$term_namespace <- ontology
 			}
 			
+			#######################################
+			## restricted to those with annotations for the simplified version of REACTOME
+			if(flag_REACTOME){
+				if(0){
+					g <- dnet::dDAGinduce(g, nodes_query=GS$set_info$setID, path.mode="all_paths")
+				}else{
+					ind <- match(V(g)$name, GS$set_info$setID)
+					vids <- V(g)$name[!is.na(ind)]
+					neighs.in <- igraph::neighborhood(g, order=vcount(g), nodes=vids, mode="in")
+					neighbors <- unique(names(unlist(neighs.in)))
+					g <- dnet::dNetInduce(g, nodes_query=neighbors, knn=0, remove.loops=TRUE, largest.comp=T)
+					#g <- delete_vertices(g, V(g)$term_name!=unlist(strsplit(ontology_REACTOME, '_'))[2])
+				}
+			}
+			#######################################
+						
 		}else{
 			# force ontology.algorithm to be 'none'
 			ontology.algorithm <- 'none'

@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichTreemap} is supposed to visualise enrichment results using a treemap. The area is proportional to odds ratio, colored by the significance level. It returns an object of class "ggplot".
 #'
-#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')
 #' @param top_num the number of the top terms (sorted according to OR). If it is 'auto', only the significant terms (see below FDR.cutoff) will be displayed
 #' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
 #' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
@@ -22,6 +22,8 @@
 #' @param treemap.color the color of the text
 #' @param treemap.fontface the fontface of the text
 #' @param treemap.min.size the minimum font size, in points. If provided, text that would need to be shrunk below this size to fit the box will not be drawn. Defaults to 4 pt
+#' @param area which statistics will be used for the area. It can be "adjp" for adjusted p value (FDR) and "or" for odds ratio
+#' @param area.fill which statistics will be used for the area fill color. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -57,11 +59,13 @@
 #' gp <- xEnrichTreemap(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="spectral.top", ncolors=64, zlim=NULL, barwidth=NULL, barheight=0.5, wrap.width=NULL, font.family="sans", drop=F, details=c("name","name_FDR","name_FDR_members"), caption=T, treemap.grow=F, treemap.reflow=F, treemap.place="topleft", treemap.color="black", treemap.fontface="bold.italic", treemap.min.size=4)
+xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="spectral.top", ncolors=64, zlim=NULL, barwidth=NULL, barheight=0.5, wrap.width=NULL, font.family="sans", drop=F, details=c("name","name_FDR","name_FDR_members"), caption=T, treemap.grow=F, treemap.reflow=F, treemap.place="topleft", treemap.color="black", treemap.fontface="bold.italic", treemap.min.size=4, area=c("adjp","or"), area.fill=c("or","adjp","zscore"))
 {
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     details <- match.arg(details)
+    area <- match.arg(area)
+    area.fill <- match.arg(area.fill)
     
     if(is.null(eTerm)){
         warnings("There is no enrichment in the 'eTerm' object.\n")
@@ -97,30 +101,30 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 			
 		}else if(class(eTerm)=='data.frame'){
 			
-			if(all(c('group','ontology','name','adjp','or','CIl','CIu','nOverlap','members') %in% colnames(eTerm))){
-				df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu','nOverlap','members')]
+			if(all(c('group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap') %in% colnames(eTerm))){
+				df <- eTerm[,c('group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')]
 			
 			}else{
 				details <- 'name'
 				
-				if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-					df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu')]
+				if(all(c('group','ontology','name','zscore','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+					df <- eTerm[,c('group','ontology','name','zscore','adjp','or','CIl','CIu')]
 				
-				}else if(all(c('group','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-					df <- eTerm[,c('group','name','adjp','or','CIl','CIu')]
+				}else if(all(c('group','name','zscore','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+					df <- eTerm[,c('group','name','zscore','adjp','or','CIl','CIu')]
 					df$ontology <- 'ontology'
 			
-				}else if(all(c('ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-					df <- eTerm[,c('ontology','name','adjp','or','CIl','CIu')]
+				}else if(all(c('ontology','name','zscore','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+					df <- eTerm[,c('ontology','name','zscore','adjp','or','CIl','CIu')]
 					df$group <- 'group'
 			
-				}else if(all(c('name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
-					df <- eTerm[,c('name','adjp','or','CIl','CIu')]
+				}else if(all(c('name','zscore','adjp','or','CIl','CIu') %in% colnames(eTerm))){
+					df <- eTerm[,c('name','zscore','adjp','or','CIl','CIu')]
 					df$group <- 'group'
 					df$ontology <- 'ontology'
 			
 				}else{
-					warnings("The input data.frame does not contain required columns: c('group','ontology','name','adjp','or','CIl','CIu').\n")
+					warnings("The input data.frame does not contain required columns: c('group','ontology','name','zscore','adjp','or','CIl','CIu').\n")
 					return(NULL)
 				}
 			}
@@ -178,14 +182,36 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 	name <- fdr <- or <- CIl <- CIu <- NULL
 	group <- ontology <- NULL
 	label <- NULL
+	lor <- zscore <- NULL
 	
 	df$fdr <- -log10(df$adjp)
-	if(is.null(zlim)){
-		tmp <- df$fdr
-		zlim <- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+	df$lor <- log2(df$or)
+	
+	if(area.fill=='adjp'){
+		title <- expression(-log[10]("FDR"))
+		if(is.null(zlim)){
+			tmp <- df$fdr
+			zlim <- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+		}
+		df$fdr[df$fdr<=zlim[1]] <- zlim[1]
+		df$fdr[df$fdr>=zlim[2]] <- zlim[2]
+	}else if(area.fill=='or'){
+		title <- expression(log[2]("OR"))
+		if(is.null(zlim)){
+			tmp <- df$lor
+			zlim <- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+		}
+		df$lor[df$lor<=zlim[1]] <- zlim[1]
+		df$lor[df$lor>=zlim[2]] <- zlim[2]
+	}else if(area.fill=='zscore'){
+		title <- "Z-score"
+		if(is.null(zlim)){
+			tmp <- df$zscore
+			zlim <- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+		}
+		df$zscore[df$zscore<=zlim[1]] <- zlim[1]
+		df$zscore[df$zscore>=zlim[2]] <- zlim[2]
 	}
-	df$fdr[df$fdr<=zlim[1]] <- zlim[1]
-	df$fdr[df$fdr>=zlim[2]] <- zlim[2]
 	
 	## order by 'or', 'adjp'
 	df <- df[with(df,order(group, ontology, or, fdr)),]
@@ -199,20 +225,34 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 	}else if(details=="name_FDR_members"){
 		treemap.grow <- T
 		treemap.reflow <- T
-		df$label <- paste0(df$name, '\n[OR=', df$or, '; FDR=', df$adjp, '; n=', df$nOverlap, ']\n(', df$members,')')
+		df$label <- paste0(df$name, '\n[OR=', df$or, '; FDR=', df$adjp, '; n=', df$nOverlap, ']\n(', df$members_Overlap,')')
 	}
 	###########################################
-	
-	bp <- ggplot(df, aes(area=log2(or), fill=fdr, label=label)) 
+	if(area.fill=='adjp'){
+		bp <- ggplot(df, aes(area=lor, fill=fdr, label=label)) 
+	}else if(area.fill=='or'){
+		bp <- ggplot(df, aes(area=fdr, fill=lor, label=label))
+	}else if(area.fill=='zscore'){
+		if(area=='adjp'){
+			bp <- ggplot(df, aes(area=fdr, fill=zscore, label=label))
+		}else if(area=='or'){
+			bp <- ggplot(df, aes(area=lor, fill=zscore, label=label))
+		}
+	}
 	bp <- bp + treemapify::geom_treemap() + treemapify::geom_treemap_text(fontface=treemap.fontface, color=treemap.color, place=treemap.place, grow=treemap.grow, reflow=treemap.reflow, min.size=treemap.min.size)
 	bp <- bp + theme_bw() + theme(legend.position="bottom")
-	bp <- bp + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="left",barwidth=barwidth,barheight=barheight,draw.ulim=FALSE,draw.llim=FALSE))
+	bp <- bp + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=title,title.position="left",barwidth=barwidth,barheight=barheight,draw.ulim=FALSE,draw.llim=FALSE))
 	
 	## caption
     if(caption){
-		bp <- bp + labs(caption="The area is proportional to odds ratio") + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
+    	if(area=='adjp'){
+			bp <- bp + labs(caption="The area is proportional to FDR")
+		}else if(area=='or'){
+			bp <- bp + labs(caption="The area is proportional to odds ratio")
+		}
+		bp <- bp + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
-    
+
 	## change font family to 'Arial'
 	bp <- bp + theme(text=element_text(family=font.family))
 	
