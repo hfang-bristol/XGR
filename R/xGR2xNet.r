@@ -18,10 +18,14 @@
 #' @param seed.genes logical to indicate whether the identified network is restricted to seed genes (ie nearby genes that are located within defined distance window centred on lead or LD SNPs). By default, it sets to true
 #' @param subnet.significance the given significance threshold. By default, it is set to NULL, meaning there is no constraint on nodes/genes. If given, those nodes/genes with p-values below this are considered significant and thus scored positively. Instead, those p-values above this given significance threshold are considered insigificant and thus scored negatively
 #' @param subnet.size the desired number of nodes constrained to the resulting subnet. It is not nulll, a wide range of significance thresholds will be scanned to find the optimal significance threshold leading to the desired number of nodes in the resulting subnet. Notably, the given significance threshold will be overwritten by this option
+#' @param test.permutation logical to indicate whether the permutation test is perform to estimate the significance of identified network with the same number of nodes. By default, it sets to false
+#' @param num.permutation the number of permutations generating the null distribution of the identified network
+#' @param respect how to respect nodes to be sampled. It can be one of 'none' (randomly sampling) and 'degree' (degree-preserving sampling)
+#' @param aggregateBy the aggregate method used to aggregate edge confidence p-values. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a subgraph with a maximum score, an object of class "igraph". It has graph attributes (evidence, gp_evidence) and node attributes (significance, score).
+#' a subgraph with a maximum score, an object of class "igraph". It has graph attributes (evidence, gp_evidence) and node attributes (significance, score, type). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
 #' @note The algorithm identifying a gene subnetwork that is likely modulated by input genomic regions (GR) includes two major steps. The first step is to use \code{\link{xGR2xGeneScores}} for defining and scoring nearby genes that are located within distance window of input GR. The second step is to use \code{\link{xSubneterGenes}} for identifying a maximum-scoring gene subnetwork that contains as many highly scored genes as possible but a few less scored genes as linkers.
 #' @export
 #' @seealso \code{\link{xGR2xGeneScores}}, \code{\link{xSubneterGenes}}
@@ -31,7 +35,7 @@
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
-#'
+#' 
 #' # a) provide the seed SNPs with the significance info
 #' data(ImmunoBase)
 #' ## only AS GWAS SNPs and their significance info (p-values)
@@ -62,7 +66,7 @@
 #' xCircos(g=subnet, entity="Gene", colormap="orange-darkred", ideogram=F, entity.label.side="out", chr.exclude=NULL, RData.location=RData.location)
 #' }
 
-xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -149,7 +153,7 @@ xGR2xNet <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
         message(sprintf("#######################################################", appendLF=T))
     }
     
-    subg <- xSubneterGenes(data=pval, network=network, network.customised=network.customised, seed.genes=seed.genes, subnet.significance=subnet.significance, subnet.size=subnet.size, verbose=verbose, RData.location=RData.location)
+    subg <- xSubneterGenes(data=pval, network=network, network.customised=network.customised, seed.genes=seed.genes, subnet.significance=subnet.significance, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, verbose=verbose, RData.location=RData.location)
 	
 	######
 	## append graph attribute 'evidence'

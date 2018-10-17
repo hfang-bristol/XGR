@@ -19,7 +19,7 @@
 #' # 2) obtain its projected graph
 #' ig <- xBiproject(g)
 #' 
-#' # 3) estimate pairwise affiinity between nodes
+#' # 3) estimate pairwise affinity between nodes
 #' mat <- xRWkernel(ig)
 #' }
 

@@ -189,7 +189,7 @@ print.cPath <- function(x, ...) {
 	cat(sprintf("  $ig_subg: ab igraph object or NULL"), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$ig_paths$enrichment:\n")
-	print(x$ig_paths$enrichment[1:min(2,nrow(x$ig_paths$enrichment)),2:13], row.names=FALSE)
+	print(x$ig_paths$enrichment[1:min(2,nrow(x$ig_paths$enrichment)),c(2:13,18:19)], row.names=FALSE)
 	cat("......\n")
 }
 

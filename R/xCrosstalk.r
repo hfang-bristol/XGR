@@ -173,7 +173,7 @@ xCrosstalk <- function(data, entity=c("Gene","GR"), significance.threshold=NULL,
 			ls_path <- lapply(1:nrow(df_enrichment), function(j){
 				scores <- rep(-1, vcount(subg))
 				names(scores) <- V(subg)$name
-				x <- df_enrichment$members[j]
+				x <- df_enrichment$members_Overlap[j]
 				query <- unlist(strsplit(x, ", "))
 				scores[query] <- 1
 				path <- dnet::dNetFind(subg, scores)

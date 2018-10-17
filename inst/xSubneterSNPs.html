@@ -36,7 +36,10 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
 "KEGG_disease",
 "REACTOME"), network.customised = NULL, seed.genes = T,
-subnet.significance = 5e-05, subnet.size = NULL, verbose = T,
+subnet.significance = 5e-05, subnet.size = NULL,
+test.permutation = F, num.permutation = 100, respect = c("none",
+"degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
+"orderStatistic"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -225,6 +228,37 @@ leading to the desired number of nodes in the resulting subnet.
 Notably, the given significance threshold will be overwritten by this
 option</p>
 </td></tr>
+<tr valign="top"><td><code>test.permutation</code></td>
+<td>
+<p>logical to indicate whether the permutation
+test is perform to estimate the significance of identified network with
+the same number of nodes. By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>num.permutation</code></td>
+<td>
+<p>the number of permutations generating the null
+distribution of the identified network</p>
+</td></tr>
+<tr valign="top"><td><code>respect</code></td>
+<td>
+<p>how to respect nodes to be sampled. It can be one of
+'none' (randomly sampling) and 'degree' (degree-preserving sampling)</p>
+</td></tr>
+<tr valign="top"><td><code>aggregateBy</code></td>
+<td>
+<p>the aggregate method used to aggregate edge
+confidence p-values. It can be either &quot;orderStatistic&quot; for the method
+based on the order statistics of p-values, or &quot;fishers&quot; for Fisher's
+method, &quot;Ztransform&quot; for Z-transform method, &quot;logistic&quot; for the
+logistic method. Without loss of generality, the Z-transform method
+does well in problems where evidence against the combined null is
+spread widely (equal footings) or when the total evidence is weak;
+Fisher's method does best in problems where the evidence is
+concentrated in a relatively small fraction of the individual tests or
+when the evidence is at least moderately strong; the logistic method
+provides a compromise between these two. Notably, the aggregate methods
+'Ztransform' and 'logistic' are preferred here</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -241,7 +275,9 @@ RData files. See <code>xRDataLoader</code> for details</p>
 <h3>Value</h3>
 
 <p>a subgraph with a maximum score, an object of class &quot;igraph&quot;. It has
-ndoe attributes: significance, score, type
+ndoe attributes: significance, score, type. If permutation test is
+enabled, it also has a graph attribute (combinedP) and an edge
+attribute (edgeConfidence)
 </p>
 
 

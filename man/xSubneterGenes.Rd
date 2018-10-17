@@ -135,7 +135,7 @@ RData files. See \code{\link{xRDataLoader}} for details}
 a subgraph with a maximum score, an object of class "igraph". It has
 node attributes: significance, score, type. If permutation test is
 enabled, it also has a graph attribute (combinedP) and an edge
-attribute (edgeConfidence)
+attribute (edgeConfidence).
 }
 \description{
 \code{xSubneterGenes} is supposed to identify maximum-scoring
