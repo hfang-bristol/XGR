@@ -97,7 +97,7 @@ xLDblock <- function(data, include.LD=c("AFR","AMR","EAS","EUR","SAS"), LD.custo
     if(is.null(data)){
         stop("The input data must be not NULL.\n")
     }else{
-    	
+
     	if(class(data)=='DataFrame'){
     		data <- as.data.frame(data)
     	}

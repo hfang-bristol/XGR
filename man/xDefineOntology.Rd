@@ -16,9 +16,17 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "KEGGgenetic",
 "KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
 "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"),
-anno.identity = c("GeneID", "Symbol"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC",
+"EnrichrAchillesFitnessD", "EnrichrAchillesFitnessI",
+"EnrichrARCHS4Cells", "EnrichrARCHS4Tissues", "EnrichrBioCarta",
+"EnrichrChEA", "EnrichrConsensusTFs", "EnrichrdbGaP", "EnrichrDSigDB",
+"EnrichrEncodeTF", "EnrichrHumanGeneAtlas", "EnrichrhuMAP",
+"EnrichrJensenDiseases", "EnrichrJensenTissues", "EnrichrKEGG",
+"EnrichrNCIpathway", "EnrichrOMIM", "EnrichrOMIMexpanded",
+"EnrichrPanther", "EnrichrReactome", "EnrichrTFlof", "EnrichrTFpert",
+"EnrichrTissueHumanProteomeMap", "EnrichrTissueProteomicsDB",
+"EnrichrWikiPathways"), anno.identity = c("GeneID", "Symbol"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{ontology}{the ontology supported currently. It can be "GOBP" for
@@ -61,7 +69,9 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
 "MsigdbC7"), and the SIFTS database ("SIFTS2GOBP" for Gene Ontology
 Biological Process, "SIFTS2GOMF" for Gene Ontology Molecular Function,
-"SIFTS2GOCC" for Gene Ontology Cellular Component)}
+"SIFTS2GOCC" for Gene Ontology Cellular Component), and 'EnrichrX' for
+Enrichr libraries (where X can be
+"AchillesFitnessD","AchillesFitnessI","ARCHS4Cells","ARCHS4Tissues","BioCarta","ChEA","ConsensusTFs","dbGaP","DSigDB","EncodeTF","HumanGeneAtlas","huMAP","JensenDiseases","JensenTissues","KEGG","NCIpathway","OMIM","OMIMexpanded","Panther","Reactome","TFlof","TFpert","TissueHumanProteomeMap","TissueProteomicsDB","WikiPathways")}
 
 \item{anno.identity}{identity for gene annotations. It can be "GeneID"
 for Gene ID and "Symbol" for gene symbol}

@@ -127,7 +127,7 @@ tks
 gene.model <- xRDataLoader("UCSC_knownGene_model",
 RData.location=RData.location)
 
-### LDblock_GR
+### LDblock_GR (all GWAS Lead/LD SNPs)
 gr <- xRDataLoader("LDblock_GR", RData.location=RData.location)
 maf <- gr[,'maf']
 distance <- gr[,'distance']

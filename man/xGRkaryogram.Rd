@@ -44,7 +44,7 @@ a ggplot object.
 }
 \description{
 \code{xGRkaryogram} is supposed to visualise genomic regions using
-manhattan plot. It returns an object of class "ggplot".
+karyogram plot. It returns an object of class "ggplot".
 }
 \note{
 none

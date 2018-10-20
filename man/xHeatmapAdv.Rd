@@ -152,7 +152,7 @@ legend.width=NULL)
 gt <- xHeatmapAdv(data.main, data.meta, barwidth=0.3, barheight=4,
 meta.location="right", legend.nrow=6, meta.width=0.4, gap.width=0.2,
 legend.width=4)
-dev.new(); grid.draw(gt)
+dev.new(); grid::grid.draw(gt)
 }
 }
 \seealso{

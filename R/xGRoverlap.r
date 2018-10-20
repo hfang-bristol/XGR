@@ -1,6 +1,6 @@
-#' Function to extract overlap-based scores given a list of genomic regions
+#' Function to extract overlap-based scores given genomic regions
 #'
-#' \code{xGRoverlap} is supposed to extract overlap-based scores given a list of genomic regions. Scores are extracted for overlapped sub-regions only, valued at the mean per base; otherwise NA. It returns a GR object.
+#' \code{xGRoverlap} is supposed to extract overlap-based scores given genomic regions. Scores are extracted for overlapped sub-regions only, valued at the mean per base; otherwise NA. It returns a GR object.
 #'
 #' @param data input genomic regions (GR). If formatted as "chr:start-end" (see the next parameter 'format' below), GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'. If formatted as a 'data.frame', the first three columns correspond to the chromosome (1st column), the starting chromosome position (2nd column), and the ending chromosome position (3rd column). If the format is indicated as 'bed' (browser extensible data), the same as 'data.frame' format but the position is 0-based offset from chromomose position. If the genomic regions provided are not ranged but only the single position, the ending chromosome position (3rd column) is allowed not to be provided. The data could also be an object of 'GRanges' (in this case, formatted as 'GRanges')
 #' @param format the format of the input data. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"

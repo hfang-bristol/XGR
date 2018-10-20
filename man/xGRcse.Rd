@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGRcse.r
 \name{xGRcse}
 \alias{xGRcse}
-\title{Function to create a vector for genomic regions}
+\title{Function to create a vector storing genomic regions}
 \usage{
 xGRcse(data, format = c("GRanges", "data.frame", "bed"))
 }

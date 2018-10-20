@@ -1,6 +1,6 @@
 #' Function to visualise genomic regions using karyogram plot
 #'
-#' \code{xGRkaryogram} is supposed to visualise genomic regions using manhattan plot. It returns an object of class "ggplot".
+#' \code{xGRkaryogram} is supposed to visualise genomic regions using karyogram plot. It returns an object of class "ggplot".
 #'
 #' @param gr a GenomicRange object. If the meta-column 'label' is not provided, it will the name of this object
 #' @param cytoband logical to indicate whether cytoband will be displayed. By default, it sets to false

@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGRoverlap.r
 \name{xGRoverlap}
 \alias{xGRoverlap}
-\title{Function to extract overlap-based scores given a list of genomic regions}
+\title{Function to extract overlap-based scores given genomic regions}
 \usage{
 xGRoverlap(data, format = c("chr:start-end", "data.frame", "bed",
 "GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
@@ -53,10 +53,9 @@ regions from GR.score; otherwise all overlapped regions from input data
 will be output.
 }
 \description{
-\code{xGRoverlap} is supposed to extract overlap-based scores given a
-list of genomic regions. Scores are extracted for overlapped
-sub-regions only, valued at the mean per base; otherwise NA. It returns
-a GR object.
+\code{xGRoverlap} is supposed to extract overlap-based scores given
+genomic regions. Scores are extracted for overlapped sub-regions only,
+valued at the mean per base; otherwise NA. It returns a GR object.
 }
 \examples{
 \dontrun{

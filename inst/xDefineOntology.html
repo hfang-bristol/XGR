@@ -29,9 +29,17 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "KEGGgenetic",
 "KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
 "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC"),
-anno.identity = c("GeneID", "Symbol"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC",
+"EnrichrAchillesFitnessD", "EnrichrAchillesFitnessI",
+"EnrichrARCHS4Cells", "EnrichrARCHS4Tissues", "EnrichrBioCarta",
+"EnrichrChEA", "EnrichrConsensusTFs", "EnrichrdbGaP", "EnrichrDSigDB",
+"EnrichrEncodeTF", "EnrichrHumanGeneAtlas", "EnrichrhuMAP",
+"EnrichrJensenDiseases", "EnrichrJensenTissues", "EnrichrKEGG",
+"EnrichrNCIpathway", "EnrichrOMIM", "EnrichrOMIMexpanded",
+"EnrichrPanther", "EnrichrReactome", "EnrichrTFlof", "EnrichrTFpert",
+"EnrichrTissueHumanProteomeMap", "EnrichrTissueProteomicsDB",
+"EnrichrWikiPathways"), anno.identity = c("GeneID", "Symbol"),
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -80,7 +88,9 @@ Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
 &quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;,
 &quot;MsigdbC7&quot;), and the SIFTS database (&quot;SIFTS2GOBP&quot; for Gene Ontology
 Biological Process, &quot;SIFTS2GOMF&quot; for Gene Ontology Molecular Function,
-&quot;SIFTS2GOCC&quot; for Gene Ontology Cellular Component)</p>
+&quot;SIFTS2GOCC&quot; for Gene Ontology Cellular Component), and 'EnrichrX' for
+Enrichr libraries (where X can be
+&quot;AchillesFitnessD&quot;,&quot;AchillesFitnessI&quot;,&quot;ARCHS4Cells&quot;,&quot;ARCHS4Tissues&quot;,&quot;BioCarta&quot;,&quot;ChEA&quot;,&quot;ConsensusTFs&quot;,&quot;dbGaP&quot;,&quot;DSigDB&quot;,&quot;EncodeTF&quot;,&quot;HumanGeneAtlas&quot;,&quot;huMAP&quot;,&quot;JensenDiseases&quot;,&quot;JensenTissues&quot;,&quot;KEGG&quot;,&quot;NCIpathway&quot;,&quot;OMIM&quot;,&quot;OMIMexpanded&quot;,&quot;Panther&quot;,&quot;Reactome&quot;,&quot;TFlof&quot;,&quot;TFpert&quot;,&quot;TissueHumanProteomeMap&quot;,&quot;TissueProteomicsDB&quot;,&quot;WikiPathways&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>anno.identity</code></td>
 <td>

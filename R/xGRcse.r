@@ -1,4 +1,4 @@
-#' Function to create a vector for genomic regions
+#' Function to create a vector storing genomic regions
 #'
 #' \code{xGRcse} is supposed to create genomic regions in the format of 'chr:start-end'. 
 #'
