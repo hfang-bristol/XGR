@@ -101,7 +101,7 @@ xCorrelation <- function(df, list_vec, method=c("pearson","spearman"), p.type=c(
 			return(NULL)
 		}
 		################
-				
+
 		##############
 		res <- stats::cor.test(x=df$priority, y=as.numeric(df$data), method=method, exact=FALSE)
 		cor_obs <- signif(res$estimate, 3)

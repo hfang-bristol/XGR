@@ -9,8 +9,10 @@ build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GR.annotation = c("FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
 "FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "GWAScatalog_alltraits",
 "ENCODE_DNaseI_ClusteredV3", "ENCODE_TFBS_ClusteredV3",
-"EpigenomeAtlas_15Segments", "RecombinationRate", "phastCons100way",
-"phyloP100way"), verbose = T,
+"RecombinationRate", "phastCons100way", "phyloP100way",
+"EpigenomeAtlas_15Segments_enhancer",
+"EpigenomeAtlas_15Segments_heterochromatin",
+"EpigenomeAtlas_15Segments_quiescent"), scoring = T, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -38,6 +40,10 @@ another. The conversions supported are "hg38.to.hg19" and
 \item{GR.annotation}{the genomic regions of annotation data. Pre-built
 genomic annotation data are detailed in the section 'Note'}
 
+\item{scoring}{logical to indicate whether features are
+aggregated/scored. By default, it sets to true, that is, calling the
+function 'xAggregate' for no display}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
 
@@ -45,7 +51,8 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a GenomicRanges object appended a metacolumn 'RPS'
+a GenomicRanges object appended metacolumns (all features used) and/or
+'RPS' (if scoring is TRUE)
 }
 \description{
 \code{xRPS} is supposed to calculate regulatory potential scores for
@@ -96,7 +103,16 @@ cell types
 \itemize{
 \item{\code{EpigenomeAtlas_15Segments}: a list (127 cell types) of a
 list (15 categories of segments) of GenomicRanges objects; each is an
-GR object containing segments per category in the reference epigenome.}
+GR object containing segments per category in the reference epigenome.
+Segment categories are: E1_TssA (Active TSS), E2_TssAFlnk (Flanking
+Active TSS), E3_TxFlnk (Transcr. at gene 5' and 3'), E4_Tx (Strong
+transcription), E5_TxWk (Weak transcription), E6_EnhG (Genic
+enhancers), E7_Enh (Enhancers), E8_ZNF/Rpts (ZNF genes & repeats),
+E9_Het (Heterochromatin), E10_TssBiv (Bivalent/Poised TSS), E11_BivFlnk
+(Flanking Bivalent TSS/Enh), E12_EnhBiv (Bivalent Enhancer), E13_ReprPC
+(Repressed PolyComb), E14_ReprPCWk (Weak Repressed PolyComb), E15_Quies
+(Quiescent/Low). Now supported are
+"EpigenomeAtlas_15Segments_enhancer","EpigenomeAtlas_15Segments_heterochromatin","EpigenomeAtlas_15Segments_quiescent".}
 }
 7. Genomic scores
 \itemize{

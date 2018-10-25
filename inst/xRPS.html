@@ -22,8 +22,10 @@ build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 GR.annotation = c("FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
 "FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "GWAScatalog_alltraits",
 "ENCODE_DNaseI_ClusteredV3", "ENCODE_TFBS_ClusteredV3",
-"EpigenomeAtlas_15Segments", "RecombinationRate", "phastCons100way",
-"phyloP100way"), verbose = T,
+"RecombinationRate", "phastCons100way", "phyloP100way",
+"EpigenomeAtlas_15Segments_enhancer",
+"EpigenomeAtlas_15Segments_heterochromatin",
+"EpigenomeAtlas_15Segments_quiescent"), scoring = T, verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -63,6 +65,12 @@ another. The conversions supported are &quot;hg38.to.hg19&quot; and
 <p>the genomic regions of annotation data. Pre-built
 genomic annotation data are detailed in the section 'Note'</p>
 </td></tr>
+<tr valign="top"><td><code>scoring</code></td>
+<td>
+<p>logical to indicate whether features are
+aggregated/scored. By default, it sets to true, that is, calling the
+function 'xAggregate' for no display</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -78,7 +86,8 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a GenomicRanges object appended a metacolumn 'RPS'
+<p>a GenomicRanges object appended metacolumns (all features used) and/or
+'RPS' (if scoring is TRUE)
 </p>
 
 
@@ -155,6 +164,15 @@ cell types
 <li><p><code>EpigenomeAtlas_15Segments</code>: a list (127 cell types) of a
 list (15 categories of segments) of GenomicRanges objects; each is an
 GR object containing segments per category in the reference epigenome.
+Segment categories are: E1_TssA (Active TSS), E2_TssAFlnk (Flanking
+Active TSS), E3_TxFlnk (Transcr. at gene 5' and 3'), E4_Tx (Strong
+transcription), E5_TxWk (Weak transcription), E6_EnhG (Genic
+enhancers), E7_Enh (Enhancers), E8_ZNF/Rpts (ZNF genes &amp; repeats),
+E9_Het (Heterochromatin), E10_TssBiv (Bivalent/Poised TSS), E11_BivFlnk
+(Flanking Bivalent TSS/Enh), E12_EnhBiv (Bivalent Enhancer), E13_ReprPC
+(Repressed PolyComb), E14_ReprPCWk (Weak Repressed PolyComb), E15_Quies
+(Quiescent/Low). Now supported are
+&quot;EpigenomeAtlas_15Segments_enhancer&quot;,&quot;EpigenomeAtlas_15Segments_heterochromatin&quot;,&quot;EpigenomeAtlas_15Segments_quiescent&quot;.
 </p>
 </li></ul>
 

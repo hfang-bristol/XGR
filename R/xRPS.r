@@ -6,10 +6,11 @@
 #' @param format the format of the input data. It can be one of "data.frame", "chr:start-end", "bed" or "GRanges"
 #' @param build.conversion the conversion from one genome build to another. The conversions supported are "hg38.to.hg19" and "hg18.to.hg19". By default it is NA (no need to do so)
 #' @param GR.annotation the genomic regions of annotation data. Pre-built genomic annotation data are detailed in the section 'Note'
+#' @param scoring logical to indicate whether features are aggregated/scored. By default, it sets to true, that is, calling the function 'xAggregate' for no display
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' a GenomicRanges object appended a metacolumn 'RPS'
+#' a GenomicRanges object appended metacolumns (all features used) and/or 'RPS' (if scoring is TRUE)
 #' @note The genomic annotation data are described below according to the data sources and data types.\cr
 #' 1. FANTOM5 expressed enhancer atlas
 #' \itemize{
@@ -35,7 +36,7 @@
 #' }
 #' 6. Roadmap Epigenomics Core 15-state Genome Segmentation data for 127 cell types
 #' \itemize{
-#' \item{\code{EpigenomeAtlas_15Segments}: a list (127 cell types) of a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome.}
+#' \item{\code{EpigenomeAtlas_15Segments}: a list (127 cell types) of a list (15 categories of segments) of GenomicRanges objects; each is an GR object containing segments per category in the reference epigenome. Segment categories are: E1_TssA (Active TSS), E2_TssAFlnk (Flanking Active TSS), E3_TxFlnk (Transcr. at gene 5' and 3'), E4_Tx (Strong transcription), E5_TxWk (Weak transcription), E6_EnhG (Genic enhancers), E7_Enh (Enhancers), E8_ZNF/Rpts (ZNF genes & repeats), E9_Het (Heterochromatin), E10_TssBiv (Bivalent/Poised TSS), E11_BivFlnk (Flanking Bivalent TSS/Enh), E12_EnhBiv (Bivalent Enhancer), E13_ReprPC (Repressed PolyComb), E14_ReprPCWk (Weak Repressed PolyComb), E15_Quies (Quiescent/Low). Now supported are "EpigenomeAtlas_15Segments_enhancer","EpigenomeAtlas_15Segments_heterochromatin","EpigenomeAtlas_15Segments_quiescent".}
 #' }
 #' 7. Genomic scores
 #' \itemize{
@@ -61,7 +62,7 @@
 #' dGR <- xRPS(data, format="GRanges", GR.annotation=c("FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue"), RData.location=RData.location)
 #' }
 
-xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), GR.annotation=c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","RecombinationRate","phastCons100way","phyloP100way","EpigenomeAtlas_15Segments_enhancer","EpigenomeAtlas_15Segments_heterochromatin","EpigenomeAtlas_15Segments_quiescent"), scoring=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -76,8 +77,8 @@ xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges")
     
     #########################################################################
     
-	default.GR_annotation <- c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","EpigenomeAtlas_15Segments","RecombinationRate","phastCons100way","phyloP100way")
-	names(default.GR_annotation) <- c("Fcell","Ftissue","CATcell","CATtissue","Trait","DHS","TF","Epi","RR","phastCons","phyloP")
+	default.GR_annotation <- c("FANTOM5_Enhancer_Cell","FANTOM5_Enhancer_Tissue","FANTOM5_CAT_Cell","FANTOM5_CAT_Tissue","GWAScatalog_alltraits","ENCODE_DNaseI_ClusteredV3","ENCODE_TFBS_ClusteredV3","RecombinationRate","phastCons100way","phyloP100way","EpigenomeAtlas_15Segments_enhancer","EpigenomeAtlas_15Segments_heterochromatin","EpigenomeAtlas_15Segments_quiescent")
+	names(default.GR_annotation) <- c("Fcell","Ftissue","CATcell","CATtissue","Trait","DHS","TF","RR","phastCons","phyloP","EpiEnhancer","EpiHeterochromatin","EpiQuiescent")
 	ind <- match(default.GR_annotation, GR.annotation)
 	GR_annotation <- default.GR_annotation[!is.na(ind)]
 	if(length(GR_annotation)==0){
@@ -275,38 +276,6 @@ xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges")
 	}
 	
 	##############
-	# Epi: number of cell types
-	##############
-	if("EpigenomeAtlas_15Segments" %in% GR_annotation){
-	
-		if(verbose){
-			message(sprintf("using the annotation '%s' (%s) ...", 'EpigenomeAtlas_15Segments', as.character(Sys.time())), appendLF=T)
-		}
-	
-		# Roadmap Epigenomics Core 15-state Genome Segmentation data (127 cell types)
-		ls_ls_gr <- xRDataLoader('EpigenomeAtlas_15Segments', verbose=F, RData.location=RData.location)
-		## enhancer-like
-		ls_vec <- lapply(ls_ls_gr, function(ls_gr){
-			## three features containing 'enhancer'
-			ind <- grepl('enhancer', names(ls_gr), ignore.case=T)
-			grl <- GenomicRanges::GRangesList(ls_gr[ind])
-			gr <- IRanges::reduce(BiocGenerics::unlist(grl))
-	
-			q2r <- as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=dGR, subject=gr, maxgap=-1L, minoverlap=1L, type="any", select="all", ignore.strand=T)))
-			## a vector
-			ind <- unique(q2r[,1])
-			vec <- rep(0, length(dGR))
-			vec[ind] <- 1
-			return(vec)
-		})
-		df_res <- do.call(cbind, ls_vec)
-		colnames(df_res) <- names(ls_ls_gr)
-		vec_res <- apply(df_res, 1, sum)
-		vec_res[vec_res==0] <- NA
-		dGR$Epi <- vec_res
-    }
-    
-	##############
 	# RecombinationRate phastCons100way phyloP100way
 	##############
 	ind <- match(c("RecombinationRate","phastCons100way","phyloP100way"), GR_annotation)
@@ -327,20 +296,112 @@ xRPS <- function(data, format=c("data.frame", "bed", "chr:start-end", "GRanges")
 		}
 	}
 	
+	##############
+	# Epi: number of cell types
+	##############
+	if(sum(grep("EpigenomeAtlas_15Segments",GR_annotation,perl=TRUE)) > 0){
+
+		# Roadmap Epigenomics Core 15-state Genome Segmentation data (127 cell types)
+		ls_ls_gr <- xRDataLoader('EpigenomeAtlas_15Segments', verbose=F, RData.location=RData.location)
+		
+		# EpigenomeAtlas_15Segments_enhancer
+		if("EpigenomeAtlas_15Segments_enhancer" %in% GR_annotation){
+			if(verbose){
+				message(sprintf("using the annotation '%s' (%s) ...", 'EpigenomeAtlas_15Segments_enhancer', as.character(Sys.time())), appendLF=T)
+			}
+			## enhancer-like
+			ls_vec <- lapply(ls_ls_gr, function(ls_gr){
+				## three features containing 'enhancer'
+				ind <- grepl('enhancer', names(ls_gr), ignore.case=T)
+				grl <- GenomicRanges::GRangesList(ls_gr[ind])
+				gr <- IRanges::reduce(BiocGenerics::unlist(grl))
+	
+				q2r <- as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=dGR, subject=gr, maxgap=-1L, minoverlap=1L, type="any", select="all", ignore.strand=T)))
+				## a vector
+				ind <- unique(q2r[,1])
+				vec <- rep(0, length(dGR))
+				vec[ind] <- 1
+				return(vec)
+			})
+			df_res <- do.call(cbind, ls_vec)
+			colnames(df_res) <- names(ls_ls_gr)
+			vec_res <- apply(df_res, 1, sum)
+			vec_res[vec_res==0] <- NA
+			dGR$EpiEnhancer <- vec_res
+    	}
+    
+		# EpigenomeAtlas_15Segments_heterochromatin
+		if("EpigenomeAtlas_15Segments_heterochromatin" %in% GR_annotation){
+			if(verbose){
+				message(sprintf("using the annotation '%s' (%s) ...", 'EpigenomeAtlas_15Segments_heterochromatin', as.character(Sys.time())), appendLF=T)
+			}
+			## enhancer-like
+			ls_vec <- lapply(ls_ls_gr, function(ls_gr){
+				## three features containing 'enhancer'
+				ind <- grepl('heterochromatin', names(ls_gr), ignore.case=T)
+				grl <- GenomicRanges::GRangesList(ls_gr[ind])
+				gr <- IRanges::reduce(BiocGenerics::unlist(grl))
+	
+				q2r <- as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=dGR, subject=gr, maxgap=-1L, minoverlap=1L, type="any", select="all", ignore.strand=T)))
+				## a vector
+				ind <- unique(q2r[,1])
+				vec <- rep(0, length(dGR))
+				vec[ind] <- 1
+				return(vec)
+			})
+			df_res <- do.call(cbind, ls_vec)
+			colnames(df_res) <- names(ls_ls_gr)
+			vec_res <- apply(df_res, 1, sum)
+			vec_res[vec_res==0] <- NA
+			dGR$EpiHeterochromatin <- vec_res
+    	}
+    
+		# EpigenomeAtlas_15Segments_quiescent
+		if("EpigenomeAtlas_15Segments_quiescent" %in% GR_annotation){
+			if(verbose){
+				message(sprintf("using the annotation '%s' (%s) ...", 'EpigenomeAtlas_15Segments_quiescent', as.character(Sys.time())), appendLF=T)
+			}
+			## enhancer-like
+			ls_vec <- lapply(ls_ls_gr, function(ls_gr){
+				## three features containing 'enhancer'
+				ind <- grepl('quiescent', names(ls_gr), ignore.case=T)
+				grl <- GenomicRanges::GRangesList(ls_gr[ind])
+				gr <- IRanges::reduce(BiocGenerics::unlist(grl))
+	
+				q2r <- as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=dGR, subject=gr, maxgap=-1L, minoverlap=1L, type="any", select="all", ignore.strand=T)))
+				## a vector
+				ind <- unique(q2r[,1])
+				vec <- rep(0, length(dGR))
+				vec[ind] <- 1
+				return(vec)
+			})
+			df_res <- do.call(cbind, ls_vec)
+			colnames(df_res) <- names(ls_ls_gr)
+			vec_res <- apply(df_res, 1, sum)
+			vec_res[vec_res==0] <- NA
+			dGR$EpiQuiescent <- vec_res
+    	}
+    }
+	
 	################################################################
 	
-	if(verbose){
-		now <- Sys.time()
-		message(sprintf("Then, scores are combined in a rank aggregation manner (%s) ...", as.character(now)), appendLF=T)
+	if(scoring){
+	
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Then, scores are combined in a rank aggregation manner (%s) ...", as.character(now)), appendLF=T)
+		}
+	
+		df_mat <- as.data.frame(GenomicRanges::mcols(dGR))
+		ind <- match(colnames(df_mat), names(GR_annotation))
+		df_mat <- df_mat[,!is.na(ind)]
+	
+		## Rank aggregation
+		res <- xAggregate(df_mat, bin=T, nbin=10, scale.log=T)
+		dGR$RPS <- res$Aggregate
+		
 	}
-	
-	df_mat <- as.data.frame(GenomicRanges::mcols(dGR))
-	ind <- match(colnames(df_mat), names(GR_annotation))
-	df_mat <- df_mat[,!is.na(ind)]
-	
-	## Rank aggregation
-	res <- xAggregate(df_mat, bin=T, nbin=10, scale.log=T)
-	dGR$RPS <- res$Aggregate
+		
 	####################################################################################
     endT <- Sys.time()
     message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
