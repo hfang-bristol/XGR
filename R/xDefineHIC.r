@@ -153,14 +153,23 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
 			}else if(x == 'Combined_PE'){
 				g <- xRDataLoader(RData.customised='ig.PCHiC_PE', RData.location=RData.location, verbose=verbose)
 				df <- do.call(cbind, igraph::edge_attr(g))
-				num <- apply(df>=5, 1, sum)
-				dff <- df
-				dff[dff<5] <- 0
-				total <- apply(dff, 1, sum)
-				ave <- log(total / num)
-				ave_scale <- (ave - min(ave))/(max(ave) - min(ave)) * 0.9999999
+				if(1){
+					## new way
+					df[df<5] <- NA
+					res <- xAggregate(log(df), verbose=FALSE)
+					vec_score <- res$Aggregate
+				}else{
+					## old way
+					num <- apply(df>=5, 1, sum)
+					dff <- df
+					dff[dff<5] <- 0
+					total <- apply(dff, 1, sum)
+					ave <- log(total / num)
+					ave_scale <- (ave - min(ave))/(max(ave) - min(ave)) * 0.9999999
+					vec_score <- num + ave_scale
+				}
 				ig <- g
-				E(ig)$score <- num + ave_scale
+				E(ig)$score <- vec_score
 				for(i in igraph::edge_attr_names(g)){
 					ig <- igraph::delete_edge_attr(ig, i)
 				}

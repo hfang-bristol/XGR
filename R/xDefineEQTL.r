@@ -177,10 +177,12 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 		###########################	
     	
     	# if GTEx required, only load once
-    	if(sum(grep("GTEx_V4_",include.eQTL,perl=TRUE)) > 0){
-			GTEx <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, verbose=verbose)
-		}else if(sum(grep("GTEx_V6p_",include.eQTL,perl=TRUE)) > 0){
-			GTEx <- xRDataLoader(RData.customised='GTEx_V6p', RData.location=RData.location, verbose=verbose)
+    	if(sum(grepl("GTEx_V4_",include.eQTL,perl=TRUE)) > 0){
+			GTEx_V4 <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, verbose=verbose)
+		}
+		
+		if(sum(grepl("GTEx_V6p_",include.eQTL,perl=TRUE)) > 0){
+			GTEx_V6p <- xRDataLoader(RData.customised='GTEx_V6p', RData.location=RData.location, verbose=verbose)
 		}
     	
 		res_list <- lapply(include.eQTL, function(x){
@@ -385,14 +387,14 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 			}else if(sum(grep("GTEx_V4_",x,perl=TRUE)) > 0){
 				y <- gsub("GTEx_V4_","",x)
 				cis <- ''
-				eval(parse(text=paste("cis <- GTEx$", y, sep="")))
+				eval(parse(text=paste("cis <- GTEx_V4$", y, sep="")))
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("GTEx_V6p_",x,perl=TRUE)) > 0){
 				y <- gsub("GTEx_V6p_","",x)
 				cis <- ''
-				eval(parse(text=paste("cis <- GTEx$", y, sep="")))
+				eval(parse(text=paste("cis <- GTEx_V6p$", y, sep="")))
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
