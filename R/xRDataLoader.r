@@ -17,7 +17,7 @@
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
 #' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl extendrange dev.off pdf col2rgb
-#' @importFrom graphics plot lines legend contour text par
+#' @importFrom graphics plot lines legend contour text par hist curve
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd median prcomp lm quantile
@@ -28,6 +28,7 @@
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom XML htmlTreeParse xmlGetAttr
 #' @importFrom Matrix Diagonal colSums Matrix t
+#' @importFrom MASS fitdistr
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples
