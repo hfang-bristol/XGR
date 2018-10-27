@@ -139,6 +139,33 @@
 #'  \item{\code{GTEx_V6p_Vagina}: cis-eQTLs in tissue "Vagina".}
 #'  \item{\code{GTEx_V6p_Whole_Blood}: cis-eQTLs in tissue "Whole Blood".}
 #' }
+#' 11. eQTLs in eQTLGen. Sourced from bioRxiv, 2018, doi:10.1101/447367
+#' \itemize{
+#'  \item{\code{eQTLGen}: cis- and trans-eQTLs.}
+#'  \item{\code{eQTLGen_cis}: cis-eQTLs only.}
+#'  \item{\code{eQTLGen_trans}: trans-eQTLs only.}
+#' }
+#' 12. Single-cell-RNA-identified celltype-specific cis-eQTLs (including 9 cell types). Sourced from Nature Genetics 2018, 50(4):493-497
+#' \itemize{
+#'  \item{\code{scRNAseq_eQTL_Bcell}: cis-eQTLs in B cells.}
+#'  \item{\code{scRNAseq_eQTL_CD4}: cis-eQTLs in CD4+ T cells.}
+#'  \item{\code{scRNAseq_eQTL_CD8}: cis-eQTLs in CD8+ T cells.}
+#'  \item{\code{scRNAseq_eQTL_DC}: cis-eQTLs in dendritic cells.}
+#'  \item{\code{scRNAseq_eQTL_cMono}: cis-eQTLs in classical monocytes.}
+#'  \item{\code{scRNAseq_eQTL_ncMono}: cis-eQTLs in nonclassical monocytes.}
+#'  \item{\code{scRNAseq_eQTL_Mono}: cis-eQTLs in monocytes.}
+#'  \item{\code{scRNAseq_eQTL_NK}: cis-eQTLs in NK cells.}
+#'  \item{\code{scRNAseq_eQTL_PBMC}: cis-eQTLs in PBMC.}
+#' }
+#' 13. Japanese celltype-specific cis-eQTLs (including 6 cell types). Sourced from Nature Genetics 2017, 49(7):1120-1125
+#' \itemize{
+#'  \item{\code{jpRNAseq_eQTL_Bcell}: cis-eQTLs in B cells.}
+#'  \item{\code{jpRNAseq_eQTL_CD4}: cis-eQTLs in CD4+ T cells.}
+#'  \item{\code{jpRNAseq_eQTL_CD8}: cis-eQTLs in CD8+ T cells.}
+#'  \item{\code{jpRNAseq_eQTL_Mono}: cis-eQTLs in monocytes.}
+#'  \item{\code{jpRNAseq_eQTL_NK}: cis-eQTLs in NK cells.}
+#'  \item{\code{jpRNAseq_eQTL_PBMC}: cis-eQTLs in PBMC.}
+#' }
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xDefineEQTL.r
@@ -153,20 +180,20 @@
 #' # a) provide the SNPs with the significance info
 #' data(ImmunoBase)
 #' gr <- ImmunoBase$AS$variants
-#' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
+#' data <- gr$Variant
 #'
 #' # b) define eQTL genes
-#' df_SGS <- xDefineEQTL(data=AS[,1], include.eQTL="JKscience_TS2A", RData.location=RData.location)
+#' df_SGS <- xDefineEQTL(data, include.eQTL="JKscience_TS2A", RData.location=RData.location)
 #' }
 
-xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood", "eQTLGen","eQTLGen_cis","eQTLGen_trans", "scRNAseq_eQTL_Bcell","scRNAseq_eQTL_CD4","scRNAseq_eQTL_CD8","scRNAseq_eQTL_cMono","scRNAseq_eQTL_DC","scRNAseq_eQTL_Mono","scRNAseq_eQTL_ncMono","scRNAseq_eQTL_NK","scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell","jpRNAseq_eQTL_CD4","jpRNAseq_eQTL_CD8","jpRNAseq_eQTL_Mono","jpRNAseq_eQTL_NK","jpRNAseq_eQTL_PBMC"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ######################################################
     # Link to targets based on eQTL
     ######################################################
     
-    default.include.eQTL <- c("JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN","GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood")
+    default.include.eQTL <- c("JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN","GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood", "eQTLGen","eQTLGen_cis","eQTLGen_trans", "scRNAseq_eQTL_Bcell","scRNAseq_eQTL_CD4","scRNAseq_eQTL_CD8","scRNAseq_eQTL_cMono","scRNAseq_eQTL_DC","scRNAseq_eQTL_Mono","scRNAseq_eQTL_ncMono","scRNAseq_eQTL_NK","scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell","jpRNAseq_eQTL_CD4","jpRNAseq_eQTL_CD8","jpRNAseq_eQTL_Mono","jpRNAseq_eQTL_NK","jpRNAseq_eQTL_PBMC")
 	ind <- match(default.include.eQTL, include.eQTL)
 	include.eQTL <- default.include.eQTL[!is.na(ind)]
     
@@ -176,15 +203,23 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 		# built-in eQTL
 		###########################	
     	
-    	# if GTEx required, only load once
+    	# only load once 'GTEx_V4'
     	if(sum(grepl("GTEx_V4_",include.eQTL,perl=TRUE)) > 0){
 			GTEx_V4 <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, verbose=verbose)
 		}
-		
+		# only load once 'GTEx_V6p'
 		if(sum(grepl("GTEx_V6p_",include.eQTL,perl=TRUE)) > 0){
 			GTEx_V6p <- xRDataLoader(RData.customised='GTEx_V6p', RData.location=RData.location, verbose=verbose)
 		}
-    	
+		# only load once 'scRNAseq_eQTL'
+		if(sum(grepl("scRNAseq_eQTL_",include.eQTL,perl=TRUE)) > 0){
+			scRNAseq_eQTL <- xRDataLoader(RData.customised='scRNAseq_eQTL', RData.location=RData.location, verbose=verbose)
+		}
+		# only load once 'jpRNAseq_eQTL'
+		if(sum(grepl("jpRNAseq_eQTL_",include.eQTL,perl=TRUE)) > 0){
+			jpRNAseq_eQTL <- xRDataLoader(RData.customised='jpRNAseq_eQTL', RData.location=RData.location, verbose=verbose)
+		}
+		
 		res_list <- lapply(include.eQTL, function(x){
 
 			if(verbose){
@@ -367,6 +402,23 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				}
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
+			}else if(sum(grep("eQTLGen",x,perl=TRUE)) > 0){
+				# neutrophils
+				res_ls <- xRDataLoader(RData.customised='eQTLGen', RData.location=RData.location, verbose=verbose)
+				## cis
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,3], stringsAsFactors=FALSE)
+				## trans
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], Sig=res_ls$trans[,3], stringsAsFactors=FALSE)
+				if(x=='eQTLGen'){
+					## both
+					df <- rbind(df_cis, df_trans)
+				}else if(x=='eQTLGen_cis'){
+					df <- df_cis
+				}else if(x=='eQTLGen_trans'){
+					df <- df_trans
+				}
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
+				
 			}else if(x=='JK_nk'){
 				# NK cells
 				res_ls <- xRDataLoader(RData.customised='JK_nk', RData.location=RData.location, verbose=verbose)
@@ -398,6 +450,20 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
+			}else if(sum(grep("scRNAseq_eQTL_",x,perl=TRUE)) > 0){
+				y <- gsub("scRNAseq_eQTL_","",x)
+				cis <- ''
+				eval(parse(text=paste("cis <- scRNAseq_eQTL$", y, sep="")))
+				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
+
+			}else if(sum(grep("jpRNAseq_eQTL_",x,perl=TRUE)) > 0){
+				y <- gsub("jpRNAseq_eQTL_","",x)
+				cis <- ''
+				eval(parse(text=paste("cis <- jpRNAseq_eQTL$", y, sep="")))
+				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,3], stringsAsFactors=FALSE)
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
+
 			}else if(sum(grep("eQTLdb_",x,perl=TRUE)) > 0){
 				cis <- xRDataLoader(RData.customised=x, RData.location=RData.location, verbose=verbose)
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)

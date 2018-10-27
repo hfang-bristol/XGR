@@ -59,8 +59,15 @@ xDefineEQTL(data = NULL, include.eQTL = c(NA, "JKscience_CD14",
 "GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
 "GTEx_V6p_Small_Intestine_Terminal_Ileum", "GTEx_V6p_Spleen",
 "GTEx_V6p_Stomach", "GTEx_V6p_Testis", "GTEx_V6p_Thyroid",
-"GTEx_V6p_Uterus", "GTEx_V6p_Vagina", "GTEx_V6p_Whole_Blood"),
-eQTL.customised = NULL, verbose = TRUE,
+"GTEx_V6p_Uterus", "GTEx_V6p_Vagina", "GTEx_V6p_Whole_Blood",
+"eQTLGen",
+"eQTLGen_cis", "eQTLGen_trans", "scRNAseq_eQTL_Bcell",
+"scRNAseq_eQTL_CD4", "scRNAseq_eQTL_CD8", "scRNAseq_eQTL_cMono",
+"scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono", "scRNAseq_eQTL_ncMono",
+"scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell",
+"jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8", "jpRNAseq_eQTL_Mono",
+"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC"), eQTL.customised = NULL,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -522,6 +529,78 @@ tissue &quot;Small Intestine Terminal Ileum&quot;.
 </p>
 </li></ul>
 
+<p>11. eQTLs in eQTLGen. Sourced from bioRxiv, 2018, doi:10.1101/447367
+</p>
+
+<ul>
+<li><p><code>eQTLGen</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>eQTLGen_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>eQTLGen_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>12. Single-cell-RNA-identified celltype-specific cis-eQTLs (including 9
+cell types). Sourced from Nature Genetics 2018, 50(4):493-497
+</p>
+
+<ul>
+<li><p><code>scRNAseq_eQTL_Bcell</code>: cis-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_CD4</code>: cis-eQTLs in CD4+ T cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_CD8</code>: cis-eQTLs in CD8+ T cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_DC</code>: cis-eQTLs in dendritic cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_cMono</code>: cis-eQTLs in classical monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_ncMono</code>: cis-eQTLs in nonclassical
+monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_Mono</code>: cis-eQTLs in monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_NK</code>: cis-eQTLs in NK cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_PBMC</code>: cis-eQTLs in PBMC.
+</p>
+</li></ul>
+
+<p>13. Japanese celltype-specific cis-eQTLs (including 6 cell types).
+Sourced from Nature Genetics 2017, 49(7):1120-1125
+</p>
+
+<ul>
+<li><p><code>jpRNAseq_eQTL_Bcell</code>: cis-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_CD4</code>: cis-eQTLs in CD4+ T cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_CD8</code>: cis-eQTLs in CD8+ T cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_Mono</code>: cis-eQTLs in monocytes.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_NK</code>: cis-eQTLs in NK cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_PBMC</code>: cis-eQTLs in PBMC.
+</p>
+</li></ul>
+
 
 
 <h3>See Also</h3>
@@ -544,10 +623,10 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 # a) provide the SNPs with the significance info
 data(ImmunoBase)
 gr &lt;- ImmunoBase$AS$variants
-AS &lt;- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
+data &lt;- gr$Variant
 
 # b) define eQTL genes
-df_SGS &lt;- xDefineEQTL(data=AS[,1], include.eQTL="JKscience_TS2A",
+df_SGS &lt;- xDefineEQTL(data, include.eQTL="JKscience_TS2A",
 RData.location=RData.location)
 
 ## End(Not run)
