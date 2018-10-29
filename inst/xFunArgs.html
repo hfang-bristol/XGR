@@ -17,7 +17,7 @@ default values for a given function.
 <h3>Usage</h3>
 
 <pre>
-xFunArgs(fun, action = F, verbose = TRUE)
+xFunArgs(fun, action = NULL, verbose = TRUE)
 </pre>
 
 
@@ -32,7 +32,8 @@ xFunArgs(fun, action = F, verbose = TRUE)
 <td>
 <p>logical to indicate whether the function will act as it
 should be (with assigned values in the current environment). By
-default, it sets to FALSE</p>
+default, it sets to NULL, return a string specifying the assignment to
+be evalated</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -44,7 +45,9 @@ displayed in the screen. By default, it sets to TRUE for display</p>
 
 <h3>Value</h3>
 
-<p>a list containing arguments and their default values
+<p>If action is logical, a list containing arguments and their default
+values. If action is NULL, a string specifying the assignment to be
+evalated.
 </p>
 
 

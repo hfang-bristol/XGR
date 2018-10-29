@@ -4,20 +4,23 @@
 \alias{xFunArgs}
 \title{Function to assign (and evaluate) arguments with default values for a given function}
 \usage{
-xFunArgs(fun, action = F, verbose = TRUE)
+xFunArgs(fun, action = NULL, verbose = TRUE)
 }
 \arguments{
 \item{fun}{character specifying the name of the function}
 
 \item{action}{logical to indicate whether the function will act as it
 should be (with assigned values in the current environment). By
-default, it sets to FALSE}
+default, it sets to NULL, return a string specifying the assignment to
+be evalated}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display}
 }
 \value{
-a list containing arguments and their default values
+If action is logical, a list containing arguments and their default
+values. If action is NULL, a string specifying the assignment to be
+evalated.
 }
 \description{
 \code{xFunArgs} is supposed to assign (and evaluate) arguments with
