@@ -93,7 +93,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 		list_vec <- base::Filter(base::Negate(is.null), list_vec)
 		if(length(list_vec)==0){
 			return(NULL)
-		}	
+		}
     }else{
         stop("The input data must be a vector or a list of vectors.\n")
     }

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to post-process results from CEMiTool</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xCEMiTool"><tr><td>xCEMiTool</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to post-process results from CEMiTool</h2>
+
+<h3>Description</h3>
+
+<p><code>xCEMiTool</code> is supposed to post-process results from CEMiTool (an
+object of class &quot;CEMiTool&quot;).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xCEMiTool(cem, filename = "xCEMiTool", verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cem</code></td>
+<td>
+<p>an object of class &quot;CEMiTool&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xCEMiTool'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with three columns 'genes' (ordered by intramodular
+connectivity), 'modules' (M1, M2, ...) and 'rank' (integer with a
+module).
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xCEMiTool</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+cem &lt;- cemitool(expr, filter=FALSE, merge_similar=TRUE, min_ngen=70,
+diss_thresh=0.8, verbose=T)
+df_res &lt;- xCEMiTool(cem)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
