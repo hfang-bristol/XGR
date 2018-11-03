@@ -1,6 +1,6 @@
 #' Function to create a data frame (with three columns) from a (sparse) matrix
 #'
-#' \code{xSM2DF} is supposed to create a data frame (with three columns) from a (sparse) matrix. Only nonzero entries from the matrix will be kept in the resulting data frame.
+#' \code{xSM2DF} is supposed to create a data frame (with three columns) from a (sparse) matrix. Only nonzero/nonna entries from the matrix will be kept in the resulting data frame.
 #'
 #' @param data a matrix or an object of the dgCMatrix class (a sparse matrix)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display

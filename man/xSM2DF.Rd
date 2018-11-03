@@ -19,8 +19,8 @@ for column names, and 3rd for numeric values
 }
 \description{
 \code{xSM2DF} is supposed to create a data frame (with three columns)
-from a (sparse) matrix. Only nonzero entries from the matrix will be
-kept in the resulting data frame.
+from a (sparse) matrix. Only nonzero/nonna entries from the matrix will
+be kept in the resulting data frame.
 }
 \note{
 none
