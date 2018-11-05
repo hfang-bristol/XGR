@@ -23,12 +23,12 @@ match, it returns NULL}
 "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree"
 (previously "layout.reingold.tilford"), "layout_with_lgl" (previously
 "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"),
-"layout_with_sugiyama" (previously "layout.kamada.kawai"),
-"layout_with_dh" (previously "layout.davidson.harel"),
-"layout_with_drl" (previously "layout.drl"), "layout_with_gem"
-(previously "layout.gem"), "layout_with_mds", and
-"layout_as_bipartite". A full explanation of these layouts can be found
-in \url{http://igraph.org/r/doc/layout_nicely.html}}
+"layout_with_sugiyama" (previously "layout.sugiyama"), "layout_with_dh"
+(previously "layout.davidson.harel"), "layout_with_drl" (previously
+"layout.drl"), "layout_with_gem" (previously "layout.gem"),
+"layout_with_mds", and "layout_as_bipartite". A full explanation of
+these layouts can be found in
+\url{http://igraph.org/r/doc/layout_nicely.html}}
 
 \item{edge.color.alternative}{two alternative colors for edges within
 the community (grey70 by default) and edges between communities (grey95

@@ -124,5 +124,6 @@ Collate:
     'xBicreate.r'
     'xWGCNA.r'
     'xWGCNAtom.r'
+    'xLayout.r'
 License: GPL-2
 biocViews: Bioinformatics
