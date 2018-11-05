@@ -7,6 +7,8 @@ NEW FEATURES
     
     o Add a new function 'xEnrichRadial' for radial-like plot of enrichment results
 
+    o Add functions ('xWGCNA' and 'xWGCNAtom') for correlation network analysis
+
 
 CHANGES IN VERSION 1.1.4
 -----------------------

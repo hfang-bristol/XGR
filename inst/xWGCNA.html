@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to perform weighted gene correlated network analysis</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xWGCNA"><tr><td>xWGCNA</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to perform weighted gene correlated network analysis</h2>
+
+<h3>Description</h3>
+
+<p><code>xWGCNA</code> is supposed to perform weighted gene correlated network
+analysis. It returns an object of class &quot;cModule&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xWGCNA(data, networkType = c("unsigned", "signed", "signed hybrid"),
+powerVector = 1:25, setBeta = "wgcna", RsquaredCut = 0.85,
+TOMType = c("signed", "unsigned"), minClusterSize = 30, merge = T,
+cutHeight = 0.2, verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data matrix or data frame. Rows for genes and columns for
+samples</p>
+</td></tr>
+<tr valign="top"><td><code>networkType</code></td>
+<td>
+<p>network type. It determines how the adajcency [0,1]
+is transformed from correlations ([-1,1]), resulting in a weighted
+network adjacency matrix. It can be one of &quot;unsigned&quot; (|cor|^power),
+&quot;signed&quot; ((0.5*(1+cor))^power), and &quot;signed hybrid&quot; (cor^power if cor&gt;0
+and 0 otherwise)</p>
+</td></tr>
+<tr valign="top"><td><code>powerVector</code></td>
+<td>
+<p>a vector of soft thresholding powers for which the
+scale-free topology fit indices are to be calculated</p>
+</td></tr>
+<tr valign="top"><td><code>setBeta</code></td>
+<td>
+<p>NULL or &quot;wgcna&quot; or an integer. If NULL, beta will be
+determined internally; if &quot;wgcna&quot;, estimate of an appropriate
+soft-thresholding power is the lowest power for which the scale free
+topology fit R^2 exceeds &quot;RsquaredCut&quot;. It can be specified explicitly
+by the beta value (an integer)</p>
+</td></tr>
+<tr valign="top"><td><code>RsquaredCut</code></td>
+<td>
+<p>desired minimum scale free topology fitting index
+R^2</p>
+</td></tr>
+<tr valign="top"><td><code>TOMType</code></td>
+<td>
+<p>TOM type. It determines what will be used as inputs. It
+can be one of &quot;unsigned&quot; (taking as inputs the adjacency), &quot;signed&quot;
+(taking as inputs the adjacency multiplied by the sign of the
+adjacency)</p>
+</td></tr>
+<tr valign="top"><td><code>minClusterSize</code></td>
+<td>
+<p>minimum cluster size</p>
+</td></tr>
+<tr valign="top"><td><code>merge</code></td>
+<td>
+<p>logical to indicate whether to merge close modules
+(measured by the eigengene correlation)</p>
+</td></tr>
+<tr valign="top"><td><code>cutHeight</code></td>
+<td>
+<p>maximum dissimilarity (1-cor) that qualifies modules
+for merging</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;cModule&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>modules</code>: a data frame of n X 3 containing module
+membership information, where n is the number of nodes, and the 3
+columns are &quot;nodes&quot;, &quot;modules&quot; (an integer), &quot;rank&quot; (intramodule rank)
+</p>
+</li>
+<li><p><code>expr</code>: an input data for nodes assigned to modules
+</p>
+</li>
+<li><p><code>adj</code>: a weighted network adjacency matrix
+</p>
+</li>
+<li><p><code>io</code>: a named list containing inputs/outputs associated,
+including input paramters (&quot;networkType&quot;,&quot;TOMType&quot;,&quot;minClusterSize&quot;),
+and output results
+(&quot;beta&quot;,&quot;r2&quot;,&quot;fit&quot;,&quot;num_modules&quot;,&quot;pattern_modules&quot;,&quot;gp_fit&quot;)
+</p>
+</li>
+<li><p><code>call</code>: the call that produced this result
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xWGCNA</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+cModule &lt;- xWGCNA(data, networkType="unsigned", powerVector=1:25,
+setBeta=NULL, RsquaredCut=0.85, TOMType="signed", minClusterSize=30,
+merge=T, cutHeight=0.2, verbose=T)
+head(cModule$modules)
+cModule$io
+
+## End(Not run)
+</pre>
+
+
+</body></html>

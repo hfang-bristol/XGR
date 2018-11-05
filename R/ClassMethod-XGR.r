@@ -327,3 +327,57 @@ print.DR <- function(x, ...) {
 	print(head(x$index,2))
 	cat("......\n")
 }
+
+######################################################################
+# cModule
+######################################################################
+#' @title Definition for S3 class \code{cModule}
+#' @description \code{cModule} has 4 components: modules, expr, adj, io.
+#' @param modules a data frame
+#' @param expr a data matrix
+#' @param adj a data matrix
+#' @param io a named list
+#' @return an object of S3 class \code{cModule}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' cModule(modules, expr, adj, io)
+#' }
+cModule <- function(modules, expr, adj, io){
+	## integrity checks
+	if(class(modules)!='data.frame' | class(expr)!='matrix' | class(adj)!='matrix' | class(io)!='list'){
+		stop("The S3 class 'cModule' object failed to pass integrity checks!\n")
+	}
+	value <- list(modules=modules, expr=expr, adj=adj, io=io)
+	class(value) <- "cModule"
+	return(value)
+}
+#' @param x an object of class \code{cModule}
+#' @param ... other parameters
+#' @rdname cModule
+#' @export
+print.cModule <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $modules: a data frame of %d rows X %d columns", dim(x$modules)[1],dim(x$modules)[2]), "\n", sep="")
+	cat(sprintf("  $expr: a data matrix of %d rows X %d columns", dim(x$expr)[1],dim(x$expr)[2]), "\n", sep="")
+	cat(sprintf("  $adj: a data matrix of %d rows X %d columns", dim(x$adj)[1],dim(x$adj)[2]), "\n", sep="")
+	cat(sprintf("  $io: a named list with %d components", length(x$io)), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$modules:\n")
+	print(head(x$modules,3))
+	cat("......\n")
+	cat("$io$fit:\n")
+	print(head(x$io$fit,3))
+	cat("......\n")
+	cat("$io$beta:\n")
+	print(x$io$beta)
+	cat("$io$num_modules:\n")
+	print(x$io$num_modules)
+
+}

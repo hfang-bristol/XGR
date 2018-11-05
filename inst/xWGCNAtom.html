@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw TOM plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xWGCNAtom"><tr><td>xWGCNAtom</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to draw TOM plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xWGCNAtom</code> is supposed to draw TOM plot from an object of class
+&quot;cModule&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xWGCNAtom(cModule, beta_pseudo = NULL, which.modules = NULL,
+colormap = "grey-orange-red", zlim = c(0, 1),
+filename = "xWGCNAtom", verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cModule</code></td>
+<td>
+<p>an object of class &quot;cModule&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>beta_pseudo</code></td>
+<td>
+<p>NULL or an integer used to enhance TOM plot. If
+NULL, beta will be the one determined internally. It can be specified
+explicitly by the beta value (an integer)</p>
+</td></tr>
+<tr valign="top"><td><code>which.modules</code></td>
+<td>
+<p>an integer vector specifying which modules are
+visualised. If NULL (by default), all modules will be used</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to [0,1]</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>the without-extension part of the name of the output
+file. By default, it is 'xWGCNAtom'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a named vector specifying module colors
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xWGCNAtom</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+modules_color &lt;- xWGCNAtom(cModule)
+modules_color &lt;- xWGCNAtom(cModule, beta_pseudo=4,
+which.modules=c(1,3,10))
+
+## End(Not run)
+</pre>
+
+
+</body></html>
