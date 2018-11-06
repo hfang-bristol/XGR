@@ -34,6 +34,31 @@
 #' cModule <- xWGCNA(data, networkType="unsigned", powerVector=1:25, setBeta=NULL, RsquaredCut=0.85, TOMType="signed", minClusterSize=30, merge=T, cutHeight=0.2, verbose=T)
 #' head(cModule$modules)
 #' cModule$io
+#' 
+#' # Enrichment analysis of modular genes: using REACTOME pathways
+#' ls_modules <- split(x=cModule$modules$nodes, f=cModule$modules$modules)
+#' ls_eTerm <- xEnricherGenesAdv(ls_modules, background=cModule$modules$nodes, ontologies=c("REACTOME"), size.range=c(10,500), test="fisher", min.overlap=5, p.tail="one-tail", RData.location=RData.location, plot=T, fdr.cutoff=0.05, displayBy="zscore")
+#' gp <- xEnrichForest(ls_eTerm, top_num='auto', CI.one=F, FDR.cutoff=0.05, signature=F, drop=T, colormap="yellow-red")
+#' 
+#' # Network analysis of modular genes: intramodular genes in an interaction network
+#' # 1) define netowrk to visualise
+#' g <- xDefineNet(network="STRING_high", STRING.only=c("experimental_score","database_score"), RData.location=RData.location)
+#' # 2) genes/nodes in module 1
+#' nodes_query <- (cModule$modules %>% dplyr::filter(modules==2))$nodes
+#' # 3) connectivity of intramodular genes in the interaction network
+#' ig <- dnet::dNetInduce(g, nodes_query=nodes_query, knn=0, largest.comp=F)
+#' # 4) visualisation
+#' ig <- xLayout(ig, layout="gplot.layout.fruchtermanreingold")
+#' gp <- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord", node.color.alpha=0.5, edge.color.alpha=0.2)
+#' ## also size by degree
+#' V(ig)$degree <- igraph::degree(ig)
+#' gp <- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord", node.color.alpha=0.5, edge.color.alpha=0.2, node.size="degree", node.size.range=c(1,5))
+#' ## also label by intramodule hub genes (top 10)
+#' ind <- match(V(ig)$name,cModule$modules$nodes)
+#' V(ig)$rank <- cModule$modules$rank[ind]
+#' V(ig)$label <- ''
+#' V(ig)$label[V(ig)$rank<=10] <- V(ig)$name[V(ig)$rank<=10]
+#' gp <- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord", node.color.alpha=0.5, edge.color.alpha=0.2, node.size="degree", node.size.range=c(1,5), node.label="label", node.label.size=2, node.label.force=0.01)
 #' }
 
 xWGCNA <- function(data, networkType=c("unsigned","signed","signed hybrid"), powerVector=1:25, setBeta="wgcna", RsquaredCut=0.85, TOMType=c("signed","unsigned"), minClusterSize=30, merge=T, cutHeight=0.2, verbose=T)
@@ -116,7 +141,7 @@ xWGCNA <- function(data, networkType=c("unsigned","signed","signed hybrid"), pow
 	}
 	adjMat <- adj
 	if(TOMType=='signed'){
-		adjMat <- adjMat * sign(WGCNA::cor(expr_t, use="p", method="pearson"))
+		adjMat <- adjMat * sign(WGCNA::cor(expr_t, use="p", method="pearson", verbose=0))
 	}
 	tom <- WGCNA::TOMsimilarity(adjMat, TOMType=TOMType, verbose=F)
 

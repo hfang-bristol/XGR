@@ -9,6 +9,8 @@ NEW FEATURES
 
     o Add functions ('xWGCNA' and 'xWGCNAtom') for correlation network analysis
 
+    o Add a new function 'xLayout' for adding graph node coordinates into a graph
+    
 
 CHANGES IN VERSION 1.1.4
 -----------------------

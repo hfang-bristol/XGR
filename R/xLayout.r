@@ -2,7 +2,7 @@
 #'
 #' \code{xLayout} is supposed to define graph node coordinates according to igraph- or sna-style layout.
 #'
-#' @param g an object of class "igraph" (or "graphNEL") for a graph with such as a 'community' node attribute
+#' @param g an object of class "igraph" (or "graphNEL") for a graph
 #' @param layout a character specifying graph layout function. This character can be used to indicate igraph-style layout ("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite"), or sna-style layout ("gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target")
 #' @param seed an integer specifying the seed
 #' @return It returns an igraph object, appended by node attributes including "xcoord" for x-coordinates, "ycoord" for y-coordiates.
@@ -42,7 +42,7 @@
 xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite", "gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target"), seed=825)
 {
     
-    layout <- match.arg(layout)
+    layout <- layout[1]
     
     if(class(g)=="graphNEL"){
         ig <- igraph.from.graphNEL(g)

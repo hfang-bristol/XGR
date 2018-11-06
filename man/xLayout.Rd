@@ -18,8 +18,7 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 "gplot.layout.springrepulse", "gplot.layout.target"), seed = 825)
 }
 \arguments{
-\item{g}{an object of class "igraph" (or "graphNEL") for a graph with
-such as a 'community' node attribute}
+\item{g}{an object of class "igraph" (or "graphNEL") for a graph}
 
 \item{layout}{a character specifying graph layout function. This
 character can be used to indicate igraph-style layout

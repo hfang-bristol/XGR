@@ -12,10 +12,11 @@ node.label.arrow = 0.01, node.label.force = 1, node.shape = 19,
 node.shape.title = NULL, node.xcoord = NULL, node.ycoord = NULL,
 node.color = NULL, node.color.title = NULL,
 colormap = "grey-orange-darkred", ncolors = 64, zlim = NULL,
-na.color = "grey80", node.size = NULL, node.size.title = NULL,
-node.size.range = c(1, 4), slim = NULL, title = "",
-edge.size = 0.5, edge.color = "black", edge.color.alpha = 0.5,
-edge.curve = 0.1, edge.arrow = 2, edge.arrow.gap = 0.02)
+na.color = "grey80", node.color.alpha = 1, node.size = NULL,
+node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
+title = "", edge.size = 0.5, edge.color = "black",
+edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
+edge.arrow.gap = 0.02)
 }
 \arguments{
 \item{g}{an object of class "igraph". For an advanced use, it can be a
@@ -89,6 +90,9 @@ standard color names can be found in
 plotted}
 
 \item{na.color}{the color for NAs. By default, it is 'grey80'}
+
+\item{node.color.alpha}{the 0-1 value specifying transparency of node
+colors}
 
 \item{node.size}{either a vector specifying node size or a character
 specifying which node attribute used for the node size}
