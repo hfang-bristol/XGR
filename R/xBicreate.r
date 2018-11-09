@@ -2,7 +2,7 @@
 #'
 #' \code{xBicreate} is supposed to create a bipartitle graph.
 #'
-#' @param data a data frame/matrix to create a bipartitle graph. The coloring can be continuous (numeric matrix) or discrete (factor matrix)
+#' @param data a data frame/matrix to create a bipartitle graph
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return It returns an igraph object.
 #' @note none

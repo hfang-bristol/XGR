@@ -5,16 +5,16 @@
 \alias{print.cModule}
 \title{Definition for S3 class \code{cModule}}
 \usage{
-cModule(modules, expr, adj, io)
+cModule(mem, data, adj, io)
 
 \method{print}{cModule}(x, ...)
 }
 \arguments{
-\item{modules}{a data frame}
+\item{mem}{a data frame}
 
-\item{expr}{a data matrix}
+\item{data}{a matrix}
 
-\item{adj}{a data matrix}
+\item{adj}{an adjacency matrix}
 
 \item{io}{a named list}
 
@@ -26,7 +26,7 @@ cModule(modules, expr, adj, io)
 an object of S3 class \code{cModule}
 }
 \description{
-\code{cModule} has 4 components: modules, expr, adj, io.
+\code{cModule} has 4 components: mem, data, adj, io.
 }
 \examples{
 \dontrun{
@@ -35,7 +35,7 @@ library(XGR)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-cModule(modules, expr, adj, io)
+cModule(mem, data, adj, io)
 }
 }
 \keyword{S3}

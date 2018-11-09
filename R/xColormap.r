@@ -40,7 +40,7 @@
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu"), interpolate=c("spline","linear"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu","rainbow_hcl"), interpolate=c("spline","linear"))
 {
 
 	interpolate <- match.arg(interpolate)
@@ -96,6 +96,10 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 		
 		}else if(colormap == "RdYlBu"){
 			palette.name <-colorRampPalette(rev(c("#A50026","#D73027","#F46D43","#FDAE61","#FEE090","#FFFFBF","#E0F3F8","#ABD9E9","#74ADD1","#4575B4","#313695")), interpolate=interpolate)
+			
+		}else if(colormap == "rainbow_hcl"){
+			#via: noquote(paste0(rainbow_hcl(7),collapse='","'))
+			palette.name <-colorRampPalette(c("#E495A5","#CEA472","#9CB469","#56BD96","#46BAC8","#99A9E2","#D497D3"), interpolate=interpolate)
 		
 		}else if(colormap == "heat"){
 			palette.name <- grDevices::heat.colors

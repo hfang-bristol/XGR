@@ -7,9 +7,7 @@
 xBicreate(data, verbose = TRUE)
 }
 \arguments{
-\item{data}{a data frame/matrix to create a bipartitle graph. The
-coloring can be continuous (numeric matrix) or discrete (factor
-matrix)}
+\item{data}{a data frame/matrix to create a bipartitle graph}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

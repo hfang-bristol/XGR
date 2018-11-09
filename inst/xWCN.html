@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xWGCNA"><tr><td>xWGCNA</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xWCN"><tr><td>xWCN</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to perform weighted gene correlated network analysis</h2>
 
 <h3>Description</h3>
 
-<p><code>xWGCNA</code> is supposed to perform weighted gene correlated network
+<p><code>xWCN</code> is supposed to perform weighted gene correlated network
 analysis. It returns an object of class &quot;cModule&quot;.
 </p>
 
@@ -17,10 +17,11 @@ analysis. It returns an object of class &quot;cModule&quot;.
 <h3>Usage</h3>
 
 <pre>
-xWGCNA(data, networkType = c("unsigned", "signed", "signed hybrid"),
+xWCN(data, networkType = c("unsigned", "signed", "signed hybrid"),
 powerVector = 1:25, setBeta = "wgcna", RsquaredCut = 0.85,
-TOMType = c("signed", "unsigned"), minClusterSize = 30, merge = T,
-cutHeight = 0.2, verbose = T)
+TOMType = c("signed", "unsigned"), minClusterSize = 30,
+deepSplit = c(2, 1, 0, 3, 4), merge = T, cutHeight = 0.2,
+verbose = T)
 </pre>
 
 
@@ -29,8 +30,9 @@ cutHeight = 0.2, verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data matrix or data frame. Rows for genes and columns for
-samples</p>
+<p>a data matrix or data frame. It can be an expresison-like
+matrix (with rows for genes and columns for samples) or a similarity
+matrix (symmetric)</p>
 </td></tr>
 <tr valign="top"><td><code>networkType</code></td>
 <td>
@@ -69,10 +71,17 @@ adjacency)</p>
 <td>
 <p>minimum cluster size</p>
 </td></tr>
+<tr valign="top"><td><code>deepSplit</code></td>
+<td>
+<p>an integer [0,4] controlling sensitivity to cluster
+splitting. The higher the value, the more and smaller clusters will be
+produced</p>
+</td></tr>
 <tr valign="top"><td><code>merge</code></td>
 <td>
 <p>logical to indicate whether to merge close modules
-(measured by the eigengene correlation)</p>
+(measured by the eigengene correlation). It only works when input data
+is expression-like matrix</p>
 </td></tr>
 <tr valign="top"><td><code>cutHeight</code></td>
 <td>
@@ -93,9 +102,9 @@ displayed in the screen. By default, it sets to true for display</p>
 </p>
 
 <ul>
-<li><p><code>modules</code>: a data frame of n X 3 containing module
-membership information, where n is the number of nodes, and the 3
-columns are &quot;nodes&quot;, &quot;modules&quot; (an integer), &quot;rank&quot; (intramodule rank)
+<li><p><code>mem</code>: a data frame of n X 3 containing module membership
+information, where n is the number of nodes, and the 3 columns are
+&quot;nodes&quot;, &quot;modules&quot; (an integer), &quot;rank&quot; (intramodule hub rank)
 </p>
 </li>
 <li><p><code>expr</code>: an input data for nodes assigned to modules
@@ -105,9 +114,10 @@ columns are &quot;nodes&quot;, &quot;modules&quot; (an integer), &quot;rank&quot
 </p>
 </li>
 <li><p><code>io</code>: a named list containing inputs/outputs associated,
-including input paramters (&quot;networkType&quot;,&quot;TOMType&quot;,&quot;minClusterSize&quot;),
-and output results
-(&quot;beta&quot;,&quot;r2&quot;,&quot;fit&quot;,&quot;num_modules&quot;,&quot;pattern_modules&quot;,&quot;gp_fit&quot;)
+including input paramters
+(&quot;inputType&quot;,&quot;networkType&quot;,&quot;TOMType&quot;,&quot;minClusterSize&quot;), and output
+results
+(&quot;beta&quot;,&quot;r2&quot;,&quot;fit&quot;,&quot;num_modules&quot;,&quot;pattern_modules&quot;,&quot;gp_fit&quot;,&quot;tree&quot;)
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result
@@ -124,7 +134,7 @@ and output results
 
 <h3>See Also</h3>
 
-<p><code>xWGCNA</code>
+<p><code>xWCN</code>
 </p>
 
 
@@ -136,29 +146,27 @@ and output results
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-cModule &lt;- xWGCNA(data, networkType="unsigned", powerVector=1:25,
-setBeta=NULL, RsquaredCut=0.85, TOMType="signed", minClusterSize=30,
-merge=T, cutHeight=0.2, verbose=T)
-head(cModule$modules)
-cModule$io
+cModule &lt;- xWCN(data, networkType="unsigned", powerVector=1:25,
+setBeta="wgcna", RsquaredCut=0.85, TOMType="signed", minClusterSize=30,
+merge=F, cutHeight=0.2, verbose=T)
+head(cModule$mem)
+names(cModule$io)
 
 # Enrichment analysis of modular genes: using REACTOME pathways
-ls_modules &lt;- split(x=cModule$modules$nodes, f=cModule$modules$modules)
-ls_eTerm &lt;- xEnricherGenesAdv(ls_modules,
-background=cModule$modules$nodes, ontologies=c("REACTOME"),
-size.range=c(10,500), test="fisher", min.overlap=5, p.tail="one-tail",
-RData.location=RData.location, plot=T, fdr.cutoff=0.05,
-displayBy="zscore")
-gp &lt;- xEnrichForest(ls_eTerm, top_num='auto', CI.one=F,
-FDR.cutoff=0.05, signature=F, drop=T, colormap="yellow-red")
+ls_eTerm &lt;- xEnricherGenesAdv(cModule, background=cModule$mem$nodes,
+ontologies=c("REACTOME"), size.range=c(10,500), test="fisher",
+min.overlap=10, p.tail="one-tail", RData.location=RData.location,
+plot=T, fdr.cutoff=0.05, displayBy="zscore")
+gp &lt;- xEnrichForest(ls_eTerm, top_num=5, CI.one=F, FDR.cutoff=0.05,
+signature=F, drop=T, colormap="yellow-red")
 
 # Network analysis of modular genes: intramodular genes in an interaction network
 # 1) define netowrk to visualise
 g &lt;- xDefineNet(network="STRING_high",
 STRING.only=c("experimental_score","database_score"),
 RData.location=RData.location)
-# 2) genes/nodes in module 1
-nodes_query &lt;- (cModule$modules %&gt;% dplyr::filter(modules==2))$nodes
+# 2) genes/nodes in module 2
+nodes_query &lt;- (cModule$mem %&gt;% dplyr::filter(modules==2))$nodes
 # 3) connectivity of intramodular genes in the interaction network
 ig &lt;- dnet::dNetInduce(g, nodes_query=nodes_query, knn=0,
 largest.comp=F)
@@ -172,8 +180,8 @@ gp &lt;- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord",
 node.color.alpha=0.5, edge.color.alpha=0.2, node.size="degree",
 node.size.range=c(1,5))
 ## also label by intramodule hub genes (top 10)
-ind &lt;- match(V(ig)$name,cModule$modules$nodes)
-V(ig)$rank &lt;- cModule$modules$rank[ind]
+ind &lt;- match(V(ig)$name,cModule$mem$nodes)
+V(ig)$rank &lt;- cModule$mem$rank[ind]
 V(ig)$label &lt;- ''
 V(ig)$label[V(ig)$rank&lt;=10] &lt;- V(ig)$name[V(ig)$rank&lt;=10]
 gp &lt;- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord",

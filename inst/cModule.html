@@ -9,14 +9,14 @@
 
 <h3>Description</h3>
 
-<p><code>cModule</code> has 4 components: modules, expr, adj, io.
+<p><code>cModule</code> has 4 components: mem, data, adj, io.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-cModule(modules, expr, adj, io)
+cModule(mem, data, adj, io)
 
 ## S3 method for class 'cModule'
 print(x, ...)
@@ -26,17 +26,17 @@ print(x, ...)
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>modules</code></td>
+<tr valign="top"><td><code>mem</code></td>
 <td>
 <p>a data frame</p>
 </td></tr>
-<tr valign="top"><td><code>expr</code></td>
+<tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data matrix</p>
+<p>a matrix</p>
 </td></tr>
 <tr valign="top"><td><code>adj</code></td>
 <td>
-<p>a data matrix</p>
+<p>an adjacency matrix</p>
 </td></tr>
 <tr valign="top"><td><code>io</code></td>
 <td>
@@ -69,7 +69,7 @@ library(XGR)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-cModule(modules, expr, adj, io)
+cModule(mem, data, adj, io)
 
 ## End(Not run)
 </pre>

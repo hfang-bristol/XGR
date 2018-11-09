@@ -332,10 +332,10 @@ print.DR <- function(x, ...) {
 # cModule
 ######################################################################
 #' @title Definition for S3 class \code{cModule}
-#' @description \code{cModule} has 4 components: modules, expr, adj, io.
-#' @param modules a data frame
-#' @param expr a data matrix
-#' @param adj a data matrix
+#' @description \code{cModule} has 4 components: mem, data, adj, io.
+#' @param mem a data frame
+#' @param data a matrix
+#' @param adj an adjacency matrix
 #' @param io a named list
 #' @return an object of S3 class \code{cModule}
 #' @keywords S3 classes
@@ -347,14 +347,14 @@ print.DR <- function(x, ...) {
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' cModule(modules, expr, adj, io)
+#' cModule(mem, data, adj, io)
 #' }
-cModule <- function(modules, expr, adj, io){
+cModule <- function(mem, data, adj, io){
 	## integrity checks
-	if(class(modules)!='data.frame' | class(expr)!='matrix' | class(adj)!='matrix' | class(io)!='list'){
+	if(class(mem)!='data.frame' | class(data)!='matrix' | class(adj)!='matrix' | class(io)!='list'){
 		stop("The S3 class 'cModule' object failed to pass integrity checks!\n")
 	}
-	value <- list(modules=modules, expr=expr, adj=adj, io=io)
+	value <- list(mem=mem, data=data, adj=adj, io=io)
 	class(value) <- "cModule"
 	return(value)
 }
@@ -364,14 +364,16 @@ cModule <- function(modules, expr, adj, io){
 #' @export
 print.cModule <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
-	cat(sprintf("  $modules: a data frame of %d rows X %d columns", dim(x$modules)[1],dim(x$modules)[2]), "\n", sep="")
-	cat(sprintf("  $expr: a data matrix of %d rows X %d columns", dim(x$expr)[1],dim(x$expr)[2]), "\n", sep="")
-	cat(sprintf("  $adj: a data matrix of %d rows X %d columns", dim(x$adj)[1],dim(x$adj)[2]), "\n", sep="")
+	cat(sprintf("  $mem: a data frame of %d rows X %d columns", dim(x$mem)[1],dim(x$mem)[2]), "\n", sep="")
+	cat(sprintf("  $data: a data matrix of %d rows X %d columns", dim(x$data)[1],dim(x$data)[2]), "\n", sep="")
+	cat(sprintf("  $adj: an adjacency matrix of %d rows X %d columns", dim(x$adj)[1],dim(x$adj)[2]), "\n", sep="")
 	cat(sprintf("  $io: a named list with %d components", length(x$io)), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
-	cat("$modules:\n")
-	print(head(x$modules,3))
+	cat("$mem:\n")
+	print(head(x$mem,3))
 	cat("......\n")
+	cat("$io$inputType:\n")
+	print(x$io$inputType)
 	cat("$io$fit:\n")
 	print(head(x$io$fit,3))
 	cat("......\n")

@@ -16,17 +16,18 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "KEGGgenetic",
 "KEGGenvironmental", "KEGGcellular", "KEGGorganismal", "KEGGdisease",
 "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction",
-"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC",
-"EnrichrAchillesFitnessD", "EnrichrAchillesFitnessI",
-"EnrichrARCHS4Cells", "EnrichrARCHS4Tissues", "EnrichrBioCarta",
-"EnrichrChEA", "EnrichrConsensusTFs", "EnrichrdbGaP", "EnrichrDSigDB",
-"EnrichrEncodeTF", "EnrichrHumanGeneAtlas", "EnrichrhuMAP",
-"EnrichrJensenDiseases", "EnrichrJensenTissues", "EnrichrKEGG",
-"EnrichrNCIpathway", "EnrichrOMIM", "EnrichrOMIMexpanded",
-"EnrichrPanther", "EnrichrReactome", "EnrichrTFlof", "EnrichrTFpert",
+"CGL", "SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC", "EnrichrARCHS4Cells",
+"EnrichrARCHS4Tissues", "EnrichrHumanGeneAtlas",
 "EnrichrTissueHumanProteomeMap", "EnrichrTissueProteomicsDB",
-"EnrichrWikiPathways"), anno.identity = c("GeneID", "Symbol"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"EnrichrAchillesFitnessD", "EnrichrAchillesFitnessI", "EnrichrDSigDB",
+"EnrichrOMIM", "EnrichrOMIMexpanded", "EnrichrdbGaP",
+"EnrichrJensenDiseases", "EnrichrJensenTissues", "EnrichrBioCarta",
+"EnrichrKEGG", "EnrichrNCIpathway", "EnrichrPanther",
+"EnrichrReactome",
+"EnrichrWikiPathways", "EnrichrhuMAP", "EnrichrChEA",
+"EnrichrConsensusTFs", "EnrichrEncodeTF", "EnrichrTFlof",
+"EnrichrTFpert"), anno.identity = c("GeneID", "Symbol"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{ontology}{the ontology supported currently. It can be "GOBP" for

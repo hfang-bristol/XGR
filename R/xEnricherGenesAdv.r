@@ -81,6 +81,13 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     p.tail <- match.arg(p.tail)
     displayBy <- match.arg(displayBy)
     
+    ################################################
+    ## support enrichment analysis for modular genes from the cModule object
+    if(class(list_vec)=='cModule'){
+    	list_vec <- split(x=list_vec$mem$nodes, f=list_vec$mem$modules)
+    }
+    ################################################
+        
     ############
     if(length(list_vec)==0){
     	return(NULL)
