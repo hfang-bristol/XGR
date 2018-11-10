@@ -32,7 +32,7 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
-#' cModule <- xWCN(data, networkType="unsigned", powerVector=1:25, setBeta="wgcna", RsquaredCut=0.85, TOMType="signed", minClusterSize=30, merge=F, cutHeight=0.2, verbose=T)
+#' cModule <- xWCN(data, merge=T)
 #' head(cModule$mem)
 #' names(cModule$io)
 #' 
@@ -59,6 +59,41 @@
 #' V(ig)$label <- ''
 #' V(ig)$label[V(ig)$rank<=10] <- V(ig)$name[V(ig)$rank<=10]
 #' gp <- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord", node.color.alpha=0.5, edge.color.alpha=0.2, node.size="degree", node.size.range=c(1,5), node.label="label", node.label.size=2, node.label.force=0.01)
+#'
+#' # Visualisation of the tree dendrogram (without merging similar modules)
+#' cModule <- xWCN(data, merge=F)
+#' ## extract the tree info (dend, tips, mat)
+#' dend <- cModule$io$tree$dend
+#' tips <- cModule$io$tree$tips
+#' mat <- cModule$io$tree$mat
+#' ## color tree branches by modules
+#' cols <- xColormap("ggplot2")(length(unique(tips$modules)) - 1)
+#' dend2 <- dend %>% dendextend::branches_attr_by_clusters(tips$modules, values=cols[unique(tips$modules)]) %>% dendextend::set("labels_cex", c(.5,0.5))
+#' plot(dend2, type="rectangle", leaflab='none')
+#' ## using circlize
+#' dendextend::circlize_dendrogram(dend2)
+#' ## using ggplot
+#' ggd <- dendextend::as.ggdend(dend2)
+#' gp <- ggplot(ggd, horiz=T)
+#' gp <- ggplot(ggd, labels=F) + scale_y_reverse(expand=c(0.2,0)) + coord_polar(theta="x")
+#' ## using gplots (heatmap)
+#' allcols <- c('black',cols)
+#' ### RowSideColors (ordered by data)
+#' ind <- match(rownames(data), tips$nodes)
+#' RowSideColors <- allcols[tips$modules[ind] + 1]
+#' gplots::heatmap.2(as.matrix(data), dendrogram="row", Rowv=dend2, Colv=T, col=xColormap('spectral'), trace="none", labRow=NA, labCol=NA, srtCol=20, RowSideColors=RowSideColors)
+#' ## using ggtree
+#' tree <- ape::as.phylo(as.hclust(dend))
+#' membership <- subset(tips, modules!=0)[,2]
+#' names(membership) <- subset(tips, modules!=0)[,1]
+#' ### rectangular layout
+#' gp <- xGGtree(tree, membership, layout="rectangular")
+#' gp + ggtree::geom_tiplab(size=1)
+#' gp$tree
+#' gp$tree$cluster
+#' ### fan layout
+#' gp <- xGGtree(tree, membership, layout="fan")
+#' gp + ggtree::geom_tiplab2(size=1)
 #' }
 
 xWCN <- function(data, networkType=c("unsigned","signed","signed hybrid"), powerVector=1:25, setBeta="wgcna", RsquaredCut=0.85, TOMType=c("signed","unsigned"), minClusterSize=30, deepSplit=c(2,1,0,3,4), merge=T, cutHeight=0.2, verbose=T)
@@ -172,6 +207,7 @@ xWCN <- function(data, networkType=c("unsigned","signed","signed hybrid"), power
 		}
 	}
 	tom <- WGCNA::TOMsimilarity(adjMat, TOMType=TOMType, verbose=F)
+	rownames(tom) <- colnames(tom) <- rownames(adjMat)
 
 	if(verbose){
 		message(sprintf("Cut tree to determine modules (each having >= %d nodes and '%d' deepSplit) (%s) ...", minClusterSize, deepSplit, as.character(Sys.time())), appendLF=T)
@@ -231,27 +267,6 @@ xWCN <- function(data, networkType=c("unsigned","signed","signed hybrid"), power
 			mat <- data[ind,ind]
 		}
 		ls_tree <- list(dend=dend, tips=df_tips, mat=mat)
-		
-		if(0){
-			#dend <- cModule$io$tree$dend
-			#df_tips <- cModule$io$tree$tips
-			#mat <- cModule$io$tree$mat
-
-			## visualisation using dendextend: color branches by clusters
-			#cols <- xColormap("spectral")(length(unique(df_tips$modules)) - 1)
-			#dend2 <- dend %>% dendextend::branches_attr_by_clusters(df_tips$modules, values=cols[unique(df_tips$modules)]) %>% dendextend::set("labels_cex", c(.5,0.5))
-			#plot(dend2, type="rectangle", leaflab='none')
-			# 1) using ggplot
-			#ggd <- dendextend::as.ggdend(dend2)
-			#gp <- ggplot(ggd, horiz=T)
-			#gp <- ggplot(ggd, labels=F) + scale_y_reverse(expand=c(0.2,0)) + coord_polar(theta="x")
-			# 2) using circlize
-			#dendextend::circlize_dendrogram(dend2)
-			# 3) using gplots
-			#allcols <- c('black',cols)
-			#RowSideColors <- allcols[df_tips$modules[match(rownames(data),df_tips$nodes)] + 1]
-			#gplots::heatmap.2(data, dendrogram="row", Rowv=dend2, Colv=T,col=xColormap('spectral'),trace="none", labRow=NA, labCol=NA, srtCol=20, RowSideColors=RowSideColors)
-		}
 	}
 	
 	################################################

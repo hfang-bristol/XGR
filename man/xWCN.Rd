@@ -83,9 +83,7 @@ none
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
-cModule <- xWCN(data, networkType="unsigned", powerVector=1:25,
-setBeta="wgcna", RsquaredCut=0.85, TOMType="signed", minClusterSize=30,
-merge=F, cutHeight=0.2, verbose=T)
+cModule <- xWCN(data, merge=T)
 head(cModule$mem)
 names(cModule$io)
 
@@ -125,6 +123,46 @@ gp <- xGGnetwork(ig, node.xcoord="xcoord", node.ycoord="ycoord",
 node.color.alpha=0.5, edge.color.alpha=0.2, node.size="degree",
 node.size.range=c(1,5), node.label="label", node.label.size=2,
 node.label.force=0.01)
+
+# Visualisation of the tree dendrogram (without merging similar modules)
+cModule <- xWCN(data, merge=F)
+## extract the tree info (dend, tips, mat)
+dend <- cModule$io$tree$dend
+tips <- cModule$io$tree$tips
+mat <- cModule$io$tree$mat
+## color tree branches by modules
+cols <- xColormap("ggplot2")(length(unique(tips$modules)) - 1)
+dend2 <- dend \%>\% dendextend::branches_attr_by_clusters(tips$modules,
+values=cols[unique(tips$modules)]) \%>\% dendextend::set("labels_cex",
+c(.5,0.5))
+plot(dend2, type="rectangle", leaflab='none')
+## using circlize
+dendextend::circlize_dendrogram(dend2)
+## using ggplot
+ggd <- dendextend::as.ggdend(dend2)
+gp <- ggplot(ggd, horiz=T)
+gp <- ggplot(ggd, labels=F) + scale_y_reverse(expand=c(0.2,0)) +
+coord_polar(theta="x")
+## using gplots (heatmap)
+allcols <- c('black',cols)
+### RowSideColors (ordered by data)
+ind <- match(rownames(data), tips$nodes)
+RowSideColors <- allcols[tips$modules[ind] + 1]
+gplots::heatmap.2(as.matrix(data), dendrogram="row", Rowv=dend2,
+Colv=T, col=xColormap('spectral'), trace="none", labRow=NA, labCol=NA,
+srtCol=20, RowSideColors=RowSideColors)
+## using ggtree
+tree <- ape::as.phylo(as.hclust(dend))
+membership <- subset(tips, modules!=0)[,2]
+names(membership) <- subset(tips, modules!=0)[,1]
+### rectangular layout
+gp <- xGGtree(tree, membership, layout="rectangular")
+gp + ggtree::geom_tiplab(size=1)
+gp$tree
+gp$tree$cluster
+### fan layout
+gp <- xGGtree(tree, membership, layout="fan")
+gp + ggtree::geom_tiplab2(size=1)
 }
 }
 \seealso{
