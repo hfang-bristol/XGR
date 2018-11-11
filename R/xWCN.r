@@ -32,6 +32,13 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
+#' # leukemia patient dataset from Golub et al
+#' data(Golub)
+#' # the highest variation (500)
+#' vec_sd <- apply(Golub, 1, sd)
+#' ind <- match(names(tail(sort(vec_sd),400)), rownames(Golub))
+#' data <- Golub[ind,]
+#' 
 #' cModule <- xWCN(data, merge=T)
 #' head(cModule$mem)
 #' names(cModule$io)
@@ -62,37 +69,37 @@
 #'
 #' # Visualisation of the tree dendrogram (without merging similar modules)
 #' cModule <- xWCN(data, merge=F)
-#' ## extract the tree info (dend, tips, mat)
+#' ## 1) extract the tree info (dend, tips, mat)
 #' dend <- cModule$io$tree$dend
 #' tips <- cModule$io$tree$tips
 #' mat <- cModule$io$tree$mat
-#' ## color tree branches by modules
+#' ## 2) color tree branches by modules
 #' cols <- xColormap("ggplot2")(length(unique(tips$modules)) - 1)
 #' dend2 <- dend %>% dendextend::branches_attr_by_clusters(tips$modules, values=cols[unique(tips$modules)]) %>% dendextend::set("labels_cex", c(.5,0.5))
 #' plot(dend2, type="rectangle", leaflab='none')
-#' ## using circlize
+#' ## 3) using circlize
 #' dendextend::circlize_dendrogram(dend2)
-#' ## using ggplot
+#' ## 4) using ggplot
 #' ggd <- dendextend::as.ggdend(dend2)
 #' gp <- ggplot(ggd, horiz=T)
 #' gp <- ggplot(ggd, labels=F) + scale_y_reverse(expand=c(0.2,0)) + coord_polar(theta="x")
-#' ## using gplots (heatmap)
+#' ## 5) using gplots (heatmap)
 #' allcols <- c('black',cols)
 #' ### RowSideColors (ordered by data)
 #' ind <- match(rownames(data), tips$nodes)
 #' RowSideColors <- allcols[tips$modules[ind] + 1]
 #' gplots::heatmap.2(as.matrix(data), dendrogram="row", Rowv=dend2, Colv=T, col=xColormap('spectral'), trace="none", labRow=NA, labCol=NA, srtCol=20, RowSideColors=RowSideColors)
-#' ## using ggtree
+#' ## 6) using ggtree
 #' tree <- ape::as.phylo(as.hclust(dend))
 #' membership <- subset(tips, modules!=0)[,2]
 #' names(membership) <- subset(tips, modules!=0)[,1]
 #' ### rectangular layout
-#' gp <- xGGtree(tree, membership, layout="rectangular")
+#' gp <- xGT(tree, membership, layout="rectangular")
 #' gp + ggtree::geom_tiplab(size=1)
 #' gp$tree
 #' gp$tree$cluster
 #' ### fan layout
-#' gp <- xGGtree(tree, membership, layout="fan")
+#' gp <- xGT(tree, membership, layout="fan")
 #' gp + ggtree::geom_tiplab2(size=1)
 #' }
 
