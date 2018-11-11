@@ -13,6 +13,7 @@
 #' @param legend.title the title of the colorbar. By default, it is ''
 #' @param x.rotate the angle to rotate the x tick labelings. By default, it is 60
 #' @param x.text.size the text size of the x tick labelings. By default, it is 6
+#' @param x.text.hjust the hjust of the x tick labelings. By default, it is 0.5
 #' @param y.text.size the text size of the y tick labelings. By default, it is 6
 #' @param legend.text.size the text size of the legend tick labelings. By default, it is 5
 #' @param legend.title.size the text size of the legend titles. By default, it is 6
@@ -42,7 +43,7 @@
 #' gp + geom_text(aes(x, y, label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
 #' }
 
-xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=6, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='grey80', data.label=NULL, label.size=1, label.color="black", ...)
+xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=6, x.text.hjust=0.5, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='grey80', data.label=NULL, label.size=1, label.color="black", ...)
 {
 
     reorder <- match.arg(reorder)
@@ -153,7 +154,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 			gp <- gp + theme(legend.key.width=unit(barwidth,'pt'), legend.key.height=unit(barheight,'pt')) + guides(col=guide_legend(ncol=1))
 		}
 		
-		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold",color="black",size=x.text.size,angle=x.rotate,hjust=0), axis.text.y=element_text(face="bold",color="black",size=y.text.size,angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + theme(plot.margin=plot.margin) + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
+		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold",color="black",size=x.text.size,angle=x.rotate,hjust=x.text.hjust), axis.text.y=element_text(face="bold",color="black",size=y.text.size,angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + theme(plot.margin=plot.margin) + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
 		gp <- gp + theme(axis.ticks=element_line(size=0.25),axis.ticks.length=unit(0.1,"cm"))
 		gp <- gp + theme(text=element_text(family=font.family))
 		gp_main <- gp + scale_x_discrete(position="top")

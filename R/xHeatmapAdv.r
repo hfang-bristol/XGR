@@ -14,6 +14,7 @@
 #' @param legend.title the title of the colorbar. By default, it is ''
 #' @param x.rotate the angle to rotate the x tick labelings. By default, it is 60
 #' @param x.text.size the text size of the x tick labelings. By default, it is 6
+#' @param x.text.hjust the hjust of the x tick labelings. By default, it is 0.5
 #' @param y.text.size the text size of the y tick labelings. By default, it is 6
 #' @param legend.text.size the text size of the legend tick labelings. By default, it is 5
 #' @param legend.title.size the text size of the legend titles. By default, it is 6
@@ -56,7 +57,7 @@
 #' dev.new(); grid::grid.draw(gt)
 #' }
 
-xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=4, nbin=64, legend.title="Main", x.rotate=60, x.text.size=6, y.text.size=6, legend.text.size=5, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='grey80', data.label=NULL, label.size=1, label.color="black", meta.colormap="spectral",meta.x.rotate=75,meta.shape.continuous=15,meta.shape.discrete=95,meta.size=2,meta.location=c("right","left"), meta.width=0.5, gap.width=0.5, legend.width=NULL, legend.direction=c("vertical","horizontal"), legend.nrow=NULL, verbose=TRUE, ...)
+xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=4, nbin=64, legend.title="Main", x.rotate=60, x.text.size=6, x.text.hjust=0.5, y.text.size=6, legend.text.size=5, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='grey80', data.label=NULL, label.size=1, label.color="black", meta.colormap="spectral",meta.x.rotate=75,meta.shape.continuous=15,meta.shape.discrete=95,meta.size=2,meta.location=c("right","left"), meta.width=0.5, gap.width=0.5, legend.width=NULL, legend.direction=c("vertical","horizontal"), legend.nrow=NULL, verbose=TRUE, ...)
 {
 
     reorder <- match.arg(reorder)
@@ -72,7 +73,7 @@ xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both
     }
     
     ## main gp
-	gp_main <- xHeatmap(data.main, reorder=reorder, colormap=colormap, ncolors=ncolors, zlim=zlim, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=legend.title, x.rotate=x.rotate, x.text.size=x.text.size, y.text.size=y.text.size, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=shape, size=size, plot.margin=plot.margin, font.family=font.family, na.color=na.color, data.label=data.label, label.size=label.size, label.color=label.color, ...)
+	gp_main <- xHeatmap(data.main, reorder=reorder, colormap=colormap, ncolors=ncolors, zlim=zlim, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=legend.title, x.rotate=x.rotate, x.text.size=x.text.size, x.text.hjust=x.text.hjust, y.text.size=y.text.size, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=shape, size=size, plot.margin=plot.margin, font.family=font.family, na.color=na.color, data.label=data.label, label.size=label.size, label.color=label.color, ...)
     
     if(legend.direction == "horizontal"){
 		gp_main <- gp_main + theme(legend.position="right",legend.direction="horizontal") + guides(color=guide_colorbar(title=legend.title,title.position="top",barwidth=barheight,barheight=barwidth))
@@ -115,7 +116,7 @@ xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both
 				meta.size <- meta.size * 1.5
 			}
 		}
-		gp <- xHeatmap(data, reorder="none", colormap=meta.colormap, ncolors=ncolors, zlim=NULL, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=meta.legend.title, x.rotate=meta.x.rotate, x.text.size=x.text.size, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=meta.shape, size=meta.size, plot.margin=meta.plot.margin, font.family=font.family, na.color=na.color)
+		gp <- xHeatmap(data, reorder="none", colormap=meta.colormap, ncolors=ncolors, zlim=NULL, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=meta.legend.title, x.rotate=meta.x.rotate, x.text.size=x.text.size, x.text.hjust=x.text.hjust, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=meta.shape, size=meta.size, plot.margin=meta.plot.margin, font.family=font.family, na.color=na.color)
 		
 		if(legend.direction == "horizontal"){
 			gp <- gp + theme(legend.position="right",legend.direction="horizontal") + guides(color=guide_colorbar(title=meta.legend.title,title.position="top",barwidth=barheight,barheight=barwidth))

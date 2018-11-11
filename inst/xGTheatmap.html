@@ -1,27 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap using ggplot2</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap on tree tips</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xHeatmap"><tr><td>xHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGTheatmap"><tr><td>xGTheatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to draw heatmap using ggplot2</h2>
+<h2>Function to draw heatmap on tree tips</h2>
 
 <h3>Description</h3>
 
-<p><code>xHeatmap</code> is supposed to draw heatmap using ggplot2.
+<p><code>xGTheatmap</code> is supposed to draw heatmap on tree tips.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xHeatmap(data, reorder = c("none", "row", "col", "both"),
-colormap = "spectral", ncolors = 64, zlim = NULL, barwidth = 0.3,
-barheight = NULL, nbin = 64, legend.title = "", x.rotate = 60,
-x.text.size = 6, x.text.hjust = 0.5, y.text.size = 6,
-legend.text.size = 4, legend.title.size = 6, shape = 19,
-size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
+xGTheatmap(gp, data, reorder = c("none", "col"), colormap = "spectral",
+ncolors = 64, zlim = NULL, barwidth = 0.3, barheight = 4,
+nbin = 64, legend.title = "", x.rotate = 60, x.text.size = 6,
+x.text.hjust = 0.5, y.text.size = 6, legend.text.size = 5,
+legend.title.size = 6, shape = 19, size = 2,
+plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
 font.family = "sans", na.color = "grey80", data.label = NULL,
 label.size = 1, label.color = "black", ...)
 </pre>
@@ -30,17 +30,18 @@ label.size = 1, label.color = "black", ...)
 <h3>Arguments</h3>
 
 <table summary="R argblock">
+<tr valign="top"><td><code>gp</code></td>
+<td>
+<p>a ggplot object resulting from ggtree</p>
+</td></tr>
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data frame/matrix for coloring. The coloring can be
-continuous (numeric matrix) or discrete (factor matrix)</p>
+<p>a data frame/matrix for coloring</p>
 </td></tr>
 <tr valign="top"><td><code>reorder</code></td>
 <td>
 <p>how to reorder rows and columns. It can be &quot;none&quot; for no
-reordering, &quot;row&quot; for reordering rows according to number of sharings
-(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
-rows and columns</p>
+reordering, &quot;col&quot; for reordering columns</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -148,15 +149,14 @@ is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional graphic parameters for
-supraHex::visTreeBootstrap</p>
+<p>additional graphic parameters for xHeatmap</p>
 </td></tr>
 </table>
 
 
 <h3>Value</h3>
 
-<p>a ggplot2 object
+<p>a ggplot object
 </p>
 
 
@@ -176,17 +176,16 @@ supraHex::visTreeBootstrap</p>
 
 <pre>
 ## Not run: 
-# Load the XGR package and specify the location of built-in data
+# Load the XGR package
 library(XGR)
-data(mtcars)
-gp &lt;- xHeatmap(mtcars, reorder="none", colormap='jet.top', x.rotate=45,
-shape=19, size=3, x.text.size=8,y.text.size=8, legend.title='mtcars')
-gp + theme(legend.position="bottom",legend.direction="horizontal") +
-guides(color=guide_colorbar(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
-gp + theme(legend.position="bottom",legend.direction="horizontal") +
-guides(color=guide_legend(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
-gp + geom_text(aes(x, y,
-label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
+set.seed(825)
+tree &lt;- ape::rtree(50)
+gp &lt;- xGGtree(tree) + ggtree::geom_tiplab(size=2)
+# heatmap data
+x &lt;- matrix(rnorm(length(tree$tip.label)*5), ncol=5)
+colnames(x) &lt;- paste0('C',1:5)
+rownames(x) &lt;- tree$tip.label
+gp_heatmap &lt;- xGTheatmap(gp, x)
 
 ## End(Not run)
 </pre>

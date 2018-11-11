@@ -40,7 +40,8 @@ xWCNheatmap <- function(cModule, displayBy=c("tom","adj"), power_pseudo=NULL, wh
     displayBy <- match.arg(displayBy)
     
     if(class(cModule)!= "cModule" & is.na(cModule$io$beta)){
-        stop("The function must apply to a 'cModule' object.\n")
+    	warnings("The function must apply to a 'cModule' object.\n")
+        return(NULL)
     }
     
 	data <- cModule$data

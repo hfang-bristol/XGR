@@ -3,24 +3,23 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGGtree"><tr><td>xGGtree</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGT"><tr><td>xGT</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using a forest plot</h2>
 
 <h3>Description</h3>
 
-<p><code>xGGtree</code> is supposed to visualise enrichment results using a
-forest plot. A point is colored by the significance level, and a
-horizontal line for the 95
-the wider the CI, the less reliable). It returns an object of class
-&quot;ggplot&quot;.
+<p><code>xGT</code> is supposed to visualise enrichment results using a forest
+plot. A point is colored by the significance level, and a horizontal
+line for the 95
+the CI, the less reliable). It returns an object of class &quot;ggplot&quot;.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xGGtree(phylo, membership, layout = c("rectangular", "fan"),
+xGT(phylo, membership = NULL, layout = c("rectangular", "fan"),
 colormap = "ggplot2", extendto = NULL, offset = NULL,
 open.angle = 0)
 </pre>
@@ -37,7 +36,7 @@ open.angle = 0)
 <td>
 <p>a named input vector containing the membership for
 tips. For this named vector, the element names are clusters, the
-element values for tip labels</p>
+element values for tip labels. It can be NULL</p>
 </td></tr>
 <tr valign="top"><td><code>layout</code></td>
 <td>
@@ -76,7 +75,7 @@ for the rectangular visual</p>
 <h3>Value</h3>
 
 <p>an object of class &quot;ggplot&quot; appended with a phylo object &quot;tree&quot;
-(appended with a &quot;cluster&quot; list)
+(appended with a list &quot;cluster&quot;)
 </p>
 
 
@@ -88,7 +87,7 @@ for the rectangular visual</p>
 
 <h3>See Also</h3>
 
-<p><code>xGGtree</code>
+<p><code>xGT</code>
 </p>
 
 
@@ -96,9 +95,12 @@ for the rectangular visual</p>
 
 <pre>
 ## Not run: 
-# Load the library
-library(XGR)
-gp &lt;- xGGtree(tree, membership)
+set.seed(825)
+tree &lt;- ape::rtree(50)
+gp &lt;- xGT(tree)
+gp + ggtree::geom_tiplab(size=2,align=T)
+gp$data
+gp$tree
 
 ## End(Not run)
 </pre>

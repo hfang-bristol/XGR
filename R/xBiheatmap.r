@@ -13,6 +13,7 @@
 #' @param legend.title the title of the colorbar. By default, it is ''
 #' @param x.rotate the angle to rotate the x tick labelings. By default, it is 60
 #' @param x.text.size the text size of the x tick labelings. By default, it is 6
+#' @param x.text.hjust the hjust of the x tick labelings. By default, it is 0.5
 #' @param y.text.size the text size of the y tick labelings. By default, it is 6
 #' @param legend.text.size the text size of the legend tick labelings. By default, it is 5
 #' @param legend.title.size the text size of the legend titles. By default, it is 6
@@ -42,7 +43,7 @@
 #' gp <- xBiheatmap(ig)
 #' }
 
-xBiheatmap <- function(g, which.communites=NULL, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=3, y.text.size=3, legend.text.size=4, legend.title.size=6, shape=19, size=0.5, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', intercept.color="grey95", intercept.size=0.3)
+xBiheatmap <- function(g, which.communites=NULL, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=60, x.text.size=3, x.text.hjust=0.5, y.text.size=3, legend.text.size=4, legend.title.size=6, shape=19, size=0.5, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', intercept.color="grey95", intercept.size=0.3)
 {
     
     if (class(g) != "igraph"){
@@ -103,7 +104,7 @@ xBiheatmap <- function(g, which.communites=NULL, colormap="spectral", ncolors=64
 		data <- adj
 		data[data==0] <- NA
 		
-		gp <- xHeatmap(data, colormap=colormap, ncolors=ncolors, zlim=zlim, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=legend.title, x.rotate=x.rotate, x.text.size=x.text.size, y.text.size=y.text.size, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=shape, size=size, plot.margin=plot.margin, font.family=font.family, na.color=na.color, data.label=NULL)
+		gp <- xHeatmap(data, colormap=colormap, ncolors=ncolors, zlim=zlim, barwidth=barwidth, barheight=barheight, nbin=nbin, legend.title=legend.title, x.rotate=x.rotate, x.text.size=x.text.size, x.text.hjust=x.text.hjust, y.text.size=y.text.size, legend.text.size=legend.text.size, legend.title.size=legend.title.size, shape=shape, size=size, plot.margin=plot.margin, font.family=font.family, na.color=na.color, data.label=NULL)
 		gp <- gp + geom_vline(xintercept=colsep+0.5,color=intercept.color,size=intercept.size) + geom_hline(yintercept=nrow(data)-rowsep+0.5,color=intercept.color,size=intercept.size) + theme(axis.ticks=element_line(size=0.25),axis.ticks.length=unit(0.05,"cm"))
 		
     }

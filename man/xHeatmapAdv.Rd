@@ -7,14 +7,15 @@
 xHeatmapAdv(data.main, data.meta, reorder = c("none", "row", "col",
 "both"), colormap = "spectral", ncolors = 64, zlim = NULL,
 barwidth = 0.3, barheight = 4, nbin = 64, legend.title = "Main",
-x.rotate = 60, x.text.size = 6, y.text.size = 6,
-legend.text.size = 5, legend.title.size = 6, shape = 19,
-size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
-font.family = "sans", na.color = "grey80", data.label = NULL,
-label.size = 1, label.color = "black", meta.colormap = "spectral",
-meta.x.rotate = 75, meta.shape.continuous = 15,
-meta.shape.discrete = 95, meta.size = 2, meta.location = c("right",
-"left"), meta.width = 0.5, gap.width = 0.5, legend.width = NULL,
+x.rotate = 60, x.text.size = 6, x.text.hjust = 0.5,
+y.text.size = 6, legend.text.size = 5, legend.title.size = 6,
+shape = 19, size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5),
+"pt"), font.family = "sans", na.color = "grey80",
+data.label = NULL, label.size = 1, label.color = "black",
+meta.colormap = "spectral", meta.x.rotate = 75,
+meta.shape.continuous = 15, meta.shape.discrete = 95,
+meta.size = 2, meta.location = c("right", "left"),
+meta.width = 0.5, gap.width = 0.5, legend.width = NULL,
 legend.direction = c("vertical", "horizontal"), legend.nrow = NULL,
 verbose = TRUE, ...)
 }
@@ -62,6 +63,9 @@ it is 60}
 
 \item{x.text.size}{the text size of the x tick labelings. By default,
 it is 6}
+
+\item{x.text.hjust}{the hjust of the x tick labelings. By default, it
+is 0.5}
 
 \item{y.text.size}{the text size of the y tick labelings. By default,
 it is 6}

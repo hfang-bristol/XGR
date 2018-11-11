@@ -7,9 +7,10 @@
 xBiheatmap(g, which.communites = NULL, colormap = "spectral",
 ncolors = 64, zlim = NULL, barwidth = 0.3, barheight = NULL,
 nbin = 64, legend.title = "", x.rotate = 60, x.text.size = 3,
-y.text.size = 3, legend.text.size = 4, legend.title.size = 6,
-shape = 19, size = 0.5, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5),
-"pt"), font.family = "sans", na.color = "transparent",
+x.text.hjust = 0.5, y.text.size = 3, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 0.5,
+plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
+font.family = "sans", na.color = "transparent",
 intercept.color = "grey95", intercept.size = 0.3)
 }
 \arguments{
@@ -51,6 +52,9 @@ it is 60}
 
 \item{x.text.size}{the text size of the x tick labelings. By default,
 it is 6}
+
+\item{x.text.hjust}{the hjust of the x tick labelings. By default, it
+is 0.5}
 
 \item{y.text.size}{the text size of the y tick labelings. By default,
 it is 6}
