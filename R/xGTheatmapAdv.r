@@ -1,6 +1,6 @@
-#' Function to draw heatmap on tree tips
+#' Function to plot tree and heatmap given associated data on tree tips
 #'
-#' \code{xGTheatmapAdv} is supposed to draw heatmap on tree tips.
+#' \code{xGTheatmapAdv} is supposed to plot tree and heatmap given associated data on tree tips. It returns an object of class "ggplot".
 #'
 #' @param gp a ggplot object resulting from ggtree
 #' @param data a data frame/matrix for coloring
@@ -24,15 +24,15 @@
 #' a ggplot object
 #' @note none
 #' @export
-#' @seealso \code{\link{xHeatmap}}
-#' @include xHeatmapAdv.r
+#' @seealso \code{\link{xGT}}
+#' @include xGTheatmapAdv.r
 #' @examples
 #' \dontrun{
 #' # Load the XGR package
 #' library(XGR)
 #' set.seed(825)
 #' tree <- ape::rtree(50)
-#' gp <- xGGtree(tree)
+#' gp <- xGT(tree)
 #' # heatmap data
 #' x <- matrix(rnorm(length(tree$tip.label)*5), ncol=5)
 #' colnames(x) <- paste0('C',1:5)

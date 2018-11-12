@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGTplot.r
 \name{xGTplot}
 \alias{xGTplot}
-\title{Function to draw heatmap on tree tips}
+\title{Function to plot tree with associated data on tips}
 \usage{
 xGTplot(gp, data, type = c("bar", "ridge"), combined = T,
 colormap = "spectral", ncolors = 64, y.text.size = 2)
@@ -37,7 +37,8 @@ it is 6}
 a ggplot object
 }
 \description{
-\code{xGTplot} is supposed to draw heatmap on tree tips.
+\code{xGTplot} is supposed to plot tree with associated data on tips.
+It returns an object of class "ggplot".
 }
 \note{
 none
@@ -48,7 +49,7 @@ none
 library(XGR)
 set.seed(825)
 tree <- ape::rtree(50)
-gp <- xGGtree(tree)
+gp <- xGT(tree)
 
 # barplot plot
 data <- data.frame(id=tree$tip.label,
@@ -72,5 +73,5 @@ grid::grid.draw(g)
 }
 }
 \seealso{
-\code{\link{xGTplot}}
+\code{\link{xGT}}
 }

@@ -1,6 +1,6 @@
-#' Function to visualise enrichment results using a forest plot
+#' Function to plot a tree and its clades
 #'
-#' \code{xGT} is supposed to visualise enrichment results using a forest plot. A point is colored by the significance level, and a horizontal line for the 95% confidence interval (CI) of odds ratio (OR; the wider the CI, the less reliable). It returns an object of class "ggplot".
+#' \code{xGT} is supposed to plot a tree and its clades. It returns an object of class "ggplot".
 #'
 #' @param phylo an object of class "phylo"
 #' @param membership a named input vector containing the membership for tips. For this named vector, the element names are clusters, the element values for tip labels. It can be NULL
@@ -22,6 +22,10 @@
 #' gp + ggtree::geom_tiplab(size=2,align=T)
 #' gp$data
 #' gp$tree
+#' 
+#' # fan layout
+#' gp <- xGT(tree, layout='fan')
+#' gp
 #' }
 
 xGT <- function(phylo, membership=NULL, layout=c("rectangular","fan"), colormap="ggplot2", extendto=NULL, offset=NULL, open.angle=0)

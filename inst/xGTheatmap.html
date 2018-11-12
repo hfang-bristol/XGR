@@ -1,15 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap on tree tips</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to plot heatmap given associated data on tree tips</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGTheatmap"><tr><td>xGTheatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to draw heatmap on tree tips</h2>
+<h2>Function to plot heatmap given associated data on tree tips</h2>
 
 <h3>Description</h3>
 
-<p><code>xGTheatmap</code> is supposed to draw heatmap on tree tips.
+<p><code>xGTheatmap</code> is supposed to plot heatmap given associated data on
+tree tips. It returns an object of class &quot;ggplot&quot;.
 </p>
 
 
@@ -168,7 +169,7 @@ is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
 
 <h3>See Also</h3>
 
-<p><code>xHeatmap</code>
+<p><code>xGT</code>
 </p>
 
 
@@ -180,7 +181,7 @@ is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
 library(XGR)
 set.seed(825)
 tree &lt;- ape::rtree(50)
-gp &lt;- xGGtree(tree) + ggtree::geom_tiplab(size=2)
+gp &lt;- xGT(tree) + ggtree::geom_tiplab(size=2)
 # heatmap data
 x &lt;- matrix(rnorm(length(tree$tip.label)*5), ncol=5)
 colnames(x) &lt;- paste0('C',1:5)

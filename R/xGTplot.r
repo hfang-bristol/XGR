@@ -1,6 +1,6 @@
-#' Function to draw heatmap on tree tips
+#' Function to plot tree with associated data on tips
 #'
-#' \code{xGTplot} is supposed to draw heatmap on tree tips.
+#' \code{xGTplot} is supposed to plot tree with associated data on tips. It returns an object of class "ggplot".
 #'
 #' @param gp a ggplot object resulting from ggtree
 #' @param data a data frame/matrix for coloring
@@ -13,7 +13,7 @@
 #' a ggplot object
 #' @note none
 #' @export
-#' @seealso \code{\link{xGTplot}}
+#' @seealso \code{\link{xGT}}
 #' @include xGTplot.r
 #' @examples
 #' \dontrun{
@@ -21,7 +21,7 @@
 #' library(XGR)
 #' set.seed(825)
 #' tree <- ape::rtree(50)
-#' gp <- xGGtree(tree)
+#' gp <- xGT(tree)
 #' 
 #' # barplot plot
 #' data <- data.frame(id=tree$tip.label, val=rnorm(length(tree$tip.label)))

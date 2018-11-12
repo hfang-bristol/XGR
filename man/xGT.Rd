@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGT.r
 \name{xGT}
 \alias{xGT}
-\title{Function to visualise enrichment results using a forest plot}
+\title{Function to plot a tree and its clades}
 \usage{
 xGT(phylo, membership = NULL, layout = c("rectangular", "fan"),
 colormap = "ggplot2", extendto = NULL, offset = NULL,
@@ -41,10 +41,8 @@ an object of class "ggplot" appended with a phylo object "tree"
 (appended with a list "cluster")
 }
 \description{
-\code{xGT} is supposed to visualise enrichment results using a forest
-plot. A point is colored by the significance level, and a horizontal
-line for the 95% confidence interval (CI) of odds ratio (OR; the wider
-the CI, the less reliable). It returns an object of class "ggplot".
+\code{xGT} is supposed to plot a tree and its clades. It returns an
+object of class "ggplot".
 }
 \note{
 none
@@ -57,6 +55,10 @@ gp <- xGT(tree)
 gp + ggtree::geom_tiplab(size=2,align=T)
 gp$data
 gp$tree
+
+# fan layout
+gp <- xGT(tree, layout='fan')
+gp
 }
 }
 \seealso{

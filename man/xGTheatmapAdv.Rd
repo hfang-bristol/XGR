@@ -2,7 +2,7 @@
 % Please edit documentation in R/xGTheatmapAdv.r
 \name{xGTheatmapAdv}
 \alias{xGTheatmapAdv}
-\title{Function to draw heatmap on tree tips}
+\title{Function to plot tree and heatmap given associated data on tree tips}
 \usage{
 xGTheatmapAdv(gp, data, ratio.width = 1, gap.width = NULL,
 colormap = "spectral", ncolors = 64, zlim = NULL, barwidth = 0.5,
@@ -72,7 +72,8 @@ is 0.5}
 a ggplot object
 }
 \description{
-\code{xGTheatmapAdv} is supposed to draw heatmap on tree tips.
+\code{xGTheatmapAdv} is supposed to plot tree and heatmap given
+associated data on tree tips. It returns an object of class "ggplot".
 }
 \note{
 none
@@ -83,7 +84,7 @@ none
 library(XGR)
 set.seed(825)
 tree <- ape::rtree(50)
-gp <- xGGtree(tree)
+gp <- xGT(tree)
 # heatmap data
 x <- matrix(rnorm(length(tree$tip.label)*5), ncol=5)
 colnames(x) <- paste0('C',1:5)
@@ -94,5 +95,5 @@ gp_heatmap + coord_polar(theta="y")
 }
 }
 \seealso{
-\code{\link{xHeatmap}}
+\code{\link{xGT}}
 }
