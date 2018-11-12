@@ -5,7 +5,7 @@
 #' @param gp a ggplot object resulting from ggtree
 #' @param data a data frame/matrix for coloring
 #' @param type the plot type. It can be "bar" and "ridge"
-#' @param combined logical to indicate whether the tree is combined. By default, it sets to true for display
+#' @param combined logical to indicate whether the tree is combined. By default, it sets to true
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param y.text.size the text size of the y tick labelings. By default, it is 6

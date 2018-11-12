@@ -18,8 +18,8 @@ object of class &quot;ggplot&quot;.
 
 <pre>
 xGT(phylo, membership = NULL, layout = c("rectangular", "fan"),
-colormap = "ggplot2", extendto = NULL, offset = NULL,
-open.angle = 0)
+tip.label = T, tip.size = 2, tip.align = T, colormap = "ggplot2",
+extendto = NULL, offset = NULL, open.angle = 0)
 </pre>
 
 
@@ -39,6 +39,19 @@ element values for tip labels. It can be NULL</p>
 <tr valign="top"><td><code>layout</code></td>
 <td>
 <p>the visual layout. It can be &quot;rectangular&quot; or &quot;fan&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>tip.label</code></td>
+<td>
+<p>logical to indicate whether the tree tip is labelled</p>
+</td></tr>
+<tr valign="top"><td><code>tip.size</code></td>
+<td>
+<p>the size of the tree tip label</p>
+</td></tr>
+<tr valign="top"><td><code>tip.align</code></td>
+<td>
+<p>logical to indicate whether the tree tip label is
+aligned</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>

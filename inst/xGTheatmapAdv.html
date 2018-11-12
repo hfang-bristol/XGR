@@ -159,6 +159,11 @@ gp_heatmap &lt;- xGTheatmapAdv(gp, x, ratio.width=0.5)
 gp_heatmap
 gp_heatmap + coord_polar(theta="y")
 
+# advanced usage
+gp &lt;- xGT(tree, layout="fan", open.angle=180)
+gp_heatmap &lt;- xGTheatmapAdv(gp, x, y.text.size=0)
+gp_heatmap
+
 ## End(Not run)
 </pre>
 

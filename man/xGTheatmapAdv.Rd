@@ -92,6 +92,11 @@ rownames(x) <- tree$tip.label
 gp_heatmap <- xGTheatmapAdv(gp, x, ratio.width=0.5)
 gp_heatmap
 gp_heatmap + coord_polar(theta="y")
+
+# advanced usage
+gp <- xGT(tree, layout="fan", open.angle=180)
+gp_heatmap <- xGTheatmapAdv(gp, x, y.text.size=0)
+gp_heatmap
 }
 }
 \seealso{

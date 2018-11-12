@@ -15,7 +15,7 @@ colormap = "spectral", ncolors = 64, y.text.size = 2)
 \item{type}{the plot type. It can be "bar" and "ridge"}
 
 \item{combined}{logical to indicate whether the tree is combined. By
-default, it sets to true for display}
+default, it sets to true}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red

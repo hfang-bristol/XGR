@@ -40,6 +40,11 @@
 #' gp_heatmap <- xGTheatmapAdv(gp, x, ratio.width=0.5)
 #' gp_heatmap
 #' gp_heatmap + coord_polar(theta="y")
+#' 
+#' # advanced usage
+#' gp <- xGT(tree, layout="fan", open.angle=180)
+#' gp_heatmap <- xGTheatmapAdv(gp, x, y.text.size=0)
+#' gp_heatmap
 #' }
 
 xGTheatmapAdv <- function(gp, data, ratio.width=1, gap.width=NULL, colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.5, barheight=4, nbin=64, legend.title="", legend.text.size=5, legend.title.size=6, y.text.size=2, x.rotate=0, x.text.size=2, x.text.hjust=0.5, ...)

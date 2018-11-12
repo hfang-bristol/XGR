@@ -5,8 +5,8 @@
 \title{Function to plot a tree and its clades}
 \usage{
 xGT(phylo, membership = NULL, layout = c("rectangular", "fan"),
-colormap = "ggplot2", extendto = NULL, offset = NULL,
-open.angle = 0)
+tip.label = T, tip.size = 2, tip.align = T, colormap = "ggplot2",
+extendto = NULL, offset = NULL, open.angle = 0)
 }
 \arguments{
 \item{phylo}{an object of class "phylo"}
@@ -16,6 +16,13 @@ tips. For this named vector, the element names are clusters, the
 element values for tip labels. It can be NULL}
 
 \item{layout}{the visual layout. It can be "rectangular" or "fan"}
+
+\item{tip.label}{logical to indicate whether the tree tip is labelled}
+
+\item{tip.size}{the size of the tree tip label}
+
+\item{tip.align}{logical to indicate whether the tree tip label is
+aligned}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
