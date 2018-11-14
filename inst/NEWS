@@ -8,11 +8,13 @@ NEW FEATURES
     o Add a new function 'xEnrichRadial' for radial-like plot of enrichment results
 
     o Add functions ('xWCN' and 'xWCNheatmap') for weighted correlation network analysis
-
-    o Add a new function 'xLayout' for adding graph node coordinates into a graph
     
     o Add functions ('xGT', 'xGTplot', 'xGTheatmap' and 'xGTheatmapAdv') for tree visualisation
- 
+    
+    o Add a new function 'xLayout' for adding graph node coordinates into a graph
+
+    o Add a new function 'xObjSize' for estimating the memory allocation
+     
 
 CHANGES IN VERSION 1.1.4
 -----------------------

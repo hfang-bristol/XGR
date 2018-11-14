@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to estimate memory allocated for an R variable or a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xObjSize"><tr><td>xObjSize</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to estimate memory allocated for an R variable or a file</h2>
+
+<h3>Description</h3>
+
+<p><code>xObjSize</code> is supposed to estimate memory allocated for an R
+variable or a file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xObjSize(obj, type = c("auto", "variable", "file"), units = "auto",
+verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>character specifying an R variable or a local file</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>the object type specifying an R object or a local file. It
+can be 'variable', 'file' or 'auto' (by default; automatically
+determined)</p>
+</td></tr>
+<tr valign="top"><td><code>units</code></td>
+<td>
+<p>the units to be used in formatting the size. It can be
+'auto', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to TRUE for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If action is logical, a list containing arguments and their default
+values. If action is NULL, a string specifying the assignment to be
+evalated.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is potentially useful when debugging as it frees
+developers from specifying default values for all arguments except
+those arguments of interest
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xObjSize</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+xObjSize(ls()[1])
+#res &lt;- lapply(ls(), xObjSize)
+#res &lt;- lapply(list.files(), xObjSize)
+</pre>
+
+
+</body></html>
