@@ -383,3 +383,101 @@ print.cModule <- function(x, ...) {
 	print(x$io$num_modules)
 
 }
+
+######################################################################
+# pPerf
+######################################################################
+#' @title Definition for S3 class \code{pPerf}
+#' @description \code{pPerf} mush have following components: data, auroc, fmax, amax, direction, gp, Pred_obj.
+#' @param data a data frame
+#' @param auroc a scalar
+#' @param fmax a scalar
+#' @param amax a scalar
+#' @param direction a character
+#' @param gp a 'ggplot' object or NULL
+#' @param Pred_obj a ROCR prediction-class object
+#' @return an object of S3 class \code{pPerf}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' pPerf(data, auroc, fmax, amax, direction, gp, Pred_obj)
+#' }
+pPerf <- function(data, auroc, fmax, amax, direction, gp, Pred_obj){
+	## integrity checks
+	if(class(data)!='data.frame' | class(Pred_obj)!='prediction'){
+		stop("The S3 class 'pPerf' object failed to pass integrity checks!\n")
+	}
+	value <- list(data=data, auroc=auroc, fmax=fmax, amax=amax, direction=direction, gp=gp, Pred_obj=Pred_obj)
+	class(value) <- "pPerf"
+	return(value)
+}
+#' @param x an object of class \code{pPerf}
+#' @param ... other parameters
+#' @rdname pPerf
+#' @export
+print.pPerf <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components including:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $data: a data frame of %d rows X %d columns", dim(x$data)[1],dim(x$data)[2]), "\n", sep="")
+	cat(sprintf("  $auroc: %.3f", x$auroc), "\n", sep="")
+	cat(sprintf("  $fmax: %.3f", x$fmax), "\n", sep="")
+	cat(sprintf("  $amax: %.3f", x$amax), "\n", sep="")
+	cat(sprintf("  $direction: %s", x$direction), "\n", sep="")
+	cat(sprintf("  $Pred_obj: an object of S3 class '%s'", class(x$Pred_obj)), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+}
+
+######################################################################
+# sClass
+######################################################################
+#' @title Definition for S3 class \code{sClass}
+#' @description \code{sClass} mush have following components: priority, predictor, performance.
+#' @param priority a data frame
+#' @param predictor a data frame
+#' @param performance a data frame
+#' @return an object of S3 class \code{sClass}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' sClass(priority, predictor, performance)
+#' }
+sClass <- function(priority, predictor, performance){
+	## integrity checks
+	if(class(priority)!='data.frame'){
+		stop("The S3 class 'sClass' object failed to pass integrity checks!\n")
+	}
+	value <- list(priority=priority, predictor=predictor, performance=performance)
+	class(value) <- "sClass"
+	return(value)
+}
+#' @param x an object of class \code{sClass}
+#' @param ... other parameters
+#' @rdname sClass
+#' @export
+print.sClass <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components including:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $priority: a data frame of %d rows X %d columns", dim(x$priority)[1],dim(x$priority)[2]), "\n", sep="")
+	cat(sprintf("  $predictor: a data frame of %d rows X %d columns", dim(x$predictor)[1],dim(x$predictor)[2]), "\n", sep="")
+	cat(sprintf("  $performance: a data frame of %d rows X %d columns", dim(x$performance)[1],dim(x$performance)[2]), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$priority:\n")
+	print(x$priority[1:5,], row.names=FALSE)
+	cat("......\n")
+	cat("$predictor:\n")
+	print(x$predictor[1:2,], row.names=FALSE)
+	cat("......\n")
+	cat("$performance:\n")
+	print(x$performance[1:5,], row.names=TRUE)
+	cat("......\n")
+}

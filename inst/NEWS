@@ -14,7 +14,9 @@ NEW FEATURES
     o Add a new function 'xLayout' for adding graph node coordinates into a graph
 
     o Add a new function 'xObjSize' for estimating the memory allocation
-     
+
+    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF') for supervised classification
+
 
 CHANGES IN VERSION 1.1.4
 -----------------------

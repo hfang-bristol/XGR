@@ -20,7 +20,7 @@
 #' @importFrom graphics plot lines legend contour text par hist curve
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
-#' @importFrom stats sd median prcomp lm quantile as.dist hclust cor as.dendrogram order.dendrogram
+#' @importFrom stats sd median mad ecdf na.omit predict prcomp lm quantile as.dist hclust cor as.dendrogram order.dendrogram 
 #' @importFrom BiocGenerics unlist start end
 #' @importFrom plot3D image2D persp3D image3D contour3D
 #' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all slice
