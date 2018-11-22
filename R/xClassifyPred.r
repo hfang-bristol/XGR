@@ -34,16 +34,16 @@ xClassifyPred <- function(sClass, displayBy=c("ROC","Fmax","importance","Amax"),
     
     if(displayBy=='importance'){
     	df <- data.frame(Predictor=rownames(sClass$importance), Val=sClass$importance[,1], stringsAsFactors=FALSE)
-    	xlab <- "Decrease in accuracy disabling a predictor\n(a measure of predictor importance)"
+    	xlab <- "Predictor importance"
     }else if(displayBy=='ROC'){
     	df <- data.frame(Predictor=rownames(sClass$performance)[-1], Val=sClass$performance[-1,'auroc'], direction=sClass$performance[-1,'direction'], stringsAsFactors=FALSE)
-    	xlab <- "AUC\n(a measure of ROC)"
+    	xlab <- "AUC (a measure of ROC)"
     }else if(displayBy=='Fmax'){
     	df <- data.frame(Predictor=rownames(sClass$performance)[-1], Val=sClass$performance[-1,'fmax'], stringsAsFactors=FALSE)
-    	xlab <- "F-max\n(a measure of Precision-Recall curve)"
+    	xlab <- "F-max (a measure of PR curve)"
     }else if(displayBy=='Amax'){
     	df <- data.frame(Predictor=rownames(sClass$performance)[-1], Val=sClass$performance[-1,'amax'], stringsAsFactors=FALSE)
-    	xlab <- "Maximum accuracy\n(along with ROC)"
+    	xlab <- "Maximum accuracy (along with ROC)"
     }
     
     Predictor <- Val <- direction <- NULL

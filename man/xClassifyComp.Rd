@@ -5,7 +5,7 @@
 \title{Function to compare prediction performance results}
 \usage{
 xClassifyComp(list_pPerf, displayBy = c("ROC", "PR"), type = c("bar",
-"curve"), sort = TRUE, detail = TRUE, facet = FALSE)
+"curve"), sort = FALSE, detail = TRUE, facet = FALSE)
 }
 \arguments{
 \item{list_pPerf}{a list of "pPerf" objects or a "pPerf" object}
@@ -17,13 +17,14 @@ be "ROC" for ROC curve (by default), "PR" for PR curve}
 default) or "curve" for curve plot}
 
 \item{sort}{logical to indicate whether to sort methods according to
-performance. By default, it sets TRUE}
+performance. By default, it sets FALSE}
 
 \item{detail}{logical to indicate whether to label performance and
-score direction (together with methods). By default, it sets TRUE}
+score direction (together with methods). By default, it sets TRUE. Only
+works for the curve}
 
 \item{facet}{logical to indicate whether to facet/wrap a 1d of panels
-into 2d. By default, it sets FALSE}
+into 2d. By default, it sets FALSE. Only works for the curve}
 }
 \value{
 an object of class "ggplot" or NULL (if all input pPerf objects are

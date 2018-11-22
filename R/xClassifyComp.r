@@ -5,9 +5,9 @@
 #' @param list_pPerf a list of "pPerf" objects or a "pPerf" object 
 #' @param displayBy which performance will be used for comparison. It can be "ROC" for ROC curve (by default), "PR" for PR curve
 #' @param type the type of plot to draw. It can be "bar" for bar plot (by default) or "curve" for curve plot
-#' @param sort logical to indicate whether to sort methods according to performance. By default, it sets TRUE
-#' @param detail logical to indicate whether to label performance and score direction (together with methods). By default, it sets TRUE
-#' @param facet logical to indicate whether to facet/wrap a 1d of panels into 2d. By default, it sets FALSE
+#' @param sort logical to indicate whether to sort methods according to performance. By default, it sets FALSE
+#' @param detail logical to indicate whether to label performance and score direction (together with methods). By default, it sets TRUE. Only works for the curve
+#' @param facet logical to indicate whether to facet/wrap a 1d of panels into 2d. By default, it sets FALSE. Only works for the curve
 #' @return an object of class "ggplot" or NULL (if all input pPerf objects are NULL)
 #' @note none
 #' @export
@@ -26,7 +26,7 @@
 #' gp + theme(legend.position=c(0.75,0.25))
 #' }
 
-xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","curve"), sort=TRUE, detail=TRUE, facet=FALSE)
+xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","curve"), sort=FALSE, detail=TRUE, facet=FALSE)
 {
 
     displayBy <- match.arg(displayBy)
@@ -163,10 +163,11 @@ xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","cur
 			## sort by: auroc
 			if(sort){
 				df <- df[with(df, order(-auroc)), ]
-				## define levels
-				df$methods <- factor(df$methods, levels=unique(df$methods))
 			}
-		
+			
+			## define levels
+			df$methods <- factor(df$methods, levels=rev(unique(df$methods)))
+				
 			## ggplot
 			p <- ggplot(df, aes(x=methods,y=auroc))
 			p <- p + geom_col(aes(fill=factor(methods)))
@@ -182,9 +183,10 @@ xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","cur
 			## sort by: fmax
 			if(sort){
 				df <- df[with(df, order(-fmax)), ]
-				## define levels
-				df$methods <- factor(df$methods, levels=unique(df$methods))
 			}
+		
+			## define levels
+			df$methods <- factor(df$methods, levels=rev(unique(df$methods)))
 		
 			## ggplot
 			p <- ggplot(df, aes(x=methods,y=fmax))
@@ -200,8 +202,10 @@ xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","cur
 	p <- p + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	
 	## put arrows on both axes
-	p <- p + theme(axis.line=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
+	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 
+	## y-axis position
+	p <- p + scale_y_continuous(position="right")
 	
 	invisible(p)
 }

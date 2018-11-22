@@ -5,9 +5,9 @@
 \title{Function to combine predictor matrix in a supervised manner via machine learning algorithm random forest.}
 \usage{
 xClassifyRF(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-seed = 825, mtry = NULL, ntree = 1000,
-fold.aggregateBy = c("logistic", "Ztransform", "fishers",
-"orderStatistic"), verbose = TRUE, ...)
+seed = 825, mtry = NULL, ntree = 1000, cv.aggregateBy = c("none",
+"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE,
+...)
 }
 \arguments{
 \item{df_predictor}{a data frame with columns as predictors, with their
@@ -37,7 +37,7 @@ number of predictors. The minimum value is 3}
 \item{ntree}{an integer specifying the number of trees to grow. By
 default, it sets to 2000}
 
-\item{fold.aggregateBy}{the aggregate method used to aggregate results
+\item{cv.aggregateBy}{the aggregate method used to aggregate results
 from k-fold cross validataion. It can be either "orderStatistic" for
 the method based on the order statistics of p-values, or "fishers" for
 Fisher's method, "Ztransform" for Z-transform method, "logistic" for

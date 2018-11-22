@@ -467,8 +467,8 @@ sClass <- function(prediction, predictor, performance){
 #' @export
 print.sClass <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', resulted from %d cross-validation, containing %d components:", class(x), length(x$cv_model), length(names(x))), "\n", sep="")
-	cat(sprintf("  $prediction: a data frame of %d rows X %d columns", dim(x$prediction)[1],dim(x$prediction)[2]), "\n", sep="")
-	cat(sprintf("  $predictor: a data frame of %d rows X %d columns", dim(x$predictor)[1],dim(x$predictor)[2]), "\n", sep="")
+	cat(sprintf("  $prediction: a data frame of %d rows X %d columns", dim(x$prediction)[1], dim(x$prediction)[2], dim(x$prediction)[2]-2), "\n", sep="")
+	cat(sprintf("  $predictor: a data frame of %d rows X %d columns (%d predictors)", dim(x$predictor)[1], dim(x$predictor)[2], dim(x$predictor)[2]-2), "\n", sep="")
 	cat(sprintf("  $performance: a data frame of %d rows X %d columns", dim(x$performance)[1],dim(x$performance)[2]), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$prediction:\n")
@@ -480,5 +480,7 @@ print.sClass <- function(x, ...) {
 	cat("$performance:\n")
 	print(x$performance[1:5,], row.names=TRUE)
 	cat("......\n")
+	cat("$call:\n")
+	print(x$call)	
 }
 

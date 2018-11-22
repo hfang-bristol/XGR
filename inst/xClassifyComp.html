@@ -18,7 +18,7 @@ results. It returns an object of class &quot;ggplot&quot;.
 
 <pre>
 xClassifyComp(list_pPerf, displayBy = c("ROC", "PR"), type = c("bar",
-"curve"), sort = TRUE, detail = TRUE, facet = FALSE)
+"curve"), sort = FALSE, detail = TRUE, facet = FALSE)
 </pre>
 
 
@@ -42,17 +42,18 @@ default) or &quot;curve&quot; for curve plot</p>
 <tr valign="top"><td><code>sort</code></td>
 <td>
 <p>logical to indicate whether to sort methods according to
-performance. By default, it sets TRUE</p>
+performance. By default, it sets FALSE</p>
 </td></tr>
 <tr valign="top"><td><code>detail</code></td>
 <td>
 <p>logical to indicate whether to label performance and
-score direction (together with methods). By default, it sets TRUE</p>
+score direction (together with methods). By default, it sets TRUE. Only
+works for the curve</p>
 </td></tr>
 <tr valign="top"><td><code>facet</code></td>
 <td>
 <p>logical to indicate whether to facet/wrap a 1d of panels
-into 2d. By default, it sets FALSE</p>
+into 2d. By default, it sets FALSE. Only works for the curve</p>
 </td></tr>
 </table>
 

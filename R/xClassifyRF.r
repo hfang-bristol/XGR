@@ -10,7 +10,7 @@
 #' @param seed an integer specifying the seed
 #' @param mtry an integer specifying the number of predictors randomly sampled as candidates at each split. If NULL, it will be tuned by `randomForest::tuneRF`, with starting value as sqrt(p) where p is the number of predictors. The minimum value is 3
 #' @param ntree an integer specifying the number of trees to grow. By default, it sets to 2000
-#' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
+#' @param cv.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
 #' @param ... additional parameters. Please refer to 'randomForest::randomForest' for the complete list.
 #' @return 
@@ -39,7 +39,7 @@
 #' sClass <- xClassifyRF(df_predictor, GSP, GSN)
 #' }
 
-xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
+xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, cv.aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
 {
 	
     startT <- Sys.time()
@@ -48,8 +48,8 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
         message("", appendLF=TRUE)
     }
     ####################################################################################
-	
-    fold.aggregateBy <- match.arg(fold.aggregateBy)
+    ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
+    cv.aggregateBy <- match.arg(cv.aggregateBy)
 	
     if(!is.data.frame(df_predictor)){
     	warnings("The function must apply to a 'data.frame'.\n")
@@ -83,13 +83,15 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	## predictors + class
 	ind <- match(df_gs$name, rownames(df_predictor))
 	df_predictor_class <- df_predictor[ind[!is.na(ind)],]
-	df_predictor_class$class <- as.factor(df_gs$gs[!is.na(ind)])
+	## class as factor ("GSN","GSP")
+	class <- df_gs$gs[!is.na(ind)]
+	class <- ifelse(class==1, 'GSP', 'GSN')
+	class <- factor(class, level=c("GSN","GSP"))
+	df_predictor_class$class <- class
 	
     if(verbose){
         message(sprintf("1. Gold standards (%d in GSP, %d in GSN) are used for supervised integration of %d predictors (%s).", sum(df_predictor_class$class==1), sum(df_predictor_class$class==0), ncol(df_predictor), as.character(Sys.time())), appendLF=TRUE)
     }
-	
-	class <- NULL
 	
 	#####################################
 
@@ -129,7 +131,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 			}
 			
 			if(is.null(mtry)){
-				mtry <- as.integer(sqrt(ncol(trainset)))
+				mtry <- as.integer(sqrt(ncol(trainset)-1))
 				suppressMessages(df_mtry <- randomForest::tuneRF(x=trainset[,-ncol(trainset)], y=trainset[, ncol(trainset)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE))
 				ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
 				mtry <- df_mtry[ind,1]
@@ -162,7 +164,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 			}
 
 			set.seed(i)
-			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry,...))
+			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 		})
 		names(ls_model) <- names(index_sets)
 	
@@ -182,7 +184,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 		rf.model <- ls_model[[i]]
 		## prediction for testset: ?predict.randomForest
 		testset <- df_predictor_class[-index_sets[[i]],]
-		vec_predict_test <- predict(rf.model, newdata=testset[,-ncol(testset)], type='prob')[,2]
+		vec_predict_test <- predict(rf.model, newdata=testset[,-ncol(testset)], type='prob')[,'GSP']
 		### do preparation
 		ind <- match(rownames(testset), rownames(df_predictor))
 		df_predictor_test <- cbind(Supervised=as.numeric(vec_predict_test), df_predictor[ind,])
@@ -203,7 +205,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 		})
 		
 		# do plotting
-		bp <- xClassifyComp(ls_pPerf, type="bar")
+		bp <- xClassifyComp(ls_pPerf)
 		
 		if(is.null(bp)){
 			df <- NULL
@@ -255,40 +257,73 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	#####################################
     if(verbose){
         message(sprintf("5. Do prediction for fullset (%s).", as.character(Sys.time())), appendLF=TRUE)
-        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/repeats*folds, aggregated via '%s' (%s) ...", nrow(df_predictor_class), nfold*nrepeat, fold.aggregateBy, as.character(Sys.time())), appendLF=TRUE)
+        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/repeats*folds, aggregated via '%s' (%s) ...", nrow(df_predictor_class), nfold*nrepeat, cv.aggregateBy, as.character(Sys.time())), appendLF=TRUE)
     }
 	
-	ls_full <- lapply(1:length(ls_model), function(i){
-		rf.model <- ls_model[[i]]
-		## prediction for fullset: ?predict.randomForest
-		vec_predict_full <- predict(rf.model, newdata=df_predictor, type='prob')[,2]
-		# output
-		df <- data.frame(name=names(vec_predict_full), model=names(ls_model)[i], prob=vec_predict_full, stringsAsFactors=FALSE)
-	})
-	df_full <- do.call(rbind, ls_full)
-	df_full <- as.matrix(xSparseMatrix(df_full, verbose=FALSE))
-
-	## Convert into p-values by computing an empirical cumulative distribution function
-    ls_pval <- lapply(1:ncol(df_full), function(j){
-    	x <- df_full[,j]
-    	my.CDF <- stats::ecdf(x)
-    	pval <- 1 - my.CDF(x)
-    })
-	df_pval <- do.call(cbind, ls_pval)
-	rownames(df_pval) <- rownames(df_full)
+	if(cv.aggregateBy=="none"){
+		# rf.model
+		if(is.null(mtry)){
+			mtry <- as.integer(sqrt(ncol(df_predictor_class)-1))
+			invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=df_predictor_class[,-ncol(df_predictor_class)], y=df_predictor_class[, ncol(df_predictor_class)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE)))
+			ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
+			mtry <- df_mtry[ind,1]
+			if(mtry<3){
+				mtry <- 3
+			}
+		}
+		if(!is.null(seed)){
+			set.seed(seed)
+		}
+		suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 	
-	## aggregate p values
-	df_ap <- dnet::dPvalAggregate(pmatrix=df_pval, method=fold.aggregateBy)
-	df_ap <- sort(df_ap, decreasing=FALSE)
+		## prediction for fullset
+		fullset <- df_predictor_class
+		vec_predict_full <- predict(rf.model, newdata=fullset, type='prob')[,'GSP']
+		names(vec_predict_full) <- rownames(df_predictor)
+		vec_full <- sort(vec_predict_full, decreasing=TRUE)
 	
-	## get rank
-	df_rank <- rank(df_ap, ties.method="min")
+		## get rank
+		vec_rank <- rank(-1*vec_full, ties.method="min")
+	
+		## priority: being rescaled into the [0,100] range
+		priority <- vec_full
+		priority <- 100 * (priority - min(priority))/(max(priority) - min(priority))
+		priority <- signif(priority, digits=2)
+		
+	}else{
+		ls_full <- lapply(1:length(ls_model), function(i){
+			rf.model <- ls_model[[i]]
+			## prediction for fullset: ?predict.randomForest
+			vec_predict_full <- predict(rf.model, newdata=df_predictor, type='prob')[,'GSP']
+			# output
+			df <- data.frame(name=names(vec_predict_full), model=names(ls_model)[i], prob=vec_predict_full, stringsAsFactors=FALSE)
+		})
+		df_full <- do.call(rbind, ls_full)
+		df_full <- as.matrix(xSparseMatrix(df_full, verbose=FALSE))
 
-	## priority: first log10-transformed ap and then being rescaled into the [0,100] range
-	df_ap[df_ap==0] <- min(df_ap[df_ap!=0])
-	priority <- sqrt(-log10(df_ap))
-	priority <- 100* (priority - min(priority))/(max(priority) - min(priority))
-	priority <- signif(priority, digits=2)
+		## Convert into p-values by computing an empirical cumulative distribution function
+		ls_pval <- lapply(1:ncol(df_full), function(j){
+			x <- df_full[,j]
+			my.CDF <- stats::ecdf(x)
+			pval <- 1 - my.CDF(x)
+		})
+		df_pval <- do.call(cbind, ls_pval)
+		rownames(df_pval) <- rownames(df_full)
+	
+		## aggregate p values
+		df_ap <- dnet::dPvalAggregate(pmatrix=df_pval, method=cv.aggregateBy)
+		df_ap <- sort(df_ap, decreasing=FALSE)
+	
+		## get rank
+		df_rank <- rank(df_ap, ties.method="min")
+
+		## priority: first log10-transformed ap and then being rescaled into the [0,100] range
+		df_ap[df_ap==0] <- min(df_ap[df_ap!=0])
+		priority <- sqrt(-log10(df_ap))
+		priority <- 100* (priority - min(priority))/(max(priority) - min(priority))
+		priority <- signif(priority, digits=2)
+	
+	}
 	
 	#########################################
 	## output
@@ -321,10 +356,9 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	######################
 	## overall importance
 	######################
-	trainset <- df_predictor_class
 	if(is.null(mtry)){
-		mtry <- as.integer(sqrt(ncol(trainset)))
-		invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=trainset[,-ncol(trainset)], y=trainset[, ncol(trainset)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE, na.action=na.omit)))
+		mtry <- as.integer(sqrt(ncol(df_predictor_class)-1))
+		invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=df_predictor_class[,-ncol(df_predictor_class)], y=df_predictor_class[, ncol(df_predictor_class)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE, na.action=na.omit)))
 		ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
 		mtry <- df_mtry[ind,1]
 		if(mtry<3){
@@ -334,7 +368,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	if(!is.null(seed)){
 		set.seed(seed)
 	}
-	suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+	suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 	df_importance <- as.data.frame(randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4])
 	#randomForest::varImpPlot(rf.model.overall)
 
@@ -354,7 +388,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 		pPerf <- xClassifyPerf(prediction=x, GSP=GSP, GSN=GSN, verbose=FALSE)
 	})
 	# do plotting
-	bp <- xClassifyComp(ls_pPerf, displayBy=c("ROC","PR"))
+	bp <- xClassifyComp(ls_pPerf)
 	df <- unique(bp$data[,c('methods','auroc','fmax','amax','direction')])
 	df_evaluation <- df[,-1]
 	rownames(df_evaluation) <- df[,1]

@@ -22,9 +22,9 @@ it. It returns an object of class 'sClass'.
 
 <pre>
 xClassifyRF(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-seed = 825, mtry = NULL, ntree = 1000,
-fold.aggregateBy = c("logistic", "Ztransform", "fishers",
-"orderStatistic"), verbose = TRUE, ...)
+seed = 825, mtry = NULL, ntree = 1000, cv.aggregateBy = c("none",
+"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE,
+...)
 </pre>
 
 
@@ -74,7 +74,7 @@ number of predictors. The minimum value is 3</p>
 <p>an integer specifying the number of trees to grow. By
 default, it sets to 2000</p>
 </td></tr>
-<tr valign="top"><td><code>fold.aggregateBy</code></td>
+<tr valign="top"><td><code>cv.aggregateBy</code></td>
 <td>
 <p>the aggregate method used to aggregate results
 from k-fold cross validataion. It can be either &quot;orderStatistic&quot; for

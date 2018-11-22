@@ -59,9 +59,7 @@ xClassifyCV <-function(list_sClass, displayBy=c("ROC","Fmax"), type=c("bar","rid
 		})
 		df_data <- do.call(rbind, ls_df)
 		rownames(df_data) <- NULL
-		if(is.na(xlab)){
-			xlab <- "AUC: 95% Confidence Interval\n(Repeated Cross-Validation)"
-		}
+		xlab <- "AUC: 95% Confidence Interval\n(Repeated Cross-Validation)"
 	}else if(displayBy=="Fmax"){
 		ls_df <- lapply(1:length(list_sClass), function(i){
 			x <- list_sClass[[i]]$cv_fmax[1,-c(1:4)]
@@ -69,9 +67,7 @@ xClassifyCV <-function(list_sClass, displayBy=c("ROC","Fmax"), type=c("bar","rid
 		})
 		df_data <- do.call(rbind, ls_df)
 		rownames(df_data) <- NULL
-		if(is.na(xlab)){
-			xlab <- "F-max: 95% Confidence Interval\n(Repeated Cross-Validation)"
-		}
+		xlab <- "F-max: 95% Confidence Interval\n(Repeated Cross-Validation)"
 	}
 	
 	if(type=='bar'){
