@@ -15,7 +15,7 @@ NEW FEATURES
 
     o Add a new function 'xObjSize' for estimating the memory allocation
 
-    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF') for supervised classification
+    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF', 'xClassifyPred', 'xClassifyCV') for supervised classification
 
 
 CHANGES IN VERSION 1.1.4

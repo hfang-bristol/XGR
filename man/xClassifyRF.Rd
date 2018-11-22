@@ -59,7 +59,7 @@ displayed in the screen. By default, it sets to TRUE for display}
 \value{
 an object of class "sClass", a list with following components:
 \itemize{
-\item{\code{priority}: a data frame of nrow X 5 containing priority
+\item{\code{prediction}: a data frame of nrow X 5 containing priority
 information, where nrow is the number of rows in the input data frame,
 and the 5 columns are "GS" (either 'GSP', or 'GSN', or 'NEW'), "name"
 (row names of the input data frame), "rank" (ranks of the priority
@@ -100,14 +100,14 @@ of the AUC values across folds), "mad" (the median of absolute
 deviation of the AUC values across folds), "min" (the minimum of the
 AUC values across folds), "max" (the maximum of the AUC values across
 folds), and the rest columns storing the per-fold AUC values}
-\item{\code{cv_fmax2}: a data frame of 1+nPredictor X 4+nfold
-containing the supervised/predictor PR info (F-max values), where
-nPredictor is the number of predictors, nfold is the number of folds
-for cross validataion, and the first 4 columns are "median" (the median
-of the F-max values across folds), "mad" (the median of absolute
-deviation of the F-max values across folds), "min" (the minimum of the
-F-max values across folds), "max" (the maximum of the F-max values
-across folds), and the rest columns storing the per-fold F-max values}
+\item{\code{cv_fmax}: a data frame of 1+nPredictor X 4+nfold containing
+the supervised/predictor PR info (F-max values), where nPredictor is
+the number of predictors, nfold is the number of folds for cross
+validataion, and the first 4 columns are "median" (the median of the
+F-max values across folds), "mad" (the median of absolute deviation of
+the F-max values across folds), "min" (the minimum of the F-max values
+across folds), "max" (the maximum of the F-max values across folds),
+and the rest columns storing the per-fold F-max values}
 \item{\code{call}: the call that produced this result}
 }
 }
@@ -129,6 +129,6 @@ library(XGR)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-sClass <- xClassifyRF(df_prediction, GSP, GSN)
+sClass <- xClassifyRF(df_predictor, GSP, GSN)
 }
 }

@@ -5,7 +5,7 @@
 \title{Function to plot tree with associated data on tips}
 \usage{
 xGTplot(gp, data, type = c("bar", "ridge"), combined = T,
-colormap = "spectral", ncolors = 64, y.text.size = 2)
+colormap = "spectral", ncolors = 64, y.text.size = 2, ...)
 }
 \arguments{
 \item{gp}{a ggplot object resulting from ggtree}
@@ -32,6 +32,9 @@ standard color names can be found in
 
 \item{y.text.size}{the text size of the y tick labelings. By default,
 it is 6}
+
+\item{...}{additional graphic parameters for
+ggridges::geom_density_ridges_gradient (such as scale=1)}
 }
 \value{
 a ggplot object

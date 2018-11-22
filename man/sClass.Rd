@@ -5,12 +5,12 @@
 \alias{print.sClass}
 \title{Definition for S3 class \code{sClass}}
 \usage{
-sClass(priority, predictor, performance)
+sClass(prediction, predictor, performance)
 
 \method{print}{sClass}(x, ...)
 }
 \arguments{
-\item{priority}{a data frame}
+\item{prediction}{a data frame}
 
 \item{predictor}{a data frame}
 
@@ -24,7 +24,7 @@ sClass(priority, predictor, performance)
 an object of S3 class \code{sClass}
 }
 \description{
-\code{sClass} mush have following components: priority, predictor,
+\code{sClass} mush have following components: prediction, predictor,
 performance.
 }
 \examples{
@@ -34,7 +34,7 @@ library(XGR)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-sClass(priority, predictor, performance)
+sClass(prediction, predictor, performance)
 }
 }
 \keyword{S3}

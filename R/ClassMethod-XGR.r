@@ -436,8 +436,8 @@ print.pPerf <- function(x, ...) {
 # sClass
 ######################################################################
 #' @title Definition for S3 class \code{sClass}
-#' @description \code{sClass} mush have following components: priority, predictor, performance.
-#' @param priority a data frame
+#' @description \code{sClass} mush have following components: prediction, predictor, performance.
+#' @param prediction a data frame
 #' @param predictor a data frame
 #' @param performance a data frame
 #' @return an object of S3 class \code{sClass}
@@ -450,14 +450,14 @@ print.pPerf <- function(x, ...) {
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' sClass(priority, predictor, performance)
+#' sClass(prediction, predictor, performance)
 #' }
-sClass <- function(priority, predictor, performance){
+sClass <- function(prediction, predictor, performance){
 	## integrity checks
-	if(class(priority)!='data.frame'){
+	if(class(prediction)!='data.frame'){
 		stop("The S3 class 'sClass' object failed to pass integrity checks!\n")
 	}
-	value <- list(priority=priority, predictor=predictor, performance=performance)
+	value <- list(prediction=prediction, predictor=predictor, performance=performance)
 	class(value) <- "sClass"
 	return(value)
 }
@@ -466,13 +466,13 @@ sClass <- function(priority, predictor, performance){
 #' @rdname sClass
 #' @export
 print.sClass <- function(x, ...) {
-	cat(sprintf("An object of S3 class '%s', with %d components including:", class(x), length(names(x))), "\n", sep="")
-	cat(sprintf("  $priority: a data frame of %d rows X %d columns", dim(x$priority)[1],dim(x$priority)[2]), "\n", sep="")
+	cat(sprintf("An object of S3 class '%s', resulted from %d cross-validation, containing %d components:", class(x), length(x$cv_model), length(names(x))), "\n", sep="")
+	cat(sprintf("  $prediction: a data frame of %d rows X %d columns", dim(x$prediction)[1],dim(x$prediction)[2]), "\n", sep="")
 	cat(sprintf("  $predictor: a data frame of %d rows X %d columns", dim(x$predictor)[1],dim(x$predictor)[2]), "\n", sep="")
 	cat(sprintf("  $performance: a data frame of %d rows X %d columns", dim(x$performance)[1],dim(x$performance)[2]), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
-	cat("$priority:\n")
-	print(x$priority[1:5,], row.names=FALSE)
+	cat("$prediction:\n")
+	print(x$prediction[1:5,], row.names=FALSE)
 	cat("......\n")
 	cat("$predictor:\n")
 	print(x$predictor[1:2,], row.names=FALSE)
@@ -481,3 +481,4 @@ print.sClass <- function(x, ...) {
 	print(x$performance[1:5,], row.names=TRUE)
 	cat("......\n")
 }
+

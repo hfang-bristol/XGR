@@ -16,14 +16,14 @@
 #' @return 
 #' an object of class "sClass", a list with following components:
 #' \itemize{
-#'  \item{\code{priority}: a data frame of nrow X 5 containing priority information, where nrow is the number of rows in the input data frame, and the 5 columns are "GS" (either 'GSP', or 'GSN', or 'NEW'), "name" (row names of the input data frame), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "priority" (sqrt(-log10(pvalue)) rescaled into [0,100]])}
+#'  \item{\code{prediction}: a data frame of nrow X 5 containing priority information, where nrow is the number of rows in the input data frame, and the 5 columns are "GS" (either 'GSP', or 'GSN', or 'NEW'), "name" (row names of the input data frame), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "priority" (sqrt(-log10(pvalue)) rescaled into [0,100]])}
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting two additional columns ('GS' and 'name')}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 4 containing the supervised/predictor performance info, where nPredictor is the number of predictors, and the 4 columns are "auroc" (AUC values), "fmax" (F-max values), "amx" (maximum accuracy), and "direction" ('+' indicating the higher score the better prediction; '-' indicating the higher score the worse prediction)}
 #'  \item{\code{importance}: a data frame of nPredictor X 2 containing the predictor importance info, where nPredictor is the number of predictors, two columns are predictor importance measures ("MeanDecreaseAccuracy" and "MeanDecreaseGini") . "MeanDecreaseAccuracy" sees how worse the model performs without each predictor (a high decrease in accuracy would be expected for very informative predictors), while "MeanDecreaseGini" measures how pure the nodes are at the end of the tree (a high score means the predictor was important if each predictor is taken out)}
 #'  \item{\code{cv_model}: a list of models, results from per-fold train set}
 #'  \item{\code{cv_prob}: a data frame of nrow X 2+nfold containing the probability of being GSP, where nrow is the number of rows in the input data frame, nfold is the number of folds for cross validataion, and the first two columns are "GS" (either 'GSP', or 'GSN', or 'NEW'), "name" (gene names), and the rest columns storing the per-fold probability of being GSP}
 #'  \item{\code{cv_auroc}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor ROC info (AUC values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the AUC values across folds), "mad" (the median of absolute deviation of the AUC values across folds), "min" (the minimum of the AUC values across folds), "max" (the maximum of the AUC values across folds), and the rest columns storing the per-fold AUC values}
-#'  \item{\code{cv_fmax2}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor PR info (F-max values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the F-max values across folds), "mad" (the median of absolute deviation of the F-max values across folds), "min" (the minimum of the F-max values across folds), "max" (the maximum of the F-max values across folds), and the rest columns storing the per-fold F-max values}
+#'  \item{\code{cv_fmax}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor PR info (F-max values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the F-max values across folds), "mad" (the median of absolute deviation of the F-max values across folds), "min" (the minimum of the F-max values across folds), "max" (the maximum of the F-max values across folds), and the rest columns storing the per-fold F-max values}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
@@ -36,7 +36,7 @@
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' sClass <- xClassifyRF(df_prediction, GSP, GSN)
+#' sClass <- xClassifyRF(df_predictor, GSP, GSN)
 #' }
 
 xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
@@ -362,7 +362,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	#####################
 
     res <- list(
-    				priority = df_priority,
+    				prediction = df_priority,
     				predictor = df_predictor_gs,
     				performance = df_evaluation,
     				importance = df_importance,

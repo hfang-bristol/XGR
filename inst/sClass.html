@@ -9,7 +9,7 @@
 
 <h3>Description</h3>
 
-<p><code>sClass</code> mush have following components: priority, predictor,
+<p><code>sClass</code> mush have following components: prediction, predictor,
 performance.
 </p>
 
@@ -17,7 +17,7 @@ performance.
 <h3>Usage</h3>
 
 <pre>
-sClass(priority, predictor, performance)
+sClass(prediction, predictor, performance)
 
 ## S3 method for class 'sClass'
 print(x, ...)
@@ -27,7 +27,7 @@ print(x, ...)
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>priority</code></td>
+<tr valign="top"><td><code>prediction</code></td>
 <td>
 <p>a data frame</p>
 </td></tr>
@@ -66,7 +66,7 @@ library(XGR)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-sClass(priority, predictor, performance)
+sClass(prediction, predictor, performance)
 
 ## End(Not run)
 </pre>

@@ -108,7 +108,7 @@ displayed in the screen. By default, it sets to TRUE for display</p>
 </p>
 
 <ul>
-<li><p><code>priority</code>: a data frame of nrow X 5 containing priority
+<li><p><code>prediction</code>: a data frame of nrow X 5 containing priority
 information, where nrow is the number of rows in the input data frame,
 and the 5 columns are &quot;GS&quot; (either 'GSP', or 'GSN', or 'NEW'), &quot;name&quot;
 (row names of the input data frame), &quot;rank&quot; (ranks of the priority
@@ -163,14 +163,14 @@ AUC values across folds), &quot;max&quot; (the maximum of the AUC values across
 folds), and the rest columns storing the per-fold AUC values
 </p>
 </li>
-<li><p><code>cv_fmax2</code>: a data frame of 1+nPredictor X 4+nfold
-containing the supervised/predictor PR info (F-max values), where
-nPredictor is the number of predictors, nfold is the number of folds
-for cross validataion, and the first 4 columns are &quot;median&quot; (the median
-of the F-max values across folds), &quot;mad&quot; (the median of absolute
-deviation of the F-max values across folds), &quot;min&quot; (the minimum of the
-F-max values across folds), &quot;max&quot; (the maximum of the F-max values
-across folds), and the rest columns storing the per-fold F-max values
+<li><p><code>cv_fmax</code>: a data frame of 1+nPredictor X 4+nfold containing
+the supervised/predictor PR info (F-max values), where nPredictor is
+the number of predictors, nfold is the number of folds for cross
+validataion, and the first 4 columns are &quot;median&quot; (the median of the
+F-max values across folds), &quot;mad&quot; (the median of absolute deviation of
+the F-max values across folds), &quot;min&quot; (the minimum of the F-max values
+across folds), &quot;max&quot; (the maximum of the F-max values across folds),
+and the rest columns storing the per-fold F-max values
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result
@@ -195,7 +195,7 @@ library(XGR)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-sClass &lt;- xClassifyRF(df_prediction, GSP, GSN)
+sClass &lt;- xClassifyRF(df_predictor, GSP, GSN)
 
 ## End(Not run)
 </pre>
