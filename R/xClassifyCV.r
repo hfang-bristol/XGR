@@ -111,7 +111,7 @@ xClassifyCV <-function(list_sClass, displayBy=c("ROC","Fmax"), type=c("bar","rid
 		}
 		df_data$Method <- factor(df_data$Method, levels=methods)
 		
-		p <- ggplot(df_data) + ggridges::geom_density_ridges_gradient(aes(x=Val, y=Method, group=Method, fill=..density..), lwd=0.2, jittered_points=T, position=ggridges::position_points_jitter(width=0.05,height=0), point_shape='|', point_size=1, point_alpha=0.5) + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), guide=F)
+		p <- ggplot(df_data) + ggridges::geom_density_ridges_gradient(aes(x=Val, y=Method, group=Method, fill=..density..), lwd=0.2, jittered_points=T, position=ggridges::position_points_jitter(width=0.05,height=0), point_shape='|', point_size=1, point_alpha=0.5, ...) + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), guide=F)
 		p <- p  + theme_bw() + theme(legend.position="none", axis.title.y=element_blank(), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
 		p <- p + xlab(xlab)
 		p <- p + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())

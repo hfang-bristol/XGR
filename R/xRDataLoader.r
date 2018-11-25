@@ -22,7 +22,7 @@
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd median mad ecdf na.omit predict prcomp lm quantile as.dist hclust cor as.dendrogram order.dendrogram 
 #' @importFrom BiocGenerics unlist start end
-#' @importFrom plot3D image2D persp3D image3D contour3D
+#' @importFrom plot3D image2D persp3D image3D contour3D scatter3D text3D
 #' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all slice
 #' @importFrom ggnetwork ggnetwork geom_nodes geom_edges
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel

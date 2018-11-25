@@ -20,6 +20,9 @@
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting two additional columns ('GS' and 'name')}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 4 containing the supervised/predictor performance info, where nPredictor is the number of predictors, and the 4 columns are "auroc" (AUC values), "fmax" (F-max values), "amx" (maximum accuracy), and "direction" ('+' indicating the higher score the better prediction; '-' indicating the higher score the worse prediction)}
 #'  \item{\code{importance}: a data frame of nPredictor X 2 containing the predictor importance info, where nPredictor is the number of predictors, two columns are predictor importance measures ("MeanDecreaseAccuracy" and "MeanDecreaseGini") . "MeanDecreaseAccuracy" sees how worse the model performs without each predictor (a high decrease in accuracy would be expected for very informative predictors), while "MeanDecreaseGini" measures how pure the nodes are at the end of the tree (a high score means the predictor was important if each predictor is taken out)}
+#'  \item{\code{parameter}: NULL or a data frame containing tuning parameters and their associated AUC, Sensitivity and Specificity.}
+#'  \item{\code{model}: the best model.}
+#'  \item{\code{algorithm}: the classifying algorithm.}
 #'  \item{\code{cv_model}: a list of models, results from per-fold train set}
 #'  \item{\code{cv_prob}: a data frame of nrow X 2+nfold containing the probability of being GSP, where nrow is the number of rows in the input data frame, nfold is the number of folds for cross validataion, and the first two columns are "GS" (either 'GSP', or 'GSN', or 'NEW'), "name" (gene names), and the rest columns storing the per-fold probability of being GSP}
 #'  \item{\code{cv_auroc}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor ROC info (AUC values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the AUC values across folds), "mad" (the median of absolute deviation of the AUC values across folds), "min" (the minimum of the AUC values across folds), "max" (the maximum of the AUC values across folds), and the rest columns storing the per-fold AUC values}
@@ -86,7 +89,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	## class as factor ("GSN","GSP")
 	class <- df_gs$gs[!is.na(ind)]
 	class <- ifelse(class==1, 'GSP', 'GSN')
-	class <- factor(class, level=c("GSN","GSP"))
+	class <- factor(class, levels=c("GSN","GSP"))
 	df_predictor_class$class <- class
 	
     if(verbose){
@@ -371,7 +374,8 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 	suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 	df_importance <- as.data.frame(randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4])
 	#randomForest::varImpPlot(rf.model.overall)
-
+	# For classification, the nclass columns are the class-specific measures computed as mean descrease in accuracy. The nclass + 1st column is the mean descrease in accuracy over all classes. The last column is the mean decrease in Gini index
+	
 	######################
 	## overall evaluation
 	######################
@@ -400,6 +404,9 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
     				predictor = df_predictor_gs,
     				performance = df_evaluation,
     				importance = df_importance,
+    				parameter = NULL,
+    				model = rf.model.overall, 
+    				algorithm = "RandomForest",
     				cv_model = ls_model,				
     				cv_prob = df_prob,
     				cv_auroc = df_auroc,

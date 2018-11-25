@@ -470,6 +470,7 @@ print.sClass <- function(x, ...) {
 	cat(sprintf("  $prediction: a data frame of %d rows X %d columns", dim(x$prediction)[1], dim(x$prediction)[2], dim(x$prediction)[2]-2), "\n", sep="")
 	cat(sprintf("  $predictor: a data frame of %d rows X %d columns (%d predictors)", dim(x$predictor)[1], dim(x$predictor)[2], dim(x$predictor)[2]-2), "\n", sep="")
 	cat(sprintf("  $performance: a data frame of %d rows X %d columns", dim(x$performance)[1],dim(x$performance)[2]), "\n", sep="")
+	cat(sprintf("  $cv_auroc[1,1]: cross-validated AUC = %.3f", x$cv_auroc[1,1]), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$prediction:\n")
 	print(x$prediction[1:5,], row.names=FALSE)

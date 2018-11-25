@@ -3,28 +3,29 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xClassifyRF"><tr><td>xClassifyRF</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xClassifyCARET"><tr><td>xClassifyCARET</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to combine predictor matrix in a supervised manner via machine learning algorithm random forest.</h2>
+<h2>Function to combine predictor matrix in a supervised manner via classifying algorithms.</h2>
 
 <h3>Description</h3>
 
-<p><code>xClassifyRF</code> is supposed to integrate predictor matrix in a
-supervised manner via machine learning algorithm random forest. It
-requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold
-Standard Negative (GSN) targets; 3) a predictor matrix containing genes
-in rows and predictors in columns, with their predictive scores inside
-it. It returns an object of class 'sClass'.
+<p><code>xClassifyCARET</code> is supposed to integrate predictor matrix in a
+supervised manner via classifying algorithm. It requires three inputs:
+1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative
+(GSN) targets; 3) a predictor matrix containing genes in rows and
+predictors in columns, with their predictive scores inside it. It
+returns an object of class 'sClass'.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xClassifyRF(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-seed = 825, mtry = NULL, ntree = 1000, cv.aggregateBy = c("none",
-"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE,
-...)
+xClassifyCARET(df_predictor, GSP, GSN, algorithm = c("glm", "bayesglm",
+"glmnet", "lda", "rda", "pls", "svmRadial", "knn", "nnet", "gbm",
+"xgbLinear", "xgbTree", "LogitBoost", "cforest", "rf", "myrf"),
+nfold = 3, nrepeat = 10, seed = 825, cv.aggregateBy = c("none",
+"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE)
 </pre>
 
 
@@ -44,6 +45,21 @@ predictive scores inside it. This data frame must has row names</p>
 <td>
 <p>a vector containing Gold Standard Negative (GSN)</p>
 </td></tr>
+<tr valign="top"><td><code>algorithm</code></td>
+<td>
+<p>classifying algorithm. It can be one of &quot;gbm&quot; for
+Gradient Boosting Machine (GBM), &quot;svmRadial&quot; for Support Vector
+Machines with Radial Basis Function Kernel (SVM), &quot;rda&quot; for Regularized
+Discriminant Analysis (RDA), &quot;knn&quot; for k-nearest neighbor (KNN), &quot;pls&quot;
+for Partial Least Squares (PLS), &quot;nnet&quot; for Neural Network (NNET), &quot;rf&quot;
+for Random Forest (RF), &quot;myrf&quot; for customised Random Forest (RF),
+&quot;cforest&quot; for Conditional Inference Random Forest, &quot;glmnet&quot; for glmnet,
+&quot;glm&quot; for Generalized Linear Model (GLM), &quot;bayesglm&quot; for Bayesian
+Generalized Linear Model (BGLM), &quot;LogitBoost&quot; for Boosted Logistic
+Regression (BLR), &quot;xgbLinear&quot; for eXtreme Gradient Boosting as linear
+booster (XGBL), &quot;xgbTree&quot; for eXtreme Gradient Boosting as tree booster
+(XGBT)</p>
+</td></tr>
 <tr valign="top"><td><code>nfold</code></td>
 <td>
 <p>an integer specifying the number of folds for cross
@@ -61,18 +77,6 @@ repeated 10 times</p>
 <tr valign="top"><td><code>seed</code></td>
 <td>
 <p>an integer specifying the seed</p>
-</td></tr>
-<tr valign="top"><td><code>mtry</code></td>
-<td>
-<p>an integer specifying the number of predictors randomly
-sampled as candidates at each split. If NULL, it will be tuned by
-'randomForest::tuneRF', with starting value as sqrt(p) where p is the
-number of predictors. The minimum value is 3</p>
-</td></tr>
-<tr valign="top"><td><code>ntree</code></td>
-<td>
-<p>an integer specifying the number of trees to grow. By
-default, it sets to 2000</p>
 </td></tr>
 <tr valign="top"><td><code>cv.aggregateBy</code></td>
 <td>
@@ -93,11 +97,6 @@ provides a compromise between these two. Notably, the aggregate methods
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display</p>
-</td></tr>
-<tr valign="top"><td><code>...</code></td>
-<td>
-<p>additional parameters. Please refer to
-'randomForest::randomForest' for the complete list.</p>
 </td></tr>
 </table>
 
@@ -141,7 +140,7 @@ nodes are at the end of the tree (a high score means the predictor was
 important if each predictor is taken out)
 </p>
 </li>
-<li><p><code>parameter</code>: NULL or a data frame containing tuning
+<li><p><code>parameter</code>: NULL or a data frame detailing tuning
 parameters and their associated AUC, Sensitivity and Specificity.
 </p>
 </li>
@@ -191,7 +190,9 @@ and the rest columns storing the per-fold F-max values
 
 <h3>Note</h3>
 
-<p>none
+<p>It will depend on whether a package &quot;caret&quot; and its suggested packages
+have been installed. It can be installed via:
+<code>BiocManager::install(c("caret","e1071","gbm","kernlab","klaR","pls","nnet","randomForest","party","glmnet","arm","caTools","xgboost"))</code>.
 </p>
 
 
@@ -205,7 +206,7 @@ library(XGR)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-sClass &lt;- xClassifyRF(df_predictor, GSP, GSN)
+sClass &lt;- xClassifyCARET(df_predictor, GSP, GSN)
 
 ## End(Not run)
 </pre>

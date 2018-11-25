@@ -84,7 +84,7 @@ xGTplot <- function(gp, data, type=c("bar","ridge"), combined=T, colormap="spect
 			df$panel <- factor('Ridge', levels=c('Tree','Ridge'))
 			gp$data$panel <- factor('Tree', levels=c('Tree','Ridge'))
 			gp <- gp + ggtree::geom_tiplab(size=y.text.size,align=T)
-			gp2 <- gp + ggridges::geom_density_ridges_gradient(data=df, aes(x=value, group=label, fill=..density..), lwd=0.2, jittered_points=T, position=ggridges::position_points_jitter(width=0.05,height=0), point_shape='|', point_size=1, point_alpha=0.5) + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), guide=F) + facet_grid(.~panel, scales="free_x")
+			gp2 <- gp + ggridges::geom_density_ridges_gradient(data=df, aes(x=value, group=label, fill=..density..), lwd=0.2, jittered_points=T, position=ggridges::position_points_jitter(width=0.05,height=0), point_shape='|', point_size=1, point_alpha=0.5, ...) + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), guide=F) + facet_grid(.~panel, scales="free_x")
 		}else{
 			gp2 <- ggplot(df) + ggridges::geom_density_ridges_gradient(aes(x=value, y=y, group=label, fill=..density..), lwd=0.2, jittered_points=T, position=ggridges::position_points_jitter(width=0.05,height=0), point_shape='|', point_size=1, point_alpha=0.5, ...) + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), guide=F) + scale_y_continuous(breaks=1:nrow(df_tips),labels=rev(df_tips$label),expand=c(0,0.5)) + theme_bw() + theme(legend.position="none",axis.text.y=element_text(size=y.text.size*4),axis.title.y=element_blank(), axis.title.x=element_blank(),panel.grid.major=element_blank(), panel.grid.minor=element_blank())
 		}
