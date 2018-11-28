@@ -26,7 +26,8 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "EnrichrReactome",
 "EnrichrWikiPathways", "EnrichrhuMAP", "EnrichrChEA",
 "EnrichrConsensusTFs", "EnrichrEncodeTF", "EnrichrTFlof",
-"EnrichrTFpert"), anno.identity = c("GeneID", "Symbol"), verbose = T,
+"EnrichrTFpert"), ontology.customised = NULL,
+anno.identity = c("GeneID", "Symbol"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -74,8 +75,12 @@ Biological Process, "SIFTS2GOMF" for Gene Ontology Molecular Function,
 Enrichr libraries (where X can be
 "AchillesFitnessD","AchillesFitnessI","ARCHS4Cells","ARCHS4Tissues","BioCarta","ChEA","ConsensusTFs","dbGaP","DSigDB","EncodeTF","HumanGeneAtlas","huMAP","JensenDiseases","JensenTissues","KEGG","NCIpathway","OMIM","OMIMexpanded","Panther","Reactome","TFlof","TFpert","TissueHumanProteomeMap","TissueProteomicsDB","WikiPathways")}
 
+\item{ontology.customised}{an object 'GS'. Higher priority over
+'ontology' above. Required, otherwise it will return NULL}
+
 \item{anno.identity}{identity for gene annotations. It can be "GeneID"
-for Gene ID and "Symbol" for gene symbol}
+for Gene ID and "Symbol" for gene symbol. Does not support the
+customised ontology}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -103,7 +108,11 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 aOnto <- xDefineOntology("HPPA", RData.location=RData.location)
 aOnto <- xDefineOntology("REACTOME_ImmuneSystem",
 RData.location=RData.location)
-aOnto <- xDefineOntology("CGL", RData.location=RData.location)
+aOnto <- xDefineOntology("CGL", RData.location=RData.location)\\
+
+# advanced use
+GS <- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
+res <- xDefineOntology(ontology.customised=GS)
 }
 }
 \seealso{

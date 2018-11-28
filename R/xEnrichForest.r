@@ -3,7 +3,7 @@
 #' \code{xEnrichForest} is supposed to visualise enrichment results using a forest plot. A point is colored by the significance level, and a horizontal line for the 95% confidence interval (CI) of odds ratio (OR; the wider the CI, the less reliable). It returns an object of class "ggplot".
 #'
 #' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp','or','CIl','CIu')
-#' @param top_num the number of the top terms (sorted according to OR). If it is 'auto', only the significant terms (see below FDR.cutoff) will be displayed
+#' @param top_num the number of the top terms (sorted according to OR). For the eTerm object, if it is 'auto' (for eTerm), only the significant terms (see below FDR.cutoff) will be displayed
 #' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
 #' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
@@ -121,15 +121,13 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		}
 		############
 		
-		or <- group <- ontology <- rank <- NULL
+		or <- group <- ontology <- rank <- adjp <- NULL
 		df <- df %>% dplyr::arrange(-or)
 		if(top_num=='auto'){
 			df <- subset(df, df$adjp<FDR.cutoff)
 		}else{
 			top_num <- as.integer(top_num)
-			df_tmp <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=order(or,decreasing=T),add=TRUE) %>% dplyr::filter(rank<=top_num))
-			df <- subset(df, df$name %in% df_tmp$name)
-			df <- subset(df, df$adjp<FDR.cutoff)
+			df <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=order(or,decreasing=T),add=TRUE) %>% dplyr::filter(rank<=top_num & adjp<FDR.cutoff))
 		}
 		
 	}

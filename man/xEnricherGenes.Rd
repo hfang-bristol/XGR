@@ -5,14 +5,15 @@
 \title{Function to conduct enrichment analysis given a list of genes and the ontology in query}
 \usage{
 xEnricherGenes(data, background = NULL, check.symbol.identity = F,
-ontology = NA, size.range = c(10, 2000), min.overlap = 3,
-which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, verbose = T, silent = FALSE,
+ontology = NA, ontology.customised = NULL, size.range = c(10,
+2000), min.overlap = 3, which.distance = NULL, test = c("hypergeo",
+"fisher", "binomial"), background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
+"bonferroni", "holm", "hochberg", "hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F,
+verbose = T, silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -29,6 +30,9 @@ gene symbols. By default, it sets to false}
 \item{ontology}{the ontology supported currently. By default, it is
 'NA' to disable this option. Pre-built ontology and annotation data are
 detailed in \code{\link{xDefineOntology}}.}
+
+\item{ontology.customised}{an object 'GS'. Higher priority over
+'ontology' above. Required, otherwise it will return NULL}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more

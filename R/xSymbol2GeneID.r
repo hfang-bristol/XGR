@@ -3,6 +3,7 @@
 #' \code{xSymbol2GeneID} is supposed to convert gene symbols to entrez geneid.
 #'
 #' @param data an input vector containing gene symbols
+#' @param org a character specifying an organism. Currently supported organisms are 'human' and 'mouse'. It can be an object 'EG'
 #' @param check.symbol.identity logical to indicate whether to match the input data via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
 #' @param details logical to indicate whether to result in a data frame (in great details). By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
@@ -28,9 +29,13 @@
 #' 
 #' # c) convert into a data frame
 #' df <- xSymbol2GeneID(Symbol, details=TRUE)
+#' 
+#' 
+#' # advanced use
+#' df <- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
 #' }
 
-xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     
     if (!is.vector(data)){
@@ -39,7 +44,22 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, 
     Symbol <- as.character(data)
     
     ## load Enterz Gene information
-	df_eg <- xRDataLoader(RData.customised='org.Hs.eg', RData.location=RData.location, verbose=verbose)$gene_info
+	if(class(org) == "EG"){
+		df_eg <- org$gene_info
+		if(verbose){
+			message(sprintf("Customised organism (%s)", as.character(Sys.time())), appendLF=T)
+		}
+	}else{
+		org <- org[1]
+		if(org=='human'){
+			df_eg <- xRDataLoader(RData.customised='org.Hs.eg', RData.location=RData.location, verbose=verbose)$gene_info
+		}else if(org=='mouse'){
+			df_eg <- xRDataLoader(RData.customised='org.Mm.eg', RData.location=RData.location, verbose=verbose)$gene_info
+		}
+		if(verbose){
+			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=T)
+		}
+	}
     
     ## subdived into two parts: "protein-coding" and the rest
     type_of_gene <- ''
@@ -104,16 +124,16 @@ xSymbol2GeneID <- function(data, check.symbol.identity=F, details=F, verbose=T, 
             ifelse(length(tmp_result)==1, Orig.index[tmp_result[1]], NA)
         })
         match_flag[na_flag] <- b
-            
+        
         if(verbose){
         	now <- Sys.time()
-            message(sprintf("\tAmong %d symbols of input data, there are %d mappable via official gene symbols, %d mappable via gene alias but %d left unmappable", length(Symbol), (length(Symbol)-length(a)), sum(!is.na(b)), sum(is.na(b))), appendLF=T)
+            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols, %d mappable via gene alias but %d left unmappable", length(Symbol), (length(Symbol)-length(a)), sum(!is.na(b)), sum(is.na(b))), appendLF=T)
         }
     
     }else{
     	if(verbose){
         	now <- Sys.time()
-            message(sprintf("\tAmong %d symbols of input data, there are %d mappable via official gene symbols but %d left unmappable", length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))), appendLF=T)
+            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols but %d left unmappable", length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))), appendLF=T)
         }
     }
     

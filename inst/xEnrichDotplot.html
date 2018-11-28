@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using dot-like plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichDotplot"><tr><td>xEnrichDotplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using dot-like plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichDotplot</code> is supposed to visualise enrichment results using
+dot-like plot. It returns a ggplot2 object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichDotplot(eTerm, FDR.cutoff = 0.05, colors = c("pink", "red"),
+y.scale = c("normal", "log"), slim = NULL, size.range = c(0.5,
+3.5), size.title = "Num of overlaps", label.top = "auto",
+label.direction.y = c("left", "right", "none"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eTerm</code></td>
+<td>
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns (named as
+'group','name','adjp','zscore','nOverlap')</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
+</td></tr>
+<tr valign="top"><td><code>colors</code></td>
+<td>
+<p>a 2-element vector for color-coded points. By default, it
+is c(&quot;pink&quot;,&quot;red&quot;), responding to the insignificant and the
+significant</p>
+</td></tr>
+<tr valign="top"><td><code>y.scale</code></td>
+<td>
+<p>how to transform the y scale. It can be &quot;normal&quot; for no
+transformation, and &quot;log&quot; for log-based transformation</p>
+</td></tr>
+<tr valign="top"><td><code>slim</code></td>
+<td>
+<p>the minimum and maximum values for which sizes should be
+plotted</p>
+</td></tr>
+<tr valign="top"><td><code>size.range</code></td>
+<td>
+<p>the range of actual node size</p>
+</td></tr>
+<tr valign="top"><td><code>size.title</code></td>
+<td>
+<p>a character specifying the title for node sizing. By
+default it is 'Num of overlaps'</p>
+</td></tr>
+<tr valign="top"><td><code>label.top</code></td>
+<td>
+<p>the number of the top terms (sorted according to
+adjp). Only the significant terms (see above FDR.cutoff) will be
+labelled</p>
+</td></tr>
+<tr valign="top"><td><code>label.direction.y</code></td>
+<td>
+<p>how to align labels. It can be &quot;none&quot;, &quot;left&quot;
+(align labels on the left edge) or &quot;right&quot; (align labels on the right
+edge). Only works for individual group</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters (such as size, color) used in
+ggrepel::geom_text_repel to control labels</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichDotplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+gp &lt;- xEnrichDotplot(eTerm, label.top=10)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

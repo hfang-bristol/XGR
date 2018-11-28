@@ -61,6 +61,7 @@ Collate:
     'xGR.r'
     'xCheckParallel.r'
     'xSymbol2GeneID.r'
+    'xGeneID2Symbol.r'
     'xDAGpropagate.r'
     'xVisInterp.r'
     'xVisInterpAnimate.r'
@@ -137,5 +138,6 @@ Collate:
     'xClassifyCV.r'
     'xClassifyPara.r'
     'xClassifyCARET.r'
+    'xEnrichDotplot.r'
 License: GPL-2
 biocViews: Bioinformatics

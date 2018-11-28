@@ -6,6 +6,7 @@
 #' @param background a background vector containing gene symbols as the test background. If NULL, by default all annotatable are used as background
 #' @param check.symbol.identity logical to indicate whether to match the input data/background via Synonyms for those unmatchable by official gene symbols. By default, it sets to false
 #' @param ontology the ontology supported currently. By default, it is 'NA' to disable this option. Pre-built ontology and annotation data are detailed in \code{\link{xDefineOntology}}.
+#' @param ontology.customised an object 'GS'. Higher priority over 'ontology' above. Required, otherwise it will return NULL
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 2000
 #' @param min.overlap the minimum number of overlaps. Only those terms with members that overlap with input data at least min.overlap (3 by default) will be processed
 #' @param which.distance which terms with the distance away from the ontology root (if any) is used to restrict terms in consideration. By default, it sets to 'NULL' to consider all distances
@@ -98,7 +99,7 @@
 #' xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 #' }
 
-xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, ontology.customised=NULL, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -135,7 +136,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     data <- as.character(data)
     
     #################################
- 	aOnto <- xDefineOntology(ontology, verbose=verbose, RData.location=RData.location)
+ 	aOnto <- xDefineOntology(ontology, ontology.customised=ontology.customised, verbose=verbose, RData.location=RData.location)
  	g <- aOnto$g
  	anno <- aOnto$anno
  	if(is.null(g)){
@@ -143,17 +144,19 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
         return(NULL)
 	}
     #################################
-        
-    ## convert gene symbol to entrz gene for both input data of interest and the input background (if given)
-    if(verbose){
-		now <- Sys.time()
-		message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=T)
-	}
-    data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
-    data <- data[!is.na(data)]
-    if(length(background)>0){
-        background <- xSymbol2GeneID(background, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
-        background <- background[!is.na(background)]
+
+    if(is.null(ontology.customised)){
+		## convert gene symbol to entrz gene for both input data of interest and the input background (if given)
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=T)
+		}
+		data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+		data <- data[!is.na(data)]
+		if(length(background)>0){
+			background <- xSymbol2GeneID(background, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+			background <- background[!is.na(background)]
+		}
     }
     
     #############################################################################################
@@ -167,7 +170,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     eTerm <- xEnricher(data=data, annotation=anno, g=g, background=background, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose)
 	
 	# replace EntrezGenes with gene symbols	
-	if(1 & class(eTerm)=="eTerm"){
+	if(is.null(ontology.customised) & class(eTerm)=="eTerm"){
 		## load Enterz Gene information
 		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, verbose=verbose)
 		allGeneID <- EG$gene_info$GeneID

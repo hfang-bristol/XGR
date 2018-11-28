@@ -39,7 +39,8 @@ xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
 "EnrichrReactome",
 "EnrichrWikiPathways", "EnrichrhuMAP", "EnrichrChEA",
 "EnrichrConsensusTFs", "EnrichrEncodeTF", "EnrichrTFlof",
-"EnrichrTFpert"), anno.identity = c("GeneID", "Symbol"), verbose = T,
+"EnrichrTFpert"), ontology.customised = NULL,
+anno.identity = c("GeneID", "Symbol"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -93,10 +94,16 @@ Biological Process, &quot;SIFTS2GOMF&quot; for Gene Ontology Molecular Function,
 Enrichr libraries (where X can be
 &quot;AchillesFitnessD&quot;,&quot;AchillesFitnessI&quot;,&quot;ARCHS4Cells&quot;,&quot;ARCHS4Tissues&quot;,&quot;BioCarta&quot;,&quot;ChEA&quot;,&quot;ConsensusTFs&quot;,&quot;dbGaP&quot;,&quot;DSigDB&quot;,&quot;EncodeTF&quot;,&quot;HumanGeneAtlas&quot;,&quot;huMAP&quot;,&quot;JensenDiseases&quot;,&quot;JensenTissues&quot;,&quot;KEGG&quot;,&quot;NCIpathway&quot;,&quot;OMIM&quot;,&quot;OMIMexpanded&quot;,&quot;Panther&quot;,&quot;Reactome&quot;,&quot;TFlof&quot;,&quot;TFpert&quot;,&quot;TissueHumanProteomeMap&quot;,&quot;TissueProteomicsDB&quot;,&quot;WikiPathways&quot;)</p>
 </td></tr>
+<tr valign="top"><td><code>ontology.customised</code></td>
+<td>
+<p>an object 'GS'. Higher priority over
+'ontology' above. Required, otherwise it will return NULL</p>
+</td></tr>
 <tr valign="top"><td><code>anno.identity</code></td>
 <td>
 <p>identity for gene annotations. It can be &quot;GeneID&quot;
-for Gene ID and &quot;Symbol&quot; for gene symbol</p>
+for Gene ID and &quot;Symbol&quot; for gene symbol. Does not support the
+customised ontology</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -141,7 +148,11 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 aOnto &lt;- xDefineOntology("HPPA", RData.location=RData.location)
 aOnto &lt;- xDefineOntology("REACTOME_ImmuneSystem",
 RData.location=RData.location)
-aOnto &lt;- xDefineOntology("CGL", RData.location=RData.location)
+aOnto &lt;- xDefineOntology("CGL", RData.location=RData.location)\
+
+# advanced use
+GS &lt;- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
+res &lt;- xDefineOntology(ontology.customised=GS)
 
 ## End(Not run)
 </pre>

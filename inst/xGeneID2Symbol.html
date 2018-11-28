@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xSymbol2GeneID"><tr><td>xSymbol2GeneID</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGeneID2Symbol"><tr><td>xGeneID2Symbol</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to convert gene symbols to entrez geneid</h2>
 
 <h3>Description</h3>
 
-<p><code>xSymbol2GeneID</code> is supposed to convert gene symbols to entrez
+<p><code>xGeneID2Symbol</code> is supposed to convert gene symbols to entrez
 geneid.
 </p>
 
@@ -17,9 +17,8 @@ geneid.
 <h3>Usage</h3>
 
 <pre>
-xSymbol2GeneID(data, org = c("human", "mouse"),
-check.symbol.identity = F, details = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGeneID2Symbol(data, org = c("human", "mouse"), details = F,
+verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -34,12 +33,6 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <td>
 <p>a character specifying an organism. Currently supported
 organisms are 'human' and 'mouse'. It can be an object 'EG'</p>
-</td></tr>
-<tr valign="top"><td><code>check.symbol.identity</code></td>
-<td>
-<p>logical to indicate whether to match the
-input data via Synonyms for those unmatchable by official gene symbols.
-By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
@@ -61,15 +54,14 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a vector containing entrez geneid with 'NA' for the unmatched if
-(details set to false); otherwise, a data frame is returned
+<p>a vector containing symbol with 'NA' for the unmatched if (details set
+to false); otherwise, a data frame is returned
 </p>
 
 
 <h3>Note</h3>
 
-<p>If a symbol mapped many times, the one assiged as the &quot;protein-coding&quot;
-type of gene is preferred.
+<p>none.
 </p>
 
 
@@ -89,18 +81,18 @@ library(XGR)
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
-Symbol &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-Symbol
+GeneID &lt;- sample(org.Hs.eg$gene_info$GeneID, 100)
+GeneID
 
 # b) convert into GeneID
-GeneID &lt;- xSymbol2GeneID(Symbol)
+Symbol &lt;- xGeneID2Symbol(GeneID)
 
 # c) convert into a data frame
-df &lt;- xSymbol2GeneID(Symbol, details=TRUE)
+df &lt;- xGeneID2Symbol(GeneID, details=TRUE)
 
 
 # advanced use
-df &lt;- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
+df &lt;- xGeneID2Symbol(GeneID, org=org.Hs.eg, details=TRUE)
 
 ## End(Not run)
 </pre>

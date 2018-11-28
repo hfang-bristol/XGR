@@ -5,7 +5,7 @@ NEW FEATURES
 
     o Populate annotations
     
-    o Add a new function 'xEnrichRadial' for radial-like plot of enrichment results
+    o Add functions ('xEnrichRadial' and 'xEnrichDotplot') for radial- and dot-like plot of enrichment results
 
     o Add functions ('xWCN' and 'xWCNheatmap') for weighted correlation network analysis
     
@@ -15,7 +15,9 @@ NEW FEATURES
 
     o Add a new function 'xObjSize' for estimating the memory allocation
 
-    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF', 'xClassifyPred', 'xClassifyCV') for supervised classification
+    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF', 'xClassifyPred', 'xClassifyCV', 'xClassifyPara', 'xClassifyCARET') for supervised classification
+
+    o Modify functions ('xSymbol2GeneID', 'xGeneID2Symbol', 'xDefineOntology', 'xEnricherGenes') enabling organism-specific customised analysis
 
 
 CHANGES IN VERSION 1.1.4
