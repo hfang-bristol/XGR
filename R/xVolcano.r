@@ -22,7 +22,7 @@
 #' @param y.scale how to transform the y scale. It can be "normal" for no transformation, and "log" for log-based transformation
 #' @param xlab the x labelling. By default, it is expression(log[2]("fold change"))
 #' @param ylab the y labelling. By default, it is expression(-log[10]("FDR"))
-#' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE
+#' @param caption logical to indicate whether the caption is assigned to the plot caption. NA for not shown, NULL for package version, and other customised input
 #' @return
 #' a ggplot object
 #' @note none
@@ -36,7 +36,7 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' }
 
-xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cutoff.fdr=5e-2, colors=c("#EEEEEE","darkgrey","pink","red"), column.label=NULL, top=10, top.direction=c('both','up','down'), label.size=2, label.color='black', label.alpha=0.8, label.padding=0.5, label.arrow=0.01, label.force=0.5, xlim=NULL, ylim=NULL, y.scale=c("normal","log"), xlab=expression(log[2]("fold change")), ylab=expression(-log[10]("FDR")), signature=TRUE)
+xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cutoff.fdr=5e-2, colors=c("#EEEEEE","darkgrey","pink","red"), column.label=NULL, top=10, top.direction=c('both','up','down'), label.size=2, label.color='black', label.alpha=0.8, label.padding=0.5, label.arrow=0.01, label.force=0.5, xlim=NULL, ylim=NULL, y.scale=c("normal","log"), xlab=expression(log[2]("fold change")), ylab=expression(-log[10]("FDR")), caption=NULL)
 {
 	
 	top.direction <- match.arg(top.direction)
@@ -105,8 +105,8 @@ xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cut
 		if(top.direction %in% c('both','up')){
 			df_sub <- df %>% dplyr::filter(FDR<cutoff.fdr, LFC>=cutoff.lfc) %>% dplyr::arrange(FDR, desc(LFC))
 			df_sub <- df_sub[1:min(top,nrow(df_sub)), ]	
-			gp <- gp + ggrepel::geom_text_repel(data=df_sub, aes(x=LFC,y=-log10(FDR),label=label), size=label.size, color=label.color, fontface="bold", alpha=label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(label.padding,"lines"), segment.alpha=0.5, segment.color="grey50", segment.size=0.5, arrow=arrow(length=unit(label.arrow,'npc')), force=label.force)
-			#gp <- gp + ggrepel::geom_text_repel(data=df_sub, aes(x=LFC,y=-log10(FDR),label=label), size=label.size, color=label.color, fontface="bold", alpha=label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(label.padding,"lines"), segment.alpha=0.5, segment.color="grey50", segment.size=0.5, arrow=arrow(length=unit(label.arrow,'npc')), force=label.force, direction="x",vjust=1,angle=90, nudge_y=max(-log10(df_sub$FDR))+1+log10(df_sub$FDR))
+			gp <- gp + ggrepel::geom_text_repel(data=df_sub, aes(x=LFC,y=-log10(FDR),label=label), size=label.size, color=label.color, fontface="bold", alpha=label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(label.padding,"lines"), segment.alpha=0.2, segment.color="grey50", segment.size=0.5, arrow=arrow(length=unit(label.arrow,'npc')), force=label.force)
+			#gp <- gp + ggrepel::geom_text_repel(data=df_sub, aes(x=LFC,y=-log10(FDR),label=label), size=label.size, color=label.color, fontface="bold", alpha=label.alpha, box.padding=unit(0.5,"lines"), point.padding=unit(label.padding,"lines"), segment.alpha=0.2, segment.color="grey50", segment.size=0.5, arrow=arrow(length=unit(label.arrow,'npc')), force=label.force, direction="x",vjust=1,angle=90, nudge_y=max(-log10(df_sub$FDR))+1+log10(df_sub$FDR))
 		}
 		
 		## down
@@ -118,8 +118,10 @@ xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cut
 	}
 
 	## caption
-    if(signature){
+    if(is.null(caption)){
     	caption <- paste("Created by xVolcano from XGR version", utils::packageVersion("XGR"))
+    	gp <- gp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
+    }else if(!is.na(caption)){
     	gp <- gp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	

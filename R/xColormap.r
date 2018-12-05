@@ -4,10 +4,9 @@
 #'
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}. It can also be a function of 'colorRampPalette'
 #' @param interpolate use spline or linear interpolation
+#' @param data NULL or a numeric vector
 #' @return 
-#' \itemize{
-#'  \item{\code{palette.name}: a function that takes an integer argument for generating that number of colors interpolating the given sequence}
-#' }
+#' palette.name (a function that takes an integer argument for generating that number of colors interpolating the given sequence) or mapped colors if data is provided.
 #' @note The input colormap includes: 
 #' \itemize{
 #' \item{"jet": jet colormap}
@@ -39,8 +38,11 @@
 #' palette.name <- xColormap(colormap="RdYlBu")
 #' # use the return function "palette.name" to generate 3 default colors used by ggplot2
 #' palette.name(3)
+#' 
+#' # 4) return mapped colors
+#' xColormap(colormap="RdYlBu", data=runif(5))
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu","rainbow_hcl"), interpolate=c("spline","linear"))
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu","rainbow_hcl"), interpolate=c("spline","linear"), data=NULL)
 {
 
 	interpolate <- match.arg(interpolate)
@@ -114,6 +116,18 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			palette.name <- supraHex::visColormap(colormap=colormap)
 		}
 	}
-
+	
+	########################################
+	## return mapped colors
+	if(!is.null(data)){
+		if(is.numeric(data)){
+			cut_index <- as.numeric(cut(data, breaks=min(data)+(max(data)-min(data))*seq(0, 1, len=64)))
+			cut_index[is.na(cut_index)] <- 1
+			res <- palette.name(64)[cut_index]
+			return(res)
+		}	
+	}
+	########################################
+		
     invisible(palette.name)
 }

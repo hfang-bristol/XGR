@@ -62,7 +62,7 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NU
 		
 		if(!all("size" %in% igraph::vertex_attr_names(ig))){
 			if(0){
-				V(ig)$size <- degree(ig)
+				V(ig)$size <- igraph::degree(ig)
 			}else{
 				V(ig)$size <- V(ig)$withindegree
 			}
@@ -138,7 +138,8 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NU
 		}
 		## leaf size
 		if(length(unique(V(ig_hierarchy)$size))>2){
-			gp <- gp + ggraph::geom_node_point(aes(filter=leaf, x=x*1.05, y=y*1.05, colour=community, size=size), alpha=0.3) + scale_size_continuous(range=c(1,7))
+			gp <- gp + ggraph::geom_node_point(aes(filter=leaf, x=x*1.05, y=y*1.05, colour=community, size=size), alpha=0.3) 
+			#gp <- gp + scale_size_continuous(range=c(1,7))
 		}else{
 			if(is.null(leave.size)){
 				leave.size <- 3

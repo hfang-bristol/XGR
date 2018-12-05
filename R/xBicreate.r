@@ -16,7 +16,11 @@
 xBicreate <- function(data, verbose=TRUE)
 {
     
-    if(any(class(data) %in% c("matrix","data.frame"))){
+    if(any(class(data) %in% c("matrix","data.frame","dgCMatrix"))){
+    	if(class(data)=="dgCMatrix"){
+    		data <- as.matrix(data)
+    	}
+
         if(nrow(data) < ncol(data)){
         	data <- t(data)
         }

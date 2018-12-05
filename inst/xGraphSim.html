@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate node similarity based on the network...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGraphSim"><tr><td>xGraphSim</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to calculate node similarity based on the network structure</h2>
+
+<h3>Description</h3>
+
+<p><code>xGraphSim</code> is supposed to calculate node similarity based on the
+network structure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGraphSim(g, measure = c("CN", "SI", "JI", "DI", "HPI", "HDI", "LHN",
+"AA", "RA", "LP", "KI", "LHNg", "SP", "ACT", "CL", "MFI", "RWR",
+"SRW"),
+type = c("full", "edge"), edge.fast = F, measure.para = list(LP.eps
+= 0.01, KI.beta = 0.001, LHNg.theta = 0.5, RWR.r = 0.5, SRW.p = 4),
+verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph</p>
+</td></tr>
+<tr valign="top"><td><code>measure</code></td>
+<td>
+<p>the similarity metrics used to measure similarity
+between nodes. It can be node-dependent similarity, path-dependent
+similarity, and random walk-based similarity</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>the type defining nodes to be calcuated. It can be 'full'
+for all possible pairs of nodes (used for link prediction) and 'edge'
+for paris of nodes in edges (used for link recommendation)</p>
+</td></tr>
+<tr valign="top"><td><code>edge.fast</code></td>
+<td>
+<p>logical to indicate whether a vectorised fast
+computation is used. By default, it sets to true. It is always
+advisable to use this vectorised fast computation; though the
+conventional computation is just used for script understanding</p>
+</td></tr>
+<tr valign="top"><td><code>measure.para</code></td>
+<td>
+<p>a list of measure-specific parameters.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>It returns a symmetric sparse matrix involving all network nodes.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The similarity measures are detailed as follows.<br />
+1. Node-dependent similarity
+</p>
+
+<ul>
+<li><p>&quot;Common Neighbors (CN)&quot;: the number of common neighbors.
+</p>
+</li>
+<li><p>&quot;Salton Index (SI)&quot;: the cosine similarity, that is, the number
+of common neighbors normalised by square root of degree product of two
+nodes.
+</p>
+</li>
+<li><p>&quot;Jaccard Index (JI)&quot;: the number of common neighbors normalised
+by the union of neighbors.
+</p>
+</li>
+<li><p>&quot;Dice Index (DI)&quot;: mainly for ecological community data, that is,
+the number of common neighbors normalised by degree average of two
+nodes.
+</p>
+</li>
+<li><p>&quot;Hub Promoted Index (HPI)&quot;: the topological overlap, that is, the
+number of common neighbors normalised by minimum degree of two nodes
+(with hubs receiving higher score).
+</p>
+</li>
+<li><p>&quot;Hub Depressed Index (HPI)&quot;: the number of common neighbors
+normalised by maximum degree of two nodes (with hubs receiving lower
+score).
+</p>
+</li>
+<li><p>&quot;Leicht-Holme-Newman Index (LHN)&quot;: inversely proportional to the
+expected number of common neighbors in the configuration model, that
+is, the number of common neighbors normalised by degree product of two
+nodes.
+</p>
+</li>
+<li><p>&quot;Adamic-Adar Index (AA)&quot;: the number of common neighbors with a
+logarithmic weighting, that is, weighted by 1/log(degree).
+</p>
+</li>
+<li><p>&quot;Resource Allocation Index (RA)&quot;: the number of common neighbors
+with an inverse weighting, that is, weighted by 1/degree.
+</p>
+</li></ul>
+
+<p>2. Path-dependent similarity
+</p>
+
+<ul>
+<li><p>&quot;Local Path Index (LP)&quot;: the number of two-step paths and
+three-step paths (weighted by the eps).
+</p>
+</li>
+<li><p>&quot;Katz Index (KI)&quot;: sums over the collection of paths
+exponentially damped by length to give the shorter paths more weights.
+</p>
+</li>
+<li><p>&quot;Leicht-Holme-Newman Index global similarity (LHNg)&quot;: two nodes
+are similar if their immediate neighbors are similar by themselves.
+</p>
+</li>
+<li><p>&quot;Shortest Path Index (SP)&quot;: the length of the shortest paths.
+</p>
+</li></ul>
+
+<p>3. Random walk-based similarity
+</p>
+
+<ul>
+<li><p>&quot;Average Commute Time (ACT)&quot;: the average number of steps
+required by a random walker starting from a node to reach another
+node.
+</p>
+</li>
+<li><p>&quot;Cosine based on Laplacian matrix (CL)&quot;: the cosine of the angle
+between columns of the pseudoinverse of the Laplacian matrix.
+</p>
+</li>
+<li><p>&quot;Matrix Forest Index (MFI)&quot;: the ratio of the number of spanning
+rooted forests belonging to the same tree to all spanning rooted
+forests of the network.
+</p>
+</li>
+<li><p>&quot;Random Walk with Restart (RWR)&quot;: the probability at the steady
+state, solved analytically (not iteratively).
+</p>
+</li>
+<li><p>&quot;Short Random Walk (SRW)&quot;: p-step random walk, solved
+analytically (not iteratively).
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xGraphSim</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+g &lt;- make_graph("Zachary")
+gp &lt;- xGGnetwork(g,node.label='name',node.label.size=3,
+node.label.force=0.01)
+
+## Not run: 
+# Common Neighbors (CN)
+res &lt;- xGraphSim(g, measure="CN")
+# Resource Allocation Index (RA)
+res &lt;- xGraphSim(g, measure="RA")
+# Local Path Index (LP)
+res &lt;- xGraphSim(g, measure="LP", measure.para=list(LP.eps=0.01))
+# Katz Index (KI)
+res &lt;- xGraphSim(g, measure="KI", measure.para=list(KI.beta=0.001))
+# Random Walk with Restart (RWR)
+res &lt;- xGraphSim(g, measure="RWR", measure.para=list(RWR.r=0.5))
+# Short Random Walk (SRW)
+res &lt;- xGraphSim(g, measure="SRW", measure.para=list(SRW.p=4))
+
+## End(Not run)
+</pre>
+
+
+</body></html>

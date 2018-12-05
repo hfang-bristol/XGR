@@ -1,4 +1,4 @@
-#' Function to calculate random walk kernel on the input graph
+#' Function to calculate random walk kernel on the input graph solved analytically
 #'
 #' \code{xRWkernel} is supposed to calculate a weighted random walk kernel (at a predefined number of steps) for estimating pairwise affinity between nodes.
 #'
@@ -68,8 +68,8 @@ xRWkernel <- function(g, steps=4, chance=2, verbose=TRUE)
         message(sprintf("Then, laplacian normalisation of the adjacency matrix (%s) ...", as.character(Sys.time())), appendLF=TRUE)
     }
     
-    A <- adjM!=0
     ## D is the degree matrix of the graph (^-1/2)
+    A <- adjM!=0
     D <- Matrix::Diagonal(x=(Matrix::colSums(A))^(-0.5))
     nadjM <- D %*% adjM %*% D
     #nadjM <- as.matrix(nadjM)

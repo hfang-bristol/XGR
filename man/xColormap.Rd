@@ -9,7 +9,7 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom", "jet.both", "spectral", "ggplot2.top", "ggplot2.bottom",
 "ggplot2.both", "RdYlBu", "rainbow_hcl"), interpolate = c("spline",
-"linear"))
+"linear"), data = NULL)
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"
@@ -26,12 +26,13 @@ standard color names can be found in
 function of 'colorRampPalette'}
 
 \item{interpolate}{use spline or linear interpolation}
+
+\item{data}{NULL or a numeric vector}
 }
 \value{
-\itemize{
-\item{\code{palette.name}: a function that takes an integer argument
-for generating that number of colors interpolating the given sequence}
-}
+palette.name (a function that takes an integer argument for generating
+that number of colors interpolating the given sequence) or mapped
+colors if data is provided.
 }
 \description{
 \code{xColormap} is supposed to define a colormap. It returns a
@@ -75,4 +76,7 @@ palette.name(3)
 palette.name <- xColormap(colormap="RdYlBu")
 # use the return function "palette.name" to generate 3 default colors used by ggplot2
 palette.name(3)
+
+# 4) return mapped colors
+xColormap(colormap="RdYlBu", data=runif(5))
 }

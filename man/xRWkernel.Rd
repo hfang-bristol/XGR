@@ -2,7 +2,7 @@
 % Please edit documentation in R/xRWkernel.r
 \name{xRWkernel}
 \alias{xRWkernel}
-\title{Function to calculate random walk kernel on the input graph}
+\title{Function to calculate random walk kernel on the input graph solved analytically}
 \usage{
 xRWkernel(g, steps = 4, chance = 2, verbose = TRUE)
 }

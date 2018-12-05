@@ -108,7 +108,8 @@ plotted}
 \item{title}{a character specifying the title for the plot}
 
 \item{edge.size}{a numeric value specifying the edge size. By default,
-it is 0.5}
+it is 0.5. It can be a character specifying which edge attribute
+defining the the edge colors (though without the legend)}
 
 \item{edge.color}{a character specifying which edge attribute defining
 the the edge colors}
@@ -234,6 +235,17 @@ node.color.title='5-star\\nrating', colormap='white-yellow-red',
 ncolors=64, zlim=c(0,5), node.size.range=5,
 edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02,
 title='')
+
+###########################
+# use edge weight to color/size edges (without legends)
+# edge color
+#E(g)$color <- xColormap(colormap='RdYlBu', data=E(g)$weight)
+#E(g)$size <- (E(g)$weight - min(E(g)$weight)) / (max(E(g)$weight) - min(E(g)$weight))
+e.color <- subset(gp$data, !is.na(na.y))$e.color
+gp + ggnetwork::geom_edges(color=e.color, show.legend=FALSE)
+# edge size/thickness
+e.size <- subset(gp$data, !is.na(na.y))$e.size
+gp + ggnetwork::geom_edges(size=e.size, show.legend=FALSE)
 }
 }
 \seealso{

@@ -12,7 +12,7 @@ label.color = "black", label.alpha = 0.8, label.padding = 0.5,
 label.arrow = 0.01, label.force = 0.5, xlim = NULL, ylim = NULL,
 y.scale = c("normal", "log"),
 xlab = expression(log[2]("fold change")),
-ylab = expression(-log[10]("FDR")), signature = TRUE)
+ylab = expression(-log[10]("FDR")), caption = NULL)
 }
 \arguments{
 \item{data}{a data frame}
@@ -65,8 +65,9 @@ change"))}
 \item{ylab}{the y labelling. By default, it is
 expression(-log[10]("FDR"))}
 
-\item{signature}{logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets TRUE}
+\item{caption}{logical to indicate whether the caption is assigned to
+the plot caption. NA for not shown, NULL for package version, and other
+customised input}
 }
 \value{
 a ggplot object
