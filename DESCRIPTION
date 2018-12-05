@@ -141,5 +141,7 @@ Collate:
     'xEnrichDotplot.r'
     'xGraphRWR.r'
     'xGraphSim.r'
+    'xGraphPerf.r'
+    'xGraphML2A2.r'
 License: GPL-2
 biocViews: Bioinformatics

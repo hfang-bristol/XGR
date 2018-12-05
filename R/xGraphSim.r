@@ -57,6 +57,15 @@
 #' res <- xGraphSim(g, measure="RWR", measure.para=list(RWR.r=0.5))
 #' # Short Random Walk (SRW)
 #' res <- xGraphSim(g, measure="SRW", measure.para=list(SRW.p=4))
+#' 
+#' # comparing performance
+#' measures <- c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA","LP","KI","LHNg","SP","ACT","CL","MFI","RWR","SRW")
+#' names(measures) <- measures
+#' ls_pPerf <- lapply(measures, function(measure){
+#' 	prediction <- xGraphSim(g, measure)
+#' 	pPerf <- xGraphPerf(prediction, g)
+#' })
+#' gp <- xClassifyComp(ls_pPerf, displayBy="PR")
 #' }
 
 xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA","LP","KI","LHNg","SP","ACT","CL","MFI","RWR","SRW"), type=c('full','edge'), edge.fast=F, measure.para=list(LP.eps=0.01,KI.beta=0.001,LHNg.theta=0.5,RWR.r=0.5,SRW.p=4), verbose=TRUE)

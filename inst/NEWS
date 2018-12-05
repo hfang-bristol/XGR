@@ -19,7 +19,9 @@ NEW FEATURES
 
     o Modify functions ('xSymbol2GeneID', 'xGeneID2Symbol', 'xDefineOntology', 'xEnricherGenes') enabling organism-specific customised analysis
     
-    o Add functions ('xGraphRWR', 'xGraphSim') for estimating graph node similarity
+    o Add functions ('xGraphRWR', 'xGraphSim', 'xGraphPerf') for analysing graph node similarity
+    
+    o Add functions ('xGraphML2A2') for pathway analysis
 
 
 CHANGES IN VERSION 1.1.4

@@ -23,7 +23,7 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom", "jet.both", "spectral", "ggplot2.top", "ggplot2.bottom",
 "ggplot2.both", "RdYlBu", "rainbow_hcl"), interpolate = c("spline",
-"linear"), data = NULL)
+"linear"), data = NULL, zlim = NULL)
 </pre>
 
 
@@ -52,6 +52,14 @@ function of 'colorRampPalette'</p>
 <tr valign="top"><td><code>data</code></td>
 <td>
 <p>NULL or a numeric vector</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z/patttern values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
 </td></tr>
 </table>
 

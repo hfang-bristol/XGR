@@ -9,7 +9,7 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom", "jet.both", "spectral", "ggplot2.top", "ggplot2.bottom",
 "ggplot2.both", "RdYlBu", "rainbow_hcl"), interpolate = c("spline",
-"linear"), data = NULL)
+"linear"), data = NULL, zlim = NULL)
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"
@@ -28,6 +28,12 @@ function of 'colorRampPalette'}
 \item{interpolate}{use spline or linear interpolation}
 
 \item{data}{NULL or a numeric vector}
+
+\item{zlim}{the minimum and maximum z/patttern values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted}
 }
 \value{
 palette.name (a function that takes an integer argument for generating

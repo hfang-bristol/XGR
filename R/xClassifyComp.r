@@ -190,12 +190,15 @@ xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","cur
 		
 			## ggplot
 			p <- ggplot(df, aes(x=methods,y=fmax))
-			p <- p + geom_col(aes(fill=factor(labels)))
+			p <- p + geom_col(aes(fill=factor(methods)))
 			p <- p + ylab("F-max\n(a measure of Precision-Recall curve)")
 			p <- p + geom_text(aes(label=fmax), hjust=1)
 		}
 		
 		p <- p + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+		
+		## y-axis position
+		p <- p + scale_y_continuous(position="right")
 	
 	}
 	
@@ -204,8 +207,6 @@ xClassifyComp <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("bar","cur
 	## put arrows on both axes
 	p <- p + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 
-	## y-axis position
-	p <- p + scale_y_continuous(position="right")
 	
 	invisible(p)
 }

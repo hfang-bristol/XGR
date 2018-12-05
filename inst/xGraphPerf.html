@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to evaluate the graph node similarity prediction...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGraphPerf"><tr><td>xGraphPerf</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to evaluate the graph node similarity prediction performance</h2>
+
+<h3>Description</h3>
+
+<p><code>xGraphPerf</code> is supposed to evaluate the graph node similarity
+prediction performance. It returns an object of class &quot;pPerf&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGraphPerf(prediction, g = NULL, GSP = NULL, GSN = NULL,
+plot = c("none", "ROC", "PR"), highlight = F, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>prediction</code></td>
+<td>
+<p>a symmetric sparse matrix containing predictive
+scores</p>
+</td></tr>
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph. If
+either GSP or GSN is NULL, its adjacency matrix is used to define GSP
+(all edges) and the rest as GSN</p>
+</td></tr>
+<tr valign="top"><td><code>GSP</code></td>
+<td>
+<p>a vector containing Gold Standard Positives (GSP)</p>
+</td></tr>
+<tr valign="top"><td><code>GSN</code></td>
+<td>
+<p>a vector containing Gold Standard Negatives (GSN)</p>
+</td></tr>
+<tr valign="top"><td><code>plot</code></td>
+<td>
+<p>the way to plot performance curve. It can be 'none' for no
+curve returned, 'ROC' for ROC curve, and 'PR' for PR curve.</p>
+</td></tr>
+<tr valign="top"><td><code>highlight</code></td>
+<td>
+<p>logical to indicate whether a dot is highlighted. It
+only works when plot is drawn. When true, the maximum accuracy
+highlighted in ROC curve, and the Fmax highlighted in PR curve. By
+default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to TRUE for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;pPerf&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>data</code>: a data frame with 8 columns, including 4 performance
+measures ('Accuracy', 'Precision', 'Recall' and 'Specificity'), 'name'
+(subjects), 'pred' (predictive scores), 'label' (1 for GSP and 0 for
+GSN), 'corrected' (corrected/transformed predictiv scores, always the
+higher the better)
+</p>
+</li>
+<li><p><code>auroc</code>: a scalar value for ROC AUC
+</p>
+</li>
+<li><p><code>fmax</code>: a scalar value for maximum F-measure
+</p>
+</li>
+<li><p><code>amax</code>: a scalar value for maximum accuracy
+</p>
+</li>
+<li><p><code>direction</code>: '+' (the higher score the better prediction)
+and '-' (the higher score the worse prediction)
+</p>
+</li>
+<li><p><code>gp</code>: a ggplot object (if plotted) or NULL
+</p>
+</li>
+<li><p><code>Pred_obj</code>: a ROCR prediction-class object (potentially used
+for calculating other performance measures)
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>AUC: the area under ROC
+F-measure: the maximum of a harmonic mean between precision and recall
+along PR curve
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+g &lt;- make_graph("Zachary")
+# Common Neighbors (CN)
+prediction &lt;- xGraphSim(g, measure="CN")
+pPerf &lt;- xGraphPerf(prediction, g)
+gp &lt;- xClassifyComp(pPerf, displayBy="PR")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
