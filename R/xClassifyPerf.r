@@ -50,6 +50,11 @@ xClassifyPerf <- function(prediction, GSP, GSN, rescale=F, plot=c("none","ROC","
         message(sprintf("There are %d subjects in predictions (%s).", length(pred), as.character(Sys.time())), appendLF=TRUE)
     }
 	
+	########
+	# make sure no intersection
+	GSN <- setdiff(GSN, GSP)
+	########
+		
 	## GSP
 	gsp <- unique(GSP)
 	### GSP but only predicted

@@ -47,8 +47,8 @@
 #' \dontrun{
 #' # Common Neighbors (CN)
 #' res <- xGraphSim(g, measure="CN")
-#' # Resource Allocation Index (RA)
-#' res <- xGraphSim(g, measure="RA")
+#' # Adamic-Adar Index (AA)
+#' res <- xGraphSim(g, measure="AA")
 #' # Local Path Index (LP)
 #' res <- xGraphSim(g, measure="LP", measure.para=list(LP.eps=0.01))
 #' # Katz Index (KI)
@@ -66,6 +66,43 @@
 #' 	pPerf <- xGraphPerf(prediction, g)
 #' })
 #' gp <- xClassifyComp(ls_pPerf, displayBy="PR")
+#'
+#' ###################
+#' # advanced use
+#' ###################
+#' ig.KEGG.list <- xRDataLoader('ig.KEGG.list', RData.location=RData.location)
+#' 
+#' ## prediction within a bigraph (ligend-receptor interaction)
+#' # 1) define bigraph (ligend-receptor interaction)
+#' ig <- ig.KEGG.list$'Cytokine-cytokine receptor interaction'
+#' df_edges <- igraph::get.data.frame(ig, what="edges")[, c(1,2)]
+#' big <- xBicreate(xSparseMatrix(df_edges))
+#' V(big)$type <- ifelse(V(big)$type=='ynode', 'Ligand', 'Receptor')
+#' # 2) prediction 
+#' # via Short Random Walk (SRW)
+#' prediction <- xGraphSim(big, measure="SRW", measure.para=list(SRW.p=4))
+#' visHeatmapAdv(as.matrix(prediction),dendrogram="none", colormap='white-orange-red', labRow=NA, labCol=NA)
+#' # 3) performance against GSP (the observed), GSN (any not observed)
+#' pPerf <- xGraphPerf(prediction, big)
+#' 
+#' ## prediction based on KEGG pathways
+#' # 1) define merged graph
+#' networks <- c("KEGG_environmental","KEGG_organismal")
+#' ls_ig <- lapply(networks, xDefineNet, RData.location=RData.location)
+#' mg <- xCombineNet(ls_ig, combineBy='union', attrBy="intersect")
+#' # 2) prediction
+#' # via Short Random Walk (SRW)
+#' prediction <- xGraphSim(mg, measure="SRW", measure.para=list(SRW.p=4))
+#' # 3) define the target space (ligend-receptor interaction) to evaluate
+#' ig <- ig.KEGG.list$'Cytokine-cytokine receptor interaction'
+#' df_edges <- igraph::get.data.frame(ig, what="edges")
+#' # GSP (LR interactions observed)
+#' GSP <- paste0(df_edges[,1],'--',df_edges[,2])
+#' # GSN (any LR interaction not observed)
+#' GSN <- apply(expand.grid(unique(df_edges[,1]), unique(df_edges[,2])), 1, paste0, collapse="--")
+#' GSN <- base::setdiff(GSN, GSP)
+#' # 4) performance
+#' pPerf <- xGraphPerf(prediction, GSP=GSP, GSN=GSN)
 #' }
 
 xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA","LP","KI","LHNg","SP","ACT","CL","MFI","RWR","SRW"), type=c('full','edge'), edge.fast=F, measure.para=list(LP.eps=0.01,KI.beta=0.001,LHNg.theta=0.5,RWR.r=0.5,SRW.p=4), verbose=TRUE)
@@ -89,19 +126,27 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
         stop("The function must apply to either 'igraph' or 'graphNEL' object.\n")
     }
     
+	n <- vcount(ig)
+	m <- igraph::ecount(ig)
+    
+	if(!is.null(V(ig)$name)){
+		vec_nodenames <- V(ig)$name
+	}else{
+		vec_nodenames <- 1:n
+	}
+    
     if(type=='edge' & !edge.fast){
-		if(is.null(V(ig)$iid)){
-			V(ig)$iid <- 1:vcount(ig)
-		}
+
+		V(ig)$name <- 1:n
 	
 		vec_degree <- igraph::degree(ig)
-		names(vec_degree) <- V(ig)$iid
+		names(vec_degree) <- V(ig)$name
 	
 		# a node: neighbors
 		ls_neighbors <- lapply(V(ig), function(v){
 			res <- igraph::neighbors(ig, v)
 		})
-		names(ls_neighbors) <- V(ig)$iid
+		names(ls_neighbors) <- V(ig)$name
 	
 		df_edges <- get.data.frame(ig, what='edge')
 		## add degree
@@ -117,9 +162,6 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 			intersection(from, to)
 		})
     }
-	
-	n <- vcount(ig)
-	m <- igraph::ecount(ig)
 	
 	###############
 	if(measure=='CN'){
@@ -288,7 +330,7 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 	}else if(measure=='LP'){
 		# Local Path Index (LP): the number of two-step paths and three-step paths (weighted by the eps), providing a tradeoff of accuracy and computational complexity
 		eps <- 0.01
-		if(names(measure.para) %in% "LP.eps"){
+		if("LP.eps" %in% names(measure.para)){
 			if(!is.null(measure.para$LP.eps)){
 				eps <- measure.para$LP.eps
 			}
@@ -304,7 +346,7 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 	}else if(measure=='KI'){
 		# Katz Index (KI): based on the ensemble of all paths, which directly sums over the collection of paths and is exponentially damped by length to give the shorter paths more weights
 		beta <- 0.001
-		if(names(measure.para) %in% "KI.beta"){
+		if(any(names(measure.para) %in% "KI.beta")){
 			if(!is.null(measure.para$KI.beta)){
 				beta <- measure.para$KI.beta
 			}
@@ -320,7 +362,7 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 	}else if(measure=='LHNg'){
 		# Leicht-Holme-Newman Index global similarity (LHNg): two nodes are similar if their immediate neighbors are similar by themselves
 		theta <- 0.5
-		if(names(measure.para) %in% "LHNg.theta"){
+		if("LHNg.theta" %in% names(measure.para)){
 			if(!is.null(measure.para$LHNg.theta)){
 				theta <- measure.para$LHNg.theta
 			}
@@ -383,7 +425,7 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 		# Random Walk with Restart (RWR)
 		# solved analytically (not iteratively)
 		r <- 0.5
-		if(names(measure.para) %in% "RWR.r"){
+		if("RWR.r" %in% names(measure.para)){
 			if(!is.null(measure.para$RWR.r)){
 				r <- measure.para$RWR.r
 			}
@@ -420,7 +462,7 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
 		# Short Random Walk (SRW)
 		# solved analytically
 		p <- 4
-		if(names(measure.para) %in% "SRW.p"){
+		if("SRW.p" %in% names(measure.para)){
 			if(!is.null(measure.para$SRW.p)){
 				p <- measure.para$SRW.p
 			}
@@ -432,7 +474,8 @@ xGraphSim <- function(g, measure=c("CN","SI","JI","DI","HPI","HDI","LHN","AA","R
     	
 	}
 	
-	colnames(score) <- rownames(score) <- 1:n
+	colnames(score) <- rownames(score) <- vec_nodenames
+	
     ####################################################################################
     endT <- Sys.time()
     if(verbose){

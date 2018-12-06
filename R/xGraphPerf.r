@@ -51,17 +51,24 @@ xGraphPerf <- function(prediction, g=NULL, GSP=NULL, GSN=NULL, plot=c("none","RO
     }
 	
 	if(is.null(GSP) | is.null(GSN)){
-		A  <- igraph::get.adjacency(g)
+		# extract only lower triangle part of adjacency matrix
+		A  <- igraph::get.adjacency(g, type="lower")
+		# artificially force upper triangle part to -1
+		A[upper.tri(A,diag=T)] <- -1
+		# upper triangle part: 0
+		# lower triangle part: 2 (GSP), 1 (GSN)
 		df_A <- xSM2DF(A+1, verbose=F)
-		df_A <- df_A[df_A[,1]<df_A[,2],]
 		df_GSP <- df_A[df_A[,3]==2,]
 		df_GSN <- df_A[df_A[,3]==1,]
 		GSP <- paste0(df_GSP[,1],'--',df_GSP[,2])
 		GSN <- paste0(df_GSN[,1],'--',df_GSN[,2])
 	}
 	
+	# artificially force upper triangle part to 0
+	prediction[upper.tri(prediction,diag=T)] <- 0
+	# upper triangle part: 0
+	# lower triangle part: nonzero entries for the predicted
 	df <- xSM2DF(prediction, verbose=F)
-	df <- df[df[,1]<df[,2],]
 	prediction <- data.frame(name=paste0(df[,1],'--',df[,2]), score=df[,3], stringsAsFactors=F)
 	
 	pPerf <- xClassifyPerf(prediction, GSP, GSN, plot=plot, highlight=highlight, verbose=verbose)

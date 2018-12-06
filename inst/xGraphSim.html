@@ -184,8 +184,8 @@ node.label.force=0.01)
 ## Not run: 
 # Common Neighbors (CN)
 res &lt;- xGraphSim(g, measure="CN")
-# Resource Allocation Index (RA)
-res &lt;- xGraphSim(g, measure="RA")
+# Adamic-Adar Index (AA)
+res &lt;- xGraphSim(g, measure="AA")
 # Local Path Index (LP)
 res &lt;- xGraphSim(g, measure="LP", measure.para=list(LP.eps=0.01))
 # Katz Index (KI)
@@ -204,6 +204,46 @@ prediction &lt;- xGraphSim(g, measure)
 pPerf &lt;- xGraphPerf(prediction, g)
 })
 gp &lt;- xClassifyComp(ls_pPerf, displayBy="PR")
+
+###################
+# advanced use
+###################
+ig.KEGG.list &lt;- xRDataLoader('ig.KEGG.list',
+RData.location=RData.location)
+
+## prediction within a bigraph (ligend-receptor interaction)
+# 1) define bigraph (ligend-receptor interaction)
+ig &lt;- ig.KEGG.list$'Cytokine-cytokine receptor interaction'
+df_edges &lt;- igraph::get.data.frame(ig, what="edges")[, c(1,2)]
+big &lt;- xBicreate(xSparseMatrix(df_edges))
+V(big)$type &lt;- ifelse(V(big)$type=='ynode', 'Ligand', 'Receptor')
+# 2) prediction 
+# via Short Random Walk (SRW)
+prediction &lt;- xGraphSim(big, measure="SRW", measure.para=list(SRW.p=4))
+visHeatmapAdv(as.matrix(prediction),dendrogram="none",
+colormap='white-orange-red', labRow=NA, labCol=NA)
+# 3) performance against GSP (the observed), GSN (any not observed)
+pPerf &lt;- xGraphPerf(prediction, big)
+
+## prediction based on KEGG pathways
+# 1) define merged graph
+networks &lt;- c("KEGG_environmental","KEGG_organismal")
+ls_ig &lt;- lapply(networks, xDefineNet, RData.location=RData.location)
+mg &lt;- xCombineNet(ls_ig, combineBy='union', attrBy="intersect")
+# 2) prediction
+# via Short Random Walk (SRW)
+prediction &lt;- xGraphSim(mg, measure="SRW", measure.para=list(SRW.p=4))
+# 3) define the target space (ligend-receptor interaction) to evaluate
+ig &lt;- ig.KEGG.list$'Cytokine-cytokine receptor interaction'
+df_edges &lt;- igraph::get.data.frame(ig, what="edges")
+# GSP (LR interactions observed)
+GSP &lt;- paste0(df_edges[,1],'--',df_edges[,2])
+# GSN (any LR interaction not observed)
+GSN &lt;- apply(expand.grid(unique(df_edges[,1]), unique(df_edges[,2])),
+1, paste0, collapse="--")
+GSN &lt;- base::setdiff(GSN, GSP)
+# 4) performance
+pPerf &lt;- xGraphPerf(prediction, GSP=GSP, GSN=GSN)
 
 ## End(Not run)
 </pre>
