@@ -19,9 +19,9 @@
 #' @include xGraphRWR.r
 #' @examples
 #' g <- make_graph("Zachary")
-#' gp <- xGGnetwork(g,node.label='name',node.label.size=3, node.label.force=0.01)
 #'
 #' \dontrun{
+#' gp <- xGGnetwork(g,node.label='name',node.label.size=3, node.label.force=0.01)
 #' # obtain the pre-computated affinity matrix
 #' PTmatrix <- xGraphRWR(g, normalise="laplacian", restart=0.75)
 #' # visualise affinity matrix

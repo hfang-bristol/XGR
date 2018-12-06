@@ -59,7 +59,7 @@
 #' res <- xGraphSim(g, measure="SRW", measure.para=list(SRW.p=4))
 #' 
 #' # comparing performance
-#' measures <- c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA","LP","KI","LHNg","SP","ACT","CL","MFI","RWR","SRW")
+#' measures <- c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA")
 #' names(measures) <- measures
 #' ls_pPerf <- lapply(measures, function(measure){
 #' 	prediction <- xGraphSim(g, measure)

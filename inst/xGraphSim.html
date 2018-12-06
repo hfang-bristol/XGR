@@ -196,8 +196,7 @@ res &lt;- xGraphSim(g, measure="RWR", measure.para=list(RWR.r=0.5))
 res &lt;- xGraphSim(g, measure="SRW", measure.para=list(SRW.p=4))
 
 # comparing performance
-measures &lt;-
-c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA","LP","KI","LHNg","SP","ACT","CL","MFI","RWR","SRW")
+measures &lt;- c("CN","SI","JI","DI","HPI","HDI","LHN","AA","RA")
 names(measures) &lt;- measures
 ls_pPerf &lt;- lapply(measures, function(measure){
 prediction &lt;- xGraphSim(g, measure)
