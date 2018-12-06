@@ -95,12 +95,14 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 	#################
 		
     ## tooltip
-    vec_description <- xSymbol2GeneID(df$Symbol, org=org, details=TRUE, verbose=verbose, RData.location=RData.location)$description
+    df_res <- xSymbol2GeneID(df$Symbol, org=org, details=TRUE, verbose=verbose, RData.location=RData.location)
+    df$GeneID <- df_res$GeneID
+    df$description <- df_res$description
     ### whether or not FDR is highlighted
     if(node.highlight %in% colnames(data)){
-		df$tooltip <- paste0('Symbol: ', df$Symbol, '\nName: ', vec_description, '\nColor: ', df$LFC, '\nHightlight: ', df$FDR)
+		df$tooltip <- paste0('Symbol: ', df$Symbol, '\nName: ', df$description, '\nColor: ', df$LFC, '\nHightlight: ', df$FDR)
 	}else{
-		df$tooltip <- paste0('Symbol: ', df$Symbol, '\nName: ', vec_description, '\nColor: ', df$LFC)
+		df$tooltip <- paste0('Symbol: ', df$Symbol, '\nName: ', df$description, '\nColor: ', df$LFC)
 	}
     if(!is.null(node.tooltip)){
 		if(node.tooltip %in% colnames(data)){
@@ -350,7 +352,8 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 			##############
 			if(!is.na(ind_found)){
 				k <- k+1
-				vec[k] <- paste0('<data key="d1"><![CDATA[', "http://www.genecards.org/cgi-bin/carddisp.pl?gene=", df$Symbol[ind_found], ']]></data>')
+				#vec[k] <- paste0('<data key="d1"><![CDATA[', "http://www.genecards.org/cgi-bin/carddisp.pl?gene=", df$Symbol[ind_found], ']]></data>')
+				vec[k] <- paste0('<data key="d1"><![CDATA[', "https://www.ncbi.nlm.nih.gov/gene/", df$GeneID[ind_found], ']]></data>')
 			
 				k <- k+1
 				vec[k] <- paste0('<data key="d2"><![CDATA[', df$tooltip[ind_found], ']]></data>')
@@ -366,6 +369,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 						return(NULL)
 					}else if(flag_gene){
 						k <- k+1
+						## those not found given the input data, thus only by gene symbols
 						vec[k] <- paste0('<data key="d1"><![CDATA[', "http://www.genecards.org/cgi-bin/carddisp.pl?gene=", df_nodes$name[i], ']]></data>')
 			
 						k <- k+1

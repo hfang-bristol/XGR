@@ -42,7 +42,6 @@
 #' @include xGraphSim.r
 #' @examples
 #' g <- make_graph("Zachary")
-#' gp <- xGGnetwork(g,node.label='name',node.label.size=3, node.label.force=0.01)
 #' 
 #' \dontrun{
 #' # Common Neighbors (CN)
