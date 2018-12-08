@@ -17,7 +17,7 @@
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom S4Vectors Rle queryHits subjectHits as.matrix
 #' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl extendrange dev.off pdf col2rgb jpeg
-#' @importFrom graphics plot lines legend contour text par hist curve
+#' @importFrom graphics plot lines legend contour text par hist curve abline
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom rtracklayer liftOver
 #' @importFrom stats sd median mad ecdf na.omit predict prcomp lm quantile as.dist hclust cor as.dendrogram order.dendrogram 

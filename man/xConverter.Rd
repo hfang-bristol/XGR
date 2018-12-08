@@ -4,30 +4,37 @@
 \alias{xConverter}
 \title{Function to convert an object between graph classes}
 \usage{
-xConverter(obj, from = c("dgCMatrix", "igraph"), to = c("igraph",
-"dgCMatrix"), verbose = TRUE)
+xConverter(obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
+"json"),
+to = c("dgCMatrix", "igraph", "dtree", "lol", "json"),
+verbose = TRUE)
 }
 \arguments{
-\item{obj}{an object of class "dgCMatrix" or "igraph"}
+\item{obj}{an object of class "igraph", "dgCMatrix", "dtree", "lol",
+and "json"}
 
 \item{from}{a character specifying the class converted from. It can be
-one of "dgCMatrix" and "igraph"}
+one of "igraph", "dgCMatrix", "dtree", "lol", and "json"}
 
 \item{to}{a character specifying the class converted to. It can be one
-of "dgCMatrix" and "igraph"}
+of "igraph", "dgCMatrix", "dtree", "lol", and "json"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 }
 \value{
-an object of class "dgCMatrix" or "igraph"
+an object of class "igraph", "dgCMatrix", "dtree", "lol", or "json".
 }
 \description{
 \code{xConverter} is supposed to convert an object between classes
-'dgCMatrix' and 'igraph'.
+"igraph", "dgCMatrix", "dtree", "lol", and "json".
 }
 \note{
-Conversion is also supported between classes 'dgCMatrix' and 'igraph'
+Conversion is supported directly: 1) from 'igraph' to
+"dgCMatrix","dtree","lol","json"; 2) from 'dgCMatrix' to "igraph"; 3)
+from 'dtree' to "igraph","lol","json"; 4) from 'lol' to "dtree","json";
+5) from 'json' to "lol","dtree". In summary: "dgCMatrix" -- "igraph"
+(hub) -- "dtree" (hub) -- "lol" -- "json"
 }
 \examples{
 # generate a ring graph
@@ -49,6 +56,21 @@ s[1:10,1:10]
 # convert the object from 'dgCMatrix' to 'igraph' class
 ig <- xConverter(s, from="dgCMatrix", to="igraph")
 ig
+
+##############
+g <- make_graph("Zachary")
+
+# from 'igraph' to "dtree","lol","json"
+dtree <- xConverter(g, from='igraph', to='dtree')
+lol <- xConverter(g, from='igraph', to='lol')
+json <- xConverter(g, from='igraph', to='json')
+
+# from "lol","json" to 'dtree' 
+dtree <- xConverter(lol, from='lol', to='dtree')
+dtree <- xConverter(json, from='json', to='dtree')
+
+# from 'dtree' to "igraph"
+g <- xConverter(dtree, from='dtree', to='igraph')
 }
 }
 \seealso{

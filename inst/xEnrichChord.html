@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a chord plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xEnrichChord"><tr><td>xEnrichChord</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise enrichment results using a chord plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichChord</code> is supposed to visualise enrichment results using a
+chord plot. The thickness of links is proportional to the enrichment
+Z-scores. Particularly useful for multiple groups and/or ontologies.
+The left-half part sorted by the input groups (anti-clockwise), and the
+right-half part sorted first by the input ontolgies and then by the
+number of links within an ontology (clockwise).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xEnrichChord(eTerm, top_num = 5, FDR.cutoff = 0.05,
+colormap.group = "ggplot2", colormap.ontology = "spectral",
+wrap.width = NULL, text.size = 0.6, legend = NULL, vline = F,
+...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eTerm</code></td>
+<td>
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns (named as
+'group','ontology','name','adjp','zscore')</p>
+</td></tr>
+<tr valign="top"><td><code>top_num</code></td>
+<td>
+<p>the number of the top terms (sorted according to adjp).
+For the eTerm object, if it is 'auto' (for eTerm), only the significant
+terms (see below FDR.cutoff) will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
+</td></tr>
+<tr valign="top"><td><code>colormap.group</code></td>
+<td>
+<p>short name for the group sector colormap</p>
+</td></tr>
+<tr valign="top"><td><code>colormap.ontology</code></td>
+<td>
+<p>short name for the ontology sector colormap</p>
+</td></tr>
+<tr valign="top"><td><code>wrap.width</code></td>
+<td>
+<p>a positive integer specifying wrap width of
+labellings</p>
+</td></tr>
+<tr valign="top"><td><code>text.size</code></td>
+<td>
+<p>the text size of the labelings. By default, it is 0.6</p>
+</td></tr>
+<tr valign="top"><td><code>legend</code></td>
+<td>
+<p>logical to indicate whether to show the legend. If NULL,
+automatically determined. For the group sector, the legends shown on
+the bottom-left corner. For the ontology sector, the legends shown on
+the bottom-right corner</p>
+</td></tr>
+<tr valign="top"><td><code>vline</code></td>
+<td>
+<p>logical to indicate whether to vertically put a line
+seperating two symmetric parts of sectors</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters (such as big.gap=15,
+small.gap=1.5) used in circlize::chordDiagram</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a data frame used for visualisation
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichChord</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+xEnrichChord(eTerm)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
