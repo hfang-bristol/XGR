@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Definition for S3 class 'sMap'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sMap"><tr><td>sMap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Definition for S3 class <code>sMap</code></h2>
+
+<h3>Description</h3>
+
+<p><code>sClass</code> mush have following components: nHex, xdim, ydim, r,
+lattice, shape, coord, polygon, init, codebook, hits
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sMap(nHex, xdim, ydim, r, lattice, shape, coord, polygon, init,
+codebook,
+hits)
+
+## S3 method for class 'sMap'
+print(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>nHex</code></td>
+<td>
+<p>an integer</p>
+</td></tr>
+<tr valign="top"><td><code>xdim</code></td>
+<td>
+<p>an integer</p>
+</td></tr>
+<tr valign="top"><td><code>ydim</code></td>
+<td>
+<p>an integer</p>
+</td></tr>
+<tr valign="top"><td><code>r</code></td>
+<td>
+<p>an integer</p>
+</td></tr>
+<tr valign="top"><td><code>lattice</code></td>
+<td>
+<p>a character</p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>a character</p>
+</td></tr>
+<tr valign="top"><td><code>coord</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>polygon</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>init</code></td>
+<td>
+<p>a character</p>
+</td></tr>
+<tr valign="top"><td><code>codebook</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>hits</code></td>
+<td>
+<p>a vector</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>sMap</code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other parameters</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of S3 class <code>sMap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+sMap(nHex=nHex, xdim=xdim, ydim=ydim, r=r, lattice=lattice,
+shape=shape, coord=coord, polygon=polygon, init=init,
+codebook=codebook, hits=hits)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

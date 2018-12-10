@@ -7,8 +7,8 @@
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param border.color the border color for each hexagon
 #' @param legend.title the title of the colorbar. By default, it is ''
-#' @param legend.text.size the text size of the legend tick labelings. By default, it is 5
-#' @param legend.title.size the text size of the legend titles. By default, it is 6
+#' @param legend.text.size the text size of the legend tick labelings
+#' @param legend.title.size the text size of the legend titles
 #' @return 
 #' a ggplot2 object
 #' @note none
@@ -23,21 +23,20 @@
 #' gp + theme(legend.position="none")
 #' 
 #' ## advanced use
-#' # steps
-#' df <- sMap$polygon %>% dplyr::group_by(index) %>% dplyr::summarise(val=unique(stepCentroid))
-#' sBase <- df$val
-#' gp <- xSHbase(sMap, sBase, legend.title='Steps')
+#' # steps to the centroid
+#' df <- unique(sMap$polygon[,c("index","stepCentroid")]) %>% dplyr::arrange(index)
+#' gp <- xSHbase(sMap, df$stepCentroid, legend.title='Steps')
 #' # further labelled by hits
 #' df_coord <- data.frame(sMap$coord, hits=sMap$hits, stringsAsFactors=F)
 #' gp + geom_text(data=df_coord, aes(x,y,label=hits))
 #' 
-#' # angles
-#' df <- sMap$polygon %>% dplyr::group_by(index) %>% dplyr::summarise(val=unique(angleCentroid))
-#' sBase <- ceiling(180*(df$val/3.14))
-#' gp <- xSHbase(sMap, sBase, legend.title='Angles')
+#' # angles to the centroid
+#' df <- unique(sMap$polygon[,c("index","angleCentroid")]) %>% dplyr::arrange(index)
+#' vec <- ceiling(180*(df$angleCentroid/3.14))
+#' gp <- xSHbase(sMap, vec, legend.title='Angles')
 #' }
 
-xSHbase <- function(sMap, sBase, colormap="spectral", border.color="white", legend.title="", legend.text.size=6, legend.title.size=8)
+xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", legend.title="", legend.text.size=6, legend.title.size=8)
 {
 
     if (class(sMap) != "sMap"){
@@ -80,7 +79,7 @@ xSHbase <- function(sMap, sBase, colormap="spectral", border.color="white", lege
 		# ggplot
 		gp <- ggplot(data=df_polygon, aes(x,y)) + geom_polygon(aes(fill=base,group=index),color=border.color) + scale_fill_manual(values=my_colors) + guides(fill=guide_legend(title=legend.title,keywidth=0.8, keyheight=0.8))
 	
-		gp <- gp + coord_fixed(ratio=1) + theme_void() + theme(legend.position="bottom") + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
+		gp <- gp + coord_fixed(ratio=1) + theme_void() + theme(legend.position="right",legend.box="vertical") + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
 
 		if(!is.null(vec_labels)){
 			label <- NULL

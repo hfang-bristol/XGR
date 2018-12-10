@@ -5,16 +5,22 @@
 \title{Function to draw multiple component planes reorded within a tree using ggplot2}
 \usage{
 xSHtree(sMap, phylo = NULL, layout = c("rectangular", "fan",
-"partition"), colormap = "spectral", zlim = NULL, tip.size = 10,
-width = 1)
+"partition"), tip.size = 10, embed.width = 1,
+colormap = "spectral", zlim = NULL, border.color = "transparent",
+barwidth = 0.4, barheight = NULL, nbin = 64, legend.title = "",
+legend.text.size = 6, legend.title.size = 8)
 }
 \arguments{
 \item{sMap}{an object of class "sMap"}
 
 \item{phylo}{an object of class "phylo" or NULL}
 
-\item{layout}{the visual layout. It can be "rectangular" or circular
-stype ("fan" and "partition")}
+\item{layout}{the visual layout. It can be "rectangular" (via ggtree)
+or circular layout via ggraph including "fan" and "partition"}
+
+\item{tip.size}{the tip/title size}
+
+\item{embed.width}{the width/height of embedded ggplot obejcts}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -31,9 +37,21 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 codebook matrix}
 
-\item{tip.size}{the tip/title size}
+\item{border.color}{the border color for each hexagon}
 
-\item{width}{the width/height of embedded ggplot obejcts}
+\item{barwidth}{the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme}
+
+\item{barheight}{the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme}
+
+\item{nbin}{the number of bins for drawing colorbar}
+
+\item{legend.title}{the title of the colorbar. By default, it is ''}
+
+\item{legend.text.size}{the text size of the legend tick labelings}
+
+\item{legend.title.size}{the text size of the legend titles}
 }
 \value{
 a ggplot2 object
@@ -55,9 +73,9 @@ ls_gp <- gp$ls_gp
 
 # advanced use
 tree <- visTreeBootstrap(t(sMap$codebook))
-gp <- xSHtree(sMap, tree, layout="rectangular", width=1)
-gp <- xSHtree(sMap, tree, layout="fan", width=0.4)
-gp <- xSHtree(sMap, tree, layout="partition", width=0.7)
+gp <- xSHtree(sMap, tree, layout="rectangular", embed.width=1)
+gp <- xSHtree(sMap, tree, layout="fan", embed.width=0.4)
+gp <- xSHtree(sMap, tree, layout="partition", embed.width=0.7)
 }
 }
 \seealso{

@@ -5,10 +5,10 @@
 \title{Function to draw multiple component planes of a supra-hexagonal grid using ggplot2}
 \usage{
 xSH(sMap, which.components = NULL, customised.comp = NULL,
-ncols = NULL, colormap = "spectral", ncolors = 64, zlim = NULL,
-border.color = "transparent", barwidth = 0.4, barheight = NULL,
-nbin = 64, legend.title = "", legend.text.size = 5,
-legend.title.size = 6)
+ncolumns = NULL, colormap = "spectral", ncolors = 64,
+zlim = NULL, border.color = "transparent", barwidth = 0.4,
+barheight = NULL, nbin = 64, legend.title = "",
+legend.text.size = 6, legend.title.size = 8)
 }
 \arguments{
 \item{sMap}{an object of class "sMap"}
@@ -20,7 +20,7 @@ be visualised}
 \item{customised.comp}{the customised codebook matrix. It has a high
 priority over the built one. It can be a vector}
 
-\item{ncols}{an integer specifying the number of columns for a
+\item{ncolumns}{an integer specifying the number of columns for a
 rectangle grid wherein the component planes are placed. By defaul, it
 is NULL (decided on according to the number of component planes that
 will be visualised)}
@@ -54,11 +54,9 @@ codebook matrix}
 
 \item{legend.title}{the title of the colorbar. By default, it is ''}
 
-\item{legend.text.size}{the text size of the legend tick labelings. By
-default, it is 5}
+\item{legend.text.size}{the text size of the legend tick labelings}
 
-\item{legend.title.size}{the text size of the legend titles. By
-default, it is 6}
+\item{legend.title.size}{the text size of the legend titles}
 }
 \value{
 a ggplot2 object
@@ -75,7 +73,7 @@ none
 library(XGR)
 
 gp <- xSH(sMap)
-gp <- xSH(sMap, ncols=10)
+gp <- xSH(sMap, ncolumns=8)
 gp <- xSH(sMap, which.components=1)
 gp + theme(legend.position="none")
 

@@ -4,7 +4,7 @@
 \alias{xSHbase}
 \title{Function to visualise bases partitioned from a supra-hexagonal grid using ggplot2}
 \usage{
-xSHbase(sMap, sBase, colormap = "spectral", border.color = "white",
+xSHbase(sMap, sBase, colormap = "rainbow_hcl", border.color = "grey",
 legend.title = "", legend.text.size = 6, legend.title.size = 8)
 }
 \arguments{
@@ -28,11 +28,9 @@ standard color names can be found in
 
 \item{legend.title}{the title of the colorbar. By default, it is ''}
 
-\item{legend.text.size}{the text size of the legend tick labelings. By
-default, it is 5}
+\item{legend.text.size}{the text size of the legend tick labelings}
 
-\item{legend.title.size}{the text size of the legend titles. By
-default, it is 6}
+\item{legend.title.size}{the text size of the legend titles}
 }
 \value{
 a ggplot2 object
@@ -52,20 +50,19 @@ gp <- xSHbase(sMap, sBase)
 gp + theme(legend.position="none")
 
 ## advanced use
-# steps
-df <- sMap$polygon \%>\% dplyr::group_by(index) \%>\%
-dplyr::summarise(val=unique(stepCentroid))
-sBase <- df$val
-gp <- xSHbase(sMap, sBase, legend.title='Steps')
+# steps to the centroid
+df <- unique(sMap$polygon[,c("index","stepCentroid")]) \%>\%
+dplyr::arrange(index)
+gp <- xSHbase(sMap, df$stepCentroid, legend.title='Steps')
 # further labelled by hits
 df_coord <- data.frame(sMap$coord, hits=sMap$hits, stringsAsFactors=F)
 gp + geom_text(data=df_coord, aes(x,y,label=hits))
 
-# angles
-df <- sMap$polygon \%>\% dplyr::group_by(index) \%>\%
-dplyr::summarise(val=unique(angleCentroid))
-sBase <- ceiling(180*(df$val/3.14))
-gp <- xSHbase(sMap, sBase, legend.title='Angles')
+# angles to the centroid
+df <- unique(sMap$polygon[,c("index","angleCentroid")]) \%>\%
+dplyr::arrange(index)
+vec <- ceiling(180*(df$angleCentroid/3.14))
+gp <- xSHbase(sMap, vec, legend.title='Angles')
 }
 }
 \seealso{

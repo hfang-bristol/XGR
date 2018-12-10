@@ -485,3 +485,70 @@ print.sClass <- function(x, ...) {
 	print(x$call)	
 }
 
+######################################################################
+# sMap
+######################################################################
+#' @title Definition for S3 class \code{sMap}
+#' @description \code{sClass} mush have following components: nHex, xdim, ydim, r, lattice, shape, coord, polygon, init, codebook, hits
+#' @param nHex an integer
+#' @param xdim an integer
+#' @param ydim an integer
+#' @param r an integer
+#' @param lattice a character
+#' @param shape a character
+#' @param coord a data frame
+#' @param polygon a data frame
+#' @param init a character
+#' @param codebook a data frame
+#' @param hits a vector
+#' @return an object of S3 class \code{sMap}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' sMap(nHex=nHex, xdim=xdim, ydim=ydim, r=r, lattice=lattice, shape=shape, coord=coord, polygon=polygon, init=init, codebook=codebook, hits=hits)
+#' }
+sMap <- function(nHex, xdim, ydim, r, lattice, shape, coord, polygon, init, codebook, hits){
+	## integrity checks
+	if(class(codebook)!='data.frame' | class(coord)!='data.frame' | class(polygon)!='data.frame'){
+		stop("The S3 class 'sMap' object failed to pass integrity checks!\n")
+	}
+	value <- list(nHex=nHex, xdim=xdim, ydim=ydim, r=r, lattice=lattice, shape=shape, coord=coord, polygon=polygon, init=init, codebook=codebook, hits=hits)
+	class(value) <- "sMap"
+	return(value)
+}
+#' @param x an object of class \code{sMap}
+#' @param ... other parameters
+#' @rdname sMap
+#' @export
+print.sMap <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', containing %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $shape: %s (grid shape)", x$shape), "\n", sep="")
+	cat(sprintf("  $lattice: %s (grid lattice)", x$lattice), "\n", sep="")
+	cat(sprintf("  $r: %d (grid radius)", x$r), "\n", sep="")
+	cat(sprintf("  $xdim: %d hexagons (x-dimension)", x$xdim), "\n", sep="")
+	cat(sprintf("  $xdim: %d hexagons (y-dimension)", x$ydim), "\n", sep="")
+	cat(sprintf("  $nHex: %d hexagons (in total)", x$nHex), "\n", sep="")
+	cat(sprintf("  $hits: a vector of %d in length", length(x$hits)), "\n", sep="")
+	cat(sprintf("  $codebook: a data frame of %d rows X %d columns", dim(x$codebook)[1], dim(x$codebook)[2]), "\n", sep="")
+	cat(sprintf("  $coord: a data frame of %d rows X %d columns", dim(x$coord)[1], dim(x$coord)[2]), "\n", sep="")
+	cat(sprintf("  $polygon: a data frame of %d rows X %d columns", dim(x$polygon)[1], dim(x$polygon)[2]), "\n", sep="")
+	cat("\n--------------------------------------------------\n")
+	cat("$codebook:\n")
+	print(x$codebook[1:2,1:min(5,ncol(x$codebook))], row.names=FALSE)
+	cat("......\n")
+	cat("$coord:\n")
+	print(x$coord[1:5,], row.names=FALSE)
+	cat("......\n")
+	cat("$polygon:\n")
+	print(x$polygon[1:6,], row.names=TRUE)
+	cat("......\n")
+	cat("$call:\n")
+	print(x$call)	
+}
+

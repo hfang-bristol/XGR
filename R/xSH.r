@@ -5,7 +5,7 @@
 #' @param sMap an object of class "sMap"
 #' @param which.components an integer vector specifying which compopnets will be visualised. By default, it is NULL meaning all components will be visualised
 #' @param customised.comp the customised codebook matrix. It has a high priority over the built one. It can be a vector
-#' @param ncols an integer specifying the number of columns for a rectangle grid wherein the component planes are placed. By defaul, it is NULL (decided on according to the number of component planes that will be visualised)
+#' @param ncolumns an integer specifying the number of columns for a rectangle grid wherein the component planes are placed. By defaul, it is NULL (decided on according to the number of component planes that will be visualised)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the finite values of displayed codebook matrix
@@ -14,8 +14,8 @@
 #' @param barheight the height of the colorbar. Default value is 'legend.key.height' or 'legend.key.size' in 'theme' or theme
 #' @param nbin the number of bins for drawing colorbar 
 #' @param legend.title the title of the colorbar. By default, it is ''
-#' @param legend.text.size the text size of the legend tick labelings. By default, it is 5
-#' @param legend.title.size the text size of the legend titles. By default, it is 6
+#' @param legend.text.size the text size of the legend tick labelings
+#' @param legend.title.size the text size of the legend titles
 #' @return 
 #' a ggplot2 object
 #' @note none
@@ -27,7 +27,7 @@
 #' library(XGR)
 #' 
 #' gp <- xSH(sMap)
-#' gp <- xSH(sMap, ncols=10)
+#' gp <- xSH(sMap, ncolumns=8)
 #' gp <- xSH(sMap, which.components=1)
 #' gp + theme(legend.position="none")
 #' 
@@ -38,7 +38,7 @@
 #' ls_gp <-lapply(1:5, function(i) xSH(sMap, which.components=i) + theme(legend.position="none"))
 #' }
 
-xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncols=NULL, colormap="spectral", ncolors=64, zlim=NULL, border.color="transparent", barwidth=0.4, barheight=NULL, nbin=64, legend.title='', legend.text.size=5, legend.title.size=6)
+xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL, colormap="spectral", ncolors=64, zlim=NULL, border.color="transparent", barwidth=0.4, barheight=NULL, nbin=64, legend.title='', legend.text.size=6, legend.title.size=8)
 {
 
     if (class(sMap) != "sMap"){
@@ -102,10 +102,10 @@ xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncols=NULL, c
 	
 	# facet_wrap: partitions a plot into a matrix of panels
 	if(ncol(codebook)>1){
-		if(is.null(ncols)){
-			ncols <- ceiling(sqrt(ncol(codebook)))
+		if(is.null(ncolumns)){
+			ncolumns <- ceiling(sqrt(ncol(codebook)))
 		}
-		gp <- gp + facet_wrap(~component, ncol=ncols)
+		gp <- gp + facet_wrap(~component, ncol=ncolumns)
 	}
 	
 	invisible(gp)

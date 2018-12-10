@@ -18,8 +18,10 @@ within a tree using ggplot2.
 
 <pre>
 xSHtree(sMap, phylo = NULL, layout = c("rectangular", "fan",
-"partition"), colormap = "spectral", zlim = NULL, tip.size = 10,
-width = 1)
+"partition"), tip.size = 10, embed.width = 1,
+colormap = "spectral", zlim = NULL, border.color = "transparent",
+barwidth = 0.4, barheight = NULL, nbin = 64, legend.title = "",
+legend.text.size = 6, legend.title.size = 8)
 </pre>
 
 
@@ -36,8 +38,16 @@ width = 1)
 </td></tr>
 <tr valign="top"><td><code>layout</code></td>
 <td>
-<p>the visual layout. It can be &quot;rectangular&quot; or circular
-stype (&quot;fan&quot; and &quot;partition&quot;)</p>
+<p>the visual layout. It can be &quot;rectangular&quot; (via ggtree)
+or circular layout via ggraph including &quot;fan&quot; and &quot;partition&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>tip.size</code></td>
+<td>
+<p>the tip/title size</p>
+</td></tr>
+<tr valign="top"><td><code>embed.width</code></td>
+<td>
+<p>the width/height of embedded ggplot obejcts</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -58,13 +68,35 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 codebook matrix</p>
 </td></tr>
-<tr valign="top"><td><code>tip.size</code></td>
+<tr valign="top"><td><code>border.color</code></td>
 <td>
-<p>the tip/title size</p>
+<p>the border color for each hexagon</p>
 </td></tr>
-<tr valign="top"><td><code>width</code></td>
+<tr valign="top"><td><code>barwidth</code></td>
 <td>
-<p>the width/height of embedded ggplot obejcts</p>
+<p>the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>barheight</code></td>
+<td>
+<p>the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>nbin</code></td>
+<td>
+<p>the number of bins for drawing colorbar</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the title of the colorbar. By default, it is &rdquo;</p>
+</td></tr>
+<tr valign="top"><td><code>legend.text.size</code></td>
+<td>
+<p>the text size of the legend tick labelings</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title.size</code></td>
+<td>
+<p>the text size of the legend titles</p>
 </td></tr>
 </table>
 
@@ -99,9 +131,9 @@ ls_gp &lt;- gp$ls_gp
 
 # advanced use
 tree &lt;- visTreeBootstrap(t(sMap$codebook))
-gp &lt;- xSHtree(sMap, tree, layout="rectangular", width=1)
-gp &lt;- xSHtree(sMap, tree, layout="fan", width=0.4)
-gp &lt;- xSHtree(sMap, tree, layout="partition", width=0.7)
+gp &lt;- xSHtree(sMap, tree, layout="rectangular", embed.width=1)
+gp &lt;- xSHtree(sMap, tree, layout="fan", embed.width=0.4)
+gp &lt;- xSHtree(sMap, tree, layout="partition", embed.width=0.7)
 
 ## End(Not run)
 </pre>

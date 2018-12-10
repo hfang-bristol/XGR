@@ -4,13 +4,19 @@
 \alias{xSHreorder}
 \title{Function to draw multiple component planes reorded within a sheet-shape rectangle grid using ggplot2}
 \usage{
-xSHreorder(sMap, sReorder, colormap = "spectral", zlim = NULL,
-title.size = 10)
+xSHreorder(sMap, sReorder, title.size = 8, embed.width = 1,
+colormap = "spectral", zlim = NULL, border.color = "transparent",
+barwidth = 0.4, barheight = NULL, nbin = 64, legend.title = "",
+legend.text.size = 6, legend.title.size = 8)
 }
 \arguments{
 \item{sMap}{an object of class "sMap"}
 
 \item{sReorder}{an object of class "sReorder"}
+
+\item{title.size}{the title size}
+
+\item{embed.width}{the width/height of embedded ggplot obejcts}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -27,7 +33,21 @@ standard color names can be found in
 plotted, defaulting to the range of the finite values of displayed
 codebook matrix}
 
-\item{title.size}{the title size}
+\item{border.color}{the border color for each hexagon}
+
+\item{barwidth}{the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme}
+
+\item{barheight}{the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme}
+
+\item{nbin}{the number of bins for drawing colorbar}
+
+\item{legend.title}{the title of the colorbar. By default, it is ''}
+
+\item{legend.text.size}{the text size of the legend tick labelings}
+
+\item{legend.title.size}{the text size of the legend titles}
 }
 \value{
 a ggplot2 object
