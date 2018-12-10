@@ -21,8 +21,8 @@ tree structure (in a circular layout). It returns a ggplot object.
 
 <pre>
 xHEB(g, leave.label.size = 3, leave.label.color = "black",
-leave.size = NULL, edge.tension = 0.8, edge.alpha = 1,
-edge.width = 0.5, edge.palette = NULL)
+leave.label.wrap = NULL, leave.size = NULL, edge.tension = 0.8,
+edge.alpha = 1, edge.width = 0.5, edge.palette = NULL)
 </pre>
 
 
@@ -43,6 +43,10 @@ default, it is 3</p>
 <td>
 <p>the color of the leave labelings. By default,
 it is 'black'. If NULL, the label will be colored by the community</p>
+</td></tr>
+<tr valign="top"><td><code>leave.label.wrap</code></td>
+<td>
+<p>the wrap width of the leave labelings</p>
 </td></tr>
 <tr valign="top"><td><code>leave.size</code></td>
 <td>

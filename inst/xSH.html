@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw multiple component planes of a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSH"><tr><td>xSH</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to draw multiple component planes of a supra-hexagonal grid using ggplot2</h2>
+
+<h3>Description</h3>
+
+<p><code>xSH</code> is supposed to draw multiple component planes of a
+supra-hexagonal grid using ggplot2.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSH(sMap, which.components = NULL, customised.comp = NULL,
+ncols = NULL, colormap = "spectral", ncolors = 64, zlim = NULL,
+border.color = "transparent", barwidth = 0.4, barheight = NULL,
+nbin = 64, legend.title = "", legend.text.size = 5,
+legend.title.size = 6)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>sMap</code></td>
+<td>
+<p>an object of class &quot;sMap&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>which.components</code></td>
+<td>
+<p>an integer vector specifying which compopnets
+will be visualised. By default, it is NULL meaning all components will
+be visualised</p>
+</td></tr>
+<tr valign="top"><td><code>customised.comp</code></td>
+<td>
+<p>the customised codebook matrix. It has a high
+priority over the built one. It can be a vector</p>
+</td></tr>
+<tr valign="top"><td><code>ncols</code></td>
+<td>
+<p>an integer specifying the number of columns for a
+rectangle grid wherein the component planes are placed. By defaul, it
+is NULL (decided on according to the number of component planes that
+will be visualised)</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>ncolors</code></td>
+<td>
+<p>the number of colors specified over the colormap</p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the finite values of displayed
+codebook matrix</p>
+</td></tr>
+<tr valign="top"><td><code>border.color</code></td>
+<td>
+<p>the border color for each hexagon</p>
+</td></tr>
+<tr valign="top"><td><code>barwidth</code></td>
+<td>
+<p>the width of the colorbar. Default value is
+'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>barheight</code></td>
+<td>
+<p>the height of the colorbar. Default value is
+'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+</td></tr>
+<tr valign="top"><td><code>nbin</code></td>
+<td>
+<p>the number of bins for drawing colorbar</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the title of the colorbar. By default, it is &rdquo;</p>
+</td></tr>
+<tr valign="top"><td><code>legend.text.size</code></td>
+<td>
+<p>the text size of the legend tick labelings. By
+default, it is 5</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title.size</code></td>
+<td>
+<p>the text size of the legend titles. By
+default, it is 6</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSH</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(XGR)
+
+gp &lt;- xSH(sMap)
+gp &lt;- xSH(sMap, ncols=10)
+gp &lt;- xSH(sMap, which.components=1)
+gp + theme(legend.position="none")
+
+## advanced use
+gp &lt;- xSH(sMap, customised.comp=sMap$codebook[,1:2])
+
+## list of gp
+ls_gp &lt;-lapply(1:5, function(i) xSH(sMap, which.components=i) +
+theme(legend.position="none"))
+
+## End(Not run)
+</pre>
+
+
+</body></html>

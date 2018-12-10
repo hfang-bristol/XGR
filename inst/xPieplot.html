@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise data frame using pie plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xPieplot"><tr><td>xPieplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise data frame using pie plots</h2>
+
+<h3>Description</h3>
+
+<p><code>xPieplot</code> is supposed to visualise data frame using pie plots. It
+returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xPieplot(df, columns, colormap = "ggplot2", pie.radius = NULL,
+pie.color = "transparent", pie.color.alpha = 1, pie.thick = 0.1,
+legend.title = "", gp = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>df</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>a vector containing column names of the input data
+frame. These columns are used to draw pie charts</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>pie.radius</code></td>
+<td>
+<p>the radius of a pie. If NULL, it equals roughly 1/75</p>
+</td></tr>
+<tr valign="top"><td><code>pie.color</code></td>
+<td>
+<p>the border color of a pie</p>
+</td></tr>
+<tr valign="top"><td><code>pie.color.alpha</code></td>
+<td>
+<p>the 0-1 value specifying transparency of pie
+border colors</p>
+</td></tr>
+<tr valign="top"><td><code>pie.thick</code></td>
+<td>
+<p>the pie border thickness</p>
+</td></tr>
+<tr valign="top"><td><code>legend.title</code></td>
+<td>
+<p>the legend title</p>
+</td></tr>
+<tr valign="top"><td><code>gp</code></td>
+<td>
+<p>an existing ggplot object or NULL. It is used for
+overlapping</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xPieplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+gp &lt;- xPieplot(df,
+columns=c('dGene','pGene','fGene','nGene','eGene','cGene'),
+legend.title='Seeds')
+
+## End(Not run)
+</pre>
+
+
+</body></html>

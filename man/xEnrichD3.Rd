@@ -34,7 +34,7 @@ networkD3::sankeyNetwork, networkD3::forceNetwork,
 networkD3::radialNetwork and networkD3::diagonalNetwork}
 }
 \value{
-an object of class "htmlwidget"
+an object of class "htmlwidget", appended with an "igraph" object
 }
 \description{
 \code{xEnrichD3} is supposed to visualise enrichment results using a D3
@@ -52,6 +52,9 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 res <- xEnrichD3(eTerm, type="sankey", width=500, height=500)
 res <- xEnrichD3(eTerm,type="radial", fontSize=12,
 nodeColour="steelblue", nodeStroke="fff")
+res
+res$ig
+ig <- xConverter(res$ig, from='igraph', to='igraph_tree')
 
 # BiocManager::install('webshot')
 # webshot::install_phantomjs()

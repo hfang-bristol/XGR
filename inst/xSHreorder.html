@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw multiple component planes reorded within a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSHreorder"><tr><td>xSHreorder</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to draw multiple component planes reorded within a sheet-shape rectangle grid using ggplot2</h2>
+
+<h3>Description</h3>
+
+<p><code>xSHreorder</code> is supposed to draw multiple component planes reorded
+within a sheet-shape rectangle grid using ggplot2.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSHreorder(sMap, sReorder, colormap = "spectral", zlim = NULL,
+title.size = 10)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>sMap</code></td>
+<td>
+<p>an object of class &quot;sMap&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>sReorder</code></td>
+<td>
+<p>an object of class &quot;sReorder&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the finite values of displayed
+codebook matrix</p>
+</td></tr>
+<tr valign="top"><td><code>title.size</code></td>
+<td>
+<p>the title size</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSHreorder</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(XGR)
+
+gp &lt;- xSHreorder(sMap, sReorder)
+gp
+ls_gp &lt;- gp$ls_gp
+
+## End(Not run)
+</pre>
+
+
+</body></html>

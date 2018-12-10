@@ -5,6 +5,7 @@
 #' @param g an object of class "igraph" with node attributes 'name' and 'community'
 #' @param leave.label.size the text size of the leave labelings. By default, it is 3
 #' @param leave.label.color the color of the leave labelings. By default, it is 'black'. If NULL, the label will be colored by the community
+#' @param leave.label.wrap the wrap width of the leave labelings
 #' @param leave.size the size of the leave nodes. By default, it is 3 if there is no node attribute 'size'
 #' @param edge.tension the bundling strength of edges. 1 for very tight bundles, 0 for no bundle (straight lines). By defaults it is 0.8
 #' @param edge.alpha the alpha of edges
@@ -31,7 +32,7 @@
 #' gp <- xHEB(ig)
 #' }
 
-xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NULL, edge.tension=0.8, edge.alpha=1, edge.width=0.5, edge.palette=NULL)
+xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.wrap=NULL, leave.size=NULL, edge.tension=0.8, edge.alpha=1, edge.width=0.5, edge.palette=NULL)
 {
     
     if (class(g) != "igraph"){
@@ -40,6 +41,23 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NU
     	ig <- g
     }
 	
+	##################
+	## text wrap
+	if(!is.null(leave.label.wrap)){
+		width <- as.integer(leave.label.wrap)
+		res_list <- lapply(V(ig)$name, function(x){
+			x <- gsub('_', ' ', x)
+			y <- strwrap(x, width=width)
+			if(length(y)>1){
+				paste(y,collapse='\n')
+			}else{
+				y
+			}
+		})
+		V(ig)$name <- unlist(res_list)
+	}
+	##################
+		
 	if(!all(c("community","name") %in% igraph::vertex_attr_names(ig))){
 		stop("The igraph object must have vertex attributes 'community'.\n")
 		
@@ -130,6 +148,7 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NU
 				edge.palette <- "RdPu"
 			}
 			gp <- gp + ggraph::scale_edge_colour_distiller(palette=edge.palette, direction=1)
+			
 		}else{
 			if(is.null(edge.palette)){
 				edge.palette <- "skyblue"
@@ -155,7 +174,7 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.size=NU
 		
 		## theme
 		gp <- gp + theme(legend.position="none",plot.margin=unit(c(0,0,0,0),"cm")) + expand_limits(x=c(-1.2, 1.2), y=c(-1.2, 1.2))
-		gp <- gp + theme_void()
+		gp <- gp + theme_void() + coord_fixed()
 	}
 	
     invisible(gp)

@@ -69,7 +69,7 @@ networkD3::radialNetwork and networkD3::diagonalNetwork</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;htmlwidget&quot;
+<p>an object of class &quot;htmlwidget&quot;, appended with an &quot;igraph&quot; object
 </p>
 
 
@@ -97,6 +97,9 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 res &lt;- xEnrichD3(eTerm, type="sankey", width=500, height=500)
 res &lt;- xEnrichD3(eTerm,type="radial", fontSize=12,
 nodeColour="steelblue", nodeStroke="fff")
+res
+res$ig
+ig &lt;- xConverter(res$ig, from='igraph', to='igraph_tree')
 
 # BiocManager::install('webshot')
 # webshot::install_phantomjs()

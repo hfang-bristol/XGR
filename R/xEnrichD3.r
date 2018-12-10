@@ -9,7 +9,7 @@
 #' @param colormap short name for the group/ontology colormap
 #' @param filename the without-extension part of the name of the output html file. By default, it is 'xEnrichD3'
 #' @param ... additional graphic parameters used in networkD3::sankeyNetwork, networkD3::forceNetwork, networkD3::radialNetwork and networkD3::diagonalNetwork
-#' @return an object of class "htmlwidget"
+#' @return an object of class "htmlwidget", appended with an "igraph" object
 #' @note none
 #' @export
 #' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
@@ -22,6 +22,9 @@
 #' 
 #' res <- xEnrichD3(eTerm, type="sankey", width=500, height=500)
 #' res <- xEnrichD3(eTerm,type="radial", fontSize=12, nodeColour="steelblue", nodeStroke="fff")
+#' res
+#' res$ig
+#' ig <- xConverter(res$ig, from='igraph', to='igraph_tree')
 #'
 #' # BiocManager::install('webshot')
 #' # webshot::install_phantomjs()
@@ -50,7 +53,7 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
 				top_num <- 10
 			}
 		}
-		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy=sortBy)
+		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="adjp")
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
@@ -170,6 +173,9 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
 	#g <- make_graph("Zachary")
 	#json <- xConverter(g, from='igraph', to='json')
 	#res <- r2d3(json, d3_version=4, script="radialtree.js"
+	
+	## appended with an "igraph" object
+	res$ig <- g
 	
 	invisible(res)
 }

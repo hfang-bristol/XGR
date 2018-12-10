@@ -3,11 +3,11 @@
 #' \code{xConverter} is supposed to convert an object between classes "igraph", "dgCMatrix", "dtree", "lol", and "json".
 #'
 #' @param obj an object of class "igraph", "dgCMatrix", "dtree", "lol", and "json"
-#' @param from a character specifying the class converted from. It can be one of "igraph", "dgCMatrix", "dtree", "lol", and "json"
-#' @param to a character specifying the class converted to. It can be one of "igraph", "dgCMatrix", "dtree", "lol", and "json"
+#' @param from a character specifying the class converted from. It can be one of "igraph", "dgCMatrix", "dtree", "lol", "json"
+#' @param to a character specifying the class converted to. It can be one of "igraph", "dgCMatrix", "dtree", "lol", "json" and "igraph_tree"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return an object of class "igraph", "dgCMatrix", "dtree", "lol", or "json".
-#' @note Conversion is supported directly: 1) from 'igraph' to "dgCMatrix","dtree","lol","json"; 2) from 'dgCMatrix' to "igraph"; 3) from 'dtree' to "igraph","lol","json"; 4) from 'lol' to "dtree","json"; 5) from 'json' to "lol","dtree". In summary: "dgCMatrix" -- "igraph" (hub) -- "dtree" (hub) -- "lol" -- "json"
+#' @note Conversion is supported directly: 1) from 'igraph' to "dgCMatrix","dtree","lol","json","igraph_tree"; 2) from 'dgCMatrix' to "igraph"; 3) from 'dtree' to "igraph","lol","json"; 4) from 'lol' to "dtree","json"; 5) from 'json' to "lol","dtree". In summary: "dgCMatrix" -- "igraph" (hub) -- "dtree" (hub) -- "lol" -- "json"
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xConverter.r
@@ -46,9 +46,12 @@
 #' 
 #' # from 'dtree' to "igraph"
 #' g <- xConverter(dtree, from='dtree', to='igraph')
+#' 
+#' # force 'igraph' to a tree
+#' gtree <- xConverter(g, from='igraph', to='igraph_tree')
 #' }
 
-xConverter <- function(obj, from=c("igraph","dgCMatrix","dtree","lol","json"), to=c("dgCMatrix","igraph","dtree","lol","json"), verbose=TRUE)
+xConverter <- function(obj, from=c("igraph","dgCMatrix","dtree","lol","json"), to=c("dgCMatrix","igraph","dtree","lol","json","igraph_tree"), verbose=TRUE)
 {
     
     from <- match.arg(from)
@@ -78,7 +81,7 @@ xConverter <- function(obj, from=c("igraph","dgCMatrix","dtree","lol","json"), t
 				objConverted <- igraph::as_adjacency_matrix(obj, type="both", attr=NULL, edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
 			}
 			
-        }else if(to %in% c("dtree","lol","json")){
+        }else if(to %in% c("dtree","lol","json","igraph_tree")){
 			## get edges data frame
         	df_edges <- igraph::get.data.frame(obj, what="edges")
         	
@@ -96,39 +99,46 @@ xConverter <- function(obj, from=c("igraph","dgCMatrix","dtree","lol","json"), t
 				df <- rbind(df_root, df)
 			}
 			
-			## df -> dtree ('data.tree' object)
-			dtree <- data.tree::FromDataFrameNetwork(df)
-			if(to %in% c("lol","json")){
-				## dtree -> lol (a hierarchical list object with a root node and children)
-				lol <- data.tree::ToListExplicit(dtree, unname=TRUE)
-				
-				if(0){
-					# function: traverse next layer and then recurve
-					# return: a hierarchical list object with a root node and children
-					func.igraph2list <- function(g, thisNode) {
-						nm <- igraph::vertex_attr(g, "name", thisNode)
-						childNodes <- V(g)[which(igraph::shortest.paths(g, thisNode, mode="out")==1)]
-						if(length(childNodes)==0){
-							return(list(name=nm))
-						}
-						list(name=nm, children=unname(lapply(childNodes, func.igraph2list, g=g)))
-					}
-					ig <- igraph::graph_from_data_frame(d=df, directed=T)
-					root <- setdiff(df[,1], df[,2])
-					lol <- func.igraph2list(ig, V(ig)[root])
-				}
-				
-				if(to=="json"){
-					## lol -> json
-					json <- jsonlite::toJSON(lol)
-					objConverted <- json
-				}else{
-					objConverted <- lol
-				}
+			if(to=="igraph_tree"){
+				## igraph but a tree
+				objConverted <- igraph::graph_from_data_frame(d=df, directed=T)
 			}else{
-				objConverted <- dtree
+			
+				## df -> dtree ('data.tree' object)
+				dtree <- data.tree::FromDataFrameNetwork(df)
+				if(to %in% c("lol","json")){
+					## dtree -> lol (a hierarchical list object with a root node and children)
+					lol <- data.tree::ToListExplicit(dtree, unname=TRUE)
+				
+					if(0){
+						# function: traverse next layer and then recurve
+						# return: a hierarchical list object with a root node and children
+						func.igraph2list <- function(g, thisNode) {
+							nm <- igraph::vertex_attr(g, "name", thisNode)
+							childNodes <- V(g)[which(igraph::shortest.paths(g, thisNode, mode="out")==1)]
+							if(length(childNodes)==0){
+								return(list(name=nm))
+							}
+							list(name=nm, children=unname(lapply(childNodes, func.igraph2list, g=g)))
+						}
+						ig <- igraph::graph_from_data_frame(d=df, directed=T)
+						root <- setdiff(df[,1], df[,2])
+						lol <- func.igraph2list(ig, V(ig)[root])
+					}
+				
+					if(to=="json"){
+						## lol -> json
+						json <- jsonlite::toJSON(lol)
+						objConverted <- json
+					}else{
+						objConverted <- lol
+					}
+				}else{
+					objConverted <- dtree
+				}
+
 			}
-        	
+			
         }
         
     }else if(from=="dgCMatrix"){

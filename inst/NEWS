@@ -23,6 +23,10 @@ NEW FEATURES
     
     o Add functions ('xGraphML2A2') for pathway analysis
 
+    o Add functions ('xPieplot') for pie plot
+
+    o Add functions ('xSH', 'xSHbase', 'xSHreorder', 'xSHtree') for supra-hexagonal map visualisation using ggplot2
+    
 
 CHANGES IN VERSION 1.1.4
 -----------------------

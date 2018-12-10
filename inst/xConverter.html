@@ -19,7 +19,7 @@
 <pre>
 xConverter(obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
 "json"),
-to = c("dgCMatrix", "igraph", "dtree", "lol", "json"),
+to = c("dgCMatrix", "igraph", "dtree", "lol", "json", "igraph_tree"),
 verbose = TRUE)
 </pre>
 
@@ -35,12 +35,12 @@ and &quot;json&quot;</p>
 <tr valign="top"><td><code>from</code></td>
 <td>
 <p>a character specifying the class converted from. It can be
-one of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, and &quot;json&quot;</p>
+one of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, &quot;json&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>to</code></td>
 <td>
 <p>a character specifying the class converted to. It can be one
-of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, and &quot;json&quot;</p>
+of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, &quot;json&quot; and &quot;igraph_tree&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -59,10 +59,10 @@ displayed in the screen. By default, it sets to true for display</p>
 <h3>Note</h3>
 
 <p>Conversion is supported directly: 1) from 'igraph' to
-&quot;dgCMatrix&quot;,&quot;dtree&quot;,&quot;lol&quot;,&quot;json&quot;; 2) from 'dgCMatrix' to &quot;igraph&quot;; 3)
-from 'dtree' to &quot;igraph&quot;,&quot;lol&quot;,&quot;json&quot;; 4) from 'lol' to &quot;dtree&quot;,&quot;json&quot;;
-5) from 'json' to &quot;lol&quot;,&quot;dtree&quot;. In summary: &quot;dgCMatrix&quot; &ndash; &quot;igraph&quot;
-(hub) &ndash; &quot;dtree&quot; (hub) &ndash; &quot;lol&quot; &ndash; &quot;json&quot;
+&quot;dgCMatrix&quot;,&quot;dtree&quot;,&quot;lol&quot;,&quot;json&quot;,&quot;igraph_tree&quot;; 2) from 'dgCMatrix' to
+&quot;igraph&quot;; 3) from 'dtree' to &quot;igraph&quot;,&quot;lol&quot;,&quot;json&quot;; 4) from 'lol' to
+&quot;dtree&quot;,&quot;json&quot;; 5) from 'json' to &quot;lol&quot;,&quot;dtree&quot;. In summary:
+&quot;dgCMatrix&quot; &ndash; &quot;igraph&quot; (hub) &ndash; &quot;dtree&quot; (hub) &ndash; &quot;lol&quot; &ndash; &quot;json&quot;
 </p>
 
 
@@ -109,6 +109,9 @@ dtree &lt;- xConverter(json, from='json', to='dtree')
 
 # from 'dtree' to "igraph"
 g &lt;- xConverter(dtree, from='dtree', to='igraph')
+
+# force 'igraph' to a tree
+gtree &lt;- xConverter(g, from='igraph', to='igraph_tree')
 
 ## End(Not run)
 </pre>

@@ -5,8 +5,8 @@
 \title{Function to visualise a graph with communities using hierarchical edge bundling}
 \usage{
 xHEB(g, leave.label.size = 3, leave.label.color = "black",
-leave.size = NULL, edge.tension = 0.8, edge.alpha = 1,
-edge.width = 0.5, edge.palette = NULL)
+leave.label.wrap = NULL, leave.size = NULL, edge.tension = 0.8,
+edge.alpha = 1, edge.width = 0.5, edge.palette = NULL)
 }
 \arguments{
 \item{g}{an object of class "igraph" with node attributes 'name' and
@@ -17,6 +17,8 @@ default, it is 3}
 
 \item{leave.label.color}{the color of the leave labelings. By default,
 it is 'black'. If NULL, the label will be colored by the community}
+
+\item{leave.label.wrap}{the wrap width of the leave labelings}
 
 \item{leave.size}{the size of the leave nodes. By default, it is 3 if
 there is no node attribute 'size'}
