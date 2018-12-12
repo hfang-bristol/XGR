@@ -36,7 +36,8 @@ edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns (named as
-'group','name','adjp','or','zscore')</p>
+'group','name','adjp','or','zscore'). Be aware that multiple ontologies
+are not supported here</p>
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>
@@ -152,6 +153,19 @@ pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
 print(ls_res$data + coord_equal(ratio=1.3))
 print(ls_res$code + coord_equal(ratio=1.3))
 print(ls_res$table)
+dev.off()
+
+# advanced use: customise layout
+ig.PhasedTargets &lt;- xRDataLoader('ig.PhasedTargets',
+RData.location=RData.location)
+ig &lt;- xLayout(ig.PhasedTargets,
+layout="gplot.layout.fruchtermanreingold")
+ls_res &lt;- xEnrichRadial(df, ig=ig, fixed=F, node.color="or",
+node.size="adjp", node.xcoord="xcoord", node.ycoord="ycoord")
+pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
+print(ls_res$data + coord_equal())
+gridExtra::grid.arrange(grobs=c(list(ls_res$code+coord_equal()),ls_res$table),
+ncol=2)
 dev.off()
 
 ## End(Not run)

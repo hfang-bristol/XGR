@@ -94,16 +94,16 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 		offset <- (range(df_enrichment_group$zscore)[2]-range(df_enrichment_group$zscore)[1])*0.1
 		if(label.direction.y=='right'){
 			df$nudge_x <- max(df_enrichment_group$zscore) - df$zscore + offset
-			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=1, nudge_x=df$nudge_x, ...)
+			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=1, nudge_x=df$nudge_x, ...)
 			gp <- gp + scale_x_continuous(position="bottom", limits=c(min(df_enrichment_group$zscore),max(df_enrichment_group$zscore)+offset))
 		}else if (label.direction.y=='left'){
 			df$nudge_x <- -1 * (df$zscore - min(df_enrichment_group$zscore)) - offset
-			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=0, nudge_x=df$nudge_x, ...)
+			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=0, nudge_x=df$nudge_x, ...)
 			gp <- gp + scale_x_continuous(position="bottom", limits=c(min(df_enrichment_group$zscore)-offset,max(df_enrichment_group$zscore)))
 		}
 		
 	}else{
-		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), ...)
+		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), ...)
 	}
 	
 	# line

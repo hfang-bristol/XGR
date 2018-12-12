@@ -5,7 +5,7 @@
 \title{Function to visualise enrichment results using a chord plot}
 \usage{
 xEnrichChord(eTerm, top_num = 5, FDR.cutoff = 0.05,
-colormap.group = "ggplot2", colormap.ontology = "spectral",
+colormap.group = "ggplot2", colormap.ontology = NULL,
 wrap.width = NULL, text.size = 0.6, legend = NULL, vline = F,
 ...)
 }

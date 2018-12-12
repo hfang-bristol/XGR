@@ -14,7 +14,8 @@ edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
 can be a data frame having all these columns (named as
-'group','name','adjp','or','zscore')}
+'group','name','adjp','or','zscore'). Be aware that multiple ontologies
+are not supported here}
 
 \item{ig}{the igraph object. If provided, only those terms within it
 will be visualised. By default, it is NULL meaning no surch
@@ -93,6 +94,19 @@ pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
 print(ls_res$data + coord_equal(ratio=1.3))
 print(ls_res$code + coord_equal(ratio=1.3))
 print(ls_res$table)
+dev.off()
+
+# advanced use: customise layout
+ig.PhasedTargets <- xRDataLoader('ig.PhasedTargets',
+RData.location=RData.location)
+ig <- xLayout(ig.PhasedTargets,
+layout="gplot.layout.fruchtermanreingold")
+ls_res <- xEnrichRadial(df, ig=ig, fixed=F, node.color="or",
+node.size="adjp", node.xcoord="xcoord", node.ycoord="ycoord")
+pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
+print(ls_res$data + coord_equal())
+gridExtra::grid.arrange(grobs=c(list(ls_res$code+coord_equal()),ls_res$table),
+ncol=2)
 dev.off()
 }
 }

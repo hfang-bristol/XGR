@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichRadial} is supposed to visualise enrichment results using radial-like plot. It returns three ggplot2 objects, the first for visualing the network with nodes lablelled by codes, the second for listing code meaning in a table, and the third for the network with nodes colored/sized with enrichment results.
 #'
-#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','name','adjp','or','zscore')
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','name','adjp','or','zscore'). Be aware that multiple ontologies are not supported here
 #' @param ig the igraph object. If provided, only those terms within it will be visualised. By default, it is NULL meaning no surch restriction
 #' @param fixed logical to indicate whether all terms in ig will be visualised. By default, it is TURE; otherwise only overlapped terms from eTerm will be visualised
 #' @param node.color which statistics will be used for node coloring. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
@@ -33,6 +33,15 @@
 #' print(ls_res$data + coord_equal(ratio=1.3))
 #' print(ls_res$code + coord_equal(ratio=1.3))
 #' print(ls_res$table)
+#' dev.off()
+#' 
+#' # advanced use: customise layout
+#' ig.PhasedTargets <- xRDataLoader('ig.PhasedTargets', RData.location=RData.location)
+#' ig <- xLayout(ig.PhasedTargets, layout="gplot.layout.fruchtermanreingold")
+#' ls_res <- xEnrichRadial(df, ig=ig, fixed=F, node.color="or", node.size="adjp", node.xcoord="xcoord", node.ycoord="ycoord")
+#' pdf("xEnrichRadial.pdf", width=6.5, height=6.5)
+#' print(ls_res$data + coord_equal())
+#' gridExtra::grid.arrange(grobs=c(list(ls_res$code+coord_equal()),ls_res$table), ncol=2)
 #' dev.off()
 #' }
 
@@ -97,7 +106,7 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 	##########################################################
 	
 	if(class(subg)=="igraph"){
-		gp_code_table <- xOBOcode(g=subg, node.level='term_distance', node.level.value=2, node.label.color='black', node.shape=21, node.size.range=4, edge.color.alpha=0.2, table.base.size=7, table.row.space=2, table.nrow=55)
+		gp_code_table <- xOBOcode(g=subg, node.level='term_distance', node.level.value=2, node.label.color='black', node.shape=21, node.size.range=4, edge.color.alpha=0.2, table.base.size=7, table.row.space=2, table.nrow=min(vcount(subg),55), ...)
 		gp_code <- gp_code_table$code
 		gp_table <- gp_code_table$table
 		

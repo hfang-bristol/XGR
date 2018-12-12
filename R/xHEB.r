@@ -167,9 +167,9 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.w
 		}
 		## leaf label
 		if(is.null(leave.label.color)){
-			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust, color=community), size=leave.label.size, alpha=1)
+			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust, color=community),show.legend=F, size=leave.label.size, alpha=1)
 		}else{
-			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust), color=leave.label.color, size=leave.label.size, alpha=1)
+			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=1)
 		}
 		
 		## theme

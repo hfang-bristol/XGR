@@ -26,7 +26,7 @@
 #' xEnrichChord(eTerm)
 #' }
 
-xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggplot2", colormap.ontology="spectral", wrap.width=NULL, text.size=0.6, legend=NULL, vline=F, ...)
+xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggplot2", colormap.ontology=NULL, wrap.width=NULL, text.size=0.6, legend=NULL, vline=F, ...)
 {
     
     if(is.null(eTerm)){
@@ -109,6 +109,19 @@ xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggpl
 	df <- as.data.frame(df %>% dplyr::group_by(name) %>% dplyr::group_by(n=n(),add=T) %>% dplyr::arrange(ontology, n,zscore))
 	order <- c(sort(unique(df$group)), unique(df$name))
 
+	#######################################
+	# how to deal with colormap.ontology when NULL
+	if(is.null(colormap.ontology)){
+		if(length(table(df$ontology))==1){
+			## always grey
+			colormap.ontology <- "grey-grey"
+		}else{
+			## always spectral
+			colormap.ontology <- "spectral"
+		}
+	}
+	#######################################
+	
 	# chordDiagram
 	circlize::circos.clear()
 	circlize::circos.par(start.degree=90, clock.wise=FALSE)
@@ -148,11 +161,11 @@ xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggpl
 	
 	# legend for groups
 	if(any((is.null(legend) & length(color_group)>1), legend)){
-		legend("bottomleft", title="Groups", legend=names(color_group), border=color_group, fill=color_group, horiz=F, box.col="transparent", cex=text.size)	
+		legend("topleft", title="Groups", legend=names(color_group), border=color_group, fill=color_group, horiz=F, box.col="transparent", cex=text.size)	
 	}
 	# legend for ontology
 	if(any((is.null(legend) & length(color_ontology)>1), legend)){
-		legend("bottomright", title="Ontologies", legend=names(color_ontology), border=color_ontology, fill=color_ontology, horiz=F, box.col="transparent", cex=text.size)
+		legend("topright", title="Ontologies", legend=names(color_ontology), border=color_ontology, fill=color_ontology, horiz=F, box.col="transparent", cex=text.size)
 	}
 	
 	invisible(df)

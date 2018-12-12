@@ -27,6 +27,8 @@ NEW FEATURES
 
     o Add functions ('xSH', 'xSHbase', 'xSHreorder', 'xSHtree') for supra-hexagonal map visualisation using ggplot2
     
+    o Add functions ('xAge') for Phylostratigraphy analysis
+        
 
 CHANGES IN VERSION 1.1.4
 -----------------------

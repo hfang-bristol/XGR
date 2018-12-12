@@ -137,7 +137,7 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
 		colourScale <- paste('d3.scaleOrdinal(["', colors, '"])')
 
 		#res <- networkD3::forceNetwork(Links=d3$links, Nodes=d3$nodes, Source='source', Target='target', Value="value", NodeID='name', Group='group', colourScale=colourScale, zoom=T, linkDistance=200, linkWidth=linkWidth, legend=T, linkColour = "#666", opacity=0.9, fontSize=15, opacityNoHover=c(0,F)[1], charge=-180)
-		res <- networkD3::forceNetwork(Links=d3$links, Nodes=d3$nodes, Source='source', Target='target', Value="value", NodeID='name', Group='group', colourScale=colourScale, zoom=T, linkDistance=200, linkWidth=linkWidth, legend=T, ...)
+		res <- networkD3::forceNetwork(Links=d3$links, Nodes=d3$nodes, Source='source', Target='target', Value="value", NodeID='name', Group='group', colourScale=colourScale, zoom=T, linkDistance=200, linkWidth=linkWidth, ...)
 
 	}else if(type %in% c('radial','diagonal')){
 		

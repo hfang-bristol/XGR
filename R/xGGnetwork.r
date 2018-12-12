@@ -466,7 +466,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 					}
 				)
 		## my_geom_nodetext_repel
-		my_geom_nodetext_repel <- function (mapping = NULL, data = NULL, parse = FALSE, ..., box.padding = unit(0.25, "lines"), point.padding = unit(1e-06, "lines"), segment.size = 0.5, arrow = NULL, force = 1, max.iter = 2000, nudge_x = 0, nudge_y = 0, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE){
+		my_geom_nodetext_repel <- function (mapping = NULL, data = NULL, parse = FALSE, ..., box.padding = unit(0.25, "lines"), point.padding = unit(1e-06, "lines"), segment.size = 0.5, arrow = NULL, force = 1, max.iter = 2000, nudge_x = 0, nudge_y = 0, na.rm = FALSE, show.legend = F, inherit.aes = TRUE){
 			ggplot2::layer(data = data, mapping = mapping, stat = StatNodes, 
 				geom = ggrepel::GeomTextRepel, position = "identity", 
 				show.legend = show.legend, inherit.aes = inherit.aes, 
