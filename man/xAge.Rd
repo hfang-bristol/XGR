@@ -4,18 +4,22 @@
 \alias{xAge}
 \title{Function to compare evolutionary history age of genes based on their Phylostratigraphy}
 \usage{
-xAge(list_vec, p.type = c("nominal", "empirical"), seed = 825,
-nperm = 2000, p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), plot = FALSE,
+xAge(list_vec, identity = c("Symbol", "GeneID"), p.type = c("nominal",
+"empirical"), seed = 825, nperm = 2000, p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), plot = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{list_vec}{a named vector containing human genes (gene symbol).
 Alternatively it can be a list of named vectors}
 
+\item{identity}{the entity of input data. It can be either "Symbol" or
+"GeneID"}
+
 \item{p.type}{the type of the p-value calcualted. It can be 'nominal'
 for nominal p-value (calculated using two-sample Wilcoxon rank sum
-tests) or 'empirical' for empirical p-value}
+tests) or 'empirical' for empirical p-value (based on the test
+statistic 'Gene Evolutionary Age Cumulative Ranking')}
 
 \item{seed}{an integer specifying the seed}
 
@@ -69,8 +73,15 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 # ExAC LoF intolerant
 ExAC <- xRDataLoader('ExAC', RData.location=RData.location)
 data <- subset(ExAC, pLI>0.9)$gene
-res <- xAge(data, plot=TRUE, RData.location=RData.location)
+# based on two-sample Wilcoxon rank sum tests
+res <- xAge(data, p.type="nominal", plot=TRUE,
+RData.location=RData.location)
 res$ls_gp_violin[[1]]
+# based on the test statistic 'Gene Evolutionary Age Cumulative Ranking'
+res <- xAge(data, p.type="empirical", nperm=10000, plot=TRUE,
+RData.location=RData.location)
+res$ls_gp_violin[[1]]
+res$ls_gp_pdf[[1]]
 
 # Genetic regulators 
 Haploid <- xRDataLoader('Haploid_regulators',
@@ -141,7 +152,8 @@ df2 <- res_df \%>\% dplyr::filter(data=="other") \%>\%
 dplyr::mutate(group=data)
 ## genes not found in any group
 df2 <- as.data.frame(df2 \%>\% dplyr::group_by(Symbol) \%>\%
-dplyr::group_by(num=n(),add=T) \%>\% dplyr::filter(num==12))
+dplyr::group_by(num=n(),add=T) \%>\%
+dplyr::filter(num==length(table(df1$group))))
 df2 <- df2 \%>\% dplyr::select(-num)
 ## remove duplicated genes
 df2 <- df2[!duplicated(df2$Symbol),]

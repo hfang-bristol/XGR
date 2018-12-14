@@ -17,9 +17,9 @@ based on their Phylostratigraphy.
 <h3>Usage</h3>
 
 <pre>
-xAge(list_vec, p.type = c("nominal", "empirical"), seed = 825,
-nperm = 2000, p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), plot = FALSE,
+xAge(list_vec, identity = c("Symbol", "GeneID"), p.type = c("nominal",
+"empirical"), seed = 825, nperm = 2000, p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), plot = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -32,11 +32,17 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <p>a named vector containing human genes (gene symbol).
 Alternatively it can be a list of named vectors</p>
 </td></tr>
+<tr valign="top"><td><code>identity</code></td>
+<td>
+<p>the entity of input data. It can be either &quot;Symbol&quot; or
+&quot;GeneID&quot;</p>
+</td></tr>
 <tr valign="top"><td><code>p.type</code></td>
 <td>
 <p>the type of the p-value calcualted. It can be 'nominal'
 for nominal p-value (calculated using two-sample Wilcoxon rank sum
-tests) or 'empirical' for empirical p-value</p>
+tests) or 'empirical' for empirical p-value (based on the test
+statistic 'Gene Evolutionary Age Cumulative Ranking')</p>
 </td></tr>
 <tr valign="top"><td><code>seed</code></td>
 <td>
@@ -121,8 +127,15 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 # ExAC LoF intolerant
 ExAC &lt;- xRDataLoader('ExAC', RData.location=RData.location)
 data &lt;- subset(ExAC, pLI&gt;0.9)$gene
-res &lt;- xAge(data, plot=TRUE, RData.location=RData.location)
+# based on two-sample Wilcoxon rank sum tests
+res &lt;- xAge(data, p.type="nominal", plot=TRUE,
+RData.location=RData.location)
 res$ls_gp_violin[[1]]
+# based on the test statistic 'Gene Evolutionary Age Cumulative Ranking'
+res &lt;- xAge(data, p.type="empirical", nperm=10000, plot=TRUE,
+RData.location=RData.location)
+res$ls_gp_violin[[1]]
+res$ls_gp_pdf[[1]]
 
 # Genetic regulators 
 Haploid &lt;- xRDataLoader('Haploid_regulators',
@@ -193,7 +206,8 @@ df2 &lt;- res_df %&gt;% dplyr::filter(data=="other") %&gt;%
 dplyr::mutate(group=data)
 ## genes not found in any group
 df2 &lt;- as.data.frame(df2 %&gt;% dplyr::group_by(Symbol) %&gt;%
-dplyr::group_by(num=n(),add=T) %&gt;% dplyr::filter(num==12))
+dplyr::group_by(num=n(),add=T) %&gt;%
+dplyr::filter(num==length(table(df1$group))))
 df2 &lt;- df2 %&gt;% dplyr::select(-num)
 ## remove duplicated genes
 df2 &lt;- df2[!duplicated(df2$Symbol),]

@@ -63,7 +63,7 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy","wal
 	}
 	
 	## only keep the largest component
-	ig <- dnet::dNetInduce(ig, nodes_query=V(ig)$name, knn=0, largest.comp=TRUE)
+	ig <- dnet::dNetInduce(ig, nodes_query=V(ig)$name, knn=0, largest.comp=F)
 	
 	if(verbose){
 		message(sprintf("\tThe largest component has %d nodes and %d edges", vcount(ig), ecount(ig)), appendLF=T)
@@ -110,7 +110,7 @@ xBigraph <- function(g, algorithm=c("louvain","leading_eigen","fast_greedy","wal
 	## ig_x: igraph from projected adjacency matrix on xnodes
 	ig_x <- igraph::graph.adjacency(xM, mode="undirected", weighted=TRUE, diag=FALSE)
 	### remove loops and multiple edges
-	ig_x <- dnet::dNetInduce(ig_x, nodes_query=V(ig_x)$name, knn=0, largest.comp=TRUE)
+	ig_x <- dnet::dNetInduce(ig_x, nodes_query=V(ig_x)$name, knn=0, largest.comp=F)
 
 	# find community for ig_x
 	if(algorithm=="louvain"){

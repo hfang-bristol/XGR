@@ -66,6 +66,11 @@ xVolcano <- function(data, column.lfc='lfc', column.fdr='fdr', cutoff.lfc=1, cut
 						ifelse(FDR<cutoff.fdr & abs(LFC)<cutoff.lfc, 'R3', 
 						ifelse(FDR<cutoff.fdr & abs(LFC)>=cutoff.lfc, 'R4', 'R1')
 						)))
+	
+	## colors reduced
+	tmp <- gsub('R','',sort(unique(df$region)))
+	colors <- colors[as.numeric(tmp)]
+	
 	## add a column 'n'
 	tmp <- table(df$region)
 	ind <- match(df$region, names(tmp))
