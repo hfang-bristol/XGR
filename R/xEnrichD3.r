@@ -93,7 +93,7 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
 			df <- subset(df, df$adjp<FDR.cutoff)
 		}else{
 			top_num <- as.integer(top_num)
-			df <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=order(adjp),add=TRUE) %>% dplyr::filter(rank<=top_num & adjp<FDR.cutoff))
+			df <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=rank(adjp),add=TRUE) %>% dplyr::filter(rank<=top_num & adjp<FDR.cutoff))
 		}
 		
 	}

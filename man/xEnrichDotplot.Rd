@@ -7,7 +7,7 @@
 xEnrichDotplot(eTerm, FDR.cutoff = 0.05, colors = c("pink", "red"),
 y.scale = c("normal", "log"), slim = NULL, size.range = c(0.5,
 3.5), size.title = "Num of overlaps", label.top = "auto",
-label.direction.y = c("left", "right", "none"), ...)
+label.direction.y = c("left", "right", "none"), label.size = 2, ...)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
@@ -39,6 +39,8 @@ labelled}
 \item{label.direction.y}{how to align labels. It can be "none", "left"
 (align labels on the left edge) or "right" (align labels on the right
 edge). Only works for individual group}
+
+\item{label.size}{the size of the labellings}
 
 \item{...}{additional graphic parameters (such as size, color) used in
 ggrepel::geom_text_repel to control labels}

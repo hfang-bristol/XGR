@@ -11,6 +11,7 @@
 #' @param size.title a character specifying the title for node sizing. By default it is 'Num of overlaps'
 #' @param label.top the number of the top terms (sorted according to adjp). Only the significant terms (see above FDR.cutoff) will be labelled
 #' @param label.direction.y how to align labels. It can be "none", "left" (align labels on the left edge) or "right" (align labels on the right edge). Only works for individual group
+#' @param label.size the size of the labellings
 #' @param ... additional graphic parameters (such as size, color) used in ggrepel::geom_text_repel to control labels
 #' @return an object of class "ggplot"
 #' @note none
@@ -26,7 +27,7 @@
 #' gp <- xEnrichDotplot(eTerm, label.top=10)
 #' }
 
-xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.scale=c("normal","log"), slim=NULL, size.range=c(0.5,3.5), size.title="Num of overlaps", label.top='auto', label.direction.y=c("left","right","none"), ...)
+xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.scale=c("normal","log"), slim=NULL, size.range=c(0.5,3.5), size.title="Num of overlaps", label.top='auto', label.direction.y=c("left","right","none"), label.size=2, ...)
 {
 	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     y.scale <- match.arg(y.scale)
@@ -88,22 +89,22 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 		df <- subset(df_enrichment_group, adjp<FDR.cutoff)
 	}else{
 		label.top <- as.integer(label.top)
-		df <- as.data.frame(df_enrichment_group %>% dplyr::group_by(group) %>% dplyr::group_by(rank=order(adjp),add=TRUE) %>% dplyr::filter(rank<=label.top & adjp<FDR.cutoff))
+		df <- as.data.frame(df_enrichment_group %>% dplyr::group_by(group) %>% dplyr::group_by(rank=rank(adjp),add=TRUE) %>% dplyr::filter(rank<=label.top & adjp<FDR.cutoff))
 	}
 	if(ngroup==1 & label.direction.y!='none'){
 		offset <- (range(df_enrichment_group$zscore)[2]-range(df_enrichment_group$zscore)[1])*0.1
 		if(label.direction.y=='right'){
 			df$nudge_x <- max(df_enrichment_group$zscore) - df$zscore + offset
-			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=1, nudge_x=df$nudge_x, ...)
+			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), size=label.size, show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=1, nudge_x=df$nudge_x, ...)
 			gp <- gp + scale_x_continuous(position="bottom", limits=c(min(df_enrichment_group$zscore),max(df_enrichment_group$zscore)+offset))
 		}else if (label.direction.y=='left'){
 			df$nudge_x <- -1 * (df$zscore - min(df_enrichment_group$zscore)) - offset
-			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=0, nudge_x=df$nudge_x, ...)
+			gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), size=label.size, show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), direction="y", hjust=0, nudge_x=df$nudge_x, ...)
 			gp <- gp + scale_x_continuous(position="bottom", limits=c(min(df_enrichment_group$zscore)-offset,max(df_enrichment_group$zscore)))
 		}
 		
 	}else{
-		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name),show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), ...)
+		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), size=label.size, show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), ...)
 	}
 	
 	# line
@@ -118,7 +119,8 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 	if(ngroup!=1){
 		scales <- "free_y"
 		space <- "free_y"
-		gp <- gp + facet_grid(~group, scales=scales, space=space)
+		#gp <- gp + facet_grid(~group, scales=scales, space=space)
+		gp <- gp + facet_wrap(~group)
 		## strip
 		#gp <- gp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=8,face="bold.italic"))
 	}

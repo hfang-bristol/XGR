@@ -20,7 +20,7 @@ dot-like plot. It returns a ggplot2 object.
 xEnrichDotplot(eTerm, FDR.cutoff = 0.05, colors = c("pink", "red"),
 y.scale = c("normal", "log"), slim = NULL, size.range = c(0.5,
 3.5), size.title = "Num of overlaps", label.top = "auto",
-label.direction.y = c("left", "right", "none"), ...)
+label.direction.y = c("left", "right", "none"), label.size = 2, ...)
 </pre>
 
 
@@ -74,6 +74,10 @@ labelled</p>
 <p>how to align labels. It can be &quot;none&quot;, &quot;left&quot;
 (align labels on the left edge) or &quot;right&quot; (align labels on the right
 edge). Only works for individual group</p>
+</td></tr>
+<tr valign="top"><td><code>label.size</code></td>
+<td>
+<p>the size of the labellings</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
