@@ -467,7 +467,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 				if(!is.null(title.thispath)){
 					name_display <- paste0(name_display, ' ', title.thispath)
 				}else{
-					name_display <- paste0(name_display, ' (A2)')
+					name_display <- paste0(name_display, ' (AA)')
 					
 				}
 			}

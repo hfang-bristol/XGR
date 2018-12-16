@@ -1,6 +1,6 @@
 #' Function to visualise enrichment results using a chord plot
 #'
-#' \code{xEnrichChord} is supposed to visualise enrichment results using a chord plot. The thickness of links is proportional to the enrichment Z-scores. Particularly useful for multiple groups and/or ontologies. The left-half part sorted by the input groups (anti-clockwise), and the right-half part sorted first by the input ontolgies and then by the number of links within an ontology (clockwise).
+#' \code{xEnrichChord} is supposed to visualise enrichment results using a chord plot. The thickness of links is proportional to the enrichment Z-scores. Particularly useful for multiple groups and/or ontologies. The left-half part sorted by the input groups (anti-clockwise), and the right-half part sorted first by the input ontologies and then by the number of links within an ontology (clockwise).
 #'
 #' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp','zscore')
 #' @param top_num the number of the top terms (sorted according to adjp). For the eTerm object, if it is 'auto' (for eTerm), only the significant terms (see below FDR.cutoff) will be displayed
