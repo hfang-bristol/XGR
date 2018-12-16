@@ -7,9 +7,9 @@
 xEnrichLadder(eTerm, sortBy = c("or", "adjp", "fdr", "pvalue",
 "zscore",
 "fc", "nAnno", "nOverlap", "none"), top_num = 10, FDR.cutoff = 0.05,
-CI.one = T, colormap = "skyblue-darkblue", x.rotate = 60,
-x.text.size = 6, y.text.size = 6, shape = 19, size = 2,
-label = c("concise", "full"), verbose = T)
+CI.one = T, colormap = "lightgrey-grey-black", x.rotate = 60,
+x.text.size = 6, y.text.size = 6, shape = 22, size = 2,
+label = c("concise", "full"), verbose = T, ...)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}
@@ -60,6 +60,8 @@ it is 6}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen}
+
+\item{...}{additional graphic parameters for xHeatmap}
 }
 \value{
 an object of class "ggplot"

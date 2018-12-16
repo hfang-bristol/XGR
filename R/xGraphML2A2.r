@@ -56,7 +56,7 @@
 #' xGraphML2A2(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2A2', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-white-darkorange', ncolors=64, nlegend=11, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xGraphML2A2', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xGraphML2A2', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(verbose){
@@ -446,18 +446,18 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 				if(df$FDR[ind_found] < node.highlight.cutoff){
 					## found gene nodes highlighted
 					nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="bolditalic"', nodelabel)
-					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="13"', nodelabel)
+					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="12"', nodelabel)
 					#nodelabel <- gsub('verticalTextPosition=', 'underlinedText="true" verticalTextPosition=', nodelabel)
 				}else{
 					## found gene nodes not highlighted
 					nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="italic"', nodelabel)
-					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="12"', nodelabel)
+					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="11"', nodelabel)
 				}
 			
 			}else if(flag_gene & is.na(ind_legend)){
 				## gene nodes but not found
 				nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="italic"', nodelabel)
-				nodelabel <- gsub('fontSize="\\w+"', 'fontSize="11"', nodelabel)
+				nodelabel <- gsub('fontSize="\\w+"', 'fontSize="10"', nodelabel)
 			}
 			### name_display
 			name_display <- df_nodes$name[i]
@@ -475,7 +475,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 			if(!is.na(ind_legend)){
 				name_display <- df_legends$labels[ind_legend]
 			}else{
-				if(name_display %in% c("5-star rating", "5-star\nrating")){
+				if(name_display %in% c("Pi rating", "5-star\nrating")){
 					name_display <- legend.title
 					nodelabel <- gsub('modelPosition="\\w+"', 'modelPosition="t"', nodelabel)
 				}

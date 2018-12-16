@@ -67,7 +67,8 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 	
 	## add a column 'flag'
 	df_enrichment_group <- df_enrichment_group %>% dplyr::mutate(flag=ifelse(adjp>=FDR.cutoff, 'N','Y'))
-	names(colors) <- sort(unique(df_enrichment_group$flag))
+	#names(colors) <- sort(unique(df_enrichment_group$flag))
+	names(colors) <- c('N','Y')
 	
 	gp <- ggplot(df_enrichment_group, aes(x=zscore, y=-log10(adjp), size=nOverlap))
 	gp <- gp + geom_point(aes(color=flag,size=nOverlap),alpha=0.6)

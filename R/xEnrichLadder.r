@@ -15,6 +15,7 @@
 #' @param size the number specifying the shape size. By default, it is 2
 #' @param label how to label gene sets (terms). It can be "concise" or "full"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen
+#' @param ... additional graphic parameters for xHeatmap
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -86,7 +87,7 @@
 #' eTerm <- xEnricherYours(data.file=data, annotation.file=annotation.file, background.file=background, size.range=c(10,20000))
 #' }
 
-xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="skyblue-darkblue", x.rotate=60, x.text.size=6, y.text.size=6, shape=19, size=2, label=c('concise','full'), verbose=T)
+xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="lightgrey-grey-black", x.rotate=60, x.text.size=6, y.text.size=6, shape=22, size=2, label=c('concise','full'), verbose=T, ...)
 {
 
     sortBy <- match.arg(sortBy)
@@ -190,7 +191,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","f
 					mat_heatmap <- t(df_heatmap)
 					ind <- match(rownames(mat_heatmap), df_enrichment$name)
 					rownames(mat_heatmap) <- df_enrichment$label[ind]
-					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap=colormap, zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=x.rotate, x.text.size=x.text.size, y.text.size=y.text.size, shape=shape, size=size, na.color='transparent')
+					gp_heatmap <- xHeatmap(mat_heatmap, reorder="none", colormap=colormap, zlim=c(0,max(mat_heatmap,na.rm=T)), ncolors=64, barwidth=0.4, x.rotate=x.rotate, x.text.size=x.text.size, y.text.size=y.text.size, shape=shape, size=size, na.color='transparent', ...)
 					gp_heatmap <- gp_heatmap + theme(legend.title=element_text(size=8), legend.position="none") + scale_y_discrete(position="right")
 					colsep <- cumsum(table(vec_sum))
 					colsep <- length(vec_sum) - colsep[-length(colsep)]
