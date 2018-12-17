@@ -5,7 +5,9 @@
 \title{Function to visualise bases partitioned from a supra-hexagonal grid using ggplot2}
 \usage{
 xSHbase(sMap, sBase, colormap = "rainbow_hcl", border.color = "grey",
-legend.title = "", legend.text.size = 6, legend.title.size = 8)
+legend.title = "", legend.text.size = 6, legend.title.size = 8,
+boundary = F, boundary.color = "black", boundary.type = c("line",
+"point"))
 }
 \arguments{
 \item{sMap}{an object of class "sMap"}
@@ -31,6 +33,13 @@ standard color names can be found in
 \item{legend.text.size}{the text size of the legend tick labelings}
 
 \item{legend.title.size}{the text size of the legend titles}
+
+\item{boundary}{logical to indicate whether the base boundary is added}
+
+\item{boundary.color}{the boundary color for each base}
+
+\item{boundary.type}{the type of boundary. It can be 'line' (polygon;
+likely problematic due to the ordering issue), 'point' (simply dots)}
 }
 \value{
 a ggplot2 object
@@ -40,7 +49,10 @@ a ggplot2 object
 supra-hexagonal grid using ggplot2.
 }
 \note{
-none
+Illustrator: cut a shape of points into each segmented line: 1) select
+the shape; 2) Direct Select Tool (A); 3) hold Shift and select an
+anchor point; 4) select Cut path of selected anchor points in the
+Anchor Point toolbar (The icon with the segmented line and scissors).
 }
 \examples{
 \dontrun{
@@ -63,6 +75,12 @@ df <- unique(sMap$polygon[,c("index","angleCentroid")]) \%>\%
 dplyr::arrange(index)
 vec <- ceiling(180*(df$angleCentroid/3.14))
 gp <- xSHbase(sMap, vec, legend.title='Angles')
+
+# add boundary
+gp <- xSHbase(sMap, sBase, boundary=T, colormap="rainbow_hcl")
+gp <- xSHbase(sMap, sBase, boundary=T,
+colormap="transparent-transparent")
+gp + theme(legend.position="none")
 }
 }
 \seealso{

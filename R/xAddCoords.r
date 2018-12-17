@@ -14,19 +14,28 @@
 #' @include xAddCoords.r
 #' @examples
 #' # 1) generate a random bipartite graph
-#' set.seed(123)
+#' set.seed(825)
 #' g <- sample_bipartite(100, 50, p=0.1)
 #' V(g)$name <- V(g)
 #' 
 #' \dontrun{
 #' # 2) obtain and append the community
 #' cs <- igraph::cluster_louvain(g)
+#' set.seed(825); cs <- igraph::cluster_spinglass(g)
 #' V(g)$community <- cs$membership
 #' ig <- xAddCoords(g, node.attr="community", edge.color.alternative=c("grey50","grey95"))
+#' if(class(V(ig)$community)=='character') V(ig)$community <- as.factor(V(ig)$community)
 #' gp <- xGGnetwork(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 #' 
 #' ## make it discrete for the colorbar
-#' gp + scale_colour_gradientn(colors=xColormap('jet')(64),breaks=seq(1,8)) + guides(color=guide_legend(title="Community"))
+#' gp + scale_colour_gradientn(colors=xColormap('jet')(64),breaks=seq(1,9)) + guides(color=guide_legend(title="Community"))
+#' 
+#' ## add vertex hull for each community
+#' df <- gp$data_nodes
+#' ls_res <- lapply(split(x=df,f=df$community), function(z) z[chull(z$x,z$y),])
+#' data <- do.call(rbind, ls_res)
+#' gp + geom_polygon(data=data, aes(x=x,y=y,group=community), alpha=0.1)
+#' gp + geom_polygon(data=data, aes(x=x,y=y,group=community,fill=community), alpha=0.1) + scale_fill_gradientn(colors=xColormap('jet.both')(64)) + guides(fill="none")
 #' }
 
 xAddCoords <- function(g, node.attr=NULL, glayout=layout_with_kk, edge.color.alternative=c("grey70","grey95"), seed=825, verbose=TRUE)

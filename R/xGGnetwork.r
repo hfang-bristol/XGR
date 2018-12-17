@@ -29,7 +29,7 @@
 #' @param node.size.range the range of actual node size
 #' @param slim the minimum and maximum values for which sizes should be plotted
 #' @param title a character specifying the title for the plot
-#' @param edge.size a numeric value specifying the edge size. By default, it is 0.5. It can be a character specifying which edge attribute defining the the edge colors (though without the legend)
+#' @param edge.size a numeric value specifying the edge size. By default, it is 0.5. It can be a character specifying which edge attribute defining the edge colors (though without the legend)
 #' @param edge.color a character specifying which edge attribute defining the the edge colors
 #' @param edge.color.alpha the 0-1 value specifying transparency of edge colors
 #' @param edge.curve a numeric value specifying the edge curve. 0 for the straight line
@@ -493,14 +493,14 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 		
 		## append data_nodes
 		df_sub <- subset(df, is.na(na.y))
-		ind <- match(colnames(df_sub), c('xend','yend','na.x','na.y','e.color','edge.color'))
+		ind <- match(colnames(df_sub), c('na.x','na.y','e.color','edge.color','e.size'))
 		df_sub <- df_sub[,is.na(ind)]
 		df_sub <- df_sub[!duplicated(df_sub),]
 		gp$data_nodes <- df_sub
 		
 		## append data_edges
 		df_sub <- subset(df, !is.na(na.y))
-		ind <- match(colnames(df_sub), c('x','y','xend','yend','e.color','edge.color'))
+		ind <- match(colnames(df_sub), c('x','y','xend','yend','e.color','edge.color','e.size'))
 		df_sub <- df_sub[,!is.na(ind)]
 		df_sub <- df_sub[!duplicated(df_sub),]
 		gp$data_edges <- df_sub

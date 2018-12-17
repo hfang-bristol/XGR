@@ -109,7 +109,7 @@ plotted}
 
 \item{edge.size}{a numeric value specifying the edge size. By default,
 it is 0.5. It can be a character specifying which edge attribute
-defining the the edge colors (though without the legend)}
+defining the edge colors (though without the legend)}
 
 \item{edge.color}{a character specifying which edge attribute defining
 the the edge colors}

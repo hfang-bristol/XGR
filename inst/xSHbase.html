@@ -18,7 +18,9 @@ supra-hexagonal grid using ggplot2.
 
 <pre>
 xSHbase(sMap, sBase, colormap = "rainbow_hcl", border.color = "grey",
-legend.title = "", legend.text.size = 6, legend.title.size = 8)
+legend.title = "", legend.text.size = 6, legend.title.size = 8,
+boundary = F, boundary.color = "black", boundary.type = c("line",
+"point"))
 </pre>
 
 
@@ -63,6 +65,19 @@ standard color names can be found in
 <td>
 <p>the text size of the legend titles</p>
 </td></tr>
+<tr valign="top"><td><code>boundary</code></td>
+<td>
+<p>logical to indicate whether the base boundary is added</p>
+</td></tr>
+<tr valign="top"><td><code>boundary.color</code></td>
+<td>
+<p>the boundary color for each base</p>
+</td></tr>
+<tr valign="top"><td><code>boundary.type</code></td>
+<td>
+<p>the type of boundary. It can be 'line' (polygon;
+likely problematic due to the ordering issue), 'point' (simply dots)</p>
+</td></tr>
 </table>
 
 
@@ -74,7 +89,10 @@ standard color names can be found in
 
 <h3>Note</h3>
 
-<p>none
+<p>Illustrator: cut a shape of points into each segmented line: 1) select
+the shape; 2) Direct Select Tool (A); 3) hold Shift and select an
+anchor point; 4) select Cut path of selected anchor points in the
+Anchor Point toolbar (The icon with the segmented line and scissors).
 </p>
 
 
@@ -107,6 +125,12 @@ df &lt;- unique(sMap$polygon[,c("index","angleCentroid")]) %&gt;%
 dplyr::arrange(index)
 vec &lt;- ceiling(180*(df$angleCentroid/3.14))
 gp &lt;- xSHbase(sMap, vec, legend.title='Angles')
+
+# add boundary
+gp &lt;- xSHbase(sMap, sBase, boundary=T, colormap="rainbow_hcl")
+gp &lt;- xSHbase(sMap, sBase, boundary=T,
+colormap="transparent-transparent")
+gp + theme(legend.position="none")
 
 ## End(Not run)
 </pre>
