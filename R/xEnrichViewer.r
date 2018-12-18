@@ -125,6 +125,7 @@ xEnrichViewer <- function(eTerm, top_num=10, sortBy=c("adjp","fdr","pvalue","zsc
     }
     
     switch(sortBy, 
+    	fdr={res <- res[with(res,order(adjp,-zscore))[1:top_num],]},
     	adjp={res <- res[with(res,order(adjp,-zscore))[1:top_num],]},
     	pvalue={res <- res[with(res,order(pvalue,-zscore))[1:top_num],]},
     	zscore={res <- res[with(res,order(-zscore,adjp))[1:top_num],]},

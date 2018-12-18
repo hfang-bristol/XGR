@@ -89,7 +89,7 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 				top_num <- 10
 			}
 		}
-		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="or")
+		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy="or", details=T)
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
@@ -196,7 +196,7 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 		df$fdr[df$fdr<=zlim[1]] <- zlim[1]
 		df$fdr[df$fdr>=zlim[2]] <- zlim[2]
 	}else if(area.fill=='or'){
-		title <- expression(log[2]("OR"))
+		title <- expression(log[2]("odds ratio"))
 		if(is.null(zlim)){
 			tmp <- df$lor
 			zlim <- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))

@@ -50,7 +50,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=TRUE, drop=F, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=FALSE, drop=F, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
 {
     
     sortBy <- match.arg(sortBy)
@@ -168,9 +168,9 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 	
 	## order by 'or', 'adjp'
 	if(class(eTerm)=='eTerm' & sortBy!='or'){
-		df <- df[with(df,order(group, ontology)),]
+		df <- df[rev(1:nrow(df)),]
 	}else{
-		df <- df[with(df,order(group, ontology, or, fdr)),]
+		df <- df[with(df,order(group, ontology, or, -fdr)),]
 	}
 	df$name <- factor(df$name, levels=unique(df$name))
 

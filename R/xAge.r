@@ -65,7 +65,7 @@
 #' #################
 #' # 3) Pairwise comparison against all
 #' df <- res_df %>% dplyr::filter(data!="other")
-#' ##ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group=".all.", method="wilcox.test", p.adjust.method="BH")
+#' ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group=".all.", method="wilcox.test", p.adjust.method="BH")
 #' p <- ggpubr::ggviolin(df, x="group", y="Phylostrata", color="transparent", fill="group", add="boxplot", add.params=list(width=0.05, fill='transparent', color="black")) + theme(legend.position='none') + ggpubr::stat_compare_means(method="anova", label.y=18) + ggpubr::stat_compare_means(label="p.signif", label.y=18, method="wilcox.test", ref.group=".all.", hide.ns=T) + geom_hline(yintercept=median(df$Phylostrata), linetype=2)
 #' 
 #' #################
@@ -86,7 +86,7 @@
 #' ## remove duplicated genes
 #' df2 <- df2[!duplicated(df2$Symbol),]
 #' df <- rbind(df1, df2)
-#' ##ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group="other", method="wilcox.test", p.adjust.method="BH")
+#' ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group="other", method="wilcox.test", p.adjust.method="BH")
 #' p <- ggpubr::ggviolin(df, x="group", y="Phylostrata", fill="group", color="transparent", add="boxplot", add.params=list(width=0.05, color="black")) + theme(legend.position='none') + ggpubr::stat_compare_means(method="anova", label.y=18) + ggpubr::stat_compare_means(label="p.signif", label.y=17, method="wilcox.test", ref.group="other", hide.ns=T) + geom_hline(yintercept=median(df$Phylostrata[df$group=='other']), linetype=2) + geom_hline(yintercept=median(df$Phylostrata[df$group!='other']), linetype=2)
 #' 
 #' ### 6) labels

@@ -46,9 +46,11 @@ xObjSize <- function(obj, type=c("auto","variable","file"), units="auto", verbos
     
     if(type=='file'){
     	if(base::file.exists(obj)){
-    		res <- utils::format.object_size(file.info(obj)$size, units)
+    		#res <- utils::format.object_size(file.info(obj)$size, units)
+    		
 			if(verbose){
-				message(sprintf("The file '%s' in size: %s", obj, res), appendLF=T)
+				#message(sprintf("The file '%s' in size: %s", obj, res), appendLF=T)
+				message(sprintf("The file '%s' in size: %d", obj, file.info(obj)$size), appendLF=T)
 			}
     	}else{
     		warnings(sprintf("The file '%s' NOT found!", obj))

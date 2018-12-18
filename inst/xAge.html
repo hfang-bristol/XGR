@@ -173,7 +173,8 @@ ggpubr::stat_compare_means(aes(group=data),label=c("p.format","p.signif")[1],lab
 #################
 # 3) Pairwise comparison against all
 df &lt;- res_df %&gt;% dplyr::filter(data!="other")
-##ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group=".all.", method="wilcox.test", p.adjust.method="BH")
+ggpubr::compare_means(Phylostrata ~ group, data=df, ref.group=".all.",
+method="wilcox.test", p.adjust.method="BH")
 p &lt;- ggpubr::ggviolin(df, x="group", y="Phylostrata",
 color="transparent", fill="group", add="boxplot",
 add.params=list(width=0.05, fill='transparent', color="black")) +
@@ -212,7 +213,8 @@ df2 &lt;- df2 %&gt;% dplyr::select(-num)
 ## remove duplicated genes
 df2 &lt;- df2[!duplicated(df2$Symbol),]
 df &lt;- rbind(df1, df2)
-##ggpubr::compare_means(Phylostrata ~ group,  data=df, ref.group="other", method="wilcox.test", p.adjust.method="BH")
+ggpubr::compare_means(Phylostrata ~ group, data=df, ref.group="other",
+method="wilcox.test", p.adjust.method="BH")
 p &lt;- ggpubr::ggviolin(df, x="group", y="Phylostrata", fill="group",
 color="transparent", add="boxplot", add.params=list(width=0.05,
 color="black")) + theme(legend.position='none') +
