@@ -6,7 +6,9 @@
 #' @param leave.label.size the text size of the leave labelings. By default, it is 3
 #' @param leave.label.color the color of the leave labelings. By default, it is 'black'. If NULL, the label will be colored by the community
 #' @param leave.label.wrap the wrap width of the leave labelings
+#' @param leave.label.expansion the x- and y-expansion of the leave labelings. The value of 1 for the exact location of the leave, and the outwards (>1) and the inwards (<1)
 #' @param leave.size the size of the leave nodes. By default, it is 3 if there is no node attribute 'size'
+#' @param limit.expansion the x- and y-limit expansion. By default, it is 1.2. Beware the orignial limit is [-1,1]
 #' @param edge.tension the bundling strength of edges. 1 for very tight bundles, 0 for no bundle (straight lines). By defaults it is 0.8
 #' @param edge.alpha the alpha of edges
 #' @param edge.width the width of edges
@@ -32,7 +34,7 @@
 #' gp <- xHEB(ig)
 #' }
 
-xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.wrap=NULL, leave.size=NULL, edge.tension=0.8, edge.alpha=1, edge.width=0.5, edge.palette=NULL)
+xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.wrap=NULL, leave.label.expansion=1.1, leave.size=NULL, limit.expansion=1.2, edge.tension=0.8, edge.alpha=1, edge.width=0.5, edge.palette=NULL)
 {
     
     if (class(g) != "igraph"){
@@ -42,7 +44,7 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.w
     }
 	
 	##################
-	## text wrap
+	## label wrap
 	if(!is.null(leave.label.wrap)){
 		width <- as.integer(leave.label.wrap)
 		res_list <- lapply(V(ig)$name, function(x){
@@ -115,13 +117,13 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.w
 		ind <- match(df_vertices$name, df_nodes$name)
 		df_vertices$size <- df_nodes$size[ind]
 		## orientation
-		myleaves <- which(is.na( match(df_vertices$name, df_hierarchy$from) ))
+		myleaves <- which(is.na(match(df_vertices$name, df_hierarchy$from)))
 		nleaves <- length(myleaves)
 		df_vertices$id <- NA
-		df_vertices$id[ myleaves ] <- seq(1:nleaves)
+		df_vertices$id[myleaves] <- seq(1:nleaves)
 		df_vertices$angle <- 90 - 360 * df_vertices$id / nleaves
-		df_vertices$hjust<-ifelse( df_vertices$angle < -90, 1, 0)
-		df_vertices$angle<-ifelse(df_vertices$angle < -90, df_vertices$angle+180, df_vertices$angle)
+		df_vertices$hjust <- ifelse(df_vertices$angle < -90, 1, 0)
+		df_vertices$angle <- ifelse(df_vertices$angle < -90, df_vertices$angle+180, df_vertices$angle)
 
 		# Create ig_hierarchy
 		ig_hierarchy <- igraph::graph_from_data_frame(df_hierarchy, vertices=df_vertices)
@@ -157,7 +159,7 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.w
 		}
 		## leaf size
 		if(length(unique(V(ig_hierarchy)$size))>2){
-			gp <- gp + ggraph::geom_node_point(aes(filter=leaf, x=x*1.05, y=y*1.05, colour=community, size=size), alpha=0.3) 
+			gp <- gp + ggraph::geom_node_point(aes(filter=leaf, x=x*1.05, y=y*1.05, colour=community, size=size), alpha=0.3)
 			#gp <- gp + scale_size_continuous(range=c(1,7))
 		}else{
 			if(is.null(leave.size)){
@@ -167,13 +169,13 @@ xHEB <- function(g, leave.label.size=3, leave.label.color="black", leave.label.w
 		}
 		## leaf label
 		if(is.null(leave.label.color)){
-			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust, color=community),show.legend=F, size=leave.label.size, alpha=1)
+			gp <- gp + ggraph::geom_node_text(aes(x=x*leave.label.expansion, y=y*leave.label.expansion, filter=leaf, label=name, angle=angle, hjust=hjust, color=community),show.legend=F, size=leave.label.size, alpha=1)
 		}else{
-			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=1)
+			gp <- gp + ggraph::geom_node_text(aes(x=x*leave.label.expansion, y=y*leave.label.expansion, filter=leaf, label=name, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=1)
 		}
 		
 		## theme
-		gp <- gp + theme(legend.position="none",plot.margin=unit(c(0,0,0,0),"cm")) + expand_limits(x=c(-1.2, 1.2), y=c(-1.2, 1.2))
+		gp <- gp + theme(legend.position="none",plot.margin=unit(c(0,0,0,0),"cm")) + expand_limits(x=c(-limit.expansion,limit.expansion), y=c(-limit.expansion,limit.expansion))
 		gp <- gp + theme_void() + coord_fixed()
 	}
 	

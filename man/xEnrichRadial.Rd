@@ -13,9 +13,9 @@ edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
-can be a data frame having all these columns (named as
-'group','name','adjp','or','zscore'). Be aware that multiple ontologies
-are not supported here}
+can be a data frame having all these columns
+('name','adjp','or','zscore'; 'group' optionally). Be aware that
+multiple ontologies are not supported here}
 
 \item{ig}{the igraph object. If provided, only those terms within it
 will be visualised. By default, it is NULL meaning no surch

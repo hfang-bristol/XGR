@@ -118,14 +118,28 @@ xSHtree <- function(sMap, phylo=NULL, layout=c("rectangular","fan","partition"),
 		}
 		ig <- as.igraph(tree, directed=T, use.labels=T)
 		
+		# append 'tipid': NA for internal node, sequential order for tips
+		ind <- match(V(ig)$name, tree$tip.label)
+		V(ig)$tipid <- NA
+		V(ig)$tipid[!is.na(ind)] <- 1:sum(!is.na(ind))
+		
 		if(layout=="fan"){
+			g <- ig
 			
-			gp <- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
+			#####################################
+			name <- angle <- hjust <- NULL
+			## orientation: angle and hjust			
+			V(g)$angle <- 90 - 360 * V(g)$tipid / sum(!is.na(V(g)$tipid))
+			V(g)$hjust <- ifelse(V(g)$angle < -90, 1, 0)
+			V(g)$angle <- ifelse(V(g)$angle < -90, V(g)$angle+180, V(g)$angle)
+			#####################################
+
+			gp <- ggraph::ggraph(g, layout='dendrogram', circular=TRUE)
 			#gp <- gp + ggraph::geom_edge_diagonal(aes(color=1 - ..index..), color='black')
 			gp <- gp + ggraph::geom_edge_diagonal(color='grey')
 			gp <- gp + ggraph::geom_node_point(aes(filter=!leaf), color='grey')
-			#gp <- gp + ggraph::geom_node_text(aes(filter=leaf, label=name))
-			gp <- gp + theme_void() + coord_fixed() + theme(legend.position="none",plot.margin=unit(c(1,1,1,1),"cm")) + expand_limits(x=c(-1.2, 1.2), y=c(-1.2, 1.2))
+			gp <- gp + ggraph::geom_node_text(aes(x=x*1.1, y=y*1.1, filter=leaf, label=name, angle=angle, hjust=hjust),show.legend=F, size=2, alpha=1)
+			gp <- gp + theme_void() + coord_fixed() + theme(legend.position="none",plot.margin=unit(c(1,1,1,1),"cm")) + expand_limits(x=c(-1.2,1.2), y=c(-1.2,1.2))
 			
 		}else if(layout=="partition"){
 			

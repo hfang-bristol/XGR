@@ -5,7 +5,7 @@ NEW FEATURES
 
     o Populate annotations
     
-    o Add functions ('xEnrichRadial', 'xEnrichDotplot', 'xEnrichChord', 'xEnrichD3') for radial-, dot-, chord- and D3-style plot of enrichment results
+    o Add functions ('xEnrichRadial', 'xEnrichDotplot', 'xEnrichChord', 'xEnrichD3', 'xEnrichCtree', 'xCtree') for radial-, dot-, chord-, D3 and tree-style plot of enrichment results
 
     o Add functions ('xWCN' and 'xWCNheatmap') for weighted correlation network analysis
     

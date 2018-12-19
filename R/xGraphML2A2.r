@@ -183,12 +183,12 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     if(curation %in% c('any','manual')){
 		AA.path <- xRDataLoader(RData.customised="AA.path", verbose=verbose, RData.location=RData.location)
 		info <- AA.path$info
-		path <- gsub('^AA:', '', info$path)
+		path <- gsub('^AA:', '', info$id)
 		query <- gsub('^AA:', '', query)
 		query <- gsub('^path:', '', query)
 		manual_ind <- match(query, path)
 		if(is.na(manual_ind)){
-			manual_ind <- grep(query, info$desc)
+			manual_ind <- grep(query, info$name)
 			if(length(manual_ind)>1){
 				warning(sprintf("Manual curation: %d found for queried %s: only 1st kept", length(manual_ind), query), appendLF=TRUE)
 				manual_ind <- manual_ind[1]
@@ -198,13 +198,13 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 				###########################################################
 				AT.path <- xRDataLoader(RData.customised="AT.path", verbose=verbose, RData.location=RData.location)
 				info <- AT.path$info
-				path <- gsub('^AT:', '', info$path)
+				path <- gsub('^AT:', '', info$id)
 				query <- gsub('^AT:', '', query)
 				query <- gsub('^path:', '', query)
 				manual_ind_at <- match(query, path)
 				
 				if(is.na(manual_ind_at)){
-					manual_ind_at <- grep(query, info$desc)
+					manual_ind_at <- grep(query, info$name)
 					if(length(manual_ind_at)>1){
 						warning(sprintf("Automatic curation: %d found for queried %s: only 1st kept", length(manual_ind_at), query), appendLF=TRUE)
 						manual_ind_at <- manual_ind_at[1]
@@ -226,7 +226,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     	if(length(manual_ind) != 0){
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.path$info$path[manual_ind], AA.path$info$desc[manual_ind], as.character(now)), appendLF=TRUE)
+				message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.path$info$id[manual_ind], AA.path$info$name[manual_ind], as.character(now)), appendLF=TRUE)
 			}
 			detail <- AA.path$detail[[manual_ind]]
 			df_nodes <- detail$nodes
@@ -235,7 +235,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 		}else{
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Automatic curation: visualising '%s: %s' (%s) ...", AT.path$info$path[manual_ind_at], AT.path$info$desc[manual_ind_at], as.character(now)), appendLF=TRUE)
+				message(sprintf("Automatic curation: visualising '%s: %s' (%s) ...", AT.path$info$id[manual_ind_at], AT.path$info$name[manual_ind_at], as.character(now)), appendLF=TRUE)
 			}
 			detail <- AT.path$detail[[manual_ind_at]]
 			

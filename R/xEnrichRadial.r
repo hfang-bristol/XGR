@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichRadial} is supposed to visualise enrichment results using radial-like plot. It returns three ggplot2 objects, the first for visualing the network with nodes lablelled by codes, the second for listing code meaning in a table, and the third for the network with nodes colored/sized with enrichment results.
 #'
-#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','name','adjp','or','zscore'). Be aware that multiple ontologies are not supported here
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns ('name','adjp','or','zscore'; 'group' optionally). Be aware that multiple ontologies are not supported here
 #' @param ig the igraph object. If provided, only those terms within it will be visualised. By default, it is NULL meaning no surch restriction
 #' @param fixed logical to indicate whether all terms in ig will be visualised. By default, it is TURE; otherwise only overlapped terms from eTerm will be visualised
 #' @param node.color which statistics will be used for node coloring. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
@@ -71,7 +71,7 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 		}else if(class(eTerm)=='data.frame'){
 			if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore')]
-			}else if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
+			}else if(all(c('name','adjp','or','zscore') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('name','adjp','or','zscore')]
 				df_enrichment_group$group <- 'group'
 			}

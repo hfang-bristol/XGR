@@ -5,7 +5,8 @@
 \title{Function to visualise a graph with communities using hierarchical edge bundling}
 \usage{
 xHEB(g, leave.label.size = 3, leave.label.color = "black",
-leave.label.wrap = NULL, leave.size = NULL, edge.tension = 0.8,
+leave.label.wrap = NULL, leave.label.expansion = 1.1,
+leave.size = NULL, limit.expansion = 1.2, edge.tension = 0.8,
 edge.alpha = 1, edge.width = 0.5, edge.palette = NULL)
 }
 \arguments{
@@ -20,8 +21,15 @@ it is 'black'. If NULL, the label will be colored by the community}
 
 \item{leave.label.wrap}{the wrap width of the leave labelings}
 
+\item{leave.label.expansion}{the x- and y-expansion of the leave
+labelings. The value of 1 for the exact location of the leave, and the
+outwards (>1) and the inwards (<1)}
+
 \item{leave.size}{the size of the leave nodes. By default, it is 3 if
 there is no node attribute 'size'}
+
+\item{limit.expansion}{the x- and y-limit expansion. By default, it is
+1.2. Beware the orignial limit is [-1,1]}
 
 \item{edge.tension}{the bundling strength of edges. 1 for very tight
 bundles, 0 for no bundle (straight lines). By defaults it is 0.8}
