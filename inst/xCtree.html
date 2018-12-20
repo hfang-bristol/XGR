@@ -124,7 +124,7 @@ ig &lt;- AA.path$consensus$ig
 
 # outwards
 gp &lt;- xCtree(ig, leave.label.orientation="outwards",
-leave.label.wrap=30, limit.expansion=1.5, leave.size=2)
+leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
 head(gp$data %&gt;% dplyr::arrange(tipid))
 
 # inwards

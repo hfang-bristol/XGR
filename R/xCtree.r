@@ -30,7 +30,7 @@
 #' ig <- AA.path$consensus$ig
 #' 
 #' # outwards
-#' gp <- xCtree(ig, leave.label.orientation="outwards", leave.label.wrap=30, limit.expansion=1.5, leave.size=2)
+#' gp <- xCtree(ig, leave.label.orientation="outwards", leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
 #' head(gp$data %>% dplyr::arrange(tipid))
 #' 
 #' # inwards
