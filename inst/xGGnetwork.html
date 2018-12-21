@@ -29,7 +29,7 @@ na.color = "grey80", node.color.alpha = 1, node.size = NULL,
 node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
 title = "", edge.size = 0.5, edge.color = "black",
 edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
-edge.arrow.gap = 0.02)
+edge.arrow.gap = 0.02, ncolumns = NULL)
 </pre>
 
 
@@ -207,6 +207,12 @@ default, it is 2</p>
 <tr valign="top"><td><code>edge.arrow.gap</code></td>
 <td>
 <p>a gap between the arrow and the node</p>
+</td></tr>
+<tr valign="top"><td><code>ncolumns</code></td>
+<td>
+<p>an integer specifying the number of columns for
+facet_wrap. By defaul, it is NULL (decided on according to the number
+of groups that will be visualised)</p>
 </td></tr>
 </table>
 

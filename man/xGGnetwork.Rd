@@ -16,7 +16,7 @@ na.color = "grey80", node.color.alpha = 1, node.size = NULL,
 node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
 title = "", edge.size = 0.5, edge.color = "black",
 edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
-edge.arrow.gap = 0.02)
+edge.arrow.gap = 0.02, ncolumns = NULL)
 }
 \arguments{
 \item{g}{an object of class "igraph". For an advanced use, it can be a
@@ -124,6 +124,10 @@ straight line}
 default, it is 2}
 
 \item{edge.arrow.gap}{a gap between the arrow and the node}
+
+\item{ncolumns}{an integer specifying the number of columns for
+facet_wrap. By defaul, it is NULL (decided on according to the number
+of groups that will be visualised)}
 }
 \value{
 a ggplot object, appended with 'data_nodes' and 'data_edges'

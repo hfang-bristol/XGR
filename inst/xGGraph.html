@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise an igraph object using ggraph</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGGraph"><tr><td>xGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise an igraph object using ggraph</h2>
+
+<h3>Description</h3>
+
+<p><code>xGGraph</code> is supposed to visualise an igraph object using ggraph,
+with nodes/tips labelled (aligned to left-right or top-bottom edges).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGGraph(ig, layout = "partition", circular = T, leave = T,
+node.label.size = 2, node.label.direction = c("none", "leftright",
+"topbottom"), node.label.color = "darkblue", node.label.alpha = 0.7,
+node.label.wrap = NULL, node.label.offset = 0.5, node.size = 2,
+limit.expansion = NULL, edge.color = "grey", edge.alpha = 0.5,
+edge.width = 0.5, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>ig</code></td>
+<td>
+<p>an object of class &quot;igraph&quot; with node attribute 'name'. It
+could be a 'phylo' object converted to. Note: the node/leave labels
+would be the node attribute 'name' unless the node attribute 'label' is
+explicitely provided</p>
+</td></tr>
+<tr valign="top"><td><code>layout</code></td>
+<td>
+<p>the layout supported in ggraph::create_layout. This can
+be ggraph layouts 'partition' (by default), 'dendrogram', 'circlepack',
+'treemap' (-1,1). This can be also igraph-supported layout
+('nicely','fr','kk','sugiyama','randomly','star','circle','gem','dh','graphopt','grid','mds','drl','lgl','sphere')</p>
+</td></tr>
+<tr valign="top"><td><code>circular</code></td>
+<td>
+<p>the logic specifying whether or not circular
+representations. This will be disabled implicitly if the layout does
+not support circularity</p>
+</td></tr>
+<tr valign="top"><td><code>leave</code></td>
+<td>
+<p>the logic specifying whether or not only leaves
+(nodes/labellings) shown. This can be disenabled if the layout does not
+support tips</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.size</code></td>
+<td>
+<p>the text size of the leave labelings. By
+default, it is 2. If 0, all labellings will be disabled</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.direction</code></td>
+<td>
+<p>the leave label direction. It can be
+&quot;none&quot;, &quot;leftright&quot; (aligned to the left- and right-most edge) and
+&quot;topbottom&quot; (aligned to the top- and bottom-most edge)</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.color</code></td>
+<td>
+<p>the color of the leave labelings</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.alpha</code></td>
+<td>
+<p>the alpha of the leave labelings</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.wrap</code></td>
+<td>
+<p>the wrap width of the leave labelings</p>
+</td></tr>
+<tr valign="top"><td><code>node.label.offset</code></td>
+<td>
+<p>the offset of the leave labelings aligned to
+the edge. It is defined as relative to the range of limits (x-limit for
+left-right, and y-limit for top-bottom)</p>
+</td></tr>
+<tr valign="top"><td><code>node.size</code></td>
+<td>
+<p>the size of the leave nodes. By default, it is 0</p>
+</td></tr>
+<tr valign="top"><td><code>limit.expansion</code></td>
+<td>
+<p>the x- and y-limit expansion. By default, it is
+NULL, decided by &quot;node.label.offset&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>edge.color</code></td>
+<td>
+<p>the color of edges</p>
+</td></tr>
+<tr valign="top"><td><code>edge.alpha</code></td>
+<td>
+<p>the alpha of edges</p>
+</td></tr>
+<tr valign="top"><td><code>edge.width</code></td>
+<td>
+<p>the width of edges</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional graphic parameters (such as size, color) used in
+ggrepel::geom_text_repel to control labels</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object appended with 'ig' and 'data' which should contain
+columns 'x','y','name' (the same as V(ig)$name), 'label' (if not given
+in ig, a 'name' varient). Also contain 'leaf' (T/F), 'depth' (the
+number of step to the root) for tree-like graph with certain layouts.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGGraph</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+
+AA.path &lt;- xRDataLoader("AA.path", RData.location=RData.location)
+# consensus tree
+ig &lt;- AA.path$consensus$ig
+
+# Default: partition-like circular layout
+# none
+gp &lt;- xGGraph(ig, node.label.direction="none", node.label.wrap=50)
+# leftright
+gp &lt;- xGGraph(ig, node.label.direction="leftright", node.label.wrap=50,
+node.label.offset=0.5)
+# topbottom
+gp &lt;- xGGraph(ig, node.label.direction="topbottom", node.label.wrap=50,
+node.label.offset=0.5)
+
+# advanced usage
+## ggraph layouts
+gp &lt;- xGGraph(ig, layout='dendrogram',
+node.label.direction="leftright")
+gp &lt;- xGGraph(ig, layout='treemap')
+gp &lt;- xGGraph(ig, layout='circlepack')
+## igraph layouts
+set.seed(825)
+gp &lt;- xGGraph(ig, layout='nicely', node.label.direction="leftright")
+gp &lt;- xGGraph(ig, layout='kk')
+gp &lt;- xGGraph(ig, layout='fr', node.label.direction="leftright")
+gp &lt;- xGGraph(ig, layout='gem')
+
+## End(Not run)
+</pre>
+
+
+</body></html>

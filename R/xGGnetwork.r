@@ -35,6 +35,7 @@
 #' @param edge.curve a numeric value specifying the edge curve. 0 for the straight line
 #' @param edge.arrow a numeric value specifying the edge arrow. By default, it is 2
 #' @param edge.arrow.gap a gap between the arrow and the node
+#' @param ncolumns an integer specifying the number of columns for facet_wrap. By defaul, it is NULL (decided on according to the number of groups that will be visualised)
 #' @return
 #' a ggplot object, appended with 'data_nodes' and 'data_edges'
 #' @note none
@@ -109,7 +110,7 @@
 #' gp + ggnetwork::geom_edges(size=e.size, show.legend=FALSE)
 #' }
 
-xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lineheight=0.8, node.label.size=NULL, node.label.fontface='plain', node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.shape.title=NULL, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, na.color='grey80', node.color.alpha=1, node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02)
+xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lineheight=0.8, node.label.size=NULL, node.label.fontface='plain', node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=1, node.label.arrow=0.01, node.label.force=1, node.shape=19, node.shape.title=NULL, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-orange-darkred', ncolors=64, zlim=NULL, na.color='grey80', node.color.alpha=1, node.size=NULL, node.size.title=NULL, node.size.range=c(1,4), slim=NULL, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.5, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02, ncolumns=NULL)
 {
     
    	if(any(class(g) %in% c("igraph"))){
@@ -448,8 +449,11 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
     
     ## facet by 'group' artificially added 
     if(length(ls_ig)>1){
-    	group <- NULL
-    	gp <- gp + facet_wrap(~group)
+		if(is.null(ncolumns)){
+			ncolumns <- ceiling(sqrt(length(ls_ig)))
+		}
+		group <- NULL
+		gp <- gp + facet_wrap(~group, ncol=ncolumns)
 		gp <- gp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=12,face="bold"), strip.placement="inside", panel.spacing=unit(0,"lines"))
     }
     
