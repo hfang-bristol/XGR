@@ -35,8 +35,9 @@ Conversion is supported directly: 1) from 'igraph' to
 "igraph"; 3) from 'dtree' to "igraph","lol","json"; 4) from 'lol' to
 "dtree","json"; 5) from 'json' to "lol","dtree". In summary:
 "dgCMatrix" -- "igraph" (hub) -- "dtree" (hub) -- "lol" -- "json".
-Note: igraph --as.igraph-- phylo --as.hclust/as.phylo-- hclust
---as.dendrogram/as.hclust-- dendro
+Note: 1) igraph --as.igraph-- phylo --as.hclust/as.phylo-- hclust
+--as.dendrogram/as.hclust-- dendro; 2) igraph --ggraph::den_to_igraph--
+dendro
 }
 \examples{
 # generate a ring graph

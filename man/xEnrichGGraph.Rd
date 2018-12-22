@@ -2,10 +2,10 @@
 % Please edit documentation in R/xEnrichGGraph.r
 \name{xEnrichGGraph}
 \alias{xEnrichGGraph}
-\title{Function to visualise enrichment results using a tree-like circular plot}
+\title{Function to visualise enrichment results using a ggraph-like lauout}
 \usage{
-xEnrichGGraph(eTerm, ig, node.color = c("zscore", "adjp", "or"),
-colormap = "grey-orange-darkred", zlim = NULL,
+xEnrichGGraph(eTerm, ig = NULL, fixed = T, node.color = c("zscore",
+"adjp", "or"), colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "zscore", "or"), slim = NULL,
 node.size.range = c(0.5, 4), node.label.size = 2, leave = T,
 ncolumns = NULL, ...)
@@ -15,10 +15,15 @@ ncolumns = NULL, ...)
 can be a data frame having all these columns
 ('name','adjp','or','zscore'; 'group' optionally)}
 
-\item{ig}{an object of class "igraph" with node attribute 'name'. It
-could be a 'phylo' object converted to. Note: the leave labels would be
-the node attribute 'name' unless the node attribute 'label' is
-explicitely provided}
+\item{ig}{an object of class "igraph" with node attribute 'name'. Note:
+the node labels would be the node attribute 'name' unless the node
+attribute 'label' is explicitely provided. If provided, only those
+terms within it will be visualised. By default, it is NULL meaning no
+surch restriction}
+
+\item{fixed}{logical to indicate whether all terms in ig will be
+visualised. By default, it is TURE; otherwise only overlapped terms
+from eTerm will be visualised}
 
 \item{node.color}{which statistics will be used for node coloring. It
 can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and
@@ -70,7 +75,7 @@ labelling for the colored plots).
 }
 \description{
 \code{xEnrichGGraph} is supposed to visualise enrichment results using
-a tree-like circular plot.
+a ggraph-like lauout.
 }
 \note{
 none

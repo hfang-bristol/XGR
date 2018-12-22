@@ -142,6 +142,30 @@ gp &lt;- xSH(sMap, customised.comp=sMap$codebook[,1:2])
 ls_gp &lt;-lapply(1:5, function(i) xSH(sMap, which.components=i) +
 theme(legend.position="none"))
 
+## save into a gif file via magick
+ls_gp &lt;-lapply(1:ncol(sMap$codebook), function(i) xSH(sMap,
+which.components=i,zlim=c(0,5))+ggtitle(colnames(sMap$codebook)[i]))
+img &lt;- magick::image_graph(480, 480, res=96)
+ls_gp; dev.off()
+animation &lt;- magick::image_animate(img, fps=2)
+magick::image_write(animation, "xSH.gif")
+
+## save into a gif file via magick and tweenr
+cnames &lt;- colnames(sMap$codebook)
+data &lt;- lapply(1:length(cnames), function(i)
+data.frame(x=sMap$codebook[,i]))
+k &lt;- 8
+data_tween &lt;- tweenr::tween_states(c(data,data[1]), tweenlength=1,
+statelength=1, ease='cubic-in-out', nframes=length(cnames) * k)
+ls_gp &lt;- lapply(1:(length(cnames)*k), function(i) {
+p &lt;- xSH(sMap, customised.comp=subset(data_tween,.frame==i)$x,
+zlim=c(0,5)) + ggtitle(cnames[ceiling(i/k)])
+})
+img &lt;- magick::image_graph(480, 480, res=96)
+ls_gp; dev.off()
+animation &lt;- magick::image_animate(img, fps=5)
+magick::image_write(animation, "xSH_advanced.gif")
+
 ## End(Not run)
 </pre>
 

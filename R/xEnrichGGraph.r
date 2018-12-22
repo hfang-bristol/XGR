@@ -1,9 +1,10 @@
-#' Function to visualise enrichment results using a tree-like circular plot
+#' Function to visualise enrichment results using a ggraph-like lauout
 #'
-#' \code{xEnrichGGraph} is supposed to visualise enrichment results using a tree-like circular plot.
+#' \code{xEnrichGGraph} is supposed to visualise enrichment results using a ggraph-like lauout.
 #'
 #' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns ('name','adjp','or','zscore'; 'group' optionally)
-#' @param ig an object of class "igraph" with node attribute 'name'. It could be a 'phylo' object converted to. Note: the leave labels would be the node attribute 'name' unless the node attribute 'label' is explicitely provided
+#' @param ig an object of class "igraph" with node attribute 'name'. Note: the node labels would be the node attribute 'name' unless the node attribute 'label' is explicitely provided. If provided, only those terms within it will be visualised. By default, it is NULL meaning no surch restriction
+#' @param fixed logical to indicate whether all terms in ig will be visualised. By default, it is TURE; otherwise only overlapped terms from eTerm will be visualised
 #' @param node.color which statistics will be used for node coloring. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param zlim the minimum and maximum values for which colors should be plotted
@@ -55,7 +56,7 @@
 #' gp$gp_template
 #' }
 
-xEnrichGGraph <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4), node.label.size=2, leave=T, ncolumns=NULL, ...)
+xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4), node.label.size=2, leave=T, ncolumns=NULL, ...)
 {
 	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     node.color <- match.arg(node.color)
@@ -66,6 +67,7 @@ xEnrichGGraph <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colorma
         return(NULL)
     }
     
+    if(0){
 	if(class(ig)!="igraph"){
 		warnings("The 'ig' object must be provided.\n")
 		return(NULL)
@@ -74,6 +76,7 @@ xEnrichGGraph <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colorma
 			warnings("The 'ig' object must contain a node attribute 'name'.\n")
 			return(NULL)
 		}
+	}
 	}
     
     if(class(eTerm)=='eTerm'){
@@ -99,7 +102,27 @@ xEnrichGGraph <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colorma
 			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
 		}
 	}
+
+	##########################################################
+	# restrict those nodes provided in 'ig'
+	if(class(ig)!="igraph"){
+		if(class(eTerm)=='eTerm'){
+			ig <- eTerm$g
+			V(ig)$name <- V(ig)$term_name
+		}else{
+			return(NULL)
+		}
+	}
 	
+	if(!fixed){
+		ind <- match(V(ig)$name, df_enrichment_group$name)
+		nodes_query <- V(ig)$name[!is.na(ind)]
+		if(class(suppressWarnings(try(ig <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), T)))=="try-error"){
+			ig <- NULL
+		}
+	}
+	##########################################################
+
 	gp <- NULL
 	
 	if(class(ig)=="igraph"){

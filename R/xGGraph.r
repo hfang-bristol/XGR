@@ -14,6 +14,7 @@
 #' @param node.label.offset the offset of the leave labelings aligned to the edge. It is defined as relative to the range of limits (x-limit for left-right, and y-limit for top-bottom)
 #' @param node.size the size of the leave nodes. By default, it is 0
 #' @param limit.expansion the x- and y-limit expansion. By default, it is NULL, decided by "node.label.offset"
+#' @param edge the edge type. It can be "diagonal" (default) , "link" (straight lines), "arc", "fan" (curves of different curvature), "elbow"
 #' @param edge.color the color of edges
 #' @param edge.alpha the alpha of edges
 #' @param edge.width the width of edges
@@ -54,10 +55,11 @@
 #' gp <- xGGraph(ig, layout='gem')
 #' }
 
-xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size=2, node.label.direction=c('none','leftright','topbottom'), node.label.color="darkblue", node.label.alpha=0.7, node.label.wrap=NULL, node.label.offset=0.5, node.size=2, limit.expansion=NULL, edge.color='grey', edge.alpha=0.5, edge.width=0.5, ...)
+xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size=2, node.label.direction=c('none','leftright','topbottom'), node.label.color="darkblue", node.label.alpha=0.7, node.label.wrap=NULL, node.label.offset=0.5, node.size=2, limit.expansion=NULL, edge=c("diagonal","link","arc","fan","elbow"), edge.color='grey', edge.alpha=0.5, edge.width=0.5, ...)
 {
 
     node.label.direction <- match.arg(node.label.direction)
+    edge <- match.arg(edge)
 	
 	## how to convert a phylo object 'tree' into igraph object 'ig'
 	if(0){
@@ -116,7 +118,17 @@ xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size
 	}
 
 	## edges
-	gp <- gp + ggraph::geom_edge_diagonal(color=edge.color,alpha=edge.alpha,width=edge.width)
+	if(edge=="diagonal"){
+		gp <- gp + ggraph::geom_edge_diagonal(color=edge.color,alpha=edge.alpha,width=edge.width)
+	}else if(edge=="link"){
+		gp <- gp + ggraph::geom_edge_link(color=edge.color,alpha=edge.alpha,width=edge.width)
+	}else if(edge=="arc"){
+		gp <- gp + ggraph::geom_edge_arc(color=edge.color,alpha=edge.alpha,width=edge.width)
+	}else if(edge=="fan"){
+		gp <- gp + ggraph::geom_edge_fan(color=edge.color,alpha=edge.alpha,width=edge.width)
+	}else if(edge=="elbow"){
+		gp <- gp + ggraph::geom_edge_elbow(color=edge.color,alpha=edge.alpha,width=edge.width)
+	}
 	
 	if(node.label.size>0){
 	
@@ -175,7 +187,7 @@ xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size
 		}
 	}
 		
-	gp <- gp + ggraph::theme_graph()
+	gp <- gp + ggraph::theme_graph(base_family="Arial")
 	
 	if(0){
 		# order by tipid

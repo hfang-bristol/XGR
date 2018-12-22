@@ -39,6 +39,7 @@ eTerm <- function(term_info, annotation, g, data, background, overlap, fc, zscor
 #' @param ... other parameters
 #' @rdname eTerm
 #' @export
+#' @method print eTerm
 print.eTerm <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components including:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $term_info: a data frame of %d rows X %d columns", dim(x$term_info)[1],dim(x$term_info)[2]), "\n", sep="")
@@ -85,6 +86,7 @@ mSeed <- function(GR, Gene, Link){
 #' @param ... other parameters
 #' @rdname mSeed
 #' @export
+#' @method print mSeed
 print.mSeed <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $GR: a data frame of %d rows X %d columns", dim(x$GR)[1],dim(x$GR)[2]), "\n", sep="")
@@ -136,6 +138,7 @@ ls_eTerm <- function(df, mat, gp){
 #' @param ... other parameters
 #' @rdname ls_eTerm
 #' @export
+#' @method print ls_eTerm
 print.ls_eTerm <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $df: a data frame of %d rows X %d columns", dim(x$df)[1],dim(x$df)[2]), "\n", sep="")
@@ -181,12 +184,13 @@ cPath <- function(ig_paths, gp_paths, gp_heatmap, ig_subg){
 #' @param ... other parameters
 #' @rdname cPath
 #' @export
+#' @method print cPath
 print.cPath <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $ig_paths: an igraph object or NULL"), "\n", sep="")
 	cat(sprintf("  $gp_paths: a ggplot object or NULL"), "\n", sep="")
 	cat(sprintf("  $gp_heatmap: a ggplot object or NULL"), "\n", sep="")
-	cat(sprintf("  $ig_subg: ab igraph object or NULL"), "\n", sep="")
+	cat(sprintf("  $ig_subg: an igraph object or NULL"), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("$ig_paths$enrichment:\n")
 	print(x$ig_paths$enrichment[1:min(2,nrow(x$ig_paths$enrichment)),c(2:13,18:19)], row.names=FALSE)
@@ -225,6 +229,7 @@ bLD <- function(best, block){
 #' @param ... other parameters
 #' @rdname bLD
 #' @export
+#' @method print bLD
 print.bLD <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $best: a GR object or NULL"), "\n", sep="")
@@ -270,6 +275,7 @@ aOnto <- function(g, anno){
 #' @param ... other parameters
 #' @rdname aOnto
 #' @export
+#' @method print aOnto
 print.aOnto <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $g: an igraph object or NULL"), "\n", sep="")
@@ -314,6 +320,7 @@ DR <- function(df, index, gp){
 #' @param ... other parameters
 #' @rdname DR
 #' @export
+#' @method print DR
 print.DR <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $df: a data frame of %d rows X %d columns", dim(x$df)[1],dim(x$df)[2]), "\n", sep="")
@@ -362,6 +369,7 @@ cModule <- function(mem, data, adj, io){
 #' @param ... other parameters
 #' @rdname cModule
 #' @export
+#' @method print cModule
 print.cModule <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $mem: a data frame of %d rows X %d columns", dim(x$mem)[1],dim(x$mem)[2]), "\n", sep="")
@@ -421,6 +429,7 @@ pPerf <- function(data, auroc, fmax, amax, direction, gp, Pred_obj){
 #' @param ... other parameters
 #' @rdname pPerf
 #' @export
+#' @method print pPerf
 print.pPerf <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', with %d components including:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $data: a data frame of %d rows X %d columns", dim(x$data)[1],dim(x$data)[2]), "\n", sep="")
@@ -465,6 +474,7 @@ sClass <- function(prediction, predictor, performance){
 #' @param ... other parameters
 #' @rdname sClass
 #' @export
+#' @method print sClass
 print.sClass <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', resulted from %d cross-validation, containing %d components:", class(x), length(x$cv_model), length(names(x))), "\n", sep="")
 	cat(sprintf("  $prediction: a data frame of %d rows X %d columns", dim(x$prediction)[1], dim(x$prediction)[2], dim(x$prediction)[2]-2), "\n", sep="")
@@ -526,6 +536,7 @@ sMap <- function(nHex, xdim, ydim, r, lattice, shape, coord, polygon, init, code
 #' @param ... other parameters
 #' @rdname sMap
 #' @export
+#' @method print sMap
 print.sMap <- function(x, ...) {
 	cat(sprintf("An object of S3 class '%s', containing %d components:", class(x), length(names(x))), "\n", sep="")
 	cat(sprintf("  $shape: %s (grid shape)", x$shape), "\n", sep="")

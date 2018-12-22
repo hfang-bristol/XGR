@@ -21,8 +21,9 @@ xGGraph(ig, layout = "partition", circular = T, leave = T,
 node.label.size = 2, node.label.direction = c("none", "leftright",
 "topbottom"), node.label.color = "darkblue", node.label.alpha = 0.7,
 node.label.wrap = NULL, node.label.offset = 0.5, node.size = 2,
-limit.expansion = NULL, edge.color = "grey", edge.alpha = 0.5,
-edge.width = 0.5, ...)
+limit.expansion = NULL, edge = c("diagonal", "link", "arc", "fan",
+"elbow"), edge.color = "grey", edge.alpha = 0.5, edge.width = 0.5,
+...)
 </pre>
 
 
@@ -92,6 +93,12 @@ left-right, and y-limit for top-bottom)</p>
 <td>
 <p>the x- and y-limit expansion. By default, it is
 NULL, decided by &quot;node.label.offset&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>edge</code></td>
+<td>
+<p>the edge type. It can be &quot;diagonal&quot; (default) , &quot;link&quot;
+(straight lines), &quot;arc&quot;, &quot;fan&quot; (curves of different curvature),
+&quot;elbow&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>

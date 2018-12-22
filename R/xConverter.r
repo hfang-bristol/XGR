@@ -7,7 +7,7 @@
 #' @param to a character specifying the class converted to. It can be one of "igraph", "dgCMatrix", "dtree", "lol", "json" and "igraph_tree"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return an object of class "igraph", "dgCMatrix", "dtree", "lol", or "json".
-#' @note Conversion is supported directly: 1) from 'igraph' to "dgCMatrix","dtree","lol","json","igraph_tree"; 2) from 'dgCMatrix' to "igraph"; 3) from 'dtree' to "igraph","lol","json"; 4) from 'lol' to "dtree","json"; 5) from 'json' to "lol","dtree". In summary: "dgCMatrix" -- "igraph" (hub) -- "dtree" (hub) -- "lol" -- "json". Note: igraph --as.igraph-- phylo --as.hclust/as.phylo-- hclust --as.dendrogram/as.hclust-- dendro
+#' @note Conversion is supported directly: 1) from 'igraph' to "dgCMatrix","dtree","lol","json","igraph_tree"; 2) from 'dgCMatrix' to "igraph"; 3) from 'dtree' to "igraph","lol","json"; 4) from 'lol' to "dtree","json"; 5) from 'json' to "lol","dtree". In summary: "dgCMatrix" -- "igraph" (hub) -- "dtree" (hub) -- "lol" -- "json". Note: 1) igraph --as.igraph-- phylo --as.hclust/as.phylo-- hclust --as.dendrogram/as.hclust-- dendro; 2) igraph --ggraph::den_to_igraph-- dendro
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xConverter.r

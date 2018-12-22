@@ -36,6 +36,26 @@
 #' 
 #' ## list of gp
 #' ls_gp <-lapply(1:5, function(i) xSH(sMap, which.components=i) + theme(legend.position="none"))
+#' 
+#' ## save into a gif file via magick
+#' ls_gp <-lapply(1:ncol(sMap$codebook), function(i) xSH(sMap, which.components=i,zlim=c(0,5))+ggtitle(colnames(sMap$codebook)[i]))
+#' img <- magick::image_graph(480, 480, res=96)
+#' ls_gp; dev.off()
+#' animation <- magick::image_animate(img, fps=2)
+#' magick::image_write(animation, "xSH.gif")
+#' 
+#' ## save into a gif file via magick and tweenr
+#' cnames <- colnames(sMap$codebook)
+#' data <- lapply(1:length(cnames), function(i) data.frame(x=sMap$codebook[,i]))
+#' k <- 8
+#' data_tween <- tweenr::tween_states(c(data,data[1]), tweenlength=1, statelength=1, ease='cubic-in-out', nframes=length(cnames) * k)
+#' ls_gp <- lapply(1:(length(cnames)*k), function(i) {
+#'    p <- xSH(sMap, customised.comp=subset(data_tween,.frame==i)$x, zlim=c(0,5)) + ggtitle(cnames[ceiling(i/k)])
+#' })
+#' img <- magick::image_graph(480, 480, res=96)
+#' ls_gp; dev.off()
+#' animation <- magick::image_animate(img, fps=5)
+#' magick::image_write(animation, "xSH_advanced.gif")
 #' }
 
 xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL, colormap="spectral", ncolors=64, zlim=NULL, border.color="transparent", barwidth=0.4, barheight=NULL, nbin=64, legend.title='', legend.text.size=6, legend.title.size=8)

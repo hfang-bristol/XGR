@@ -1,24 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a tree-like...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a ggraph-like...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichGGraph"><tr><td>xEnrichGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using a tree-like circular plot</h2>
+<h2>Function to visualise enrichment results using a ggraph-like lauout</h2>
 
 <h3>Description</h3>
 
 <p><code>xEnrichGGraph</code> is supposed to visualise enrichment results using
-a tree-like circular plot.
+a ggraph-like lauout.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichGGraph(eTerm, ig, node.color = c("zscore", "adjp", "or"),
-colormap = "grey-orange-darkred", zlim = NULL,
+xEnrichGGraph(eTerm, ig = NULL, fixed = T, node.color = c("zscore",
+"adjp", "or"), colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "zscore", "or"), slim = NULL,
 node.size.range = c(0.5, 4), node.label.size = 2, leave = T,
 ncolumns = NULL, ...)
@@ -36,10 +36,17 @@ can be a data frame having all these columns
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>
-<p>an object of class &quot;igraph&quot; with node attribute 'name'. It
-could be a 'phylo' object converted to. Note: the leave labels would be
-the node attribute 'name' unless the node attribute 'label' is
-explicitely provided</p>
+<p>an object of class &quot;igraph&quot; with node attribute 'name'. Note:
+the node labels would be the node attribute 'name' unless the node
+attribute 'label' is explicitely provided. If provided, only those
+terms within it will be visualised. By default, it is NULL meaning no
+surch restriction</p>
+</td></tr>
+<tr valign="top"><td><code>fixed</code></td>
+<td>
+<p>logical to indicate whether all terms in ig will be
+visualised. By default, it is TURE; otherwise only overlapped terms
+from eTerm will be visualised</p>
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>

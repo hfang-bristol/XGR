@@ -8,8 +8,9 @@ xGGraph(ig, layout = "partition", circular = T, leave = T,
 node.label.size = 2, node.label.direction = c("none", "leftright",
 "topbottom"), node.label.color = "darkblue", node.label.alpha = 0.7,
 node.label.wrap = NULL, node.label.offset = 0.5, node.size = 2,
-limit.expansion = NULL, edge.color = "grey", edge.alpha = 0.5,
-edge.width = 0.5, ...)
+limit.expansion = NULL, edge = c("diagonal", "link", "arc", "fan",
+"elbow"), edge.color = "grey", edge.alpha = 0.5, edge.width = 0.5,
+...)
 }
 \arguments{
 \item{ig}{an object of class "igraph" with node attribute 'name'. It
@@ -51,6 +52,10 @@ left-right, and y-limit for top-bottom)}
 
 \item{limit.expansion}{the x- and y-limit expansion. By default, it is
 NULL, decided by "node.label.offset"}
+
+\item{edge}{the edge type. It can be "diagonal" (default) , "link"
+(straight lines), "arc", "fan" (curves of different curvature),
+"elbow"}
 
 \item{edge.color}{the color of edges}
 
