@@ -36,6 +36,9 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
     
     ontology <- ontology[1]
     
+    # input ontology name
+    ontology.input <- ontology
+    
     g <- NULL
     anno <- NULL
     
@@ -51,6 +54,8 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 			nodes <- rbind(nodes, c('root','root','root','root','root'))
 			relations <- data.frame(from='root', to=nodes$name)
 			g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+			
+			ontology.input <- 'customised'
     	}
     	
     }else{
@@ -172,9 +177,12 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
     
     }
     
+	## append graph attribute 'ontology'
+	g$ontology <- ontology.input
+    
 	# object 'aOnto'
     aOnto <- list(g = g,
-    			anno = anno
+    			  anno = anno
                  )
     class(aOnto) <- "aOnto"
 	

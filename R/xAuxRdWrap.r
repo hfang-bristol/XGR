@@ -1,6 +1,6 @@
 #' Function to wrap texts from Rd files
 #'
-#' \code{xRdWrap} is supposed to wrap texts from Rd files under a given directory.
+#' \code{xAuxRdWrap} is supposed to wrap texts from Rd files under a given directory.
 #'
 #' @param path a directory containing Rd files
 #' @param remove.dontrun logical to indicate whether to remove the restriction of not running examples. By default, it sets to FALSE without any modefications
@@ -8,12 +8,12 @@
 #' none
 #' @note This auxiliary function helps create a new package. The orignal Rd files will be replaced with new ones.
 #' @export
-#' @seealso \code{\link{xRdWrap}}
-#' @include xRdWrap.r
+#' @seealso \code{\link{xAuxRdWrap}}
+#' @include xAuxRdWrap.r
 #' @examples
-#' # xRdWrap(path="./XGR/man", remove.dontrun=FALSE)
+#' # xAuxRdWrap(path="./XGR/man", remove.dontrun=FALSE)
 
-xRdWrap <- function(path="./XGR/man", remove.dontrun=FALSE)
+xAuxRdWrap <- function(path="./XGR/man", remove.dontrun=FALSE)
 {
 	for(nm in list.files(path, pattern="\\.Rd$")) {
 		input_file <- file.path(path, nm)

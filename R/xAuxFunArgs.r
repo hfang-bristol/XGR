@@ -1,6 +1,6 @@
 #' Function to assign (and evaluate) arguments with default values for a given function
 #'
-#' \code{xFunArgs} is supposed to assign (and evaluate) arguments with default values for a given function.
+#' \code{xAuxFunArgs} is supposed to assign (and evaluate) arguments with default values for a given function.
 #'
 #' @param fun character specifying the name of the function
 #' @param action logical to indicate whether the function will act as it should be (with assigned values in the current environment). By default, it sets to NULL, return a string specifying the assignment to be evalated
@@ -8,14 +8,14 @@
 #' @return
 #' If action is logical, a list containing arguments and their default values. If action is NULL, a string specifying the assignment to be evalated.
 #' @note
-#' This function is potentially useful when debugging as it frees developers from specifying default values for all arguments except those arguments of interest
+#' This auxiliary function is potentially useful when debugging as it frees developers from specifying default values for all arguments except those arguments of interest
 #' @export
-#' @seealso \code{\link{xFunArgs}}
-#' @include xFunArgs.r
+#' @seealso \code{\link{xAuxFunArgs}}
+#' @include xAuxFunArgs.r
 #' @examples
-#' xFunArgs(fun="xRDataLoader")
+#' xAuxFunArgs(fun="xRDataLoader")
 
-xFunArgs <- function(fun, action=NULL, verbose=TRUE)
+xAuxFunArgs <- function(fun, action=NULL, verbose=TRUE)
 {
     
     args_list <- base::formals(fun)

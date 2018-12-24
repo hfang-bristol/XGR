@@ -235,7 +235,7 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 		gp <- gp + scale_size_continuous(limits=slim, range=node.size.range, guide=guide_legend(node.size.title,title.position="top",ncol=1)) + scale_colour_gradientn(colors=xColormap(colormap)(64), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5))
 		
 		## facet by 'group' artificially added 
-		if(length(ls_igg)>1){		
+		if(length(ls_igg)>1){
 			if(is.null(ncolumns)){
 				ncolumns <- ceiling(sqrt(length(ls_igg)))
 			}

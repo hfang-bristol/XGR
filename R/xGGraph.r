@@ -187,7 +187,7 @@ xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size
 		}
 	}
 		
-	gp <- gp + ggraph::theme_graph(base_family="Arial")
+	gp <- gp + ggraph::theme_graph(base_family="sans")
 	
 	if(0){
 		# order by tipid

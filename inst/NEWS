@@ -28,7 +28,11 @@ NEW FEATURES
     o Add functions ('xSH', 'xSHbase', 'xSHreorder', 'xSHtree') for supra-hexagonal map visualisation using ggplot2
     
     o Add functions ('xAge') for Phylostratigraphy analysis
-        
+
+    o Unify auxiliary functions ('xAuxFunArgs', 'xAuxRd2HTML', 'xAuxRdWrap' and 'xAuxEmbed')
+
+    o Add a new function 'xReport' enabling dynamic reports
+    
 
 CHANGES IN VERSION 1.1.4
 -----------------------

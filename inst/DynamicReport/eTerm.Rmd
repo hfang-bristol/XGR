@@ -1,0 +1,110 @@
+---
+title: "Dynamic reports for you"
+date: "`r date()`"
+always_allow_html: yes
+output:
+  rmarkdown::html_document:
+        toc: false
+        toc_depth: 2
+        number_sections: true
+        theme: readable
+        highlight: default
+        toc_float: false
+        code_folding: hide
+  rmarkdown::pdf_document:
+        toc: true
+        toc_depth: 2
+        number_sections: true
+        theme: readable
+        highlight: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(results="asis")
+knitr::opts_chunk$set(cache=FALSE)
+knitr::opts_chunk$set(echo=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(fig_cap="yes")
+```
+
+# Overview
+
+This fully self-contained report consists of tables and plots for you exploring results, with both text and pdf files downloadable (also embedded inside for the unrestricted sharing).
+
+# Results {.tabset .tabset-fade .tabset-pills}
+
+## Table ##
+
+```{r}
+df_enrichment <- xEnrichViewer(obj, top_num="all", details=T)[, c('name','zscore',"pvalue",'adjp','or',"CIl","CIu","nOverlap","members_Overlap")]
+
+# text file for download
+tmpfile <- paste0(tempfile(), '.txt')
+write.table(df_enrichment, file=tmpfile, sep="\t", row.names=FALSE)
+hlink_txt <- xAuxEmbed(tmpfile, link.text="Download TEXT")
+```
+
+*List of enrichments  (`r hlink_txt`)*
+
+```{r, fig.cap="", fig.align="center"}
+
+df_enrichment <- subset(df_enrichment, adjp<0.05)
+
+## only for AA pathway
+if(eTerm$g$ontology %in% "AA"){
+	
+	if(0){
+	df_enrichment$download <- sapply(rownames(df_enrichment), function (x){
+		sprintf("<a href='http://galahad.well.ox.ac.uk:3030/A2/explorer/%s' target='%s''>%s</a>", x, x, x)
+	})
+	}
+	
+	data <- data.frame(label=eTerm$data, lfc=1, stringsAsFactors=F)
+
+	vec_outfile <- sapply(1:nrow(df_enrichment), function(i){
+		query <- rownames(df_enrichment)[i]
+		out.file <- paste0(tempfile(), ".", query, '.graphml')
+		xGraphML2A2(data=data, query=query, node.label="label", node.color="lfc", colormap="white-orange", filename=out.file, RData.location=RData.location, verbose=F)
+		out.file
+	})
+
+	df_enrichment$download <- sapply(vec_outfile, function(x){
+		download.attribute <- paste0(names(x), '.graphml')
+		hlink_graphml <- xAuxEmbed(x, download.attribute=download.attribute, link.text="GraphML")
+	})
+	
+}
+
+DT::datatable(df_enrichment, options=list(pageLength=5), style='default', caption="", rownames=FALSE, escape=F)
+```
+
+
+## Plot
+
+```{r}
+
+## only for AA pathway
+if(eTerm$g$ontology %in% "AA"){
+	AA.path <- xRDataLoader("AA.path", RData.location=RData.location)
+	# consensus tree
+	ig <- AA.path$consensus$ig
+}else{
+	ig <- NULL
+}
+
+gp <- xEnrichGGraph(obj, ig=ig)
+
+# pdf file for download
+tmpfile <- paste0(tempfile(), '.pdf')
+pdf(file=tmpfile)
+print(gp)
+graphics.off()
+hlink_pdf <- xAuxEmbed(tmpfile, link.text="Download PDF")
+```
+
+*Plot of enrichments (`r hlink_pdf`)*
+
+```{r, fig.cap="", fig.align="center"}
+gp
+```
