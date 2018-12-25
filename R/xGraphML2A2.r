@@ -181,7 +181,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     manual_ind <- NULL
     manual_ind_at <- NULL
     if(curation %in% c('any','manual')){
-		AA.path <- xRDataLoader(RData.customised="AA.path", verbose=verbose, RData.location=RData.location)
+		AA.path <- xRDataLoader("AA.path", verbose=verbose, RData.location=RData.location)
 		info <- AA.path$info
 		path <- gsub('^AA:', '', info$id)
 		query <- gsub('^AA:', '', query)
@@ -555,7 +555,9 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 			fileConn <- base::file(outputfile)
 			base::writeLines(output, fileConn)
 			base::close(fileConn)
-			message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
+			if(verbose){
+				message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
+			}
 			############################
 		}
 
@@ -616,7 +618,7 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 		V(subg)$FDR <- df$FDR[ind]
 		V(subg)$node.size <- ifelse(V(subg)$FDR<node.highlight.cutoff & !is.na(V(subg)$FDR), 25, 15)
 
-		output <- XGR::xGraphML(g=subg, node.label="name", node.label.size=10, node.tooltip="tooltip", node.xcoord="xcoord", node.ycoord="ycoord", node.color.na=color.gene, node.color="LFC", node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=", nlegend=nlegend, node.size='node.size', node.coord.scale=300, zlim=zlim, colormap=colormap, filename=filename)
+		output <- xGraphML(g=subg, node.label="name", node.label.size=10, node.tooltip="tooltip", node.xcoord="xcoord", node.ycoord="ycoord", node.color.na=color.gene, node.color="LFC", node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=", nlegend=nlegend, node.size='node.size', node.coord.scale=300, zlim=zlim, colormap=colormap, filename=filename)
 		#######################################################
 			
     }

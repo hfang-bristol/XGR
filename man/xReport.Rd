@@ -12,7 +12,7 @@ output_dir = NULL, quiet = T, verbose = T, ...)
 as an 'eTerm' object}
 
 \item{rmd}{the R markdown file. If NULL, the pre-prepared one in the
-directory 'DynamicReport' of the package will be used}
+directory 'inst/DynamicReport' of the XGR package will be used}
 
 \item{output_format}{the output format rendered from the R markdown
 file. If NULL, the output format is the first one defined within the R
@@ -49,14 +49,13 @@ library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 \donttest{
-res <- xReport(eTerm, rmd="xReport_eTerm.Rmd")
+res <- xReport(eTerm)
 
 # advanced use
 output_format <-
 rmarkdown::html_document(number_sections=T,theme="journal",
 hightlight="espresso",code_folding="hide")
-res <- xReport(eTerm, rmd="xReport_eTerm.Rmd",
-output_format=output_format)
+res <- xReport(eTerm, output_format=output_format)
 }
 }
 \seealso{

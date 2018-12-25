@@ -49,7 +49,7 @@ hlink_txt <- xAuxEmbed(tmpfile, link.text="Download TEXT")
 
 ```{r, fig.cap="", fig.align="center"}
 
-df_enrichment <- subset(df_enrichment, adjp<0.05)
+df_enrichment <- subset(df_enrichment, adjp<0.05)[,c(1:7)]
 
 ## only for AA pathway
 if(eTerm$g$ontology %in% "AA"){
@@ -62,8 +62,7 @@ if(eTerm$g$ontology %in% "AA"){
 	
 	data <- data.frame(label=eTerm$data, lfc=1, stringsAsFactors=F)
 
-	vec_outfile <- sapply(1:nrow(df_enrichment), function(i){
-		query <- rownames(df_enrichment)[i]
+	vec_outfile <- sapply(rownames(df_enrichment), function(query){
 		out.file <- paste0(tempfile(), ".", query, '.graphml')
 		xGraphML2A2(data=data, query=query, node.label="label", node.color="lfc", colormap="white-orange", filename=out.file, RData.location=RData.location, verbose=F)
 		out.file
@@ -86,7 +85,7 @@ DT::datatable(df_enrichment, options=list(pageLength=5), style='default', captio
 
 ## only for AA pathway
 if(eTerm$g$ontology %in% "AA"){
-	AA.path <- xRDataLoader("AA.path", RData.location=RData.location)
+	AA.path <- xRDataLoader("AA.path", verbose=F, RData.location=RData.location)
 	# consensus tree
 	ig <- AA.path$consensus$ig
 }else{

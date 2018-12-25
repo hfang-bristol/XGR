@@ -24,6 +24,7 @@
 #' @param edge.color a character specifying the edge colors. By default, it is #00000033
 #' @param edge.width the edge width. By default, it is 1
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML'
+#' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return
 #' invisible (a string storing graphml-formatted content). If the filename is not NULL, a graphml-formatted file is also output.
 #' @note none
@@ -63,7 +64,7 @@
 #' xGraphML(g=ig, node.label="name", node.tooltip="description", node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern", colormap="grey-orange-darkred", node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=", nlegend=11, node.size=30, node.coord.scale=300)
 #' }
 
-xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=12, node.label.color='#000000', node.tooltip=NULL, node.link=NULL, node.xcoord="xcoord", node.ycoord="ycoord", node.color.na='#dddddd', node.color=NULL, colormap='grey-orange-darkred', ncolors=64, nlegend=11, legend.label.size=10, legend.interval=0.05, zlim=NULL, node.size=30, node.coord.scale=300, edge.color="#00000033", edge.width=1, filename='xGraphML')
+xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=12, node.label.color='#000000', node.tooltip=NULL, node.link=NULL, node.xcoord="xcoord", node.ycoord="ycoord", node.color.na='#dddddd', node.color=NULL, colormap='grey-orange-darkred', ncolors=64, nlegend=11, legend.label.size=10, legend.interval=0.05, zlim=NULL, node.size=30, node.coord.scale=300, edge.color="#00000033", edge.width=1, filename='xGraphML', verbose=T)
 {
     
     if (class(g) != "igraph"){
@@ -430,7 +431,9 @@ xGraphML <- function(g, node.label=NULL, label.wrap.width=NULL, node.label.size=
 		fileConn <- base::file(outputfile)
 		base::writeLines(output, fileConn)
 		base::close(fileConn)
-		message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
+		if(verbose){
+			message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
+		}
 		############################
     }
     

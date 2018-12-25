@@ -33,7 +33,7 @@ as an 'eTerm' object</p>
 <tr valign="top"><td><code>rmd</code></td>
 <td>
 <p>the R markdown file. If NULL, the pre-prepared one in the
-directory 'DynamicReport' of the package will be used</p>
+directory 'inst/DynamicReport' of the XGR package will be used</p>
 </td></tr>
 <tr valign="top"><td><code>output_format</code></td>
 <td>
@@ -95,14 +95,13 @@ library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
 
-res &lt;- xReport(eTerm, rmd="xReport_eTerm.Rmd")
+res &lt;- xReport(eTerm)
 
 # advanced use
 output_format &lt;-
 rmarkdown::html_document(number_sections=T,theme="journal",
 hightlight="espresso",code_folding="hide")
-res &lt;- xReport(eTerm, rmd="xReport_eTerm.Rmd",
-output_format=output_format)
+res &lt;- xReport(eTerm, output_format=output_format)
 
 </pre>
 

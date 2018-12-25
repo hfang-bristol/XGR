@@ -6,7 +6,7 @@
 #' @param download.attribute the download attribute specifying the target to be downloaded instead of being explored. By default, it is the filename of the input file. The filename of the downloaded file can be different from the input file if provided differently
 #' @param link.text the link text (the visible part of the hyperlink)
 #' @return 
-#' a hyperlink in the form of: <a href="encoded base64 string" download="download.attribute">"link.text"</a>'
+#' a hyperlink in the form of: <a href="encoded base64 string" download="download.attribute">"link.text"</a>
 #' @note This auxiliary function helps embed a file into the R markdown rendering html file for the download.
 #' @export
 #' @seealso \code{\link{xAuxEmbed}}
@@ -22,8 +22,7 @@ xAuxEmbed <- function(file, download.attribute=basename(file), link.text=paste0(
 	
 	ext <- tools::file_ext(file)
 	
-	if(ext %in% c("txt","")){
-		# also by default
+	if(ext %in% c("txt")){
 		type <- "text/plain"
 		
 	}else if(ext %in% c("csv")){
@@ -37,6 +36,10 @@ xAuxEmbed <- function(file, download.attribute=basename(file), link.text=paste0(
 		
 	}else if(ext %in% c("Rmd","rmd")){
 		type <- "text/x-markdown"
+		
+	}else{
+		# by default
+		type <- "text/plain"
 		
 	}
 	

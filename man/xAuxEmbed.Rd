@@ -19,7 +19,7 @@ different from the input file if provided differently}
 }
 \value{
 a hyperlink in the form of: <a href="encoded base64 string"
-download="download.attribute">"link.text"</a>'
+download="download.attribute">"link.text"</a>
 }
 \description{
 \code{xAuxEmbed} is supposed to encode a file as a base64 string for

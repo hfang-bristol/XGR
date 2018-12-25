@@ -47,6 +47,8 @@ print.eTerm <- function(x, ...) {
 	cat(sprintf("  $background: a vector (%d in total)", length(x$background)), "\n", sep="")
 	cat(sprintf("  $adjp: a vector (%d in total)", length(x$adjp)), "\n", sep="")
 	cat(sprintf("  $cross: a matrix of %d X %d", dim(x$cross)[1], dim(x$cross)[2]), "\n", sep="")
+	cat(sprintf("  $g: an 'igraph' object"), "\n", sep="")
+	cat(sprintf("  $g$ontology: '%s'", x$g$ontology), "\n", sep="")
 	cat("\n--------------------------------------------------\n")
 	cat("xEnrichViewer(eTerm):\n")
 	print(xEnrichViewer(x), row.names=TRUE)

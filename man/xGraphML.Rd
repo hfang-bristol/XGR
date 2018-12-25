@@ -11,7 +11,8 @@ node.ycoord = "ycoord", node.color.na = "#dddddd",
 node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
 nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
 zlim = NULL, node.size = 30, node.coord.scale = 300,
-edge.color = "#00000033", edge.width = 1, filename = "xGraphML")
+edge.color = "#00000033", edge.width = 1, filename = "xGraphML",
+verbose = T)
 }
 \arguments{
 \item{g}{an object of class "igraph"}
@@ -89,6 +90,9 @@ it is #00000033}
 
 \item{filename}{the without-extension part of the name of the output
 file. By default, it is 'xGraphML'}
+
+\item{verbose}{logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display}
 }
 \value{
 invisible (a string storing graphml-formatted content). If the filename
