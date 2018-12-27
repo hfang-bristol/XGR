@@ -26,7 +26,8 @@ nlegend = 9, zlim = NULL, legend.title = "",
 title.thispath = NULL, node.tooltip = "tooltip",
 node.highlight = "fdr", node.highlight.cutoff = 0.05,
 edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
-color.thispath = "#bbbbbb", color.otherpath = "#cccccc",
+color.thispath = "#dddddd", color.otherpath = "#eeeeee",
+size.gene = 10, size.gene.found = 11, size.gene.highlight = 12,
 filename = "xGraphML2A2", verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
@@ -147,12 +148,27 @@ default, it is '#dddddd'</p>
 <tr valign="top"><td><code>color.thispath</code></td>
 <td>
 <p>a character specifying the color for this pathway
-node. By default, it is '#bbbbbb'</p>
+node. By default, it is '#dddddd'</p>
 </td></tr>
 <tr valign="top"><td><code>color.otherpath</code></td>
 <td>
 <p>a character specifying the color for other
-pathway nodes. By default, it is '#cccccc'</p>
+pathway nodes. By default, it is '#eeeeee'</p>
+</td></tr>
+<tr valign="top"><td><code>size.gene</code></td>
+<td>
+<p>an integer character specifying the gene label
+fontsize. By default, it is 10</p>
+</td></tr>
+<tr valign="top"><td><code>size.gene.found</code></td>
+<td>
+<p>an integer character specifying the label
+fontsize for genes found/matched. By default, it is 11</p>
+</td></tr>
+<tr valign="top"><td><code>size.gene.highlight</code></td>
+<td>
+<p>an integer character specifying the label
+fontsize for genes highlighted. By default, it is 12</p>
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
@@ -203,7 +219,8 @@ data(Haploid_regulators)
 ## IRF1 regulators
 data &lt;- subset(Haploid_regulators, Phenotype=='IRF1')
 
-xGraphML2A2(query="AA:hsa04630", RData.location=RData.location)
+xGraphML2A2(query="AA:hsa04630", RData.location=RData.location,
+color.gene='#dde8f1',size.gene=11)
 
 ## load GWAS genes
 GWAS_Gene &lt;- xRDataLoader(RData.customised='GWAS_Gene',

@@ -33,8 +33,8 @@ name}
 character specifying which node attribute used for the tooltips. If
 NULL (by default), node attribute 'name' will be used node lab}
 
-\item{node.link}{a string specifying hyperlink address. By default, it
-is NULL meaning no hyperlink}
+\item{node.link}{either a vector used for node link or a character
+specifying which node attribute used for the link}
 
 \item{node.xcoord}{a vector specifying x coordinates. If NULL, it will
 be created using igraph::layout_with_kk}
@@ -141,11 +141,13 @@ node.size=8, node.label.size=4)
 glayout <- igraph::layout_with_kk(ig)
 V(ig)$xcoord <- glayout[,1]
 V(ig)$ycoord <- glayout[,2]
+V(ig)$node.link <-
+paste0("http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+V(ig)$name)
 xGraphML(g=ig, node.label="name", node.tooltip="description",
 node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern",
-colormap="grey-orange-darkred",
-node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
-nlegend=11, node.size=30, node.coord.scale=300)
+colormap="grey-orange-darkred", node.link="node.link", nlegend=11,
+node.size=30, node.coord.scale=300)
 }
 }
 \seealso{

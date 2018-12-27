@@ -12,7 +12,8 @@ nlegend = 9, zlim = NULL, legend.title = "",
 title.thispath = NULL, node.tooltip = "tooltip",
 node.highlight = "fdr", node.highlight.cutoff = 0.05,
 edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
-color.thispath = "#bbbbbb", color.otherpath = "#cccccc",
+color.thispath = "#dddddd", color.otherpath = "#eeeeee",
+size.gene = 10, size.gene.found = 11, size.gene.highlight = 12,
 filename = "xGraphML2A2", verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
@@ -91,10 +92,19 @@ it is '#00000033'}
 default, it is '#dddddd'}
 
 \item{color.thispath}{a character specifying the color for this pathway
-node. By default, it is '#bbbbbb'}
+node. By default, it is '#dddddd'}
 
 \item{color.otherpath}{a character specifying the color for other
-pathway nodes. By default, it is '#cccccc'}
+pathway nodes. By default, it is '#eeeeee'}
+
+\item{size.gene}{an integer character specifying the gene label
+fontsize. By default, it is 10}
+
+\item{size.gene.found}{an integer character specifying the label
+fontsize for genes found/matched. By default, it is 11}
+
+\item{size.gene.highlight}{an integer character specifying the label
+fontsize for genes highlighted. By default, it is 12}
 
 \item{filename}{the without-extension part of the name of the output
 file. By default, it is 'xGraphML2A2'}
@@ -127,7 +137,8 @@ data(Haploid_regulators)
 ## IRF1 regulators
 data <- subset(Haploid_regulators, Phenotype=='IRF1')
 
-xGraphML2A2(query="AA:hsa04630", RData.location=RData.location)
+xGraphML2A2(query="AA:hsa04630", RData.location=RData.location,
+color.gene='#dde8f1',size.gene=11)
 
 ## load GWAS genes
 GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene',

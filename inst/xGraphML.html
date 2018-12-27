@@ -64,8 +64,8 @@ NULL (by default), node attribute 'name' will be used node lab</p>
 </td></tr>
 <tr valign="top"><td><code>node.link</code></td>
 <td>
-<p>a string specifying hyperlink address. By default, it
-is NULL meaning no hyperlink</p>
+<p>either a vector used for node link or a character
+specifying which node attribute used for the link</p>
 </td></tr>
 <tr valign="top"><td><code>node.xcoord</code></td>
 <td>
@@ -217,11 +217,13 @@ node.size=8, node.label.size=4)
 glayout &lt;- igraph::layout_with_kk(ig)
 V(ig)$xcoord &lt;- glayout[,1]
 V(ig)$ycoord &lt;- glayout[,2]
+V(ig)$node.link &lt;-
+paste0("http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+V(ig)$name)
 xGraphML(g=ig, node.label="name", node.tooltip="description",
 node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern",
-colormap="grey-orange-darkred",
-node.link="http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
-nlegend=11, node.size=30, node.coord.scale=300)
+colormap="grey-orange-darkred", node.link="node.link", nlegend=11,
+node.size=30, node.coord.scale=300)
 
 ## End(Not run)
 </pre>

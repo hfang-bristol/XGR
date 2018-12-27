@@ -20,8 +20,11 @@
 #' @param edge.color a character specifying the edge colors. By default, it is '#00000033'
 #' @param edge.width the edge width. By default, it is 1
 #' @param color.gene a character specifying the gene node colors. By default, it is '#dddddd'
-#' @param color.thispath a character specifying the color for this pathway node. By default, it is '#bbbbbb'
-#' @param color.otherpath a character specifying the color for other pathway nodes. By default, it is '#cccccc'
+#' @param color.thispath a character specifying the color for this pathway node. By default, it is '#dddddd'
+#' @param color.otherpath a character specifying the color for other pathway nodes. By default, it is '#eeeeee'
+#' @param size.gene an integer character specifying the gene label fontsize. By default, it is 10
+#' @param size.gene.found an integer character specifying the label fontsize for genes found/matched. By default, it is 11
+#' @param size.gene.highlight an integer character specifying the label fontsize for genes highlighted. By default, it is 12
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML2A2'
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -41,7 +44,7 @@
 #' ## IRF1 regulators
 #' data <- subset(Haploid_regulators, Phenotype=='IRF1')
 #' 
-#' xGraphML2A2(query="AA:hsa04630", RData.location=RData.location)
+#' xGraphML2A2(query="AA:hsa04630", RData.location=RData.location, color.gene='#dde8f1',size.gene=11)
 #' 
 #' ## load GWAS genes
 #' GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene', RData.location=RData.location)
@@ -56,7 +59,7 @@
 #' xGraphML2A2(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2A2', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#bbbbbb', color.otherpath='#cccccc', filename='xGraphML2A2', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#dddddd', color.otherpath='#eeeeee', size.gene=10, size.gene.found=11, size.gene.highlight=12, filename='xGraphML2A2', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(verbose){
@@ -446,18 +449,24 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 				if(df$FDR[ind_found] < node.highlight.cutoff){
 					## found gene nodes highlighted
 					nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="bolditalic"', nodelabel)
-					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="12"', nodelabel)
+					#nodelabel <- gsub('fontSize="\\w+"', 'fontSize="12"', nodelabel)
+					tmp <- paste0('fontSize="', size.gene.highlight, '"')
+					nodelabel <- gsub('fontSize="\\w+"', tmp, nodelabel)
 					#nodelabel <- gsub('verticalTextPosition=', 'underlinedText="true" verticalTextPosition=', nodelabel)
 				}else{
 					## found gene nodes not highlighted
 					nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="italic"', nodelabel)
-					nodelabel <- gsub('fontSize="\\w+"', 'fontSize="11"', nodelabel)
+					#nodelabel <- gsub('fontSize="\\w+"', 'fontSize="11"', nodelabel)
+					tmp <- paste0('fontSize="', size.gene.found, '"')
+					nodelabel <- gsub('fontSize="\\w+"', tmp, nodelabel)
 				}
 			
 			}else if(flag_gene & is.na(ind_legend)){
 				## gene nodes but not found
 				nodelabel <- gsub('fontStyle="\\w+"', 'fontStyle="italic"', nodelabel)
-				nodelabel <- gsub('fontSize="\\w+"', 'fontSize="10"', nodelabel)
+				#nodelabel <- gsub('fontSize="\\w+"', 'fontSize="10"', nodelabel)
+				tmp <- paste0('fontSize="', size.gene, '"')
+				nodelabel <- gsub('fontSize="\\w+"', tmp, nodelabel)
 			}
 			### name_display
 			name_display <- df_nodes$name[i]
