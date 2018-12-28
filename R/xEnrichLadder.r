@@ -87,7 +87,7 @@
 #' eTerm <- xEnricherYours(data.file=data, annotation.file=annotation.file, background.file=background, size.range=c(10,20000))
 #' }
 
-xEnrichLadder <- function(eTerm, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="lightgrey-grey-black", x.rotate=60, x.text.size=6, y.text.size=6, shape=22, size=2, label=c('concise','full'), verbose=T, ...)
+xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=5, FDR.cutoff=0.05, CI.one=T, colormap="lightgrey-grey-black", x.rotate=90, x.text.size=6, y.text.size=6, shape=22, size=2, label=c('concise','full'), verbose=T, ...)
 {
 
     sortBy <- match.arg(sortBy)

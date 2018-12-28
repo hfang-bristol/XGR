@@ -6,8 +6,8 @@
 \usage{
 xEnricherGenesAdv(list_vec, background = NULL,
 check.symbol.identity = F, ontologies = NA, size.range = c(10,
-2000), min.overlap = 3, which.distance = NULL, test = c("hypergeo",
-"fisher", "binomial"), background.annotatable.only = NULL,
+2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL,
 p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"),

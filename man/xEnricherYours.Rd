@@ -5,8 +5,8 @@
 \title{Function to conduct enrichment analysis given YOUR own input data}
 \usage{
 xEnricherYours(data.file, annotation.file, background.file = NULL,
-size.range = c(10, 2000), min.overlap = 3, test = c("hypergeo",
-"fisher", "binomial"), background.annotatable.only = NULL,
+size.range = c(10, 2000), min.overlap = 5, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL,
 p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
 "bonferroni", "holm", "hochberg", "hommel"), verbose = T,
 silent = FALSE)
