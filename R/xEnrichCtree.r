@@ -54,7 +54,7 @@
 #' gp <- xEnrichCtree(ls_eTerm, ig)
 #' }
 
-xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4), group.gap=0.08, group.color="lightblue", group.label.size=2, group.label.color="black", ...)
+xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4.5), group.gap=0.08, group.color="lightblue", group.label.size=2, group.label.color="black", ...)
 {
 	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     node.color <- match.arg(node.color)

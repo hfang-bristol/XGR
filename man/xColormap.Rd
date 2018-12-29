@@ -8,8 +8,16 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "rainbow",
 "wb", "heat", "terrain", "topo", "cm", "ggplot2", "jet.top",
 "jet.bottom", "jet.both", "spectral", "ggplot2.top", "ggplot2.bottom",
-"ggplot2.both", "RdYlBu", "rainbow_hcl"), interpolate = c("spline",
-"linear"), data = NULL, zlim = NULL)
+"ggplot2.both", "RdYlBu", "brewer.BrBG", "brewer.PiYG", "brewer.PRGn",
+"brewer.PuOr", "brewer.RdBu", "brewer.RdGy", "brewer.RdYlBu",
+"brewer.RdYlGn", "brewer.Spectral", "brewer.Blues", "brewer.BuGn",
+"brewer.BuPu", "brewer.GnBu", "brewer.Greens", "brewer.Greys",
+"brewer.Oranges", "brewer.OrRd", "brewer.PuBu", "brewer.PuBuGn",
+"brewer.PuRd", "brewer.Purples", "brewer.RdPu", "brewer.Reds",
+"brewer.YlGn", "brewer.YlGnBu", "brewer.YlOrBr", "brewer.YlOrRd",
+"rainbow_hcl", "heat_hcl", "terrain_hcl", "diverge_hcl", "hcl_br",
+"hcl_bp", "hcl_bb", "hcl_gp", "hcl_go", "hcl_cp", "hcl_cy"),
+interpolate = c("spline", "linear"), data = NULL, zlim = NULL)
 }
 \arguments{
 \item{colormap}{short name for the colormap. It can be one of "jet"
@@ -23,7 +31,11 @@ names, e.g. "lightyellow-orange" (by default), "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}. It can also be a
-function of 'colorRampPalette'}
+function of 'colorRampPalette'. It can also be "brewer.*" (RColorBrewer
+palette; see RColorBrewer::display.brewer.all()). It can be colorspace
+defaults ("rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl") or
+other useful ones
+("hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy")}
 
 \item{interpolate}{use spline or linear interpolation}
 

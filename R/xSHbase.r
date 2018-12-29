@@ -42,6 +42,14 @@
 #' gp <- xSHbase(sMap, sBase, boundary=T, colormap="rainbow_hcl")
 #' gp <- xSHbase(sMap, sBase, boundary=T, colormap="transparent-transparent")
 #' gp + theme(legend.position="none")
+#' 
+#' # interactive (ggiraph)
+#' df_polygon <- sMap$polygon
+#' df_polygon$onclick <- 'alert(this.getAttribute("data-id"))'
+#' df_polygon$onclick <- paste0('window.open("https://en.wikipedia.org/wiki/', df_polygon$stepCentroid,'")')
+#' gg <- ggplot(df_polygon, aes(x, y)) + ggiraph::geom_polygon_interactive(aes(fill=index, group=index, tooltip=stepCentroid, data_id=stepCentroid, onclick=onclick)) + coord_fixed(ratio=1) + theme_void()
+#' gr <- ggiraph::ggiraph(code=print(gg), width_svg=6, height_svg=6)
+#' ggiraph::girafe_options(gr, opts_tooltip(use_fill=T), opts_hover(css="fill:orange"), opts_toolbar(position="topright"))
 #' }
 
 xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", legend.title="", legend.text.size=6, legend.title.size=8, boundary=F, boundary.color="black", boundary.type=c("line","point"))

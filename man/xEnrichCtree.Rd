@@ -7,7 +7,7 @@
 xEnrichCtree(eTerm, ig, node.color = c("zscore", "adjp", "or"),
 colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "zscore", "or"), slim = NULL,
-node.size.range = c(0.5, 4), group.gap = 0.08,
+node.size.range = c(0.5, 4.5), group.gap = 0.08,
 group.color = "lightblue", group.label.size = 2,
 group.label.color = "black", ...)
 }
