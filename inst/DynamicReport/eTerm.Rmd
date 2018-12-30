@@ -84,9 +84,9 @@ DT::datatable(df_enrichment, options=list(pageLength=5), style='default', captio
 
 ## only for AA pathway
 if(eTerm$g$ontology %in% "AA"){
-	AA.path <- xRDataLoader("AA.path", verbose=F, RData.location=RData.location)
+	AA.template <- xRDataLoader("AA.template", verbose=F, RData.location=RData.location)
 	# consensus tree
-	ig <- AA.path$consensus$ig
+	ig <- AA.template$consensus$ig
 }else{
 	ig <- NULL
 }

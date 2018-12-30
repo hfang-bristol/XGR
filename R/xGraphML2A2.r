@@ -184,8 +184,8 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     manual_ind <- NULL
     manual_ind_at <- NULL
     if(curation %in% c('any','manual')){
-		AA.path <- xRDataLoader("AA.path", verbose=verbose, RData.location=RData.location)
-		info <- AA.path$info
+		AA.template <- xRDataLoader("AA.template", verbose=verbose, RData.location=RData.location)
+		info <- AA.template$info
 		path <- gsub('^AA:', '', info$id)
 		query <- gsub('^AA:', '', query)
 		query <- gsub('^path:', '', query)
@@ -229,9 +229,9 @@ xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     	if(length(manual_ind) != 0){
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.path$info$id[manual_ind], AA.path$info$name[manual_ind], as.character(now)), appendLF=TRUE)
+				message(sprintf("Manual curation: visualising '%s: %s' (%s) ...", AA.template$info$id[manual_ind], AA.template$info$name[manual_ind], as.character(now)), appendLF=TRUE)
 			}
-			detail <- AA.path$detail[[manual_ind]]
+			detail <- AA.template$detail[[manual_ind]]
 			df_nodes <- detail$nodes
 			df_edges <- detail$edges
 			

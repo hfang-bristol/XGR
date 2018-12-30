@@ -93,8 +93,9 @@ ggiraph::geom_polygon_interactive(aes(fill=index, group=index,
 tooltip=stepCentroid, data_id=stepCentroid, onclick=onclick)) +
 coord_fixed(ratio=1) + theme_void()
 gr <- ggiraph::ggiraph(code=print(gg), width_svg=6, height_svg=6)
-ggiraph::girafe_options(gr, opts_tooltip(use_fill=T),
-opts_hover(css="fill:orange"), opts_toolbar(position="topright"))
+ggiraph::girafe_options(gr, ggiraph::opts_tooltip(use_fill=T),
+ggiraph::opts_hover(css="fill:orange"),
+ggiraph::opts_toolbar(position="topright"))
 }
 }
 \seealso{

@@ -64,9 +64,10 @@ none
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
-AA.path <- xRDataLoader("AA.path", RData.location=RData.location)
+AA.template <- xRDataLoader("AA.template",
+RData.location=RData.location)
 # consensus tree
-ig <- AA.path$consensus$ig
+ig <- AA.template$consensus$ig
 
 # outwards
 gp <- xCtree(ig, leave.label.orientation="outwards",

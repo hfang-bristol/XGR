@@ -148,9 +148,10 @@ number of step to the root) for tree-like graph with certain layouts.
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-AA.path &lt;- xRDataLoader("AA.path", RData.location=RData.location)
+AA.template &lt;- xRDataLoader("AA.template",
+RData.location=RData.location)
 # consensus tree
-ig &lt;- AA.path$consensus$ig
+ig &lt;- AA.template$consensus$ig
 
 # Default: partition-like circular layout
 # none

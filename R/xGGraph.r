@@ -30,9 +30,9 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' 
-#' AA.path <- xRDataLoader("AA.path", RData.location=RData.location)
+#' AA.template <- xRDataLoader("AA.template", RData.location=RData.location)
 #' # consensus tree
-#' ig <- AA.path$consensus$ig
+#' ig <- AA.template$consensus$ig
 #'
 #' # Default: partition-like circular layout
 #' # none
@@ -187,7 +187,7 @@ xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size
 		}
 	}
 		
-	gp <- gp + ggraph::theme_graph(base_family="sans")
+	gp <- gp + ggraph::theme_graph(base_family="sans",plot_margin=margin(0,0,0,0))
 	
 	if(0){
 		# order by tipid

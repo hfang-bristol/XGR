@@ -25,9 +25,9 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' 
-#' AA.path <- xRDataLoader("AA.path", RData.location=RData.location)
+#' AA.template <- xRDataLoader("AA.template", RData.location=RData.location)
 #' # consensus tree
-#' ig <- AA.path$consensus$ig
+#' ig <- AA.template$consensus$ig
 #' 
 #' # outwards
 #' gp <- xCtree(ig, leave.label.orientation="outwards", leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
@@ -114,7 +114,7 @@ xCtree <- function(ig, leave.label.orientation=c('outwards','inwards'), leave.la
 	gp <- gp + ggraph::geom_node_point(aes(filter=leaf),size=leave.size, color=edge.color,alpha=edge.alpha)
 	gp <- gp + ggraph::geom_node_text(aes(x=x*leave.label.expansion, y=y*leave.label.expansion, filter=leaf, label=label, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=leave.label.alpha) + expand_limits(x=c(-limit.expansion, limit.expansion), y=c(-limit.expansion, limit.expansion))
 	
-	gp <- gp + coord_fixed() + theme(legend.position="bottom") + ggraph::theme_graph(base_family="sans")
+	gp <- gp + coord_fixed() + theme(legend.position="bottom") + ggraph::theme_graph(base_family="sans",plot_margin=margin(0,0,0,0))
 	
 	if(0){
 		# order by tipid
