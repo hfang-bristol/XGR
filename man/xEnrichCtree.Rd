@@ -9,7 +9,8 @@ colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "zscore", "or"), slim = NULL,
 node.size.range = c(0.5, 4.5), group.gap = 0.08,
 group.color = "lightblue", group.label.size = 2,
-group.label.color = "black", ...)
+group.label.color = "black", leave.label.orientation = c("outwards",
+"inwards"), ...)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
@@ -61,6 +62,9 @@ groups provided}
 
 \item{group.label.color}{the color of group circle labelling. Only
 works when multiple groups provided}
+
+\item{leave.label.orientation}{the leave label orientation. It can be
+"outwards" and "inwards"}
 
 \item{...}{additional graphic parameters used in xCtree}
 }

@@ -14,6 +14,7 @@
 #' @param group.color the color of group circles. Only works when multiple groups provided
 #' @param group.label.size the size of group circle labelling. Always a sequential integer located at the top middle. Only works when multiple groups provided
 #' @param group.label.color the color of group circle labelling. Only works when multiple groups provided
+#' @param leave.label.orientation the leave label orientation. It can be "outwards" and "inwards"
 #' @param ... additional graphic parameters used in xCtree
 #' @return
 #' a ggplot2 object appended with 'ig', 'data' which should contain columns 'x','y', 'leaf' (T/F), 'name' (the same as V(ig)$name), 'tipid' (tip id), 'label' (if not given in ig, a 'name' varient), 'angle' and 'hjust' (assist in leave label orientation), and 'data_enrichment' (enrichment results for tips)
@@ -54,11 +55,12 @@
 #' gp <- xEnrichCtree(ls_eTerm, ig)
 #' }
 
-xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4.5), group.gap=0.08, group.color="lightblue", group.label.size=2, group.label.color="black", ...)
+xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4.5), group.gap=0.08, group.color="lightblue", group.label.size=2, group.label.color="black", leave.label.orientation=c('outwards','inwards'), ...)
 {
 	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     node.color <- match.arg(node.color)
     node.size <- match.arg(node.size)
+    leave.label.orientation <- match.arg(leave.label.orientation)
     
     if(is.null(eTerm)){
         warnings("There is no enrichment in the 'eTerm' object.\n")
@@ -162,7 +164,13 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 		
 		x <- y <- leaf <- x_group <- y_group <- group <- group_id <- color <- size <- NULL
 		
-		gp <- xCtree(ig, leave.label.orientation='inwards', ...)
+		leave.label.orientation <- NULL
+		
+		if(length(ls_igg)>1){
+			leave.label.orientation <- 'inwards'
+		}
+		
+		gp <- xCtree(ig, leave.label.orientation=leave.label.orientation, ...)
 		df_tips <- subset(gp$data, leaf==T)
 		
 		ls_df <- lapply(1:length(ls_igg), function(i){

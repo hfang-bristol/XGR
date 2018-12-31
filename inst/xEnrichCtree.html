@@ -22,7 +22,8 @@ colormap = "grey-orange-darkred", zlim = NULL,
 node.size = c("adjp", "zscore", "or"), slim = NULL,
 node.size.range = c(0.5, 4.5), group.gap = 0.08,
 group.color = "lightblue", group.label.size = 2,
-group.label.color = "black", ...)
+group.label.color = "black", leave.label.orientation = c("outwards",
+"inwards"), ...)
 </pre>
 
 
@@ -102,6 +103,11 @@ groups provided</p>
 <td>
 <p>the color of group circle labelling. Only
 works when multiple groups provided</p>
+</td></tr>
+<tr valign="top"><td><code>leave.label.orientation</code></td>
+<td>
+<p>the leave label orientation. It can be
+&quot;outwards&quot; and &quot;inwards&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
