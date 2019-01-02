@@ -92,10 +92,12 @@ gg <- ggplot(df_polygon, aes(x, y)) +
 ggiraph::geom_polygon_interactive(aes(fill=index, group=index,
 tooltip=stepCentroid, data_id=stepCentroid, onclick=onclick)) +
 coord_fixed(ratio=1) + theme_void()
-gr <- ggiraph::ggiraph(code=print(gg), width_svg=6, height_svg=6)
-ggiraph::girafe_options(gr, ggiraph::opts_tooltip(use_fill=T),
+gr <- ggiraph::ggiraph(code=print(gg), width=0.6)
+gr <- ggiraph::girafe_options(gr, ggiraph::opts_tooltip(use_fill=T),
 ggiraph::opts_hover(css="fill:orange"),
-ggiraph::opts_toolbar(position="topright"))
+ggiraph::opts_toolbar(position="topright", saveaspng=F))
+htmlwidgets::saveWidget(gr, file="out.html", background="white",
+selfcontained=T)
 }
 }
 \seealso{

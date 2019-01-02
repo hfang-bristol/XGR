@@ -18,8 +18,6 @@
 xAuxEmbed <- function(file, download.attribute=basename(file), link.text=paste0("Download ",download.attribute))
 {
 	
-	download.attribute <- basename(file)
-	
 	ext <- tools::file_ext(file)
 	
 	if(ext %in% c("txt")){

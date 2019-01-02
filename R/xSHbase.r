@@ -48,8 +48,9 @@
 #' df_polygon$onclick <- 'alert(this.getAttribute("data-id"))'
 #' df_polygon$onclick <- paste0('window.open("https://en.wikipedia.org/wiki/', df_polygon$stepCentroid,'")')
 #' gg <- ggplot(df_polygon, aes(x, y)) + ggiraph::geom_polygon_interactive(aes(fill=index, group=index, tooltip=stepCentroid, data_id=stepCentroid, onclick=onclick)) + coord_fixed(ratio=1) + theme_void()
-#' gr <- ggiraph::ggiraph(code=print(gg), width_svg=6, height_svg=6)
-#' ggiraph::girafe_options(gr, ggiraph::opts_tooltip(use_fill=T), ggiraph::opts_hover(css="fill:orange"), ggiraph::opts_toolbar(position="topright"))
+#' gr <- ggiraph::ggiraph(code=print(gg), width=0.6)
+#' gr <- ggiraph::girafe_options(gr, ggiraph::opts_tooltip(use_fill=T), ggiraph::opts_hover(css="fill:orange"), ggiraph::opts_toolbar(position="topright", saveaspng=F))
+#' htmlwidgets::saveWidget(gr, file="out.html", background="white", selfcontained=T)
 #' }
 
 xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", legend.title="", legend.text.size=6, legend.title.size=8, boundary=F, boundary.color="black", boundary.type=c("line","point"))
