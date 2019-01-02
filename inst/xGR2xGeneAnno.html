@@ -302,9 +302,15 @@ off-diagnal cell for the overlapped-members shared betwene two terms
 <li><p><code>call</code>: the call that produced this result
 </p>
 </li>
+<li><p><code>crosslink</code>: a data frame with 3 columns ('Gene' for
+crosslinked genes, 'Score' for gene score summarised over its list of
+crosslinked GR, and 'Pval' for p-value-like significance level
+transformed from gene scores); restricted by crosslink.top
+</p>
+</li>
 <li><p><code>evidence</code>: a data frame with 3 columns ('GR' for genomic
 regions, 'Gene' for crosslinked genes, and 'Score' for the score
-between the gene and the GR)
+between the gene and the GR); restricted by crosslink.top
 </p>
 </li>
 <li><p><code>gp_evidence</code>: a ggplot object for evidence data

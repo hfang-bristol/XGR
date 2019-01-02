@@ -45,7 +45,8 @@
 #'  \item{\code{CIu}: a vector containing upper bound confidence interval for the odds ratio}
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared betwene two terms}
 #'  \item{\code{call}: the call that produced this result}
-#'  \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic regions, 'Gene' for crosslinked genes, and 'Score' for the score between the gene and the GR)}
+#'  \item{\code{crosslink}: a data frame with 3 columns ('Gene' for crosslinked genes, 'Score' for gene score summarised over its list of crosslinked GR, and 'Pval' for p-value-like significance level transformed from gene scores); restricted by crosslink.top}
+#'  \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic regions, 'Gene' for crosslinked genes, and 'Score' for the score between the gene and the GR); restricted by crosslink.top}
 #'  \item{\code{gp_evidence}: a ggplot object for evidence data}
 #' }
 #' @note The interpretation of the algorithms used to account for the hierarchy of the ontology is:
@@ -177,6 +178,14 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
     }
     
     if(!is.null(eTerm)){
+    	
+    	#######
+		## append 'crosslink'
+		ind <- match(df_xGenes_data$Gene, dGR_genes)
+		eTerm$crosslink <- df_xGenes_data[!is.na(ind), c('Gene','Score','Pval')]
+		#eTerm$crosslink <- df_xGenes_data
+		#######
+    
 		######
 		## append 'evidence'
 		df_evidence <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=FALSE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
@@ -197,7 +206,7 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
 		rowsep <- xGRsep(rownames(mat))
 		rowsep <- nrow(mat) - rowsep
 		################
-				
+		
 		####
 		if(ncol(mat)>=0){
 			reorder <- "none"
