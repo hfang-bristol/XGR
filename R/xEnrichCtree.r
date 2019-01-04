@@ -125,6 +125,7 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			V(igg)$or <- 0
 			ind <- match(V(igg)$name, df_enrichment$name)
 			V(igg)$or[!is.na(ind)] <- log2(df_enrichment$or)[ind[!is.na(ind)]]
+			
 			igg
 		})
 		
@@ -175,11 +176,17 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 		
 		ls_df <- lapply(1:length(ls_igg), function(i){
 			g <- ls_igg[[i]]
-
-			group <- paste0(i, ": ", names(ls_igg)[i])			
+			
+			if(length(ls_igg)<10){
+				# 0-leading
+				group <- paste0(i, ": ", names(ls_igg)[i])	
+				group_id <- i
+			}else{
+				group <- sprintf("%02d: %s", i, names(ls_igg)[i])
+				group_id <- sprintf("%02d", i)
+			}
 			x_group <- 1.05+(i-1)*group.gap
 			y_group <- 1.05+(i-1)*group.gap
-
 			ind <- match(V(g)$name, df_tips$name)
 			if(node.color=="or"){
 				color <- V(g)$or[!is.na(ind)]
@@ -201,7 +208,7 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			size[size<=slim[1]] <- slim[1]
 			size[size>=slim[2]] <- slim[2]
 		
-			df <- data.frame(df_tips[ind[!is.na(ind)],], color=color, size=size, group=group, group_id=i, x_group=x_group, y_group=y_group, stringsAsFactors=F)
+			df <- data.frame(df_tips[ind[!is.na(ind)],], color=color, size=size, group=group, group_id=group_id, x_group=x_group, y_group=y_group, stringsAsFactors=F)
 		})
 		df <- do.call(rbind, ls_df)
 		

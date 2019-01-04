@@ -25,6 +25,7 @@
 #' @param lea.depth the parameter only used when "ontology.algorithm" is "lea". It is used to control how many maximum depth is used to consider the children of a term (and subsequently all genes in these children term are eliminated from the use for the recalculation of the signifance at this term)
 #' @param path.mode the mode of paths induced by vertices/nodes with input annotation data. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to false
+#' @param out.evidence logical to indicate whether the evidence should be output. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
@@ -46,7 +47,7 @@
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the overlapped-members observed in an individaul term, and off-diagnal cell for the overlapped-members shared betwene two terms}
 #'  \item{\code{call}: the call that produced this result}
 #'  \item{\code{crosslink}: a data frame with 3 columns ('Gene' for crosslinked genes, 'Score' for gene score summarised over its list of crosslinked GR, and 'Pval' for p-value-like significance level transformed from gene scores); restricted by crosslink.top}
-#'  \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic regions, 'Gene' for crosslinked genes, and 'Score' for the score between the gene and the GR); restricted by crosslink.top}
+#'  \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic regions, 'Gene' for crosslinked genes, and 'Score' for the score between the gene and the GR); restricted by crosslink.top and only works when out.evidence is true}
 #'  \item{\code{gp_evidence}: a ggplot object for evidence data}
 #' }
 #' @note The interpretation of the algorithms used to account for the hierarchy of the ontology is:
@@ -95,7 +96,7 @@
 #' gp <- xEnrichForest(eTerm, top_num=10)
 #' }
 
-xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontology=NA, size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnno <- function(data, background=NULL, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontology=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, out.evidence=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -151,7 +152,7 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
 	if(!is.null(df_xGenes_background)){
 		bGR_genes <- (df_xGenes_background %>% dplyr::arrange(-Score))$Gene
 	}else{
-		bGR_genes <- NULL
+		bGR_genes <- NULL		
 	}
 	
 	if(verbose){
@@ -185,39 +186,41 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("data.frame", "bed", "
 		eTerm$crosslink <- df_xGenes_data[!is.na(ind), c('Gene','Score','Pval')]
 		#eTerm$crosslink <- df_xGenes_data
 		#######
-    
-		######
-		## append 'evidence'
-		df_evidence <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=FALSE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
-		ind <- match(df_evidence$Gene, dGR_genes)
-		evidence <- df_evidence[!is.na(ind), c('GR','Gene','Score')]
-		eTerm$evidence <- evidence
-		## append 'gp_evidence'
-		Gene <- Score <- NULL
-		mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
-		mat <- mat_evidence[,-1]
-		rownames(mat) <- mat_evidence[,1]
-		#### sort by chromosome, start and end
-		ind <- xGRsort(rownames(mat))
-		mat <- mat[ind,]
+    	
+    	if(out.evidence){
+			######
+			## append 'evidence'
+			df_evidence <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=FALSE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+			ind <- match(df_evidence$Gene, dGR_genes)
+			evidence <- df_evidence[!is.na(ind), c('GR','Gene','Score')]
+			eTerm$evidence <- evidence
+			## append 'gp_evidence'
+			Gene <- Score <- NULL
+			mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
+			mat <- mat_evidence[,-1]
+			rownames(mat) <- mat_evidence[,1]
+			#### sort by chromosome, start and end
+			ind <- xGRsort(rownames(mat))
+			mat <- mat[ind,]
 		
-		################
-		## obtain rowsep
-		rowsep <- xGRsep(rownames(mat))
-		rowsep <- nrow(mat) - rowsep
-		################
+			################
+			## obtain rowsep
+			rowsep <- xGRsep(rownames(mat))
+			rowsep <- nrow(mat) - rowsep
+			################
 		
-		####
-		if(ncol(mat)>=0){
-			reorder <- "none"
-		}else{
-			reorder <- "col"
+			####
+			if(ncol(mat)>=0){
+				reorder <- "none"
+			}else{
+				reorder <- "col"
+			}
+			gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+			gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
+			gp_evidence <- gp_evidence + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5)
+			eTerm$gp_evidence <- gp_evidence
+			######
 		}
-		gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
-		gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
-		gp_evidence <- gp_evidence + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5)
-		eTerm$gp_evidence <- gp_evidence
-		###### 
     }
     ####################################################################################
     endT <- Sys.time()

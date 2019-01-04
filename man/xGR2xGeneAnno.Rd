@@ -4,21 +4,22 @@
 \alias{xGR2xGeneAnno}
 \title{Function to conduct region-based enrichment analysis via crosslinked genes}
 \usage{
-xGR2xGeneAnno(data, background = NULL, format = c("data.frame", "bed",
-"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), crosslink = c("genehancer", "PCHiC_combined",
-"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
-crosslink.top = NULL, nearby.distance.max = 50000,
-nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, ontology = NA, size.range = c(10, 2000),
-min.overlap = 3, which.distance = NULL, test = c("hypergeo",
-"fisher", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnno(data, background = NULL, format = c("chr:start-end",
+"data.frame", "bed", "GRanges"), build.conversion = c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
+"PCHiC_combined", "GTEx_V6p_combined", "nearby"),
+crosslink.customised = NULL, crosslink.top = NULL,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, ontology = NA,
+size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"),
+background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F, out.evidence = T, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -152,6 +153,9 @@ for each node, find all shortest paths with the equal lengths)}
 should be applied to propagate annotations. By default, it sets to
 false}
 
+\item{out.evidence}{logical to indicate whether the evidence should be
+output. By default, it sets to true}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
 
@@ -197,7 +201,8 @@ crosslinked GR, and 'Pval' for p-value-like significance level
 transformed from gene scores); restricted by crosslink.top}
 \item{\code{evidence}: a data frame with 3 columns ('GR' for genomic
 regions, 'Gene' for crosslinked genes, and 'Score' for the score
-between the gene and the GR); restricted by crosslink.top}
+between the gene and the GR); restricted by crosslink.top and only
+works when out.evidence is true}
 \item{\code{gp_evidence}: a ggplot object for evidence data}
 }
 }

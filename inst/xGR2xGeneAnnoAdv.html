@@ -25,7 +25,7 @@ xGR2xGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
 crosslink.customised = NULL, crosslink.top = NULL,
 nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
 "linear", "constant"), nearby.decay.exponent = 2, ontologies = NA,
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
+size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"),
 background.annotatable.only = NULL, p.tail = c("one-tail",
 "two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
@@ -245,7 +245,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 </p>
 
 <ul>
-<li><p><code>df</code>: a data frame of n x 12, where the 12 columns are
+<li><p><code>df</code>: a data frame of n x 12, where the 17 columns are
 &quot;group&quot; (the input group names), &quot;ontology&quot; (input ontologies), &quot;id&quot;
 (term ID), &quot;name&quot; (term name), &quot;nAnno&quot; (number in members annotated by
 a term), &quot;nOverlap&quot; (number in overlaps), &quot;fc&quot; (enrichment fold
@@ -253,8 +253,9 @@ changes), &quot;zscore&quot; (enrichment z-score), &quot;pvalue&quot; (nominal p
 &quot;adjp&quot; (adjusted p value (FDR)), &quot;or&quot; (odds ratio), &quot;CIl&quot; (lower bound
 confidence interval for the odds ratio), &quot;CIu&quot; (upper bound confidence
 interval for the odds ratio), &quot;distance&quot; (term distance or other
-information), &quot;members&quot; (members (represented as Gene Symbols) in
-overlaps)
+information), &quot;namespace&quot;, &quot;members_Overlap&quot; (members (represented as
+Gene Symbols) in overlaps), &quot;members_Anno&quot; (members (represented as
+Gene Symbols) in annotations)
 </p>
 </li>
 <li><p><code>mat</code>: NULL if the plot is not drawn; otherwise, a matrix of
