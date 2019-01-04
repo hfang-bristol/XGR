@@ -1,6 +1,6 @@
 #' Function to generate a graphml file from a pathway upon query
 #'
-#' \code{xGraphML2A2} is supposed to generate a graphml file from a pathway upon query. If data is provided, pathway gene members are color-coded.
+#' \code{xGraphML2AA} is supposed to generate a graphml file from a pathway upon query. If data is provided, pathway gene members are color-coded.
 #'
 #' @param data a data frame
 #' @param org a character specifying an organism. Currently supported organisms are 'human' and 'mouse'
@@ -25,15 +25,15 @@
 #' @param size.gene an integer character specifying the gene label fontsize. By default, it is 10
 #' @param size.gene.found an integer character specifying the label fontsize for genes found/matched. By default, it is 11
 #' @param size.gene.highlight an integer character specifying the label fontsize for genes highlighted. By default, it is 12
-#' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML2A2'
+#' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML2AA'
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' invisible (a string storing graphml-formatted content). If the filename is not NULL, a graphml-formatted file is also output.
 #' @note none
 #' @export
-#' @seealso \code{\link{xGraphML2A2}}
-#' @include xGraphML2A2.r
+#' @seealso \code{\link{xGraphML2AA}}
+#' @include xGraphML2AA.r
 #' @examples
 #' # Load the XGR package and specify the location of built-in data
 #' library(XGR)
@@ -44,22 +44,22 @@
 #' ## IRF1 regulators
 #' data <- subset(Haploid_regulators, Phenotype=='IRF1')
 #' 
-#' xGraphML2A2(query="AA:hsa04630", RData.location=RData.location, color.gene='#dde8f1',size.gene=11)
+#' xGraphML2AA(query="AA:hsa04630", RData.location=RData.location, color.gene='#dde8f1',size.gene=11)
 #' 
 #' ## load GWAS genes
 #' GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene', RData.location=RData.location)
 #' data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL' & Disease_ID=='RA') %>% dplyr::transmute(label=Symbol, lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>% dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
 #' 
 #' ## manual one (the same as curation='any')
-#' xGraphML2A2(data, query="AA:hsa04630", curation='manual', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2A2', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)
+#' xGraphML2AA(data, query="AA:hsa04630", curation='manual', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)
 #' ## automatic one
-#' xGraphML2A2(data, query="AA:hsa04630", curation='automatic', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2A2', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)
+#' xGraphML2AA(data, query="AA:hsa04630", curation='automatic', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)
 #' 
 #' ## key words 
-#' xGraphML2A2(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2A2', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
+#' xGraphML2AA(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xGraphML2A2 <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#dddddd', color.otherpath='#eeeeee', size.gene=10, size.gene.found=11, size.gene.highlight=12, filename='xGraphML2A2', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#dddddd', color.otherpath='#eeeeee', size.gene=10, size.gene.found=11, size.gene.highlight=12, filename='xGraphML2AA', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(verbose){

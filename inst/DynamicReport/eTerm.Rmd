@@ -63,7 +63,7 @@ if(eTerm$g$ontology %in% "AA"){
 
 	vec_outfile <- sapply(rownames(df_enrichment), function(query){
 		out.file <- paste0(tempfile(), ".", query, '.graphml')
-		xGraphML2A2(data=data, query=query, node.label="label", node.color="lfc", colormap="white-orange", filename=out.file, RData.location=RData.location, verbose=F)
+		xGraphML2AA(data=data, query=query, node.label="label", node.color="lfc", colormap="white-orange", filename=out.file, RData.location=RData.location, verbose=F)
 		out.file
 	})
 

@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xGraphML2A2"><tr><td>xGraphML2A2</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xGraphML2AA"><tr><td>xGraphML2AA</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to generate a graphml file from a pathway upon query</h2>
 
 <h3>Description</h3>
 
-<p><code>xGraphML2A2</code> is supposed to generate a graphml file from a
+<p><code>xGraphML2AA</code> is supposed to generate a graphml file from a
 pathway upon query. If data is provided, pathway gene members are
 color-coded.
 </p>
@@ -18,7 +18,7 @@ color-coded.
 <h3>Usage</h3>
 
 <pre>
-xGraphML2A2(data = NULL, org = c("human", "mouse"),
+xGraphML2AA(data = NULL, org = c("human", "mouse"),
 query = "AA:hsa04672", curation = c("manual", "automatic", "any"),
 node.label = "label", node.color = "lfc",
 colormap = "deepskyblue-lightyellow-darkorange", ncolors = 64,
@@ -28,7 +28,7 @@ node.highlight = "fdr", node.highlight.cutoff = 0.05,
 edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
 color.thispath = "#dddddd", color.otherpath = "#eeeeee",
 size.gene = 10, size.gene.found = 11, size.gene.highlight = 12,
-filename = "xGraphML2A2", verbose = TRUE,
+filename = "xGraphML2AA", verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -173,7 +173,7 @@ fontsize for genes highlighted. By default, it is 12</p>
 <tr valign="top"><td><code>filename</code></td>
 <td>
 <p>the without-extension part of the name of the output
-file. By default, it is 'xGraphML2A2'</p>
+file. By default, it is 'xGraphML2AA'</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -203,7 +203,7 @@ is not NULL, a graphml-formatted file is also output.
 
 <h3>See Also</h3>
 
-<p><code>xGraphML2A2</code>
+<p><code>xGraphML2AA</code>
 </p>
 
 
@@ -219,7 +219,7 @@ data(Haploid_regulators)
 ## IRF1 regulators
 data &lt;- subset(Haploid_regulators, Phenotype=='IRF1')
 
-xGraphML2A2(query="AA:hsa04630", RData.location=RData.location,
+xGraphML2AA(query="AA:hsa04630", RData.location=RData.location,
 color.gene='#dde8f1',size.gene=11)
 
 ## load GWAS genes
@@ -232,22 +232,22 @@ dplyr::group_by(label) %&gt;% dplyr::summarise(lfc=max(lfc),
 fdr=min(fdr))
 
 ## manual one (the same as curation='any')
-xGraphML2A2(data, query="AA:hsa04630", curation='manual',
+xGraphML2AA(data, query="AA:hsa04630", curation='manual',
 node.label="label", node.color="lfc", node.highlight='fdr',
-node.highlight.cutoff=5e-8, filename='xGraphML2A2',
+node.highlight.cutoff=5e-8, filename='xGraphML2AA',
 legend.title='log2(Odds ratio)', zlim=c(-1,1),
 RData.location=RData.location)
 ## automatic one
-xGraphML2A2(data, query="AA:hsa04630", curation='automatic',
+xGraphML2AA(data, query="AA:hsa04630", curation='automatic',
 node.label="label", node.color="lfc", node.highlight='fdr',
-node.highlight.cutoff=5e-8, filename='xGraphML2A2',
+node.highlight.cutoff=5e-8, filename='xGraphML2AA',
 legend.title='log2(Odds ratio)', zlim=c(-1,1),
 RData.location=RData.location)
 
 ## key words 
-xGraphML2A2(data, query="Asthma", curation='any', node.label="label",
+xGraphML2AA(data, query="Asthma", curation='any', node.label="label",
 node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8,
-filename='xGraphML2A2', RData.location=RData.location,
+filename='xGraphML2AA', RData.location=RData.location,
 legend.title='log2(Odds ratio)', zlim=c(-1,1))
 
 </pre>

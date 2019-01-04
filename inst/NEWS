@@ -21,7 +21,7 @@ NEW FEATURES
     
     o Add functions ('xGraphRWR', 'xGraphSim', 'xGraphPerf') for analysing graph node similarity
     
-    o Add functions ('xGraphML2A2') for pathway analysis
+    o Add functions ('xGraphML2AA') for pathway analysis
 
     o Add functions ('xPieplot') for pie plot
 
