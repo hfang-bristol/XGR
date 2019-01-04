@@ -112,7 +112,7 @@ xCtree <- function(ig, leave.label.orientation=c('outwards','inwards'), leave.la
 	gp <- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
 	gp <- gp + ggraph::geom_edge_diagonal(color=edge.color,alpha=edge.alpha,width=edge.width)
 	gp <- gp + ggraph::geom_node_point(aes(filter=leaf),size=leave.size, color=edge.color,alpha=edge.alpha)
-	gp <- gp + ggraph::geom_node_text(aes(x=x*leave.label.expansion, y=y*leave.label.expansion, filter=leaf, label=label, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=leave.label.alpha) + expand_limits(x=c(-limit.expansion, limit.expansion), y=c(-limit.expansion, limit.expansion))
+	gp <- gp + ggraph::geom_node_text(aes(x=x*leave.label.expansion, y=y*leave.label.expansion, filter=leaf, label=label, angle=angle, hjust=hjust),show.legend=F, color=leave.label.color, size=leave.label.size, alpha=leave.label.alpha, fontface="bold") + expand_limits(x=c(-limit.expansion, limit.expansion), y=c(-limit.expansion, limit.expansion))
 	
 	gp <- gp + coord_fixed() + theme(legend.position="bottom") + ggraph::theme_graph(base_family="sans",plot_margin=margin(0,0,0,0))
 	
