@@ -17,12 +17,13 @@ tree-like circular plot.
 <h3>Usage</h3>
 
 <pre>
-xEnrichCtree(eTerm, ig, node.color = c("zscore", "adjp", "or"),
-colormap = "grey-orange-darkred", zlim = NULL,
-node.size = c("adjp", "zscore", "or"), slim = NULL,
+xEnrichCtree(eTerm, ig, FDR.cutoff = NULL, node.color = c("zscore",
+"adjp", "or", "nOverlap"), colormap = "brewer.Reds", zlim = NULL,
+node.size = c("adjp", "zscore", "or", "nOverlap"), slim = NULL,
 node.size.range = c(0.5, 4.5), group.gap = 0.08,
-group.color = "lightblue", group.label.size = 2,
-group.label.color = "black", leave.label.orientation = c("inwards",
+group.color = "lightblue", group.size = 0.2, group.label.size = 2,
+group.label.color = "black", legend.direction = c("auto",
+"horizontal", "vertical"), leave.label.orientation = c("inwards",
 "outwards"), ...)
 </pre>
 
@@ -34,7 +35,7 @@ group.label.color = "black", leave.label.orientation = c("inwards",
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns
-('name','adjp','or','zscore'; 'group' optionally)</p>
+('name','adjp','or','zscore','nOverlap'; 'group' optionally)</p>
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>
@@ -42,6 +43,11 @@ can be a data frame having all these columns
 could be a 'phylo' object converted to. Note: the leave labels would be
 the node attribute 'name' unless the node attribute 'label' is
 explicitely provided</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.cutoff</code></td>
+<td>
+<p>FDR cutoff used to show the significant terms only.
+By default, it is set to NULL; useful when nodes sized by FDR</p>
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
@@ -93,6 +99,11 @@ multiple groups provided</p>
 <p>the color of group circles. Only works when multiple
 groups provided</p>
 </td></tr>
+<tr valign="top"><td><code>group.size</code></td>
+<td>
+<p>the line width of group circles. Only works when
+multiple groups provided</p>
+</td></tr>
 <tr valign="top"><td><code>group.label.size</code></td>
 <td>
 <p>the size of group circle labelling. Always a
@@ -103,6 +114,13 @@ groups provided</p>
 <td>
 <p>the color of group circle labelling. Only
 works when multiple groups provided</p>
+</td></tr>
+<tr valign="top"><td><code>legend.direction</code></td>
+<td>
+<p>the legend guide direction. It can be
+&quot;horizontal&quot; (useful for many groups with lengthy labelling),
+&quot;vertical&quot; and &quot;auto&quot; (&quot;vertical&quot; when multiple groups provided;
+otherwise &quot;horizontal&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.orientation</code></td>
 <td>

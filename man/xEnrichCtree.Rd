@@ -4,23 +4,27 @@
 \alias{xEnrichCtree}
 \title{Function to visualise enrichment results using a tree-like circular plot}
 \usage{
-xEnrichCtree(eTerm, ig, node.color = c("zscore", "adjp", "or"),
-colormap = "grey-orange-darkred", zlim = NULL,
-node.size = c("adjp", "zscore", "or"), slim = NULL,
+xEnrichCtree(eTerm, ig, FDR.cutoff = NULL, node.color = c("zscore",
+"adjp", "or", "nOverlap"), colormap = "brewer.Reds", zlim = NULL,
+node.size = c("adjp", "zscore", "or", "nOverlap"), slim = NULL,
 node.size.range = c(0.5, 4.5), group.gap = 0.08,
-group.color = "lightblue", group.label.size = 2,
-group.label.color = "black", leave.label.orientation = c("inwards",
+group.color = "lightblue", group.size = 0.2, group.label.size = 2,
+group.label.color = "black", legend.direction = c("auto",
+"horizontal", "vertical"), leave.label.orientation = c("inwards",
 "outwards"), ...)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
 can be a data frame having all these columns
-('name','adjp','or','zscore'; 'group' optionally)}
+('name','adjp','or','zscore','nOverlap'; 'group' optionally)}
 
 \item{ig}{an object of class "igraph" with node attribute 'name'. It
 could be a 'phylo' object converted to. Note: the leave labels would be
 the node attribute 'name' unless the node attribute 'label' is
 explicitely provided}
+
+\item{FDR.cutoff}{FDR cutoff used to show the significant terms only.
+By default, it is set to NULL; useful when nodes sized by FDR}
 
 \item{node.color}{which statistics will be used for node coloring. It
 can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and
@@ -56,12 +60,20 @@ multiple groups provided}
 \item{group.color}{the color of group circles. Only works when multiple
 groups provided}
 
+\item{group.size}{the line width of group circles. Only works when
+multiple groups provided}
+
 \item{group.label.size}{the size of group circle labelling. Always a
 sequential integer located at the top middle. Only works when multiple
 groups provided}
 
 \item{group.label.color}{the color of group circle labelling. Only
 works when multiple groups provided}
+
+\item{legend.direction}{the legend guide direction. It can be
+"horizontal" (useful for many groups with lengthy labelling),
+"vertical" and "auto" ("vertical" when multiple groups provided;
+otherwise "horizontal")}
 
 \item{leave.label.orientation}{the leave label orientation. It can be
 "outwards" and "inwards"}

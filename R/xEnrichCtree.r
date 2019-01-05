@@ -2,8 +2,9 @@
 #'
 #' \code{xEnrichCtree} is supposed to visualise enrichment results using a tree-like circular plot.
 #'
-#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns ('name','adjp','or','zscore'; 'group' optionally)
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns ('name','adjp','or','zscore','nOverlap'; 'group' optionally)
 #' @param ig an object of class "igraph" with node attribute 'name'. It could be a 'phylo' object converted to. Note: the leave labels would be the node attribute 'name' unless the node attribute 'label' is explicitely provided
+#' @param FDR.cutoff FDR cutoff used to show the significant terms only. By default, it is set to NULL; useful when nodes sized by FDR
 #' @param node.color which statistics will be used for node coloring. It can be "or" for the odds ratio, "adjp" for adjusted p value (FDR) and "zscore" for enrichment z-score
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param zlim the minimum and maximum values for which colors should be plotted
@@ -12,8 +13,10 @@
 #' @param node.size.range the range of actual node size
 #' @param group.gap the gap between group circles. Only works when multiple groups provided
 #' @param group.color the color of group circles. Only works when multiple groups provided
+#' @param group.size the line width of group circles. Only works when multiple groups provided
 #' @param group.label.size the size of group circle labelling. Always a sequential integer located at the top middle. Only works when multiple groups provided
 #' @param group.label.color the color of group circle labelling. Only works when multiple groups provided
+#' @param legend.direction the legend guide direction. It can be "horizontal" (useful for many groups with lengthy labelling), "vertical" and "auto" ("vertical" when multiple groups provided; otherwise "horizontal")
 #' @param leave.label.orientation the leave label orientation. It can be "outwards" and "inwards"
 #' @param ... additional graphic parameters used in xCtree
 #' @return
@@ -55,11 +58,12 @@
 #' gp <- xEnrichCtree(ls_eTerm, ig)
 #' }
 
-xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap="grey-orange-darkred", zlim=NULL, node.size=c("adjp","zscore","or"), slim=NULL, node.size.range=c(0.5,4.5), group.gap=0.08, group.color="lightblue", group.label.size=2, group.label.color="black", leave.label.orientation=c('inwards','outwards'), ...)
+xEnrichCtree <- function(eTerm, ig, FDR.cutoff=NULL, node.color=c("zscore","adjp","or","nOverlap"), colormap="brewer.Reds", zlim=NULL, node.size=c("adjp","zscore","or","nOverlap"), slim=NULL, node.size.range=c(0.5,4.5), group.gap=0.08, group.color="lightblue", group.size=0.2, group.label.size=2, group.label.color="black", legend.direction=c("auto","horizontal","vertical"), leave.label.orientation=c('inwards','outwards'), ...)
 {
 	## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     node.color <- match.arg(node.color)
     node.size <- match.arg(node.size)
+    legend.direction <- match.arg(legend.direction)
     leave.label.orientation <- match.arg(leave.label.orientation)
     
     if(is.null(eTerm)){
@@ -86,14 +90,21 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			df_enrichment_group <- eTerm$df
 			
 		}else if(class(eTerm)=='data.frame'){
-			if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
-				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore')]
-			}else if(all(c('name','adjp','or','zscore') %in% colnames(eTerm))){
-				df_enrichment_group <- eTerm[,c('name','adjp','or','zscore')]
+			if(all(c('group','name','adjp','or','zscore','nOverlap') %in% colnames(eTerm))){
+				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore','nOverlap')]
+			}else if(all(c('name','adjp','or','zscore','nOverlap') %in% colnames(eTerm))){
+				df_enrichment_group <- eTerm[,c('name','adjp','or','zscore','nOverlap')]
 				df_enrichment_group$group <- 'group'
 			}
 		}
 	}
+	
+	##########
+	# force those insignificant (FDR) to 1; useful when nodes sized by FDR
+	if(!is.null(FDR.cutoff)){
+		df_enrichment_group$adjp[df_enrichment_group$adjp>=FDR.cutoff] <- 1
+	}
+	##########
 	
 	if(class(df_enrichment_group$group)=='factor'){
 		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
@@ -111,9 +122,10 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 		#########################
 		
 		# convert 'ig' into 'ls_igg' by group
-		ls_df <- split(x=df_enrichment_group[,c("name","zscore","adjp","or")], f=df_enrichment_group$group)
+		ls_df <- split(x=df_enrichment_group[,c("name","zscore","adjp","or","nOverlap")], f=df_enrichment_group$group)
 		ls_igg <- lapply(ls_df, function(df_enrichment){
 			igg <- ig
+			
 			V(igg)$zscore <- 0
 			ind <- match(V(igg)$name, df_enrichment$name)
 			V(igg)$zscore[!is.na(ind)] <- df_enrichment$zscore[ind[!is.na(ind)]]
@@ -125,6 +137,10 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			V(igg)$or <- 0
 			ind <- match(V(igg)$name, df_enrichment$name)
 			V(igg)$or[!is.na(ind)] <- log2(df_enrichment$or)[ind[!is.na(ind)]]
+			
+			V(igg)$nOverlap <- 0
+			ind <- match(V(igg)$name, df_enrichment$name)
+			V(igg)$nOverlap[!is.na(ind)] <- df_enrichment$nOverlap[ind[!is.na(ind)]]
 			
 			igg
 		})
@@ -144,6 +160,11 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			if(is.null(zlim)){
 				zlim <- c(0, ceiling(max(df_enrichment_group$zscore)))
 			}
+		}else if(node.color=="nOverlap"){
+			node.color.title <- "# genes"
+			if(is.null(zlim)){
+				zlim <- c(0, ceiling(max(df_enrichment_group$nOverlap)))
+			}
 		}
 		
 		if(node.size=="or"){
@@ -160,6 +181,12 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 			node.size.title <- "Z-score"
 			if(is.null(slim)){
 				slim <- c(0, ceiling(max(df_enrichment_group$zscore)))
+			}
+		}
+		else if(node.size=="nOverlap"){
+			node.size.title <- "Num of genes"
+			if(is.null(slim)){
+				slim <- c(0, ceiling(max(df_enrichment_group$nOverlap)))
 			}
 		}
 		
@@ -192,6 +219,8 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 				color <- V(g)$adjp[!is.na(ind)]
 			}else if(node.color=="zscore"){
 				color <- V(g)$zscore[!is.na(ind)]
+			}else if(node.color=="nOverlap"){
+				color <- V(g)$nOverlap[!is.na(ind)]
 			}
 			color[color<=zlim[1]] <- zlim[1]
 			color[color>=zlim[2]] <- zlim[2]
@@ -202,6 +231,8 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 				size <- V(g)$adjp[!is.na(ind)]
 			}else if(node.size=="zscore"){
 				size <- V(g)$zscore[!is.na(ind)]
+			}else if(node.size=="nOverlap"){
+				size <- V(g)$nOverlap[!is.na(ind)]
 			}
 			size[size<=slim[1]] <- slim[1]
 			size[size>=slim[2]] <- slim[2]
@@ -213,16 +244,31 @@ xEnrichCtree <- function(eTerm, ig, node.color=c("zscore","adjp","or"), colormap
 		# if multiple groups
 		if(length(ls_igg)>1){
 			## add polygon
-			gp <- gp + geom_polygon(data=df, aes(x=x*x_group, y=y*y_group, group=group, linetype=df$group),color=group.color,fill="transparent") + guides(linetype=guide_legend(title="Circles\n(outwards)",keywidth=0.7, keyheight=0.7))
+			gp <- gp + geom_polygon(data=df, aes(x=x*x_group, y=y*y_group, group=group, color=group),fill="transparent",size=group.size) + scale_colour_manual(values=xColormap(paste0(group.color,"-",group.color))(length(unique(df$group))), guide=guide_legend(title="Circles",keywidth=0.5,keyheight=0.6, order=1, nrow=min(20,length(unique(df$group)))))
 			
 			## add polygon labelling
 			tipid <- NULL
-			gp <- gp + geom_text(data=subset(df,tipid==1), aes(x=x*x_group+0.05, y=y*y_group, label=group_id),color=group.label.color,size=group.label.size)
+			gp <- gp + geom_text(data=subset(df,tipid==1), aes(x=x*x_group+0.1, y=y*y_group, label=group_id),color=group.label.color,size=group.label.size)
 		}		
 		
-		gp <- gp + geom_point(data=df, aes(x=x*x_group, y=y*y_group, color=color, size=size), alpha=1)
+		gp <- gp + geom_point(data=df, aes(x=x*x_group, y=y*y_group, fill=color, size=size), alpha=1, color=group.color, shape=21)
 		
-		gp <- gp + scale_size_continuous(limits=slim, range=node.size.range, guide=guide_legend(node.size.title,title.position="top",ncol=1)) + scale_colour_gradientn(colors=xColormap(colormap)(64), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5))
+		if(legend.direction=="auto"){
+			if(length(ls_igg)>1){
+				legend.direction <- "horizontal"
+			}else{
+				legend.direction <- "vertical"
+			}
+		}
+		
+		if(legend.direction=="vertical"){
+			gp <- gp + scale_size_continuous(limits=slim, range=node.size.range, guide=guide_legend(node.size.title,title.position="top",ncol=1,order=2))
+			gp <- gp + scale_fill_gradientn(colors=xColormap(colormap)(64), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barwidth=0.5,order=3))
+
+		}else if(legend.direction=="horizontal"){
+			gp <- gp + scale_size_continuous(limits=slim, range=node.size.range, guide=guide_legend(node.size.title,title.position="top",keywidth=0.5,keyheight=0.5,ncol=3,byrow=T,order=2))
+			gp <- gp + scale_fill_gradientn(colors=xColormap(colormap)(64), limits=zlim, guide=guide_colorbar(title=node.color.title,title.position="top",barheight=0.5,direction="horizontal",order=3))
+		}
 		
 		gp$data_enrichment <- df
 	}
