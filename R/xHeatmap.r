@@ -21,7 +21,7 @@
 #' @param size the number specifying the shape size. By default, it is 2
 #' @param plot.margin the margin (t, r, b, l) around plot. By default, it is unit(c(5.5,5.5,5.5,5.5),"pt")
 #' @param font.family the font family for texts
-#' @param na.color the color for NAs. By default, it is 'grey80'
+#' @param na.color the color for NAs. By default, it is 'transparent'
 #' @param data.label a data frame/matrix used for the labelling
 #' @param label.size the label size
 #' @param label.color the label color
@@ -43,7 +43,7 @@
 #' gp + geom_text(aes(x, y, label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
 #' }
 
-xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=90, x.text.size=6, x.text.hjust=0, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='grey80', data.label=NULL, label.size=1, label.color="black", ...)
+xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=90, x.text.size=6, x.text.hjust=0, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', data.label=NULL, label.size=1, label.color="black", ...)
 {
 
     reorder <- match.arg(reorder)

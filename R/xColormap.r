@@ -2,7 +2,7 @@
 #'
 #' \code{xColormap} is supposed to define a colormap. It returns a function, which will take an integer argument specifying how many colors interpolate the given colormap.
 #'
-#' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}. It can also be a function of 'colorRampPalette'. It can also be "brewer.*" (RColorBrewer palette; see RColorBrewer::display.brewer.all()). It can be colorspace defaults ("rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl") or other useful ones ("hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy")
+#' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}. It can also be a function of 'colorRampPalette'. It can also be "brewer.*" (RColorBrewer palette; see RColorBrewer::display.brewer.all()). It can be colorspace defaults ("rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl") or other useful ones ("hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy","hcl_co")
 #' @param interpolate use spline or linear interpolation
 #' @param data NULL or a numeric vector
 #' @param zlim the minimum and maximum z/patttern values for which colors should be plotted, defaulting to the range of the finite values of z. Each of the given colors will be used to color an equispaced interval of this range. The midpoints of the intervals cover the range, so that values just outside the range will be plotted
@@ -43,7 +43,7 @@
 #' # 4) return mapped colors
 #' xColormap(colormap="RdYlBu", data=runif(5))
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu", "brewer.BrBG","brewer.PiYG","brewer.PRGn","brewer.PuOr","brewer.RdBu","brewer.RdGy","brewer.RdYlBu","brewer.RdYlGn","brewer.Spectral", "brewer.Blues","brewer.BuGn","brewer.BuPu","brewer.GnBu","brewer.Greens","brewer.Greys","brewer.Oranges","brewer.OrRd","brewer.PuBu","brewer.PuBuGn","brewer.PuRd","brewer.Purples","brewer.RdPu","brewer.Reds","brewer.YlGn","brewer.YlGnBu","brewer.YlOrBr","brewer.YlOrRd", "rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl", "hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy"), interpolate=c("spline","linear"), data=NULL, zlim=NULL)
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu", "brewer.BrBG","brewer.PiYG","brewer.PRGn","brewer.PuOr","brewer.RdBu","brewer.RdGy","brewer.RdYlBu","brewer.RdYlGn","brewer.Spectral", "brewer.Blues","brewer.BuGn","brewer.BuPu","brewer.GnBu","brewer.Greens","brewer.Greys","brewer.Oranges","brewer.OrRd","brewer.PuBu","brewer.PuBuGn","brewer.PuRd","brewer.Purples","brewer.RdPu","brewer.Reds","brewer.YlGn","brewer.YlGnBu","brewer.YlOrBr","brewer.YlOrRd", "rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl", "hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy","hcl_co"), interpolate=c("spline","linear"), data=NULL, zlim=NULL)
 {
 
 	interpolate <- match.arg(interpolate)
@@ -154,6 +154,9 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 		}else if(colormap == "hcl_cy"){
 			#via: noquote(paste0(colorspace::diverge_hcl(12,h=c(180,70),c=70,l=c(90,95)),collapse='","'))
 			palette.name <- colorRampPalette(c("#22FDEB","#83FAEC","#AEF7EE","#CBF5EF","#E0F3F0","#EDF1F0","#F1F0EE","#F3EEE3","#F6ECD2","#F9E9BD","#FBE5A2","#FEE17F"), interpolate=interpolate)
+		}else if(colormap == "hcl_co"){
+			#via: noquote(paste0(colorspace::diverge_hcl(12,h=c(180,43),c=70,l=c(90,95)),collapse='","'))
+			palette.name <- colorRampPalette(c("#22FDEB","#83FAEC","#AEF7EE","#CBF5EF","#E0F3F0","#EDF1F0","#F2F0EE","#F8ECE5","#FFE8D8","#FFE2C8","#FFDBB3","#FFD49A"), interpolate=interpolate)
 		
 		}else if(colormap == "heat"){
 			palette.name <- grDevices::heat.colors

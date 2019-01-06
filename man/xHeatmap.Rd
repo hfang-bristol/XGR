@@ -10,7 +10,7 @@ barheight = NULL, nbin = 64, legend.title = "", x.rotate = 90,
 x.text.size = 6, x.text.hjust = 0, y.text.size = 6,
 legend.text.size = 4, legend.title.size = 6, shape = 19,
 size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
-font.family = "sans", na.color = "grey80", data.label = NULL,
+font.family = "sans", na.color = "transparent", data.label = NULL,
 label.size = 1, label.color = "black", ...)
 }
 \arguments{
@@ -76,7 +76,7 @@ is unit(c(5.5,5.5,5.5,5.5),"pt")}
 
 \item{font.family}{the font family for texts}
 
-\item{na.color}{the color for NAs. By default, it is 'grey80'}
+\item{na.color}{the color for NAs. By default, it is 'transparent'}
 
 \item{data.label}{a data frame/matrix used for the labelling}
 

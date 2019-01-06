@@ -16,7 +16,7 @@ xColormap(colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr",
 "brewer.PuRd", "brewer.Purples", "brewer.RdPu", "brewer.Reds",
 "brewer.YlGn", "brewer.YlGnBu", "brewer.YlOrBr", "brewer.YlOrRd",
 "rainbow_hcl", "heat_hcl", "terrain_hcl", "diverge_hcl", "hcl_br",
-"hcl_bp", "hcl_bb", "hcl_gp", "hcl_go", "hcl_cp", "hcl_cy"),
+"hcl_bp", "hcl_bb", "hcl_gp", "hcl_go", "hcl_cp", "hcl_cy", "hcl_co"),
 interpolate = c("spline", "linear"), data = NULL, zlim = NULL)
 }
 \arguments{
@@ -35,7 +35,7 @@ function of 'colorRampPalette'. It can also be "brewer.*" (RColorBrewer
 palette; see RColorBrewer::display.brewer.all()). It can be colorspace
 defaults ("rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl") or
 other useful ones
-("hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy")}
+("hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy","hcl_co")}
 
 \item{interpolate}{use spline or linear interpolation}
 

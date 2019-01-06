@@ -18,7 +18,8 @@ background.annotatable.only = NULL, p.tail = c("one-tail",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
 "lea"), elim.pvalue = 0.01, lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, out.evidence = T, verbose = T, silent = F,
+true.path.rule = F, out.evidence = T, out.evidence.plot = F,
+verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -155,6 +156,9 @@ false}
 
 \item{out.evidence}{logical to indicate whether the evidence should be
 output. By default, it sets to true}
+
+\item{out.evidence.plot}{logical to indicate whether the evidence
+should be plot. By default, it sets to false}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}

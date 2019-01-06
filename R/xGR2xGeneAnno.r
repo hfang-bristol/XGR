@@ -26,6 +26,7 @@
 #' @param path.mode the mode of paths induced by vertices/nodes with input annotation data. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to false
 #' @param out.evidence logical to indicate whether the evidence should be output. By default, it sets to true
+#' @param out.evidence.plot logical to indicate whether the evidence should be plot. By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -97,7 +98,7 @@
 #' gp <- xEnrichForest(eTerm, top_num=10)
 #' }
 
-xGR2xGeneAnno <- function(data, background=NULL, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontology=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, out.evidence=T, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnno <- function(data, background=NULL, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontology=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, out.evidence=T, out.evidence.plot=F, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -199,31 +200,34 @@ xGR2xGeneAnno <- function(data, background=NULL, format=c("chr:start-end","data.
 			ind <- match(df_evidence$Gene, dGR_genes)
 			evidence <- df_evidence[!is.na(ind), c('GR','Gene','Score')]
 			eTerm$evidence <- evidence
-			## append 'gp_evidence'
-			Gene <- Score <- NULL
-			mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
-			mat <- mat_evidence[,-1]
-			rownames(mat) <- mat_evidence[,1]
-			#### sort by chromosome, start and end
-			ind <- xGRsort(rownames(mat))
-			mat <- mat[ind,]
+			
+			if(out.evidence.plot){
+				## append 'gp_evidence'
+				Gene <- Score <- NULL
+				mat_evidence <- tidyr::spread(evidence, key=Gene, value=Score)
+				mat <- mat_evidence[,-1]
+				rownames(mat) <- mat_evidence[,1]
+				#### sort by chromosome, start and end
+				ind <- xGRsort(rownames(mat))
+				mat <- mat[ind,]
 		
-			################
-			## obtain rowsep
-			rowsep <- xGRsep(rownames(mat))
-			rowsep <- nrow(mat) - rowsep
-			################
+				################
+				## obtain rowsep
+				rowsep <- xGRsep(rownames(mat))
+				rowsep <- nrow(mat) - rowsep
+				################
 		
-			####
-			if(ncol(mat)>=0){
-				reorder <- "none"
-			}else{
-				reorder <- "col"
+				####
+				if(ncol(mat)>=0){
+					reorder <- "none"
+				}else{
+					reorder <- "col"
+				}
+				gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
+				gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
+				gp_evidence <- gp_evidence + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5)
+				eTerm$gp_evidence <- gp_evidence
 			}
-			gp_evidence <- xHeatmap(mat, reorder=reorder, colormap="spectral", ncolors=64, barwidth=0.4, x.rotate=90, shape=19, size=2, x.text.size=6,y.text.size=6, na.color='transparent')
-			gp_evidence <- gp_evidence + theme(legend.title=element_text(size=8), legend.position="left") + scale_y_discrete(position="right")
-			gp_evidence <- gp_evidence + geom_hline(yintercept=rowsep+0.5,color="grey90",size=0.5)
-			eTerm$gp_evidence <- gp_evidence
 			######
 		}
     }

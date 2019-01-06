@@ -39,7 +39,8 @@ background.annotatable.only = NULL, p.tail = c("one-tail",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
 "lea"), elim.pvalue = 0.01, lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, out.evidence = T, verbose = T, silent = F,
+true.path.rule = F, out.evidence = T, out.evidence.plot = F,
+verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -228,6 +229,11 @@ false</p>
 <td>
 <p>logical to indicate whether the evidence should be
 output. By default, it sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>out.evidence.plot</code></td>
+<td>
+<p>logical to indicate whether the evidence
+should be plot. By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
