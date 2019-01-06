@@ -207,7 +207,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     
     if(!silent){
     	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
-    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total (xEnricherYours): ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     }
     
     invisible(eTerm)

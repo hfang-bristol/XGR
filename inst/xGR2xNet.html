@@ -40,7 +40,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 subnet.significance = 5e-05, subnet.size = NULL,
 test.permutation = F, num.permutation = 100, respect = c("none",
 "degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = T,
+"orderStatistic"), verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -240,6 +240,12 @@ provides a compromise between these two. Notably, the aggregate methods
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>

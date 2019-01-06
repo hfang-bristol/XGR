@@ -82,7 +82,7 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_xGenes <- xGR2xGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, RData.location=RData.location)
+	df_xGenes <- xGR2xGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location)
 	
 	
 	if(verbose){

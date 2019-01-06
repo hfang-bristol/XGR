@@ -24,7 +24,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 subnet.significance = 5e-05, subnet.size = NULL,
 test.permutation = F, num.permutation = 100, respect = c("none",
 "degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = T,
+"orderStatistic"), verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -178,6 +178,10 @@ provides a compromise between these two. Notably, the aggregate methods
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

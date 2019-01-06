@@ -11,7 +11,7 @@ crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
 "empirical"), scoring = F, scoring.scheme = c("max", "sum",
 "sequential"), scoring.rescale = F, nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, verbose = T,
+nearby.decay.exponent = 2, verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -89,6 +89,10 @@ default, it sets to 2}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

@@ -15,6 +15,7 @@
 #' @param nearby.decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay. If no distance weight is used, please select 'constant'
 #' @param nearby.decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
+#' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' If scoring sets to false, a data frame with following columns:
@@ -71,13 +72,15 @@
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=T, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     startT <- Sys.time()
-    if(verbose){
+    if(!silent){
         message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
         message("", appendLF=TRUE)
+    }else{
+    	verbose <- FALSE
     }
     ####################################################################################
 	
@@ -478,13 +481,12 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	
     ####################################################################################
     endT <- Sys.time()
-    if(verbose){
-        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
-    }
-    
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
+    if(!silent){
+    	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total (xGR2xGenes): ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    }
   	
 	invisible(df_xGenes)
 }

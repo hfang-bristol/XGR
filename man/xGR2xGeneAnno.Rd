@@ -18,7 +18,7 @@ background.annotatable.only = NULL, p.tail = c("one-tail",
 "hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
 "lea"), elim.pvalue = 0.01, lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, out.evidence = T, verbose = T,
+true.path.rule = F, out.evidence = T, verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -158,6 +158,10 @@ output. By default, it sets to true}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

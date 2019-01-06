@@ -28,7 +28,7 @@ crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
 "empirical"), scoring = F, scoring.scheme = c("max", "sum",
 "sequential"), scoring.rescale = F, nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2, verbose = T,
+nearby.decay.exponent = 2, verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -136,6 +136,12 @@ default, it sets to 2</p>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>

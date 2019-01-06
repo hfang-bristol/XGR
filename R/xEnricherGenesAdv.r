@@ -124,7 +124,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 			}
 			ontology <- ontologies[j]
 			
-    		eTerm <- xEnricherGenes(data=data, background=background, check.symbol.identity=check.symbol.identity, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=TRUE, RData.location=RData.location)
+    		eTerm <- xEnricherGenes(data=data, background=background, check.symbol.identity=check.symbol.identity, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=!verbose, RData.location=RData.location)
 			df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
 			
 			if(is.null(df)){
@@ -161,7 +161,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     
     if(!silent){
     	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
-    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total (xEnricherGenesAdv): ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     }
     
     invisible(ls_eTerm)
