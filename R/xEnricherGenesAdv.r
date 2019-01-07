@@ -61,7 +61,7 @@
 #' gp <- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="or")
 #' }
 
-xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F, ontologies=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=F, silent=FALSE, plot=TRUE, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     if(!silent){
@@ -136,6 +136,8 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
 		df <- do.call(rbind, ls_df)
 	})
     df_all <- do.call(rbind, ls_df)
+    ## group ordered by the input data
+    df_all$group <- factor(df_all$group, levels=names(list_vec))
     
     ## heatmap view
     if(plot & !is.null(df_all)){
