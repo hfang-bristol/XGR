@@ -34,7 +34,8 @@ xDefineGenomicAnno(GR.annotation = c(NA, "Uniform_TFBS",
 "EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno",
 "FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "FANTOM5_CAT_DO",
 "FANTOM5_CAT_EFO", "FANTOM5_CAT_HPO", "FANTOM5_CAT_MESH",
-"FANTOM5_CAT_PICS"), verbose = T,
+"FANTOM5_CAT_PICS", "EpigenomeAtlas_DNaseNarrow",
+"EpigenomeAtlas_DNaseBroad"), verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -384,6 +385,15 @@ trait-associated SNPs.}
 \item{\code{GWAScatalog_bloodindex}: a list (29 traits grouped by EFO)
 of GenomicRanges objects; each is an GR object containing
 trait-associated SNPs.}
+}
+20. Roadmap Epigenomics DNase-seq peaks
+\itemize{
+\item{\code{EpigenomeAtlas_DNaseNarrow}: a list (39 cell types) of
+GenomicRanges objects; each is an GR object containing narrow Peaks in
+FDR 0.01 hotspots.}
+\item{\code{EpigenomeAtlas_DNaseBroad}: a list (39 cell types) of
+GenomicRanges objects; each is an GR object containing broad Peaks in
+FDR 0.01 hotspots.}
 }
 }
 \examples{
