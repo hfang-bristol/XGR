@@ -21,7 +21,8 @@ xEnrichMatrix(list_eTerm, method = c("ggplot2", "circle", "square",
 "color", "pie"), displayBy = c("zscore", "fc", "adjp", "pvalue"),
 FDR.cutoff = 0.05, wrap.width = NULL, sharings = NULL,
 reorder = c("row", "none", "col", "both"), colormap = "jet",
-ncolors = 20, zlim = NULL, slim = NULL, title = NULL,
+ncolors = 20, zlim = NULL, slim = NULL,
+legend.direction = c("horizontal", "vertical"), title = NULL,
 flip = FALSE, y.rotate = 45, shape = 19, font.family = "sans",
 ...)
 </pre>
@@ -97,6 +98,12 @@ matrix</p>
 <td>
 <p>the minimum and maximum displaying values for which sizes
 should be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>legend.direction</code></td>
+<td>
+<p>the legend guide direction. It can be
+&quot;horizontal&quot; (useful for many groups with lengthy labelling),
+&quot;vertical&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>title</code></td>
 <td>

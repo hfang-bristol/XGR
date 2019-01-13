@@ -67,7 +67,7 @@ none
 \dontrun{
 library(XGR)
 
-gp <- xSHtree(sMap, layout="rectangular", width=1)
+gp <- xSHtree(sMap, layout="rectangular", embed.width=1)
 gp
 ls_gp <- gp$ls_gp
 

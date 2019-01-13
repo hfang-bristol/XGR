@@ -12,7 +12,9 @@ legend.text.size = 6, legend.title.size = 8)
 \arguments{
 \item{sMap}{an object of class "sMap"}
 
-\item{sReorder}{an object of class "sReorder"}
+\item{sReorder}{an object of class "sReorder". Alternatively, it can be
+a data frame with two columns (1st column for x-axis location and 2nd
+for the y-axis location)}
 
 \item{title.size}{the title size}
 

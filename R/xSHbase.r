@@ -3,7 +3,7 @@
 #' \code{xSHbase} is supposed to visualise bases partitioned from a supra-hexagonal grid using ggplot2.
 #'
 #' @param sMap an object of class "sMap"
-#' @param sBase an object of class "sBase". It can be an integer vector specifying clusters
+#' @param sBase an object of class "sBase". It can be an integer vector specifying clusters or NULL (map shown without coloring/legend)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param border.color the border color for each hexagon
 #' @param legend.title the title of the colorbar. By default, it is ''
@@ -22,6 +22,8 @@
 #' \dontrun{
 #' library(XGR)
 #' 
+#' gp <- xSHbase(sMap)
+#' 
 #' gp <- xSHbase(sMap, sBase)
 #' gp + theme(legend.position="none")
 #' 
@@ -30,13 +32,27 @@
 #' df <- unique(sMap$polygon[,c("index","stepCentroid")]) %>% dplyr::arrange(index)
 #' gp <- xSHbase(sMap, df$stepCentroid, legend.title='Steps')
 #' # further labelled by hits
-#' df_coord <- data.frame(sMap$coord, hits=sMap$hits, stringsAsFactors=F)
+#' df_coord <- data.frame(sMap$coord, hits=sMap$hits, index=1:length(sMap$hits), stringsAsFactors=F)
 #' gp + geom_text(data=df_coord, aes(x,y,label=hits))
 #' 
 #' # angles to the centroid
 #' df <- unique(sMap$polygon[,c("index","angleCentroid")]) %>% dplyr::arrange(index)
 #' vec <- ceiling(180*(df$angleCentroid/3.14))
 #' gp <- xSHbase(sMap, vec, legend.title='Angles')
+#' 
+#' ##################
+#' # labelled by data
+#' gp <- xSHbase(sMap)
+#' # df_output
+#' df_output <- sWriteData(sMap, data) %>% dplyr::group_by(Hexagon_index) %>% dplyr::summarise(IDs=paste(ID,collapse="\n"))
+#' # df_coord
+#' df_coord <- data.frame(sMap$coord, hits=sMap$hits, index=1:length(sMap$hits), stringsAsFactors=F)
+#' # df_output_coord
+#' ind <- match(df_output$Hexagon_index, df_coord$index)
+#' df <- data.frame(df_output, df_coord[ind,])
+#' gp + geom_point(data=df,aes(x,y,size=hits),alpha=0.1) + geom_text(data=df,aes(x,y,label=IDs),size=2)
+#' gp + geom_point(data=df,aes(x,y,size=hits),alpha=0.1) + ggrepel::geom_text_repel(data=df,aes(x,y,label=IDs),size=1.5)
+#' ##################
 #' 
 #' # add boundary
 #' gp <- xSHbase(sMap, sBase, boundary=T, colormap="rainbow_hcl")
@@ -53,7 +69,7 @@
 #' htmlwidgets::saveWidget(gr, file="out.html", background="white", selfcontained=T)
 #' }
 
-xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", legend.title="", legend.text.size=6, legend.title.size=8, boundary=F, boundary.color="black", boundary.type=c("line","point"))
+xSHbase <- function(sMap, sBase=NULL, colormap="rainbow_hcl", border.color="grey", legend.title="", legend.text.size=6, legend.title.size=8, boundary=F, boundary.color="black", boundary.type=c("line","point"))
 {
 
     boundary.type <- match.arg(boundary.type)
@@ -65,7 +81,7 @@ xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", le
 	gp <- NULL
 	
 	vec_labels <- NULL
-	
+		
     if(class(sBase) == "sBase"){
     	## vec_bases
         vec_bases <- sBase$bases
@@ -77,7 +93,16 @@ xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", le
     }else if(is.vector(sBase)){
     	vec_bases <- sBase
     	
+    }else if(is.null(sBase)){
+    	vec_bases <- 1:nrow(sMap$coord)
+    	colormap <- NA
     }
+
+	#########################################
+	if(is.na(colormap)){
+		colormap <- "transparent-transparent"
+	}
+	#########################################
 
 	if(is.vector(vec_bases)){
 		
@@ -98,7 +123,11 @@ xSHbase <- function(sMap, sBase, colormap="rainbow_hcl", border.color="grey", le
 		gp <- ggplot(data=df_polygon, aes(x,y)) + geom_polygon(aes(fill=base,group=index),color=border.color) + scale_fill_manual(values=my_colors) + guides(fill=guide_legend(title=legend.title,keywidth=0.8, keyheight=0.8))
 	
 		gp <- gp + coord_fixed(ratio=1) + theme_void() + theme(legend.position="right",legend.box="vertical") + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
-
+		
+		if(colormap=="transparent-transparent"){
+			gp <- gp + theme(legend.position="none")
+		}
+		
 		if(!is.null(vec_labels)){
 			label <- NULL
 

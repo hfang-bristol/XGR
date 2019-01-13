@@ -13,6 +13,7 @@
 #' @param ncolors the number of colors specified over the colormap
 #' @param zlim the minimum and maximum z values for which colors should be plotted, defaulting to the range of the finite values of displayed matrix
 #' @param slim the minimum and maximum displaying values for which sizes should be plotted
+#' @param legend.direction the legend guide direction. It can be "horizontal" (useful for many groups with lengthy labelling), "vertical"
 #' @param title the title of the plot. By default, it is NULL
 #' @param flip logical to indicate whether to flip the coordiate. By default, it sets to false
 #' @param y.rotate the angle to rotate the y tick labelings. By default, it is 45
@@ -35,11 +36,12 @@
 #' gp <- xEnrichMatrix(list_eTerm, method="ggplot2", displayBy="zscore", FDR.cutoff=0.05, wrap.width=40, sharings=NULL, reorder="row", colormap="yellow-red", flip=T, y.rotate=45, font.family=font.family)
 #' }
 
-xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, slim=NULL, title=NULL, flip=FALSE, y.rotate=45, shape=19, font.family="sans", ...)
+xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","color","pie"), displayBy=c("zscore","fc","adjp","pvalue"), FDR.cutoff=0.05, wrap.width=NULL, sharings=NULL, reorder=c("row","none","col","both"), colormap="jet", ncolors=20, zlim=NULL, slim=NULL, legend.direction=c("horizontal","vertical"), title=NULL, flip=FALSE, y.rotate=45, shape=19, font.family="sans", ...)
 {
     method <- match.arg(method)    
     displayBy <- match.arg(displayBy)
     reorder <- match.arg(reorder)
+    legend.direction <- match.arg(legend.direction)
     
     if(class(list_eTerm)=="list"){
 		## Remove null elements in a list
@@ -238,9 +240,15 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		
 		gp <- ggplot(d, aes(x=group, y=name, color=bycol))
 		gp <- gp + geom_point(aes(size=val),shape=shape)
-		gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
-		gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4), guide=guide_legend(title_size,title.position="top",ncol=1))
-		
+
+		if(legend.direction=="vertical"){
+			gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4), guide=guide_legend(title_size,title.position="top",ncol=1,order=1))
+			gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",barwidth=0.5,order=2))
+		}else if(legend.direction=="horizontal"){
+			gp <- gp + scale_size_continuous(limits=c(floor(min(d$val)*10)/10, ceiling(max(d$val)*10)/10), range=c(1,4), guide=guide_legend(title_size,title.position="top",keywidth=0.5,keyheight=0.5,ncol=3,byrow=T,order=1))
+			gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",,barheight=0.5,direction="horizontal",order=2))
+		}
+
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold", color="black", size=8, angle=y.rotate), axis.text.y=element_text(face="bold", color="black", size=8, angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 		gp <- gp + labs(title=title)
 		gp <- gp + theme(text=element_text(family=font.family))

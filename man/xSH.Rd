@@ -8,7 +8,7 @@ xSH(sMap, which.components = NULL, customised.comp = NULL,
 ncolumns = NULL, colormap = "spectral", ncolors = 64,
 zlim = NULL, border.color = "transparent", barwidth = 0.4,
 barheight = NULL, nbin = 64, legend.title = "",
-legend.text.size = 6, legend.title.size = 8)
+legend.text.size = 6, legend.title.size = 8, strip.text.size = 8)
 }
 \arguments{
 \item{sMap}{an object of class "sMap"}
@@ -57,6 +57,8 @@ codebook matrix}
 \item{legend.text.size}{the text size of the legend tick labelings}
 
 \item{legend.title.size}{the text size of the legend titles}
+
+\item{strip.text.size}{the text size of the strip texts}
 }
 \value{
 a ggplot2 object

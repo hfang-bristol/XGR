@@ -16,6 +16,7 @@
 #' @param legend.title the title of the colorbar. By default, it is ''
 #' @param legend.text.size the text size of the legend tick labelings
 #' @param legend.title.size the text size of the legend titles
+#' @param strip.text.size the text size of the strip texts
 #' @return 
 #' a ggplot2 object
 #' @note none
@@ -58,7 +59,7 @@
 #' magick::image_write(animation, "xSH_advanced.gif")
 #' }
 
-xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL, colormap="spectral", ncolors=64, zlim=NULL, border.color="transparent", barwidth=0.4, barheight=NULL, nbin=64, legend.title='', legend.text.size=6, legend.title.size=8)
+xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL, colormap="spectral", ncolors=64, zlim=NULL, border.color="transparent", barwidth=0.4, barheight=NULL, nbin=64, legend.title='', legend.text.size=6, legend.title.size=8, strip.text.size=8)
 {
 
     if (class(sMap) != "sMap"){
@@ -126,6 +127,8 @@ xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL
 			ncolumns <- ceiling(sqrt(ncol(codebook)))
 		}
 		gp <- gp + facet_wrap(~component, ncol=ncolumns)
+		
+		gp <- gp + theme(strip.background=element_rect(fill="transparent",color="transparent"), strip.text=element_text(size=strip.text.size))
 	}
 	
 	invisible(gp)

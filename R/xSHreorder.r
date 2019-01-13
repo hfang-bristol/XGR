@@ -3,7 +3,7 @@
 #' \code{xSHreorder} is supposed to draw multiple component planes reorded within a sheet-shape rectangle grid using ggplot2.
 #'
 #' @param sMap an object of class "sMap"
-#' @param sReorder an object of class "sReorder"
+#' @param sReorder an object of class "sReorder". Alternatively, it can be a data frame with two columns (1st column for x-axis location and 2nd for the y-axis location)
 #' @param title.size the title size
 #' @param embed.width the width/height of embedded ggplot obejcts
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
@@ -60,14 +60,16 @@ xSHreorder <- function(sMap, sReorder, title.size=8, embed.width=1, colormap="sp
     })
     names(ls_gp) <- cnames
 
-    if(class(sReorder) != "sReorder"){
-        stop("The funciton must apply to 'sReorder' object.\n")
-    }
-
 	##################
 	# df: geom_subview
 	##################
-	df <- data.frame(x=sReorder$coord[,1], y=sReorder$coord[,2], stringsAsFactors=F)
+    if(class(sReorder) == "sReorder"){
+        df <- data.frame(x=sReorder$coord[,1], y=sReorder$coord[,2], stringsAsFactors=F)
+    }else if(class(sReorder) == "data.frame"){
+    	df <- data.frame(x=sReorder[,1], y=sReorder[,2], stringsAsFactors=F)
+    }else{
+    	stop("The funciton must apply to 'sReorder' object or a 'data.frame'.\n")
+    }
 	## append ls_gp
 	df_max <- df[,1:2] %>% dplyr::arrange(-x,y)
 	ind <- which(df[,1]==df_max[1,1] & df[,2]==df_max[1,2])
@@ -82,7 +84,7 @@ xSHreorder <- function(sMap, sReorder, title.size=8, embed.width=1, colormap="sp
 	##################
 	## data: initialise the plot with 3 columns: x, y, fill
 	##################
-	if(1){
+	if(class(sReorder) == "sReorder"){
 		xdim <- sReorder$xdim
 		ydim <- sReorder$ydim
 	}else{
@@ -101,7 +103,7 @@ xSHreorder <- function(sMap, sReorder, title.size=8, embed.width=1, colormap="sp
 	
 	gp <- gp + ggimage::geom_subview(data=df, aes(x=x, y=y, subview=ls_gp), width=embed.width, height=embed.width) + coord_fixed(ratio=1)
 	
-	gp <- gp + theme_bw() + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), , panel.background=element_rect(fill=rgb(0.95,0.95,0.95,0.95)))
+	gp <- gp + theme_bw() + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.background=element_rect(fill=rgb(0.99,0.99,0.99,0.99)))
 	gp <- gp + theme(legend.position="right",legend.box="vertical",legend.justification="bottom",axis.title.x=element_blank(), axis.title.y=element_blank())
 	# gp + theme(axis.text.x=element_blank(), axis.text.y=element_blank())
 	

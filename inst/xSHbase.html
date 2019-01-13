@@ -17,10 +17,10 @@ supra-hexagonal grid using ggplot2.
 <h3>Usage</h3>
 
 <pre>
-xSHbase(sMap, sBase, colormap = "rainbow_hcl", border.color = "grey",
-legend.title = "", legend.text.size = 6, legend.title.size = 8,
-boundary = F, boundary.color = "black", boundary.type = c("line",
-"point"))
+xSHbase(sMap, sBase = NULL, colormap = "rainbow_hcl",
+border.color = "grey", legend.title = "", legend.text.size = 6,
+legend.title.size = 8, boundary = F, boundary.color = "black",
+boundary.type = c("line", "point"))
 </pre>
 
 
@@ -34,7 +34,7 @@ boundary = F, boundary.color = "black", boundary.type = c("line",
 <tr valign="top"><td><code>sBase</code></td>
 <td>
 <p>an object of class &quot;sBase&quot;. It can be an integer vector
-specifying clusters</p>
+specifying clusters or NULL (map shown without coloring/legend)</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -108,6 +108,8 @@ Anchor Point toolbar (The icon with the segmented line and scissors).
 ## Not run: 
 library(XGR)
 
+gp &lt;- xSHbase(sMap)
+
 gp &lt;- xSHbase(sMap, sBase)
 gp + theme(legend.position="none")
 
@@ -117,7 +119,8 @@ df &lt;- unique(sMap$polygon[,c("index","stepCentroid")]) %&gt;%
 dplyr::arrange(index)
 gp &lt;- xSHbase(sMap, df$stepCentroid, legend.title='Steps')
 # further labelled by hits
-df_coord &lt;- data.frame(sMap$coord, hits=sMap$hits, stringsAsFactors=F)
+df_coord &lt;- data.frame(sMap$coord, hits=sMap$hits,
+index=1:length(sMap$hits), stringsAsFactors=F)
 gp + geom_text(data=df_coord, aes(x,y,label=hits))
 
 # angles to the centroid
@@ -125,6 +128,25 @@ df &lt;- unique(sMap$polygon[,c("index","angleCentroid")]) %&gt;%
 dplyr::arrange(index)
 vec &lt;- ceiling(180*(df$angleCentroid/3.14))
 gp &lt;- xSHbase(sMap, vec, legend.title='Angles')
+
+##################
+# labelled by data
+gp &lt;- xSHbase(sMap)
+# df_output
+df_output &lt;- sWriteData(sMap, data) %&gt;%
+dplyr::group_by(Hexagon_index) %&gt;%
+dplyr::summarise(IDs=paste(ID,collapse="\n"))
+# df_coord
+df_coord &lt;- data.frame(sMap$coord, hits=sMap$hits,
+index=1:length(sMap$hits), stringsAsFactors=F)
+# df_output_coord
+ind &lt;- match(df_output$Hexagon_index, df_coord$index)
+df &lt;- data.frame(df_output, df_coord[ind,])
+gp + geom_point(data=df,aes(x,y,size=hits),alpha=0.1) +
+geom_text(data=df,aes(x,y,label=IDs),size=2)
+gp + geom_point(data=df,aes(x,y,size=hits),alpha=0.1) +
+ggrepel::geom_text_repel(data=df,aes(x,y,label=IDs),size=1.5)
+##################
 
 # add boundary
 gp &lt;- xSHbase(sMap, sBase, boundary=T, colormap="rainbow_hcl")
