@@ -48,6 +48,7 @@ xSHtree <- function(sMap, phylo=NULL, layout=c("rectangular","fan","partition"),
     cnames <- colnames(codebook)
     if(is.null(cnames)){
         cnames <- seq(1,ncol(codebook))
+        colnames(codebook) <- cnames
     }
     
     if(class(phylo)=="phylo"){
@@ -116,7 +117,8 @@ xSHtree <- function(sMap, phylo=NULL, layout=c("rectangular","fan","partition"),
 		if(any(duplicated(tree$node.label))){
 			tree$node.label<-NULL
 		}
-		ig <- as.igraph(tree, directed=T, use.labels=T)
+		ig <- igraph::as.igraph(tree, directed=T, use.labels=T)
+		#eval(parse(text=paste0('ig <- ape::as.igraph(tree, directed=T, use.labels=T)')))
 		
 		# append 'tipid': NA for internal node, sequential order for tips
 		ind <- match(V(ig)$name, tree$tip.label)

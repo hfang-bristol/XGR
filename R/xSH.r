@@ -69,6 +69,7 @@ xSH <- function(sMap, which.components=NULL, customised.comp=NULL, ncolumns=NULL
     cnames <- colnames(codebook)
     if(is.null(cnames)){
         cnames <- seq(1,ncol(codebook))
+        colnames(codebook) <- cnames
     }
    	
    	# customised comp
