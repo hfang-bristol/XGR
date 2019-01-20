@@ -33,6 +33,8 @@ NEW FEATURES
 
     o Add a new function 'xReport' enabling dynamic reports
     
+    o Add a new function 'xME' enabling eQTL analysis
+    
 
 CHANGES IN VERSION 1.1.4
 -----------------------
