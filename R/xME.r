@@ -127,7 +127,8 @@ xME <- function(expression, genotype, GR.Gene, GR.SNP, mode=c('cis','both'), dis
 	gene$fileSkipColumns <- 1
 	gene$fileSliceSize <- 2000
 	suppressMessages(gene$LoadFile(genefile))
-
+	
+	me <- NULL
 	if(mode=='cis'){
 		if(verbose){
 			message(sprintf("3. cis-eQTL analysis: within %d distance window and pvalue < %.1e reported (%s) ...", distance.cis, pvalue.cis, as.character(Sys.time())), appendLF=TRUE)
@@ -148,7 +149,15 @@ xME <- function(expression, genotype, GR.Gene, GR.SNP, mode=c('cis','both'), dis
 			me <- MatrixEQTL::Matrix_eQTL_main(snps=snps, gene=gene, useModel=MatrixEQTL::modelLINEAR, output_file_name=NULL, pvOutputThreshold=pvalue.trans, output_file_name.cis=NULL, pvOutputThreshold.cis=pvalue.cis, snpspos=snpspos, genepos=genepos, cisDist=distance.cis, min.pv.by.genesnp=F, noFDRsaveMemory=F, verbose=F)
 		}
 	}
-
+	
+	if(any(class(me) %in% c("MatrixEQTL"))){
+		if(verbose){
+			message(sprintf("Successfully finish the eQTL analysis (%s)!", as.character(Sys.time())), appendLF=TRUE)
+		}
+		unlink(genefile)
+		unlink(snpfile)
+	}
+	
     ####################################################################################
     endT <- Sys.time()
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
