@@ -4,10 +4,10 @@
 \alias{xME}
 \title{Function to perform eQTL analysis using MatrixEQTL}
 \usage{
-xME(expression, genotype, GR.Gene, GR.SNP, mode = c("cis", "both"),
-distance.cis = 1e+06, pvalue.cis = 0.01, pvalue.trans = 1e-05,
-which.PCs = NULL, mydir = tempdir(check = T), verbose = T,
-silent = F)
+xME(expression, genotype, GR.Gene, GR.SNP, mode = c("cis", "both",
+"none"), distance.cis = 1e+06, pvalue.cis = 0.01,
+pvalue.trans = 1e-05, num.PCs = 0, mydir = tempdir(check = T),
+verbose = T, silent = F)
 }
 \arguments{
 \item{expression}{a data matrix/frame with genes in rows and samples in
@@ -21,7 +21,9 @@ samples in columns}
 \item{GR.SNP}{an GR object storing the genomic regions of SNPs}
 
 \item{mode}{a character specifying the eQTL mode. It can be 'cis' for
-cis-eQTL analysis, 'both' for both cis-eQTL and trans-eQTL analysis}
+cis-eQTL analysis, 'both' for both cis-eQTL and trans-eQTL analysis,
+and 'none' (no eQTL analysis only returning variables actually used for
+eQTL analysis: expression, genotype, GR.Gene and GR.SNP)}
 
 \item{distance.cis}{a distance defining cis-eQTL. By default, it is
 1Mb}
@@ -32,8 +34,8 @@ default, it is 1e-2}
 \item{pvalue.trans}{the p-value threshold outputing the trans-eQTL. By
 default, it is 1e-5}
 
-\item{which.PCs}{a vector specifying which principle components (PCs)
-are used for expression being regressed out. If NULL (by default), no
+\item{num.PCs}{an integer specifying the number of principle components
+(PCs) used for expression being regressed out. If zero (by default), no
 gression is done}
 
 \item{mydir}{a temporary directory file}
@@ -49,7 +51,9 @@ forced to be false}
 a "MatrixEQTL" object, a list including componets 'cis' and 'trans' (if
 mode is 'both'). The 'cis' (or 'trans') contains a data frame 'eqtls'
 with following columns
-("snps","gene","statistic","pvalue","FDR","beta")
+("snps","gene","statistic","pvalue","FDR","beta"). If the mode is
+'none', return a list with four components 'expression', 'genotype',
+'GR.Gene' and 'GR.SNP'
 }
 \description{
 \code{xME} is supposed to perform eQTL analysis using MatrixEQTL.
@@ -61,6 +65,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
+res <- xME(expression, genotype, GR.Gene, GR.SNP, mode='none')
 }
 }
 \seealso{
