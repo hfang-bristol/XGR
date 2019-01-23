@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise eQTL analysis using violin plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xMEplot"><tr><td>xMEplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise eQTL analysis using violin plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xMEplot</code> is supposed to visualise eQTL analysis using violin
+plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xMEplot(gene = 580484, snp = "rs13182119", summary, expression,
+genotype, contexts = c("CD14", "LPS2", "LPS24", "IFN", "Bcell", "NK",
+"Neutrophil", "Monocyte", "shared_CD14", "shared_IFN", "shared_LPS2",
+"shared_LPS24"), colormap = "sci_jco", ncolumns = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>gene</code></td>
+<td>
+<p>an integer specifying ArrayAddress or a character
+specifying a gene symbol (possibly several ArrayAddress queried
+returning a list of ggplot objects)</p>
+</td></tr>
+<tr valign="top"><td><code>snp</code></td>
+<td>
+<p>a dbSNP</p>
+</td></tr>
+<tr valign="top"><td><code>summary</code></td>
+<td>
+<p>a data frame storing eQTL summary statistics. It must
+contain columns 'context', 'gene', 'snps', 'FDR', 'statistic'</p>
+</td></tr>
+<tr valign="top"><td><code>expression</code></td>
+<td>
+<p>a data matrix/frame with genes in rows and samples in
+columns</p>
+</td></tr>
+<tr valign="top"><td><code>genotype</code></td>
+<td>
+<p>a data (sparse) matrix/frame with SNPs in rows and
+samples in columns</p>
+</td></tr>
+<tr valign="top"><td><code>contexts</code></td>
+<td>
+<p>a vector specifying contexts included</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>the colormap (&quot;sci_jco&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>ncolumns</code></td>
+<td>
+<p>an integer specifying the number of columns for
+contexts. By defaul, it is NULL (decided on according to the number of
+contexts that will be visualised)</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object (or a list of ggplot objects)
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xME</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+summary &lt;- xRDataLoader('JK_cohort_xMEdb',
+RData.location=RData.location)
+genotype &lt;- xRDataLoader('JK_cohort_genotype',
+RData.location=RData.location)
+expression &lt;- xRDataLoader('JK_cohort_expression_cis',
+RData.location=RData.location)
+gp &lt;- xMEplot(gene="MED7", snp='rs13182119', summary, expression,
+genotype,
+contexts=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","Monocyte"))
+
+## End(Not run)
+</pre>
+
+
+</body></html>

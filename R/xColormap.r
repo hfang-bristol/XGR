@@ -43,7 +43,7 @@
 #' # 4) return mapped colors
 #' xColormap(colormap="RdYlBu", data=runif(5))
 
-xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu", "brewer.BrBG","brewer.PiYG","brewer.PRGn","brewer.PuOr","brewer.RdBu","brewer.RdGy","brewer.RdYlBu","brewer.RdYlGn","brewer.Spectral", "brewer.Blues","brewer.BuGn","brewer.BuPu","brewer.GnBu","brewer.Greens","brewer.Greys","brewer.Oranges","brewer.OrRd","brewer.PuBu","brewer.PuBuGn","brewer.PuRd","brewer.Purples","brewer.RdPu","brewer.Reds","brewer.YlGn","brewer.YlGnBu","brewer.YlOrBr","brewer.YlOrRd", "rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl", "hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy","hcl_co"), interpolate=c("spline","linear"), data=NULL, zlim=NULL)
+xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm","ggplot2","jet.top","jet.bottom","jet.both","spectral","ggplot2.top","ggplot2.bottom","ggplot2.both","RdYlBu", "brewer.BrBG","brewer.PiYG","brewer.PRGn","brewer.PuOr","brewer.RdBu","brewer.RdGy","brewer.RdYlBu","brewer.RdYlGn","brewer.Spectral", "brewer.Blues","brewer.BuGn","brewer.BuPu","brewer.GnBu","brewer.Greens","brewer.Greys","brewer.Oranges","brewer.OrRd","brewer.PuBu","brewer.PuBuGn","brewer.PuRd","brewer.Purples","brewer.RdPu","brewer.Reds","brewer.YlGn","brewer.YlGnBu","brewer.YlOrBr","brewer.YlOrRd", "rainbow_hcl","heat_hcl","terrain_hcl","diverge_hcl", "hcl_br","hcl_bp","hcl_bb","hcl_gp","hcl_go","hcl_cp","hcl_cy","hcl_co", "sci_jco"), interpolate=c("spline","linear"), data=NULL, zlim=NULL)
 {
 
 	interpolate <- match.arg(interpolate)
@@ -157,6 +157,11 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 		}else if(colormap == "hcl_co"){
 			#via: noquote(paste0(colorspace::diverge_hcl(12,h=c(180,43),c=70,l=c(90,95)),collapse='","'))
 			palette.name <- colorRampPalette(c("#22FDEB","#83FAEC","#AEF7EE","#CBF5EF","#E0F3F0","#EDF1F0","#F2F0EE","#F8ECE5","#FFE8D8","#FFE2C8","#FFDBB3","#FFD49A"), interpolate=interpolate)
+		
+		}else if(colormap == "sci_jco"){
+			#https://cloud.r-project.org/web/packages/ggsci/vignettes/ggsci.html#jco
+			#via: noquote(paste0(ggsci::pal_jco("default",alpha=1)(3),collapse='","'))
+			palette.name <- colorRampPalette(c("#0073C2FF","#EFC000FF","#868686FF"), interpolate=interpolate)
 		
 		}else if(colormap == "heat"){
 			palette.name <- grDevices::heat.colors

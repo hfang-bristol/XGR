@@ -76,7 +76,7 @@ xME <- function(expression, genotype, GR.Gene, GR.SNP, mode=c('cis','both','none
 		
 		if(verbose){
 			message(sprintf("1. Return a list with four components 'expression', 'genotype', 'GR.Gene' and 'GR.SNP' (%s) ...", as.character(Sys.time())), appendLF=TRUE)
-			message(sprintf("\txpression matrix of %d rows/genes X %d columns", nrow(data_expression), ncol(data_expression)), appendLF=TRUE)
+			message(sprintf("\texpression matrix of %d rows/genes X %d columns", nrow(data_expression), ncol(data_expression)), appendLF=TRUE)
 			message(sprintf("\tgenotype matrix of %d rows/SNPs X %d columns", nrow(data_genotype), ncol(data_genotype)), appendLF=TRUE)
 		}
 		
