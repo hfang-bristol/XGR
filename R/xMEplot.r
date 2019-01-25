@@ -32,7 +32,7 @@ xMEplot <- function(gene=580484, snp='rs13182119', summary, expression, genotype
 	## df_summary_all
 	if(class(summary)=='data.frame'){
 		
-		if(class(gene)=='numeric'){
+		if(class(gene)=='integer'){
 			ind <- which(!is.na(match(summary$gene, gene)) & !is.na(match(summary$snps, snp)))
 			df_summary_all <- summary[ind,]
 		}else{
@@ -114,8 +114,9 @@ xMEplot <- function(gene=580484, snp='rs13182119', summary, expression, genotype
 		ylab <- paste0("Expression of ", unique(df_summary$Symbol), " (", unique(df_summary$gene), ")")
 		xlab <- unique(df_summary$snps)
 		#gp <- ggpubr::ggboxplot(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="genotype", palette ="jco", add=c("jitter","dotplot")[2], add.params=list(binwidth=0.1, dotsize=0.2))
-		gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add=c("median_iqr","boxplot")[1], add.params=list(size=0.2))
-		
+		#gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add=c("median_iqr","boxplot")[1], add.params=list(size=0.2))
+		gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add="boxplot", add.params=list(size=0.3,width=0.1,fill='transparent',color="direction"))
+
 		if(is.null(ncolumns)){
 			ncolumns <- ceiling(sqrt(length(levels(df_output$strip))))
 		}		
@@ -124,10 +125,10 @@ xMEplot <- function(gene=580484, snp='rs13182119', summary, expression, genotype
 		values <- xColormap(colormap)(length(levels(df_output$direction)))
 		names(values) <- levels(df_output$direction)
 		gp <- gp + scale_colour_manual(values=values, guide=guide_legend(title="Direction",keywidth=0.7,keyheight=0.7))
-		gp <- gp + theme(axis.text.y=element_text(size=7,color="black"), 
-	axis.title.y=element_text(size=9,color="black"), 
-	axis.text.x=element_text(size=7,color="black"), 
-	axis.title.x=element_text(size=9,color="black"), panel.background=element_rect(fill="grey99")) + theme(strip.background=element_rect(fill="grey95",color="black"), strip.text=element_text(size=8))
+		gp <- gp + theme(axis.text.y=element_text(size=8,color="black"), 
+	axis.title.y=element_text(size=10,color="black"), 
+	axis.text.x=element_text(size=8,color="black"), 
+	axis.title.x=element_text(size=10,color="black"), panel.background=element_rect(fill="grey99")) + theme(strip.background=element_rect(fill="grey95",color="black"), strip.text=element_text(size=9))
 	})
 	
 	if(length(ls_gp)==1){
