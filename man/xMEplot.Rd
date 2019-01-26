@@ -47,6 +47,7 @@ none
 \dontrun{
 # Load the library
 library(XGR)
+library(ggpubr)
 summary <- xRDataLoader('JK_cohort_xMEdb',
 RData.location=RData.location)
 genotype <- xRDataLoader('JK_cohort_genotype',

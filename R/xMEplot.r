@@ -20,6 +20,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
+#' library(ggpubr)
 #' summary <- xRDataLoader('JK_cohort_xMEdb', RData.location=RData.location)
 #' genotype <- xRDataLoader('JK_cohort_genotype', RData.location=RData.location)
 #' expression <- xRDataLoader('JK_cohort_expression_cis', RData.location=RData.location)
@@ -105,7 +106,7 @@ xMEplot <- function(gene=580484, snp='rs13182119', summary, expression, genotype
 		df_output$id <- as.numeric(factor(df_output$context,vec_context))
 		df_output <- df_output %>% dplyr::arrange(id)
 		#### strip labelling
-		df_output$strip <- ifelse(df_output$FDR=='ns', df_output$context, paste0(df_output$context, ' (FDR ', df_output$FDR, ')'))
+		df_output$strip <- ifelse(df_output$FDR=='ns', df_output$context, paste0(df_output$context, '\n(FDR ', df_output$FDR, ')'))
 		df_output$strip <- factor(df_output$strip, unique(df_output$strip))
 
 		## ggviolin plot
@@ -114,9 +115,11 @@ xMEplot <- function(gene=580484, snp='rs13182119', summary, expression, genotype
 		ylab <- paste0("Expression of ", unique(df_summary$Symbol), " (", unique(df_summary$gene), ")")
 		xlab <- unique(df_summary$snps)
 		#gp <- ggpubr::ggboxplot(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="genotype", palette ="jco", add=c("jitter","dotplot")[2], add.params=list(binwidth=0.1, dotsize=0.2))
-		#gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add=c("median_iqr","boxplot")[1], add.params=list(size=0.2))
-		gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add="boxplot", add.params=list(size=0.3,width=0.1,fill='transparent',color="direction"))
-
+		#gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add=c("median_iqr","boxplot","jitter")[1], add.params=list(size=0.2))
+		#gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add="boxplot", add.params=list(size=0.3,width=0.1,fill='transparent',color="direction"))
+		
+		gp <- ggpubr::ggviolin(df_output, x="genotype", y="val", xlab=xlab, ylab=ylab, color="direction", palette="jco", add=c("median_iqr","boxplot","jitter")[1], add.params=list(size=0.3))
+		
 		if(is.null(ncolumns)){
 			ncolumns <- ceiling(sqrt(length(levels(df_output$strip))))
 		}		
