@@ -33,7 +33,7 @@ NEW FEATURES
 
     o Add a new function 'xReport' enabling dynamic reports
     
-    o Add new functions ('xME','xMEplot') enabling eQTL analysis and visualisation
+    o Add new functions ('xME','xMEplot','xMEbesd') enabling eQTL and its downstream analysis
     
 
 CHANGES IN VERSION 1.1.4

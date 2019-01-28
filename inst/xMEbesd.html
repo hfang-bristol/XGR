@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to store eQTL summary data in the BESD format</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xMEbesd"><tr><td>xMEbesd</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to store eQTL summary data in the BESD format</h2>
+
+<h3>Description</h3>
+
+<p><code>xMEbesd</code> is supposed to store eQTL summary data in the BESD
+format ready for the use in SMR.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xMEbesd(summary, contexts = c("CD14", "LPS2", "LPS24", "IFN", "Bcell",
+"NK", "Neutrophil", "Monocyte", "Blood", "CD4", "CD8", "shared_CD14",
+"shared_IFN", "shared_LPS2", "shared_LPS24"), outdir = ".",
+verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>summary</code></td>
+<td>
+<p>a data frame storing eQTL summary statistics. It must
+contain columns 'context', and columns
+('snp_cse','snps','effect_allele','other_allele','effect_maf') for the
+esi file, and columns ('gene_cse','gene','Symbol') for the epi file,
+and columns ('snps','gene','beta','statistic','pvalue','FDR') for the
+besd file</p>
+</td></tr>
+<tr valign="top"><td><code>contexts</code></td>
+<td>
+<p>a vector specifying contexts included</p>
+</td></tr>
+<tr valign="top"><td><code>outdir</code></td>
+<td>
+<p>the output directory. By default it is '.'</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to TRUE for display</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a logical vector
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function requires the software 'smr' at
+<a href="http://cnsgenomics.com/software/smr">http://cnsgenomics.com/software/smr</a>. Shell command lines in
+Terminal (Mac and Linux) are:
+</p>
+
+<ul>
+<li><p>1a) Mac: <code>wget
+http://cnsgenomics.com/software/smr/download/smr_Mac.zip &amp;&amp; unzip
+smr_Mac.zip &amp;&amp; mv smr_Mac ~/smr</code>
+</p>
+</li>
+<li><p>1b) Linux: <code>wget
+https://cnsgenomics.com/software/smr/download/smr_Linux.zip &amp;&amp; unzip
+smr_Linux.zip &amp;&amp; mv smr_Linux ~/smr</code>
+</p>
+</li>
+<li><p>2a) # Assuming a ROOT (sudo) privilege: <br /><code>sudo cp ~/smr
+/usr/local/bin</code>
+</p>
+</li>
+<li><p>2b) # Assuming without ROOT (sudo) privilege and adding the
+system PATH variable to your ~/.bash_profile file: <br /><code>export
+PATH=$HOME:$PATH</code>
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xMEbesd</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+summary &lt;- xRDataLoader('JK_cohort_xMEdb',
+RData.location=RData.location)
+xMEbesd(summary, contexts="CD14", outdir="Pi_eQTL_hg19")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
