@@ -1,6 +1,6 @@
-#' Function to generate a graphml file from a pathway upon query
+#' Function to generate a html-formatted report
 #'
-#' \code{xReport} is supposed to generate a graphml file from a pathway upon query. If data is provided, pathway gene members are color-coded.
+#' \code{xReport} is supposed to generate a html-formatted report.
 #'
 #' @param obj an R object. Usually a S3-class object storing results such as an 'eTerm' object 
 #' @param rmd the R markdown file. If NULL, the pre-prepared one in the directory 'inst/DynamicReport' of the XGR package will be used

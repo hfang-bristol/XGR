@@ -2,7 +2,7 @@
 % Please edit documentation in R/xReport.r
 \name{xReport}
 \alias{xReport}
-\title{Function to generate a graphml file from a pathway upon query}
+\title{Function to generate a html-formatted report}
 \usage{
 xReport(obj, rmd = NULL, output_format = NULL, output_file = NULL,
 output_dir = NULL, quiet = T, verbose = T, ...)
@@ -37,8 +37,7 @@ displayed in the screen. By default, it sets to false for no display}
 the message on the rendered output file and directory.
 }
 \description{
-\code{xReport} is supposed to generate a graphml file from a pathway
-upon query. If data is provided, pathway gene members are color-coded.
+\code{xReport} is supposed to generate a html-formatted report.
 }
 \note{
 none
