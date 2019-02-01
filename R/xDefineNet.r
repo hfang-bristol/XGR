@@ -86,6 +86,15 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 			colnames(relations) <- c("from","to")
 			relations$weight <- rep(1, nrow(relations))
 		}
+		
+		######################################
+		# remove interaction between HLA genes
+		if(0){
+			ind <- which(!(grepl('HLA-',relations$from) & grepl('HLA-',relations$to)))
+			relations <- relations[ind,]
+		}
+		######################################
+		
 		## do removal for node extraction (without 'name'; otherwise failed to do so using the function 'igraph::get.data.frame')
 		g <- igraph::delete_vertex_attr(g, "name")
 		g <- igraph::delete_vertex_attr(g, "seqid")
@@ -144,6 +153,14 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
     	g <- igraph::delete_vertex_attr(g, "Symbol")
     	E(g)$weight <- 1
     	
+		######################################
+		# remove HLA genes
+		if(1){
+			v <- V(g)[grepl('HLA-',V(g)$name)]
+			g <- delete_vertices(g, v)
+		}
+		######################################
+    	
     }else if(length(grep('KEGG_',network,perl=TRUE)) > 0){
     	ls_ig <- xRDataLoader(RData.customised='ig.KEGG.mergedCategory', RData.location=RData.location, verbose=verbose)
 		if(network=='KEGG_metabolism'){
@@ -163,6 +180,14 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
     	g <- igraph::delete_vertex_attr(g, "GeneID")
     	g <- igraph::delete_vertex_attr(g, "Symbol")
     	E(g)$weight <- 1
+
+		######################################
+		# remove HLA genes
+		if(1){
+			v <- V(g)[grepl('HLA-',V(g)$name)]
+			g <- delete_vertices(g, v)
+		}
+		######################################
 
     }else if(network=='REACTOME'){
     	g <- xRDataLoader(RData.customised='ig.REACTOME.merged', RData.location=RData.location, verbose=verbose)
