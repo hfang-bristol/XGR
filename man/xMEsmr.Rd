@@ -16,7 +16,7 @@ p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
 'snp', 'effect allele' (the allele assessed), 'other allele', 'freq'
 (frequency of the effect allele; not essential unless 'freq.check' is
 true), 'b' (effect size for the allele assessed; log(odds ratio) for a
-case-control study), 'se' (standard error), 'p' (p-value) adn 'n'
+case-control study), 'se' (standard error), 'p' (p-value) and 'n'
 (sample size; not required)}
 
 \item{beqtl.summary}{a character specifying where to find eQTL summary

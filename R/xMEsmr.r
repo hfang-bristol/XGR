@@ -2,7 +2,7 @@
 #'
 #' \code{xMEsmr} is supposed to conduct conduct Summary-data-based Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data.
 #'
-#' @param gwas.summary an input GWAS summary data file, containing columns 'snp', 'effect allele' (the allele assessed), 'other allele', 'freq' (frequency of the effect allele; not essential unless 'freq.check' is true), 'b' (effect size for the allele assessed; log(odds ratio) for a case-control study), 'se' (standard error), 'p' (p-value) adn 'n' (sample size; not required)
+#' @param gwas.summary an input GWAS summary data file, containing columns 'snp', 'effect allele' (the allele assessed), 'other allele', 'freq' (frequency of the effect allele; not essential unless 'freq.check' is true), 'b' (effect size for the allele assessed; log(odds ratio) for a case-control study), 'se' (standard error), 'p' (p-value) and 'n' (sample size; not required)
 #' @param beqtl.summary a character specifying where to find eQTL summary data files in the BESD format containing three files (.esi for SNP information, .epi for probe information, and .besd for eQTL summary statistics)
 #' @param bfile a character specifying where to find the LD reference data containing three files (.bed, .bim, and .fam)
 #' @param mode a character specifying the SMR and HEIDI test mode. It can be 'cis' for the test in cis regions, 'trans' for the test in trans regions, and 'both' for both regions
@@ -132,14 +132,18 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     file_cis <- paste0(my_cis,".smr")
     if(file.exists(file_cis)){
     	df_cis <- utils::read.delim(file=file_cis, header=T, row.names=NULL, stringsAsFactors=F)
-    	df_cis$mode <- 'cis'
+    	if(nrow(df_cis)>0){
+    		df_cis$mode <- 'cis'
+    	}
     }
     df_trans <- NULL
     file_trans <- paste0(my_trans,".smr")
     if(file.exists(file_trans)){
     	df_trans <- utils::read.delim(file=file_trans, header=T, row.names=NULL, stringsAsFactors=F)
-    	df_trans <- df_trans[,c(-5,-6,-7)]
-    	df_trans$mode <- 'trans'
+    	if(nrow(df_trans)>0){
+			df_trans <- df_trans[,c(-5,-6,-7)]
+			df_trans$mode <- 'trans'
+		}
     }
     df_res <- do.call(rbind, list(df_cis, df_trans))
     ###################
@@ -152,6 +156,13 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     })
     df_output <- do.call(rbind, ls_df)
     
+    #########
+    if(Sys.info()['sysname']=='Linux'){
+		#bug found in smr_Linux (wrapped columns 'se_GWAS' and 'p_GWAS')
+		df_output$p_GWAS <- df_output$se_GWAS
+    }
+    #########
+        
     df_output <- df_output[,c('mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','p_HEIDI','fdr_HEIDI','nsnp_HEIDI')]
     rownames(df_output) <- NULL
     
