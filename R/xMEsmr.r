@@ -1,26 +1,33 @@
-#' Function to conduct colocalisation analysis through SMR
+#' Function to conduct colocalisation analysis through SMR integrating GWAS and eQTL summary data
 #'
-#' \code{xMEsmr} is supposed to conduct conduct Summary-data-based Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data.
+#' \code{xMEsmr} is supposed to conduct Summary-data-based Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data.
 #'
 #' @param gwas.summary an input GWAS summary data file, containing columns 'snp', 'effect allele' (the allele assessed), 'other allele', 'freq' (frequency of the effect allele; not essential unless 'freq.check' is true), 'b' (effect size for the allele assessed; log(odds ratio) for a case-control study), 'se' (standard error), 'p' (p-value) and 'n' (sample size; not required)
 #' @param beqtl.summary a character specifying where to find eQTL summary data files in the BESD format containing three files (.esi for SNP information, .epi for probe information, and .besd for eQTL summary statistics)
-#' @param bfile a character specifying where to find the LD reference data containing three files (.bed, .bim, and .fam)
 #' @param mode a character specifying the SMR and HEIDI test mode. It can be 'cis' for the test in cis regions, 'trans' for the test in trans regions, and 'both' for both regions
 #' @param peqtl eQTL p-value threshold for selecting a probe (with the top associated eQTL passing a p-value threshold) for the SMR test. In other words, a probe with the top associated eQTL not passing this threshold will be removed for the test. By default, it is 5e-8
 #' @param window.cis an integer specifying a window centred around the probe to select cis-eQTLs (passing a p-value threshold) for the SMR test. The default value is 1000Kb
 #' @param window.trans an integer specifying a window centred around the top associated trans-eQTL to select trans-eQTLs (passing a p-value threshold) for the SMR and HEIDI test. The default value is 1000Kb
 #' @param heidi logical to indicate whether the HEIDI test is enabled. By default it is true
+#' @param bfile a character specifying where to find the LD reference data containing three files (.bed, .bim, and .fam). Required if heidi test is enabled (see above)
 #' @param heidi.peqtl eQTL p-value threshold for selecting eQTLs per probe for the HEIDI test. The default value is 1.57e-3 (a chi-squared value 10 with df=1)
 #' @param heidi.ld LD r2 threshold used to further prune SNPs (eQTLs) in the HEIDI test. By default only those between 0.05 and 0.9 will be used for the test
 #' @param heidi.num the number of SNPs (eQTLs) left per probe in the HEIDI test. By default, the test skipped if the number of remaining SNPs is less than 3; and top 20 SNPs (ranked by eQTL p-value) will be used in the test
 #' @param freq.check logical to indicate whether to remove SNPs withe discrepant allele frequencies between data sets. By default it is disabled
 #' @param thread.num an integer specifying the number of OpenMP threads for parallel computing. By default it is 1
 #' @param p.adjust.method the method used to adjust p-values. It can be one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The first two methods "BH" (widely used) and "BY" control the false discovery rate (FDR: the expected proportion of false discoveries amongst the rejected hypotheses); the last four methods "bonferroni", "holm", "hochberg" and "hommel" are designed to give strong control of the family-wise error rate (FWER). Notes: FDR is a less stringent condition than FWER
+#' @param clear logical to indicate whether the temporary and log files are cleared up. By default, it sets to TRUE
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @return 
-#' a data frame with following columns ("mode", "probeID", "Gene", "ProbeChr", "Probe_bp", "topSNP", "topSNP_chr", "topSNP_bp", "A1", "A2", "b_GWAS", "b_eQTL", "b_SMR", "p_GWAS", "p_eQTL", "p_SMR", "fdr_SMR", "p_HEIDI", "fdr_HEIDI", "nsnp_HEIDI")
-#' @note None
+#' a data frame with following columns ("mode", "probeID", "Gene", "ProbeChr", "Probe_bp", "topSNP", "topSNP_chr", "topSNP_bp", "A1", "A2", "b_GWAS", "b_eQTL", "b_SMR", "p_GWAS", "p_eQTL", "p_SMR", "fdr_SMR") and, if heidi teste enabled, columns ("p_HEIDI", "fdr_HEIDI", "nsnp_HEIDI")
+#' @note This function requires the software 'smr' at \url{http://cnsgenomics.com/software/smr}. Shell command lines in Terminal (Mac and Linux) are:
+#' \itemize{
+#' \item{1a) Mac: \code{wget http://cnsgenomics.com/software/smr/download/smr_Mac.zip && unzip smr_Mac.zip && mv smr_Mac ~/smr}}
+#' \item{1b) Linux: \code{wget https://cnsgenomics.com/software/smr/download/smr_Linux.zip && unzip smr_Linux.zip && mv smr_Linux ~/smr}}
+#' \item{2a) # Assuming a ROOT (sudo) privilege: \cr\code{sudo cp ~/smr /usr/local/bin}}
+#' \item{2b) # Assuming without ROOT (sudo) privilege and adding the system PATH variable to your ~/.bash_profile file: \cr\code{export PATH=$HOME:$PATH}}
+#' }
 #' @export
 #' @seealso \code{\link{xMEsmr}}
 #' @include xMEsmr.r
@@ -29,14 +36,20 @@
 #' # Load the library
 #' library(XGR)
 #' 
-#' bfile <- "~/Sites/SVN/github/bigdata_dev/Merged_EUR"
-#' beqtl.summary <- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Neutrophil"
-#' gwas.summary <- "summary_gwas.txt"
+#' gwas.summary <- "summary_gwas.RA.txt"
+#' beqtl.summary <- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Blood"
+#' 
+#' # only SMR test
+#' df_output <- xMEsmr(gwas.summary, beqtl.summary, heidi=F)
+#' utils::write.table(df_output, file="df_output.txt", row.names=F, col.names=T, quote=F, sep="\t")
+#' 
+#' # also heidi test
+#' bfile <- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Merged_EUR"
 #' df_output <- xMEsmr(gwas.summary, beqtl.summary, bfile)
 #' utils::write.table(df_output, file="df_output.txt", row.names=F, col.names=T, quote=F, sep="\t")
 #' }
 
-xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","trans"), peqtl=5e-8, window.cis=1000, window.trans=1000, heidi=T, heidi.peqtl=1.57e-3, heidi.ld=c(0.05,0.9), heidi.num=c(3,20), freq.check=F, thread.num=1, p.adjust.method=c("BH","BY","bonferroni","holm","hochberg","hommel"), verbose=T, silent=FALSE)
+xMEsmr <- function(gwas.summary, beqtl.summary, mode=c("both","cis","trans"), peqtl=5e-8, window.cis=1000, window.trans=1000, heidi=T, bfile=NULL, heidi.peqtl=1.57e-3, heidi.ld=c(0.05,0.9), heidi.num=c(3,20), freq.check=F, thread.num=1, p.adjust.method=c("BH","BY","bonferroni","holm","hochberg","hommel"), clear=T, verbose=T, silent=FALSE)
 {
     startT <- Sys.time()
     if(!silent){
@@ -53,15 +66,16 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     p.adjust.method <- match.arg(p.adjust.method)
     
     ############
-    ## bfile
-    vec <- paste0(bfile, c('.bed','.fam','.bim'))
-    if(any(!file.exists(vec))){
-		if(verbose){
-			message(sprintf("The bfile '%s' not found (%s)!", bfile, as.character(Sys.time())), appendLF=T)
+    if(heidi){
+		## bfile
+		vec <- paste0(bfile, c('.bed','.fam','.bim'))
+		if(any(!file.exists(vec))){
+			if(verbose){
+				message(sprintf("The bfile '%s' not found (%s)!", bfile, as.character(Sys.time())), appendLF=T)
+			}
+			return(NULL)
 		}
-		return(NULL)
     }
-    
     ############
     ## beqtl.summary
     vec <- paste0(beqtl.summary, c('.besd','.esi','.epi'))
@@ -75,21 +89,25 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     ############
     # random numbers derived from time stamps
 	tempnum <- gsub('\\.*', '', as.character(as.numeric(Sys.time())))
-	my_cis <- paste0(tempnum,'_cis')
-	my_trans <- paste0(tempnum,'_trans')
+	smr_cis <- paste0(tempnum,'_cis')
+	smr_trans <- paste0(tempnum,'_trans')
     ############
-        
-    cmd <- paste0("smr --bfile ", bfile, " --gwas-summary ", gwas.summary, " --beqtl-summary ", beqtl.summary, " --peqtl-smr ", peqtl, " --ld-lower-limit ", heidi.ld[1], " --ld-upper-limit ", heidi.ld[2], " --peqtl-heidi ", heidi.peqtl, " --heidi-min-m ", heidi.num[1], " --heidi-max-m ", heidi.num[2], " --thread-num ", thread.num)
+    
+    #cmd <- paste0("smr --bfile ", bfile, " --gwas-summary ", gwas.summary, " --beqtl-summary ", beqtl.summary, " --peqtl-smr ", peqtl, " --ld-lower-limit ", heidi.ld[1], " --ld-upper-limit ", heidi.ld[2], " --peqtl-heidi ", heidi.peqtl, " --heidi-min-m ", heidi.num[1], " --heidi-max-m ", heidi.num[2], " --thread-num ", thread.num)
+    cmd <- paste0("smr --gwas-summary ", gwas.summary, " --beqtl-summary ", beqtl.summary, " --peqtl-smr ", peqtl, " --ld-lower-limit ", heidi.ld[1], " --ld-upper-limit ", heidi.ld[2], " --peqtl-heidi ", heidi.peqtl, " --heidi-min-m ", heidi.num[1], " --heidi-max-m ", heidi.num[2], " --thread-num ", thread.num)
     
     if(mode %in% c('cis','both')){
     	cmd_cis <- paste0(cmd, " --cis-wind ", window.cis)
     	if(!heidi){
     		cmd_cis <- paste0(cmd_cis, " --heidi-off ")
+    	}else{
+    		cmd_cis <- paste0(cmd_cis, " --bfile  ", bfile)
     	}
+    	
     	if(!freq.check){
     		cmd_cis <- paste0(cmd_cis, " --disable-freq-ck ")
     	}
-		cmd_cis <- paste0(cmd_cis, " --out ", my_cis, " > my_cis.log")
+		cmd_cis <- paste0(cmd_cis, " --out ", smr_cis, " > smr_cis.log")
 		
 		if(verbose){
 			message(sprintf("cis mode ... (%s)", as.character(Sys.time())), appendLF=TRUE)
@@ -108,11 +126,15 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     	cmd_trans <- paste0(cmd, " --trans --trans-wind ", window.trans)
     	if(!heidi){
     		cmd_trans <- paste0(cmd_trans, " --heidi-off ")
+    	}else{
+    		cmd_trans <- paste0(cmd_trans, " --bfile  ", bfile)
     	}
+    	
+    	
     	if(!freq.check){
     		cmd_trans <- paste0(cmd_trans, " --disable-freq-ck ")
     	}
-		cmd_trans <- paste0(cmd_trans, " --out ", my_trans, " > my_trans.log")
+		cmd_trans <- paste0(cmd_trans, " --out ", smr_trans, " > smr_trans.log")
 		
 		if(verbose){
 			message(sprintf("trans mode ... (%s)", as.character(Sys.time())), appendLF=TRUE)
@@ -129,20 +151,33 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     
     ###################
     df_cis <- NULL
-    file_cis <- paste0(my_cis,".smr")
+    file_cis <- paste0(smr_cis,".smr")
     if(file.exists(file_cis)){
     	df_cis <- utils::read.delim(file=file_cis, header=T, row.names=NULL, stringsAsFactors=F)
     	if(nrow(df_cis)>0){
     		df_cis$mode <- 'cis'
     	}
+		if(clear){
+			## remove file_cis
+			unlink(file_cis)
+			## remove smr_cis.log
+			unlink("smr_cis.log")
+		}
     }
+    
     df_trans <- NULL
-    file_trans <- paste0(my_trans,".smr")
+    file_trans <- paste0(smr_trans,".smr")
     if(file.exists(file_trans)){
     	df_trans <- utils::read.delim(file=file_trans, header=T, row.names=NULL, stringsAsFactors=F)
     	if(nrow(df_trans)>0){
 			df_trans <- df_trans[,c(-5,-6,-7)]
 			df_trans$mode <- 'trans'
+		}
+		if(clear){
+			## remove file_trans
+			unlink(file_trans)
+			## remove smr_trans.log
+			unlink("smr_trans.log")
 		}
     }
     df_res <- do.call(rbind, list(df_cis, df_trans))
@@ -157,13 +192,17 @@ xMEsmr <- function(gwas.summary, beqtl.summary, bfile, mode=c("both","cis","tran
     df_output <- do.call(rbind, ls_df)
     
     #########
-    if(Sys.info()['sysname']=='Linux'){
+    if(Sys.info()['sysname'] %in% c('Linux','Darwin')){
 		#bug found in smr_Linux (wrapped columns 'se_GWAS' and 'p_GWAS')
 		df_output$p_GWAS <- df_output$se_GWAS
     }
     #########
-        
-    df_output <- df_output[,c('mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','p_HEIDI','fdr_HEIDI','nsnp_HEIDI')]
+    
+    if(heidi){
+    	df_output <- df_output[,c('mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','p_HEIDI','fdr_HEIDI','nsnp_HEIDI')]
+    }else{
+    	df_output <- df_output[,c('mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')]
+    }
     rownames(df_output) <- NULL
     
     p_SMR <- p_GWAS <- NULL

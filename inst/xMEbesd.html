@@ -20,7 +20,7 @@ format ready for the use in SMR.
 xMEbesd(summary, contexts = c("CD14", "LPS2", "LPS24", "IFN", "Bcell",
 "NK", "Neutrophil", "Monocyte", "Blood", "CD4", "CD8", "shared_CD14",
 "shared_IFN", "shared_LPS2", "shared_LPS24"), outdir = ".",
-verbose = T)
+clear = T, verbose = T)
 </pre>
 
 
@@ -43,6 +43,11 @@ besd file</p>
 <tr valign="top"><td><code>outdir</code></td>
 <td>
 <p>the output directory. By default it is '.'</p>
+</td></tr>
+<tr valign="top"><td><code>clear</code></td>
+<td>
+<p>logical to indicate whether the temporary and log files
+are cleared up. By default, it sets to TRUE</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

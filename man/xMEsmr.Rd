@@ -2,14 +2,14 @@
 % Please edit documentation in R/xMEsmr.r
 \name{xMEsmr}
 \alias{xMEsmr}
-\title{Function to conduct colocalisation analysis through SMR}
+\title{Function to conduct colocalisation analysis through SMR integrating GWAS and eQTL summary data}
 \usage{
-xMEsmr(gwas.summary, beqtl.summary, bfile, mode = c("both", "cis",
-"trans"), peqtl = 5e-08, window.cis = 1000, window.trans = 1000,
-heidi = T, heidi.peqtl = 0.00157, heidi.ld = c(0.05, 0.9),
+xMEsmr(gwas.summary, beqtl.summary, mode = c("both", "cis", "trans"),
+peqtl = 5e-08, window.cis = 1000, window.trans = 1000, heidi = T,
+bfile = NULL, heidi.peqtl = 0.00157, heidi.ld = c(0.05, 0.9),
 heidi.num = c(3, 20), freq.check = F, thread.num = 1,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"), verbose = T, silent = FALSE)
+"hommel"), clear = T, verbose = T, silent = FALSE)
 }
 \arguments{
 \item{gwas.summary}{an input GWAS summary data file, containing columns
@@ -23,9 +23,6 @@ case-control study), 'se' (standard error), 'p' (p-value) and 'n'
 data files in the BESD format containing three files (.esi for SNP
 information, .epi for probe information, and .besd for eQTL summary
 statistics)}
-
-\item{bfile}{a character specifying where to find the LD reference data
-containing three files (.bed, .bim, and .fam)}
 
 \item{mode}{a character specifying the SMR and HEIDI test mode. It can
 be 'cis' for the test in cis regions, 'trans' for the test in trans
@@ -46,6 +43,10 @@ threshold) for the SMR and HEIDI test. The default value is 1000Kb}
 
 \item{heidi}{logical to indicate whether the HEIDI test is enabled. By
 default it is true}
+
+\item{bfile}{a character specifying where to find the LD reference data
+containing three files (.bed, .bim, and .fam). Required if heidi test
+is enabled (see above)}
 
 \item{heidi.peqtl}{eQTL p-value threshold for selecting eQTLs per probe
 for the HEIDI test. The default value is 1.57e-3 (a chi-squared value
@@ -76,6 +77,9 @@ amongst the rejected hypotheses); the last four methods "bonferroni",
 the family-wise error rate (FWER). Notes: FDR is a less stringent
 condition than FWER}
 
+\item{clear}{logical to indicate whether the temporary and log files
+are cleared up. By default, it sets to TRUE}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
 
@@ -87,24 +91,46 @@ forced to be false}
 a data frame with following columns ("mode", "probeID", "Gene",
 "ProbeChr", "Probe_bp", "topSNP", "topSNP_chr", "topSNP_bp", "A1",
 "A2", "b_GWAS", "b_eQTL", "b_SMR", "p_GWAS", "p_eQTL", "p_SMR",
-"fdr_SMR", "p_HEIDI", "fdr_HEIDI", "nsnp_HEIDI")
+"fdr_SMR") and, if heidi teste enabled, columns ("p_HEIDI",
+"fdr_HEIDI", "nsnp_HEIDI")
 }
 \description{
-\code{xMEsmr} is supposed to conduct conduct Summary-data-based
-Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data.
+\code{xMEsmr} is supposed to conduct Summary-data-based Mendelian
+Randomisation (SMR) integrating GWAS and eQTL summary data.
 }
 \note{
-None
+This function requires the software 'smr' at
+\url{http://cnsgenomics.com/software/smr}. Shell command lines in
+Terminal (Mac and Linux) are:
+\itemize{
+\item{1a) Mac: \code{wget
+http://cnsgenomics.com/software/smr/download/smr_Mac.zip && unzip
+smr_Mac.zip && mv smr_Mac ~/smr}}
+\item{1b) Linux: \code{wget
+https://cnsgenomics.com/software/smr/download/smr_Linux.zip && unzip
+smr_Linux.zip && mv smr_Linux ~/smr}}
+\item{2a) # Assuming a ROOT (sudo) privilege: \cr\code{sudo cp ~/smr
+/usr/local/bin}}
+\item{2b) # Assuming without ROOT (sudo) privilege and adding the
+system PATH variable to your ~/.bash_profile file: \cr\code{export
+PATH=$HOME:$PATH}}
+}
 }
 \examples{
 \dontrun{
 # Load the library
 library(XGR)
 
-bfile <- "~/Sites/SVN/github/bigdata_dev/Merged_EUR"
-beqtl.summary <-
-"~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Neutrophil"
-gwas.summary <- "summary_gwas.txt"
+gwas.summary <- "summary_gwas.RA.txt"
+beqtl.summary <- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Blood"
+
+# only SMR test
+df_output <- xMEsmr(gwas.summary, beqtl.summary, heidi=F)
+utils::write.table(df_output, file="df_output.txt", row.names=F,
+col.names=T, quote=F, sep="\\t")
+
+# also heidi test
+bfile <- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Merged_EUR"
 df_output <- xMEsmr(gwas.summary, beqtl.summary, bfile)
 utils::write.table(df_output, file="df_output.txt", row.names=F,
 col.names=T, quote=F, sep="\\t")

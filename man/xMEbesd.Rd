@@ -7,7 +7,7 @@
 xMEbesd(summary, contexts = c("CD14", "LPS2", "LPS24", "IFN", "Bcell",
 "NK", "Neutrophil", "Monocyte", "Blood", "CD4", "CD8", "shared_CD14",
 "shared_IFN", "shared_LPS2", "shared_LPS24"), outdir = ".",
-verbose = T)
+clear = T, verbose = T)
 }
 \arguments{
 \item{summary}{a data frame storing eQTL summary statistics. It must
@@ -20,6 +20,9 @@ besd file}
 \item{contexts}{a vector specifying contexts included}
 
 \item{outdir}{the output directory. By default it is '.'}
+
+\item{clear}{logical to indicate whether the temporary and log files
+are cleared up. By default, it sets to TRUE}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display}

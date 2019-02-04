@@ -5,6 +5,7 @@
 #' @param summary a data frame storing eQTL summary statistics. It must contain columns 'context', and columns ('snp_cse','snps','effect_allele','other_allele','effect_maf') for the esi file, and columns ('gene_cse','gene','Symbol') for the epi file, and columns ('snps','gene','beta','statistic','pvalue','FDR') for the besd file
 #' @param contexts a vector specifying contexts included
 #' @param outdir the output directory. By default it is '.'
+#' @param clear logical to indicate whether the temporary and log files are cleared up. By default, it sets to TRUE
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
 #' @return
 #' a logical vector
@@ -26,7 +27,7 @@
 #' xMEbesd(summary, contexts="CD14", outdir="Pi_eQTL_hg19")
 #' }
 
-xMEbesd <- function(summary, contexts=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","Monocyte","Blood","CD4","CD8","shared_CD14","shared_IFN","shared_LPS2","shared_LPS24"), outdir=".", verbose=T)
+xMEbesd <- function(summary, contexts=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","Monocyte","Blood","CD4","CD8","shared_CD14","shared_IFN","shared_LPS2","shared_LPS24"), outdir=".", clear=T, verbose=T)
 {
 	
 	## check the folder and create it if not exist
@@ -202,7 +203,7 @@ xMEbesd <- function(summary, contexts=c("CD14","LPS2","LPS24","IFN","Bcell","NK"
 					## remove *.bak.epi
 					unlink(file.path(outdir, paste0(context,'.bak.epi')))
 					##################################
-					if(1){
+					if(clear){
 						## remove *.esi.txt
 						unlink(output_esi)
 						## remove *.epi.txt
@@ -211,7 +212,7 @@ xMEbesd <- function(summary, contexts=c("CD14","LPS2","LPS24","IFN","Bcell","NK"
 						unlink(output_me)
 					}
 					
-					if(1){
+					if(clear){
 						## remove esi.log
 						unlink('esi.log')
 						## remove epi.log

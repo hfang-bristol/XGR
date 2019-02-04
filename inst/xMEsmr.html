@@ -1,28 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct colocalisation analysis through SMR</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct colocalisation analysis through SMR...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xMEsmr"><tr><td>xMEsmr</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct colocalisation analysis through SMR</h2>
+<h2>Function to conduct colocalisation analysis through SMR integrating GWAS and eQTL summary data</h2>
 
 <h3>Description</h3>
 
-<p><code>xMEsmr</code> is supposed to conduct conduct Summary-data-based
-Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data.
+<p><code>xMEsmr</code> is supposed to conduct Summary-data-based Mendelian
+Randomisation (SMR) integrating GWAS and eQTL summary data.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xMEsmr(gwas.summary, beqtl.summary, bfile, mode = c("both", "cis",
-"trans"), peqtl = 5e-08, window.cis = 1000, window.trans = 1000,
-heidi = T, heidi.peqtl = 0.00157, heidi.ld = c(0.05, 0.9),
+xMEsmr(gwas.summary, beqtl.summary, mode = c("both", "cis", "trans"),
+peqtl = 5e-08, window.cis = 1000, window.trans = 1000, heidi = T,
+bfile = NULL, heidi.peqtl = 0.00157, heidi.ld = c(0.05, 0.9),
 heidi.num = c(3, 20), freq.check = F, thread.num = 1,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"), verbose = T, silent = FALSE)
+"hommel"), clear = T, verbose = T, silent = FALSE)
 </pre>
 
 
@@ -44,11 +44,6 @@ case-control study), 'se' (standard error), 'p' (p-value) and 'n'
 data files in the BESD format containing three files (.esi for SNP
 information, .epi for probe information, and .besd for eQTL summary
 statistics)</p>
-</td></tr>
-<tr valign="top"><td><code>bfile</code></td>
-<td>
-<p>a character specifying where to find the LD reference data
-containing three files (.bed, .bim, and .fam)</p>
 </td></tr>
 <tr valign="top"><td><code>mode</code></td>
 <td>
@@ -79,6 +74,12 @@ threshold) for the SMR and HEIDI test. The default value is 1000Kb</p>
 <td>
 <p>logical to indicate whether the HEIDI test is enabled. By
 default it is true</p>
+</td></tr>
+<tr valign="top"><td><code>bfile</code></td>
+<td>
+<p>a character specifying where to find the LD reference data
+containing three files (.bed, .bim, and .fam). Required if heidi test
+is enabled (see above)</p>
 </td></tr>
 <tr valign="top"><td><code>heidi.peqtl</code></td>
 <td>
@@ -121,6 +122,11 @@ amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
 the family-wise error rate (FWER). Notes: FDR is a less stringent
 condition than FWER</p>
 </td></tr>
+<tr valign="top"><td><code>clear</code></td>
+<td>
+<p>logical to indicate whether the temporary and log files
+are cleared up. By default, it sets to TRUE</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -140,14 +146,39 @@ forced to be false</p>
 <p>a data frame with following columns (&quot;mode&quot;, &quot;probeID&quot;, &quot;Gene&quot;,
 &quot;ProbeChr&quot;, &quot;Probe_bp&quot;, &quot;topSNP&quot;, &quot;topSNP_chr&quot;, &quot;topSNP_bp&quot;, &quot;A1&quot;,
 &quot;A2&quot;, &quot;b_GWAS&quot;, &quot;b_eQTL&quot;, &quot;b_SMR&quot;, &quot;p_GWAS&quot;, &quot;p_eQTL&quot;, &quot;p_SMR&quot;,
-&quot;fdr_SMR&quot;, &quot;p_HEIDI&quot;, &quot;fdr_HEIDI&quot;, &quot;nsnp_HEIDI&quot;)
+&quot;fdr_SMR&quot;) and, if heidi teste enabled, columns (&quot;p_HEIDI&quot;,
+&quot;fdr_HEIDI&quot;, &quot;nsnp_HEIDI&quot;)
 </p>
 
 
 <h3>Note</h3>
 
-<p>None
+<p>This function requires the software 'smr' at
+<a href="http://cnsgenomics.com/software/smr">http://cnsgenomics.com/software/smr</a>. Shell command lines in
+Terminal (Mac and Linux) are:
 </p>
+
+<ul>
+<li><p>1a) Mac: <code>wget
+http://cnsgenomics.com/software/smr/download/smr_Mac.zip &amp;&amp; unzip
+smr_Mac.zip &amp;&amp; mv smr_Mac ~/smr</code>
+</p>
+</li>
+<li><p>1b) Linux: <code>wget
+https://cnsgenomics.com/software/smr/download/smr_Linux.zip &amp;&amp; unzip
+smr_Linux.zip &amp;&amp; mv smr_Linux ~/smr</code>
+</p>
+</li>
+<li><p>2a) # Assuming a ROOT (sudo) privilege: <br /><code>sudo cp ~/smr
+/usr/local/bin</code>
+</p>
+</li>
+<li><p>2b) # Assuming without ROOT (sudo) privilege and adding the
+system PATH variable to your ~/.bash_profile file: <br /><code>export
+PATH=$HOME:$PATH</code>
+</p>
+</li></ul>
+
 
 
 <h3>See Also</h3>
@@ -163,10 +194,16 @@ forced to be false</p>
 # Load the library
 library(XGR)
 
-bfile &lt;- "~/Sites/SVN/github/bigdata_dev/Merged_EUR"
-beqtl.summary &lt;-
-"~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Neutrophil"
-gwas.summary &lt;- "summary_gwas.txt"
+gwas.summary &lt;- "summary_gwas.RA.txt"
+beqtl.summary &lt;- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Blood"
+
+# only SMR test
+df_output &lt;- xMEsmr(gwas.summary, beqtl.summary, heidi=F)
+utils::write.table(df_output, file="df_output.txt", row.names=F,
+col.names=T, quote=F, sep="\t")
+
+# also heidi test
+bfile &lt;- "~/Sites/SVN/github/bigdata_dev/Pi_eQTL_hg19/Merged_EUR"
 df_output &lt;- xMEsmr(gwas.summary, beqtl.summary, bfile)
 utils::write.table(df_output, file="df_output.txt", row.names=F,
 col.names=T, quote=F, sep="\t")
