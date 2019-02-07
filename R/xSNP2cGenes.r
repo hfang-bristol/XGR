@@ -182,8 +182,20 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 	if(!is.null(df_cGenes)){
 		ind <- xSymbol2GeneID(df_cGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location)
 		df_cGenes <- df_cGenes[!is.na(ind), ]
+		
 		if(nrow(df_cGenes)==0){
 			df_cGenes <- NULL
+		}else{
+			if(0){
+				#################################
+				# remove HLA genes and histone genes
+				ind <- which(!grepl('^HLA-|^HIST', df_cGenes$Gene))
+				df_cGenes <- df_cGenes[ind,]
+				#################################
+				if(nrow(df_cGenes)==0){
+					df_cGenes <- NULL
+				}
+			}
 		}
 	}
 	####################################
