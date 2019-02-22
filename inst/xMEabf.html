@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct colocalisation analysis through...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xMEabf"><tr><td>xMEabf</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to conduct colocalisation analysis through Wakefield's Approximate Bayes Factor approach integrating GWAS and eQTL summary data</h2>
+
+<h3>Description</h3>
+
+<p><code>xMEabf</code> is supposed to conduct colocalisation analysis
+integrating GWAS and eQTL summary data through Wakefield's Approximate
+Bayes Factor (ABF).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xMEabf(eqtl.summary, gwas.summary, prior.eqtl = 1e-04,
+prior.gwas = 1e-04, prior.both = 1e-05)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>eqtl.summary</code></td>
+<td>
+<p>an input eQTL summary data for a region (eg the
+eQTLs for a gene), a list with mandatory components 'beta' (a vector
+for eQTL effect size), 'varbeta' (a vector for beta variance), 'N' (an
+integer specifying number of samples), 'MAF' (minor allele frequency,
+eg effect allele frequency), 'snp' (a vector for dbSNP identity)</p>
+</td></tr>
+<tr valign="top"><td><code>gwas.summary</code></td>
+<td>
+<p>an input GWAS summary data, a list with mandatory
+components 'beta' (a vector for GWAS SNP effect size), 'varbeta' (a
+vector for beta variance), 'snp' (a vector for dbSNP identity)</p>
+</td></tr>
+<tr valign="top"><td><code>prior.eqtl</code></td>
+<td>
+<p>the prior probability an eQTL associated with the
+eQTL trait. The default value is 1e-4</p>
+</td></tr>
+<tr valign="top"><td><code>prior.gwas</code></td>
+<td>
+<p>the prior probability an SNP associated with the GWAS
+trait. The default value is 1e-4</p>
+</td></tr>
+<tr valign="top"><td><code>prior.both</code></td>
+<td>
+<p>the prior probability an eQTL/SNP associated with
+both eQTL/GWAS traits. The default value is 1e-5</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a list with two compenents (1) the component 'summary', a vector of
+'nsnps' (number of SNPs analysed), 'PP.H0.abf' (posterior probabilities
+of H0 - no causal variant), 'PP.H1.abf' (posterior probabilities of H1
+- causal variant for eQTL trait only), 'PP.H2.abf' (posterior
+probabilities of H2 - causal variant for GWAS trait only), 'PP.H3.abf'
+(posterior probabilities of H3 - two distinct causal variants), and
+'PP.H4.abf' (posterior probabilities of H4 - one shared causal
+variant), and (2) the component 'results', a data frame with a column
+'snp' (SNPs analysed), columns for eQTL statistics calcualted
+('eqtl.V', 'eqtl.z', 'eqtl.r' and 'eqtl.lABF'), columns for GWAS
+statistics calculated ('gwas.V', 'gwas.z', 'gwas.r' and 'gwas.lABF'), a
+column 'both.sum.lABF' (the sum of 'eqtl.lABF' and 'gwas.lABF') and a
+column 'SNP.PP.H4' (the posterior probability of the SNP being causal
+for both traits).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xMEabf</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+res &lt;- xMEabf(eqtl.summary, gwas.summary)
+utils::write.table(res$results, file="df_abf.txt", row.names=F,
+col.names=T, quote=F, sep="\t")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
