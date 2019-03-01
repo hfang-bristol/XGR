@@ -186,10 +186,12 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 		if(nrow(df_cGenes)==0){
 			df_cGenes <- NULL
 		}else{
-			if(0){
+			if(1){
 				#################################
 				# remove HLA genes and histone genes
-				ind <- which(!grepl('^HLA-|^HIST', df_cGenes$Gene))
+				#ind <- which(!grepl('^HLA-|^HIST', df_cGenes$Gene))
+				# remove histone genes
+				ind <- which(!grepl('^HIST', df_cGenes$Gene))
 				df_cGenes <- df_cGenes[ind,]
 				#################################
 				if(nrow(df_cGenes)==0){

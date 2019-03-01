@@ -19,7 +19,7 @@
 #'  \item{\code{Dist}: the genomic distance between the gene and the SNP}
 #'  \item{\code{Weight}: the distance weight based on the genomic distance}
 #'  \item{\code{Gap}: the genomic gap between the gene and the SNP (in the form of 'chr:start-end')}
-#'  \item{\code{TAD}: if applied, it can be 'Excluded' or the TAD boundary region (in the form of 'chr:start-end') that the genomic interval falls into}
+#'  \item{\code{TAD}: if applied, it can be 'Excluded' or the TAD boundary region (in the form of 'chr:start-end') that the genomic interval falls into. Also if SNP within the gene body, Gap and TAD will be SNP location (in the form of 'chr:start-end')}
 #' }
 #' @note For details on the decay kernels, please refer to \code{\link{xVisKernels}}
 #' @export
@@ -137,7 +137,14 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 				df_interval[ind,] <- data.frame(seqnames=df_interval$seqnames[ind], start=df_interval$end[ind], end=df_interval$start[ind], stringsAsFactors=FALSE)
 			}
 			
-			vec_interval <- paste0(df_interval$seqnames,':',df_interval$start,'-',df_interval$end)
+			###########################################################
+			########## very important!
+			## if SNP within a gene body no restriction will apply (that is, SNP location)
+			df_interval[dists==0, 'start'] <-  df_y$start[dists==0]
+			df_interval[dists==0, 'end'] <-  df_y$end[dists==0]
+			###########################################################			
+			
+			vec_interval <- paste0(df_interval$seqnames, ':', as.character(df_interval$start), '-', as.character(df_interval$end))
 			###
 			
 			df_nGenes <- data.frame(Gene=names(x), SNP=names(y), Dist=dists, Gap=vec_interval, stringsAsFactors=F)
@@ -194,6 +201,12 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=iGR, subject=TAD, type="within", select="all", ignore.strand=T))))
 		q2r <- q2r[!duplicated(q2r[,1]), ]
 		df_nGenes$TAD[q2r[,1]] <- GenomicRanges::mcols(TAD)[q2r[,2],]
+		
+		###########################################################
+		########## very important!
+		## if SNP within a gene body no restriction will apply (that is, SNP location)
+		df_nGenes$TAD[df_nGenes$Dist==0] <-  df_nGenes$Gap[df_nGenes$Dist==0]
+		###########################################################	
 		
 		if(verbose){
 			now <- Sys.time()

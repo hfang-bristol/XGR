@@ -82,7 +82,8 @@ a data frame with following columns:
 form of 'chr:start-end')}
 \item{\code{TAD}: if applied, it can be 'Excluded' or the TAD boundary
 region (in the form of 'chr:start-end') that the genomic interval falls
-into}
+into. Also if SNP within the gene body, Gap and TAD will be SNP
+location (in the form of 'chr:start-end')}
 }
 }
 \description{
