@@ -53,8 +53,12 @@ xDefineEQTL(data = NULL, include.eQTL = c(NA, "JKscience_CD14",
 "scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono", "scRNAseq_eQTL_ncMono",
 "scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell",
 "jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8", "jpRNAseq_eQTL_Mono",
-"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC"), eQTL.customised = NULL,
-verbose = TRUE,
+"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell",
+"Pi_eQTL_Blood", "Pi_eQTL_CD14", "Pi_eQTL_CD4", "Pi_eQTL_CD8",
+"Pi_eQTL_IFN", "Pi_eQTL_LPS2", "Pi_eQTL_LPS24", "Pi_eQTL_Monocyte",
+"Pi_eQTL_Neutrophil", "Pi_eQTL_NK", "Pi_eQTL_shared_CD14",
+"Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24"),
+eQTL.customised = NULL, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -313,6 +317,33 @@ Sourced from Nature Genetics 2017, 49(7):1120-1125
 \item{\code{jpRNAseq_eQTL_Mono}: cis-eQTLs in monocytes.}
 \item{\code{jpRNAseq_eQTL_NK}: cis-eQTLs in NK cells.}
 \item{\code{jpRNAseq_eQTL_PBMC}: cis-eQTLs in PBMC.}
+}
+14. Pi eQTL
+\itemize{
+\item{\code{Pi_eQTL_CD14}: cis and trans-eQTLs in the resting/CD14+
+state.}
+\item{\code{Pi_eQTL_LPS2}: cis and trans-eQTLs in the activating state
+induced by 2-hour LPS.}
+\item{\code{Pi_eQTL_LPS24}: cis and trans-eQTLs in the activating state
+induced by 24-hour LPS.}
+\item{\code{Pi_eQTL_IFN}: cis and trans-eQTLs in the activating state
+induced by 24-hour interferon-gamma.}
+\item{\code{Pi_eQTL_Bcell}: cis and trans-eQTLs in B cells.}
+\item{\code{Pi_eQTL_Blood}: cis and trans-eQTLs in the blood.}
+\item{\code{Pi_eQTL_CD4}: cis and trans-eQTLs in the CD4 cells.}
+\item{\code{Pi_eQTL_CD8}: cis and trans-eQTLs in the CD8 cells.}
+\item{\code{Pi_eQTL_Monocyte}: cis and trans-eQTLs in the monocytes.}
+\item{\code{Pi_eQTL_Neutrophil}: cis and trans-eQTLs in the
+neutrophils.}
+\item{\code{Pi_eQTL_NK}: cis and trans-eQTLs in the NK cells.}
+\item{\code{Pi_eQTL_shared_CD14}: cis and trans-eQTLs in the
+resting/CD14+ state (based on 228 individuals).}
+\item{\code{Pi_eQTL_shared_LPS2}: cis and trans-eQTLs in the activating
+state induced by 2-hour LPS (based on 228 individuals).}
+\item{\code{Pi_eQTL_shared_LPS24}: cis and trans-eQTLs in the
+activating state induced by 24-hour LPS (based on 228 individuals).}
+\item{\code{Pi_eQTL_shared_IFN}: cis and trans-eQTLs in the activating
+state induced by 24-hour interferon-gamma (based on 228 individuals).}
 }
 }
 \examples{

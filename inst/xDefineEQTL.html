@@ -66,8 +66,12 @@ xDefineEQTL(data = NULL, include.eQTL = c(NA, "JKscience_CD14",
 "scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono", "scRNAseq_eQTL_ncMono",
 "scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell",
 "jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8", "jpRNAseq_eQTL_Mono",
-"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC"), eQTL.customised = NULL,
-verbose = TRUE,
+"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell",
+"Pi_eQTL_Blood", "Pi_eQTL_CD14", "Pi_eQTL_CD4", "Pi_eQTL_CD8",
+"Pi_eQTL_IFN", "Pi_eQTL_LPS2", "Pi_eQTL_LPS24", "Pi_eQTL_Monocyte",
+"Pi_eQTL_Neutrophil", "Pi_eQTL_NK", "Pi_eQTL_shared_CD14",
+"Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24"),
+eQTL.customised = NULL, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -598,6 +602,65 @@ Sourced from Nature Genetics 2017, 49(7):1120-1125
 </p>
 </li>
 <li><p><code>jpRNAseq_eQTL_PBMC</code>: cis-eQTLs in PBMC.
+</p>
+</li></ul>
+
+<p>14. Pi eQTL
+</p>
+
+<ul>
+<li><p><code>Pi_eQTL_CD14</code>: cis and trans-eQTLs in the resting/CD14+
+state.
+</p>
+</li>
+<li><p><code>Pi_eQTL_LPS2</code>: cis and trans-eQTLs in the activating state
+induced by 2-hour LPS.
+</p>
+</li>
+<li><p><code>Pi_eQTL_LPS24</code>: cis and trans-eQTLs in the activating state
+induced by 24-hour LPS.
+</p>
+</li>
+<li><p><code>Pi_eQTL_IFN</code>: cis and trans-eQTLs in the activating state
+induced by 24-hour interferon-gamma.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Bcell</code>: cis and trans-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Blood</code>: cis and trans-eQTLs in the blood.
+</p>
+</li>
+<li><p><code>Pi_eQTL_CD4</code>: cis and trans-eQTLs in the CD4 cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_CD8</code>: cis and trans-eQTLs in the CD8 cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Monocyte</code>: cis and trans-eQTLs in the monocytes.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Neutrophil</code>: cis and trans-eQTLs in the
+neutrophils.
+</p>
+</li>
+<li><p><code>Pi_eQTL_NK</code>: cis and trans-eQTLs in the NK cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_CD14</code>: cis and trans-eQTLs in the
+resting/CD14+ state (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_LPS2</code>: cis and trans-eQTLs in the activating
+state induced by 2-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_LPS24</code>: cis and trans-eQTLs in the
+activating state induced by 24-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_IFN</code>: cis and trans-eQTLs in the activating
+state induced by 24-hour interferon-gamma (based on 228 individuals).
 </p>
 </li></ul>
 
