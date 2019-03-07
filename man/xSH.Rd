@@ -82,6 +82,10 @@ gp + theme(legend.position="none")
 ## advanced use
 gp <- xSH(sMap, customised.comp=sMap$codebook[,1:2])
 
+## advanced use: overlaid with additional data
+sOverlay <- sMapOverlay(sMap=sMap, data=data, additional=additional)
+gp <- xSH(sMap, customised.comp=sOverlay$codebook)
+
 ## list of gp
 ls_gp <-lapply(1:5, function(i) xSH(sMap, which.components=i) +
 theme(legend.position="none"))

@@ -12,7 +12,7 @@
 #' @param boundary logical to indicate whether the base boundary is added
 #' @param boundary.color the boundary color for each base
 #' @param boundary.type the type of boundary. It can be 'line' (polygon; likely problematic due to the ordering issue), 'point' (simply dots)
-#' @return 
+#' @return
 #' a ggplot2 object
 #' @note Illustrator: cut a shape of points into each segmented line: 1) select the shape; 2) Direct Select Tool (A); 3) hold Shift and select an anchor point; 4) select Cut path of selected anchor points in the Anchor Point toolbar (The icon with the segmented line and scissors).
 #' @export

@@ -141,7 +141,8 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 			palette.name <- colorRampPalette(c("#155DB5","#617EBE","#8C9CC9","#AEB7D3","#CACEDB","#DEDEE1","#E1DEE0","#DCCAD4","#D3ADC3","#C88AB0","#BA5F9A","#AB1E84"), interpolate=interpolate)
 		}else if(colormap == "hcl_bb"){
 			#via: noquote(paste0(colorspace::diverge_hcl(12,h=c(246,40),c=96),collapse='","'))
-			palette.name <- colorRampPalette(c("#0050B3","#0071B5","#6B92C2","#9DB1CF","#C2CBD9","#DCDEE1","#E0DDDB","#D8C7BE","#CAA995","#B78560","#9E5C00","#7D3200"), interpolate=interpolate)
+			#palette.name <- colorRampPalette(c("#0050B3","#0071B5","#6B92C2","#9DB1CF","#C2CBD9","#DCDEE1","#E0DDDB","#D8C7BE","#CAA995","#B78560","#9E5C00","#7D3200"), interpolate=interpolate)
+			palette.name <- colorRampPalette(c("#0050B3","#0071B5","#6B92C2","#9DB1CF","#C2CBD9","#DCDEE1","#E0DDDB","#D8C7BE","#CAA995","#B78560","#9E5C00"), interpolate=interpolate)
 		}else if(colormap == "hcl_gp"){
 			#via: noquote(paste0(colorspace::diverge_hcl(12,h=c(128,330),c=98),l=c(65,90),collapse='","'))
 			palette.name <- colorRampPalette(c("#005C0065","#007F0090","#5F9E5F65","#94B99590","#BECFBE65","#DBDFDB90","#E1DDDF65","#DBC4D190","#D1A2BE65","#C377A790","#B33E8E65","#A3007790"), interpolate=interpolate)

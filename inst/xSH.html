@@ -142,6 +142,10 @@ gp + theme(legend.position="none")
 ## advanced use
 gp &lt;- xSH(sMap, customised.comp=sMap$codebook[,1:2])
 
+## advanced use: overlaid with additional data
+sOverlay &lt;- sMapOverlay(sMap=sMap, data=data, additional=additional)
+gp &lt;- xSH(sMap, customised.comp=sOverlay$codebook)
+
 ## list of gp
 ls_gp &lt;-lapply(1:5, function(i) xSH(sMap, which.components=i) +
 theme(legend.position="none"))
