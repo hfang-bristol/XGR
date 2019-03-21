@@ -7,8 +7,9 @@
 xClassifyCARET(df_predictor, GSP, GSN, algorithm = c("glm", "bayesglm",
 "glmnet", "lda", "rda", "pls", "svmRadial", "knn", "nnet", "gbm",
 "xgbLinear", "xgbTree", "LogitBoost", "cforest", "rf", "myrf"),
-nfold = 3, nrepeat = 10, seed = 825, cv.aggregateBy = c("none",
-"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE)
+nfold = 3, nrepeat = 10, seed = 825,
+cv.aggregateBy = c("logistic", "Ztransform", "fishers",
+"orderStatistic", "none"), verbose = TRUE)
 }
 \arguments{
 \item{df_predictor}{a data frame with columns as predictors, with their

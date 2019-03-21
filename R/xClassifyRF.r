@@ -42,7 +42,7 @@
 #' sClass <- xClassifyRF(df_predictor, GSP, GSN)
 #' }
 
-xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, cv.aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
+xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, cv.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic","none"), verbose=TRUE, ...)
 {
 	
     startT <- Sys.time()
@@ -74,7 +74,7 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 			}
 		}
 	}
-		
+	
 	## pre-process GSP and GSN
 	gsp <- unique(GSP)
 	gsn <- unique(GSN)
@@ -293,6 +293,28 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 		priority <- 100 * (priority - min(priority))/(max(priority) - min(priority))
 		priority <- signif(priority, digits=2)
 		
+		######################
+		## overall importance
+		######################
+		if(is.null(mtry)){
+			mtry <- as.integer(sqrt(ncol(df_predictor_class)-1))
+			invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=df_predictor_class[,-ncol(df_predictor_class)], y=df_predictor_class[, ncol(df_predictor_class)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE, na.action=na.omit)))
+			ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
+			mtry <- df_mtry[ind,1]
+			if(mtry<3){
+				mtry <- 3
+			}
+		}
+		if(!is.null(seed)){
+			set.seed(seed)
+		}
+		suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+		df_importance <- as.data.frame(randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4])
+		#randomForest::varImpPlot(rf.model.overall)
+		# For classification, the nclass columns are the class-specific measures computed as mean descrease in accuracy. The nclass + 1st column is the mean descrease in accuracy over all classes. The last column is the mean decrease in Gini index
+		
+		res <- list(importance = df_importance)
+		
 	}else{
 		ls_full <- lapply(1:length(ls_model), function(i){
 			rf.model <- ls_model[[i]]
@@ -325,96 +347,97 @@ xClassifyRF <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, m
 		priority <- sqrt(-log10(df_ap))
 		priority <- 100* (priority - min(priority))/(max(priority) - min(priority))
 		priority <- signif(priority, digits=2)
-	
-	}
-	
-	#########################################
-	## output
-	### df_priority
-	output_gs <- rep('NEW', length(df_ap))
-	names(output_gs) <- names(df_ap)
-	ind <- match(names(output_gs), df_gs$name)
-	output_gs[!is.na(ind)] <- df_gs$gs[ind[!is.na(ind)]]
-	output_gs[output_gs=='0'] <- 'GSN'
-	output_gs[output_gs=='1'] <- 'GSP'
-	df_priority <- data.frame(GS=output_gs, name=names(df_ap), rank=df_rank, pvalue=df_ap, priority=priority, stringsAsFactors=FALSE)
 
-	### df_prob
-	ind <- match(names(df_ap), rownames(df_full))
-	if(nfold==1 & nrepeat==1){
-		output_df_full <- as.matrix(df_full[ind,], ncol=nfold)
-		colnames(output_df_full) <- 'Fold1'
-	}else{
-		output_df_full <- df_full[ind,]
-	}
-	df_prob <- data.frame(GS=output_gs, name=names(df_ap), output_df_full, stringsAsFactors=FALSE)
+		#########################################
+		## output
+		### df_priority
+		output_gs <- rep('NEW', length(df_ap))
+		names(output_gs) <- names(df_ap)
+		ind <- match(names(output_gs), df_gs$name)
+		output_gs[!is.na(ind)] <- df_gs$gs[ind[!is.na(ind)]]
+		output_gs[output_gs=='0'] <- 'GSN'
+		output_gs[output_gs=='1'] <- 'GSP'
+		df_priority <- data.frame(GS=output_gs, name=names(df_ap), rank=df_rank, pvalue=df_ap, priority=priority, stringsAsFactors=FALSE)
 
-	### df_predictor_gs
-	ind <- match(names(df_ap), rownames(df_predictor))
-	output_df_predictor <- df_predictor[ind,]
-	df_predictor_gs <- data.frame(GS=output_gs, name=names(df_ap), output_df_predictor, stringsAsFactors=FALSE)
-	
-    ####################################################################################
-
-	######################
-	## overall importance
-	######################
-	if(is.null(mtry)){
-		mtry <- as.integer(sqrt(ncol(df_predictor_class)-1))
-		invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=df_predictor_class[,-ncol(df_predictor_class)], y=df_predictor_class[, ncol(df_predictor_class)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE, na.action=na.omit)))
-		ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
-		mtry <- df_mtry[ind,1]
-		if(mtry<3){
-			mtry <- 3
+		### df_prob
+		ind <- match(names(df_ap), rownames(df_full))
+		if(nfold==1 & nrepeat==1){
+			output_df_full <- as.matrix(df_full[ind,], ncol=nfold)
+			colnames(output_df_full) <- 'Fold1'
+		}else{
+			output_df_full <- df_full[ind,]
 		}
-	}
-	if(!is.null(seed)){
-		set.seed(seed)
-	}
-	suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
-	df_importance <- as.data.frame(randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4])
-	#randomForest::varImpPlot(rf.model.overall)
-	# For classification, the nclass columns are the class-specific measures computed as mean descrease in accuracy. The nclass + 1st column is the mean descrease in accuracy over all classes. The last column is the mean decrease in Gini index
-	
-	######################
-	## overall evaluation
-	######################
-	### do preparation
-	df_predictor_overall <- cbind(Supervised=df_priority$priority, df_predictor_gs[,-c(1,2)])
-	rownames(df_predictor_overall) <- rownames(df_priority)
-	df_pred <- df_predictor_overall
-	ls_predictors <- lapply(colnames(df_pred), function(x){
-		data.frame(rownames(df_pred), df_pred[,x], stringsAsFactors=FALSE)
-	})
-	names(ls_predictors) <- colnames(df_pred)
-	# do evaluation
-	ls_pPerf <- lapply(ls_predictors, function(x){
-		pPerf <- xClassifyPerf(prediction=x, GSP=GSP, GSN=GSN, verbose=FALSE)
-	})
-	# do plotting
-	bp <- xClassifyComp(ls_pPerf)
-	df <- unique(bp$data[,c('methods','auroc','fmax','amax','direction')])
-	df_evaluation <- df[,-1]
-	rownames(df_evaluation) <- df[,1]
-	#####################
-	#####################
+		df_prob <- data.frame(GS=output_gs, name=names(df_ap), output_df_full, stringsAsFactors=FALSE)
 
-    res <- list(
-    				prediction = df_priority,
-    				predictor = df_predictor_gs,
-    				performance = df_evaluation,
-    				importance = df_importance,
-    				parameter = NULL,
-    				model = rf.model.overall, 
-    				algorithm = "RandomForest",
-    				cv_model = ls_model,				
-    				cv_prob = df_prob,
-    				cv_auroc = df_auroc,
-    				cv_fmax = df_fmax,
-                  	call  = match.call()
-                 )
-    class(res) <- "sClass"    
-  ####################################################################################
+		### df_predictor_gs
+		ind <- match(names(df_ap), rownames(df_predictor))
+		output_df_predictor <- df_predictor[ind,]
+		df_predictor_gs <- data.frame(GS=output_gs, name=names(df_ap), output_df_predictor, stringsAsFactors=FALSE)
+	
+		####################################################################################
+
+		######################
+		## overall importance
+		######################
+		if(is.null(mtry)){
+			mtry <- as.integer(sqrt(ncol(df_predictor_class)-1))
+			invisible(utils::capture.output(df_mtry <- randomForest::tuneRF(x=df_predictor_class[,-ncol(df_predictor_class)], y=df_predictor_class[, ncol(df_predictor_class)], ntreeTry=ntree, mtryStart=mtry, stepFactor=2, trace=FALSE, plot=FALSE, na.action=na.omit)))
+			ind <- which(df_mtry[,2] == min(df_mtry[,2]))[1]
+			mtry <- df_mtry[ind,1]
+			if(mtry<3){
+				mtry <- 3
+			}
+		}
+		if(!is.null(seed)){
+			set.seed(seed)
+		}
+		suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=df_predictor_class, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+		df_importance <- as.data.frame(randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4])
+		#randomForest::varImpPlot(rf.model.overall)
+		# For classification, the nclass columns are the class-specific measures computed as mean descrease in accuracy. The nclass + 1st column is the mean descrease in accuracy over all classes. The last column is the mean decrease in Gini index
+	
+		######################
+		## overall evaluation
+		######################
+		### do preparation
+		df_predictor_overall <- cbind(Supervised=df_priority$priority, df_predictor_gs[,-c(1,2)])
+		rownames(df_predictor_overall) <- rownames(df_priority)
+		df_pred <- df_predictor_overall
+		ls_predictors <- lapply(colnames(df_pred), function(x){
+			data.frame(rownames(df_pred), df_pred[,x], stringsAsFactors=FALSE)
+		})
+		names(ls_predictors) <- colnames(df_pred)
+		# do evaluation
+		ls_pPerf <- lapply(ls_predictors, function(x){
+			pPerf <- xClassifyPerf(prediction=x, GSP=GSP, GSN=GSN, verbose=FALSE)
+		})
+		# do plotting
+		bp <- xClassifyComp(ls_pPerf)
+		df <- unique(bp$data[,c('methods','auroc','fmax','amax','direction')])
+		df_evaluation <- df[,-1]
+		rownames(df_evaluation) <- df[,1]
+		#####################
+		#####################
+
+		res <- list(
+						prediction = df_priority,
+						predictor = df_predictor_gs,
+						performance = df_evaluation,
+						importance = df_importance,
+						parameter = NULL,
+						model = rf.model.overall, 
+						algorithm = "RandomForest",
+						cv_model = ls_model,				
+						cv_prob = df_prob,
+						cv_auroc = df_auroc,
+						cv_fmax = df_fmax,
+						call  = match.call()
+					 )
+		class(res) <- "sClass"    
+	  ####################################################################################
+	  
+	}
+	
     endT <- Sys.time()
     if(verbose){
         message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
