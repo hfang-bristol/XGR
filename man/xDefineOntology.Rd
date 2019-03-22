@@ -89,8 +89,9 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-an object of class "aOnto", a list with two components (an igraph
-object 'g' and a list 'anno')
+an object of class "aOnto", a list with two components: an igraph
+object 'g' (with graph attributes 'ontology' and 'type' [either 'dag'
+or 'iso']) and a list 'anno'
 }
 \description{
 \code{xDefineOntology} is supposed to define ontology and its
@@ -106,11 +107,15 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 \dontrun{
 aOnto <- xDefineOntology("HPPA", RData.location=RData.location)
+
+# only support internally (please contact us if you would like to use)
 aOnto <- xDefineOntology("REACTOME_ImmuneSystem",
 RData.location=RData.location)
-aOnto <- xDefineOntology("CGL", RData.location=RData.location)\\
+aOnto <- xDefineOntology("KEGGenvironmental",
+RData.location=RData.location)
+aOnto <- xDefineOntology("CGL", RData.location=RData.location)
 
-# advanced use
+# advanced use: customisation
 GS <- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
 res <- xDefineOntology(ontology.customised=GS)
 }

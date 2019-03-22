@@ -8,7 +8,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' an object of class "aOnto", a list with two components (an igraph object 'g' and a list 'anno')
+#' an object of class "aOnto", a list with two components: an igraph object 'g' (with graph attributes 'ontology' and 'type' [either 'dag' or 'iso']) and a list 'anno'
 #' @note none
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
@@ -20,10 +20,13 @@
 #'
 #' \dontrun{
 #' aOnto <- xDefineOntology("HPPA", RData.location=RData.location)
-#' aOnto <- xDefineOntology("REACTOME_ImmuneSystem", RData.location=RData.location)
-#' aOnto <- xDefineOntology("CGL", RData.location=RData.location)\
 #' 
-#' # advanced use
+#' # only support internally (please contact us if you would like to use)
+#' aOnto <- xDefineOntology("REACTOME_ImmuneSystem", RData.location=RData.location)
+#' aOnto <- xDefineOntology("KEGGenvironmental", RData.location=RData.location)
+#' aOnto <- xDefineOntology("CGL", RData.location=RData.location)
+#' 
+#' # advanced use: customisation
 #' GS <- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
 #' res <- xDefineOntology(ontology.customised=GS)
 #' }
@@ -55,6 +58,12 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 			relations <- data.frame(from='root', to=nodes$name)
 			g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
 			
+			
+			###############
+			##### g$type: either dag or iso
+			g$type <- 'iso'
+			###############
+						
 			ontology.input <- 'customised'
     	}
     	
@@ -165,12 +174,23 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 				}
 				#######################################
 
+				###############
+				##### g$type: either dag or iso
+				g$type <- 'dag'
+				###############
+
 			}else{
 				## construct g
 				nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=F)
 				nodes <- rbind(nodes, c('root','root','root','root','root'))
 				relations <- data.frame(from='root', to=nodes$name)
 				g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+				
+				###############
+				##### g$type: either dag or iso
+				g$type <- 'iso'
+				###############
+				
 			}
 	
 		}

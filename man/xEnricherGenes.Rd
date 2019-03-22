@@ -192,19 +192,19 @@ library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # Gene-based enrichment analysis using REACTOME pathways
-# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
+# a) provide the input Genes of interest (eg 500 randomly chosen human genes)
 ## load human genes
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg',
 RData.location=RData.location)
 set.seed(825)
-data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 500))
 data
 
 # optionally, provide the test background (if not provided, all human genes)
 #background <- as.character(org.Hs.eg$gene_info$Symbol)
 
 # b) perform enrichment analysis
-eTerm <- xEnricherGenes(data=data, ontology="REACTOME",
+eTerm <- xEnricherGenes(data=data, ontology="MsigdbC2REACTOME",
 RData.location=RData.location)
 
 # c) view enrichment results for the top significant terms
@@ -218,8 +218,8 @@ utils::write.table(output, file="REACTOME_enrichments.txt", sep="\\t",
 row.names=FALSE)
 
 # e) barplot of significant enrichment results
-bp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
+gp <- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(gp)
 
 # f) visualise the top 10 significant terms in the ontology hierarchy
 # color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)

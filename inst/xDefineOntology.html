@@ -120,8 +120,9 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;aOnto&quot;, a list with two components (an igraph
-object 'g' and a list 'anno')
+<p>an object of class &quot;aOnto&quot;, a list with two components: an igraph
+object 'g' (with graph attributes 'ontology' and 'type' [either 'dag'
+or 'iso']) and a list 'anno'
 </p>
 
 
@@ -146,11 +147,15 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
 ## Not run: 
 aOnto &lt;- xDefineOntology("HPPA", RData.location=RData.location)
+
+# only support internally (please contact us if you would like to use)
 aOnto &lt;- xDefineOntology("REACTOME_ImmuneSystem",
 RData.location=RData.location)
-aOnto &lt;- xDefineOntology("CGL", RData.location=RData.location)\
+aOnto &lt;- xDefineOntology("KEGGenvironmental",
+RData.location=RData.location)
+aOnto &lt;- xDefineOntology("CGL", RData.location=RData.location)
 
-# advanced use
+# advanced use: customisation
 GS &lt;- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
 res &lt;- xDefineOntology(ontology.customised=GS)
 
