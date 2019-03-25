@@ -118,7 +118,8 @@ xGT <- function(phylo, membership=NULL, layout=c("rectangular","fan"), tip.label
 				x <- col_clusters[i]
 				ind <- match(names(membership), names(x))
 				tip <- as.character(membership[!is.na(ind)])
-				node <- ggtree::MRCA(tree, tip=tip)
+				#node <- ggtree::MRCA(tree, tip=tip)
+				node <- tidytree::MRCA(tree, tip=tip)
 				mrca_clusters[i] <- node
 				p <- p + ggtree::geom_hilight(node, fill=x) + ggtree::geom_cladelabel(node, label=names(x), color=x, barsize=0, geom='label')
 			}
