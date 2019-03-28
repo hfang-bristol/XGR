@@ -9,13 +9,9 @@ NEW FEATURES
 
     o Add functions ('xWCN' and 'xWCNheatmap') for weighted correlation network analysis
     
-    o Add functions ('xGT', 'xGTplot', 'xGTheatmap' and 'xGTheatmapAdv') for tree visualisation
-    
     o Add a new function 'xLayout' for adding graph node coordinates into a graph
 
     o Add a new function 'xObjSize' for estimating the memory allocation
-
-    o Add functions ('xClassifyPerf', 'xClassifyComp', 'xClassifyRF', 'xClassifyPred', 'xClassifyCV', 'xClassifyPara', 'xClassifyCARET') for supervised classification
 
     o Modify functions ('xSymbol2GeneID', 'xGeneID2Symbol', 'xDefineOntology', 'xEnricherGenes') enabling organism-specific customised analysis
     
@@ -24,8 +20,6 @@ NEW FEATURES
     o Add functions ('xGraphML2AA') for pathway analysis
 
     o Add functions ('xPieplot') for pie plot
-
-    o Add functions ('xSH', 'xSHbase', 'xSHreorder', 'xSHtree') for supra-hexagonal map visualisation using ggplot2
     
     o Add functions ('xAge') for Phylostratigraphy analysis
 
