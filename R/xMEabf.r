@@ -14,9 +14,6 @@
 #' @include xMEabf.r
 #' @examples
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' 
 #' res <- xMEabf(eqtl.summary, gwas.summary)
 #' utils::write.table(res$results, file="df_abf.txt", row.names=F, col.names=T, quote=F, sep="\t")
 #' }

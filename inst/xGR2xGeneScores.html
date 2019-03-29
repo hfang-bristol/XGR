@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes from an...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGR2xGeneScores"><tr><td>xGR2xGeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to identify likely modulated seed genes from an input list of genomic regions together with the significance level given the crosslink info</h2>
+
+<h3>Description</h3>
+
+<p><code>xGR2xGeneScores</code> is supposed to identify likely modulated seed
+genes from a list of genomic regions (GR) together with the
+significance level (measured as p-values or fdr). To do so, it defines
+seed genes and their scores given the crosslink info with a score
+quantifying the link of a GR to a gene. It returns an object of class
+&quot;mSeed&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGR2xGeneScores(data, significance.threshold = NULL, score.cap = NULL,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
+"nearby"), crosslink.customised = NULL, cdf.function = c("original",
+"empirical"), scoring.scheme = c("max", "sum", "sequential"),
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a named input vector containing the sinificance level for
+genomic regions (GR). For this named vector, the element names are GR,
+in the format of 'chrN:start-end', where N is either 1-22 or X, start
+(or end) is genomic positional number; for example, 'chr1:13-20'. The
+element values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for GR, 2nd column for the significance level.</p>
+</td></tr>
+<tr valign="top"><td><code>significance.threshold</code></td>
+<td>
+<p>the given significance threshold. By
+default, it is set to NULL, meaning there is no constraint on the
+significance level when transforming the significance level of GR into
+scores. If given, those GR below this are considered significant and
+thus scored positively. Instead, those above this are considered
+insignificant and thus receive no score</p>
+</td></tr>
+<tr valign="top"><td><code>score.cap</code></td>
+<td>
+<p>the maximum score being capped. By default, it is set
+to NULL, meaning that no capping is applied</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink</code></td>
+<td>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. See <code>xGR2xGenes</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink.customised</code></td>
+<td>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if nor provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
+</td></tr>
+<tr valign="top"><td><code>cdf.function</code></td>
+<td>
+<p>a character specifying how to transform the input
+crosslink score. It can be one of 'original' (no such transformation),
+and 'empirical' for looking at empirical Cumulative Distribution
+Function (cdf; as such it is converted into pvalue-like values [0,1])</p>
+</td></tr>
+<tr valign="top"><td><code>scoring.scheme</code></td>
+<td>
+<p>the method used to calculate seed gene scores
+under a set of GR (also over Contexts if many). It can be one of &quot;sum&quot;
+for adding up, &quot;max&quot; for the maximum, and &quot;sequential&quot; for the
+sequential weighting. The sequential weighting is done via:
+<i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where <i>R_{i}</i> is the
+<i>i^{th}</i> rank (in a descreasing order)</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;mSeed&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>GR</code>: a matrix of nGR X 3 containing GR information, where
+nGR is the number of GR, and the 3 columns are &quot;GR&quot; (genomic regions),
+&quot;Score&quot; (the scores for GR calculated based on p-values taking into
+account the given threshold of the significant level), &quot;Pval&quot; (the
+input p-values for GR)
+</p>
+</li>
+<li><p><code>Gene</code>: a matrix of nGene X 3 containing Gene information,
+where nGene is the number of seed genes, and the 3 columns are &quot;Gene&quot;
+(gene symbol), &quot;Score&quot; (the scores for seed genes), &quot;Pval&quot;
+(p-value-like significance level transformed from gene scores)
+</p>
+</li>
+<li><p><code>Link</code>: a matrix of nLink X 5 containing GR-Gene link
+information, where nLink is the number of links, and the 5 columns are
+&quot;GR&quot; (genomic regions), &quot;Gene&quot; (gene symbol), &quot;Score&quot; (the scores for
+the link multiplied by the GR score), &quot;Score_GR&quot; (the scores for GR),
+&quot;Score_link&quot; (the original scores for the link if cdf.function is
+'original'; otherwise cdf based on the whole crosslink inputs)
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>This function uses <code>xGRscores</code> and <code>xGR2xGenes</code>
+to define and score seed genes from input genomic regions.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRscores</code>, <code>xGR2xGenes</code>,
+<code>xSparseMatrix</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+df &lt;- as.data.frame(gr, row.names=NULL)
+GR &lt;- paste0(df$seqnames,':',df$start,'-',df$end)
+data &lt;- cbind(GR=GR, Sig=df$Pvalue)
+
+# b) define and score seed geens
+mSeed &lt;- xGR2xGeneScores(data=data, crosslink="genehancer",
+RData.location=RData.location)
+
+## End(Not run)
+</pre>
+
+
+</body></html>

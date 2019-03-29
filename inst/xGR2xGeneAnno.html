@@ -1,0 +1,431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis via...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xGR2xGeneAnno"><tr><td>xGR2xGeneAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to conduct region-based enrichment analysis via crosslinked genes</h2>
+
+<h3>Description</h3>
+
+<p><code>xGR2xGeneAnno</code> is supposed to conduct region-based enrichment
+analysis for the input genomic region data (genome build h19), using
+crosslinked gene annotations. To do so, crosslinked genes are first
+defined. Currently supported built-in crosslink info is enhancer genes,
+eQTL genes, conformation genes and nearby genes (purely), though the
+user can customise it via 'crosslink.customised'; if so, it has
+priority over the built-in data. Enrichment analysis is then based on
+either Fisher's exact test or Hypergeometric test for estimating the
+significance of overlapped crosslinked genes. Test background can be
+provided; by default, the annotatable genes will be used.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xGR2xGeneAnno(data, background = NULL, format = c("chr:start-end",
+"data.frame", "bed", "GRanges"), build.conversion = c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
+"PCHiC_combined", "GTEx_V6p_combined", "nearby"),
+crosslink.customised = NULL, crosslink.top = NULL,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, ontology = NA,
+size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
+test = c("hypergeo", "fisher", "binomial"),
+background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F, out.evidence = T, out.evidence.plot = F,
+verbose = T, silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
+</td></tr>
+<tr valign="top"><td><code>background</code></td>
+<td>
+<p>an input background containing a list of genomic
+regions as the test background. The file format is the same as 'data'
+above. By default, it is NULL meaning all annotatable genes are used as
+background</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>the format of the input data. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>build.conversion</code></td>
+<td>
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink</code></td>
+<td>
+<p>the built-in crosslink info with a score quantifying
+the link of a GR to a gene. See <code>xGR2xGenes</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink.customised</code></td>
+<td>
+<p>the crosslink info with a score quantifying
+the link of a GR to a gene. A user-input matrix or data frame with 4
+columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
+genome build 19), 2nd column for Genes, 3rd for crosslink score
+(crosslinking a genomic region to a gene, such as -log10 significance
+level), and 4th for contexts (optional; if not provided, it will be
+added as 'C'). Alternatively, it can be a file containing these 4
+columns. Required, otherwise it will return NULL</p>
+</td></tr>
+<tr valign="top"><td><code>crosslink.top</code></td>
+<td>
+<p>the number of the top genes defined by 'data' will
+be used for test. By default, it is NULL</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.distance.max</code></td>
+<td>
+<p>the maximum distance between genes and GR.
+Only those genes no far way from this distance will be considered as
+seed genes. This parameter will influence the distance-component
+weights calculated for nearby GR per gene</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<td>
+<p>a character specifying a decay kernel
+function. It can be one of 'slow' for slow decay, 'linear' for linear
+decay, and 'rapid' for rapid decay. If no distance weight is used,
+please select 'constant'</p>
+</td></tr>
+<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<td>
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
+</td></tr>
+<tr valign="top"><td><code>ontology</code></td>
+<td>
+<p>the ontology supported currently. By default, it is
+'NA' to disable this option. Pre-built ontology and annotation data are
+detailed in <code>xDefineOntology</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>size.range</code></td>
+<td>
+<p>the minimum and maximum size of members of each term
+in consideration. By default, it sets to a minimum of 10 but no more
+than 2000</p>
+</td></tr>
+<tr valign="top"><td><code>min.overlap</code></td>
+<td>
+<p>the minimum number of overlaps. Only those terms
+with members that overlap with input data at least min.overlap (3 by
+default) will be processed</p>
+</td></tr>
+<tr valign="top"><td><code>which.distance</code></td>
+<td>
+<p>which terms with the distance away from the
+ontology root (if any) is used to restrict terms in consideration. By
+default, it sets to 'NULL' to consider all distances</p>
+</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+<p>the test statistic used. It can be &quot;fisher&quot; for using
+fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
+&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
+independence between gene group (genes belonging to a group or not) and
+gene annotation (genes annotated by a term or not), and thus compare
+sampling to the left part of background (after sampling without
+replacement). Hypergeometric test is to sample at random (without
+replacement) from the background containing annotated and non-annotated
+genes, and thus compare sampling to background. Unlike hypergeometric
+test, binomial test is to sample at random (with replacement) from the
+background with the constant probability. In terms of the ease of
+finding the significance, they are in order: hypergeometric test &gt;
+fisher's exact test &gt; binomial test. In other words, in terms of the
+calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
+binomial test</p>
+</td></tr>
+<tr valign="top"><td><code>background.annotatable.only</code></td>
+<td>
+<p>logical to indicate whether the
+background is further restricted to the annotatable. By default, it is
+NULL: if ontology.algorithm is not 'none', it is always TRUE;
+otherwise, it depends on the background (if not provided, it will be
+TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
+</td></tr>
+<tr valign="top"><td><code>p.tail</code></td>
+<td>
+<p>the tail used to calculate p-values. It can be either
+&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
+under-overrepresentation) or &quot;one-tail&quot; (by default) for the
+significance based on one tail (ie only over-representation)</p>
+</td></tr>
+<tr valign="top"><td><code>p.adjust.method</code></td>
+<td>
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
+</td></tr>
+<tr valign="top"><td><code>ontology.algorithm</code></td>
+<td>
+<p>the algorithm used to account for the
+hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
+&quot;lea&quot;. For details, please see 'Note' below</p>
+</td></tr>
+<tr valign="top"><td><code>elim.pvalue</code></td>
+<td>
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;elim&quot;. It is used to control how to declare a signficantly enriched
+term (and subsequently all genes in this term are eliminated from all
+its ancestors)</p>
+</td></tr>
+<tr valign="top"><td><code>lea.depth</code></td>
+<td>
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;lea&quot;. It is used to control how many maximum depth is used to consider
+the children of a term (and subsequently all genes in these children
+term are eliminated from the use for the recalculation of the
+signifance at this term)</p>
+</td></tr>
+<tr valign="top"><td><code>path.mode</code></td>
+<td>
+<p>the mode of paths induced by vertices/nodes with input
+annotation data. It can be &quot;all_paths&quot; for all possible paths to the
+root, &quot;shortest_paths&quot; for only one path to the root (for each node in
+query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
+for each node, find all shortest paths with the equal lengths)</p>
+</td></tr>
+<tr valign="top"><td><code>true.path.rule</code></td>
+<td>
+<p>logical to indicate whether the true-path rule
+should be applied to propagate annotations. By default, it sets to
+false</p>
+</td></tr>
+<tr valign="top"><td><code>out.evidence</code></td>
+<td>
+<p>logical to indicate whether the evidence should be
+output. By default, it sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>out.evidence.plot</code></td>
+<td>
+<p>logical to indicate whether the evidence
+should be plot. By default, it sets to false</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;eTerm&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
+information, where nTerm is the number of terms, and the 4 columns are
+&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
+&quot;distance&quot;
+</p>
+</li>
+<li><p><code>annotation</code>: a list of terms containing annotations, each
+term storing its annotations. Always, terms are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>g</code>: an igraph object to represent DAG
+</p>
+</li>
+<li><p><code>data</code>: a vector containing input data in consideration. It
+is not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>background</code>: a vector containing the background data. It is
+not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
+snps overlapped between a snp/gene set and the given input data (i.e.
+the snps of interest). Always, gene sets are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>fc</code>: a vector containing fold changes
+</p>
+</li>
+<li><p><code>zscore</code>: a vector containing z-scores
+</p>
+</li>
+<li><p><code>pvalue</code>: a vector containing p-values
+</p>
+</li>
+<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
+value but after being adjusted for multiple comparisons
+</p>
+</li>
+<li><p><code>or</code>: a vector containing odds ratio
+</p>
+</li>
+<li><p><code>CIl</code>: a vector containing lower bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>CIu</code>: a vector containing upper bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
+for the overlapped-members observed in an individaul term, and
+off-diagnal cell for the overlapped-members shared betwene two terms
+</p>
+</li>
+<li><p><code>call</code>: the call that produced this result
+</p>
+</li>
+<li><p><code>crosslink</code>: a data frame with 3 columns ('Gene' for
+crosslinked genes, 'Score' for gene score summarised over its list of
+crosslinked GR, and 'Pval' for p-value-like significance level
+transformed from gene scores); restricted by crosslink.top
+</p>
+</li>
+<li><p><code>evidence</code>: a data frame with 3 columns ('GR' for genomic
+regions, 'Gene' for crosslinked genes, and 'Score' for the score
+between the gene and the GR); restricted by crosslink.top and only
+works when out.evidence is true
+</p>
+</li>
+<li><p><code>gp_evidence</code>: a ggplot object for evidence data
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>The interpretation of the algorithms used to account for the hierarchy
+of the ontology is:
+</p>
+
+<ul>
+<li><p>&quot;none&quot;: does not consider the ontology hierarchy at all.
+</p>
+</li>
+<li><p>&quot;lea&quot;: computers the significance of a term in terms of the
+significance of its children at the maximum depth (e.g. 2). Precisely,
+once snps are already annotated to any children terms with a more
+signficance than itself, then all these snps are eliminated from the
+use for the recalculation of the signifance at that term. The final
+p-values takes the maximum of the original p-value and the recalculated
+p-value.
+</p>
+</li>
+<li><p>&quot;elim&quot;: computers the significance of a term in terms of the
+significance of its all children. Precisely, once snps are already
+annotated to a signficantly enriched term under the cutoff of e.g.
+pvalue&lt;1e-2, all these snps are eliminated from the ancestors of that
+term).
+</p>
+</li>
+<li><p>&quot;pc&quot;: requires the significance of a term not only using the
+whole snps as background but also using snps annotated to all its
+direct parents/ancestors as background. The final p-value takes the
+maximum of both p-values in these two calculations.
+</p>
+</li>
+<li><p>&quot;Notes&quot;: the order of the number of significant terms is: &quot;none&quot;
+&gt; &quot;lea&quot; &gt; &quot;elim&quot; &gt; &quot;pc&quot;.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xGR</code>, <code>xGR2xGenes</code>,
+<code>xEnricherGenes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+
+# 1) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+names(gr) &lt;- NULL
+dGR &lt;- xGR(gr, format="GRanges")
+
+## b) perform DO enrichment analysis
+## enhancer genes
+eTerm &lt;- xGR2xGeneAnno(data=dGR, format="GRanges",
+crosslink="genehancer", ontology="DO", RData.location=RData.location)
+## nearby genes (50kb, decaying rapidly)
+eTerm &lt;- xGR2xGeneAnno(data=dGR, format="GRanges", crosslink="nearby",
+ontology="DO", nearby.distance.max=50000, nearby.decay.kernel="rapid",
+RData.location=RData.location)
+
+## c) view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+
+## d) save enrichment results to the file called 'Regions2genes_enrichments.txt'
+output &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
+sortBy="adjp", details=TRUE)
+utils::write.table(output, file="Regions2genes_enrichments.txt",
+sep="\t", row.names=FALSE)
+
+## e) barplot of significant enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num=10, displayBy="fc")
+print(bp)
+
+## f) forest of significant enrichment results
+gp &lt;- xEnrichForest(eTerm, top_num=10)
+
+## End(Not run)
+</pre>
+
+
+</body></html>
