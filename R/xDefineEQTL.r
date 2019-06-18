@@ -437,7 +437,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				}
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
-			}else if(x=='JK_nk'){
+			}else if(sum(grep("JK_nk",x,perl=TRUE)) > 0){
 				# NK cells
 				res_ls <- xRDataLoader(RData.customised='JK_nk', RData.location=RData.location, verbose=verbose)
 				## cis
