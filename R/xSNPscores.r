@@ -130,7 +130,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 			ind <- match(rownames(data_ld), leads)
 			ind_lead <- which(!is.na(ind))
 			
-			if(length(ind_lead) > 2){
+			if(length(ind_lead) >= 2){
 				ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
 				sLL <- data_ld[ind_lead, ind_ld]
 				summ <- summary(sLL)
@@ -138,7 +138,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 			}else if(length(ind_lead) == 1){
 				ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
 				sLL <- data_ld[ind_lead, ind_ld]
-				res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=names(sLL), R2=sLL, stringsAsFactors=F)
+				res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=F)
 			}else{
 				NULL
 			}
@@ -156,7 +156,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 				ind <- match(rownames(data_ld), leads)
 				ind_lead <- which(!is.na(ind))
 				
-				if(length(ind_lead) > 2){
+				if(length(ind_lead) >= 2){
 					ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
 					sLL <- data_ld[ind_lead, ind_ld]
 					summ <- summary(sLL)

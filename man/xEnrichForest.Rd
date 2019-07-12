@@ -21,7 +21,7 @@ For the eTerm object, if it is 'auto' (for eTerm), only the significant
 terms (see below FDR.cutoff) will be displayed}
 
 \item{FDR.cutoff}{FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05}
+default, it is set to 0.05. Only works when top_num is 'auto' above}
 
 \item{CI.one}{logical to indicate whether to allow the inclusion of one
 in CI. By default, it is TURE (allowed)}

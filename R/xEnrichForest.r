@@ -4,7 +4,7 @@
 #'
 #' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','adjp','or','CIl','CIu')
 #' @param top_num the number of the top terms (sorted according to OR). For the eTerm object, if it is 'auto' (for eTerm), only the significant terms (see below FDR.cutoff) will be displayed
-#' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
+#' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05. Only works when top_num is 'auto' above
 #' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param ncolors the number of colors specified over the colormap
@@ -74,7 +74,9 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		if(top_num=='auto'){
 			top_num <- sum(df$adjp<FDR.cutoff)
 			if(top_num <= 1){
+				warnings("There is no enrichment in the 'eTerm' object.\n")
 				top_num <- 10
+				message(sprintf("0 or 1 term found; instead the top %d terms sorted by '%s' are shown!", top_num, sortBy), appendLF=TRUE)
 			}
 		}
 		df <- xEnrichViewer(eTerm, top_num=top_num, sortBy=sortBy)
