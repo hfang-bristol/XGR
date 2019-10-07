@@ -143,8 +143,13 @@ xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggpl
 	## df_data to plot
 	df_data <- df[,c('group','name','zscore')]
 	#circlize::chordDiagram(df_data, order=order, grid.col=grid.col)
-
-	circlize::chordDiagram(df_data, order=order, annotationTrack="grid", grid.col=grid.col, preAllocateTracks=1, ...)
+	
+	#####
+	# to be checked
+	#####
+	#circlize::chordDiagram(df_data, order=order, annotationTrack="grid", grid.col=grid.col, preAllocateTracks=1, ...)
+	#####
+	circlize::chordDiagram(df_data, annotationTrack="grid", grid.col=grid.col, preAllocateTracks=1, ...)
 	
 	circlize::circos.trackPlotRegion(track.index=1, panel.fun = function(x, y) {
   		xlim = circlize::get.cell.meta.data("xlim")
