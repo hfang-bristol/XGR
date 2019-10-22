@@ -3,7 +3,9 @@ CHANGES IN VERSION 1.1.7
 
 NEW FEATURES
 
-    o Modify functions ('xRegress') enabling customised analysis
+    o Fix bugs
+    
+    o Modify the function 'xEnricherGenes' with threshold output 
     
 
 CHANGES IN VERSION 1.1.6

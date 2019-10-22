@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a minimum spanning tree for subnetworks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xSubneterGenesMST"><tr><td>xSubneterGenesMST</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to identify a minimum spanning tree for subnetworks</h2>
+
+<h3>Description</h3>
+
+<p><code>xSubneterGenesAdv</code> is supposed to identify a minimum spanning
+tree for subnetworks. It returns an object of class &quot;igraph&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xSubneterGenesMST(isubg, metric = c("hybrid", "max", "jaccard"),
+verbose = T)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>metric</code></td>
+<td>
+<p>the distance metric for subnetworks. It can be either
+&quot;max&quot; for the maximum distance between any two nodes (one from a
+subnetwork, and other from another subnetwork) based on the whole
+network, or &quot;jaccard&quot; for jaccard distance between two subnetworks
+(nodes overlapped), or &quot;hybrid&quot; (that is, &quot;max&quot; multiplied by
+&quot;jaccard&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>ls_subg</code></td>
+<td>
+<p>a list of igraph objects resulting from
+<code>xSubneterGenesAdv</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a minimum spanning tree, an object of class &quot;igraph&quot;. It has graph
+attributes ('summary', 'detail' and 'matrix'), and node attributes
+('xcoord', 'ycoord', 'num_nodes', 'num_edges', 'weight' and
+'weight_scaled' [1,5] for visualisation).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSubneterGenesAdv</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+# a) provide the input nodes/genes with the significance info
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+sig &lt;- rbeta(500, shape1=0.5, shape2=1)
+data &lt;- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
+
+# b) find a series of maximum-scoring subnets with the desired node number=50
+isubg &lt;- xSubneterGenesAdv(data=data, network="STRING_high",
+subnet.size=50, RData.location=RData.location)
+
+# c) represent a series of subnets as a minimum spanning tree
+mst &lt;- xSubneterGenesMST(isubg)
+mst$summary
+head(mst$detail)
+head(mst$matrix)
+gp_mst &lt;- xGGnetwork(mst, node.label='name', node.label.size=3,
+node.label.force=1, node.xcoord='xcoord', node.ycoord='ycoord',
+edge.size='weight_scaled', node.size='num_edges', node.size.title="Num
+of \nedges", node.size.range=c(1,4))
+
+## End(Not run)
+</pre>
+
+
+</body></html>
