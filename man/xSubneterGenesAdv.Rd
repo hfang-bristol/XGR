@@ -132,7 +132,7 @@ forced to be false}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a
+an "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a
 "igraph" objects for the whole network. The 'ls_subg', a list of
 "igraph" objects, with each element for a subgraph with a maximum
 score, having node attributes (significance, score, type) and a graph

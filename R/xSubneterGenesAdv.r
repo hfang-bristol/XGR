@@ -17,7 +17,7 @@
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
-#' a "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a "igraph" objects for the whole network. The 'ls_subg', a list of "igraph" objects, with each element for a subgraph with a maximum score, having node attributes (significance, score, type) and a graph attribute (threshold; determined when scanning 'subnet.size'). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
+#' an "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a "igraph" objects for the whole network. The 'ls_subg', a list of "igraph" objects, with each element for a subgraph with a maximum score, having node attributes (significance, score, type) and a graph attribute (threshold; determined when scanning 'subnet.size'). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
 #' @note The algorithm uses \code{\link{xSubneterGenes}} for identifying the first gene subnetwork from the input whole network. The second subnetwork is identified from the whole subnetwork subtracted by all edges in the first identified subnetwork. And do so till subnet.significance is no less than 0.05
 #' @export
 #' @seealso \code{\link{xSubneterGenes}}

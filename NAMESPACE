@@ -2,9 +2,11 @@
 
 S3method(print,aOnto)
 S3method(print,eTerm)
+S3method(print,iSubg)
 S3method(print,ls_eTerm)
 export(aOnto)
 export(eTerm)
+export(iSubg)
 export(ls_eTerm)
 export(xAddCoords)
 export(xAggregate)

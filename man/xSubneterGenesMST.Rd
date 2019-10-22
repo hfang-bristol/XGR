@@ -8,6 +8,9 @@ xSubneterGenesMST(isubg, metric = c("hybrid", "max", "jaccard"),
 verbose = T)
 }
 \arguments{
+\item{isubg}{an "iSubg" object resulting from
+\code{\link{xSubneterGenesAdv}}}
+
 \item{metric}{the distance metric for subnetworks. It can be either
 "max" for the maximum distance between any two nodes (one from a
 subnetwork, and other from another subnetwork) based on the whole
@@ -17,9 +20,6 @@ network, or "jaccard" for jaccard distance between two subnetworks
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
-
-\item{ls_subg}{a list of igraph objects resulting from
-\code{\link{xSubneterGenesAdv}}}
 }
 \value{
 a minimum spanning tree, an object of class "igraph". It has graph

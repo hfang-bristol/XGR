@@ -2,7 +2,7 @@
 #'
 #' \code{xSubneterGenesAdv} is supposed to identify a minimum spanning tree for subnetworks. It returns an object of class "igraph". 
 #'
-#' @param ls_subg a list of igraph objects resulting from \code{\link{xSubneterGenesAdv}}
+#' @param isubg an "iSubg" object resulting from \code{\link{xSubneterGenesAdv}}
 #' @param metric the distance metric for subnetworks. It can be either "max" for the maximum distance between any two nodes (one from a subnetwork, and other from another subnetwork) based on the whole network, or "jaccard"  for jaccard distance between two subnetworks (nodes overlapped), or "hybrid" (that is, "max" multiplied by "jaccard")
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return
@@ -40,8 +40,8 @@ xSubneterGenesMST <- function(isubg, metric=c("hybrid","max","jaccard"), verbose
     metric <- match.arg(metric)
     
    	if(class(isubg)=="iSubg"){
-   		ls_subg <- iSubg$ls_subg
-   		g <- iSubg$g
+   		ls_subg <- isubg$ls_subg
+   		g <- isubg$g
 		## Remove null elements in a list
 		ls_subg <- base::Filter(base::Negate(is.null), ls_subg)
 		if(length(ls_subg)<=1){
@@ -88,7 +88,7 @@ xSubneterGenesMST <- function(isubg, metric=c("hybrid","max","jaccard"), verbose
 		for(j in (i+1):n){
 			name_j <- names(which(mat[,j]!=0))
 			to <- match(name_j, V(g)$name)
-			dist_tmp <- igraph::distances(ig, v=v, to=to, mode='all')
+			dist_tmp <- igraph::distances(g, v=v, to=to, mode='all')
 			mat_max[i,j] <- max(dist_tmp)
 			mat_jaccard[i,j] <- 1 - length(intersect(v, to)) / length(union(v,to))
 		}

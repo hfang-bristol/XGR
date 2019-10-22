@@ -143,3 +143,47 @@ print.aOnto <- function(x, ...) {
 	print(x$g)
 	cat("......\n")
 }
+
+######################################################################
+# iSubg
+######################################################################
+#' @title Definition for S3 class \code{iSubg}
+#' @description \code{iSubg} has 2 components: g, ls_subg.
+#' @param g an igraph object
+#' @param ls_subg a list of igraph objects
+#' @return an object of S3 class \code{iSubg}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' iSubg(g, ls_subg)
+#' }
+iSubg <- function(g, ls_subg){
+	## integrity checks
+	if(class(g)!='igraph' | class(ls_subg)!='list'){
+		stop("The S3 class 'iSubg' object failed to pass integrity checks!\n")
+	}
+	value <- list(g=g, ls_subg=ls_subg)
+	class(value) <- "iSubg"
+	return(value)
+}
+#' @param x an object of class \code{iSubg}
+#' @param ... other parameters
+#' @rdname iSubg
+#' @export
+#' @method print iSubg
+print.iSubg <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $g: an igraph object or NULL"), "\n", sep="")
+	cat(sprintf("  $ls_subg: a list with %d length or NULL", length(x$ls_subg)), "\n", sep="")
+	
+	cat("\n--------------------------------------------------\n")
+	cat("$g:\n")
+	print(x$g)
+	cat("......\n")
+}
