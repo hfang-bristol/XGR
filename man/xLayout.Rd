@@ -15,7 +15,8 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 "gplot.layout.hall", "gplot.layout.kamadakawai", "gplot.layout.mds",
 "gplot.layout.princoord", "gplot.layout.random", "gplot.layout.rmds",
 "gplot.layout.segeo", "gplot.layout.seham", "gplot.layout.spring",
-"gplot.layout.springrepulse", "gplot.layout.target"), seed = 825)
+"gplot.layout.springrepulse", "gplot.layout.target",
+"gephi.forceatlas2"), seed = 825)
 }
 \arguments{
 \item{g}{an object of class "igraph" (or "graphNEL") for a graph}
@@ -24,7 +25,8 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 character can be used to indicate igraph-style layout
 ("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite"),
 or sna-style layout
-("gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target")}
+("gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target"),
+or ForeceAtlas2 layout used in Dephi ("gephi.forceatlas2")}
 
 \item{seed}{an integer specifying the seed}
 }
@@ -65,6 +67,14 @@ gp1 <- xGGnetwork(ig1, node.xcoord="xcoord", node.ycoord="ycoord")
 ## based on sna layout
 ig2 <- xLayout(ig, layout="gplot.layout.kamadakawai")
 gp2 <- xGGnetwork(ig2, node.xcoord="xcoord", node.ycoord="ycoord")
+## do together
+layouts <-
+c("layout_with_fr","gplot.layout.fruchtermanreingold","layout_with_kk","gplot.layout.kamadakawai",
+"gephi.forceatlas2")
+ls_ig <- lapply(layouts, function(x) xLayout(ig, layout=x))
+names(ls_ig) <- layouts
+gp <- xGGnetwork(ls_ig, node.xcoord='xcoord', node.ycoord='ycoord',
+ncolumns=5)
 }
 }
 \seealso{

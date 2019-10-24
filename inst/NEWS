@@ -5,7 +5,9 @@ NEW FEATURES
 
     o Fix bugs
     
-    o Modify the function 'xEnricherGenes' with threshold output 
+    o Modify the function 'xEnricherGenes' with threshold output
+    
+    o Modify the function 'xLayout' with a new layout (dephi)
     
 
 CHANGES IN VERSION 1.1.6

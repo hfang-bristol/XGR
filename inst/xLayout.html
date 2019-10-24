@@ -28,7 +28,8 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 "gplot.layout.hall", "gplot.layout.kamadakawai", "gplot.layout.mds",
 "gplot.layout.princoord", "gplot.layout.random", "gplot.layout.rmds",
 "gplot.layout.segeo", "gplot.layout.seham", "gplot.layout.spring",
-"gplot.layout.springrepulse", "gplot.layout.target"), seed = 825)
+"gplot.layout.springrepulse", "gplot.layout.target",
+"gephi.forceatlas2"), seed = 825)
 </pre>
 
 
@@ -45,7 +46,8 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 character can be used to indicate igraph-style layout
 (&quot;layout_nicely&quot;,&quot;layout_randomly&quot;,&quot;layout_in_circle&quot;,&quot;layout_on_sphere&quot;,&quot;layout_with_fr&quot;,&quot;layout_with_kk&quot;,&quot;layout_as_tree&quot;,&quot;layout_with_lgl&quot;,&quot;layout_with_graphopt&quot;,&quot;layout_with_sugiyama&quot;,&quot;layout_with_dh&quot;,&quot;layout_with_drl&quot;,&quot;layout_with_gem&quot;,&quot;layout_with_mds&quot;,&quot;layout_as_bipartite&quot;),
 or sna-style layout
-(&quot;gplot.layout.adj&quot;,&quot;gplot.layout.circle&quot;,&quot;gplot.layout.circrand&quot;,&quot;gplot.layout.eigen&quot;,&quot;gplot.layout.fruchtermanreingold&quot;,&quot;gplot.layout.geodist&quot;,&quot;gplot.layout.hall&quot;,&quot;gplot.layout.kamadakawai&quot;,&quot;gplot.layout.mds&quot;,&quot;gplot.layout.princoord&quot;,&quot;gplot.layout.random&quot;,&quot;gplot.layout.rmds&quot;,&quot;gplot.layout.segeo&quot;,&quot;gplot.layout.seham&quot;,&quot;gplot.layout.spring&quot;,&quot;gplot.layout.springrepulse&quot;,&quot;gplot.layout.target&quot;)</p>
+(&quot;gplot.layout.adj&quot;,&quot;gplot.layout.circle&quot;,&quot;gplot.layout.circrand&quot;,&quot;gplot.layout.eigen&quot;,&quot;gplot.layout.fruchtermanreingold&quot;,&quot;gplot.layout.geodist&quot;,&quot;gplot.layout.hall&quot;,&quot;gplot.layout.kamadakawai&quot;,&quot;gplot.layout.mds&quot;,&quot;gplot.layout.princoord&quot;,&quot;gplot.layout.random&quot;,&quot;gplot.layout.rmds&quot;,&quot;gplot.layout.segeo&quot;,&quot;gplot.layout.seham&quot;,&quot;gplot.layout.spring&quot;,&quot;gplot.layout.springrepulse&quot;,&quot;gplot.layout.target&quot;),
+or ForeceAtlas2 layout used in Dephi (&quot;gephi.forceatlas2&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>seed</code></td>
 <td>
@@ -98,6 +100,14 @@ gp1 &lt;- xGGnetwork(ig1, node.xcoord="xcoord", node.ycoord="ycoord")
 ## based on sna layout
 ig2 &lt;- xLayout(ig, layout="gplot.layout.kamadakawai")
 gp2 &lt;- xGGnetwork(ig2, node.xcoord="xcoord", node.ycoord="ycoord")
+## do together
+layouts &lt;-
+c("layout_with_fr","gplot.layout.fruchtermanreingold","layout_with_kk","gplot.layout.kamadakawai",
+"gephi.forceatlas2")
+ls_ig &lt;- lapply(layouts, function(x) xLayout(ig, layout=x))
+names(ls_ig) &lt;- layouts
+gp &lt;- xGGnetwork(ls_ig, node.xcoord='xcoord', node.ycoord='ycoord',
+ncolumns=5)
 
 ## End(Not run)
 </pre>

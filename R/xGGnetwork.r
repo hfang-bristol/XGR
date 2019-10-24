@@ -26,7 +26,7 @@
 #' @param node.color.alpha the 0-1 value specifying transparency of node colors
 #' @param node.size either a vector specifying node size or a character specifying which node attribute used for the node size
 #' @param node.size.title a character specifying the title for node sizing
-#' @param node.size.range the range of actual node size
+#' @param node.size.range the range of actual node size. Can be two values (range) or a value (fixed size)
 #' @param slim the minimum and maximum values for which sizes should be plotted
 #' @param title a character specifying the title for the plot
 #' @param edge.size a numeric value specifying the edge size. By default, it is 0.5. It can be a character specifying which edge attribute defining the edge colors (though without the legend)

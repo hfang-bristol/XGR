@@ -100,7 +100,8 @@ specifying which node attribute used for the node size}
 \item{node.size.title}{a character specifying the title for node
 sizing}
 
-\item{node.size.range}{the range of actual node size}
+\item{node.size.range}{the range of actual node size. Can be two values
+(range) or a value (fixed size)}
 
 \item{slim}{the minimum and maximum values for which sizes should be
 plotted}

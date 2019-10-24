@@ -115,7 +115,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 		}
     }
     if (is.vector(data)){
-    	pval <- data
+    	pval <- data[!is.na(data)]
     }else if(is.matrix(data) | is.data.frame(data)){
         data <- as.matrix(data)
 		data_list <- split(x=data[,2], f=as.character(data[,1]))
@@ -283,7 +283,8 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
     #subnet <- dnet::dNetPipeline(g=g, pval=pval, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=verbose)
 
 	# extract relevant info
-	if(ecount(subnet)>0 && class(subnet)=="igraph"){
+	#if(igraph::ecount(subnet)>0 && class(subnet)=="igraph"){
+	if(class(subnet)=="igraph"){
 		relations <- igraph::get.data.frame(subnet, what="edges")[,c(1,2)]
 		if(!is.null(subnet$combinedP)){
 			relations$edgeConfidence <- igraph::get.data.frame(subnet, what="edges")[,"edgeConfidence"]
