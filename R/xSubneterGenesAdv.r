@@ -95,8 +95,8 @@ xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","ST
 		}
 	}
     
-	iSubg <- list(g=g, ls_subg=ls_subg, call=match.call())
-    class(iSubg) <- "iSubg"
+	isubg <- list(g=g, ls_subg=ls_subg, call=match.call())
+    class(isubg) <- "iSubg"
     
-    invisible(iSubg)
+    invisible(isubg)
 }

@@ -35,11 +35,13 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
 "KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
 "KEGG_disease",
-"REACTOME"), network.customised = NULL, seed.genes = T,
-subnet.significance = 5e-05, subnet.size = NULL,
+"REACTOME"), STRING.only = c(NA, "neighborhood_score", "fusion_score",
+"cooccurence_score", "coexpression_score", "experimental_score",
+"database_score", "textmining_score")[1], network.customised = NULL,
+seed.genes = T, subnet.significance = 5e-05, subnet.size = NULL,
 test.permutation = F, num.permutation = 100, respect = c("none",
 "degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = T, silent = F,
+"orderStatistic"), num.subnets = NA, verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -161,6 +163,16 @@ pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 for 'Human Diseases' pathways. 'REACTOME' for protein-protein
 interactions derived from Reactome pathways</p>
 </td></tr>
+<tr valign="top"><td><code>STRING.only</code></td>
+<td>
+<p>the further restriction of STRING by interaction
+type. If NA, no such restriction. Otherwide, it can be one or more of
+&quot;neighborhood_score&quot;,&quot;fusion_score&quot;,&quot;cooccurence_score&quot;,&quot;coexpression_score&quot;,&quot;experimental_score&quot;,&quot;database_score&quot;,&quot;textmining_score&quot;.
+Useful options are c(&quot;experimental_score&quot;,&quot;database_score&quot;): only
+experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
+and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
+and Reactome) are used</p>
+</td></tr>
 <tr valign="top"><td><code>network.customised</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. By default, it
@@ -225,6 +237,12 @@ when the evidence is at least moderately strong; the logistic method
 provides a compromise between these two. Notably, the aggregate methods
 'Ztransform' and 'logistic' are preferred here</p>
 </td></tr>
+<tr valign="top"><td><code>num.subnets</code></td>
+<td>
+<p>the number of subnets to be iteratively identified.
+If NA, this functionality is disabled. If NULL, all subnets will be
+identified until subnet.significance is no less than 0.05</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
@@ -246,10 +264,18 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>a subgraph with a maximum score, an object of class &quot;igraph&quot;. It has
-ndoe attributes: significance, score, type. If permutation test is
-enabled, it also has a graph attribute (combinedP) and an edge
-attribute (edgeConfidence)
+<p>IF num.subnets is NA, a subgraph with a maximum score, an object of
+class &quot;igraph&quot;. It has ndoe attributes: significance, score, type. If
+permutation test is enabled, it also has a graph attribute (combinedP)
+and an edge attribute (edgeConfidence)
+IF num.subnets is not NA (also subnet.size is not NULL), an &quot;iSubg&quot;
+object, with two components ('g' and 'ls_subg'). The 'g', a &quot;igraph&quot;
+objects for the whole network. The 'ls_subg', a list of &quot;igraph&quot;
+objects, with each element for a subgraph with a maximum score, having
+node attributes (significance, score, type) and a graph attribute
+(threshold; determined when scanning 'subnet.size'). If permutation
+test is enabled, it also has a graph attribute (combinedP) and an edge
+attribute (edgeConfidence).
 </p>
 
 
@@ -261,13 +287,16 @@ to use <code>xGR2GeneScores</code> for defining and scoring nearby
 genes that are located within distance window of input GR. The second
 step is to use <code>xSubneterGenes</code> for identifying a
 maximum-scoring gene subnetwork that contains as many highly scored
-genes as possible but a few less scored genes as linkers.
+genes as possible but a few less scored genes as linkers. Also
+supported at the second step is to identify multiple subnetwoks using
+<code>xSubneterGenesAdv</code> when num.subnets is not NA.
 </p>
 
 
 <h3>See Also</h3>
 
-<p><code>xGR2GeneScores</code>, <code>xSubneterGenes</code>
+<p><code>xGR2GeneScores</code>, <code>xSubneterGenes</code>,
+<code>xSubneterGenesAdv</code>
 </p>
 
 

@@ -18,11 +18,13 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
 "KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
 "KEGG_disease",
-"REACTOME"), network.customised = NULL, seed.genes = T,
-subnet.significance = 5e-05, subnet.size = NULL,
+"REACTOME"), STRING.only = c(NA, "neighborhood_score", "fusion_score",
+"cooccurence_score", "coexpression_score", "experimental_score",
+"database_score", "textmining_score")[1], network.customised = NULL,
+seed.genes = T, subnet.significance = 5e-05, subnet.size = NULL,
 test.permutation = F, num.permutation = 100, respect = c("none",
 "degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = T, silent = F,
+"orderStatistic"), num.subnets = NA, verbose = T, silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -120,6 +122,14 @@ pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 for 'Human Diseases' pathways. 'REACTOME' for protein-protein
 interactions derived from Reactome pathways}
 
+\item{STRING.only}{the further restriction of STRING by interaction
+type. If NA, no such restriction. Otherwide, it can be one or more of
+"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score".
+Useful options are c("experimental_score","database_score"): only
+experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
+and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
+and Reactome) are used}
+
 \item{network.customised}{an object of class "igraph". By default, it
 is NULL. It is designed to allow the user analysing their customised
 network data that are not listed in the above argument 'network'. This
@@ -168,6 +178,10 @@ when the evidence is at least moderately strong; the logistic method
 provides a compromise between these two. Notably, the aggregate methods
 'Ztransform' and 'logistic' are preferred here}
 
+\item{num.subnets}{the number of subnets to be iteratively identified.
+If NA, this functionality is disabled. If NULL, all subnets will be
+identified until subnet.significance is no less than 0.05}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
@@ -179,10 +193,18 @@ forced to be false}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-a subgraph with a maximum score, an object of class "igraph". It has
-ndoe attributes: significance, score, type. If permutation test is
-enabled, it also has a graph attribute (combinedP) and an edge
-attribute (edgeConfidence)
+IF num.subnets is NA, a subgraph with a maximum score, an object of
+class "igraph". It has ndoe attributes: significance, score, type. If
+permutation test is enabled, it also has a graph attribute (combinedP)
+and an edge attribute (edgeConfidence)
+IF num.subnets is not NA (also subnet.size is not NULL), an "iSubg"
+object, with two components ('g' and 'ls_subg'). The 'g', a "igraph"
+objects for the whole network. The 'ls_subg', a list of "igraph"
+objects, with each element for a subgraph with a maximum score, having
+node attributes (significance, score, type) and a graph attribute
+(threshold; determined when scanning 'subnet.size'). If permutation
+test is enabled, it also has a graph attribute (combinedP) and an edge
+attribute (edgeConfidence).
 }
 \description{
 \code{xSubneterGR} is supposed to identify maximum-scoring gene
@@ -199,7 +221,9 @@ to use \code{\link{xGR2GeneScores}} for defining and scoring nearby
 genes that are located within distance window of input GR. The second
 step is to use \code{\link{xSubneterGenes}} for identifying a
 maximum-scoring gene subnetwork that contains as many highly scored
-genes as possible but a few less scored genes as linkers.
+genes as possible but a few less scored genes as linkers. Also
+supported at the second step is to identify multiple subnetwoks using
+\code{\link{xSubneterGenesAdv}} when num.subnets is not NA.
 }
 \examples{
 \dontrun{
@@ -252,5 +276,6 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xGR2GeneScores}}, \code{\link{xSubneterGenes}}
+\code{\link{xGR2GeneScores}}, \code{\link{xSubneterGenes}},
+\code{\link{xSubneterGenesAdv}}
 }

@@ -132,7 +132,7 @@ xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_cir
 
 			#### Calculate the Forces for each node
 			### Distance matrix between all nodes
-			distances <- as.matrix(dist(position))
+			distances <- as.matrix(stats::dist(position))
 			distances[which(distances < 0.01)] <- 0.01 #We impose a minimum distance
 			### Each element of the list contains a matrix with the j = 1,2,..., dim dimension of the unitary vector 1
 			mylist <- vector("list",dim)
