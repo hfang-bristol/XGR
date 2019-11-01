@@ -52,7 +52,7 @@ library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 \dontrun{
-# a) provide the seed SNPs with the significance info
+# a) provide the SNPs
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
 RData.location=RData.location)
@@ -60,7 +60,7 @@ RData.location=RData.location)
 gr <- ImmunoBase$AS$variant
 data <- names(gr)
 
-# b) define nearby genes
+# b) find the location
 snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 }
 }

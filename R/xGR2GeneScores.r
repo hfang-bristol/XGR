@@ -165,7 +165,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, buil
 	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
+		message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme (%s)", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
 	}
     
     df_GR <- df_GR[order(df_GR$Score,df_GR$GR,decreasing=TRUE),]

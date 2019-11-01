@@ -57,8 +57,8 @@ xDefineEQTL(data = NULL, include.eQTL = c(NA, "JKscience_CD14",
 "Pi_eQTL_Blood", "Pi_eQTL_CD14", "Pi_eQTL_CD4", "Pi_eQTL_CD8",
 "Pi_eQTL_IFN", "Pi_eQTL_LPS2", "Pi_eQTL_LPS24", "Pi_eQTL_Monocyte",
 "Pi_eQTL_Neutrophil", "Pi_eQTL_NK", "Pi_eQTL_shared_CD14",
-"Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24"),
-eQTL.customised = NULL, verbose = TRUE,
+"Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24",
+"Osteoblast_eQTL"), eQTL.customised = NULL, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -344,6 +344,11 @@ state induced by 2-hour LPS (based on 228 individuals).}
 activating state induced by 24-hour LPS (based on 228 individuals).}
 \item{\code{Pi_eQTL_shared_IFN}: cis and trans-eQTLs in the activating
 state induced by 24-hour interferon-gamma (based on 228 individuals).}
+}
+15. Osteoblast cis-eQTLs. Sourced from Genome Research 2009,
+19(11):1942-52
+\itemize{
+\item{\code{Osteoblast_eQTL}: cis-eQTLs in Osteoblast.}
 }
 }
 \examples{

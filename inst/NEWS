@@ -3,13 +3,15 @@ CHANGES IN VERSION 1.1.7
 
 NEW FEATURES
 
+    o Populate annotations
+
     o Fix bugs
     
     o Modify the function 'xSubneterGenes' with threshold output
 
-    o Add functions ('xSubneterGenesAdv' and 'xSubneterGenesMST') supporting multiple subnet identifications
+    o Add functions ('xSubneterGenesAdv' and 'xSubneterGenesMST') supporting multiple subnetwork identifications
 
-    o Modify the functions ('xSubneterGR' and 'xSubneterSNP') enabling multiple subnet identifications
+    o Modify the functions ('xSubneterGR' and 'xSubneterSNP') enabling multiple subnetwork identifications
     
     o Modify the function 'xLayout' with a new layout (dephi)
     
