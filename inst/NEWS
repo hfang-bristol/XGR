@@ -15,6 +15,8 @@ NEW FEATURES
     
     o Modify the function 'xLayout' with a new layout (dephi)
     
+    o Modify the function 'xRDataLoader' supporting buit-in datasets hosted at OSF
+    
 
 CHANGES IN VERSION 1.1.6
 -----------------------

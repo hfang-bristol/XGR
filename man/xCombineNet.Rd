@@ -4,9 +4,13 @@
 \alias{xCombineNet}
 \title{Function to combine networks from a list of igraph objects}
 \usage{
-xCombineNet(list_ig, combineBy = c("union", "intersect"),
-attrBy = c("intersect", "union"), keep.all.vertices = FALSE,
-verbose = TRUE)
+xCombineNet(
+list_ig,
+combineBy = c("union", "intersect"),
+attrBy = c("intersect", "union"),
+keep.all.vertices = FALSE,
+verbose = TRUE
+)
 }
 \arguments{
 \item{list_ig}{a list of "igraph" objects or a "igraph" object}

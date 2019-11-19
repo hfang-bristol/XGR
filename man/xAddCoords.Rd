@@ -4,9 +4,14 @@
 \alias{xAddCoords}
 \title{Function to add coordinates into a graph according to a node attribute}
 \usage{
-xAddCoords(g, node.attr = NULL, glayout = layout_with_kk,
-edge.color.alternative = c("grey70", "grey95"), seed = 825,
-verbose = TRUE)
+xAddCoords(
+g,
+node.attr = NULL,
+glayout = layout_with_kk,
+edge.color.alternative = c("grey70", "grey95"),
+seed = 825,
+verbose = TRUE
+)
 }
 \arguments{
 \item{g}{an object of class "igraph" (or "graphNEL") for a graph with

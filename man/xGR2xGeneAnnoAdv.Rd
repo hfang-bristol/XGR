@@ -4,22 +4,38 @@
 \alias{xGR2xGeneAnnoAdv}
 \title{Function to conduct region-based enrichment analysis via crosslinked genes given a list of genomic region sets and a list of ontologies}
 \usage{
-xGR2xGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
-"PCHiC_combined", "GTEx_V6p_combined", "nearby"),
-crosslink.customised = NULL, crosslink.top = NULL,
-nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
-"linear", "constant"), nearby.decay.exponent = 2, ontologies = NA,
-size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
+xGR2xGeneAnnoAdv(
+list_vec,
+background = NULL,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
+"nearby"),
+crosslink.customised = NULL,
+crosslink.top = NULL,
+nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2,
+ontologies = NA,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2,
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, verbose = F, silent = F, plot = T,
-fdr.cutoff = 0.05, displayBy = c("zscore", "fdr", "pvalue", "fc",
-"or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+true.path.rule = F,
+verbose = F,
+silent = F,
+plot = T,
+fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{list_vec}{an input vector containing genomic regions.

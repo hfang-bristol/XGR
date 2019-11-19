@@ -4,23 +4,38 @@
 \alias{xGR2xGeneAnno}
 \title{Function to conduct region-based enrichment analysis via crosslinked genes}
 \usage{
-xGR2xGeneAnno(data, background = NULL, format = c("chr:start-end",
-"data.frame", "bed", "GRanges"), build.conversion = c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
-"PCHiC_combined", "GTEx_V6p_combined", "nearby"),
-crosslink.customised = NULL, crosslink.top = NULL,
-nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
-"linear", "constant"), nearby.decay.exponent = 2, ontology = NA,
-size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
+xGR2xGeneAnno(
+data,
+background = NULL,
+format = c("chr:start-end", "data.frame", "bed", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
+"nearby"),
+crosslink.customised = NULL,
+crosslink.top = NULL,
+nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2,
+ontology = NA,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
 test = c("hypergeo", "fisher", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2,
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, out.evidence = T, out.evidence.plot = F,
-verbose = T, silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+true.path.rule = F,
+out.evidence = T,
+out.evidence.plot = F,
+verbose = T,
+silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"
@@ -280,7 +295,7 @@ xEnrichViewer(eTerm)
 output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
 utils::write.table(output, file="Regions2genes_enrichments.txt",
-sep="\\t", row.names=FALSE)
+sep="\t", row.names=FALSE)
 
 ## e) barplot of significant enrichment results
 bp <- xEnrichBarplot(eTerm, top_num=10, displayBy="fc")

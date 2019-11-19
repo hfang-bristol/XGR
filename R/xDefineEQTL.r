@@ -52,7 +52,7 @@
 #'  \item{\code{JKnc_neutro_cis}: cis-eQTLs only.}
 #'  \item{\code{JKnc_neutro_trans}: trans-eQTLs only.}
 #' }
-#' 5. eQTLs in NK cells. Unpublished
+#' 5. eQTLs in NK cells. Unpublished (restricted access)
 #' \itemize{
 #'  \item{\code{JK_nk}: cis- and trans-eQTLs.}
 #'  \item{\code{JK_nk_cis}: cis-eQTLs only.}

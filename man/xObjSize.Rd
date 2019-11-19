@@ -4,8 +4,12 @@
 \alias{xObjSize}
 \title{Function to estimate memory allocated for an R variable or a file}
 \usage{
-xObjSize(obj, type = c("auto", "variable", "file"), units = "auto",
-verbose = TRUE)
+xObjSize(
+obj,
+type = c("auto", "variable", "file"),
+units = "auto",
+verbose = TRUE
+)
 }
 \arguments{
 \item{obj}{character specifying an R variable or a local file}

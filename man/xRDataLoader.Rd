@@ -4,23 +4,31 @@
 \alias{xRDataLoader}
 \title{Function to load the package built-in RData}
 \usage{
-xRDataLoader(RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
-"IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC",
-"ig.GOMF",
-"ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg",
-"org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC",
-"org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI",
+xRDataLoader(
+RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
+"IlluminaOmniExpress", "ig.DO",
+"ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA",
+"ig.HPMI", "ig.HPPA",
+"ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP",
+"org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA",
+"org.Hs.egHPMI",
 "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1",
-"org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP",
-"org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP",
-"org.Hs.egMsigdbC2KEGG",
-"org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR",
+"org.Hs.egMsigdbC2BIOCARTA",
+"org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall",
+"org.Hs.egMsigdbC2CP",
+"org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME",
+"org.Hs.egMsigdbC3MIR",
 "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM",
 "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF",
 "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH",
-"org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string",
-"org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised = NULL,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"org.Hs.egPS",
+"org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN",
+"org.Hs.PCommons_UN"),
+RData.customised = NULL,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 }
 \arguments{
 \item{RData}{which built-in RData to load. It can be one of "GWAS2EF",
@@ -63,6 +71,11 @@ working directory, and then set this option as:
 \eqn{RData.location="."}. Surely, the location can be anywhere as long
 as the user provides the correct path pointing to (otherwise, the
 script will have to remotely download each time)}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid
+provided and the query matched, it has priority over the one specified
+via RData.location}
 }
 \value{
 any use-specified variable that is given on the right side of the
@@ -75,7 +88,9 @@ cannot be loaded, it returns NULL.
 \note{
 If there are no use-specified variable that is given on the right side
 of the assigement sign '<-', then no RData will be loaded onto the
-working environment.
+working environment. To enable 'guid', please also install a package
+"osfr" via
+\code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
 }
 \examples{
 \dontrun{
@@ -84,6 +99,12 @@ org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
 ig.HPPA <- xRDataLoader(RData='ig.HPPA')
 org.Hs.egHPPA <- xRDataLoader(RData='org.Hs.egHPPA')
 org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
+org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
+
+# from OSF
+org.Mm.egKEGG <- xRDataLoader(RData='org.Mm.egKEGG', guid='gskpn')
+org.Mm.string_high <- xRDataLoader(RData='org.Mm.string_high',
+guid='gskpn')
 }
 }
 \seealso{

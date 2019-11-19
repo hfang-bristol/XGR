@@ -20,15 +20,26 @@ can respect the hierarchy of the ontology.
 <h3>Usage</h3>
 
 <pre>
-xEnricher(data, annotation, g, background = NULL, size.range = c(10,
-2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"),
+xEnricher(
+data,
+annotation,
+g,
+background = NULL,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = TRUE,
-verbose = T)
+elim.pvalue = 0.01,
+lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE,
+verbose = T
+)
 </pre>
 
 

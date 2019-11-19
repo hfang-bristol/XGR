@@ -4,10 +4,19 @@
 \alias{xEnrichDotplot}
 \title{Function to visualise enrichment results using dot-like plot}
 \usage{
-xEnrichDotplot(eTerm, FDR.cutoff = 0.05, colors = c("pink", "red"),
-y.scale = c("normal", "log"), slim = NULL, size.range = c(0.5,
-3.5), size.title = "Num of overlaps", label.top = "auto",
-label.direction.y = c("left", "right", "none"), label.size = 2, ...)
+xEnrichDotplot(
+eTerm,
+FDR.cutoff = 0.05,
+colors = c("pink", "red"),
+y.scale = c("normal", "log"),
+slim = NULL,
+size.range = c(0.5, 3.5),
+size.title = "Num of overlaps",
+label.top = "auto",
+label.direction.y = c("left", "right", "none"),
+label.size = 2,
+...
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it

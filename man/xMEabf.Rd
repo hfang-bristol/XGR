@@ -4,8 +4,13 @@
 \alias{xMEabf}
 \title{Function to conduct colocalisation analysis through Wakefield's Approximate Bayes Factor approach integrating GWAS and eQTL summary data}
 \usage{
-xMEabf(eqtl.summary, gwas.summary, prior.eqtl = 1e-04,
-prior.gwas = 1e-04, prior.both = 1e-05)
+xMEabf(
+eqtl.summary,
+gwas.summary,
+prior.eqtl = 1e-04,
+prior.gwas = 1e-04,
+prior.both = 1e-05
+)
 }
 \arguments{
 \item{eqtl.summary}{an input eQTL summary data for a region (eg the
@@ -52,7 +57,7 @@ Bayes Factor (ABF).
 \dontrun{
 res <- xMEabf(eqtl.summary, gwas.summary)
 utils::write.table(res$results, file="df_abf.txt", row.names=F,
-col.names=T, quote=F, sep="\\t")
+col.names=T, quote=F, sep="\t")
 }
 }
 \seealso{

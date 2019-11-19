@@ -4,9 +4,15 @@
 \alias{xEnrichD3}
 \title{Function to visualise enrichment results using a D3 plot}
 \usage{
-xEnrichD3(eTerm, top_num = 10, FDR.cutoff = 0.05, type = c("sankey",
-"force", "radial", "diagonal"), colormap = "ggplot2",
-filename = "xEnrichD3", ...)
+xEnrichD3(
+eTerm,
+top_num = 10,
+FDR.cutoff = 0.05,
+type = c("sankey", "force", "radial", "diagonal"),
+colormap = "ggplot2",
+filename = "xEnrichD3",
+...
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it

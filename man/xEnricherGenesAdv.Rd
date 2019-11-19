@@ -4,18 +4,31 @@
 \alias{xEnricherGenesAdv}
 \title{Function to conduct enrichment analysis given a list of gene sets and a list of ontologies}
 \usage{
-xEnricherGenesAdv(list_vec, background = NULL,
-check.symbol.identity = F, ontologies = NA, size.range = c(10,
-2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"),
+xEnricherGenesAdv(
+list_vec,
+background = NULL,
+check.symbol.identity = F,
+ontologies = NA,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F,
-verbose = F, silent = FALSE, plot = TRUE, fdr.cutoff = 0.05,
+elim.pvalue = 0.01,
+lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F,
+verbose = F,
+silent = FALSE,
+plot = TRUE,
+fdr.cutoff = 0.05,
 displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{list_vec}{an input vector containing gene symbols. Alternatively

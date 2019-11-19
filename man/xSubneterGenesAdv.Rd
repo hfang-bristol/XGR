@@ -4,22 +4,35 @@
 \alias{xSubneterGenesAdv}
 \title{Function to iteratively identify subnetworks from an input network and the signficance level imposed on its nodes}
 \usage{
-xSubneterGenesAdv(data, network = c("STRING_highest", "STRING_high",
-"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
-"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
-"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
+xSubneterGenesAdv(
+data,
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium",
+"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
+"PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
-"KEGG_organismal",
-"KEGG_disease", "REACTOME"), STRING.only = c(NA, "neighborhood_score",
-"fusion_score", "cooccurence_score", "coexpression_score",
-"experimental_score", "database_score", "textmining_score")[1],
-network.customised = NULL, seed.genes = T, subnet.size = 50,
-test.permutation = F, num.permutation = 100, respect = c("none",
-"degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), num.subnets = NULL, verbose = T, silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease", "REACTOME"),
+STRING.only = c(NA, "neighborhood_score", "fusion_score",
+"cooccurence_score",
+"coexpression_score", "experimental_score", "database_score",
+"textmining_score")[1],
+network.customised = NULL,
+seed.genes = T,
+subnet.size = 50,
+test.permutation = F,
+num.permutation = 100,
+respect = c("none", "degree"),
+aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
+num.subnets = NULL,
+verbose = T,
+silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for

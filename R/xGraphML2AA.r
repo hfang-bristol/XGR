@@ -48,7 +48,7 @@
 #' 
 #' ## load GWAS genes
 #' GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene', RData.location=RData.location)
-#' data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL' & Disease_ID=='RA') %>% dplyr::transmute(label=Symbol, lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>% dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
+#' data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL', Disease_ID=='RA') %>% dplyr::transmute(label=Symbol, lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>% dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
 #' 
 #' ## manual one (the same as curation='any')
 #' xGraphML2AA(data, query="AA:hsa04630", curation='manual', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)

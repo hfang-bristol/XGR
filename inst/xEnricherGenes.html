@@ -21,17 +21,29 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 <h3>Usage</h3>
 
 <pre>
-xEnricherGenes(data, background = NULL, check.symbol.identity = F,
-ontology = NA, ontology.customised = NULL, size.range = c(10,
-2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"),
+xEnricherGenes(
+data,
+background = NULL,
+check.symbol.identity = F,
+ontology = NA,
+ontology.customised = NULL,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F,
-verbose = T, silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+elim.pvalue = 0.01,
+lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F,
+verbose = T,
+silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 </pre>
 
 

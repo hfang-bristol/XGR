@@ -4,14 +4,32 @@
 \alias{xHeatmap}
 \title{Function to draw heatmap using ggplot2}
 \usage{
-xHeatmap(data, reorder = c("none", "row", "col", "both"),
-colormap = "spectral", ncolors = 64, zlim = NULL, barwidth = 0.3,
-barheight = NULL, nbin = 64, legend.title = "", x.rotate = 90,
-x.text.size = 6, x.text.hjust = 0, y.text.size = 6,
-legend.text.size = 4, legend.title.size = 6, shape = 19,
-size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
-font.family = "sans", na.color = "transparent", data.label = NULL,
-label.size = 1, label.color = "black", ...)
+xHeatmap(
+data,
+reorder = c("none", "row", "col", "both"),
+colormap = "spectral",
+ncolors = 64,
+zlim = NULL,
+barwidth = 0.3,
+barheight = NULL,
+nbin = 64,
+legend.title = "",
+x.rotate = 90,
+x.text.size = 6,
+x.text.hjust = 0,
+y.text.size = 6,
+legend.text.size = 4,
+legend.title.size = 6,
+shape = 19,
+size = 2,
+plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
+font.family = "sans",
+na.color = "transparent",
+data.label = NULL,
+label.size = 1,
+label.color = "black",
+...
+)
 }
 \arguments{
 \item{data}{a data frame/matrix for coloring. The coloring can be

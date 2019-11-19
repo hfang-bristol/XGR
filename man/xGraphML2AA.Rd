@@ -4,18 +4,34 @@
 \alias{xGraphML2AA}
 \title{Function to generate a graphml file from a pathway upon query}
 \usage{
-xGraphML2AA(data = NULL, org = c("human", "mouse"),
-query = "AA:hsa04672", curation = c("manual", "automatic", "any"),
-node.label = "label", node.color = "lfc",
-colormap = "deepskyblue-lightyellow-darkorange", ncolors = 64,
-nlegend = 9, zlim = NULL, legend.title = "",
-title.thispath = NULL, node.tooltip = "tooltip",
-node.highlight = "fdr", node.highlight.cutoff = 0.05,
-edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
-color.thispath = "#dddddd", color.otherpath = "#eeeeee",
-size.gene = 10, size.gene.found = 11, size.gene.highlight = 12,
-filename = "xGraphML2AA", verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGraphML2AA(
+data = NULL,
+org = c("human", "mouse"),
+query = "AA:hsa04672",
+curation = c("manual", "automatic", "any"),
+node.label = "label",
+node.color = "lfc",
+colormap = "deepskyblue-lightyellow-darkorange",
+ncolors = 64,
+nlegend = 9,
+zlim = NULL,
+legend.title = "",
+title.thispath = NULL,
+node.tooltip = "tooltip",
+node.highlight = "fdr",
+node.highlight.cutoff = 0.05,
+edge.color = "#00000033",
+edge.width = 1,
+color.gene = "#dddddd",
+color.thispath = "#dddddd",
+color.otherpath = "#eeeeee",
+size.gene = 10,
+size.gene.found = 11,
+size.gene.highlight = 12,
+filename = "xGraphML2AA",
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a data frame}
@@ -143,11 +159,10 @@ color.gene='#dde8f1',size.gene=11)
 ## load GWAS genes
 GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene',
 RData.location=RData.location)
-data <- GWAS_Gene \%>\% dplyr::filter(Odds_Ratio!='NULL' &
-Disease_ID=='RA') \%>\% dplyr::transmute(label=Symbol,
-lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) \%>\%
-dplyr::group_by(label) \%>\% dplyr::summarise(lfc=max(lfc),
-fdr=min(fdr))
+data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL',
+Disease_ID=='RA') %>% dplyr::transmute(label=Symbol,
+lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>%
+dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
 
 ## manual one (the same as curation='any')
 xGraphML2AA(data, query="AA:hsa04630", curation='manual',

@@ -4,14 +4,26 @@
 \alias{xEnrichMatrix}
 \title{Function to compare enrichment results using matrix plots}
 \usage{
-xEnrichMatrix(list_eTerm, method = c("ggplot2", "circle", "square",
-"color", "pie"), displayBy = c("zscore", "fc", "adjp", "pvalue"),
-FDR.cutoff = 0.05, wrap.width = NULL, sharings = NULL,
-reorder = c("row", "none", "col", "both"), colormap = "jet",
-ncolors = 20, zlim = NULL, slim = NULL,
-legend.direction = c("horizontal", "vertical"), title = NULL,
-flip = FALSE, y.rotate = 45, shape = 19, font.family = "sans",
-...)
+xEnrichMatrix(
+list_eTerm,
+method = c("ggplot2", "circle", "square", "color", "pie"),
+displayBy = c("zscore", "fc", "adjp", "pvalue"),
+FDR.cutoff = 0.05,
+wrap.width = NULL,
+sharings = NULL,
+reorder = c("row", "none", "col", "both"),
+colormap = "jet",
+ncolors = 20,
+zlim = NULL,
+slim = NULL,
+legend.direction = c("horizontal", "vertical"),
+title = NULL,
+flip = FALSE,
+y.rotate = 45,
+shape = 19,
+font.family = "sans",
+...
+)
 }
 \arguments{
 \item{list_eTerm}{a list of "eTerm" objects, or a data frame (with at

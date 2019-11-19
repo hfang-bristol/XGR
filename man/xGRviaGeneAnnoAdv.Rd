@@ -4,19 +4,33 @@
 \alias{xGRviaGeneAnnoAdv}
 \title{Function to conduct region-based enrichment analysis given a list of genomic region sets and a list of ontologies}
 \usage{
-xGRviaGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
-"hg38.to.hg19", "hg18.to.hg19"), gap.max = 0,
+xGRviaGeneAnnoAdv(
+list_vec,
+background = NULL,
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+gap.max = 0,
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-ontologies = NA, size.range = c(10, 2000), min.overlap = 5,
-which.distance = NULL, test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2,
+ontologies = NA,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, verbose = T, silent = FALSE, plot = TRUE,
-fdr.cutoff = 0.05, displayBy = c("zscore", "fdr", "pvalue", "fc",
-"or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+true.path.rule = F,
+verbose = T,
+silent = FALSE,
+plot = TRUE,
+fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{list_vec}{an input vector containing genomic regions.

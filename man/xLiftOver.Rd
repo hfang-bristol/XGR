@@ -4,11 +4,16 @@
 \alias{xLiftOver}
 \title{Function to lift genomic intervals from one genome build to another.}
 \usage{
-xLiftOver(data.file, format.file = c("data.frame", "bed",
-"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg19.to.hg38", "hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"),
-merged = T, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xLiftOver(
+data.file,
+format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
+"hg19.to.hg18",
+"hg18.to.hg38", "hg18.to.hg19"),
+merged = T,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of genomic

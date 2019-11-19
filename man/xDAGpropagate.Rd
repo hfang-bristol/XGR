@@ -4,10 +4,13 @@
 \alias{xDAGpropagate}
 \title{Function to generate a subgraph of a direct acyclic graph (DAG) propagaged by the input annotation data}
 \usage{
-xDAGpropagate(g, annotation, path.mode = c("all_paths",
-"shortest_paths",
-"all_shortest_paths"), propagation = c("all", "min", "max"),
-verbose = TRUE)
+xDAGpropagate(
+g,
+annotation,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+propagation = c("all", "min", "max"),
+verbose = TRUE
+)
 }
 \arguments{
 \item{g}{an object of class "igraph" to represent DAG}

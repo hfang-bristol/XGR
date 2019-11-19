@@ -4,9 +4,12 @@
 \alias{xSNPlocations}
 \title{Function to extract genomic locations given a list of SNPs}
 \usage{
-xSNPlocations(data, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
-"dbSNP_Single"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xSNPlocations(
+data,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a input vector containing SNPs. SNPs should be provided as

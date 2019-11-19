@@ -23,14 +23,23 @@ computing is also supported.
 <h3>Usage</h3>
 
 <pre>
-xSocialiserGenes(data, check.symbol.identity = F, ontology = c("GOBP",
-"GOMF", "GOCC", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP"),
+xSocialiserGenes(
+data,
+check.symbol.identity = F,
+ontology = c("GOBP", "GOMF", "GOCC", "DO", "HPPA", "HPMI", "HPCM",
+"HPMA", "MP"),
 measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
 method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
-rescale = TRUE, force = TRUE, fast = TRUE, parallel = TRUE,
-multicores = NULL, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = T, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+rescale = TRUE,
+force = TRUE,
+fast = TRUE,
+parallel = TRUE,
+multicores = NULL,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = T,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 </pre>
 
 

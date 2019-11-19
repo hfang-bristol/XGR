@@ -4,17 +4,29 @@
 \alias{xEnricherSNPs}
 \title{Function to conduct enrichment analysis given a list of SNPs and the ontology in query}
 \usage{
-xEnricherSNPs(data, background = NULL, ontology = c("EF", "EF_disease",
-"EF_phenotype", "EF_bp"), include.LD = NA, LD.r2 = 0.8,
-size.range = c(10, 2000), min.overlap = 5, which.distance = NULL,
+xEnricherSNPs(
+data,
+background = NULL,
+ontology = c("EF", "EF_disease", "EF_phenotype", "EF_bp"),
+include.LD = NA,
+LD.r2 = 0.8,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
 test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2,
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T, verbose = T, silent = FALSE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+true.path.rule = T,
+verbose = T,
+silent = FALSE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{an input vector. It contains a list of SNPs of interest}
@@ -231,7 +243,7 @@ xEnrichViewer(eTerm)
 res <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
 details=TRUE)
 output <- data.frame(term=rownames(res), res)
-utils::write.table(output, file="EF_enrichments.txt", sep="\\t",
+utils::write.table(output, file="EF_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 # e) barplot of significant enrichment results

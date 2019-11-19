@@ -4,9 +4,14 @@
 \alias{xEnrichViewer}
 \title{Function to view enrichment results}
 \usage{
-xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
-"zscore", "fc", "nAnno", "nOverlap", "or", "none"), decreasing = NULL,
-details = F)
+xEnrichViewer(
+eTerm,
+top_num = 10,
+sortBy = c("adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
+"nOverlap", "or", "none"),
+decreasing = NULL,
+details = F
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}

@@ -4,12 +4,20 @@
 \alias{xEnricherYours}
 \title{Function to conduct enrichment analysis given YOUR own input data}
 \usage{
-xEnricherYours(data.file, annotation.file, background.file = NULL,
-size.range = c(10, 2000), min.overlap = 5, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), verbose = T,
-silent = FALSE)
+xEnricherYours(
+data.file,
+annotation.file,
+background.file = NULL,
+size.range = c(10, 2000),
+min.overlap = 5,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+verbose = T,
+silent = FALSE
+)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of entities
@@ -166,7 +174,7 @@ xEnrichViewer(eTerm)
 # d) save enrichment results to the file called 'Yours_enrichments.txt'
 output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
-utils::write.table(output, file="Yours_enrichments.txt", sep="\\t",
+utils::write.table(output, file="Yours_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 # e) barplot of significant enrichment results

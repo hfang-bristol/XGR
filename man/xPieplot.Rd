@@ -4,9 +4,17 @@
 \alias{xPieplot}
 \title{Function to visualise data frame using pie plots}
 \usage{
-xPieplot(df, columns, colormap = "ggplot2", pie.radius = NULL,
-pie.color = "transparent", pie.color.alpha = 1, pie.thick = 0.1,
-legend.title = "", gp = NULL)
+xPieplot(
+df,
+columns,
+colormap = "ggplot2",
+pie.radius = NULL,
+pie.color = "transparent",
+pie.color.alpha = 1,
+pie.thick = 0.1,
+legend.title = "",
+gp = NULL
+)
 }
 \arguments{
 \item{df}{a data frame}

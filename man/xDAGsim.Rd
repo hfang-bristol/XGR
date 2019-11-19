@@ -4,9 +4,15 @@
 \alias{xDAGsim}
 \title{Function to calculate pair-wise semantic similarity between input terms based on a direct acyclic graph (DAG) with annotated data}
 \usage{
-xDAGsim(g, terms = NULL, method.term = c("Resnik", "Lin", "Schlicker",
-"Jiang", "Pesquita"), fast = T, parallel = TRUE, multicores = NULL,
-verbose = T)
+xDAGsim(
+g,
+terms = NULL,
+method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
+fast = T,
+parallel = TRUE,
+multicores = NULL,
+verbose = T
+)
 }
 \arguments{
 \item{g}{an object of class "igraph". It must contain a vertex

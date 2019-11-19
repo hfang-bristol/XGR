@@ -4,13 +4,18 @@
 \alias{xSNP2nGenes}
 \title{Function to define nearby genes given a list of SNPs}
 \usage{
-xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
-"slow", "linear", "constant"), decay.exponent = 2,
+xSNP2nGenes(
+data,
+distance.max = 2e+05,
+decay.kernel = c("rapid", "slow", "linear", "constant"),
+decay.exponent = 2,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
-"NPC"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"NPC"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{an input vector containing SNPs. SNPs should be provided as

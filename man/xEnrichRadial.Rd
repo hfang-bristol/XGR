@@ -4,12 +4,22 @@
 \alias{xEnrichRadial}
 \title{Function to visualise enrichment results using radial-like plot}
 \usage{
-xEnrichRadial(eTerm, ig = NULL, fixed = T, node.color = c("or",
-"adjp", "zscore"), colormap = "grey-orange-darkred", zlim = NULL,
-node.size = c("adjp", "or", "zscore"), slim = NULL,
-node.size.range = c(0.5, 3.5), edge.color = "skyblue",
-edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow.gap = 0.02,
-...)
+xEnrichRadial(
+eTerm,
+ig = NULL,
+fixed = T,
+node.color = c("or", "adjp", "zscore"),
+colormap = "grey-orange-darkred",
+zlim = NULL,
+node.size = c("adjp", "or", "zscore"),
+slim = NULL,
+node.size.range = c(0.5, 3.5),
+edge.color = "skyblue",
+edge.color.alpha = 0.5,
+edge.curve = 0.1,
+edge.arrow.gap = 0.02,
+...
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it

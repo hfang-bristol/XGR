@@ -4,16 +4,29 @@
 \alias{xEnrichDAGplotAdv}
 \title{Function to visualise comparative enrichment results using a direct acyclic graph (DAG)}
 \usage{
-xEnrichDAGplotAdv(ggplot, displayBy = c("nSig", "none"),
+xEnrichDAGplotAdv(
+ggplot,
+displayBy = c("nSig", "none"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-height = 7, width = 7, margin = rep(0.1, 4),
+height = 7,
+width = 7,
+margin = rep(0.1, 4),
 colormap = c("white-lightcyan-cyan", "yr", "bwr", "jet", "gbr", "wyr",
-"br", "rainbow", "wb", "lightyellow-orange"), ncolors = 40,
-zlim = NULL, colorbar = T, colorbar.fraction = 0.1, newpage = T,
+"br",
+"rainbow", "wb", "lightyellow-orange"),
+ncolors = 40,
+zlim = NULL,
+colorbar = T,
+colorbar.fraction = 0.1,
+newpage = T,
 layout.orientation = c("left_right", "top_bottom", "bottom_top",
-"right_left"), node.info = c("term_name", "term_id", "none"),
-wrap.width = NULL, graph.node.attrs = NULL,
-graph.edge.attrs = NULL, node.attrs = NULL)
+"right_left"),
+node.info = c("term_name", "term_id", "none"),
+wrap.width = NULL,
+graph.node.attrs = NULL,
+graph.edge.attrs = NULL,
+node.attrs = NULL
+)
 }
 \arguments{
 \item{ggplot}{an object "ggplot" (resulting from

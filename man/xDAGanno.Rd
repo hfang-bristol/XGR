@@ -4,8 +4,13 @@
 \alias{xDAGanno}
 \title{Function to generate a subgraph of a direct acyclic graph (DAG) induced by the input annotation data}
 \usage{
-xDAGanno(g, annotation, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = TRUE, verbose = TRUE)
+xDAGanno(
+g,
+annotation,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE,
+verbose = TRUE
+)
 }
 \arguments{
 \item{g}{an object of class "igraph" to represent DAG}
@@ -87,7 +92,7 @@ dnet::visDAG(g=dag, data=data, node.info="both")
 # select a term 'ankylosing spondylitis'
 terms <- V(g)$term_id[grep('ankylosing spondylitis',V(g)$term_name,
 perl=TRUE)]
-ind <- which(colnames(anno) \%in\% terms)
+ind <- which(colnames(anno) %in% terms)
 annotation <- lapply(ind, function(x){names(which(anno[,x]!=0))})
 names(annotation) <- colnames(anno)[ind]
 

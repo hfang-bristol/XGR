@@ -4,14 +4,21 @@
 \alias{xGRviaGenomicAnno}
 \title{Function to conduct region-based enrichment analysis using genomic annotations via binomial test}
 \usage{
-xGRviaGenomicAnno(data.file, annotation.file = NULL,
-background.file = NULL, format.file = c("data.frame", "bed",
-"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), resolution = c("bases", "regions", "hybrid"),
-background.annotatable.only = T, p.tail = c("one-tail", "two-tails"),
+xGRviaGenomicAnno(
+data.file,
+annotation.file = NULL,
+background.file = NULL,
+format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+resolution = c("bases", "regions", "hybrid"),
+background.annotatable.only = T,
+p.tail = c("one-tail", "two-tails"),
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"), GR.annotation = NA, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"hommel"),
+GR.annotation = NA,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data.file}{an input data file, containing a list of genomic
@@ -176,7 +183,7 @@ gp
 ## f) save enrichment results to the file called 'Regions_enrichments.txt'
 output <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
 sortBy="adjp", details=TRUE)
-utils::write.table(output, file="Regions_enrichments.txt", sep="\\t",
+utils::write.table(output, file="Regions_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 ##########################################
@@ -208,7 +215,7 @@ GR.annotations <- paste0('EpigenomeAtlas_15Segments_',names(info))
 names(GR.annotations) <- info
 ls_df <- lapply(1:length(GR.annotations), function(i){
 GR.annotation <- GR.annotations[i]
-message(sprintf("Analysing '\%s' (\%s) ...", names(GR.annotation),
+message(sprintf("Analysing '%s' (%s) ...", names(GR.annotation),
 as.character(Sys.time())), appendLF=T)
 df <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
 GR.annotation=GR.annotation, RData.location=RData.location, verbose=F)

@@ -4,14 +4,28 @@
 \alias{xVisNet}
 \title{Function to visualise a graph object of class "igraph"}
 \usage{
-xVisNet(g, pattern = NULL, colormap = c("yr", "jet", "gbr", "wyr",
-"br", "bwr", "rainbow", "wb"), ncolors = 40, zlim = NULL,
-colorbar = TRUE, newpage = TRUE, signature = TRUE,
-glayout = layout_with_kk, vertex.frame.color = NA,
-vertex.size = NULL, vertex.color = NULL, vertex.shape = NULL,
-vertex.label = NULL, vertex.label.cex = NULL,
-vertex.label.dist = 0.3, vertex.label.color = "blue",
-vertex.label.family = "sans", edge.arrow.size = 0.3, ...)
+xVisNet(
+g,
+pattern = NULL,
+colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr", "rainbow", "wb"),
+ncolors = 40,
+zlim = NULL,
+colorbar = TRUE,
+newpage = TRUE,
+signature = TRUE,
+glayout = layout_with_kk,
+vertex.frame.color = NA,
+vertex.size = NULL,
+vertex.color = NULL,
+vertex.shape = NULL,
+vertex.label = NULL,
+vertex.label.cex = NULL,
+vertex.label.dist = 0.3,
+vertex.label.color = "blue",
+vertex.label.family = "sans",
+edge.arrow.size = 0.3,
+...
+)
 }
 \arguments{
 \item{g}{an object of class "igraph"}

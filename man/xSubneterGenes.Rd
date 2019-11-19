@@ -4,23 +4,35 @@
 \alias{xSubneterGenes}
 \title{Function to identify a subnetwork from an input network and the signficance level imposed on its nodes}
 \usage{
-xSubneterGenes(data, network = c("STRING_highest", "STRING_high",
-"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
-"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
-"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
+xSubneterGenes(
+data,
+network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium",
+"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
+"PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
-"KEGG_organismal",
-"KEGG_disease", "REACTOME"), STRING.only = c(NA, "neighborhood_score",
-"fusion_score", "cooccurence_score", "coexpression_score",
-"experimental_score", "database_score", "textmining_score")[1],
-network.customised = NULL, seed.genes = T,
-subnet.significance = 0.01, subnet.size = NULL,
-test.permutation = F, num.permutation = 100, respect = c("none",
-"degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = T, silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease", "REACTOME"),
+STRING.only = c(NA, "neighborhood_score", "fusion_score",
+"cooccurence_score",
+"coexpression_score", "experimental_score", "database_score",
+"textmining_score")[1],
+network.customised = NULL,
+seed.genes = T,
+subnet.significance = 0.01,
+subnet.size = NULL,
+test.permutation = F,
+num.permutation = 100,
+respect = c("none", "degree"),
+aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
+verbose = T,
+silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for
@@ -193,10 +205,10 @@ subnet.size=50, RData.location=RData.location)
 
 # c) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
 output <- igraph::get.data.frame(subnet, what="edges")
-utils::write.table(output, file="subnet_edges.txt", sep="\\t",
+utils::write.table(output, file="subnet_edges.txt", sep="\t",
 row.names=FALSE)
 output <- igraph::get.data.frame(subnet, what="vertices")
-utils::write.table(output, file="subnet_nodes.txt", sep="\\t",
+utils::write.table(output, file="subnet_nodes.txt", sep="\t",
 row.names=FALSE)
 
 # d) visualise the identified subnet

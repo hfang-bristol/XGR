@@ -6,9 +6,10 @@
 #' @param RData.customised a file name for RData-formatted file. By default, it is NULL. It is designed when the user wants to import customised RData that are not listed in the above argument 'RData'. However, this argument can be always used even for those RData that are listed in the argument 'RData' 
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
 #' @param RData.location the characters to tell the location of built-in RData files. By default, it remotely locates at \url{http://galahad.well.ox.ac.uk/bigdata}; the development version locates at \url{http://galahad.well.ox.ac.uk/bigdata}. For the user equipped with fast internet connection, this option can be just left as default. But it is always advisable to download these files locally. Especially when the user needs to run this function many times, there is no need to ask the function to remotely download every time (also it will unnecessarily increase the runtime). For examples, these files (as a whole or part of them) can be first downloaded into your current working directory, and then set this option as: \eqn{RData.location="."}. Surely, the location can be anywhere as long as the user provides the correct path pointing to (otherwise, the script will have to remotely download each time)
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid provided and the query matched, it has priority over the one specified via RData.location
 #' @return 
 #' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData. If the data cannot be loaded, it returns NULL.
-#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment.
+#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment. To enable 'guid', please also install a package "osfr" via \code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
 #' @export
 #' @import dnet
 #' @import igraph
@@ -35,9 +36,14 @@
 #' ig.HPPA <- xRDataLoader(RData='ig.HPPA')
 #' org.Hs.egHPPA <- xRDataLoader(RData='org.Hs.egHPPA')
 #' org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
+#' org.Hs.egHPPA <- xRDataLoader(RData.customised='org.Hs.egHPPA')
+#' 
+#' # from OSF
+#' org.Mm.egKEGG <- xRDataLoader(RData='org.Mm.egKEGG', guid='gskpn')
+#' org.Mm.string_high <- xRDataLoader(RData='org.Mm.string_high', guid='gskpn')
 #' }
 
-xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     startT <- Sys.time()
@@ -47,8 +53,61 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
     }
 	
 	RData <- RData[1]
+    if(is.na(RData) & !is.null(RData.customised)){
+		RData <- RData.customised
+	}else if(is.na(RData) & is.null(RData.customised)){
+		stop("There is no input! Please input one of two parameters ('RData' or 'RData.customised').\n")
+	}
+	RData <- gsub('.RData$', "", RData, ignore.case=T, perl=T)
+	RData <- gsub(".RDa$", "", RData, ignore.case=T, perl=T)
+	
 	######################################################################################
-	# RData now is primarily hosted in github
+	# obtain from Open Science Frame (OSF)
+	######################################################################################
+	flag_osf <- F
+	# check in order: 
+	# 1) whether 5-digit guid (global unique identifier, eg 'gskpn') is provided
+	# 2) wether the package 'osfr' is installed
+	# 3) whether provided guid (for a project on OSF) can be retrieved (via osfr::osf_retrieve_node)
+	# 4) whether to-be-queried RData file is there (via osfr::osf_ls_files)
+	if(!is.null(guid) && nchar(guid)==5){
+		pkgs <- c("osfr")
+    	if(all(pkgs %in% rownames(utils::installed.packages()))){
+        	tmp <- sapply(pkgs, function(pkg) {
+            	requireNamespace(pkg, quietly=T)
+        	})
+        	if(all(tmp)){
+        	
+				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
+					target <- paste0(RData,".RData")
+					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
+					if(nrow(fls)>0){
+						ind <- match(fls$name, target)
+						ind <- ind[!is.na(ind)]
+						if(length(ind)==1){
+							fl <- fls[ind,]
+						
+							## specify the temporary file
+							destfile <- file.path(tempdir(), fl$name)
+							res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)
+							#res %>% osf_open()
+							# verify the file downloaded locally
+							if(file.exists(res$local_path)){
+								out <- get(load(res$local_path))
+								load_RData <- sprintf("'%s' at %s", prj$name, paste0('https://osf.io/',prj$id))
+								RData <- target
+								flag_osf <- T
+							}
+						
+						}
+					}
+				}
+			}
+        }
+	}
+	
+	######################################################################################
+	# define function: my_https_downloader
 	######################################################################################
 	my_https_downloader <- function (url, method=c("auto","internal","wininet","libcurl","wget","curl"), quiet=T, mode=c("w","wb","a","ab"), cacheOK=T, extra=getOption("download.file.extra")){
 	
@@ -124,109 +183,107 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 		invisible(res)
 	}
 	######################################################################################
+	
+	######################################################################################	
+	## obtain locally or remotely (other than OSF)
 	######################################################################################
-
-
-    if(is.na(RData) & !is.null(RData.customised)){
-		RData <- RData.customised
-	}else if(is.na(RData) & is.null(RData.customised)){
-		stop("There is no input! Please input one of two parameters ('RData' or 'RData.customised').\n")
-	}
+	if(!flag_osf){
 	
-	RData <- gsub('.RData$', "", RData, ignore.case=T, perl=T)
-	RData <- gsub(".RDa$", "", RData, ignore.case=T, perl=T)
+		###############################
+		## make sure there is no "/" at the end
+		path_host <- gsub("/$", "", RData.location)
+		if(path_host=="" || length(path_host)==0 || is.na(path_host)){
+			path_host <- "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal"
+		}
 	
-    ###############################
-    ## make sure there is no "/" at the end
-    path_host <- gsub("/$", "", RData.location)
-    if(path_host=="" || length(path_host)==0 || is.na(path_host)){
-        path_host <- "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal"
-    }
-    
-    ## load 
-    load_remote <- paste(path_host, "/", RData, ".RData", sep="")
-    load_local1 <- file.path(path_host, paste("data/", RData, ".RData", sep=""))
-    load_local2 <- file.path(path_host, paste(RData, ".RData", sep=""))
-    load_package <- RData
-    
-    #####################################################################
-    ## first, load data from the package itself (NOW DISABLE THIS OPTION)
-    #####################################################################
-    #if(length(suppressWarnings(tryCatch(eval(parse(text=paste("data(",load_package,", package='XGR')",sep=""))), error=function(e) e, warning=function(w) w)))==2){
-    
-    if(1){
-        ## second, load local R files
-        RData_local <- c(load_local1, load_local2)
-        load_flag <- sapply(RData_local, function(x){
-            if(.Platform$OS.type=="windows") x <- gsub("/", "\\\\", x)
-            ifelse(file.exists(x), TRUE, FALSE)
-        })
-        ## otherwise, load remote R files
-        if(sum(load_flag)==0){
-        	
-        	flag_failed <- F
-        	if(length(grep('^https',load_remote,perl=T))){
-        		if(length(grep('github',load_remote,perl=T))){
-        			load_remote <- paste(load_remote, "?raw=true", sep="")
-        		}
-        		res <- my_https_downloader(load_remote, mode="wb")
-        		if(res$flag==F){
-        			flag_failed <- T
-        		}else{
-        			eval(parse(text=paste(RData, " <- res$RData", sep="")))
-        		}
-        	}else{
-        		res <- my_https_downloader(load_remote, mode="wb")
-        		if(res$flag==F){
-        			flag_failed <- T
-        		}else{
-        			eval(parse(text=paste(RData, " <- res$RData", sep="")))
-        		}
-        	
-        		#if(class(suppressWarnings(try(load(url(load_remote)), T)))=="try-error"){
-        		#	flag_failed <- T
-        		#}
-        	}
-        	
-			if(flag_failed){
+		## load 
+		load_remote <- paste(path_host, "/", RData, ".RData", sep="")
+		load_local1 <- file.path(path_host, paste("data/", RData, ".RData", sep=""))
+		load_local2 <- file.path(path_host, paste(RData, ".RData", sep=""))
+		load_package <- RData
+	
+		#####################################################################
+		## first, load data from the package itself (NOW DISABLE THIS OPTION)
+		#####################################################################
+		#if(length(suppressWarnings(tryCatch(eval(parse(text=paste("data(",load_package,", package='XGR')",sep=""))), error=function(e) e, warning=function(w) w)))==2){
+	
+		if(1){
+			## second, load local R files
+			RData_local <- c(load_local1, load_local2)
+			load_flag <- sapply(RData_local, function(x){
+				if(.Platform$OS.type=="windows") x <- gsub("/", "\\\\", x)
+				ifelse(file.exists(x), TRUE, FALSE)
+			})
+			## otherwise, load remote R files
+			if(sum(load_flag)==0){
 			
-				load_remotes <- c(
-				paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep=""),
-				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep=""),
-				paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep="")
-				)
-				
-				for(i in 1:length(load_remotes)){
-					load_remote <- load_remotes[i]
-					if(verbose){
-						now <- Sys.time()
-						message(sprintf("Attempt to download from %s (at %s)", load_remote, as.character(now)), appendLF=T)
+				flag_failed <- F
+				if(length(grep('^https',load_remote,perl=T))){
+					if(length(grep('github',load_remote,perl=T))){
+						load_remote <- paste(load_remote, "?raw=true", sep="")
 					}
 					res <- my_https_downloader(load_remote, mode="wb")
-					if(res$flag==T){
-						break
+					if(res$flag==F){
+						flag_failed <- T
+					}else{
+						eval(parse(text=paste(RData, " <- res$RData", sep="")))
+					}
+				}else{
+					res <- my_https_downloader(load_remote, mode="wb")
+					if(res$flag==F){
+						flag_failed <- T
+					}else{
+						eval(parse(text=paste(RData, " <- res$RData", sep="")))
+					}
+			
+					#if(class(suppressWarnings(try(load(url(load_remote)), T)))=="try-error"){
+					#	flag_failed <- T
+					#}
+				}
+			
+				if(flag_failed){
+			
+					load_remotes <- c(
+					paste("https://github.com/hfang-bristol/RDataCentre/blob/master/Portal/", RData, ".RData?raw=true", sep=""),
+					paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep=""),
+					paste("http://galahad.well.ox.ac.uk/bigdata/", RData, ".RData", sep="")
+					)
+				
+					for(i in 1:length(load_remotes)){
+						load_remote <- load_remotes[i]
+						if(verbose){
+							now <- Sys.time()
+							message(sprintf("Attempt to download from %s (at %s)", load_remote, as.character(now)), appendLF=T)
+						}
+						res <- my_https_downloader(load_remote, mode="wb")
+						if(res$flag==T){
+							break
+						}
+					}
+				
+					if(res$flag==F){
+						warnings("Built-in Rdata files cannot be loaded. Please check your internet connection or their location in your local machine.\n")
+						eval(parse(text=paste(RData, " <- res$RData", sep="")))
+					}else{
+						eval(parse(text=paste(RData, " <- res$RData", sep="")))
 					}
 				}
-				
-				if(res$flag==F){
-					warnings("Built-in Rdata files cannot be loaded. Please check your internet connection or their location in your local machine.\n")
-					eval(parse(text=paste(RData, " <- res$RData", sep="")))
-				}else{
-					eval(parse(text=paste(RData, " <- res$RData", sep="")))
-				}
-			}
 		
-			load_RData <- load_remote
-			out <- base::get(RData)
+				load_RData <- load_remote
+				out <- base::get(RData)
 			
-        }else{
-            load_RData <- RData_local[load_flag]
-            out <- base::get(load(load_RData))
-        }
-    }else{
-        load_RData <- sprintf("package 'XGR' version %s", utils::packageVersion("XGR"))
-        out <- base::get(RData)
-    }
+			}else{
+				load_RData <- RData_local[load_flag]
+				out <- base::get(load(load_RData))
+			}
+		}else{
+			load_RData <- sprintf("package 'XGR' version %s", utils::packageVersion("XGR"))
+			out <- base::get(RData)
+		}
+	
+	}
+	
+	####################################################################################
 	
     if(verbose){
         now <- Sys.time()

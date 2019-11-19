@@ -4,11 +4,19 @@
 \alias{xEnrichBarplot}
 \title{Function to visualise enrichment results using a barplot}
 \usage{
-xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, bar.color = "lightyellow-orange",
-bar.width = 0.8, wrap.width = NULL, font.family = "sans",
-signature = TRUE)
+xEnrichBarplot(
+eTerm,
+top_num = 10,
+displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
+FDR.cutoff = 0.05,
+bar.label = TRUE,
+bar.label.size = 3,
+bar.color = "lightyellow-orange",
+bar.width = 0.8,
+wrap.width = NULL,
+font.family = "sans",
+signature = TRUE
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm"}

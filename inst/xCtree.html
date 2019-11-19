@@ -18,12 +18,20 @@ provided as an object of class &quot;igraph&quot;.
 <h3>Usage</h3>
 
 <pre>
-xCtree(ig, leave.label.orientation = c("outwards", "inwards"),
-leave.label.size = 2, leave.label.color = "steelblue",
-leave.label.alpha = 0.7, leave.label.wrap = NULL,
-leave.label.expansion = NULL, leave.size = 0,
-limit.expansion = 1.1, edge.color = "grey", edge.alpha = 0.5,
-edge.width = 0.5)
+xCtree(
+ig,
+leave.label.orientation = c("outwards", "inwards"),
+leave.label.size = 2,
+leave.label.color = "steelblue",
+leave.label.alpha = 0.7,
+leave.label.wrap = NULL,
+leave.label.expansion = NULL,
+leave.size = 0,
+limit.expansion = 1.1,
+edge.color = "grey",
+edge.alpha = 0.5,
+edge.width = 0.5
+)
 </pre>
 
 
@@ -126,7 +134,7 @@ ig &lt;- AA.template$consensus$ig
 # outwards
 gp &lt;- xCtree(ig, leave.label.orientation="outwards",
 leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
-head(gp$data %&gt;% dplyr::arrange(tipid))
+head(gp$data 
 
 # inwards
 gp &lt;- xCtree(ig, leave.label.orientation="inwards",
@@ -134,7 +142,7 @@ leave.label.wrap=30)
 
 # obtain 'xcoord' and 'ycoord'
 gp &lt;- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
-data &lt;- gp$data %&gt;% dplyr::arrange(ggraph.orig_index)
+data &lt;- gp$data 
 V(ig)$xcoord &lt;- data[,'x']
 V(ig)$ycoord &lt;- data[,'y']
 

@@ -4,13 +4,20 @@
 \alias{xGR2nGenes}
 \title{Function to define nearby genes given a list of genomic regions}
 \usage{
-xGR2nGenes(data, format = c("chr:start-end", "data.frame", "bed",
-"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("rapid", "slow", "linear",
-"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), scoring = F, scoring.scheme = c("max", "sum",
-"sequential"), scoring.rescale = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes(
+data,
+format = c("chr:start-end", "data.frame", "bed", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+distance.max = 50000,
+decay.kernel = c("rapid", "slow", "linear", "constant"),
+decay.exponent = 2,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+scoring = F,
+scoring.scheme = c("max", "sum", "sequential"),
+scoring.rescale = F,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"

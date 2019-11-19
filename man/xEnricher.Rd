@@ -4,15 +4,26 @@
 \alias{xEnricher}
 \title{Function to conduct enrichment analysis given the input data and the ontology and its annotation}
 \usage{
-xEnricher(data, annotation, g, background = NULL, size.range = c(10,
-2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"),
+xEnricher(
+data,
+annotation,
+g,
+background = NULL,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = TRUE,
-verbose = T)
+elim.pvalue = 0.01,
+lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE,
+verbose = T
+)
 }
 \arguments{
 \item{data}{an input vector containing a list of genes or SNPs of
@@ -205,7 +216,7 @@ xEnrichViewer(eTerm)
 res <- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
 details=TRUE)
 output <- data.frame(term=rownames(res), res)
-utils::write.table(output, file="EF_enrichments.txt", sep="\\t",
+utils::write.table(output, file="EF_enrichments.txt", sep="\t",
 row.names=FALSE)
 
 # 1g) barplot of significant enrichment results

@@ -4,8 +4,16 @@
 \alias{xReport}
 \title{Function to generate a html-formatted report}
 \usage{
-xReport(obj, rmd = NULL, output_format = NULL, output_file = NULL,
-output_dir = NULL, quiet = T, verbose = T, ...)
+xReport(
+obj,
+rmd = NULL,
+output_format = NULL,
+output_file = NULL,
+output_dir = NULL,
+quiet = T,
+verbose = T,
+...
+)
 }
 \arguments{
 \item{obj}{an R object. Usually a S3-class object storing results such

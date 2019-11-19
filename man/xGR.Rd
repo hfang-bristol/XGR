@@ -4,10 +4,16 @@
 \alias{xGR}
 \title{Function to create a GRanges object given a list of genomic regions}
 \usage{
-xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
+xGR(
+data,
+format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-add.name = T, remove.mcol = F, include.strand = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+add.name = T,
+remove.mcol = F,
+include.strand = F,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{input genomic regions (GR). If formatted as "chr:start-end"

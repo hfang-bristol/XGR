@@ -4,11 +4,21 @@
 \alias{xEnrichGGraph}
 \title{Function to visualise enrichment results using a ggraph-like lauout}
 \usage{
-xEnrichGGraph(eTerm, ig = NULL, fixed = T, node.color = c("zscore",
-"adjp", "or"), colormap = "grey-orange-darkred", zlim = NULL,
-node.size = c("adjp", "zscore", "or"), slim = NULL,
-node.size.range = c(0.5, 4), node.label.size = 2, leave = T,
-ncolumns = NULL, ...)
+xEnrichGGraph(
+eTerm,
+ig = NULL,
+fixed = T,
+node.color = c("zscore", "adjp", "or"),
+colormap = "grey-orange-darkred",
+zlim = NULL,
+node.size = c("adjp", "zscore", "or"),
+slim = NULL,
+node.size.range = c(0.5, 4),
+node.label.size = 2,
+leave = T,
+ncolumns = NULL,
+...
+)
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it

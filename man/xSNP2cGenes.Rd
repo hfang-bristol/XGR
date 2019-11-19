@@ -4,12 +4,16 @@
 \alias{xSNP2cGenes}
 \title{Function to define HiC genes given a list of SNPs}
 \usage{
-xSNP2cGenes(data, entity = c("SNP", "chr:start-end", "data.frame",
-"bed",
-"GRanges"), include.HiC = NA, GR.SNP = c("dbSNP_GWAS",
-"dbSNP_Common"), cdf.function = c("empirical", "exponential"),
-plot = FALSE, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xSNP2cGenes(
+data,
+entity = c("SNP", "chr:start-end", "data.frame", "bed", "GRanges"),
+include.HiC = NA,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
+cdf.function = c("empirical", "exponential"),
+plot = FALSE,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{an input vector containing SNPs. SNPs should be provided as

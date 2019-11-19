@@ -4,9 +4,16 @@
 \alias{xSNPscores}
 \title{Function to score lead or LD SNPs based on the given significance level}
 \usage{
-xSNPscores(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
-significance.threshold = 5e-05, score.cap = 10, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xSNPscores(
+data,
+include.LD = NA,
+LD.customised = NULL,
+LD.r2 = 0.8,
+significance.threshold = 5e-05,
+score.cap = 10,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a named input vector containing the significance level for

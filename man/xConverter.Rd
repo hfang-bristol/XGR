@@ -4,10 +4,12 @@
 \alias{xConverter}
 \title{Function to convert an object between graph classes}
 \usage{
-xConverter(obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
-"json"),
+xConverter(
+obj,
+from = c("igraph", "dgCMatrix", "dtree", "lol", "json"),
 to = c("dgCMatrix", "igraph", "dtree", "lol", "json", "igraph_tree"),
-verbose = TRUE)
+verbose = TRUE
+)
 }
 \arguments{
 \item{obj}{an object of class "igraph", "dgCMatrix", "dtree", "lol",

@@ -25,14 +25,24 @@ annotatable genomic regions will be used.
 <h3>Usage</h3>
 
 <pre>
-xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL,
-background.file = NULL, format.file = c("data.frame", "bed",
-"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg18.to.hg19"), background.annotatable.only = F, num.samples = 1000,
-gap.max = 50000, max.distance = NULL, p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation = NA,
-parallel = TRUE, multicores = NULL, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGRviaGenomicAnnoAdv(
+data.file,
+annotation.file = NULL,
+background.file = NULL,
+format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+background.annotatable.only = F,
+num.samples = 1000,
+gap.max = 50000,
+max.distance = NULL,
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+GR.annotation = NA,
+parallel = TRUE,
+multicores = NULL,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 </pre>
 
 

@@ -20,12 +20,19 @@ the significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
 <h3>Usage</h3>
 
 <pre>
-xGR2GeneScores(data, significance.threshold = 5e-05, score.cap = 10,
+xGR2GeneScores(
+data,
+significance.threshold = 5e-05,
+score.cap = 10,
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-distance.max = 50000, decay.kernel = c("slow", "linear", "rapid",
-"constant"), decay.exponent = 2, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), scoring.scheme = c("max", "sum", "sequential"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+distance.max = 50000,
+decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+scoring.scheme = c("max", "sum", "sequential"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 </pre>
 
 

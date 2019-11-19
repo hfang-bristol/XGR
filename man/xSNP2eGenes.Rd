@@ -4,10 +4,15 @@
 \alias{xSNP2eGenes}
 \title{Function to define eQTL genes given a list of SNPs or a customised eQTL mapping data}
 \usage{
-xSNP2eGenes(data, include.eQTL = NA, eQTL.customised = NULL,
-cdf.function = c("empirical", "exponential"), plot = FALSE,
+xSNP2eGenes(
+data,
+include.eQTL = NA,
+eQTL.customised = NULL,
+cdf.function = c("empirical", "exponential"),
+plot = FALSE,
 verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{an input vector containing SNPs. SNPs should be provided as

@@ -56,7 +56,7 @@ head(mst$matrix)
 gp_mst <- xGGnetwork(mst, node.label='name', node.label.size=3,
 node.label.force=1, node.xcoord='xcoord', node.ycoord='ycoord',
 edge.size='weight_scaled', node.size='num_edges', node.size.title="Num
-of \\nedges", node.size.range=c(1,4))
+of \nedges", node.size.range=c(1,4))
 }
 }
 \seealso{

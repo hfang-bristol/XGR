@@ -4,12 +4,21 @@
 \alias{xSocialiser}
 \title{Function to calculate pair-wise semantic similarity given the input data and the ontology and its annotation}
 \usage{
-xSocialiser(data, annotation, g, measure = c("BM.average", "BM.max",
-"BM.complete", "average", "max"), method.term = c("Resnik", "Lin",
-"Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE,
-fast = TRUE, parallel = TRUE, multicores = NULL,
+xSocialiser(
+data,
+annotation,
+g,
+measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
+method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
+rescale = TRUE,
+force = TRUE,
+fast = TRUE,
+parallel = TRUE,
+multicores = NULL,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = TRUE, verbose = T)
+true.path.rule = TRUE,
+verbose = T
+)
 }
 \arguments{
 \item{data}{an input vector containing a list of genes or SNPs of
@@ -142,7 +151,7 @@ sim
 
 # 1e) save similarity results to the file called 'EF_similarity.txt'
 output <- igraph::get.data.frame(sim, what="edges")
-utils::write.table(output, file="EF_similarity.txt", sep="\\t",
+utils::write.table(output, file="EF_similarity.txt", sep="\t",
 row.names=FALSE)
 
 # 1f) visualise the SNP network

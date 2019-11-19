@@ -24,8 +24,13 @@ should also be annotated by its all ancestor terms.
 <h3>Usage</h3>
 
 <pre>
-xDAGanno(g, annotation, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = TRUE, verbose = TRUE)
+xDAGanno(
+g,
+annotation,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE,
+verbose = TRUE
+)
 </pre>
 
 
@@ -129,7 +134,7 @@ dnet::visDAG(g=dag, data=data, node.info="both")
 # select a term 'ankylosing spondylitis'
 terms &lt;- V(g)$term_id[grep('ankylosing spondylitis',V(g)$term_name,
 perl=TRUE)]
-ind &lt;- which(colnames(anno) %in% terms)
+ind &lt;- which(colnames(anno) 
 annotation &lt;- lapply(ind, function(x){names(which(anno[,x]!=0))})
 names(annotation) &lt;- colnames(anno)[ind]
 

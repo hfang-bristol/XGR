@@ -4,9 +4,15 @@
 \alias{xGRsampling}
 \title{Function to generate random samples for data genomic regions from background genomic regions}
 \usage{
-xGRsampling(GR.data, GR.background, num.samples = 100, gap.max = 50000,
-max.distance = NULL, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGRsampling(
+GR.data,
+GR.background,
+num.samples = 100,
+gap.max = 50000,
+max.distance = NULL,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{GR.data}{an input data GR object, containing a set of genomic

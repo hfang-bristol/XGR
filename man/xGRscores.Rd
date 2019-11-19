@@ -4,8 +4,13 @@
 \alias{xGRscores}
 \title{Function to score genomic regions based on the given significance level}
 \usage{
-xGRscores(data, significance.threshold = 0.05, score.cap = 10,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+xGRscores(
+data,
+significance.threshold = 0.05,
+score.cap = 10,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+)
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for

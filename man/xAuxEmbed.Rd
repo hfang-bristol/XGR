@@ -4,8 +4,11 @@
 \alias{xAuxEmbed}
 \title{Function to encode a file as a base64 string for embedding}
 \usage{
-xAuxEmbed(file, download.attribute = basename(file),
-link.text = paste0("Download ", download.attribute))
+xAuxEmbed(
+file,
+download.attribute = basename(file),
+link.text = paste0("Download ", download.attribute)
+)
 }
 \arguments{
 \item{file}{a file to encode}

@@ -4,9 +4,14 @@
 \alias{xEnrichHeatmap}
 \title{Function to visualise enrichment results using heatmap}
 \usage{
-xEnrichHeatmap(list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
-"fdr", "pvalue", "fc", "or"), colormap = NULL, zlim = NULL,
-reorder = c("none", "row", "col", "both"))
+xEnrichHeatmap(
+list_eTerm,
+fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
+colormap = NULL,
+zlim = NULL,
+reorder = c("none", "row", "col", "both")
+)
 }
 \arguments{
 \item{list_eTerm}{an object of class "ls_eTerm". Alterntively, it can
