@@ -15,6 +15,7 @@
 #' @param nearby.decay.exponent a numeric specifying a decay exponent. By default, it sets to 2
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "mSeed", a list with following components:
 #' \itemize{
@@ -43,7 +44,7 @@
 #' mSeed <- xGR2xGeneScores(data=data, crosslink="genehancer", RData.location=RData.location)
 #' }
 
-xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring.scheme=c("max","sum","sequential"), nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -62,7 +63,7 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose, RData.location=RData.location)
+	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose)
 	
 	if(verbose){
         now <- Sys.time()
@@ -80,7 +81,7 @@ xGR2xGeneScores <- function(data, significance.threshold=NULL, score.cap=NULL, b
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_xGenes <- xGR2xGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location)
+	df_xGenes <- xGR2xGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function=cdf.function, scoring=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 	
 	
 	if(verbose){

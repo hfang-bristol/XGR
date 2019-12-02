@@ -10,6 +10,7 @@
 #' @param score.cap the maximum score being capped. By default, it is set to 10. If NULL, no capping is applied
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -44,7 +45,7 @@
 #' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, include.LD="EUR", RData.location=RData.location)
 #' }
 
-xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     if(is.null(data)){
@@ -123,7 +124,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 			message(sprintf("Inclusion of LD SNPs is based on population (%s) with R2 >= %f", paste(include.LD, collapse=','), LD.r2), appendLF=T)
 		}
 	
-		GWAS_LD <- xRDataLoader(RData.customised='GWAS_LD', RData.location=RData.location, verbose=verbose)
+		GWAS_LD <- xRDataLoader('GWAS_LD', RData.location=RData.location, guid=guid, verbose=verbose)
 		res_list <- lapply(include.LD, function(x){
 			data_ld <- ''
 			eval(parse(text=paste("data_ld <- GWAS_LD$", x, sep="")))
@@ -149,7 +150,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 		###########################
 		## also based on ImmunoBase
 		if(1){
-			ImmunoBase_LD <- xRDataLoader(RData.customised='ImmunoBase_LD', RData.location=RData.location, verbose=verbose)
+			ImmunoBase_LD <- xRDataLoader('ImmunoBase_LD', RData.location=RData.location, guid=guid, verbose=verbose)
 			res_list <- lapply(include.LD, function(x){
 				data_ld <- ''
 				eval(parse(text=paste("data_ld <- ImmunoBase_LD$", x, sep="")))

@@ -10,6 +10,7 @@
 #' @param plot logical to indicate whether the histogram plot (plus density or CDF plot) should be drawn. By default, it sets to false for no plotting
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -38,7 +39,7 @@
 #' df_cGenes <- xSNP2cGenes(data, include.HiC="Monocytes", RData.location=RData.location)
 #' }
 
-xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=NA, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=NA, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -50,7 +51,7 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
     ######################################################
 	
 	## all
-	df_FTS <- xDefineHIC(data=NULL, include.HiC=include.HiC, verbose=verbose, RData.location=RData.location)
+	df_FTS <- xDefineHIC(data=NULL, include.HiC=include.HiC, verbose=verbose, RData.location=RData.location, guid=guid)
 	
 	##################
 	if(is.null(data)){
@@ -59,7 +60,7 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 	##################
 		
 	## only data
-	PCHiC <- xDefineHIC(data=data, entity=entity, include.HiC=include.HiC, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
+	PCHiC <- xDefineHIC(data=data, entity=entity, include.HiC=include.HiC, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 	df_data <- PCHiC$df
 	
 	if(!is.null(df_FTS)){
@@ -180,7 +181,7 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 	# only keep those genes with GeneID
 	####################################
 	if(!is.null(df_cGenes)){
-		ind <- xSymbol2GeneID(df_cGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location)
+		ind <- xSymbol2GeneID(df_cGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location, guid=guid)
 		df_cGenes <- df_cGenes[!is.na(ind), ]
 		
 		if(nrow(df_cGenes)==0){

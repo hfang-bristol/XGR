@@ -8,7 +8,6 @@
 #' @param gap.max the maximum distance of background islands to be considered away from data regions. Only background islands no far way from this distance will be considered. For example, if it is 0, meaning that only background islands that overlapp with genomic regions will be considered. By default, it is 50000
 #' @param max.distance the maximum distance away from data regions that is allowed when generating random samples. By default, it is NULl meaning no such restriction
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
-#' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' a list of GR ojects, each containing an GR oject storing a sample.
 #' @export
@@ -28,10 +27,10 @@
 #' FANTOM5_Enhancer_Cell <- xRDataLoader(RData.customised='FANTOM5_Enhancer_Cell', RData.location=RData.location)
 #' 
 #' # c) generate random samples as a list of GR objects
-#' sGR_List <- xGRsampling(GR.data=dbSNP_GWAS, GR.background=FANTOM5_Enhancer_Cell, num.samples=1000, RData.location=RData.location)
+#' sGR_List <- xGRsampling(GR.data=dbSNP_GWAS, GR.background=FANTOM5_Enhancer_Cell, num.samples=1000)
 #' }
 
-xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, max.distance=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, max.distance=NULL, verbose=T)
 {
 
 	if(is.null(max.distance)){

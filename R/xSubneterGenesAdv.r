@@ -16,6 +16,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a "igraph" objects for the whole network. The 'ls_subg', a list of "igraph" objects, with each element for a subgraph with a maximum score, having node attributes (significance, score, type) and a graph attribute (threshold; determined when scanning 'subnet.size'). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
 #' @note The algorithm uses \code{\link{xSubneterGenes}} for identifying the first gene subnetwork from the input whole network. The second subnetwork is identified from the whole subnetwork subtracted by all edges in the first identified subnetwork. And do so till subnet.significance is no less than 0.05
@@ -38,7 +39,7 @@
 #' isubg <- xSubneterGenesAdv(data=data, network="STRING_high", subnet.size=50, RData.location=RData.location)
 #' }
 
-xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=T, subnet.size=50, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), num.subnets=NULL, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=T, subnet.size=50, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), num.subnets=NULL, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -63,7 +64,7 @@ xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","ST
 			now <- Sys.time()
 			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=T)
 		}
-        g <- xDefineNet(network=network, STRING.only=STRING.only, weighted=FALSE, verbose=FALSE, RData.location=RData.location)
+        g <- xDefineNet(network=network, STRING.only=STRING.only, weighted=FALSE, verbose=FALSE, RData.location=RData.location, guid=guid)
 	}
     if(verbose){
         message(sprintf("The network you choose has %d nodes and %d edges", vcount(g),ecount(g)), appendLF=T)
@@ -81,7 +82,7 @@ xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","ST
     k <- 1
     flag <- T
 	while(flag && k <= num.subnets){
-		subg_tmp <- xSubneterGenes(data=data, network.customised=ig_tmp, seed.genes=seed.genes, subnet.significance=NULL, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, verbose=verbose, silent=T, RData.location=RData.location)
+		subg_tmp <- xSubneterGenes(data=data, network.customised=ig_tmp, seed.genes=seed.genes, subnet.significance=NULL, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, verbose=verbose, silent=T, RData.location=RData.location, guid=guid)
 		if(verbose){
 			message(sprintf("Iteration %d: thresholded at %1.2e (%s) ...", k, subg_tmp$threshold, as.character(Sys.time())), appendLF=T)
 		}

@@ -17,6 +17,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' If scoring sets to false, a data frame with following columns:
 #' \itemize{
@@ -70,7 +71,7 @@
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=T, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     startT <- Sys.time()
@@ -94,7 +95,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		names(data) <- NULL
 	}
 	
-	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
 	
 	###################
 	if(is.null(dGR)){
@@ -174,7 +175,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 			if(crosslink=="genehancer"){
 				if(0){
-					ig <- xRDataLoader('ig.genehancer', verbose=F, RData.location=RData.location)
+					ig <- xRDataLoader('ig.genehancer', verbose=F, RData.location=RData.location, guid=guid)
 					V(ig)$name <- V(ig)$id
 					df_edges <- get.data.frame(ig, what="edges")
 					df_nodes <- get.data.frame(ig, what="vertices")
@@ -185,25 +186,25 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					crosslink.customised <- data.frame(GR=df_edges$from, Gene=df_edges$to, Score=df_edges$score * df_edges$GR_score, Context=rep('genehancer',nrow(df_edges)), stringsAsFactors=F)
 					df_SGS_customised <- crosslink.customised
 				}else{
-					df_SGS_customised <- xRDataLoader('crosslink.customised.genehancer', verbose=verbose, RData.location=RData.location)
+					df_SGS_customised <- xRDataLoader('crosslink.customised.genehancer', verbose=verbose, RData.location=RData.location, guid=guid)
 				}
 			
 			}else if(sum(grep("PCHiC_",crosslink,perl=TRUE)) > 0){
 				rdata <- paste0('crosslink.customised.', crosslink)
-				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location, guid=guid)
 				
 			}else if(sum(grep("GTEx_V6p_",crosslink,perl=TRUE)) > 0){
 				rdata <- paste0('crosslink.customised.', crosslink)
-				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location, guid=guid)
 					
 			}else if(sum(grep("FANTOM5_",crosslink,perl=TRUE)) > 0){
 				rdata <- paste0('crosslink.customised.', crosslink)
-				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location, guid=guid)
 					
 			}else{
 				## general use
 				rdata <- paste0('crosslink.customised.', crosslink)
-				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location)
+				df_SGS_customised <- xRDataLoader(rdata, verbose=verbose, RData.location=RData.location, guid=guid)
 			}
 
 			############################
@@ -249,7 +250,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				df_SGS$Weight <- df_SGS$Score
 			}
 			
-			gr <- xGR(df_SGS$GR, format="chr:start-end", verbose=verbose, RData.location=RData.location)
+			gr <- xGR(df_SGS$GR, format="chr:start-end", verbose=verbose, RData.location=RData.location, guid=guid)
 			
 			q2r <- as.data.frame(GenomicRanges::findOverlaps(query=dGR, subject=gr, maxgap=-1L, minoverlap=0L, type="any", select="all", ignore.strand=TRUE))
 			q2r$gr <- names(gr[q2r[,2]])
@@ -320,7 +321,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			
 			########################################
 			# check gene (make sure official symbol)
-			ind <- !is.na(XGR::xSymbol2GeneID(df_xGenes$Gene, details=TRUE, verbose=FALSE, RData.location=RData.location)$Symbol)
+			ind <- !is.na(XGR::xSymbol2GeneID(df_xGenes$Gene, details=TRUE, verbose=FALSE, RData.location=RData.location, guid=guid)$Symbol)
 			df_xGenes <- df_xGenes[ind,]
 			########################################
 	
@@ -393,7 +394,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 		## only for the option 'nearby'
 		if(crosslink=='nearby'){
-			df <- xGR2nGenes(data=dGR, format="GRanges", distance.max=nearby.distance.max, decay.kernel=nearby.decay.kernel, decay.exponent=nearby.decay.exponent, GR.Gene="UCSC_knownGene", scoring=scoring, scoring.scheme=scoring.scheme, scoring.rescale=scoring.rescale, verbose=F, RData.location=RData.location)
+			df <- xGR2nGenes(data=dGR, format="GRanges", distance.max=nearby.distance.max, decay.kernel=nearby.decay.kernel, decay.exponent=nearby.decay.exponent, GR.Gene="UCSC_knownGene", scoring=scoring, scoring.scheme=scoring.scheme, scoring.rescale=scoring.rescale, verbose=F, RData.location=RData.location, guid=guid)
 			
 			context <- paste0('nearby_',nearby.distance.max,'_',nearby.decay.kernel)
 			if(scoring){
@@ -435,7 +436,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	## also output igraph (genes with genomic location)
 	if(0){
 		GR.Gene <- "UCSC_knownGene"
-		gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=FALSE, RData.location=RData.location)
+		gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=FALSE, RData.location=RData.location, guid=guid)
 		
 		tmp_df <- df_xGenes
 		ind <- match(tmp_df$Gene, names(gr_Gene))
@@ -462,7 +463,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			
 			## Circos plot
 			if(0){
-				GR.SNP <- xGR(data=V(ig)$id[V(ig)$type=='GR'], format="chr:start-end", verbose=FALSE, RData.location=RData.location)
+				GR.SNP <- xGR(data=V(ig)$id[V(ig)$type=='GR'], format="chr:start-end", verbose=FALSE, RData.location=RData.location, guid=guid)
 				names(GR.SNP) <- V(ig)$name[V(ig)$type=='GR']
 				GR.Gene <- xGR(data=V(ig)$id[V(ig)$type=='Gene'], format="chr:start-end", verbose=FALSE, RData.location=RData.location)
 				names(GR.Gene) <- V(ig)$name[V(ig)$type=='Gene']

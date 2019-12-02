@@ -10,6 +10,7 @@
 #' @param include.strand logical to include strand. By default, it sets to false. It only works when the format is "data.frame" or "bed" and the input data has 4 columns
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return a GenomicRanges object 
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
@@ -35,7 +36,7 @@
 #' GR <- xGR(data=data, format="chr:start-end", RData.location=RData.location)
 #' }
 
-xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, include.strand=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, include.strand=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -177,7 +178,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		if(verbose){
 			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
 		}
-		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
+		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location, guid=guid)
 	}
   	#######################################################
   	

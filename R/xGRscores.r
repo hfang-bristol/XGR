@@ -6,7 +6,6 @@
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of GR into scores. If given, those GR below this are considered significant and thus scored positively. Instead, those above this are considered insigificant and thus receive no score
 #' @param score.cap the maximum score being capped. By default, it is set to 10. If NULL, no capping is applied
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
-#' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -38,10 +37,10 @@
 #' data <- cbind(GR=GR, Sig=sig)
 #'
 #' # b) calculate GR scores (considering significant cutoff 5e-5)
-#' df_GR <- xGRscores(data=data, significance.threshold=5e-5, RData.location=RData.location)
+#' df_GR <- xGRscores(data=data, significance.threshold=5e-5)
 #' }
 
-xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T)
 {
 
     if(is.null(data)){

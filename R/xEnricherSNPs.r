@@ -22,6 +22,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "eTerm", a list with following components:
 #' \itemize{
@@ -96,7 +97,7 @@
 #' xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore", node.info=c("full_term_name"))
 #' }
 
-xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     if(!silent){
@@ -139,7 +140,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
 		
 		#########
 		## load ontology information
-		ig <- xRDataLoader(RData=paste('ig.EF', sep=''), RData.location=RData.location, verbose=verbose)
+		ig <- xRDataLoader(RData=paste('ig.EF', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		V(ig)$namespace <- ontology
 		
 		if(ontology != 'EF'){
@@ -167,7 +168,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
         
 		#########
 		## load annotation information
-		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, verbose=verbose)
+		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 			
 		#########
 		## include additional SNPs that are in LD with input SNPs
@@ -178,7 +179,7 @@ xEnricherSNPs <- function(data, background=NULL, ontology=c("EF","EF_disease","E
 			include.LD <- default.include.LD[!is.na(ind)]
 			
 			if(length(include.LD) > 0){
-				GWAS_LD <- xRDataLoader(RData='GWAS_LD', RData.location=RData.location, verbose=verbose)
+				GWAS_LD <- xRDataLoader(RData='GWAS_LD', RData.location=RData.location, guid=guid, verbose=verbose)
 				
 				ld.list <- lapply(include.LD, function(x){
 					data_ld <- ''

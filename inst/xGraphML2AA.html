@@ -44,7 +44,8 @@ size.gene.found = 11,
 size.gene.highlight = 12,
 filename = "xGraphML2AA",
 verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 </pre>
 
@@ -201,6 +202,11 @@ displayed in the screen. By default, it sets to true for display</p>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
+</td></tr>
 </table>
 
 
@@ -242,9 +248,8 @@ color.gene='#dde8f1',size.gene=11)
 GWAS_Gene &lt;- xRDataLoader(RData.customised='GWAS_Gene',
 RData.location=RData.location)
 data &lt;- GWAS_Gene 
-Disease_ID=='RA') 
-lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) 
-dplyr::group_by(label) 
+transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue) 
+group_by(label) 
 
 ## manual one (the same as curation='any')
 xGraphML2AA(data, query="AA:hsa04630", curation='manual',

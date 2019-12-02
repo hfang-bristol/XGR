@@ -18,6 +18,7 @@
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' a circos plot with edge weights between input snps/genes represented by the colour of the links
 #' @note none
@@ -73,7 +74,7 @@
 #' #dev.off()
 #' }
 
-xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("in","out"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("in","out"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -150,13 +151,13 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 		if(class(GR.SNP) == "GRanges"){
 			pos_snp <- GR.SNP
 		}else{
-			pos_snp <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location)
+			pos_snp <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location, guid=guid)
 			if(is.null(pos_snp)){
 				GR.SNP <- "dbSNP_GWAS"
 				if(verbose){
 					message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
 				}
-				pos_snp <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+				pos_snp <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 			}		
 		}
   	}
@@ -165,13 +166,13 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 		if(class(GR.Gene) == "GRanges"){
 			pos_gene <- GR.Gene
 		}else{
-			pos_gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
+			pos_gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 			if(is.null(pos_gene)){
 				GR.Gene <- "UCSC_knownGene"
 				if(verbose){
 					message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
 				}
-				pos_gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+				pos_gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 			}
 		}
   	}

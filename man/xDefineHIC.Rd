@@ -21,7 +21,8 @@ include.HiC = c(NA, "Monocytes", "Macrophages_M0", "Macrophages_M1",
 "PE.Naive_CD8_T_cells", "Combined", "Combined_PE"),
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -59,6 +60,9 @@ displayed in the screen. By default, it sets to true for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 If input data is NULL, a data frame with following columns:

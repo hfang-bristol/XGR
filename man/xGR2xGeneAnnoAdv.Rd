@@ -34,7 +34,8 @@ silent = F,
 plot = T,
 fdr.cutoff = 0.05,
 displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -176,6 +177,9 @@ default), "or" for odds ratio. This option only works when setting plot
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 an object of class "ls_eTerm", a list with following components:

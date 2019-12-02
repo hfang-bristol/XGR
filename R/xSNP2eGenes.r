@@ -9,6 +9,7 @@
 #' @param plot logical to indicate whether the histogram plot (plus density or CDF plot) should be drawn. By default, it sets to false for no plotting
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -38,7 +39,7 @@
 #' df_eGenes <- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A", RData.location=RData.location)
 #' }
 
-xSNP2eGenes <- function(data, include.eQTL=NA, eQTL.customised=NULL, cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2eGenes <- function(data, include.eQTL=NA, eQTL.customised=NULL, cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -59,7 +60,7 @@ xSNP2eGenes <- function(data, include.eQTL=NA, eQTL.customised=NULL, cdf.functio
     ######################################################
     # Link to targets based on eQTL
     ######################################################
-    df_SGS <- xDefineEQTL(data=NULL, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, verbose=verbose, RData.location=RData.location)
+    df_SGS <- xDefineEQTL(data=NULL, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, verbose=verbose, RData.location=RData.location, guid=guid)
 	
 	if(!is.null(df_SGS)){	
 		
@@ -145,7 +146,7 @@ xSNP2eGenes <- function(data, include.eQTL=NA, eQTL.customised=NULL, cdf.functio
 	# only keep those genes with GeneID
 	####################################
 	if(!is.null(df_eGenes)){
-		ind <- xSymbol2GeneID(df_eGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location)
+		ind <- xSymbol2GeneID(df_eGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location, guid=guid)
 		df_eGenes <- df_eGenes[!is.na(ind), ]
 		if(nrow(df_eGenes)==0){
 			df_eGenes <- NULL

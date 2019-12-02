@@ -10,7 +10,8 @@ org = c("human", "mouse"),
 check.symbol.identity = F,
 details = F,
 verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ displayed in the screen. By default, it sets to false for no display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a vector containing entrez geneid with 'NA' for the unmatched if

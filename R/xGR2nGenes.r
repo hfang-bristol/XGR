@@ -14,6 +14,7 @@
 #' @param scoring.rescale logical to indicate whether gene scores will be further rescaled into the [0,1] range. By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' If scoring sets to false, a data frame with following columns:
 #' \itemize{
@@ -61,7 +62,7 @@
 #' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="constant", scoring=T, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -70,7 +71,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     decay.kernel <- match.arg(decay.kernel)
     scoring.scheme <- match.arg(scoring.scheme)
 	
-	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+	dGR <- xGR(data=data, format=format, build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
   	#######################################################
   	
 	if(verbose){
@@ -78,15 +79,15 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
 	}
 	if(class(GR.Gene) == "GRanges"){
-		gr_Gene <- xGR(GR.Gene, format="GRanges", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+		gr_Gene <- xGR(GR.Gene, format="GRanges", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
 	}else{
-		gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
+		gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(gr_Gene)){
 			GR.Gene <- "UCSC_knownGene"
 			if(verbose){
 				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
 			}
-			gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+			gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
     }
     

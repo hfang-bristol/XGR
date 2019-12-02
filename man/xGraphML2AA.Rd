@@ -30,7 +30,8 @@ size.gene.found = 11,
 size.gene.highlight = 12,
 filename = "xGraphML2AA",
 verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -130,6 +131,9 @@ displayed in the screen. By default, it sets to true for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 invisible (a string storing graphml-formatted content). If the filename
@@ -159,10 +163,9 @@ color.gene='#dde8f1',size.gene=11)
 ## load GWAS genes
 GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene',
 RData.location=RData.location)
-data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL',
-Disease_ID=='RA') %>% dplyr::transmute(label=Symbol,
-lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>%
-dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
+data <- GWAS_Gene %>% filter(Odds_Ratio!='NULL',Disease_ID=='RA') %>%
+transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue) %>%
+group_by(label) %>% summarise(lfc=max(lfc),fdr=min(fdr))
 
 ## manual one (the same as curation='any')
 xGraphML2AA(data, query="AA:hsa04630", curation='manual',

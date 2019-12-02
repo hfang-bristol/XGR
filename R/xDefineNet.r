@@ -7,6 +7,7 @@
 #' @param weighted logical to indicate whether edge weights should be considered. By default, it sets to false. If true, it only works for the network from the STRING database 
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "igraph"
 #' @note The input graph will treat as an unweighted graph if there is no 'weight' edge attribute associated with
@@ -37,7 +38,7 @@
 #' g <- xDefineNet(network="KEGG_organismal", RData.location=RData.location)
 #' }
 
-xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME","TRRUST"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME","TRRUST"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -49,7 +50,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 	}
 		
 	if(length(grep('STRING',network,perl=TRUE)) > 0){
-		g <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location, verbose=verbose)
+		g <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location, guid=guid, verbose=verbose)
 		
 		## restrict to those edges with given confidence
 		flag <- unlist(strsplit(network,"_"))[2]
@@ -107,7 +108,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		g <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)
 			
     }else if(length(grep('PCommonsUN',network,perl=TRUE)) > 0){
-		g <- xRDataLoader(RData.customised='org.Hs.PCommons_UN', RData.location=RData.location, verbose=verbose)
+		g <- xRDataLoader(RData.customised='org.Hs.PCommons_UN', RData.location=RData.location, guid=guid, verbose=verbose)
 			
 		flag <- unlist(strsplit(network,"_"))[2]
 		if(flag=='high'){
@@ -126,15 +127,15 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
     }else if(length(grep('PCommonsDN',network,perl=TRUE)) > 0){
 		flag <- unlist(strsplit(network,"_"))[2]
 		if(flag=='high'){
-			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN', RData.location=RData.location, verbose=verbose)
+			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN', RData.location=RData.location, guid=guid, verbose=verbose)
 			# restrict to those edges with high confidence score>=102
 			eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=102 | controls_expression_of>=102 | controls_phosphorylation_of>=102 | controls_state_change_of>=102 | controls_transport_of>=102])"))
 		}else if(flag=='medium'){
-			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN', RData.location=RData.location, verbose=verbose)
+			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN', RData.location=RData.location, guid=guid, verbose=verbose)
 			# restrict to those edges with median confidence score>=101
 			eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=101 | controls_expression_of>=101 | controls_phosphorylation_of>=101 | controls_state_change_of>=101 | controls_transport_of>=101])"))
 		}else{
-			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN.source', RData.location=RData.location, verbose=verbose)
+			g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN.source', RData.location=RData.location, guid=guid, verbose=verbose)
 			g <- g[[ flag ]]
 			# restrict to those edges with high confidence score>=101
 			eval(parse(text="g <- igraph::subgraph.edges(g, eids=E(g)[catalysis_precedes>=101 | controls_expression_of>=101 | controls_phosphorylation_of>=101 | controls_state_change_of>=101 | controls_transport_of>=101])"))
@@ -147,7 +148,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		g <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
     
     }else if(network=='KEGG'){
-    	g <- xRDataLoader(RData.customised='ig.KEGG.merged', RData.location=RData.location, verbose=verbose)
+    	g <- xRDataLoader(RData.customised='ig.KEGG.merged', RData.location=RData.location, guid=guid, verbose=verbose)
     	g <- igraph::delete_vertex_attr(g, "hsa")
     	g <- igraph::delete_vertex_attr(g, "GeneID")
     	g <- igraph::delete_vertex_attr(g, "Symbol")
@@ -162,7 +163,7 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		######################################
     	
     }else if(length(grep('KEGG_',network,perl=TRUE)) > 0){
-    	ls_ig <- xRDataLoader(RData.customised='ig.KEGG.mergedCategory', RData.location=RData.location, verbose=verbose)
+    	ls_ig <- xRDataLoader(RData.customised='ig.KEGG.mergedCategory', RData.location=RData.location, guid=guid, verbose=verbose)
 		if(network=='KEGG_metabolism'){
 			g <- ls_ig[['Metabolism']]
 		}else if(network=='KEGG_genetic'){
@@ -190,13 +191,13 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 		######################################
 
     }else if(network=='REACTOME'){
-    	g <- xRDataLoader(RData.customised='ig.REACTOME.merged', RData.location=RData.location, verbose=verbose)
+    	g <- xRDataLoader(RData.customised='ig.REACTOME.merged', RData.location=RData.location, guid=guid, verbose=verbose)
     	g <- igraph::delete_vertex_attr(g, "geneid")
     	g <- igraph::delete_vertex_attr(g, "symbol")
     	E(g)$weight <- 1
 
     }else if(network=='TRRUST'){
-    	g <- xRDataLoader(RData.customised='ig.TRRUST', RData.location=RData.location, verbose=verbose)
+    	g <- xRDataLoader(RData.customised='ig.TRRUST', RData.location=RData.location, guid=guid, verbose=verbose)
     	E(g)$weight <- 1
 
     }

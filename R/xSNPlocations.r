@@ -6,6 +6,7 @@
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an GR oject, with an additional metadata column called 'variant_id' storing SNP location in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number.
 #' @note none
@@ -31,7 +32,7 @@
 #' snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 #' }
 
-xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
 	## replace '_' with ':'
@@ -53,13 +54,13 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Sing
 	if(class(GR.SNP) == "GRanges"){
 		pos_SNP <- GR.SNP
 	}else{
-		pos_SNP <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location)
+		pos_SNP <- xRDataLoader(GR.SNP[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(pos_SNP)){
 			GR.SNP <- "dbSNP_GWAS"
 			if(verbose){
 				message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
 			}
-			pos_SNP <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location)
+			pos_SNP <- xRDataLoader(GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
 	}
 	

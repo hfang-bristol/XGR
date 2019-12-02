@@ -17,6 +17,7 @@
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' It returns an object of class "igraph", with nodes for input SNPs and edges for pair-wise semantic similarity between them. Also added graph attribute is 'dag' storing the annotated ontology DAG used. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
@@ -57,7 +58,7 @@
 #' xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width, edge.label=x, edge.label.cex=0.7)
 #' }
 
-xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "EF_bp"), include.LD=NA, LD.r2=0.8, measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -86,7 +87,7 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 		
 		#########
 		## load ontology information
-		ig <- xRDataLoader(RData=paste('ig.EF', sep=''), RData.location=RData.location, verbose=verbose)
+		ig <- xRDataLoader(RData=paste('ig.EF', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		
 		if(ontology != 'EF'){
 			if(ontology=='EF_disease'){
@@ -105,7 +106,7 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
         
 		#########
 		## load annotation information
-		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, verbose=verbose)
+		anno <- xRDataLoader(RData=paste('GWAS2EF', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		
 		#########
 		## include additional SNPs that are in LD with input SNPs
@@ -116,7 +117,7 @@ xSocialiserSNPs <- function(data, ontology=c("EF","EF_disease","EF_phenotype", "
 			include.LD <- default.include.LD[!is.na(ind)]
 			
 			if(length(include.LD) > 0){
-				GWAS_LD <- xRDataLoader(RData='GWAS_LD', RData.location=RData.location, verbose=verbose)
+				GWAS_LD <- xRDataLoader(RData='GWAS_LD', RData.location=RData.location, guid=guid, verbose=verbose)
 				
 				ld.list <- lapply(include.LD, function(x){
 					data_ld <- ''

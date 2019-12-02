@@ -11,6 +11,7 @@
 #' @param include.TAD TAD boundary regions are also included. By default, it is 'none' to disable this option. Otherwise, inclusion of a TAD dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD region will be kept). TAD datasets can be one of "GM12878"  (lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell) ,"TRO" (trophoblasts-like cell), "H1" (embryonic stem cell), "MES" (mesendoderm) and "NPC" (neural progenitor cell). Explanations can be found at \url{http://dx.doi.org/10.1016/j.celrep.2016.10.061}
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -45,7 +46,7 @@
 #' df_nGenes <- xSNP2nGenes(data=data, distance.max=200000, decay.kernel="slow", decay.exponent=2, include.TAD='GM12878', RData.location=RData.location)
 #' }
 
-xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     decay.kernel <- match.arg(decay.kernel)
@@ -62,7 +63,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
     # Link to targets based on genomic distance
     ######################################################
     
-    gr_SNP <- xSNPlocations(data=data, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
+    gr_SNP <- xSNPlocations(data=data, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 
   	#######################################################
   	
@@ -73,13 +74,13 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	if(class(GR.Gene) == "GRanges"){
 			gr_Gene <- GR.Gene
 	}else{
-		gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
+		gr_Gene <- xRDataLoader(GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(gr_Gene)){
 			GR.Gene <- "UCSC_knownGene"
 			if(verbose){
 				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
 			}
-			gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
+			gr_Gene <- xRDataLoader(GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
     }
     
@@ -196,8 +197,8 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		}
 		df_nGenes$TAD <- rep('Excluded', nrow(df_nGenes))
 		
-		TAD <- xRDataLoader(RData.customised=paste0('TAD.',include.TAD), RData.location=RData.location, verbose=verbose)
-		iGR <- xGR(data=df_nGenes$Gap, format="chr:start-end", RData.location=RData.location)
+		TAD <- xRDataLoader(paste0('TAD.',include.TAD), RData.location=RData.location, guid=guid, verbose=verbose)
+		iGR <- xGR(data=df_nGenes$Gap, format="chr:start-end", RData.location=RData.location, guid=guid)
 		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=iGR, subject=TAD, type="within", select="all", ignore.strand=T))))
 		q2r <- q2r[!duplicated(q2r[,1]), ]
 		df_nGenes$TAD[q2r[,1]] <- GenomicRanges::mcols(TAD)[q2r[,2],]
@@ -220,7 +221,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	# only keep those genes with GeneID
 	####################################
 	if(!is.null(df_nGenes)){
-		ind <- xSymbol2GeneID(df_nGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location)
+		ind <- xSymbol2GeneID(df_nGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location, guid=guid)
 		df_nGenes <- df_nGenes[!is.na(ind), ]
 		if(nrow(df_nGenes)==0){
 			df_nGenes <- NULL

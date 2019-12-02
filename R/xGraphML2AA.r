@@ -28,6 +28,7 @@
 #' @param filename the without-extension part of the name of the output file. By default, it is 'xGraphML2AA'
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' invisible (a string storing graphml-formatted content). If the filename is not NULL, a graphml-formatted file is also output.
 #' @note none
@@ -48,7 +49,7 @@
 #' 
 #' ## load GWAS genes
 #' GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene', RData.location=RData.location)
-#' data <- GWAS_Gene %>% dplyr::filter(Odds_Ratio!='NULL', Disease_ID=='RA') %>% dplyr::transmute(label=Symbol, lfc=log2(as.numeric(Odds_Ratio)), fdr=Pvalue) %>% dplyr::group_by(label) %>% dplyr::summarise(lfc=max(lfc), fdr=min(fdr))
+#' data <- GWAS_Gene %>% filter(Odds_Ratio!='NULL',Disease_ID=='RA') %>% transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue) %>% group_by(label) %>% summarise(lfc=max(lfc),fdr=min(fdr))
 #' 
 #' ## manual one (the same as curation='any')
 #' xGraphML2AA(data, query="AA:hsa04630", curation='manual', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', legend.title='log2(Odds ratio)', zlim=c(-1,1), RData.location=RData.location)
@@ -59,7 +60,7 @@
 #' xGraphML2AA(data, query="Asthma", curation='any', node.label="label", node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8, filename='xGraphML2AA', RData.location=RData.location, legend.title='log2(Odds ratio)', zlim=c(-1,1))
 #' }
 
-xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#dddddd', color.otherpath='#eeeeee', size.gene=10, size.gene.found=11, size.gene.highlight=12, filename='xGraphML2AA', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", curation=c('manual','automatic','any'), node.label='label', node.color='lfc', colormap='deepskyblue-lightyellow-darkorange', ncolors=64, nlegend=9, zlim=NULL, legend.title='', title.thispath=NULL, node.tooltip='tooltip', node.highlight='fdr', node.highlight.cutoff=0.05, edge.color="#00000033", edge.width=1, color.gene='#dddddd', color.thispath='#dddddd', color.otherpath='#eeeeee', size.gene=10, size.gene.found=11, size.gene.highlight=12, filename='xGraphML2AA', verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     if(verbose){
@@ -98,7 +99,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 	#################
 		
     ## tooltip
-    df_res <- xSymbol2GeneID(df$Symbol, org=org, details=TRUE, verbose=verbose, RData.location=RData.location)
+    df_res <- xSymbol2GeneID(df$Symbol, org=org, details=TRUE, verbose=verbose, RData.location=RData.location, guid=guid)
     df$GeneID <- df_res$GeneID
     df$description <- df_res$description
     ### whether or not FDR is highlighted
@@ -184,7 +185,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     manual_ind <- NULL
     manual_ind_at <- NULL
     if(curation %in% c('any','manual')){
-		AA.template <- xRDataLoader("AA.template", verbose=verbose, RData.location=RData.location)
+		AA.template <- xRDataLoader("AA.template", verbose=verbose, RData.location=RData.location, guid=guid)
 		info <- AA.template$info
 		path <- gsub('^AA:', '', info$id)
 		query <- gsub('^AA:', '', query)
@@ -199,7 +200,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 				warning(sprintf("Manual curation: no found for queried '%s'", query), appendLF=TRUE)
 				
 				###########################################################
-				AT.path <- xRDataLoader(RData.customised="AT.path", verbose=verbose, RData.location=RData.location)
+				AT.path <- xRDataLoader("AT.path", verbose=verbose, RData.location=RData.location, guid=guid)
 				info <- AT.path$info
 				path <- gsub('^AT:', '', info$id)
 				query <- gsub('^AT:', '', query)
@@ -258,7 +259,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 		#############
 		# convert to mouse genes for df_nodes$name
 		if(org[1]=="mouse"){
-			Human2Mouse <- xRDataLoader("Human2Mouse", RData.location=RData.location)
+			Human2Mouse <- xRDataLoader("Human2Mouse", RData.location=RData.location, guid=guid)
 			ind <- match(df_nodes$name, Human2Mouse$Human)
 			df_nodes$name[!is.na(ind)] <- Human2Mouse$Mouse[ind[!is.na(ind)]]
 		}
@@ -572,7 +573,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
 
     }else if(curation %in% c('automatic','any')){
 		
-		ls_ig <- xRDataLoader(RData.customised="ig.KEGG.list", verbose=verbose, RData.location=RData.location)
+		ls_ig <- xRDataLoader("ig.KEGG.list", verbose=verbose, RData.location=RData.location, guid=guid)
 		kegg <- gsub('^path:', '', sapply(ls_ig,function(x) x$path))
 		query <- gsub('^AA:', '', query)
 		query <- gsub('^AT:', '', query)

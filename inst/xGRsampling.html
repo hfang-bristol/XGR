@@ -29,8 +29,7 @@ GR.background,
 num.samples = 100,
 gap.max = 50000,
 max.distance = NULL,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+verbose = T
 )
 </pre>
 
@@ -72,11 +71,6 @@ no such restriction</p>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
-<td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
-</td></tr>
 </table>
 
 
@@ -112,8 +106,7 @@ RData.location=RData.location)
 
 # c) generate random samples as a list of GR objects
 sGR_List &lt;- xGRsampling(GR.data=dbSNP_GWAS,
-GR.background=FANTOM5_Enhancer_Cell, num.samples=1000,
-RData.location=RData.location)
+GR.background=FANTOM5_Enhancer_Cell, num.samples=1000)
 
 ## End(Not run)
 </pre>

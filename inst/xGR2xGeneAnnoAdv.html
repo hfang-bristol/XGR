@@ -49,7 +49,8 @@ silent = F,
 plot = T,
 fdr.cutoff = 0.05,
 displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 </pre>
 
@@ -251,6 +252,11 @@ default), &quot;or&quot; for odds ratio. This option only works when setting plo
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
 

@@ -30,6 +30,7 @@
 #' @param fdr.cutoff fdr cutoff used to declare the significant terms. By default, it is set to 0.05. This option only works when setting plot (see above) is TRUE
 #' @param displayBy which statistics will be used for drawing heatmap. It can be "fc" for enrichment fold change, "fdr" for adjusted p value (or FDR), "pvalue" for p value, "zscore" for enrichment z-score (by default), "or" for odds ratio. This option only works when setting plot (see above) is TRUE
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "ls_eTerm", a list with following components:
 #' \itemize{
@@ -60,7 +61,7 @@
 #' gp
 #' }
 
-xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontologies=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=F, silent=F, plot=T, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, crosslink.top=NULL, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, ontologies=NA, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("hypergeo","fisher","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=F, silent=F, plot=T, fdr.cutoff=0.05, displayBy=c("zscore","fdr","pvalue","fc","or"), RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     if(!silent){
@@ -122,7 +123,7 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 				}
 				ontology <- ontologies[j]
 			
-				eTerm <- xGR2xGeneAnno(data=data, background=background, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, crosslink.top=crosslink.top, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=!verbose, RData.location=RData.location)
+				eTerm <- xGR2xGeneAnno(data=data, background=background, format="chr:start-end", build.conversion=build.conversion, crosslink=crosslink, crosslink.customised=crosslink.customised, crosslink.top=crosslink.top, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 				df <- xEnrichViewer(eTerm, top_num="all", sortBy="or", details=TRUE)
 			
 				if(is.null(df)){
@@ -147,13 +148,13 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 			now <- Sys.time()
 			message(sprintf("First, import the background (%s) ...", as.character(now)), appendLF=T)
 		}
-		bGR <- xGR(data=background, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
+		bGR <- xGR(data=background, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
     	
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("Second, define crosslinked genes based on '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
 		}
-    	df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location)
+    	df_xGenes_background <- xGR2xGenes(data=bGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 		## bGR_genes
 		if(!is.null(df_xGenes_background)){
 			bGR_genes <- (df_xGenes_background %>% dplyr::arrange(-Score))$Gene
@@ -168,8 +169,8 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 			}
 			data <- list_vec[[i]]
 			
-			dGR <- xGR(data=data, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location)
-			df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location)
+			dGR <- xGR(data=data, format="chr:start-end", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
+			df_xGenes_data <- xGR2xGenes(data=dGR, format="GRanges", crosslink=crosslink, crosslink.customised=crosslink.customised, cdf.function="original", scoring=TRUE, scoring.scheme="max", scoring.rescale=F, nearby.distance.max=nearby.distance.max, nearby.decay.kernel=nearby.decay.kernel, nearby.decay.exponent=nearby.decay.exponent, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 			
 			##############################
 			## dGR_genes
@@ -206,7 +207,7 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
 					message(sprintf("'xEnricherGenes' is being called (%s):", as.character(now)), appendLF=T)
 					message(sprintf("#######################################################", appendLF=T))
 				}
-				eTerm <- xEnricherGenes(data=dGR_genes, background=bGR_genes, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=!verbose, RData.location=RData.location)
+				eTerm <- xEnricherGenes(data=dGR_genes, background=bGR_genes, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 				
 				if(verbose){
 					now <- Sys.time()

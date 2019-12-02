@@ -22,6 +22,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "eTerm", a list with following components:
 #' \itemize{
@@ -99,7 +100,7 @@
 #' xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 #' }
 
-xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, ontology.customised=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, ontology.customised=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     if(!silent){
@@ -136,7 +137,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     data <- as.character(data)
     
     #################################
- 	aOnto <- xDefineOntology(ontology, ontology.customised=ontology.customised, verbose=verbose, RData.location=RData.location)
+ 	aOnto <- xDefineOntology(ontology, ontology.customised=ontology.customised, verbose=verbose, RData.location=RData.location, guid=guid)
  	g <- aOnto$g
  	anno <- aOnto$anno
  	if(is.null(g)){
@@ -151,10 +152,10 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 			now <- Sys.time()
 			message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=T)
 		}
-		data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+		data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location, guid=guid)
 		data <- data[!is.na(data)]
 		if(length(background)>0){
-			background <- xSymbol2GeneID(background, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+			background <- xSymbol2GeneID(background, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location, guid=guid)
 			background <- background[!is.na(background)]
 		}
     }
@@ -172,7 +173,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 	# replace EntrezGenes with gene symbols	
 	if(is.null(ontology.customised) & class(eTerm)=="eTerm"){
 		## load Enterz Gene information
-		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, verbose=verbose)
+		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		allGeneID <- EG$gene_info$GeneID
 		allSymbol <- as.vector(EG$gene_info$Symbol)
 	

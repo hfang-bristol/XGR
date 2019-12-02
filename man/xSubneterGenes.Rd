@@ -31,7 +31,8 @@ respect = c("none", "degree"),
 aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
 verbose = T,
 silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -146,6 +147,9 @@ forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a subgraph with a maximum score, an object of class "igraph". It has

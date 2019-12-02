@@ -14,6 +14,7 @@
 #' @param GR.annotation the genomic regions of annotation data. By default, it is 'NA' to disable this option. Pre-built genomic annotation data are detailed in the section 'Note'. Alternatively, the user can also directly provide a customised GR object (or a list of GR objects)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' a data frame with following columns (below explanations are based on results at the 'hybrid' resolution):
 #' \itemize{
@@ -99,7 +100,7 @@
 #'
 #' }
 
-xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), resolution=c("bases","regions","hybrid"), background.annotatable.only=T, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=NA, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=NULL, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), resolution=c("bases","regions","hybrid"), background.annotatable.only=T, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), GR.annotation=NA, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -214,7 +215,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)
+			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location, guid=guid)
 			aGR <- lapply(aGRL, function(x) x)
 		}
 		
@@ -281,7 +282,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)
+			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location, guid=guid)
 			aGR <- lapply(aGRL, function(x) x)
 		}
 		
@@ -332,7 +333,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				)
 			})
 		}else{
-			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)
+			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location, guid=guid)
 			aGR <- lapply(aGRL, function(x) x)
 		}
 		
@@ -358,7 +359,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			## construct annotation GR
 			aGR <- annotation
 		}else{
-			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location)
+			aGRL <- xDefineGenomicAnno(GR.annotation, verbose=verbose, RData.location=RData.location, guid=guid)
 			aGR <- lapply(aGRL, function(x) x)
 		}
 		
@@ -420,14 +421,14 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		if(verbose){
 			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
 		}
-		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
+		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location, guid=guid)
     	## aGR
     	if(!is.null(annotation.file)){
 			if(verbose){
 				message(sprintf("\tannotation genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
 			}
 			aGR <- lapply(aGR, function(gr){
-				xLiftOver(data.file=gr, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
+				xLiftOver(data.file=gr, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location, guid=guid)
 			})
 		}
     	## bGR
@@ -435,7 +436,7 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			if(verbose){
 				message(sprintf("\tbackground genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
 			}
-			bGR <- xLiftOver(data.file=bGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location)
+			bGR <- xLiftOver(data.file=bGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
 	}
     ############

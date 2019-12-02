@@ -7,6 +7,7 @@
 #' @param anno.identity identity for gene annotations. It can be "GeneID" for Gene ID and "Symbol" for gene symbol. Does not support the customised ontology
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "aOnto", a list with two components: an igraph object 'g' (with graph attributes 'ontology' and 'type' [either 'dag' or 'iso']) and a list 'anno'
 #' @note none
@@ -31,7 +32,7 @@
 #' res <- xDefineOntology(ontology.customised=GS)
 #' }
 
-xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC", "EnrichrARCHS4Cells","EnrichrARCHS4Tissues","EnrichrHumanGeneAtlas","EnrichrTissueHumanProteomeMap","EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD","EnrichrAchillesFitnessI","EnrichrDSigDB","EnrichrOMIM","EnrichrOMIMexpanded","EnrichrdbGaP", "EnrichrJensenDiseases","EnrichrJensenTissues", "EnrichrBioCarta","EnrichrKEGG","EnrichrNCIpathway","EnrichrPanther","EnrichrReactome","EnrichrWikiPathways","EnrichrhuMAP", "EnrichrChEA","EnrichrConsensusTFs","EnrichrEncodeTF","EnrichrTFlof","EnrichrTFpert"), ontology.customised=NULL, anno.identity=c("GeneID","Symbol"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC", "EnrichrARCHS4Cells","EnrichrARCHS4Tissues","EnrichrHumanGeneAtlas","EnrichrTissueHumanProteomeMap","EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD","EnrichrAchillesFitnessI","EnrichrDSigDB","EnrichrOMIM","EnrichrOMIMexpanded","EnrichrdbGaP", "EnrichrJensenDiseases","EnrichrJensenTissues", "EnrichrBioCarta","EnrichrKEGG","EnrichrNCIpathway","EnrichrPanther","EnrichrReactome","EnrichrWikiPathways","EnrichrhuMAP", "EnrichrChEA","EnrichrConsensusTFs","EnrichrEncodeTF","EnrichrTFlof","EnrichrTFpert"), ontology.customised=NULL, anno.identity=c("GeneID","Symbol"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -92,7 +93,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 				ontology <- "REACTOME"
 			}
 		
-			GS <- xRDataLoader(paste('org.Hs.eg', ontology, sep=''), RData.location=RData.location, verbose=verbose)
+			GS <- xRDataLoader(paste('org.Hs.eg', ontology, sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		
 			################
 			if(flag_PS2){
@@ -134,7 +135,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 			## replace EntrezGenes with gene symbols	
 			if(anno.identity=="Symbol"){
 				## load Enterz Gene information
-				EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, verbose=verbose)
+				EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 				## anno_symbols
 				anno_symbols <- lapply(anno,function(x){
 					xGeneID2Symbol(x, org=EG, details=F, verbose=F)
@@ -153,7 +154,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 				ontology <- gsub('^SIFTS2','',ontology)
 				#######################################
 			
-				g <- xRDataLoader(RData.customised=paste('ig.', ontology, sep=''), RData.location=RData.location, verbose=verbose)
+				g <- xRDataLoader(RData.customised=paste('ig.', ontology, sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 				if(is.null(V(g)$term_namespace)){
 					V(g)$term_namespace <- ontology
 				}

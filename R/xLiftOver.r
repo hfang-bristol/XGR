@@ -8,6 +8,7 @@
 #' @param merged logical to indicate whether multiple ranges should be merged into the one per a range in query. By default, it sets to true
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an GR oject storing converted genomic intervals.
 #' @export
@@ -28,7 +29,7 @@
 #' gr
 #' }
 
-xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     startT <- Sys.time()
@@ -137,7 +138,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		message(sprintf("Third, lift intervals between genome builds '%s' (%s) ...", build.conversion, as.character(now)), appendLF=T)
 	}
     
-    chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, verbose=verbose)
+    chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, guid=guid, verbose=verbose)
 	chain <- ''
 	eval(parse(text=paste("chain <- chains$", build.conversion, sep="")))
 	suppressMessages(res_GRL <- rtracklayer::liftOver(dGR, chain))

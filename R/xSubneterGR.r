@@ -25,6 +25,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' IF num.subnets is NA, a subgraph with a maximum score, an object of class "igraph". It has ndoe attributes: significance, score, type. If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence)
 #' IF num.subnets is not NA (also subnet.size is not NULL), an "iSubg" object, with two components ('g' and 'ls_subg'). The 'g', a "igraph" objects for the whole network. The 'ls_subg', a list of "igraph" objects, with each element for a subgraph with a maximum score, having node attributes (significance, score, type) and a graph attribute (threshold; determined when scanning 'subnet.size'). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
@@ -75,7 +76,7 @@
 #' }
 
 xSubneterGR <- function(data, significance.threshold=5e-5, score.cap=10, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), 
-scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), num.subnets=NA, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=T, subnet.significance=5e-5, subnet.size=NULL, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), num.subnets=NA, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     startT <- Sys.time()
@@ -103,7 +104,7 @@ scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_h
     }
     
     
-    mSeed <- xGR2GeneScores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, scoring.scheme=scoring.scheme, verbose=verbose, RData.location=RData.location)
+    mSeed <- xGR2GeneScores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, scoring.scheme=scoring.scheme, verbose=verbose, RData.location=RData.location, guid=guid)
 	
 	if(verbose){
         now <- Sys.time()
@@ -137,7 +138,7 @@ scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_h
 			message(sprintf("xSubneterGenes is being called (%s):", as.character(now)), appendLF=T)
 			message(sprintf("#######################################################", appendLF=T))
 		}
-		subg <- xSubneterGenes(data=pval, network=network, STRING.only=STRING.only, network.customised=network.customised, seed.genes=seed.genes, subnet.significance=subnet.significance, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, verbose=verbose, silent=!verbose, RData.location=RData.location)
+		subg <- xSubneterGenes(data=pval, network=network, STRING.only=STRING.only, network.customised=network.customised, seed.genes=seed.genes, subnet.significance=subnet.significance, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("#######################################################", appendLF=T))
@@ -152,7 +153,7 @@ scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_h
 				message(sprintf("xSubneterGenesAdv is being called (%s):", as.character(now)), appendLF=T)
 				message(sprintf("#######################################################", appendLF=T))
 			}
-			subg <- xSubneterGenesAdv(data=pval, network=network, STRING.only=STRING.only, network.customised=network.customised, seed.genes=seed.genes, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, num.subnets=num.subnets, verbose=verbose, silent=!verbose, RData.location=RData.location)
+			subg <- xSubneterGenesAdv(data=pval, network=network, STRING.only=STRING.only, network.customised=network.customised, seed.genes=seed.genes, subnet.size=subnet.size, test.permutation=test.permutation, num.permutation=num.permutation, respect=respect, aggregateBy=aggregateBy, num.subnets=num.subnets, verbose=verbose, silent=!verbose, RData.location=RData.location, guid=guid)
 			if(verbose){
 				now <- Sys.time()
 				message(sprintf("#######################################################", appendLF=T))

@@ -46,7 +46,8 @@ aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
 num.subnets = NULL,
 verbose = T,
 silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 </pre>
 
@@ -190,6 +191,11 @@ forced to be false</p>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
 

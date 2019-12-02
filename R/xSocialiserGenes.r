@@ -16,6 +16,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param true.path.rule logical to indicate whether the true-path rule should be applied to propagate annotations. By default, it sets to true
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' It returns an object of class "igraph", with nodes for input genes and edges for pair-wise semantic similarity between them. Also added graph attribute is 'dag' storing the annotated ontology DAG used. If no similarity is calculuated, it returns NULL.
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
@@ -51,7 +52,7 @@
 #' xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width, edge.label=x, edge.label.cex=0.7)
 #' }
 
-xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","GOMF","GOCC","DO","HPPA","HPMI","HPCM","HPMA","MP"), measure=c("BM.average","BM.max","BM.complete","average","max"), method.term=c("Resnik","Lin","Schlicker","Jiang","Pesquita"), rescale=TRUE, force=TRUE, fast=TRUE, parallel=TRUE, multicores=NULL, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
@@ -79,7 +80,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
                                   
 		#########
 		## load GS information
-		GS <- xRDataLoader(RData=paste('org.Hs.eg', ontology, sep=''), RData.location=RData.location, verbose=verbose)
+		GS <- xRDataLoader(RData=paste('org.Hs.eg', ontology, sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		
 		#########
 		## get annotation information
@@ -92,7 +93,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
 		flag_ontology <- ontology %in% all.ontologies
     	
     	if(flag_ontology){
-			g <- xRDataLoader(RData=paste('ig.', ontology, sep=''), RData.location=RData.location, verbose=verbose)
+			g <- xRDataLoader(RData=paste('ig.', ontology, sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		}
 	
 	}else{
@@ -104,7 +105,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
 		now <- Sys.time()
 		message(sprintf("Do gene mapping from Symbols to EntrezIDs for (%s) ...", as.character(now)), appendLF=T)
 	}
-    data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location)
+    data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location, guid=guid)
     data <- data[!is.na(data)]
     
     #############################################################################################
@@ -130,7 +131,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
     	dag <- res$dag
     	
 		## load Enterz Gene information
-		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, verbose=verbose)
+		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		allGeneID <- EG$gene_info$GeneID
 		allSymbol <- as.vector(EG$gene_info$Symbol)
     

@@ -7,6 +7,7 @@
 #' @param eQTL.customised a user-input matrix or data frame with 4 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL mapping significance level (p-values or FDR), and 4th for contexts (required even though only one context is input). Alternatively, it can be a file containing these 4 columns. It is designed to allow the user analysing their eQTL data. This customisation (if provided) will populate built-in eQTL data; mysql -e "use pi; SELECT rs_id_dbSNP147_GRCh37p13,gene_name,pval_nominal,Tissue FROM GTEx_V7_pair WHERE rs_id_dbSNP147_GRCh37p13!='.';" > /var/www/bigdata/eQTL.customised.txt
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' a data frame with following columns:
 #' \itemize{
@@ -208,7 +209,7 @@
 #' df_SGS <- xDefineEQTL(data, include.eQTL="JKscience_TS2A", RData.location=RData.location)
 #' }
 
-xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood", "eQTLGen","eQTLGen_cis","eQTLGen_trans", "scRNAseq_eQTL_Bcell","scRNAseq_eQTL_CD4","scRNAseq_eQTL_CD8","scRNAseq_eQTL_cMono","scRNAseq_eQTL_DC","scRNAseq_eQTL_Mono","scRNAseq_eQTL_ncMono","scRNAseq_eQTL_NK","scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell","jpRNAseq_eQTL_CD4","jpRNAseq_eQTL_CD8","jpRNAseq_eQTL_Mono","jpRNAseq_eQTL_NK","jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell","Pi_eQTL_Blood","Pi_eQTL_CD14","Pi_eQTL_CD4","Pi_eQTL_CD8","Pi_eQTL_IFN","Pi_eQTL_LPS2","Pi_eQTL_LPS24","Pi_eQTL_Monocyte","Pi_eQTL_Neutrophil","Pi_eQTL_NK","Pi_eQTL_shared_CD14","Pi_eQTL_shared_IFN","Pi_eQTL_shared_LPS2","Pi_eQTL_shared_LPS24", "Osteoblast_eQTL"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2","JKscience_LPS24","JKscience_IFN","JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","WESTRAng_blood","WESTRAng_blood_cis","WESTRAng_blood_trans","JK_nk","JK_nk_cis","JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood", "GTEx_V6p_Adipose_Subcutaneous","GTEx_V6p_Adipose_Visceral_Omentum","GTEx_V6p_Adrenal_Gland","GTEx_V6p_Artery_Aorta","GTEx_V6p_Artery_Coronary","GTEx_V6p_Artery_Tibial","GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24","GTEx_V6p_Brain_Caudate_basal_ganglia","GTEx_V6p_Brain_Cerebellar_Hemisphere","GTEx_V6p_Brain_Cerebellum","GTEx_V6p_Brain_Cortex","GTEx_V6p_Brain_Frontal_Cortex_BA9","GTEx_V6p_Brain_Hippocampus","GTEx_V6p_Brain_Hypothalamus","GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia","GTEx_V6p_Brain_Putamen_basal_ganglia","GTEx_V6p_Breast_Mammary_Tissue","GTEx_V6p_Cells_EBVtransformed_lymphocytes","GTEx_V6p_Cells_Transformed_fibroblasts","GTEx_V6p_Colon_Sigmoid","GTEx_V6p_Colon_Transverse","GTEx_V6p_Esophagus_Gastroesophageal_Junction","GTEx_V6p_Esophagus_Mucosa","GTEx_V6p_Esophagus_Muscularis","GTEx_V6p_Heart_Atrial_Appendage","GTEx_V6p_Heart_Left_Ventricle","GTEx_V6p_Liver","GTEx_V6p_Lung","GTEx_V6p_Muscle_Skeletal","GTEx_V6p_Nerve_Tibial","GTEx_V6p_Ovary","GTEx_V6p_Pancreas","GTEx_V6p_Pituitary","GTEx_V6p_Prostate","GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic","GTEx_V6p_Skin_Sun_Exposed_Lower_leg","GTEx_V6p_Small_Intestine_Terminal_Ileum","GTEx_V6p_Spleen","GTEx_V6p_Stomach","GTEx_V6p_Testis","GTEx_V6p_Thyroid","GTEx_V6p_Uterus","GTEx_V6p_Vagina","GTEx_V6p_Whole_Blood", "eQTLGen","eQTLGen_cis","eQTLGen_trans", "scRNAseq_eQTL_Bcell","scRNAseq_eQTL_CD4","scRNAseq_eQTL_CD8","scRNAseq_eQTL_cMono","scRNAseq_eQTL_DC","scRNAseq_eQTL_Mono","scRNAseq_eQTL_ncMono","scRNAseq_eQTL_NK","scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell","jpRNAseq_eQTL_CD4","jpRNAseq_eQTL_CD8","jpRNAseq_eQTL_Mono","jpRNAseq_eQTL_NK","jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell","Pi_eQTL_Blood","Pi_eQTL_CD14","Pi_eQTL_CD4","Pi_eQTL_CD8","Pi_eQTL_IFN","Pi_eQTL_LPS2","Pi_eQTL_LPS24","Pi_eQTL_Monocyte","Pi_eQTL_Neutrophil","Pi_eQTL_NK","Pi_eQTL_shared_CD14","Pi_eQTL_shared_IFN","Pi_eQTL_shared_LPS2","Pi_eQTL_shared_LPS24", "Osteoblast_eQTL"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ######################################################
@@ -227,19 +228,19 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
     	
     	# only load once 'GTEx_V4'
     	if(sum(grepl("GTEx_V4_",include.eQTL,perl=TRUE)) > 0){
-			GTEx_V4 <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, verbose=verbose)
+			GTEx_V4 <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, guid=guid, verbose=verbose)
 		}
 		# only load once 'GTEx_V6p'
 		if(sum(grepl("GTEx_V6p_",include.eQTL,perl=TRUE)) > 0){
-			GTEx_V6p <- xRDataLoader(RData.customised='GTEx_V6p', RData.location=RData.location, verbose=verbose)
+			GTEx_V6p <- xRDataLoader(RData.customised='GTEx_V6p', RData.location=RData.location, guid=guid, verbose=verbose)
 		}
 		# only load once 'scRNAseq_eQTL'
 		if(sum(grepl("scRNAseq_eQTL_",include.eQTL,perl=TRUE)) > 0){
-			scRNAseq_eQTL <- xRDataLoader(RData.customised='scRNAseq_eQTL', RData.location=RData.location, verbose=verbose)
+			scRNAseq_eQTL <- xRDataLoader(RData.customised='scRNAseq_eQTL', RData.location=RData.location, guid=guid, verbose=verbose)
 		}
 		# only load once 'jpRNAseq_eQTL'
 		if(sum(grepl("jpRNAseq_eQTL_",include.eQTL,perl=TRUE)) > 0){
-			jpRNAseq_eQTL <- xRDataLoader(RData.customised='jpRNAseq_eQTL', RData.location=RData.location, verbose=verbose)
+			jpRNAseq_eQTL <- xRDataLoader(RData.customised='jpRNAseq_eQTL', RData.location=RData.location, guid=guid, verbose=verbose)
 		}
 		
 		res_list <- lapply(include.eQTL, function(x){
@@ -251,7 +252,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 			
 			if(sum(grep("JKscience_TS2A",x,perl=TRUE)) > 0){
 				# cis-eQTL
-				cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location, verbose=verbose)
+				cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location, guid=guid, verbose=verbose)
 				# either
 				if(x=='JKscience_TS2A'){
 					minFDR <- apply(cis[,c(9:12)], 1, base::min, na.rm=TRUE)
@@ -274,7 +275,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 			
 			}else if(sum(grep("JKscience_TS2B",x,perl=TRUE)) > 0){
 				# cis-eQTL
-				cis <- xRDataLoader(RData.customised='JKscience_TS2B', RData.location=RData.location, verbose=verbose)
+				cis <- xRDataLoader(RData.customised='JKscience_TS2B', RData.location=RData.location, guid=guid, verbose=verbose)
 				# either
 				if(x=='JKscience_TS2B'){
 					minFDR <- apply(cis[,c(9:12)], 1, base::min, na.rm=TRUE)
@@ -297,16 +298,16 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 			
 			}else if(x=='JKscience_TS3A'){
 				# trans-eQTL
-				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, verbose=verbose)
+				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, guid=guid, verbose=verbose)
 				minFDR <- apply(trans[,c(9:12)], 1, base::min, na.rm=TRUE)
 				df <- data.frame(SNP=trans[,1], Gene=trans[,4], Sig=minFDR, stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(x=='JKscience_CD14' | x=='JKscience_LPS2' | x=='JKscience_LPS24' | x=='JKscience_IFN'){
 				# cis-eQTL
-				cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location, verbose=verbose)
+				cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location, guid=guid, verbose=verbose)
 				# trans-eQTL
-				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, verbose=verbose)
+				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, guid=guid, verbose=verbose)
 				## both
 				df <- rbind(cis, trans)
 				if(x=='JKscience_CD14'){
@@ -324,7 +325,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JKng_bcell",x,perl=TRUE)) > 0){
 				# b cells
-				res_ls <- xRDataLoader(RData.customised='JKng_bcell', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JKng_bcell', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,5], stringsAsFactors=FALSE)
 				## trans
@@ -341,7 +342,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JKng_mono",x,perl=TRUE)) > 0){
 				# monocytes
-				res_ls <- xRDataLoader(RData.customised='JKng_mono', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JKng_mono', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,5], stringsAsFactors=FALSE)
 				## trans
@@ -358,7 +359,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JKpg_CD4",x,perl=TRUE)) > 0){
 				# CD4
-				res_ls <- xRDataLoader(RData.customised='JKpg_CD4', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JKpg_CD4', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
@@ -375,7 +376,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JKpg_CD8",x,perl=TRUE)) > 0){
 				# CD8
-				res_ls <- xRDataLoader(RData.customised='JKpg_CD8', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JKpg_CD8', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
@@ -392,7 +393,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JKnc_neutro",x,perl=TRUE)) > 0){
 				# neutrophils
-				res_ls <- xRDataLoader(RData.customised='JKnc_neutro', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JKnc_neutro', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
@@ -409,7 +410,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("WESTRAng_blood",x,perl=TRUE)) > 0){
 				# neutrophils
-				res_ls <- xRDataLoader(RData.customised='WESTRAng_blood', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='WESTRAng_blood', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
@@ -426,7 +427,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("eQTLGen",x,perl=TRUE)) > 0){
 				# neutrophils
-				res_ls <- xRDataLoader(RData.customised='eQTLGen', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='eQTLGen', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,3], stringsAsFactors=FALSE)
 				## trans
@@ -443,7 +444,7 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(sum(grep("JK_nk",x,perl=TRUE)) > 0){
 				# NK cells
-				res_ls <- xRDataLoader(RData.customised='JK_nk', RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised='JK_nk', RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
@@ -488,19 +489,19 @@ xDefineEQTL <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience
 				
 			}else if(x=='Osteoblast_eQTL'){
 				# cis-eQTL
-				cis <- xRDataLoader(RData.customised='Osteoblast_eQTL', RData.location=RData.location, verbose=verbose)
+				cis <- xRDataLoader(RData.customised='Osteoblast_eQTL', RData.location=RData.location, guid=guid, verbose=verbose)
 				df <- data.frame(SNP=cis[,2], Gene=cis[,3], Sig=cis[,7], stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 
 			}else if(sum(grep("eQTLdb_",x,perl=TRUE)) > 0){
-				cis <- xRDataLoader(RData.customised=x, RData.location=RData.location, verbose=verbose)
+				cis <- xRDataLoader(RData.customised=x, RData.location=RData.location, guid=guid, verbose=verbose)
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
 				#df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,6], stringsAsFactors=FALSE)
 				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("Pi_eQTL_",x,perl=TRUE)) > 0){
 				# both
-				res_ls <- xRDataLoader(RData.customised=x, RData.location=RData.location, verbose=verbose)
+				res_ls <- xRDataLoader(RData.customised=x, RData.location=RData.location, guid=guid, verbose=verbose)
 				## cis
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans

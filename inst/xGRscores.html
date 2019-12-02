@@ -17,13 +17,8 @@ together with the significance level.
 <h3>Usage</h3>
 
 <pre>
-xGRscores(
-data,
-significance.threshold = 0.05,
-score.cap = 10,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
-)
+xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
+= T)
 </pre>
 
 
@@ -58,11 +53,6 @@ to 10. If NULL, no capping is applied</p>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
-</td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
-<td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
 
@@ -121,8 +111,7 @@ GR &lt;- paste(chr,':',start,'-',end, sep='')
 data &lt;- cbind(GR=GR, Sig=sig)
 
 # b) calculate GR scores (considering significant cutoff 5e-5)
-df_GR &lt;- xGRscores(data=data, significance.threshold=5e-5,
-RData.location=RData.location)
+df_GR &lt;- xGRscores(data=data, significance.threshold=5e-5)
 
 ## End(Not run)
 </pre>

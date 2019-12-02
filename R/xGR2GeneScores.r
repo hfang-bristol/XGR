@@ -13,6 +13,7 @@
 #' @param scoring.scheme the method used to calculate seed gene scores under a set of GR. It can be one of "sum" for adding up, "max" for the maximum, and "sequential" for the sequential weighting. The sequential weighting is done via: \eqn{\sum_{i=1}{\frac{R_{i}}{i}}}, where \eqn{R_{i}} is the \eqn{i^{th}} rank (in a descreasing order)
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "mSeed", a list with following components:
 #' \itemize{
@@ -47,7 +48,7 @@
 #' mSeed <- xGR2GeneScores(data=data, RData.location=RData.location)
 #' }
 
-xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("slow","linear","rapid","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring.scheme=c("max","sum","sequential"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -64,7 +65,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, buil
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose, RData.location=RData.location)
+	df_GR <- xGRscores(data=data, significance.threshold=significance.threshold, score.cap=score.cap, verbose=verbose)
 	
 	if(verbose){
         now <- Sys.time()
@@ -82,7 +83,7 @@ xGR2GeneScores <- function(data, significance.threshold=5e-5, score.cap=10, buil
         message(sprintf("#######################################################", appendLF=T))
     }
     
-	df_nGenes <- xGR2nGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, scoring=F, verbose=verbose, RData.location=RData.location)
+	df_nGenes <- xGR2nGenes(data=df_GR$GR, format="chr:start-end", build.conversion=build.conversion, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.Gene=GR.Gene, scoring=F, verbose=verbose, RData.location=RData.location, guid=guid)
 	
 	if(verbose){
         now <- Sys.time()

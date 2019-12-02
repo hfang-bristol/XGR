@@ -8,6 +8,7 @@
 #' @param details logical to indicate whether to result in a data frame (in great details). By default, it sets to false
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return a vector containing entrez geneid with 'NA' for the unmatched if (details set to false); otherwise, a data frame is returned
 #' @note If a symbol mapped many times, the one assiged as the "protein-coding" type of gene is preferred.
 #' @export
@@ -35,7 +36,7 @@
 #' df <- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
 #' }
 
-xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     
     if (!is.vector(data)){
@@ -52,9 +53,9 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
 	}else{
 		org <- org[1]
 		if(org=='human'){
-			df_eg <- xRDataLoader(RData.customised='org.Hs.eg', RData.location=RData.location, verbose=verbose)$gene_info
+			df_eg <- xRDataLoader('org.Hs.eg', RData.location=RData.location, guid=guid, verbose=verbose)$gene_info
 		}else if(org=='mouse'){
-			df_eg <- xRDataLoader(RData.customised='org.Mm.eg', RData.location=RData.location, verbose=verbose)$gene_info
+			df_eg <- xRDataLoader('org.Mm.eg', RData.location=RData.location, guid=guid, verbose=verbose)$gene_info
 		}
 		if(verbose){
 			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=T)

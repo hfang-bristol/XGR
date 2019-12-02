@@ -8,6 +8,7 @@
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' If input data is NULL, a data frame with following columns:
 #' \itemize{
@@ -91,7 +92,7 @@
 #' xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 #' }
 
-xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
 	entity <- match.arg(entity)
@@ -106,9 +107,9 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
     
     if(!is.null(data)){
     	if(entity=="SNP"){
-    		data_gr <- xSNPlocations(data, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
+    		data_gr <- xSNPlocations(data, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
     	}else{
-    		data_gr <- xGR(data, format=entity, verbose=verbose, RData.location=RData.location)
+    		data_gr <- xGR(data, format=entity, verbose=verbose, RData.location=RData.location, guid=guid)
     	}
     	
     	if(is.null(data_gr)){
@@ -127,7 +128,7 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
 			}
 			
 			if(x == 'Combined'){
-				g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location, verbose=verbose)
+				g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location, guid=guid, verbose=verbose)
 				df <- do.call(cbind, igraph::edge_attr(g))
 				if(1){
 					## new way
@@ -151,7 +152,7 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
 				}
 				
 			}else if(x == 'Combined_PE'){
-				g <- xRDataLoader(RData.customised='ig.PCHiC_PE', RData.location=RData.location, verbose=verbose)
+				g <- xRDataLoader(RData.customised='ig.PCHiC_PE', RData.location=RData.location, guid=guid, verbose=verbose)
 				df <- do.call(cbind, igraph::edge_attr(g))
 				if(1){
 					## new way
@@ -181,7 +182,7 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
 				}else{
 					RData.customised <- paste('ig.PCHiC.', x, sep='')
 				}
-				ig <- xRDataLoader(RData.customised=RData.customised, RData.location=RData.location, verbose=verbose)
+				ig <- xRDataLoader(RData.customised=RData.customised, RData.location=RData.location, guid=guid, verbose=verbose)
 			}
 			
 			## Convert from igraph into data.frame
@@ -190,7 +191,7 @@ xDefineHIC <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","b
 			
 			if(!is.null(data)){
 			
-				nodes_gr <- xGR(data=df_nodes[,1], format="chr:start-end", verbose=verbose, RData.location=RData.location)
+				nodes_gr <- xGR(data=df_nodes[,1], format="chr:start-end", verbose=verbose, RData.location=RData.location, guid=guid)
 				
 				maxgap <- -1L
 				#minoverlap <- 1L # 1b overlaps

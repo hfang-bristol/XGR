@@ -4,13 +4,8 @@
 \alias{xGRscores}
 \title{Function to score genomic regions based on the given significance level}
 \usage{
-xGRscores(
-data,
-significance.threshold = 0.05,
-score.cap = 10,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
-)
+xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
+= T)
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -33,9 +28,6 @@ to 10. If NULL, no capping is applied}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
-
-\item{RData.location}{the characters to tell the location of built-in
-RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a data frame with following columns:
@@ -74,8 +66,7 @@ GR <- paste(chr,':',start,'-',end, sep='')
 data <- cbind(GR=GR, Sig=sig)
 
 # b) calculate GR scores (considering significant cutoff 5e-5)
-df_GR <- xGRscores(data=data, significance.threshold=5e-5,
-RData.location=RData.location)
+df_GR <- xGRscores(data=data, significance.threshold=5e-5)
 }
 }
 \seealso{

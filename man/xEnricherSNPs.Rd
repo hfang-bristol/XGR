@@ -25,7 +25,8 @@ path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 true.path.rule = T,
 verbose = T,
 silent = FALSE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata"
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
 )
 }
 \arguments{
@@ -140,6 +141,9 @@ forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 an object of class "eTerm", a list with following components:
