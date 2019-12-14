@@ -145,6 +145,50 @@ print.aOnto <- function(x, ...) {
 }
 
 ######################################################################
+# GS
+######################################################################
+#' @title Definition for S3 class \code{GS}
+#' @description \code{aOnto} has 2 components: set_info, gs.
+#' @param set_info a data frame
+#' @param gs a list
+#' @return an object of S3 class \code{GS}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' GS(set_info, gs)
+#' }
+GS <- function(set_info, gs){
+	## integrity checks
+	if(class(set_info)!='data.frame' | class(gs)!='list'){
+		stop("The S3 class 'GS' object failed to pass integrity checks!\n")
+	}
+	value <- list(set_info=set_info, gs=gs)
+	class(value) <- "GS"
+	return(value)
+}
+#' @param x an object of class \code{GS}
+#' @param ... other parameters
+#' @rdname GS
+#' @export
+#' @method print GS
+print.GS <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $set_info: a data frame of %d rows X %d columns", nrow(x$set_info), ncol(x$set_info)), "\n", sep="")
+	cat(sprintf("  $gs: a list with %d length", length(x$gs)), "\n", sep="")
+	
+	cat("\n--------------------------------------------------\n")
+	cat("$set_info:\n")
+	print(x$set_info[1:2,], row.names=FALSE)
+	cat("......\n")
+}
+
+######################################################################
 # iSubg
 ######################################################################
 #' @title Definition for S3 class \code{iSubg}
