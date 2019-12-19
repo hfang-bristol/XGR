@@ -134,7 +134,7 @@ ig &lt;- AA.template$consensus$ig
 # outwards
 gp &lt;- xCtree(ig, leave.label.orientation="outwards",
 leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
-head(gp$data 
+head(gp$data %&gt;% dplyr::arrange(tipid))
 
 # inwards
 gp &lt;- xCtree(ig, leave.label.orientation="inwards",
@@ -142,7 +142,7 @@ leave.label.wrap=30)
 
 # obtain 'xcoord' and 'ycoord'
 gp &lt;- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
-data &lt;- gp$data 
+data &lt;- gp$data %&gt;% dplyr::arrange(ggraph.orig_index)
 V(ig)$xcoord &lt;- data[,'x']
 V(ig)$ycoord &lt;- data[,'y']
 

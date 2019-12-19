@@ -92,7 +92,7 @@ dnet::visDAG(g=dag, data=data, node.info="both")
 # select a term 'ankylosing spondylitis'
 terms <- V(g)$term_id[grep('ankylosing spondylitis',V(g)$term_name,
 perl=TRUE)]
-ind <- which(colnames(anno) %in% terms)
+ind <- which(colnames(anno) \%in\% terms)
 annotation <- lapply(ind, function(x){names(which(anno[,x]!=0))})
 names(annotation) <- colnames(anno)[ind]
 

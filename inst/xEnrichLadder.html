@@ -179,13 +179,13 @@ dev.off()
 ## df_fpocket
 SIFTS_fpocket &lt;-
 xRDataLoader(RData='SIFTS_fpocket',RData.location=RData.location)
-df_fpocket &lt;- as.data.frame(SIFTS_fpocket 
-dplyr::filter(druggable=='Y') 
-dplyr::summarise(num_pockets=n()) 
+df_fpocket &lt;- as.data.frame(SIFTS_fpocket %&gt;%
+dplyr::filter(druggable=='Y') %&gt;% dplyr::group_by(Symbol,PDB_code)
+%&gt;% dplyr::summarise(num_pockets=n()) %&gt;%
 dplyr::arrange(Symbol,desc(num_pockets),PDB_code))
 df_fpocket &lt;- df_fpocket[!duplicated(df_fpocket$Symbol), ]
 ## mat_fpocket
-mat_fpocket &lt;- df_fpocket 
+mat_fpocket &lt;- df_fpocket %&gt;% tidyr::spread(Symbol, num_pockets)
 rownames(mat_fpocket) &lt;- mat_fpocket[,1]
 mat_fpocket &lt;- mat_fpocket[,-1]
 ## gp_ladder

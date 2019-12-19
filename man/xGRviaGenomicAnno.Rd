@@ -219,7 +219,7 @@ GR.annotations <- paste0('EpigenomeAtlas_15Segments_',names(info))
 names(GR.annotations) <- info
 ls_df <- lapply(1:length(GR.annotations), function(i){
 GR.annotation <- GR.annotations[i]
-message(sprintf("Analysing '%s' (%s) ...", names(GR.annotation),
+message(sprintf("Analysing '\%s' (\%s) ...", names(GR.annotation),
 as.character(Sys.time())), appendLF=T)
 df <- xGRviaGenomicAnno(data.file=data.file, format.file="bed",
 GR.annotation=GR.annotation, RData.location=RData.location, verbose=F)

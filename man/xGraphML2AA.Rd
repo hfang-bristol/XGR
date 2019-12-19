@@ -163,9 +163,10 @@ color.gene='#dde8f1',size.gene=11)
 ## load GWAS genes
 GWAS_Gene <- xRDataLoader(RData.customised='GWAS_Gene',
 RData.location=RData.location)
-data <- GWAS_Gene %>% filter(Odds_Ratio!='NULL',Disease_ID=='RA') %>%
-transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue) %>%
-group_by(label) %>% summarise(lfc=max(lfc),fdr=min(fdr))
+data <- GWAS_Gene \%>\% filter(Odds_Ratio!='NULL',Disease_ID=='RA')
+\%>\%
+transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue)
+\%>\% group_by(label) \%>\% summarise(lfc=max(lfc),fdr=min(fdr))
 
 ## manual one (the same as curation='any')
 xGraphML2AA(data, query="AA:hsa04630", curation='manual',
