@@ -189,6 +189,48 @@ print.GS <- function(x, ...) {
 }
 
 ######################################################################
+# EG
+######################################################################
+#' @title Definition for S3 class \code{EG}
+#' @description \code{aOnto} has 1 component: gene_info.
+#' @param gene_info a data frame
+#' @return an object of S3 class \code{GS}
+#' @keywords S3 classes
+#' @export
+#' @examples
+#' \dontrun{
+#' # Load the library
+#' library(XGR)
+#' }
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
+#' EG(gene_info)
+#' }
+EG <- function(gene_info){
+	## integrity checks
+	if(class(gene_info)!='data.frame'){
+		stop("The S3 class 'EG' object failed to pass integrity checks!\n")
+	}
+	value <- list(gene_info=gene_info)
+	class(value) <- "EG"
+	return(value)
+}
+#' @param x an object of class \code{EG}
+#' @param ... other parameters
+#' @rdname EG
+#' @export
+#' @method print EG
+print.EG <- function(x, ...) {
+	cat(sprintf("An object of S3 class '%s', with %d components:", class(x), length(names(x))), "\n", sep="")
+	cat(sprintf("  $gene_info: a data frame of %d rows X %d columns", nrow(x$set_info), ncol(x$set_info)), "\n", sep="")
+	
+	cat("\n--------------------------------------------------\n")
+	cat("$gene_info:\n")
+	print(x$gene_info[1:2,], row.names=FALSE)
+	cat("......\n")
+}
+
+######################################################################
 # iSubg
 ######################################################################
 #' @title Definition for S3 class \code{iSubg}

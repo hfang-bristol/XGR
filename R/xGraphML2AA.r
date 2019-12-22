@@ -40,7 +40,7 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
-#' \donttest{
+#' \dontrun{
 #' data(Haploid_regulators)
 #' ## IRF1 regulators
 #' data <- subset(Haploid_regulators, Phenotype=='IRF1')

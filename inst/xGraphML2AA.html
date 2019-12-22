@@ -236,7 +236,7 @@ is not NULL, a graphml-formatted file is also output.
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-
+## Not run: 
 data(Haploid_regulators)
 ## IRF1 regulators
 data &lt;- subset(Haploid_regulators, Phenotype=='IRF1')
@@ -271,6 +271,7 @@ node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8,
 filename='xGraphML2AA', RData.location=RData.location,
 legend.title='log2(Odds ratio)', zlim=c(-1,1))
 
+## End(Not run)
 </pre>
 
 
