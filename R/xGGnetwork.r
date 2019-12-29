@@ -29,9 +29,9 @@
 #' @param node.size.range the range of actual node size. Can be two values (range) or a value (fixed size)
 #' @param slim the minimum and maximum values for which sizes should be plotted
 #' @param title a character specifying the title for the plot
-#' @param edge.size a numeric value specifying the edge size. By default, it is 0.5. It can be a character specifying which edge attribute defining the edge colors (though without the legend)
-#' @param edge.color a character specifying which edge attribute defining the the edge colors
-#' @param edge.color.alpha the 0-1 value specifying transparency of edge colors
+#' @param edge.size a numeric value specifying the edge size. By default, it is 0.5. It can be a character specifying which edge attribute defining the edge size (though without the legend)
+#' @param edge.color a character specifying the edge color. By default, it is "black". It can be a character specifying which edge attribute defining the edge color (though 
+#' @param edge.color.alpha the 0-1 value specifying transparency of edge color. By default, it is 0.5. It can be a character specifying which edge attribute defining the transparency of edge color (though without the legend)
 #' @param edge.curve a numeric value specifying the edge curve. 0 for the straight line
 #' @param edge.arrow a numeric value specifying the edge arrow. By default, it is 2
 #' @param edge.arrow.gap a gap between the arrow and the node
@@ -330,6 +330,20 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 			}
 		}
 		E(ig)$e.color <- edge.color
+		## edge.color.alpha (by default, 0.5)
+		if(length(edge.color.alpha)!=nedge){
+			if(!is.null(edge.color.alpha)){
+				tmp.edge.color.alpha <- igraph::edge_attr(ig, edge.color.alpha)
+			}else{
+				tmp.edge.color.alpha <- rep(0.5, nedge)
+			}
+			if(is.null(tmp.edge.color.alpha)){
+				edge.color.alpha <- rep(edge.color.alpha, nedge)
+			}else{
+				edge.color.alpha <- tmp.edge.color.alpha
+			}
+		}
+		E(ig)$e.color.alpha <- edge.color.alpha
 		## edge.size (by default, 0.5)
 		if(length(edge.size)!=nedge){
 			if(!is.null(edge.size)){
@@ -377,11 +391,12 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 	## edges
 	########
 	e.color <- subset(df, !is.na(na.y))$e.color
+	e.color.alpha <- subset(df, !is.na(na.y))$e.color.alpha
 	e.size <- subset(df, !is.na(na.y))$e.size
 	if(igraph::is_directed(ls_ig[[1]])){
-		gp <- gp + ggnetwork::geom_edges(color=e.color, size=e.size,  alpha=edge.color.alpha, curvature=edge.curve, arrow=arrow(length=unit(edge.arrow,"pt"),type="closed"), show.legend=FALSE)
+		gp <- gp + ggnetwork::geom_edges(color=e.color, size=e.size,  alpha=e.color.alpha, curvature=edge.curve, arrow=arrow(length=unit(edge.arrow,"pt"),type="closed"), show.legend=FALSE)
 	}else{
-		gp <- gp + ggnetwork::geom_edges(color=e.color, size=e.size, alpha=edge.color.alpha, curvature=edge.curve, show.legend=FALSE)
+		gp <- gp + ggnetwork::geom_edges(color=e.color, size=e.size, alpha=e.color.alpha, curvature=edge.curve, show.legend=FALSE)
 	}
 
 	########

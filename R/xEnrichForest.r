@@ -60,7 +60,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
         return(NULL)
     }
     
-    if(class(eTerm)=='eTerm'){
+    if(any(class(eTerm) %in% 'eTerm')){
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
 		
@@ -83,13 +83,15 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(any(class(eTerm) %in% 'ls_eTerm') | any(class(eTerm) %in% c('data.frame','tbl_df','tbl'))){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(any(class(eTerm) %in% 'ls_eTerm')){
 			## when 'auto', will keep the significant terms
 			df <- eTerm$df
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(any(class(eTerm) %in% c('data.frame','tbl_df','tbl'))){
+			eTerm <- as.data.frame(eTerm)
+			
 			if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
 				df <- eTerm[,c('group','ontology','name','adjp','or','CIl','CIu')]
 			

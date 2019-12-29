@@ -133,13 +133,16 @@ plotted}
 
 \item{edge.size}{a numeric value specifying the edge size. By default,
 it is 0.5. It can be a character specifying which edge attribute
-defining the edge colors (though without the legend)}
+defining the edge size (though without the legend)}
 
-\item{edge.color}{a character specifying which edge attribute defining
-the the edge colors}
+\item{edge.color}{a character specifying the edge color. By default, it
+is "black". It can be a character specifying which edge attribute
+defining the edge color (though}
 
 \item{edge.color.alpha}{the 0-1 value specifying transparency of edge
-colors}
+color. By default, it is 0.5. It can be a character specifying which
+edge attribute defining the transparency of edge color (though without
+the legend)}
 
 \item{edge.curve}{a numeric value specifying the edge curve. 0 for the
 straight line}

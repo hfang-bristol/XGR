@@ -55,7 +55,7 @@
 #' gp <- xGGraph(ig, layout='gem')
 #' }
 
-xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size=2, node.label.direction=c('none','leftright','topbottom'), node.label.color="darkblue", node.label.alpha=0.7, node.label.wrap=NULL, node.label.offset=0.5, node.size=2, limit.expansion=NULL, edge=c("diagonal","link","arc","fan","elbow"), edge.color='grey', edge.alpha=0.5, edge.width=0.5, ...)
+xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size=2, node.label.direction=c('none','leftright','topbottom'), node.label.color="steelblue", node.label.alpha=0.7, node.label.wrap=NULL, node.label.offset=0.5, node.size=2, limit.expansion=NULL, edge=c("diagonal","link","arc","fan","elbow"), edge.color='grey', edge.alpha=0.5, edge.width=0.5, ...)
 {
 
     node.label.direction <- match.arg(node.label.direction)
