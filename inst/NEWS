@@ -13,9 +13,11 @@ NEW FEATURES
 
     o Modify the functions ('xSubneterGR' and 'xSubneterSNP') enabling multiple subnetwork identifications
     
-    o Modify the function 'xLayout' with a new layout (dephi)
+    o Modify the function 'xLayout' with new layouts (dephi and graphlayouts)
     
     o Modify the function 'xRDataLoader' supporting buit-in datasets hosted at OSF
+    
+    o Add a function ('xMarkNet') supporting network marking
     
 
 CHANGES IN VERSION 1.1.6

@@ -1,38 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a chord plot</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichChord"><tr><td>xEnrichChord</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using a chord plot</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichChord</code> is supposed to visualise enrichment results using a
-chord plot. The thickness of links is proportional to the enrichment
-Z-scores. Particularly useful for multiple groups and/or ontologies.
-The left-half part sorted by the input groups (anti-clockwise), and the
-right-half part sorted first by the input ontologies and then by the
-number of links within an ontology (clockwise).
-</p>
-
+<h2>xEnrichChord</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichChord(
-eTerm,
-top_num = 5,
-FDR.cutoff = 0.05,
-colormap.group = "ggplot2",
-colormap.ontology = NULL,
-wrap.width = NULL,
-text.size = 0.6,
-legend = NULL,
-vline = F,
-...
-)
+xEnrichChord(eTerm, top_num = 5, FDR.cutoff = 0.05, colormap.group =
+"ggplot2", colormap.ontology = NULL, wrap.width = NULL, text.size =
+0.6, legend = NULL, vline = F, ...)
 </pre>
 
 
@@ -41,87 +21,198 @@ vline = F,
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
-can be a data frame having all these columns (named as
-'group','ontology','name','adjp','zscore')</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to adjp).
-For the eTerm object, if it is 'auto' (for eTerm), only the significant
-terms (see below FDR.cutoff) will be displayed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-<p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap.group</code></td>
 <td>
-<p>short name for the group sector colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap.ontology</code></td>
 <td>
-<p>short name for the ontology sector colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-<p>a positive integer specifying wrap width of
-labellings</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>text.size</code></td>
 <td>
-<p>the text size of the labelings. By default, it is 0.6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend</code></td>
 <td>
-<p>logical to indicate whether to show the legend. If NULL,
-automatically determined. For the group sector, the legends shown on
-the bottom-left corner. For the ontology sector, the legends shown on
-the bottom-right corner</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>vline</code></td>
 <td>
-<p>logical to indicate whether to vertically put a line
-seperating two symmetric parts of sectors</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional graphic parameters (such as big.gap=15,
-small.gap=1.5) used in circlize::chordDiagram</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame used for visualisation
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnrichChord</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-xEnrichChord(eTerm)
-
-## End(Not run)
+## The function is currently defined as
+function (eTerm, top_num = 5, FDR.cutoff = 0.05, colormap.group =
+"ggplot2",
+colormap.ontology = NULL, wrap.width = NULL, text.size = 0.6,
+legend = NULL, vline = F, ...)
+{
+if (is.null(eTerm)) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+return(NULL)
+}
+if (class(eTerm) == "eTerm") {
+df &lt;- xEnrichViewer(eTerm, top_num = "all")
+if (top_num == "auto") {
+top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
+if (top_num &lt;= 1) {
+top_num &lt;- 10
+}
+}
+df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = "adjp")
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else if (class(eTerm) == "ls_eTerm" | class(eTerm) == "data.frame") {
+if (class(eTerm) == "ls_eTerm") {
+df &lt;- eTerm$df[, c("group", "ontology", "name", "adjp",
+"zscore")]
+}
+else if (class(eTerm) == "data.frame") {
+if (all(c("group", "ontology", "name", "adjp", "zscore") %in%
+colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "ontology", "name",
+"adjp", "zscore")]
+}
+else if (all(c("group", "name", "adjp", "zscore") %in%
+colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "name", "adjp", "zscore")]
+df$ontology &lt;- "ontology"
+}
+else if (all(c("ontology", "name", "adjp", "zscore") %in%
+colnames(eTerm))) {
+df &lt;- eTerm[, c("ontology", "name", "adjp", "zscore")]
+df$group &lt;- "group"
+}
+else if (all(c("name", "adjp", "zscore") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("name", "adjp", "zscore")]
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else {
+warnings("The input data.frame does not contain required columns:
+c('group','ontology','name','adjp','zscore').\n")
+return(NULL)
+}
+}
+group &lt;- ontology &lt;- rank &lt;- adjp &lt;- NULL
+df &lt;- df %&gt;% dplyr::arrange(adjp)
+if (top_num == "auto") {
+df &lt;- subset(df, df$adjp &lt; FDR.cutoff)
+}
+else {
+top_num &lt;- as.integer(top_num)
+df &lt;- as.data.frame(df %&gt;% dplyr::group_by(group,
+ontology) %&gt;% dplyr::group_by(rank = rank(adjp),
+add = TRUE) %&gt;% dplyr::filter(rank &lt;= top_num &amp;
+adjp &lt; FDR.cutoff))
+}
+}
+if (!is.null(wrap.width)) {
+width &lt;- as.integer(wrap.width)
+res_list &lt;- lapply(df$name, function(x) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = width)
+if (length(y) &gt; 1) {
+paste(y, collapse = "\n")
+}
+else {
+y
+}
+})
+df$name &lt;- unlist(res_list)
+}
+name &lt;- n &lt;- ontology &lt;- zscore &lt;- group &lt;- NULL
+df &lt;- as.data.frame(df %&gt;% dplyr::group_by(name) %&gt;%
+dplyr::group_by(n = n(),
+add = T) %&gt;% dplyr::arrange(ontology, n, zscore))
+order &lt;- c(sort(unique(df$group)), unique(df$name))
+if (is.null(colormap.ontology)) {
+if (length(table(df$ontology)) == 1) {
+colormap.ontology &lt;- "grey-grey"
+}
+else {
+colormap.ontology &lt;- "spectral"
+}
+}
+circlize::circos.clear()
+circlize::circos.par(start.degree = 90, clock.wise = FALSE)
+tmp &lt;- table(df$group)
+color_group &lt;- xColormap(colormap.group)(length(tmp))
+names(color_group) &lt;- names(tmp)
+tmp &lt;- table(df$ontology)
+color_ontology &lt;- xColormap(colormap.ontology)(length(tmp))
+names(color_ontology) &lt;- names(tmp)
+color_name &lt;- color_ontology[df$ontology]
+names(color_name) &lt;- df$name
+grid.col &lt;- c(color_group, color_name)
+df_data &lt;- df[, c("group", "name", "zscore")]
+circlize::chordDiagram(df_data, annotationTrack = "grid",
+grid.col = grid.col, preAllocateTracks = 1, ...)
+circlize::circos.trackPlotRegion(track.index = 1, panel.fun =
+function(x,
+y) {
+xlim = circlize::get.cell.meta.data("xlim")
+ylim = circlize::get.cell.meta.data("ylim")
+sector.name = circlize::get.cell.meta.data("sector.index")
+circlize::circos.text(mean(xlim), ylim[1] + 0.1, sector.name,
+facing = "clockwise", niceFacing = TRUE, adj = c(0,
+0.5), cex = text.size)
+}, bg.border = NA)
+if (vline) {
+abline(v = 0, lty = 2, col = "#00000080")
+}
+if (any((is.null(legend) &amp; length(color_group) &gt; 1), legend)) {
+legend("topleft", title = "Groups", legend = names(color_group),
+border = color_group, fill = color_group, horiz = F,
+box.col = "transparent", cex = text.size)
+}
+if (any((is.null(legend) &amp; length(color_ontology) &gt; 1), legend)) {
+legend("topright", title = "Ontologies", legend =
+names(color_ontology),
+border = color_ontology, fill = color_ontology, horiz = F,
+box.col = "transparent", cex = text.size)
+}
+invisible(df)
+}
 </pre>
 
 

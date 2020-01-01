@@ -1,25 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Definition for S3 class 'GS'</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for GS"><tr><td>GS</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Definition for S3 class <code>GS</code></h2>
-
-<h3>Description</h3>
-
-<p><code>aOnto</code> has 2 components: set_info, gs.
-</p>
-
+<h2>GS</h2>
 
 <h3>Usage</h3>
 
 <pre>
 GS(set_info, gs)
-
-## S3 method for class 'GS'
-print(x, ...)
 </pre>
 
 
@@ -28,42 +19,34 @@ print(x, ...)
 <table summary="R argblock">
 <tr valign="top"><td><code>set_info</code></td>
 <td>
-<p>a data frame</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>gs</code></td>
 <td>
-<p>a list</p>
-</td></tr>
-<tr valign="top"><td><code>x</code></td>
-<td>
-<p>an object of class <code>GS</code></p>
-</td></tr>
-<tr valign="top"><td><code>...</code></td>
-<td>
-<p>other parameters</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of S3 class <code>GS</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-## Not run: 
-GS(set_info, gs)
-
-## End(Not run)
+## The function is currently defined as
+function (set_info, gs)
+{
+if (class(set_info) != "data.frame" | class(gs) != "list") {
+stop("The S3 class 'GS' object failed to pass integrity checks!\n")
+}
+value &lt;- list(set_info = set_info, gs = gs)
+class(value) &lt;- "GS"
+return(value)
+}
 </pre>
 
 

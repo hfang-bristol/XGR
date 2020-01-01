@@ -1,54 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to iteratively identify subnetworks from an input...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSubneterGenesAdv"><tr><td>xSubneterGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to iteratively identify subnetworks from an input network and the signficance level imposed on its nodes</h2>
-
-<h3>Description</h3>
-
-<p><code>xSubneterGenesAdv</code> is supposed to iteratively identify
-subnetworks from an input network and the signficance level imposed on
-its nodes. It is an advanced version of the function
-<code>xSubneterGenes</code>. It returns a &quot;iSubg&quot; object
-</p>
-
+<h2>xSubneterGenesAdv</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSubneterGenesAdv(
-data,
-network = c("STRING_highest", "STRING_high", "STRING_medium",
-"STRING_low",
-"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
-"PCommonsDN_medium",
-"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
-"PCommonsDN_PID",
+xSubneterGenesAdv(data, network = c("STRING_highest", "STRING_high",
+"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
+"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic",
-"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
-"KEGG_disease", "REACTOME"),
-STRING.only = c(NA, "neighborhood_score", "fusion_score",
-"cooccurence_score",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal", "KEGG_disease", "REACTOME"), STRING.only = c(NA,
+"neighborhood_score", "fusion_score", "cooccurence_score",
 "coexpression_score", "experimental_score", "database_score",
-"textmining_score")[1],
-network.customised = NULL,
-seed.genes = T,
-subnet.size = 50,
-test.permutation = F,
-num.permutation = 100,
-respect = c("none", "degree"),
-aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
-num.subnets = NULL,
-verbose = T,
-silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+"textmining_score")[1], network.customised = NULL, seed.genes = T,
+subnet.size = 50, test.permutation = F, num.permutation = 100, respect
+= c("none", "degree"), aggregateBy = c("Ztransform", "fishers",
+"logistic", "orderStatistic"), num.subnets = NULL, verbose = T, silent
+= F, RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid =
+NULL)
 </pre>
 
 
@@ -57,197 +34,171 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a named input vector containing the significance level for
-nodes (gene symbols). For this named vector, the element names are gene
-symbols, the element values for the significance level (measured as
-p-value or fdr). Alternatively, it can be a matrix or data frame with
-two columns: 1st column for gene symbols, 2nd column for the
-significance level</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>network</code></td>
 <td>
-<p>the built-in network. Currently two sources of network
-information are supported: the STRING database (version 10) and the
-Pathway Commons database (version 7). STRING is a meta-integration of
-undirect interactions from the functional aspect, while Pathways
-Commons mainly contains both undirect and direct interactions from the
-physical/pathway aspect. Both have scores to control the confidence of
-interactions. Therefore, the user can choose the different quality of
-the interactions. In STRING, &quot;STRING_highest&quot; indicates interactions
-with highest confidence (confidence scores&gt;=900), &quot;STRING_high&quot; for
-interactions with high confidence (confidence scores&gt;=700),
-&quot;STRING_medium&quot; for interactions with medium confidence (confidence
-scores&gt;=400), and &quot;STRING_low&quot; for interactions with low confidence
-(confidence scores&gt;=150). For undirect/physical interactions from
-Pathways Commons, &quot;PCommonsUN_high&quot; indicates undirect interactions
-with high confidence (supported with the PubMed references plus at
-least 2 different sources), &quot;PCommonsUN_medium&quot; for undirect
-interactions with medium confidence (supported with the PubMed
-references). For direct (pathway-merged) interactions from Pathways
-Commons, &quot;PCommonsDN_high&quot; indicates direct interactions with high
-confidence (supported with the PubMed references plus at least 2
-different sources), and &quot;PCommonsUN_medium&quot; for direct interactions
-with medium confidence (supported with the PubMed references). In
-addition to pooled version of pathways from all data sources, the user
-can also choose the pathway-merged network from individual sources,
-that is, &quot;PCommonsDN_Reactome&quot; for those from Reactome,
-&quot;PCommonsDN_KEGG&quot; for those from KEGG, &quot;PCommonsDN_HumanCyc&quot; for those
-from HumanCyc, &quot;PCommonsDN_PID&quot; for those froom PID,
-&quot;PCommonsDN_PANTHER&quot; for those from PANTHER, &quot;PCommonsDN_ReconX&quot; for
-those from ReconX, &quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC,
-&quot;PCommonsDN_PhosphoSite&quot; for those from PhosphoSite, and
-&quot;PCommonsDN_CTD&quot; for those from CTD. For direct (pathway-merged)
-interactions sourced from KEGG, it can be 'KEGG' for all,
-'KEGG_metabolism' for pathways grouped into 'Metabolism',
-'KEGG_genetic' for 'Genetic Information Processing' pathways,
-'KEGG_environmental' for 'Environmental Information Processing'
-pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
-'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
-for 'Human Diseases' pathways. 'REACTOME' for protein-protein
-interactions derived from Reactome pathways</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>STRING.only</code></td>
 <td>
-<p>the further restriction of STRING by interaction
-type. If NA, no such restriction. Otherwide, it can be one or more of
-&quot;neighborhood_score&quot;,&quot;fusion_score&quot;,&quot;cooccurence_score&quot;,&quot;coexpression_score&quot;,&quot;experimental_score&quot;,&quot;database_score&quot;,&quot;textmining_score&quot;.
-Useful options are c(&quot;experimental_score&quot;,&quot;database_score&quot;): only
-experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
-and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
-and Reactome) are used</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>network.customised</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;. By default, it
-is NULL. It is designed to allow the user analysing their customised
-network data that are not listed in the above argument 'network'. This
-customisation (if provided) has the high priority over built-in
-network</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>seed.genes</code></td>
 <td>
-<p>logical to indicate whether the identified network is
-restricted to seed genes (ie input genes with the signficant level). By
-default, it sets to true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>subnet.size</code></td>
 <td>
-<p>the desired number of nodes constrained to the
-resulting subnet. It is not nulll, a wide range of significance
-thresholds will be scanned to find the optimal significance threshold
-leading to the desired number of nodes in the resulting subnet.
-Notably, the given significance threshold will be overwritten by this
-option</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>test.permutation</code></td>
 <td>
-<p>logical to indicate whether the permutation
-test is perform to estimate the significance of identified network with
-the same number of nodes. By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>num.permutation</code></td>
 <td>
-<p>the number of permutations generating the null
-distribution of the identified network</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>respect</code></td>
 <td>
-<p>how to respect nodes to be sampled. It can be one of
-'none' (randomly sampling) and 'degree' (degree-preserving sampling)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>aggregateBy</code></td>
 <td>
-<p>the aggregate method used to aggregate edge
-confidence p-values. It can be either &quot;orderStatistic&quot; for the method
-based on the order statistics of p-values, or &quot;fishers&quot; for Fisher's
-method, &quot;Ztransform&quot; for Z-transform method, &quot;logistic&quot; for the
-logistic method. Without loss of generality, the Z-transform method
-does well in problems where evidence against the combined null is
-spread widely (equal footings) or when the total evidence is weak;
-Fisher's method does best in problems where the evidence is
-concentrated in a relatively small fraction of the individual tests or
-when the evidence is at least moderately strong; the logistic method
-provides a compromise between these two. Notably, the aggregate methods
-'Ztransform' and 'logistic' are preferred here</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>num.subnets</code></td>
 <td>
-<p>the number of subnets to be iteratively identified.
-If NULL, all subnets will be identified until subnet.significance is no
-less than 0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-<p>logical to indicate whether the messages will be silent
-completely. By default, it sets to false. If true, verbose will be
-forced to be false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an &quot;iSubg&quot; object, with two components ('g' and 'ls_subg'). The 'g', a
-&quot;igraph&quot; objects for the whole network. The 'ls_subg', a list of
-&quot;igraph&quot; objects, with each element for a subgraph with a maximum
-score, having node attributes (significance, score, type) and a graph
-attribute (threshold; determined when scanning 'subnet.size'). If
-permutation test is enabled, it also has a graph attribute (combinedP)
-and an edge attribute (edgeConfidence).
-</p>
-
-
-<h3>Note</h3>
-
-<p>The algorithm uses <code>xSubneterGenes</code> for identifying the
-first gene subnetwork from the input whole network. The second
-subnetwork is identified from the whole subnetwork subtracted by all
-edges in the first identified subnetwork. And do so till
-subnet.significance is no less than 0.05
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xSubneterGenes</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the input nodes/genes with the significance info
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-sig &lt;- rbeta(500, shape1=0.5, shape2=1)
-data &lt;- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
-
-# b) find a series of maximum-scoring subnets with the desired node number=50
-isubg &lt;- xSubneterGenesAdv(data=data, network="STRING_high",
-subnet.size=50, RData.location=RData.location)
-
-## End(Not run)
+## The function is currently defined as
+function (data, network = c("STRING_highest", "STRING_high",
+"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
+"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
+"PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal",
+"KEGG_disease", "REACTOME"), STRING.only = c(NA, "neighborhood_score",
+"fusion_score", "cooccurence_score", "coexpression_score",
+"experimental_score", "database_score", "textmining_score")[1],
+network.customised = NULL, seed.genes = T, subnet.size = 50,
+test.permutation = F, num.permutation = 100, respect = c("none",
+"degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
+"orderStatistic"), num.subnets = NULL, verbose = T, silent = F,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+network &lt;- match.arg(network)
+respect &lt;- match.arg(respect)
+aggregateBy &lt;- match.arg(aggregateBy)
+subnet.size &lt;- as.integer(subnet.size)
+if (subnet.size &lt;= 0) {
+return(NULL)
+}
+if (!is.null(network.customised) &amp;&amp; class(network.customised) ==
+"igraph") {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the customised network (%s) ...",
+as.character(now)), appendLF = T)
+}
+g &lt;- network.customised
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the network %s (%s) ...", network,
+as.character(now)), appendLF = T)
+}
+g &lt;- xDefineNet(network = network, STRING.only = STRING.only,
+weighted = FALSE, verbose = FALSE, RData.location = RData.location,
+guid = guid)
+}
+if (verbose) {
+message(sprintf("The network you choose has %d nodes and %d edges",
+vcount(g), ecount(g)), appendLF = T)
+}
+if (is.null(num.subnets)) {
+num.subnets &lt;- 100
+}
+num.subnets &lt;- as.integer(num.subnets)
+ig_tmp &lt;- g
+ls_subg &lt;- list()
+k &lt;- 1
+flag &lt;- T
+while (flag &amp;&amp; k &lt;= num.subnets) {
+subg_tmp &lt;- xSubneterGenes(data = data, network.customised = ig_tmp,
+seed.genes = seed.genes, subnet.significance = NULL,
+subnet.size = subnet.size, test.permutation = test.permutation,
+num.permutation = num.permutation, respect = respect,
+aggregateBy = aggregateBy, verbose = verbose, silent = T,
+RData.location = RData.location, guid = guid)
+if (verbose) {
+message(sprintf("Iteration %d: thresholded at %1.2e (%s) ...",
+k, subg_tmp$threshold, as.character(Sys.time())),
+appendLF = T)
+}
+if (subg_tmp$threshold &lt; 0.05) {
+ls_subg[[k]] &lt;- subg_tmp
+k &lt;- k + 1
+ig_tmp &lt;- difference(ig_tmp, subg_tmp)
+}
+else {
+flag &lt;- F
+}
+}
+isubg &lt;- list(g = g, ls_subg = ls_subg, call = match.call())
+class(isubg) &lt;- "iSubg"
+invisible(isubg)
+}
 </pre>
 
 

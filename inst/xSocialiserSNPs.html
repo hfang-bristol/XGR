@@ -1,47 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity given a...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSocialiserSNPs"><tr><td>xSocialiserSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to calculate pair-wise semantic similarity given a list of SNPs and the ontology in query</h2>
-
-<h3>Description</h3>
-
-<p><code>xSocialiserSNPs</code> is supposed to calculate pair-wise semantic
-similarity between a list of input SNPs and the ontology in query. It
-returns an object of class &quot;igraph&quot;, a network representation of
-socialized SNPs. Now it supports analysis for SNPs using GWAS Catalog
-traits mapped to Experimental Factor Ontology. If required, additional
-SNPs that are in linkage disequilibrium (LD) with input SNPs are also
-be used for calculation. It first calculates semantic similarity
-between terms and then derives semantic similarity from term-term
-semantic similarity. Parallel computing is also supported.
-</p>
-
+<h2>xSocialiserSNPs</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSocialiserSNPs(
-data,
-ontology = c("EF", "EF_disease", "EF_phenotype", "EF_bp"),
-include.LD = NA,
-LD.r2 = 0.8,
-measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
-method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
-rescale = TRUE,
-force = TRUE,
-fast = TRUE,
-parallel = TRUE,
-multicores = NULL,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xSocialiserSNPs(data, ontology = c("EF", "EF_disease", "EF_phenotype",
+"EF_bp"), include.LD = NA, LD.r2 = 0.8, measure = c("BM.average",
+"BM.max", "BM.complete", "average", "max"), method.term = c("Resnik",
+"Lin", "Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE,
+fast = TRUE, parallel = TRUE, multicores = NULL, path.mode =
+c("all_paths", "shortest_paths", "all_shortest_paths"), true.path.rule
+= T, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -50,201 +26,234 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector. It contains a list of SNPs of interest</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>
-<p>the ontology supported currently. Now it is only &quot;EF&quot;
-for Experimental Factor Ontology (used to annotate GWAS Catalog SNPs).
-However, there are several subparts of this ontology to choose:
-'EF_disease' for the subpart under the term 'disease' (EFO:0000408),
-'EF_phenotype' for the subpart under the term 'phenotype'
-(EFO:0000651), 'EF_bp' for the subpart under the term 'biological
-process' (GO:0008150)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>include.LD</code></td>
 <td>
-<p>additional SNPs in LD with input SNPs are also
-included. By default, it is 'NA' to disable this option. Otherwise, LD
-SNPs will be included based on one or more of 26 populations and 5
-super populations from 1000 Genomics Project data (phase 3). The
-population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
-&quot;EUR&quot;, &quot;SAS&quot;), or one of 26 populations (&quot;ACB&quot;, &quot;ASW&quot;, &quot;BEB&quot;, &quot;CDX&quot;,
-&quot;CEU&quot;, &quot;CHB&quot;, &quot;CHS&quot;, &quot;CLM&quot;, &quot;ESN&quot;, &quot;FIN&quot;, &quot;GBR&quot;, &quot;GIH&quot;, &quot;GWD&quot;, &quot;IBS&quot;,
-&quot;ITU&quot;, &quot;JPT&quot;, &quot;KHV&quot;, &quot;LWK&quot;, &quot;MSL&quot;, &quot;MXL&quot;, &quot;PEL&quot;, &quot;PJL&quot;, &quot;PUR&quot;, &quot;STU&quot;,
-&quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
-<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>LD.r2</code></td>
 <td>
-<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
-in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
-be any value from 0.8 to 1</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>measure</code></td>
 <td>
-<p>the measure used to derive semantic similarity between
-genes/SNPs from semantic similarity between terms. Take the semantic
-similartity between SNPs as an example. It can be &quot;average&quot; for average
-similarity between any two terms (one from SNP 1, the other from SNP
-2), &quot;max&quot; for the maximum similarity between any two terms,
-&quot;BM.average&quot; for best-matching (BM) based average similarity (i.e. for
-each term of either SNP, first calculate maximum similarity to any term
-in the other SNP, then take average of maximum similarity; the final
-BM-based average similiary is the pre-calculated average between two
-SNPs in pair), &quot;BM.max&quot; for BM based maximum similarity (i.e. the same
-as &quot;BM.average&quot;, but the final BM-based maximum similiary is the
-maximum of the pre-calculated average between two SNPs in pair),
-&quot;BM.complete&quot; for BM-based complete-linkage similarity (inspired by
-complete-linkage concept: the least of any maximum similarity between a
-term of one SNP and a term of the other SNP). When comparing BM-based
-similarity between SNPs, &quot;BM.average&quot; and &quot;BM.max&quot; are sensitive to the
-number of terms involved; instead, &quot;BM.complete&quot; is much robust in this
-aspect. By default, it uses &quot;BM.average&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>method.term</code></td>
 <td>
-<p>the method used to measure semantic similarity
-between terms. It can be &quot;Resnik&quot; for information content (IC) of most
-informative common ancestor (MICA) (see
-<a href="http://dl.acm.org/citation.cfm?id=1625914">http://dl.acm.org/citation.cfm?id=1625914</a>), &quot;Lin&quot; for 2*IC at
-MICA divided by the sum of IC at pairs of terms, &quot;Schlicker&quot; for
-weighted version of 'Lin' by the 1-prob(MICA) (see
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/16776819">http://www.ncbi.nlm.nih.gov/pubmed/16776819</a>), &quot;Jiang&quot; for 1 -
-difference between the sum of IC at pairs of terms and 2*IC at MICA
-(see <a href="https://arxiv.org/pdf/cmp-lg/9709008.pdf">https://arxiv.org/pdf/cmp-lg/9709008.pdf</a>), &quot;Pesquita&quot; for
-graph information content similarity related to Tanimoto-Jacard index
-(ie. summed information content of common ancestors divided by summed
-information content of all ancestors of term1 and term2 (see
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>))</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>rescale</code></td>
 <td>
-<p>logical to indicate whether the resulting values are
-rescaled to the range [0,1]. By default, it sets to true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>force</code></td>
 <td>
-<p>logical to indicate whether the only most specific terms
-(for each SNP) will be used. By default, it sets to true. It is always
-advisable to use this since it is computationally fast but without
-compromising accuracy (considering the fact that true-path-rule has
-been applied when running <code>xDAGanno</code>)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>fast</code></td>
 <td>
-<p>logical to indicate whether a vectorised fast computation
-is used. By default, it sets to true. It is always advisable to use
-this vectorised fast computation; since the conventional computation is
-just used for understanding scripts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>parallel</code></td>
 <td>
-<p>logical to indicate whether parallel computation with
-multicores is used. By default, it sets to true, but not necessarily
-does so. It will depend on whether these two packages &quot;foreach&quot; and
-&quot;doParallel&quot; have been installed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>multicores</code></td>
 <td>
-<p>an integer to specify how many cores will be
-registered as the multicore parallel backend to the 'foreach' package.
-If NULL, it will use a half of cores available in a user's computer.
-This option only works when parallel computation is enabled</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-<p>the mode of paths induced by vertices/nodes with input
-annotation data. It can be &quot;all_paths&quot; for all possible paths to the
-root, &quot;shortest_paths&quot; for only one path to the root (for each node in
-query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
-for each node, find all shortest paths with the equal lengths)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-<p>logical to indicate whether the true-path rule
-should be applied to propagate annotations. By default, it sets to
-true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>It returns an object of class &quot;igraph&quot;, with nodes for input SNPs and
-edges for pair-wise semantic similarity between them. Also added graph
-attribute is 'dag' storing the annotated ontology DAG used. If no
-similarity is calculuated, it returns NULL.
-</p>
-
-
-<h3>Note</h3>
-
-<p>For the mode &quot;shortest_paths&quot;, the induced subgraph is the most
-concise, and thus informative for visualisation when there are many
-nodes in query, while the mode &quot;all_paths&quot; results in the complete
-subgraph.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xSocialiser</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
-# a) provide the input SNPs of interest (eg 8 randomly chosen SNPs)
-anno &lt;- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
-allSNPs &lt;- rownames(anno)
-data &lt;- sample(allSNPs,8)
-data
-
-# b) perform similarity analysis
-sim &lt;- xSocialiserSNPs(data=data, RData.location=RData.location)
-
-# b') optionally, enrichment analysis for input SNPs plus their LD SNPs
-## LD based on European population (EUR) with r2&gt;=0.8
-#sim &lt;- xSocialiserSNPs(data=data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
-
-# c) save similarity results to the file called 'EF_similarity.txt'
-output &lt;- igraph::get.data.frame(sim, what="edges")
-utils::write.table(output, file="EF_similarity.txt", sep="\t",
-row.names=FALSE)
-
-# d) visualise the SNP network
-## extract edge weight (with 2-digit precision)
-x &lt;- signif(as.numeric(E(sim)$weight), digits=2)
-## rescale into an interval [1,4] as edge width
-edge.width &lt;- 1 + (x-min(x))/(max(x)-min(x))*3
-## do visualisation
-xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width,
-edge.label=x, edge.label.cex=0.7)
-
-## End(Not run)
+## The function is currently defined as
+function (data, ontology = c("EF", "EF_disease", "EF_phenotype",
+"EF_bp"), include.LD = NA, LD.r2 = 0.8, measure = c("BM.average",
+"BM.max", "BM.complete", "average", "max"), method.term = c("Resnik",
+"Lin", "Schlicker", "Jiang", "Pesquita"), rescale = TRUE,
+force = TRUE, fast = TRUE, parallel = TRUE, multicores = NULL,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = T, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+startT &lt;- Sys.time()
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = T)
+message("", appendLF = T)
+ontology &lt;- match.arg(ontology)
+measure &lt;- match.arg(measure)
+method.term &lt;- match.arg(method.term)
+path.mode &lt;- match.arg(path.mode)
+if (is.vector(data)) {
+data &lt;- unique(data)
+}
+else {
+stop("The input data must be a vector.\n")
+}
+if (!is.na(ontology)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the ontology %s and its SNP annotations (%s)
+...",
+ontology, as.character(now)), appendLF = T)
+}
+ig &lt;- xRDataLoader(RData = paste("ig.EF", sep = ""),
+RData.location = RData.location, guid = guid, verbose = verbose)
+if (ontology != "EF") {
+if (ontology == "EF_disease") {
+node &lt;- "EFO:0000408"
+}
+else if (ontology == "EF_phenotype") {
+node &lt;- "EFO:0000651"
+}
+else if (ontology == "EF_bp") {
+node &lt;- "GO:0008150"
+}
+neighs.out &lt;- igraph::neighborhood(ig, order = vcount(ig),
+nodes = node, mode = "out")
+nodeInduced &lt;- V(ig)[unique(unlist(neighs.out))]$name
+g &lt;- igraph::induced.subgraph(ig, vids = nodeInduced)
+}
+else {
+g &lt;- ig
+}
+anno &lt;- xRDataLoader(RData = paste("GWAS2EF", sep = ""),
+RData.location = RData.location, guid = guid, verbose = verbose)
+if (LD.r2 &gt;= 0.8 &amp; LD.r2 &lt;= 1) {
+default.include.LD &lt;- c("ACB", "AFR", "AMR", "ASW",
+"BEB", "CDX", "CEU", "CHB", "CHS", "CLM", "EAS",
+"ESN", "EUR", "FIN", "GBR", "GIH", "GWD", "IBS",
+"ITU", "JPT", "KHV", "LWK", "MSL", "MXL", "PEL",
+"PJL", "PUR", "SAS", "STU", "TSI", "YRI")
+ind &lt;- match(default.include.LD, include.LD)
+include.LD &lt;- default.include.LD[!is.na(ind)]
+if (length(include.LD) &gt; 0) {
+GWAS_LD &lt;- xRDataLoader(RData = "GWAS_LD", RData.location =
+RData.location,
+guid = guid, verbose = verbose)
+ld.list &lt;- lapply(include.LD, function(x) {
+data_ld &lt;- ""
+eval(parse(text = paste("data_ld &lt;- GWAS_LD$",
+x, sep = "")))
+ind &lt;- match(colnames(data_ld), data)
+ld &lt;- rownames(data_ld)[which(Matrix::rowSums(data_ld[,
+!is.na(ind)] &gt;= LD.r2) &gt; 0)]
+ld
+})
+data &lt;- base::union(unlist(ld.list), data)
+}
+}
+}
+else {
+stop("There is no input for the ontology.\n")
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xSocialiser' is being called (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+res &lt;- xSocialiser(data = data, annotation = anno, g = g,
+measure = measure, method.term = method.term, rescale = rescale,
+force = force, fast = fast, parallel = parallel, multicores =
+multicores,
+path.mode = path.mode, true.path.rule = true.path.rule,
+verbose = verbose)
+if (!is.null(res)) {
+dag &lt;- res$dag
+sim_ig &lt;- res
+tEdges &lt;- igraph::get.data.frame(sim_ig, what = "edges")
+sEdges &lt;- tEdges[with(tEdges, order(-weight, from, to)),
+]
+relations &lt;- apply(sEdges, 1, function(x) {
+if (x[1] &gt; x[2]) {
+return(cbind(x[2], x[1], x[3]))
+}
+else {
+x
+}
+})
+relations &lt;- t(relations)
+colnames(relations) &lt;- c("from", "to", "weight")
+res &lt;- igraph::graph.data.frame(d = relations, directed = F)
+if (class(res) == "igraph") {
+if (!is.null(E(res)$weight)) {
+E(res)$weight &lt;- as.numeric(E(res)$weight)
+}
+}
+res$dag &lt;- dag
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xSocialiser' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+endT &lt;- Sys.time()
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = T)
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = T)
+invisible(res)
+}
 </pre>
 
 

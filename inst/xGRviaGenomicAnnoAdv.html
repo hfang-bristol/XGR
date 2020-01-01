@@ -1,49 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis using...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGRviaGenomicAnnoAdv"><tr><td>xGRviaGenomicAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct region-based enrichment analysis using genomic annotations via sampling</h2>
-
-<h3>Description</h3>
-
-<p><code>xGRviaGenomicAnnoAdv</code> is supposed to conduct region-based
-enrichment analysis for the input genomic region data (genome build
-h19), using genomic annotations (eg active chromatin, transcription
-factor binding sites/motifs, conserved sites). Enrichment analysis is
-achieved by comparing the observed overlaps against the expected
-overlaps which are estimated from the null distribution. The null
-distribution is generated via sampling, that is, randomly generating
-samples for data genomic regions from background genomic regions.
-Background genomic regions can be provided by the user; by default, the
-annotatable genomic regions will be used.
-</p>
-
+<h2>xGRviaGenomicAnnoAdv</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGRviaGenomicAnnoAdv(
-data.file,
-annotation.file = NULL,
-background.file = NULL,
-format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-background.annotatable.only = F,
-num.samples = 1000,
-gap.max = 50000,
-max.distance = NULL,
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-GR.annotation = NA,
-parallel = TRUE,
-multicores = NULL,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xGRviaGenomicAnnoAdv(data.file, annotation.file = NULL, background.file
+= NULL, format.file = c("data.frame", "bed", "chr:start-end",
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+background.annotatable.only = F, num.samples = 1000, gap.max = 50000,
+max.distance = NULL, p.adjust.method = c("BH", "BY", "bonferroni",
+"holm", "hochberg", "hommel"), GR.annotation = NA, parallel = TRUE,
+multicores = NULL, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -52,224 +26,666 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data.file</code></td>
 <td>
-<p>an input data file, containing a list of genomic
-regions to test. If the input file is formatted as a 'data.frame'
-(specified by the parameter 'format.file' below), the first three
-columns correspond to the chromosome (1st column), the starting
-chromosome position (2nd column), and the ending chromosome position
-(3rd column). If the format is indicated as 'bed' (browser extensible
-data), the same as 'data.frame' format but the position is 0-based
-offset from chromomose position. If the genomic regions provided are
-not ranged but only the single position, the ending chromosome position
-(3rd column) is allowed not to be provided. If the format is indicated
-as &quot;chr:start-end&quot;, instead of using the first 3 columns, only the
-first column will be used and processed. If the file also contains
-other columns, these additional columns will be ignored. Alternatively,
-the input file can be the content itself assuming that input file has
-been read. Note: the file should use the tab delimiter as the field
-separator between columns.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>annotation.file</code></td>
 <td>
-<p>an input annotation file containing genomic
-annotations for genomic regions. If the input file is formatted as a
-'data.frame', the first four columns correspond to the chromosome (1st
-column), the starting chromosome position (2nd column), the ending
-chromosome position (3rd column), and the genomic annotations (eg
-transcription factors and histones; 4th column). If the format is
-indicated as 'bed', the same as 'data.frame' format but the position is
-0-based offset from chromomose position. If the format is indicated as
-&quot;chr:start-end&quot;, the first two columns correspond to the
-chromosome:start-end (1st column) and the genomic annotations (eg
-transcription factors and histones; 2nd column). If the file also
-contains other columns, these additional columns will be ignored.
-Alternatively, the input file can be the content itself assuming that
-input file has been read. Note: the file should use the tab delimiter
-as the field separator between columns.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.file</code></td>
 <td>
-<p>an input background file containing a list of
-genomic regions as the test background. The file format is the same as
-'data.file'. By default, it is NULL meaning all annotatable bases (ig
-non-redundant bases covered by 'annotation.file') are used as
-background. However, if only one annotation (eg only a transcription
-factor) is provided in 'annotation.file', the background must be
-provided.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>format.file</code></td>
 <td>
-<p>the format for input files. It can be one of
-&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; and &quot;GRanges&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
-<p>the conversion from one genome build to
-another. The conversions supported are &quot;hg38.to.hg19&quot; and
-&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so).</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-<p>logical to indicate whether the
-background is further restricted to annotatable bases (covered by
-'annotation.file'). In other words, if the background is provided, the
-background bases are those after being overlapped with annotatable
-bases. Notably, if only one annotation (eg only a transcription factor)
-is provided in 'annotation.file', it should be false.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>num.samples</code></td>
 <td>
-<p>the number of samples randomly generated</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>gap.max</code></td>
 <td>
-<p>the maximum distance of background islands to be
-considered away from data regions. Only background islands no far way
-from this distance will be considered. For example, if it is 0, meaning
-that only background islands that overlapp with genomic regions will be
-considered. By default, it is 50000</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>max.distance</code></td>
 <td>
-<p>the maximum distance away from data regions that is
-allowed when generating random samples. By default, it is NULl meaning
-no such restriction</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-<p>the method used to adjust p-values. It can be
-one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
-first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
-discovery rate (FDR: the expected proportion of false discoveries
-amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
-&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
-the family-wise error rate (FWER). Notes: FDR is a less stringent
-condition than FWER</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>GR.annotation</code></td>
 <td>
-<p>the genomic regions of annotation data. By
-default, it is 'NA' to disable this option. Pre-built genomic
-annotation data are detailed in <code>xDefineGenomicAnno</code>.
-Alternatively, the user can also directly provide a customised GR
-object (or a list of GR objects)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>parallel</code></td>
 <td>
-<p>logical to indicate whether parallel computation with
-multicores is used. By default, it sets to true, but not necessarily
-does so. It will depend on whether these two packages &quot;foreach&quot; and
-&quot;doParallel&quot; have been installed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>multicores</code></td>
 <td>
-<p>an integer to specify how many cores will be
-registered as the multicore parallel backend to the 'foreach' package.
-If NULL, it will use a half of cores available in a user's computer.
-This option only works when parallel computation is enabled</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame with 8 columns:
-</p>
-
-<ul>
-<li><p><code>name</code>: the annotation name
-</p>
-</li>
-<li><p><code>nAnno</code>: the number of bases covered by that annotation. If
-the background is provided, they are also restricted by this
-</p>
-</li>
-<li><p><code>nOverlap</code>: the number of bases overlapped between input
-regions and annotation regions. If the background is provided, they are
-also restricted by this
-</p>
-</li>
-<li><p><code>fc</code>: fold change
-</p>
-</li>
-<li><p><code>zscore</code>: z-score
-</p>
-</li>
-<li><p><code>pvalue</code>: p-value
-</p>
-</li>
-<li><p><code>adjp</code>: adjusted p-value. It is the p value but after being
-adjusted for multiple comparisons
-</p>
-</li>
-<li><p><code>nData</code>: the number of bases covered by input regions
-</p>
-</li>
-<li><p><code>nBG</code>: the number of bases covered by background regions
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>Pre-built genomic annotation data are detailed in
-<code>xDefineGenomicAnno</code>.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xDefineGenomicAnno</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# Enrichment analysis for GWAS SNPs from ImmunoBase
-## a) provide input data
-data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-
-## b) perform enrichment analysis using FANTOM expressed enhancers
-eTerm &lt;- xGRviaGenomicAnnoAdv(data.file=data.file, format.file="bed",
-GR.annotation="FANTOM5_Enhancer_Cell", num.samples=1000, gap.max=50000,
-RData.location=RData.location)
-
-## c) view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-
-## d) barplot of enriched terms
-bp &lt;- xEnrichBarplot(eTerm, top_num='auto', displayBy="fdr")
-bp
-
-## e) save enrichment results to the file called 'Regions_enrichments.txt'
-output &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
-sortBy="adjp", details=TRUE)
-utils::write.table(output, file="Regions_enrichments.txt", sep="\t",
-row.names=FALSE)
-
-## End(Not run)
+## The function is currently defined as
+function (data.file, annotation.file = NULL, background.file = NULL,
+format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+background.annotatable.only = F, num.samples = 1000, gap.max = 50000,
+max.distance = NULL, p.adjust.method = c("BH", "BY", "bonferroni",
+"holm", "hochberg", "hommel"), GR.annotation = NA, parallel = TRUE,
+multicores = NULL, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+startT &lt;- Sys.time()
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = T)
+message("", appendLF = T)
+format.file &lt;- match.arg(format.file)
+build.conversion &lt;- match.arg(build.conversion)
+p.adjust.method &lt;- match.arg(p.adjust.method)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("First, import the files formatted as '%s' (%s) ...",
+format.file, as.character(now)), appendLF = T)
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\timport the data file (%s) ...", as.character(now)),
+appendLF = T)
+}
+if (is.matrix(data.file) | is.data.frame(data.file) | class(data.file)
+==
+"GRanges") {
+data &lt;- data.file
+}
+else if (!is.null(data.file) &amp; any(!is.na(data.file))) {
+if (length(data.file) == 1) {
+data &lt;- utils::read.delim(file = data.file, header = F,
+row.names = NULL, stringsAsFactors = F)
+}
+else {
+data &lt;- data.file
+}
+}
+else {
+stop("The file 'data.file' must be provided!\n")
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\timport the annotation file (%s) ...",
+as.character(now)), appendLF = T)
+}
+if (is.matrix(annotation.file) | is.data.frame(annotation.file) |
+class(annotation.file) == "list") {
+annotation &lt;- annotation.file
+}
+else if (!is.null(annotation.file)) {
+annotation &lt;- utils::read.delim(file = annotation.file,
+header = F, row.names = NULL, stringsAsFactors = F)
+}
+else {
+message("\t\tThe file 'annotation.file' is not provided, so built-in
+RData will be used instead!")
+annotation &lt;- NULL
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\timport the background file (%s) ...",
+as.character(now)), appendLF = T)
+}
+if (is.matrix(background.file) | is.data.frame(background.file) |
+class(background.file) == "GRanges") {
+background &lt;- background.file
+}
+else if (!is.null(background.file)) {
+if (length(background.file) == 1) {
+background &lt;- utils::read.delim(file = background.file,
+header = F, row.names = NULL, stringsAsFactors = F)
+background &lt;- unique(background[, 1])
+}
+else {
+background &lt;- background.file
+}
+}
+else {
+background &lt;- NULL
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Second, construct GenomicRanges object (%s) ...",
+as.character(now)), appendLF = T)
+}
+if (format.file == "data.frame") {
+if (ncol(data) &gt;= 3) {
+data &lt;- data
+}
+else if (ncol(data) == 2) {
+data &lt;- cbind(data, data[, 2])
+}
+else {
+stop("Your input 'data.file' is not as expected!\n")
+}
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
+2])) &amp; !is.na(as.numeric(data[, 3]))))
+data &lt;- data[ind, ]
+dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
+1]), ranges = IRanges::IRanges(start = as.numeric(data[,
+2]), end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(data))))
+if (!is.null(annotation)) {
+if (ncol(annotation) &gt;= 4) {
+annotation &lt;- annotation
+}
+else {
+stop("Your input 'annotation.file' is not as expected!\n")
+}
+anno_ls &lt;- split(x = annotation[, -4], f = annotation[,
+4])
+aGR &lt;- base::lapply(anno_ls, function(x) {
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(x[,
+2])) &amp; !is.na(as.numeric(x[, 3]))))
+x &lt;- x[ind, ]
+gr &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(x[,
+1]), ranges = IRanges::IRanges(start = as.numeric(x[,
+2]), end = as.numeric(x[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(x))))
+})
+}
+else {
+aGRL &lt;- xDefineGenomicAnno(GR.annotation, verbose = verbose,
+RData.location = RData.location, guid = guid)
+aGR &lt;- lapply(aGRL, function(x) x)
+}
+if (!is.null(background)) {
+if (ncol(background) &gt;= 3) {
+background &lt;- background
+}
+else if (ncol(background) == 2) {
+background &lt;- cbind(background, background[,
+2])
+}
+else {
+stop("Your input 'background.file' is not as expected!\n")
+}
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(background[,
+2])) &amp; !is.na(as.numeric(background[, 3]))))
+background &lt;- background[ind, ]
+bGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(background[,
+1]), ranges = IRanges::IRanges(start = as.numeric(background[,
+2]), end = as.numeric(background[, 3])), strand =
+S4Vectors::Rle(rep("*",
+nrow(background))))
+}
+else {
+bGR &lt;- NULL
+}
+}
+else if (format.file == "chr:start-end") {
+input &lt;- do.call(rbind, strsplit(data[, 1], ":|-"))
+if (ncol(input) &gt;= 3) {
+data &lt;- input
+}
+else if (ncol(input) == 2) {
+data &lt;- cbind(input, input[, 2])
+}
+else {
+stop("Your input 'data.file' does not meet the format
+'chr:start-end'!\n")
+}
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
+2])) &amp; !is.na(as.numeric(data[, 3]))))
+data &lt;- data[ind, ]
+dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
+1]), ranges = IRanges::IRanges(start = as.numeric(data[,
+2]), end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(data))))
+if (!is.null(annotation)) {
+input &lt;- do.call(rbind, strsplit(annotation[, 1],
+":|-"))
+if (ncol(input) &gt;= 3) {
+annotation &lt;- cbind(input[, 1:3], annotation[,
+2])
+}
+else if (ncol(input) == 2) {
+annotation &lt;- cbind(input[, c(1, 2, 2)], annotation[,
+2])
+}
+else {
+stop("Your input 'annotation.file' does not meet the format
+'chr:start-end'!\n")
+}
+anno_ls &lt;- split(x = annotation[, -4], f = annotation[,
+4])
+aGR &lt;- base::lapply(anno_ls, function(x) {
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(x[,
+2])) &amp; !is.na(as.numeric(x[, 3]))))
+x &lt;- x[ind, ]
+gr &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(x[,
+1]), ranges = IRanges::IRanges(start = as.numeric(x[,
+2]), end = as.numeric(x[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(x))))
+})
+}
+else {
+aGRL &lt;- xDefineGenomicAnno(GR.annotation, verbose = verbose,
+RData.location = RData.location, guid = guid)
+aGR &lt;- lapply(aGRL, function(x) x)
+}
+if (!is.null(background)) {
+input &lt;- do.call(rbind, strsplit(background[, 1],
+":|-"))
+if (ncol(input) &gt;= 3) {
+background &lt;- input
+}
+else if (ncol(input) == 2) {
+background &lt;- cbind(input, input[, 2])
+}
+else {
+stop("Your input 'background.file' does not meet the format
+'chr:start-end'!\n")
+}
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(background[,
+2])) &amp; !is.na(as.numeric(background[, 3]))))
+background &lt;- background[ind, ]
+bGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(background[,
+1]), ranges = IRanges::IRanges(start = as.numeric(background[,
+2] + 1), end = as.numeric(background[, 3])),
+strand = S4Vectors::Rle(rep("*", nrow(data))))
+}
+else {
+bGR &lt;- NULL
+}
+}
+else if (format.file == "bed") {
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
+2])) &amp; !is.na(as.numeric(data[, 3]))))
+data &lt;- data[ind, ]
+dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
+1]), ranges = IRanges::IRanges(start = as.numeric(data[,
+2]) + 1, end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(data))))
+if (!is.null(annotation)) {
+anno_ls &lt;- split(x = annotation[, -4], f = annotation[,
+4])
+aGR &lt;- base::lapply(anno_ls, function(x) {
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(x[,
+2])) &amp; !is.na(as.numeric(x[, 3]))))
+x &lt;- x[ind, ]
+gr &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(x[,
+1]), ranges = IRanges::IRanges(start = as.numeric(x[,
+2]) + 1, end = as.numeric(x[, 3])), strand = S4Vectors::Rle(rep("*",
+nrow(x))))
+})
+}
+else {
+aGRL &lt;- xDefineGenomicAnno(GR.annotation, verbose = verbose,
+RData.location = RData.location, guid = guid)
+aGR &lt;- lapply(aGRL, function(x) x)
+}
+if (!is.null(background)) {
+ind &lt;- suppressWarnings(which(!is.na(as.numeric(background[,
+2])) &amp; !is.na(as.numeric(background[, 3]))))
+background &lt;- background[ind, ]
+bGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(background[,
+1]), ranges = IRanges::IRanges(start = as.numeric(background[,
+2]) + 1, end = as.numeric(background[, 3])),
+strand = S4Vectors::Rle(rep("*", nrow(data))))
+}
+else {
+bGR &lt;- NULL
+}
+}
+else if (format.file == "GRanges") {
+dGR &lt;- data
+if (!is.null(annotation)) {
+aGR &lt;- annotation
+}
+else {
+aGRL &lt;- xDefineGenomicAnno(GR.annotation, verbose = verbose,
+RData.location = RData.location, guid = guid)
+aGR &lt;- lapply(aGRL, function(x) x)
+}
+if (!is.null(background)) {
+bGR &lt;- background
+}
+else {
+bGR &lt;- NULL
+}
+}
+mergeOverlaps &lt;- function(qGR, sGR, out.format = c("GR",
+"counts"), maxgap = -1L, minoverlap = 0L) {
+out.format &lt;- match.arg(out.format)
+hits &lt;- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query =
+qGR,
+subject = sGR, maxgap = maxgap, minoverlap = minoverlap,
+type = "any", select = "all", ignore.strand = T)))
+qhits &lt;- qGR[hits[, 1]]
+shits &lt;- sGR[hits[, 2]]
+gr &lt;- IRanges::pintersect(qhits, shits, ignore.strand = T)
+if (out.format == "GR") {
+gr
+}
+else {
+sum(as.numeric(IRanges::width(gr)))
+}
+}
+mergeOverlaps_GRL &lt;- function(qGR, sGRL, maxgap = -1L, minoverlap = 0L,
+out.format = c("GR", "counts")) {
+out.format &lt;- match.arg(out.format)
+hits_GRL &lt;- as.matrix(as.data.frame(GenomicRanges::findOverlaps(query =
+qGR,
+subject = sGRL, maxgap = maxgap, minoverlap = minoverlap,
+type = "any", select = "all", ignore.strand = T)))
+qhits_GRL &lt;- hits_GRL[, 1]
+shits_GRL &lt;- hits_GRL[, 2]
+res_ls &lt;- split(x = qhits_GRL, f = shits_GRL)
+names_ls &lt;- as.numeric(names(res_ls))
+if (1) {
+res &lt;- lapply(1:length(res_ls), function(i) {
+s_ind &lt;- names_ls[i]
+sGR &lt;- sGRL[[s_ind]]
+mergeOverlaps(qGR = qGR, sGR = sGR, out.format = out.format,
+maxgap = maxgap, minoverlap = minoverlap)
+})
+}
+else {
+sGRL_o &lt;- sGRL[names_ls]
+res &lt;- lapply(sGRL_o, function(x) {
+mergeOverlaps(qGR = qGR, sGR = x, out.format = out.format,
+maxgap = maxgap, minoverlap = minoverlap)
+})
+}
+if (out.format == "GR") {
+out &lt;- vector("list", length(sGRL))
+names(out) &lt;- names(sGRL)
+out[names_ls] &lt;- res
+out &lt;- lapply(out, function(x) {
+if (is.null(x)) {
+x &lt;- GenomicRanges::GRanges()
+}
+else {
+x
+}
+})
+}
+else {
+out &lt;- as.list(rep(0, length(sGRL)))
+names(out) &lt;- names(sGRL)
+out[names_ls] &lt;- res
+}
+out
+}
+progress_indicate &lt;- function(i, B, step, flag = F) {
+if (i%%ceiling(B/step) == 0 | i == B | i == 1) {
+if (flag &amp; verbose) {
+message(sprintf("\t%d out of %d (%s)", i, B,
+as.character(Sys.time())), appendLF = T)
+}
+}
+}
+if (!is.na(build.conversion)) {
+if (verbose) {
+message(sprintf("\tdata genomic regions: lifted over via genome build
+conversion `%s`",
+build.conversion), appendLF = T)
+}
+dGR &lt;- xLiftOver(data.file = dGR, format.file = "GRanges",
+build.conversion = build.conversion, merged = F,
+verbose = verbose, RData.location = RData.location,
+guid = guid)
+if (!is.null(annotation.file)) {
+if (verbose) {
+message(sprintf("\tannotation genomic regions: lifted over via genome
+build conversion `%s`",
+build.conversion), appendLF = T)
+}
+aGR &lt;- lapply(aGR, function(gr) {
+xLiftOver(data.file = gr, format.file = "GRanges",
+build.conversion = build.conversion, merged = F,
+verbose = verbose, RData.location = RData.location,
+guid = guid)
+})
+}
+if (!is.null(bGR)) {
+if (verbose) {
+message(sprintf("\tbackground genomic regions: lifted over via genome
+build conversion `%s`",
+build.conversion), appendLF = T)
+}
+bGR &lt;- xLiftOver(data.file = bGR, format.file = "GRanges",
+build.conversion = build.conversion, merged = F,
+verbose = verbose, RData.location = RData.location,
+guid = guid)
+}
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Third, define the background (%s) ...",
+as.character(now)), appendLF = T)
+}
+dGR_reduced &lt;- IRanges::reduce(dGR)
+aGR_reduced &lt;- base::lapply(aGR, function(x) {
+IRanges::reduce(x)
+})
+if (is.null(bGR)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tall annotatable regions (by default) are used as the
+background (%s) ...",
+as.character(now)), appendLF = T)
+}
+aGRL &lt;- GenomicRanges::GRangesList(aGR_reduced)
+bGR_reduced &lt;- IRanges::reduce(BiocGenerics::unlist(aGRL))
+}
+else {
+bGR_reduced &lt;- IRanges::reduce(bGR)
+aGR_reduced &lt;- base::lapply(aGR_reduced, function(gr) {
+mergeOverlaps(qGR = gr, sGR = bGR_reduced, maxgap = -1L,
+minoverlap = 0L)
+})
+if (background.annotatable.only) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tthe given background regions but restricted to the
+annotatable are used as the background (%s) ...",
+as.character(now)), appendLF = T)
+}
+aGRL &lt;- GenomicRanges::GRangesList(aGR_reduced)
+bGR_reduced &lt;- IRanges::reduce(BiocGenerics::unlist(aGRL))
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tthe given background regions are used as the
+background (%s) ...",
+as.character(now)), appendLF = T)
+}
+}
+}
+dGR_reduced &lt;- mergeOverlaps(qGR = dGR_reduced, sGR = bGR_reduced,
+maxgap = -1L, minoverlap = 0L)
+aGRL &lt;- GenomicRanges::GRangesList(aGR_reduced)
+oGR_reduced &lt;- mergeOverlaps_GRL(qGR = dGR_reduced, sGRL = aGRL,
+maxgap = -1L, minoverlap = 0L)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Forth, generate null distribution via doing %d
+sampling (%s) ...",
+num.samples, as.character(now)), appendLF = T)
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xGRsampling' is being called (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+sGR_list &lt;- xGRsampling(GR.data = dGR_reduced, GR.background =
+bGR_reduced,
+num.samples = num.samples, gap.max = gap.max, max.distance =
+max.distance,
+verbose = verbose)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xGRsampling' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Fifth, perform enrichment analysis (%s) ...",
+as.character(now)), appendLF = T)
+}
+data_nBases &lt;- sum(as.numeric(IRanges::width(dGR_reduced)))
+annotation_nBases &lt;- base::sapply(aGR_reduced, function(gr) {
+sum(as.numeric(IRanges::width(gr)))
+})
+background_nBases &lt;- sum(as.numeric(IRanges::width(bGR_reduced)))
+overlap_nBases &lt;- base::sapply(oGR_reduced, function(gr) {
+sum(as.numeric(IRanges::width(gr)))
+})
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tthe number of nucleotides/bases: data (%d),
+background (%d)",
+data_nBases, background_nBases), appendLF = T)
+message(sprintf("\tthe number of annotations: %d",
+length(annotation_nBases)),
+appendLF = T)
+}
+flag_parallel &lt;- F
+if (parallel == TRUE) {
+flag_parallel &lt;- xCheckParallel(multicores = multicores,
+verbose = verbose)
+if (flag_parallel) {
+i &lt;- 1
+b2f &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:length(sGR_list),
+.inorder = T, .combine = rbind), {
+progress_indicate(i, length(sGR_list), 10, flag = T)
+res &lt;- mergeOverlaps_GRL(qGR = sGR_list[[i]],
+sGRL = aGRL, out.format = "counts")
+unlist(res)
+})
+}
+}
+if (flag_parallel == F) {
+b_overlap_nBases &lt;- base::lapply(1:length(sGR_list),
+function(i) {
+progress_indicate(i, length(sGR_list), 10, flag = T)
+res &lt;- mergeOverlaps_GRL(qGR = sGR_list[[i]],
+sGRL = aGRL, out.format = "counts")
+unlist(res)
+})
+b2f &lt;- do.call(rbind, b_overlap_nBases)
+}
+obs &lt;- overlap_nBases
+exp_mean &lt;- apply(b2f, 2, mean)
+exp_std &lt;- apply(b2f, 2, stats::sd)
+ratio &lt;- obs/exp_mean
+zscore &lt;- (obs - exp_mean)/exp_std
+obs_matrix &lt;- matrix(rep(obs, each = num.samples), nrow = num.samples)
+pvalue &lt;- apply((obs_matrix - b2f) &lt;= 0, 2, sum)/num.samples
+zscore[is.na(zscore)] &lt;- 0
+zscore[is.infinite(zscore)] &lt;- max(zscore[!is.infinite(zscore)])
+pvalue[is.na(ratio)] &lt;- 1
+ratio[is.na(ratio)] &lt;- 1
+enrichment_df &lt;- data.frame(names(overlap_nBases), annotation_nBases,
+data_nBases, background_nBases, obs, exp_mean, ratio,
+zscore, pvalue, row.names = NULL, stringsAsFactors = F)
+colnames(enrichment_df) &lt;- c("name", "nAnno", "nData", "nBG",
+"nOverlap", "nExpect", "fc", "zscore", "pvalue")
+pvals &lt;- enrichment_df$pvalue
+adjpvals &lt;- stats::p.adjust(pvals, method = p.adjust.method)
+enrichment_df$adjp &lt;- adjpvals
+enrichment_df$zscore &lt;- signif(enrichment_df$zscore, digits = 3)
+pvals &lt;- enrichment_df$pvalue
+adjpvals &lt;- enrichment_df$adjp
+pvals &lt;- signif(pvals, digits = 2)
+adjpvals &lt;- signif(adjpvals, digits = 2)
+pvals &lt;- base::sapply(pvals, function(x) {
+if (x &lt; 0.1 &amp; x != 0) {
+as.numeric(format(x, scientific = T))
+}
+else {
+x
+}
+})
+adjpvals &lt;- base::sapply(adjpvals, function(x) {
+if (x &lt; 0.1 &amp; x != 0) {
+as.numeric(format(x, scientific = T))
+}
+else {
+x
+}
+})
+enrichment_df$pvalue &lt;- pvals
+enrichment_df$adjp &lt;- adjpvals
+endT &lt;- Sys.time()
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = T)
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = T)
+res_df &lt;- enrichment_df[, c("name", "nAnno", "nOverlap",
+"fc", "zscore", "pvalue", "adjp", "nData", "nBG")]
+invisible(res_df)
+}
 </pre>
 
 

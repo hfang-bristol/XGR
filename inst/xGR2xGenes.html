@@ -1,46 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define genes from an input list of genomic...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGR2xGenes"><tr><td>xGR2xGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to define genes from an input list of genomic regions given the crosslink info</h2>
-
-<h3>Description</h3>
-
-<p><code>xGR2xGenes</code> is supposed to define genes crosslinking to an input
-list of genomic regions (GR). Also required is the crosslink info with
-a score quantifying the link of a GR to a gene. Currently supported
-built-in crosslink info is enhancer genes, eQTL genes, conformation
-genes and nearby genes (purely), though the user can customise it via
-'crosslink.customised'; if so, it has priority over the built-in data.
-</p>
-
+<h2>xGR2xGenes</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGR2xGenes(
-data,
-format = c("chr:start-end", "data.frame", "bed", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+xGR2xGenes(data, format = c("chr:start-end", "data.frame", "bed",
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
 crosslink = c("genehancer", "PCHiC_PMID27863249_combined",
-"GTEx_V6p_combined",
-"nearby"),
-crosslink.customised = NULL,
-cdf.function = c("original", "empirical"),
-scoring = F,
-scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F,
-nearby.distance.max = 50000,
-nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2,
-verbose = T,
-silent = F,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
+cdf.function = c("original", "empirical"), scoring = F, scoring.scheme
+= c("max", "sum", "sequential"), scoring.rescale = F,
+nearby.distance.max = 50000, nearby.decay.kernel = c("rapid", "slow",
+"linear", "constant"), nearby.decay.exponent = 2, verbose = T, silent =
+F, RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid =
+NULL)
 </pre>
 
 
@@ -49,222 +28,551 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
-(see the next parameter 'format' below), GR should be provided as a
-vector in the format of 'chrN:start-end', where N is either 1-22 or X,
-start (or end) is genomic positional number; for example, 'chr1:13-20'.
-If formatted as a 'data.frame', the first three columns correspond to
-the chromosome (1st column), the starting chromosome position (2nd
-column), and the ending chromosome position (3rd column). If the format
-is indicated as 'bed' (browser extensible data), the same as
-'data.frame' format but the position is 0-based offset from chromomose
-position. If the genomic regions provided are not ranged but only the
-single position, the ending chromosome position (3rd column) is allowed
-not to be provided. The data could also be an object of 'GRanges' (in
-this case, formatted as 'GRanges')</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>format</code></td>
 <td>
-<p>the format of the input data. It can be one of
-&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
-<p>the conversion from one genome build to
-another. The conversions supported are &quot;hg38.to.hg19&quot; and
-&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>crosslink</code></td>
 <td>
-<p>the built-in crosslink info with a score quantifying
-the link of a GR to a gene. It can be one of 'genehancer' (enhancer
-genes; PMID:28605766), 'nearby' (nearby genes; if so, please also
-specify the relevant parameters 'nearby.distance.max',
-'nearby.decay.kernel' and 'nearby.decay.exponent' below),
-'PCHiC_PMID27863249_combined' (conformation genes; PMID:27863249),
-'PCHiC_PMID31501517_combined' (conformation genes; PMID:31501517),
-'GTEx_V6p_combined' (eQTL genes; PMID:29022597),
-'eQTL_scRNAseq_combined' (eQTL genes; PMID:29610479),
-'eQTL_jpRNAseq_combined' (eQTL genes; PMID:28553958),
-'eQTL_ImmuneCells_combined' (eQTL genes;
-PMID:24604202,22446964,26151758,28248954,24013639),
-'eQTL_DICE_combined' (eQTL genes; PMID:30449622)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>the crosslink info with a score quantifying
-the link of a GR to a gene. A user-input matrix or data frame with 4
-columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
-genome build 19), 2nd column for Genes, 3rd for crosslink score
-(crosslinking a genomic region to a gene, such as -log10 significance
-level), and 4th for contexts (optional; if not provided, it will be
-added as 'C'). Alternatively, it can be a file containing these 4
-columns. Required, otherwise it will return NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>cdf.function</code></td>
 <td>
-<p>a character specifying how to transform the input
-crosslink score. It can be one of 'original' (no such transformation),
-and 'empirical' for looking at empirical Cumulative Distribution
-Function (cdf; as such it is converted into pvalue-like values [0,1])</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>scoring</code></td>
 <td>
-<p>logical to indicate whether gene-level scoring will be
-further calculated. By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
 <td>
-<p>the method used to calculate seed gene scores
-under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for the
-maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
-weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
-<i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>scoring.rescale</code></td>
 <td>
-<p>logical to indicate whether gene scores will be
-further rescaled into the [0,1] range. By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.distance.max</code></td>
 <td>
-<p>the maximum distance between genes and GR.
-Only those genes no far way from this distance will be considered as
-seed genes. This parameter will influence the distance-component
-weights calculated for nearby GR per gene</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.decay.kernel</code></td>
 <td>
-<p>a character specifying a decay kernel
-function. It can be one of 'slow' for slow decay, 'linear' for linear
-decay, and 'rapid' for rapid decay. If no distance weight is used,
-please select 'constant'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.decay.exponent</code></td>
 <td>
-<p>a numeric specifying a decay exponent. By
-default, it sets to 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-<p>logical to indicate whether the messages will be silent
-completely. By default, it sets to false. If true, verbose will be
-forced to be false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>If scoring sets to false, a data frame with following columns:
-</p>
-
-<ul>
-<li><p><code>GR</code>: genomic regions
-</p>
-</li>
-<li><p><code>Gene</code>: crosslinked genes
-</p>
-</li>
-<li><p><code>Score</code>: the original score between the gene and the GR (if
-cdf.function is 'original'); otherwise cdf (based on the whole
-crosslink inputs)
-</p>
-</li>
-<li><p><code>Context</code>: the context
-</p>
-</li></ul>
-
-<p>If scoring sets to true, a data frame with following columns:
-</p>
-
-<ul>
-<li><p><code>Gene</code>: crosslinked genes
-</p>
-</li>
-<li><p><code>Score</code>: gene score summarised over its list of crosslinked
-GR
-</p>
-</li>
-<li><p><code>Pval</code>: p-value-like significance level transformed from
-gene scores
-</p>
-</li>
-<li><p><code>Context</code>: the context
-</p>
-</li></ul>
-
-
-
-<h3>See Also</h3>
-
-<p><code>xRDataLoader</code>, <code>xGR</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 1) provide the genomic regions
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-names(gr) &lt;- NULL
-dGR &lt;- xGR(gr, format="GRanges")
-
-# 2) using built-in crosslink info
-## enhancer genes
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges", crosslink="genehancer",
-RData.location=RData.location)
-## conformation genes
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges",
-crosslink="PCHiC_combined", RData.location=RData.location)
-## eQTL genes
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges",
-crosslink="GTEx_V6p_combined", RData.location=RData.location)
-## nearby genes (50kb, decaying rapidly)
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges", crosslink="nearby",
-nearby.distance.max=50000, nearby.decay.kernel="rapid",
-RData.location=RData.location)
-
-# 3) advanced use
-# 3a) provide crosslink.customised
-## illustration purpose only (see the content of 'crosslink.customised')
-df &lt;- xGR2nGenes(dGR, format="GRanges", RData.location=RData.location)
-crosslink.customised &lt;- data.frame(GR=df$GR, Gene=df$Gene,
-Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=F)
-#crosslink.customised &lt;- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=F)
-# 3b) define crosslinking genes
-# without gene scoring
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges",
-crosslink.customised=crosslink.customised,
-RData.location=RData.location)
-# with gene scoring
-df_xGenes &lt;- xGR2xGenes(dGR, format="GRanges",
-crosslink.customised=crosslink.customised, scoring=T,
-scoring.scheme="max", RData.location=RData.location)
-
-## End(Not run)
+## The function is currently defined as
+function (data, format = c("chr:start-end", "data.frame", "bed",
+"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+crosslink = c("genehancer", "PCHiC_PMID27863249_combined",
+"GTEx_V6p_combined", "nearby"), crosslink.customised = NULL,
+cdf.function = c("original", "empirical"), scoring = F, scoring.scheme
+= c("max",
+"sum", "sequential"), scoring.rescale = F, nearby.distance.max = 50000,
+nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
+nearby.decay.exponent = 2, verbose = T, silent = F, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+startT &lt;- Sys.time()
+if (!silent) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = TRUE)
+message("", appendLF = TRUE)
+}
+else {
+verbose &lt;- FALSE
+}
+format &lt;- match.arg(format)
+build.conversion &lt;- match.arg(build.conversion)
+cdf.function &lt;- match.arg(cdf.function)
+scoring.scheme &lt;- match.arg(scoring.scheme)
+nearby.decay.kernel &lt;- match.arg(nearby.decay.kernel)
+if (class(data) == "GRanges") {
+names(data) &lt;- NULL
+}
+dGR &lt;- xGR(data = data, format = format, build.conversion =
+build.conversion,
+verbose = verbose, RData.location = RData.location, guid = guid)
+if (is.null(dGR)) {
+return(NULL)
+}
+df_SGS_customised &lt;- NULL
+if (!is.null(crosslink.customised)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the customised crosslink (%s) ...",
+as.character(now)), appendLF = T)
+}
+df &lt;- NULL
+if (is.vector(crosslink.customised)) {
+df &lt;- utils::read.delim(file = crosslink.customised,
+header = TRUE, row.names = NULL, stringsAsFactors = FALSE)
+}
+else if (is.matrix(crosslink.customised) |
+is.data.frame(crosslink.customised)) {
+df &lt;- crosslink.customised
+}
+if (!is.null(df) &amp;&amp; (ncol(df) == 4 | ncol(df) == 3)) {
+if (ncol(df) == 4) {
+SGS_customised &lt;- df
+}
+else {
+SGS_customised &lt;- df
+SGS_customised$Context &lt;- "C"
+}
+colnames(SGS_customised) &lt;- c("GR", "Gene", "Score",
+"Context")
+df_SGS_customised &lt;- SGS_customised[!is.na(SGS_customised[,
+1]) &amp; !is.na(SGS_customised[, 2]) &amp; !is.na(SGS_customised[,
+3]), ]
+if (verbose) {
+message(sprintf("Genes (%d) and genomic regions (%d) are considered
+based on customised contexts (%d) (%s) ...",
+length(unique(df_SGS_customised[, 2])),
+length(unique(df_SGS_customised[,
+1])), length(unique(df_SGS_customised[, 4])),
+as.character(Sys.time())), appendLF = TRUE)
+}
+}
+if (!is.null(df_SGS_customised)) {
+df_SGS_customised &lt;- df_SGS_customised[df_SGS_customised[,
+1] != "" &amp; df_SGS_customised[, 2] != "", ]
+}
+}
+if (is.null(df_SGS_customised)) {
+default.crosslink &lt;- c("genehancer", "PCHiC_PMID27863249_combined",
+"PCHiC_PMID27863249PE_combined", "PCHiC_PMID31501517_combined",
+"GTEx_V6p_combined", "eQTL_ImmuneCells_combined",
+"eQTL_DICE_combined", "eQTL_eQTLGen", "eQTL_LCL",
+"eCRD_LCL", "pQTL_Plasma", "eQTL_scRNAseq_combined",
+"eQTL_jpRNAseq_combined", "FANTOM5_Cell", "FANTOM5_Tissue",
+"REG_lncRNA", "REG_enhancer", "nearby", "PCHiC_PMID27863249_Monocytes",
+"PCHiC_PMID27863249_Macrophages_M0",
+"PCHiC_PMID27863249_Macrophages_M1",
+"PCHiC_PMID27863249_Macrophages_M2", "PCHiC_PMID27863249_Neutrophils",
+"PCHiC_PMID27863249_Megakaryocytes",
+"PCHiC_PMID27863249_Endothelial_precursors",
+"PCHiC_PMID27863249_Erythroblasts", "PCHiC_PMID27863249_Fetal_thymus",
+"PCHiC_PMID27863249_Naive_CD4_T_cells",
+"PCHiC_PMID27863249_Total_CD4_T_cells",
+"PCHiC_PMID27863249_Activated_total_CD4_T_cells",
+"PCHiC_PMID27863249_Nonactivated_total_CD4_T_cells",
+"PCHiC_PMID27863249_Naive_CD8_T_cells",
+"PCHiC_PMID27863249_Total_CD8_T_cells",
+"PCHiC_PMID27863249_Naive_B_cells", "PCHiC_PMID27863249_Total_B_cells",
+"PCHiC_PMID27863249PE_Monocytes",
+"PCHiC_PMID27863249PE_Macrophages_M0",
+"PCHiC_PMID27863249PE_Macrophages_M1",
+"PCHiC_PMID27863249PE_Macrophages_M2",
+"PCHiC_PMID27863249PE_Neutrophils",
+"PCHiC_PMID27863249PE_Megakaryocytes",
+"PCHiC_PMID27863249PE_Erythroblasts",
+"PCHiC_PMID27863249PE_Naive_CD4_T_cells",
+"PCHiC_PMID27863249PE_Naive_CD8_T_cells",
+"GTEx_V6p_Adipose_Subcutaneous",
+"GTEx_V6p_Adipose_Visceral_Omentum", "GTEx_V6p_Adrenal_Gland",
+"GTEx_V6p_Artery_Aorta", "GTEx_V6p_Artery_Coronary",
+"GTEx_V6p_Artery_Tibial",
+"GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24",
+"GTEx_V6p_Brain_Caudate_basal_ganglia",
+"GTEx_V6p_Brain_Cerebellar_Hemisphere",
+"GTEx_V6p_Brain_Cerebellum", "GTEx_V6p_Brain_Cortex",
+"GTEx_V6p_Brain_Frontal_Cortex_BA9", "GTEx_V6p_Brain_Hippocampus",
+"GTEx_V6p_Brain_Hypothalamus",
+"GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia",
+"GTEx_V6p_Brain_Putamen_basal_ganglia",
+"GTEx_V6p_Breast_Mammary_Tissue",
+"GTEx_V6p_Cells_EBVtransformed_lymphocytes",
+"GTEx_V6p_Cells_Transformed_fibroblasts",
+"GTEx_V6p_Colon_Sigmoid", "GTEx_V6p_Colon_Transverse",
+"GTEx_V6p_Esophagus_Gastroesophageal_Junction",
+"GTEx_V6p_Esophagus_Mucosa",
+"GTEx_V6p_Esophagus_Muscularis", "GTEx_V6p_Heart_Atrial_Appendage",
+"GTEx_V6p_Heart_Left_Ventricle", "GTEx_V6p_Liver",
+"GTEx_V6p_Lung", "GTEx_V6p_Muscle_Skeletal", "GTEx_V6p_Nerve_Tibial",
+"GTEx_V6p_Ovary", "GTEx_V6p_Pancreas", "GTEx_V6p_Pituitary",
+"GTEx_V6p_Prostate", "GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
+"GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
+"GTEx_V6p_Small_Intestine_Terminal_Ileum",
+"GTEx_V6p_Spleen", "GTEx_V6p_Stomach", "GTEx_V6p_Testis",
+"GTEx_V6p_Thyroid", "GTEx_V6p_Uterus", "GTEx_V6p_Vagina",
+"GTEx_V6p_Whole_Blood", "eQTL_ImmuneCells_bcell",
+"eQTL_ImmuneCells_Blood", "eQTL_ImmuneCells_CD4",
+"eQTL_ImmuneCells_CD8", "eQTL_ImmuneCells_JKscience_CD14",
+"eQTL_ImmuneCells_JKscience_IFN", "eQTL_ImmuneCells_JKscience_LPS2",
+"eQTL_ImmuneCells_JKscience_LPS24", "eQTL_ImmuneCells_mono",
+"eQTL_ImmuneCells_Neutrophils", "eQTL_ImmuneCells_NK",
+"eQTL_scRNAseq_Bcell", "eQTL_scRNAseq_PBMC", "eQTL_scRNAseq_NK",
+"eQTL_scRNAseq_Mono", "eQTL_scRNAseq_DC", "eQTL_scRNAseq_CD8",
+"eQTL_scRNAseq_CD4", "eQTL_jpRNAseq_combined", "eQTL_jpRNAseq_Bcell",
+"eQTL_jpRNAseq_CD4", "eQTL_jpRNAseq_CD8", "eQTL_jpRNAseq_Mono",
+"eQTL_jpRNAseq_NK", "eQTL_jpRNAseq_PBMC", "PCHiC_PMID25938943_GM12878",
+"PCHiC_PMID25938943_CD34", "PCHiC_PMID29955040_CMhESC",
+"PCHiC_PMID31253982_islet", "PCHiC_PMID31367015_astrocytes",
+"PCHiC_PMID31367015_excitatory", "PCHiC_PMID31367015_hippocampal",
+"PCHiC_PMID31367015_motor", "TCGA_Pancancer_All",
+"TCGA_Pancancer_Enhancers", "TCGA_Pancancer_Immune")
+ind &lt;- match(default.crosslink, crosslink)
+crosslink &lt;- default.crosslink[!is.na(ind)]
+if (length(crosslink) == 0) {
+return(NULL)
+}
+else {
+crosslink &lt;- crosslink[1]
+}
+if (crosslink != "nearby") {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the built-in crosslink '%s' (%s) ...",
+crosslink, as.character(now)), appendLF = T)
+}
+if (crosslink == "genehancer") {
+if (0) {
+ig &lt;- xRDataLoader("ig.genehancer", verbose = F,
+RData.location = RData.location, guid = guid)
+V(ig)$name &lt;- V(ig)$id
+df_edges &lt;- get.data.frame(ig, what = "edges")
+df_nodes &lt;- get.data.frame(ig, what = "vertices")
+df_nodes &lt;- subset(df_nodes, df_nodes$type ==
+"enhancer")
+ind &lt;- match(df_edges$from, df_nodes$id)
+df_edges$GR_score &lt;- as.numeric(df_nodes$score[ind])
+crosslink.customised &lt;- data.frame(GR = df_edges$from,
+Gene = df_edges$to, Score = df_edges$score *
+df_edges$GR_score, Context = rep("genehancer",
+nrow(df_edges)), stringsAsFactors = F)
+df_SGS_customised &lt;- crosslink.customised
+}
+else {
+df_SGS_customised &lt;- xRDataLoader("crosslink.customised.genehancer",
+verbose = verbose, RData.location = RData.location,
+guid = guid)
+}
+}
+else if (sum(grep("PCHiC_", crosslink, perl = TRUE)) &gt;
+0) {
+rdata &lt;- paste0("crosslink.customised.", crosslink)
+df_SGS_customised &lt;- xRDataLoader(rdata, verbose = verbose,
+RData.location = RData.location, guid = guid)
+}
+else if (sum(grep("GTEx_V6p_", crosslink, perl = TRUE)) &gt;
+0) {
+rdata &lt;- paste0("crosslink.customised.", crosslink)
+df_SGS_customised &lt;- xRDataLoader(rdata, verbose = verbose,
+RData.location = RData.location, guid = guid)
+}
+else if (sum(grep("FANTOM5_", crosslink, perl = TRUE)) &gt;
+0) {
+rdata &lt;- paste0("crosslink.customised.", crosslink)
+df_SGS_customised &lt;- xRDataLoader(rdata, verbose = verbose,
+RData.location = RData.location, guid = guid)
+}
+else {
+rdata &lt;- paste0("crosslink.customised.", crosslink)
+df_SGS_customised &lt;- xRDataLoader(rdata, verbose = verbose,
+RData.location = RData.location, guid = guid)
+}
+df_SGS_customised &lt;- as.data.frame(df_SGS_customised)
+df_SGS_customised &lt;- df_SGS_customised[!is.na(df_SGS_customised[,
+1]) &amp; !is.na(df_SGS_customised[, 2]) &amp; !is.na(df_SGS_customised[,
+3]), ]
+if (!is.null(df_SGS_customised)) {
+if (verbose) {
+message(sprintf("\tGenes (%d) and genomic regions (%d) are considered
+based on built-in '%s' (%s) ...",
+length(unique(df_SGS_customised[, 2])),
+length(unique(df_SGS_customised[,
+1])), unique(df_SGS_customised[, 4]), as.character(Sys.time())),
+appendLF = TRUE)
+}
+}
+}
+}
+if (!is.null(df_SGS_customised)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Define crosslinked genes from an input list of %d
+genomic regions (%s) ...",
+length(dGR), as.character(now)), appendLF = T)
+}
+Gene &lt;- Weight &lt;- Score &lt;- NULL
+dgr &lt;- NULL
+ls_df_SGS &lt;- split(x = df_SGS_customised, f =
+df_SGS_customised$Context)
+ls_res_df &lt;- lapply(1:length(ls_df_SGS), function(j) {
+df_SGS &lt;- ls_df_SGS[[j]]
+if (cdf.function == "empirical") {
+my.CDF &lt;- stats::ecdf(df_SGS$Score)
+df_SGS$Weight &lt;- my.CDF(df_SGS$Score)
+}
+else {
+df_SGS$Weight &lt;- df_SGS$Score
+}
+gr &lt;- xGR(df_SGS$GR, format = "chr:start-end", verbose = verbose,
+RData.location = RData.location, guid = guid)
+q2r &lt;- as.data.frame(GenomicRanges::findOverlaps(query = dGR,
+subject = gr, maxgap = -1L, minoverlap = 0L,
+type = "any", select = "all", ignore.strand = TRUE))
+q2r$gr &lt;- names(gr[q2r[, 2]])
+q2r$dgr &lt;- names(dGR[q2r[, 1]])
+ind &lt;- match(df_SGS$GR, q2r$gr)
+df_found &lt;- df_SGS[!is.na(ind), ]
+if (1) {
+system.time({
+ls_df_found &lt;- split(x = df_found[, c("GR",
+"Gene", "Weight")], f = df_found$GR)
+ind &lt;- match(q2r$gr, names(ls_df_found))
+ls_df_found_reorder &lt;- ls_df_found[ind]
+df_found_reorder &lt;- do.call(rbind, ls_df_found_reorder)
+vec_nrow &lt;- sapply(ls_df_found_reorder, nrow)
+ind_times &lt;- rep(1:nrow(q2r), times = vec_nrow)
+df_q2r &lt;- q2r[ind_times, ]
+df &lt;- cbind(df_q2r, df_found_reorder)
+df_xGenes &lt;- as.data.frame(df %&gt;% dplyr::group_by(dgr,
+Gene) %&gt;% dplyr::summarize(Score = max(Weight)))
+colnames(df_xGenes) &lt;- c("GR", "Gene", "Score")
+})
+}
+else {
+system.time({
+ls_dgr &lt;- split(x = q2r$gr, f = q2r$dgr)
+ls_df &lt;- lapply(1:length(ls_dgr), function(i) {
+if (0) {
+ind &lt;- match(df_SGS$GR, ls_dgr[[i]])
+df &lt;- df_SGS[!is.na(ind), ]
+}
+else {
+ind &lt;- match(df_found$GR, ls_dgr[[i]])
+df &lt;- df_found[!is.na(ind), ]
+}
+df &lt;- as.data.frame(df %&gt;% dplyr::group_by(Gene) %&gt;%
+dplyr::summarize(Score = max(Weight)))
+data.frame(GR = rep(names(ls_dgr)[i], nrow(df)),
+df, stringsAsFactors = F)
+})
+df_xGenes &lt;- do.call(rbind, ls_df)
+})
+}
+ind &lt;- !is.na(XGR::xSymbol2GeneID(df_xGenes$Gene,
+details = TRUE, verbose = FALSE, RData.location = RData.location,
+guid = guid)$Symbol)
+df_xGenes &lt;- df_xGenes[ind, ]
+if (verbose) {
+message(sprintf("\t%d xGenes (%d genomic regions) are defined based
+on built-in '%s' (%s)",
+length(unique(df_xGenes$Gene)), length(unique(df_xGenes$GR)),
+names(ls_df_SGS)[j], as.character(Sys.time())),
+appendLF = T)
+}
+if (scoring) {
+if (scoring.scheme == "max") {
+summaryFun &lt;- max
+}
+else if (scoring.scheme == "sum") {
+summaryFun &lt;- sum
+}
+else if (scoring.scheme == "sequential") {
+summaryFun &lt;- function(x) {
+base::sum(x/base::rank(-x, ties.method = "min"))
+}
+}
+df_xGenes &lt;- as.data.frame(df_xGenes %&gt;% dplyr::group_by(Gene) %&gt;%
+dplyr::summarise(Score = summaryFun(Score)))
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\t%d xGenes are scored using '%s' scoring scheme
+(%s)",
+length(unique(df_xGenes$Gene)), scoring.scheme,
+as.character(now)), appendLF = T)
+}
+if (scoring.rescale) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\talso rescale score into the [0,1] range (%s)",
+as.character(now)), appendLF = T)
+}
+rescaleFun &lt;- function(x) {
+(x - min(x))/(max(x) - min(x))
+}
+df_xGenes$Score &lt;- rescaleFun(df_xGenes$Score)
+}
+seeds.genes &lt;- df_xGenes$Score
+names(seeds.genes) &lt;- df_xGenes$Gene
+rescaleFun &lt;- function(x) {
+0.100001 + 0.9 * 0.99999888888 * (x - min(x))/(max(x) -
+min(x))
+}
+x &lt;- rescaleFun(seeds.genes)
+pval &lt;- 10^(-x * 10)
+df_xGenes$Pval &lt;- pval
+}
+data.frame(df_xGenes, Context = rep(names(ls_df_SGS)[j],
+nrow(df_xGenes)), stringsAsFactors = F)
+})
+res_df &lt;- do.call(rbind, ls_res_df)
+}
+else {
+if (crosslink == "nearby") {
+df &lt;- xGR2nGenes(data = dGR, format = "GRanges",
+distance.max = nearby.distance.max, decay.kernel = nearby.decay.kernel,
+decay.exponent = nearby.decay.exponent, GR.Gene = "UCSC_knownGene",
+scoring = scoring, scoring.scheme = scoring.scheme,
+scoring.rescale = scoring.rescale, verbose = F,
+RData.location = RData.location, guid = guid)
+context &lt;- paste0("nearby_", nearby.distance.max,
+"_", nearby.decay.kernel)
+if (scoring) {
+res_df &lt;- data.frame(df, Context = rep(context,
+nrow(df)), stringsAsFactors = F)
+}
+else {
+res_df &lt;- data.frame(GR = df$GR, Gene = df$Gene,
+Score = df$Weight, Context = rep(context, nrow(df)),
+stringsAsFactors = F)
+}
+if (verbose) {
+if (scoring) {
+message(sprintf("\t%d xGenes (out of %d genomic regions) are defined
+as nearby genes within %d(bp) genomic distance window using '%s'
+decay kernel (%s)",
+length(unique(res_df$Gene)), length(dGR),
+nearby.distance.max, nearby.decay.kernel,
+as.character(Sys.time())), appendLF = T)
+}
+else {
+message(sprintf("\t%d xGenes from an input list of %d (out of %d)
+genomic regions are defined as nearby genes within %d(bp) genomic
+distance window using '%s' decay kernel (%s)",
+length(unique(res_df$Gene)), length(unique(res_df$GR)),
+length(dGR), nearby.distance.max, nearby.decay.kernel,
+as.character(Sys.time())), appendLF = T)
+}
+}
+}
+}
+df_xGenes &lt;- res_df
+Context &lt;- GR &lt;- Score &lt;- NULL
+if (scoring) {
+df_xGenes &lt;- df_xGenes %&gt;% dplyr::arrange(Context, -Score)
+}
+else {
+df_xGenes &lt;- df_xGenes %&gt;% dplyr::arrange(-Score)
+ind &lt;- xGRsort(df_xGenes$GR)
+if (!is.null(ind)) {
+df_xGenes &lt;- df_xGenes[ind, ]
+df_xGenes &lt;- df_xGenes %&gt;% dplyr::arrange(Context)
+}
+}
+if (0) {
+GR.Gene &lt;- "UCSC_knownGene"
+gr_Gene &lt;- xRDataLoader(RData.customised = GR.Gene, verbose = FALSE,
+RData.location = RData.location, guid = guid)
+tmp_df &lt;- df_xGenes
+ind &lt;- match(tmp_df$Gene, names(gr_Gene))
+tmp_df &lt;- tmp_df[!is.na(ind), ]
+tmp &lt;- as.data.frame(gr_Gene)[ind[!is.na(ind)], ]
+tmp_df$Gene_gr &lt;- paste0(tmp$seqnames, ":", tmp$start,
+"-", tmp$end)
+context_ls &lt;- split(x = tmp_df, f = tmp_df$Context)
+ls_ig &lt;- lapply(1:length(context_ls), function(i) {
+df &lt;- context_ls[[i]]
+relations &lt;- df[, 1:3]
+df_gr &lt;- data.frame(df[, c("GR", "GR")], type = rep("GR",
+nrow(df)), stringsAsFactors = F)
+df_gene &lt;- data.frame(df[, c("Gene", "Gene_gr")],
+type = rep("Gene", nrow(df)), stringsAsFactors = F)
+nodes &lt;- base::as.data.frame(rbind(as.matrix(df_gr),
+as.matrix(df_gene)), stringsAsFactors = FALSE)
+nodes &lt;- nodes[!duplicated(nodes), ]
+colnames(nodes) &lt;- c("name", "id", "type")
+ig &lt;- graph.data.frame(d = relations, directed = TRUE,
+vertices = nodes)
+if (0) {
+GR.SNP &lt;- xGR(data = V(ig)$id[V(ig)$type == "GR"],
+format = "chr:start-end", verbose = FALSE,
+RData.location = RData.location, guid = guid)
+names(GR.SNP) &lt;- V(ig)$name[V(ig)$type == "GR"]
+GR.Gene &lt;- xGR(data = V(ig)$id[V(ig)$type ==
+"Gene"], format = "chr:start-end", verbose = FALSE,
+RData.location = RData.location)
+names(GR.Gene) &lt;- V(ig)$name[V(ig)$type == "Gene"]
+xCircos(g = ig, entity = "Both", top_num = 10,
+GR.SNP = GR.SNP, GR.Gene = GR.Gene, colormap = c("orange-darkred"),
+ideogram = F, chr.exclude = "auto", entity.label.cex = 0.6,
+entity.label.side = "out", RData.location = RData.location)
+}
+return(ig)
+})
+names(ls_ig) &lt;- names(context_ls)
+}
+endT &lt;- Sys.time()
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+if (!silent) {
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = TRUE)
+message(paste(c("Runtime in total (xGR2xGenes): ", runTime,
+" secs\n"), collapse = ""), appendLF = TRUE)
+}
+invisible(df_xGenes)
+}
 </pre>
 
 

@@ -3,8 +3,9 @@
 #' \code{xLayout} is supposed to define graph node coordinates according to igraph- or sna-style layout.
 #'
 #' @param g an object of class "igraph" (or "graphNEL") for a graph
-#' @param layout a character specifying graph layout function. This character can be used to indicate igraph-style layout ("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite"), or sna-style layout ("gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target"), or ForeceAtlas2 layout used in Dephi ("gephi.forceatlas2")
+#' @param layout a character specifying graph layout function. This character can be used to indicate igraph-style layout ("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite"), or sna-style layout ("gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target"), or graphlayouts-style layout ("graphlayouts.layout_with_stress","graphlayouts.layout_as_backbone"), or ForeceAtlas2 layout used in Dephi ("gephi.forceatlas2")
 #' @param seed an integer specifying the seed
+#' @param flip logical to indicate whether x- and y-coordiates flip. By default, it sets to false
 #' @return It returns an igraph object, appended by node attributes including "xcoord" for x-coordinates, "ycoord" for y-coordiates.
 #' @export
 #' @seealso \code{\link{xGGnetwork}}
@@ -44,7 +45,7 @@
 #' gp <- xGGnetwork(ls_ig, node.xcoord='xcoord', node.ycoord='ycoord', ncolumns=5)
 #' }
 
-xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite", "gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target", "gephi.forceatlas2"), seed=825)
+xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_circle","layout_on_sphere","layout_with_fr","layout_with_kk","layout_as_tree","layout_with_lgl","layout_with_graphopt","layout_with_sugiyama","layout_with_dh","layout_with_drl","layout_with_gem","layout_with_mds","layout_as_bipartite", "gplot.layout.adj","gplot.layout.circle","gplot.layout.circrand","gplot.layout.eigen","gplot.layout.fruchtermanreingold","gplot.layout.geodist","gplot.layout.hall","gplot.layout.kamadakawai","gplot.layout.mds","gplot.layout.princoord","gplot.layout.random","gplot.layout.rmds","gplot.layout.segeo","gplot.layout.seham","gplot.layout.spring","gplot.layout.springrepulse","gplot.layout.target", "graphlayouts.layout_with_stress","graphlayouts.layout_as_backbone", "gephi.forceatlas2"), seed=825, flip=F)
 {
     
     layout <- layout[1]
@@ -65,6 +66,16 @@ xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_cir
 		m <- as.matrix(xConverter(ig, from='igraph', to='dgCMatrix', verbose=F))
 		set.seed(seed)
 		eval(parse(text=paste0('glayout <- sna::',layout,'(m, NULL)')))
+		
+	}else if(grepl("graphlayouts",layout)){
+		## based on graphlayouts
+		layout <- gsub('graphlayouts.','',layout)
+		set.seed(seed)
+		eval(parse(text=paste0('glayout <- graphlayouts::',layout,'(ig)')))
+		
+		if(layout=='layout_as_backbone'){
+			glayout <- glayout$xy
+		}
 		
 	}else if(layout=='gephi.forceatlas2'){
 		#################################################
@@ -208,8 +219,16 @@ xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_cir
 	
 	if(!is.null(glayout)){
 		## scale into [-1,1]
-		node.xcoord <- glayout[,1]
-		node.ycoord <- glayout[,2]
+		
+		### whether flip coordinates (vertically or horizontally)
+		if(flip){
+			node.xcoord <- glayout[,2]
+			node.ycoord <- glayout[,1]		
+		}else{
+			node.xcoord <- glayout[,1]
+			node.ycoord <- glayout[,2]
+		}
+		
 		if(max(node.xcoord) != min(node.xcoord)){
 			node.xcoord <- (node.xcoord - min(node.xcoord)) / (max(node.xcoord) - min(node.xcoord)) * 2 - 1
 		}

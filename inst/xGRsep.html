@@ -1,17 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to obtain separator index.</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGRsep"><tr><td>xGRsep</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to obtain separator index.</h2>
-
-<h3>Description</h3>
-
-<p><code>xGRsep</code> is supposed to obtain separator index.
-</p>
-
+<h2>xGRsep</h2>
 
 <h3>Usage</h3>
 
@@ -25,49 +19,30 @@ xGRsep(data)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>input genomic regions (GR). GR should be provided as a
-vector in the format of 'chrN:start-end', where N is either 1-22 or X,
-start (or end) is genomic positional number; for example, 'chr1:13-20'</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a vector for separator index
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGRsep</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the genomic regions
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-cse &lt;- xGRcse(gr)
-
-# b) sort index
-ind &lt;- xGRsort(cse)
-data &lt;- cse[ind]
-
-# c) get separator index
-vec_sep &lt;- xGRsep(data)
-
-## End(Not run)
+## The function is currently defined as
+function (data)
+{
+x &lt;- gsub(":.*|chr", "", data)
+x[x == "X"] &lt;- 23
+x[x == "Y"] &lt;- 24
+x &lt;- as.numeric(x)
+vec_sep &lt;- cumsum(table(x))
+vec_sep &lt;- vec_sep[-length(vec_sep)]
+invisible(vec_sep)
+}
 </pre>
 
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for print.eTerm"><tr><td>print.eTerm</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>print.eTerm</h2>
+
+<h3>Usage</h3>
+
+<pre>
+print.eTerm(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (x, ...)
+{
+cat(sprintf("An object of S3 class '%s', with %d components
+including:",
+class(x), length(names(x))), "\n", sep = "")
+cat(sprintf(" $term_info: a data frame of %d rows X %d columns",
+dim(x$term_info)[1], dim(x$term_info)[2]), "\n", sep = "")
+cat(sprintf(" $data: a vector (%d in total)", length(x$data)),
+"\n", sep = "")
+cat(sprintf(" $background: a vector (%d in total)",
+length(x$background)),
+"\n", sep = "")
+cat(sprintf(" $adjp: a vector (%d in total)", length(x$adjp)),
+"\n", sep = "")
+cat(sprintf(" $cross: a matrix of %d X %d", dim(x$cross)[1],
+dim(x$cross)[2]), "\n", sep = "")
+cat(sprintf(" $g: an 'igraph' object"), "\n", sep = "")
+cat(sprintf(" $g$ontology: '%s'", x$g$ontology), "\n", sep = "")
+cat("\n--------------------------------------------------\n")
+cat("xEnrichViewer(eTerm):\n")
+print(xEnrichViewer(x), row.names = TRUE)
+cat("......\n")
+}
+</pre>
+
+
+</body></html>

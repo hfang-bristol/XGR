@@ -1,30 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert gene symbols to entrez geneid</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGeneID2Symbol"><tr><td>xGeneID2Symbol</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to convert gene symbols to entrez geneid</h2>
-
-<h3>Description</h3>
-
-<p><code>xGeneID2Symbol</code> is supposed to convert gene symbols to entrez
-geneid.
-</p>
-
+<h2>xGeneID2Symbol</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGeneID2Symbol(
-data,
-org = c("human", "mouse"),
-details = F,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xGeneID2Symbol(data, org = c("human", "mouse"), details = F, verbose =
+T, RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid =
+NULL)
 </pre>
 
 
@@ -33,79 +21,96 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector containing gene symbols</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>org</code></td>
 <td>
-<p>a character specifying an organism. Currently supported
-organisms are 'human' and 'mouse'. It can be an object 'EG'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
-<p>logical to indicate whether to result in a data frame
-(in great details). By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a vector containing symbol with 'NA' for the unmatched if (details set
-to false); otherwise, a data frame is returned
-</p>
-
-
-<h3>Note</h3>
-
-<p>none.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xSocialiserGenes</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
-GeneID &lt;- sample(org.Hs.eg$gene_info$GeneID, 100)
-GeneID
-
-# b) convert into GeneID
-Symbol &lt;- xGeneID2Symbol(GeneID)
-
-# c) convert into a data frame
-df &lt;- xGeneID2Symbol(GeneID, details=TRUE)
-
-
-# advanced use
-df &lt;- xGeneID2Symbol(GeneID, org=org.Hs.eg, details=TRUE)
-
-## End(Not run)
+## The function is currently defined as
+function (data, org = c("human", "mouse"), details = F, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+if (!is.vector(data)) {
+stop("The input data must be a vector.\n")
+}
+GeneID &lt;- as.numeric(data)
+if (verbose) {
+message(sprintf("%d GeneID of input data (%s)", length(data),
+as.character(Sys.time())), appendLF = T)
+}
+if (class(org) == "EG") {
+df_eg &lt;- org$gene_info
+if (verbose) {
+message(sprintf("Customised organism (%s)", as.character(Sys.time())),
+appendLF = T)
+}
+}
+else {
+org &lt;- org[1]
+if (org == "human") {
+df_eg &lt;- xRDataLoader(RData.customised = "org.Hs.eg",
+RData.location = RData.location, guid = guid,
+verbose = verbose)$gene_info
+}
+else if (org == "mouse") {
+df_eg &lt;- xRDataLoader(RData.customised = "org.Mm.eg",
+RData.location = RData.location, guid = guid,
+verbose = verbose)$gene_info
+}
+if (verbose) {
+message(sprintf("%s organism (%s)", org, as.character(Sys.time())),
+appendLF = T)
+}
+}
+ind &lt;- match(data, df_eg$GeneID)
+df_res &lt;- df_eg[ind, ]
+if (verbose) {
+message(sprintf("%d mappable but %d left unmappable (%s)",
+sum(!is.na(ind)), sum(is.na(ind)), as.character(Sys.time())),
+appendLF = T)
+}
+if (details) {
+df_res &lt;- data.frame(Input = GeneID, df_res, stringsAsFactors = F)
+return(df_res)
+}
+else {
+return(df_res$Symbol)
+}
+}
 </pre>
 
 

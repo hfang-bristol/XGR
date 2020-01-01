@@ -1,47 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a treemap</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichTreemap"><tr><td>xEnrichTreemap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using a treemap</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichTreemap</code> is supposed to visualise enrichment results using
-a treemap. The area is proportional to odds ratio, colored by the
-significance level. It returns an object of class &quot;ggplot&quot;.
-</p>
-
+<h2>xEnrichTreemap</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichTreemap(
-eTerm,
-top_num = 10,
-FDR.cutoff = 0.05,
-CI.one = T,
-colormap = "spectral.top",
-ncolors = 64,
-zlim = NULL,
-barwidth = NULL,
-barheight = 0.5,
-wrap.width = NULL,
-font.family = "sans",
-drop = F,
-details = c("name", "name_FDR", "name_FDR_members"),
-caption = T,
-treemap.grow = F,
-treemap.reflow = F,
-treemap.place = "topleft",
-treemap.color = "black",
-treemap.fontface = "bold.italic",
-treemap.min.size = 4,
-area = c("adjp", "or"),
-area.fill = c("or", "adjp", "zscore")
-)
+xEnrichTreemap(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
+colormap = "spectral.top", ncolors = 64, zlim = NULL, barwidth = NULL,
+barheight = 0.5, wrap.width = NULL, font.family = "sans", drop = F,
+details = c("name", "name_FDR", "name_FDR_members"), caption = T,
+treemap.grow = F, treemap.reflow = F, treemap.place = "topleft",
+treemap.color = "black", treemap.fontface = "bold.italic",
+treemap.min.size = 4, area = c("adjp", "or"), area.fill = c("or",
+"adjp", "zscore"))
 </pre>
 
 
@@ -50,184 +26,347 @@ area.fill = c("or", "adjp", "zscore")
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
-can be a data frame having all these columns (named as
-'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to OR). If
-it is 'auto', only the significant terms (see below FDR.cutoff) will be
-displayed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-<p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>CI.one</code></td>
 <td>
-<p>logical to indicate whether to allow the inclusion of one
-in CI. By default, it is TURE (allowed)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z values for which colors should be
-plotted, defaulting to the range of the -log10(FDR)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barwidth</code></td>
 <td>
-<p>the width of the colorbar. Default value is
-'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barheight</code></td>
 <td>
-<p>the height of the colorbar. Default value is
-'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-<p>a positive integer specifying wrap width of name</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-<p>the font family for texts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>drop</code></td>
 <td>
-<p>logical to indicate whether all factor levels not used in
-the data will automatically be dropped. If FALSE (by default), all
-factor levels will be shown, regardless of whether or not they appear
-in the data</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
-<p>how to label. It can be one of 'name', 'name_FDR'
-(FDR/OR also appended to the name), and 'name_FDR_members' (FDR/OR plus
-members appended to the name; in this case, treemap.grow and
-treemap.reflow is forced to be true)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>caption</code></td>
 <td>
-<p>logical to indicate whether the caption is shown on the
-bottom-right</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.grow</code></td>
 <td>
-<p>logical to indicate whether text will be grown as
-well as shrunk to fill the box</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.reflow</code></td>
 <td>
-<p>logical to indicate whether text will be reflowed
-(wrapped) to better fit the box</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.place</code></td>
 <td>
-<p>where inside the box to place the text. Default is
-&quot;centre&quot;; other options are &quot;bottom&quot;, &quot;top&quot;, &quot;topleft&quot;, &quot;topright&quot;,
-etc</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.color</code></td>
 <td>
-<p>the color of the text</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.fontface</code></td>
 <td>
-<p>the fontface of the text</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>treemap.min.size</code></td>
 <td>
-<p>the minimum font size, in points. If provided,
-text that would need to be shrunk below this size to fit the box will
-not be drawn. Defaults to 4 pt</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>area</code></td>
 <td>
-<p>which statistics will be used for the area. It can be
-&quot;adjp&quot; for adjusted p value (FDR) and &quot;or&quot; for odds ratio</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>area.fill</code></td>
 <td>
-<p>which statistics will be used for the area fill color.
-It can be &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR)
-and &quot;zscore&quot; for enrichment z-score</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;ggplot&quot;
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichViewer</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
-library(treemapify)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-data
-
-# optionally, provide the test background (if not provided, all human genes)
-#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
-
-# 1) Gene-based enrichment analysis using REACTOME pathways
-# perform enrichment analysis
-eTerm &lt;- xEnricherGenes(data, ontology="REACTOME",
-RData.location=RData.location)
-## forest plot of enrichment results
-gp &lt;- xEnrichTreemap(eTerm, top_num=20, FDR.cutoff=0.05,
-treemap.reflow=F, treemap.place="topleft")
-
-# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-# perform enrichment analysis
-ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
-RData.location=RData.location)
-## forest plot of enrichment results
-gp &lt;- xEnrichTreemap(ls_eTerm, FDR.cutoff=0.1)
-
-## End(Not run)
+## The function is currently defined as
+function (eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
+colormap = "spectral.top", ncolors = 64, zlim = NULL, barwidth = NULL,
+barheight = 0.5, wrap.width = NULL, font.family = "sans",
+drop = F, details = c("name", "name_FDR", "name_FDR_members"),
+caption = T, treemap.grow = F, treemap.reflow = F, treemap.place =
+"topleft",
+treemap.color = "black", treemap.fontface = "bold.italic",
+treemap.min.size = 4, area = c("adjp", "or"), area.fill = c("or",
+"adjp", "zscore"))
+{
+details &lt;- match.arg(details)
+area &lt;- match.arg(area)
+area.fill &lt;- match.arg(area.fill)
+if (is.null(eTerm)) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+return(NULL)
+}
+if (class(eTerm) == "eTerm") {
+df &lt;- xEnrichViewer(eTerm, top_num = "all")
+if (!CI.one) {
+ind &lt;- which(df$CIl &gt; 1 | df$CIu &lt; 1)
+df &lt;- df[ind, ]
+}
+if (top_num == "auto") {
+top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
+if (top_num &lt;= 1) {
+top_num &lt;- 10
+}
+}
+df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = "or",
+details = T)
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else if (class(eTerm) == "ls_eTerm" | class(eTerm) == "data.frame") {
+if (class(eTerm) == "ls_eTerm") {
+df &lt;- eTerm$df
+}
+else if (class(eTerm) == "data.frame") {
+if (all(c("group", "ontology", "name", "zscore",
+"adjp", "or", "CIl", "CIu", "nOverlap", "members_Overlap") %in%
+colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "ontology", "name",
+"zscore", "adjp", "or", "CIl", "CIu", "nOverlap",
+"members_Overlap")]
+}
+else {
+details &lt;- "name"
+if (all(c("group", "ontology", "name", "zscore",
+"adjp", "or", "CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "ontology", "name",
+"zscore", "adjp", "or", "CIl", "CIu")]
+}
+else if (all(c("group", "name", "zscore", "adjp",
+"or", "CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "name", "zscore",
+"adjp", "or", "CIl", "CIu")]
+df$ontology &lt;- "ontology"
+}
+else if (all(c("ontology", "name", "zscore",
+"adjp", "or", "CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("ontology", "name", "zscore",
+"adjp", "or", "CIl", "CIu")]
+df$group &lt;- "group"
+}
+else if (all(c("name", "zscore", "adjp", "or",
+"CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("name", "zscore", "adjp", "or",
+"CIl", "CIu")]
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else {
+warnings("The input data.frame does not contain required columns:
+c('group','ontology','name','zscore','adjp','or','CIl','CIu').\n")
+return(NULL)
+}
+}
+}
+df$group &lt;- factor(df$group, levels = unique(df$group))
+if (!CI.one) {
+ind &lt;- which(df$CIl &gt; 1 | df$CIu &lt; 1)
+df &lt;- df[ind, ]
+}
+or &lt;- group &lt;- ontology &lt;- rank &lt;- NULL
+df &lt;- df %&gt;% dplyr::arrange(-or)
+if (top_num == "auto") {
+df &lt;- subset(df, df$adjp &lt; FDR.cutoff)
+}
+else {
+top_num &lt;- as.integer(top_num)
+df_tmp &lt;- as.data.frame(df %&gt;% dplyr::group_by(group,
+ontology) %&gt;% dplyr::group_by(rank = rank(-or,
+decreasing = T), add = TRUE) %&gt;% dplyr::filter(rank &lt;=
+top_num))
+df &lt;- subset(df, df$name %in% df_tmp$name)
+df &lt;- subset(df, df$adjp &lt; FDR.cutoff)
+}
+}
+if (nrow(df) == 0) {
+return(NULL)
+}
+if (!is.null(wrap.width)) {
+width &lt;- as.integer(wrap.width)
+res_list &lt;- lapply(df$name, function(x) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = width)
+if (length(y) &gt; 1) {
+paste0(y[1], "...")
+}
+else {
+y
+}
+})
+df$name &lt;- unlist(res_list)
+}
+name &lt;- fdr &lt;- or &lt;- CIl &lt;- CIu &lt;- NULL
+group &lt;- ontology &lt;- NULL
+label &lt;- NULL
+lor &lt;- zscore &lt;- NULL
+df$fdr &lt;- -log10(df$adjp)
+df$lor &lt;- log2(df$or)
+if (area.fill == "adjp") {
+title &lt;- expression(-log[10]("FDR"))
+if (is.null(zlim)) {
+tmp &lt;- df$fdr
+zlim &lt;- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+}
+df$fdr[df$fdr &lt;= zlim[1]] &lt;- zlim[1]
+df$fdr[df$fdr &gt;= zlim[2]] &lt;- zlim[2]
+}
+else if (area.fill == "or") {
+title &lt;- expression(log[2]("odds ratio"))
+if (is.null(zlim)) {
+tmp &lt;- df$lor
+zlim &lt;- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+}
+df$lor[df$lor &lt;= zlim[1]] &lt;- zlim[1]
+df$lor[df$lor &gt;= zlim[2]] &lt;- zlim[2]
+}
+else if (area.fill == "zscore") {
+title &lt;- "Z-score"
+if (is.null(zlim)) {
+tmp &lt;- df$zscore
+zlim &lt;- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+}
+df$zscore[df$zscore &lt;= zlim[1]] &lt;- zlim[1]
+df$zscore[df$zscore &gt;= zlim[2]] &lt;- zlim[2]
+}
+df &lt;- df[with(df, order(group, ontology, or, fdr)), ]
+df$name &lt;- factor(df$name, levels = unique(df$name))
+if (details == "name") {
+df$label &lt;- df$name
+}
+else if (details == "name_FDR") {
+df$label &lt;- paste0(df$name, "\n[OR=", df$or, "; FDR=",
+df$adjp, "; n=", df$nOverlap, "]")
+}
+else if (details == "name_FDR_members") {
+treemap.grow &lt;- T
+treemap.reflow &lt;- T
+df$label &lt;- paste0(df$name, "\n[OR=", df$or, "; FDR=",
+df$adjp, "; n=", df$nOverlap, "]\n(", df$members_Overlap,
+")")
+}
+if (area.fill == "adjp") {
+bp &lt;- ggplot(df, aes(area = lor, fill = fdr, label = label))
+}
+else if (area.fill == "or") {
+bp &lt;- ggplot(df, aes(area = fdr, fill = lor, label = label))
+}
+else if (area.fill == "zscore") {
+if (area == "adjp") {
+bp &lt;- ggplot(df, aes(area = fdr, fill = zscore, label = label))
+}
+else if (area == "or") {
+bp &lt;- ggplot(df, aes(area = lor, fill = zscore, label = label))
+}
+}
+bp &lt;- bp + treemapify::geom_treemap() +
+treemapify::geom_treemap_text(fontface = treemap.fontface,
+color = treemap.color, place = treemap.place, grow = treemap.grow,
+reflow = treemap.reflow, min.size = treemap.min.size)
+bp &lt;- bp + theme_bw() + theme(legend.position = "bottom")
+bp &lt;- bp + scale_fill_gradientn(colors = xColormap(colormap)(ncolors),
+limits = zlim, guide = guide_colorbar(title = title,
+title.position = "left", barwidth = barwidth, barheight = barheight,
+draw.ulim = FALSE, draw.llim = FALSE))
+if (caption) {
+if (area == "adjp") {
+bp &lt;- bp + labs(caption = "The area is proportional to FDR")
+}
+else if (area == "or") {
+bp &lt;- bp + labs(caption = "The area is proportional to odds ratio")
+}
+bp &lt;- bp + theme(plot.caption = element_text(hjust = 1,
+face = "bold.italic", size = 8, colour = "#002147"))
+}
+bp &lt;- bp + theme(text = element_text(family = font.family))
+ngroup &lt;- length(unique(df$group))
+nonto &lt;- length(unique(df$ontology))
+if (ngroup != 1 | nonto != 1) {
+scales &lt;- "free_y"
+space &lt;- "free_y"
+if (ngroup == 1) {
+bp &lt;- bp + facet_grid(ontology ~ ., scales = scales,
+space = space, drop = drop)
+}
+else if (nonto == 1) {
+bp &lt;- bp + facet_grid(. ~ group, scales = scales,
+space = space, drop = drop)
+}
+else {
+bp &lt;- bp + facet_grid(ontology ~ group, scales = scales,
+space = space, drop = drop)
+}
+bp &lt;- bp + theme(strip.background = element_rect(fill = "transparent",
+color = "transparent"), strip.text = element_text(size = 8,
+face = "bold.italic"))
+}
+invisible(bp)
+}
 </pre>
 
 

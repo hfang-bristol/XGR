@@ -1,18 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a vector storing genomic regions</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGRcse"><tr><td>xGRcse</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to create a vector storing genomic regions</h2>
-
-<h3>Description</h3>
-
-<p><code>xGRcse</code> is supposed to create genomic regions in the format of
-'chr:start-end'.
-</p>
-
+<h2>xGRcse</h2>
 
 <h3>Usage</h3>
 
@@ -26,56 +19,34 @@ xGRcse(data, format = c("GRanges", "data.frame", "bed"))
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>input genomic regions (GR). If formatted as a 'data.frame',
-the first three columns correspond to the chromosome (1st column), the
-starting chromosome position (2nd column), and the ending chromosome
-position (3rd column). If the format is indicated as 'bed' (browser
-extensible data), the same as 'data.frame' format but the position is
-0-based offset from chromomose position. If the genomic regions
-provided are not ranged but only the single position, the ending
-chromosome position (3rd column) is allowed not to be provided. The
-data could also be an object of 'GRanges' (in this case, formatted as
-'GRanges')</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>format</code></td>
 <td>
-<p>the format of the input data. It can be one of
-&quot;data.frame&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a vector for genomic regions the format of 'chrN:start-end'
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGRcse</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the genomic regions
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-
-# b) create a GRanges object
-cse &lt;- xGRcse(gr)
-
-## End(Not run)
+## The function is currently defined as
+function (data, format = c("GRanges", "data.frame", "bed"))
+{
+format &lt;- match.arg(format)
+dGR &lt;- xGR(data, format = format)
+df &lt;- as.data.frame(dGR, row.names = NULL)
+vec_cse &lt;- paste(df$seqnames, ":", df$start, "-", df$end,
+sep = "")
+invisible(vec_cse)
+}
 </pre>
 
 

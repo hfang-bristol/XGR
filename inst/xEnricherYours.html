@@ -1,38 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given YOUR own input...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnricherYours"><tr><td>xEnricherYours</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct enrichment analysis given YOUR own input data</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnricherYours</code> is supposed to conduct enrichment analysis given
-the input data and the ontology in query. It returns an object of class
-&quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact test or
-Hypergeometric test.
-</p>
-
+<h2>xEnricherYours</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnricherYours(
-data.file,
-annotation.file,
-background.file = NULL,
-size.range = c(10, 2000),
-min.overlap = 5,
-test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-verbose = T,
-silent = FALSE
-)
+xEnricherYours(data.file, annotation.file, background.file = NULL,
+size.range = c(10, 2000), min.overlap = 5, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL, p.tail =
+c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
+"bonferroni", "holm", "hochberg", "hommel"), verbose = T, silent =
+FALSE)
 </pre>
 
 
@@ -41,256 +24,198 @@ silent = FALSE
 <table summary="R argblock">
 <tr valign="top"><td><code>data.file</code></td>
 <td>
-<p>an input data file, containing a list of entities
-(e.g. genes or SNPs) to test. The entities can be anything, for
-example, in this file
-<a href="http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt">http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt</a>,
-the entities are InterPro domains (InterPro). As seen in this example,
-entries in the first column must be domains. If the file also contains
-other columns, these additional columns will be ignored. Alternatively,
-the data.file can be a matrix or data frame, assuming that input file
-has been read. Note: the file should use the tab delimiter as the field
-separator between columns</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>annotation.file</code></td>
 <td>
-<p>an input annotation file containing annotations
-between entities and ontology terms. For example, a file containing
-annotations between InterPro domains and GO Molecular Function (GOMF)
-terms can be found in
-<a href="http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt">http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt</a>.
-As seen in this example, the input file must contain two columns: 1st
-column for domains, 2nd column for ontology terms. If there are
-additional columns, these columns will be ignored. Alternatively, the
-annotation.file can be a matrix or data frame, assuming that input file
-has been read. Note: the file should use the tab delimiter as the field
-separator between columns</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.file</code></td>
 <td>
-<p>an input background file containing a list of
-entities as the test background. The file format is the same as
-'data.file'. By default, it is NULL meaning all annotatable entities
-(i.g. those entities in 'annotation.file') are used as background</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-<p>the minimum and maximum size of members of each term
-in consideration. By default, it sets to a minimum of 10 but no more
-than 2000</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-<p>the minimum number of overlaps. Only those terms
-with members that overlap with input data at least min.overlap (3 by
-default) will be processed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-<p>the test statistic used. It can be &quot;fisher&quot; for using
-fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
-&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
-independence between gene group (genes belonging to a group or not) and
-gene annotation (genes annotated by a term or not), and thus compare
-sampling to the left part of background (after sampling without
-replacement). Hypergeometric test is to sample at random (without
-replacement) from the background containing annotated and non-annotated
-genes, and thus compare sampling to background. Unlike hypergeometric
-test, binomial test is to sample at random (with replacement) from the
-background with the constant probability. In terms of the ease of
-finding the significance, they are in order: hypergeometric test &gt;
-fisher's exact test &gt; binomial test. In other words, in terms of the
-calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
-binomial test</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-<p>logical to indicate whether the
-background is further restricted to the annotatable (covered by
-'annotation.file'). By default, it is NULL: if the background not
-provided, it will be TRUE; otherwise FALSE. Surely, it can be
-explicitly stated. Notably, if only one annotation is provided in
-'annotation.file', it should be false (also the background.file should
-be provided)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.tail</code></td>
 <td>
-<p>the tail used to calculate p-values. It can be either
-&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
-under-overrepresentation) or &quot;one-tail&quot; (by default) for the
-significance based on one tail (ie only over-representation)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-<p>the method used to adjust p-values. It can be
-one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
-first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
-discovery rate (FDR: the expected proportion of false discoveries
-amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
-&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
-the family-wise error rate (FWER). Notes: FDR is a less stringent
-condition than FWER</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-<p>logical to indicate whether the messages will be silent
-completely. By default, it sets to false. If true, verbose will be
-forced to be false</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;eTerm&quot;, a list with following components:
-</p>
-
-<ul>
-<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
-information, where nTerm is the number of terms, and the 4 columns are
-&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
-&quot;distance&quot;
-</p>
-</li>
-<li><p><code>annotation</code>: a list of terms containing annotations, each
-term storing its annotations. Always, terms are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>g</code>: an igraph object to represent DAG
-</p>
-</li>
-<li><p><code>data</code>: a vector containing input data in consideration. It
-is not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>background</code>: a vector containing the background data. It is
-not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
-snps overlapped between a snp/gene set and the given input data (i.e.
-the snps of interest). Always, gene sets are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>fc</code>: a vector containing fold changes
-</p>
-</li>
-<li><p><code>zscore</code>: a vector containing z-scores
-</p>
-</li>
-<li><p><code>pvalue</code>: a vector containing p-values
-</p>
-</li>
-<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
-value but after being adjusted for multiple comparisons
-</p>
-</li>
-<li><p><code>or</code>: a vector containing odds ratio
-</p>
-</li>
-<li><p><code>CIl</code>: a vector containing lower bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>CIu</code>: a vector containing upper bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
-for the overlapped-members observed in an individaul term, and
-off-diagnal cell for the overlapped-members shared betwene two terms
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>None
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricher</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-library(igraph)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# Enrichment analysis using your own data
-# a) provide your own data (eg InterPro domains and their annotations by GO terms)
-## All InterPro domains
-input.file &lt;-
-"http://dcgor.r-forge.r-project.org/data/InterPro/InterPro.txt"
-data &lt;- utils::read.delim(input.file, header=F, row.names=NULL,
-stringsAsFactors=F)[,1]
-## provide the input domains of interest (eg 100 randomly chosen domains)
-data.file &lt;- sample(data, 100)
-## InterPro domains annotated by GO Molecular Function (GOMF) terms
-annotation.file &lt;-
-"http://dcgor.r-forge.r-project.org/data/InterPro/Domain2GOMF.txt"
-
-# b) perform enrichment analysis
-eTerm &lt;- xEnricherYours(data.file=data.file,
-annotation.file=annotation.file)
-
-# c) view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-
-# d) save enrichment results to the file called 'Yours_enrichments.txt'
-output &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp),
-sortBy="adjp", details=TRUE)
-utils::write.table(output, file="Yours_enrichments.txt", sep="\t",
-row.names=FALSE)
-
-# e) barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
-
-# Using ImmunoBase SNPs and associations/annotations with disease traits
-## get ImmunoBase
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get disease associated variants/SNPs
-variants_list &lt;- lapply(ImmunoBase, function(x)
-cbind(SNP=names(x$variants),
-Disease=rep(x$disease,length(x$variants))))
-## extract annotations as a data frame: Variant Disease_Name 
-annotation.file &lt;- do.call(rbind, variants_list)
-head(annotation.file)
-## provide the input SNPs of interest
-## for example, cis-eQTLs induced by interferon gamma
-cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
-RData.location=RData.location)
-data.file &lt;- matrix(cis[which(cis$IFN_t&gt;0),c('variant')], ncol=1)
-# perform enrichment analysis
-eTerm &lt;- xEnricherYours(data.file=data.file,
-annotation.file=annotation.file)
-# view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-# barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
-
-## End(Not run)
+## The function is currently defined as
+function (data.file, annotation.file, background.file = NULL,
+size.range = c(10, 2000), min.overlap = 5, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), verbose = T,
+silent = FALSE)
+{
+startT &lt;- Sys.time()
+if (!silent) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = TRUE)
+message("", appendLF = TRUE)
+}
+else {
+verbose &lt;- FALSE
+}
+test &lt;- match.arg(test)
+p.tail &lt;- match.arg(p.tail)
+p.adjust.method &lt;- match.arg(p.adjust.method)
+p.tail &lt;- match.arg(p.tail)
+if (length(data.file) == 0) {
+return(NULL)
+}
+if (is.matrix(data.file) | is.data.frame(data.file)) {
+data &lt;- unique(data.file[, 1])
+}
+else if (!is.null(data.file) &amp; any(!is.na(data.file))) {
+if (length(data.file) == 1) {
+if (class(suppressWarnings(try(data &lt;- utils::read.delim(file =
+data.file,
+header = F, row.names = NULL, stringsAsFactors = F),
+T))) == "try-error") {
+data &lt;- data.file
+}
+else {
+data &lt;- unique(data[, 1])
+}
+}
+else {
+data &lt;- data.file
+}
+}
+else {
+stop("The file 'data.file' must be provided!\n")
+}
+if (is.matrix(background.file) | is.data.frame(background.file)) {
+background &lt;- unique(background.file[, 1])
+}
+else if (!is.null(background.file)) {
+if (length(background.file) == 1) {
+background &lt;- utils::read.delim(file = background.file,
+header = F, row.names = NULL, stringsAsFactors = F)
+background &lt;- unique(background[, 1])
+}
+else {
+background &lt;- background.file
+}
+}
+else {
+background &lt;- background.file
+}
+if (is.matrix(annotation.file) | is.data.frame(annotation.file)) {
+input &lt;- cbind(annotation.file[, 1], annotation.file[,
+2])
+}
+else if (!is.null(annotation.file) &amp; any(!is.na(annotation.file))) {
+input &lt;- utils::read.delim(file = annotation.file, header = F,
+row.names = NULL, stringsAsFactors = F)
+}
+else {
+stop("The file 'annotation.file' must be provided!\n")
+}
+if (0) {
+if (background.annotatable.only == FALSE) {
+if (!is.null(background.file)) {
+tmp &lt;- cbind(background.file, rep("BG", length(background.file)))
+input &lt;- rbind(input, tmp)
+}
+}
+}
+anno &lt;- split(x = input[, 1], f = input[, 2])
+terms &lt;- names(anno)
+nodes &lt;- data.frame(name = terms, term_id = terms, term_name = terms,
+term_distance = rep(1, length(terms)), term_namespace =
+rep("Customised",
+length(terms)), stringsAsFactors = F)
+root &lt;- c("Root", "Root", "Root", 0, "Customised")
+nodes &lt;- rbind(nodes, root)
+relations &lt;- data.frame(from = "Root", to = nodes$name)
+g &lt;- igraph::graph.data.frame(d = relations, directed = T,
+vertices = nodes)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xEnricher' is being called (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+eTerm &lt;- xEnricher(data = data, annotation = anno, g = g,
+background = background, size.range = size.range, min.overlap =
+min.overlap,
+test = test, background.annotatable.only = background.annotatable.only,
+p.tail = p.tail, p.adjust.method = p.adjust.method, ontology.algorithm
+= "none",
+true.path.rule = F, verbose = verbose)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xEnricher' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+endT &lt;- Sys.time()
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+if (!silent) {
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = TRUE)
+message(paste(c("Runtime in total (xEnricherYours): ",
+runTime, " secs\n"), collapse = ""), appendLF = TRUE)
+}
+invisible(eTerm)
+}
 </pre>
 
 

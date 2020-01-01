@@ -1,21 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to aggregate data respecting number of features</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xAggregate"><tr><td>xAggregate</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to aggregate data respecting number of features</h2>
-
-<h3>Description</h3>
-
-<p><code>xAggregate</code> is supposed to aggregate data respecting number of
-features. Per row, the aggregated is the sum of two items: the number
-of features, and the sum of all but scaled into [0,0.9999999]. Also
-supported is the rank-transformation of the input data per column,
-binned into the predefined number of discrete bins.
-</p>
-
+<h2>xAggregate</h2>
 
 <h3>Usage</h3>
 
@@ -29,70 +19,111 @@ xAggregate(data, bin = F, nbin = 10, scale.log = T, verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data frame. The aggregation is done across columns per
-row. Each cell should contain positive values or NA; if infinite, it
-will be replaced with the maximum finite value</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>bin</code></td>
 <td>
-<p>logical to indicate whether the input data per column is
-rank-transformed into the predefined number of discrete bins. By
-default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nbin</code></td>
 <td>
-<p>the number of discrete bins. By default, it sets to 10
-(only works when bin is true)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>scale.log</code></td>
 <td>
-<p>logical to indicate whether the per-row sum is
-log-scaled. By default, it sets to true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame with an appended column 'Aggregate'
-</p>
-
-
-<h3>Note</h3>
-
-<p>None
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xAggregate</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-# HiC-gene pairs per cell types/states
-g &lt;- xRDataLoader(RData.customised='ig.PCHiC',
-RData.location=RData.location)
-df &lt;- do.call(cbind, igraph::edge_attr(g))
-# aggregate over cell types/states
-data &lt;- df
-data[data&lt;5] &lt;- NA
-res &lt;- xAggregate(data)
-
-## End(Not run)
+## The function is currently defined as
+function (data, bin = F, nbin = 10, scale.log = T, verbose = T)
+{
+startT &lt;- Sys.time()
+if (verbose) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = TRUE)
+message("", appendLF = TRUE)
+}
+if (is.matrix(data)) {
+data &lt;- as.data.frame(data)
+}
+data_input &lt;- data
+if (bin) {
+if (verbose) {
+message(sprintf("The input data of %d X %d is first binned into %d
+ranks per column (%s) ...",
+nrow(data), ncol(data), nbin, as.character(Sys.time())),
+appendLF = T)
+}
+for (j in 1:ncol(data)) {
+x &lt;- data[, j]
+y &lt;- x[!is.na(x)]
+cut_index &lt;- as.numeric(cut(y, breaks = min(y) +
+(max(y) - min(y)) * seq(0, 1, length.out = nbin +
+1)))
+cut_index[is.na(cut_index)] &lt;- 1
+x[!is.na(x)] &lt;- cut_index
+data[, j] &lt;- x
+}
+}
+else {
+if (verbose) {
+message(sprintf("The input data of %d X %d is directly used for
+aggregation (%s) ...",
+nrow(data), ncol(data), as.character(Sys.time())),
+appendLF = T)
+}
+}
+num_nonna &lt;- apply(data, 1, function(x) sum(!is.na(x)))
+sum_nonna &lt;- apply(data, 1, function(x) sum(x, na.rm = T))
+tmp &lt;- max(sum_nonna[!is.infinite(sum_nonna)])
+sum_nonna[is.infinite(sum_nonna)] &lt;- tmp
+if (scale.log) {
+if (verbose) {
+message(sprintf("The per-row sum is log-scaled"),
+appendLF = T)
+}
+sum_nonna[sum_nonna == 0] &lt;- NA
+sum_nonna &lt;- log(sum_nonna)
+}
+else {
+if (verbose) {
+message(sprintf("The per-row sum is WITHOUT log-scaled"),
+appendLF = T)
+}
+}
+scale_sum &lt;- (sum_nonna - min(sum_nonna, na.rm = T))/(max(sum_nonna,
+na.rm = T) - min(sum_nonna, na.rm = T)) * 0.9999999
+data_input$Aggregate &lt;- num_nonna + scale_sum
+endT &lt;- Sys.time()
+if (verbose) {
+message(paste(c("\nFinish at ", as.character(endT)),
+collapse = ""), appendLF = TRUE)
+}
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = TRUE)
+invisible(data_input)
+}
 </pre>
 
 

@@ -1,31 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a html-formatted report</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xReport"><tr><td>xReport</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to generate a html-formatted report</h2>
-
-<h3>Description</h3>
-
-<p><code>xReport</code> is supposed to generate a html-formatted report.
-</p>
-
+<h2>xReport</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xReport(
-obj,
-rmd = NULL,
-output_format = NULL,
-output_file = NULL,
-output_dir = NULL,
-quiet = T,
-verbose = T,
-...
-)
+xReport(obj, rmd = NULL, output_format = NULL, output_file = NULL,
+output_dir = NULL, quiet = T, verbose = T, ...)
 </pre>
 
 
@@ -34,82 +20,85 @@ verbose = T,
 <table summary="R argblock">
 <tr valign="top"><td><code>obj</code></td>
 <td>
-<p>an R object. Usually a S3-class object storing results such
-as an 'eTerm' object</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>rmd</code></td>
 <td>
-<p>the R markdown file. If NULL, the pre-prepared one in the
-directory 'inst/DynamicReport' of the XGR package will be used</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>output_format</code></td>
 <td>
-<p>the output format rendered from the R markdown
-file. If NULL, the output format is the first one defined within the R
-markdown file. The advanced use is to pass an output format object via
-rmarkdown::html_document()</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>output_file</code></td>
 <td>
-<p>the name of the output file. If NULL, the output
-filename will be based on the filename of R markdown file (extension
-replaced)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>output_dir</code></td>
 <td>
-<p>the directory of the output file</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>quiet</code></td>
 <td>
-<p>the logic specifying whether to suppress printing of the
-pandoc command line</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional parameters used in rmarkdown::render</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>the message on the rendered output file and directory.
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xReport</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-
-res &lt;- xReport(eTerm)
-
-# advanced use
-output_format &lt;-
-rmarkdown::html_document(number_sections=T,theme="journal",
-hightlight="espresso",code_folding="hide")
-res &lt;- xReport(eTerm, output_format=output_format)
-
+## The function is currently defined as
+function (obj, rmd = NULL, output_format = NULL, output_file = NULL,
+output_dir = NULL, quiet = T, verbose = T, ...)
+{
+res &lt;- NULL
+if (is.null(output_dir)) {
+output_dir &lt;- getwd()
+}
+if (class(obj) == "eTerm") {
+if (is.null(rmd)) {
+rmd &lt;- system.file("DynamicReport", "eTerm.Rmd",
+package = "XGR")
+}
+if (file.exists(rmd)) {
+rmarkdown::render(rmd, output_format = output_format,
+output_file = output_file, output_dir = output_dir,
+quiet = quiet, ...)
+if (is.null(output_file)) {
+output_file &lt;- gsub("\.rmd$", "\.html", basename(rmd),
+ignore.case = T)
+}
+res &lt;- sprintf("Congratulations! A html file '%s' created in the
+directory '%s'",
+output_file, output_dir)
+if (verbose) {
+message(res, appendLF = TRUE)
+}
+}
+}
+invisible(res)
+}
 </pre>
 
 

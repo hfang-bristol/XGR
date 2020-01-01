@@ -1,41 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using ladder-like...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichLadder"><tr><td>xEnrichLadder</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using ladder-like plot</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichLadder</code> is supposed to visualise enrichment results using
-ladder-like plot in which rows for terms and columns for its members.
-The members are sorted first by sharings and then by individual terms.
-It returns an object of class &quot;ggplot&quot;.
-</p>
-
+<h2>xEnrichLadder</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichLadder(
-eTerm,
-sortBy = c("fdr", "or", "adjp", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "none"),
-top_num = 5,
-FDR.cutoff = 0.05,
-CI.one = T,
-colormap = "lightgrey-grey-black",
-x.rotate = 90,
-x.text.size = 6,
-y.text.size = 6,
-shape = 22,
-size = 2,
-label = c("concise", "full"),
-verbose = T,
-...
-)
+xEnrichLadder(eTerm, sortBy = c("fdr", "or", "adjp", "pvalue",
+"zscore", "fc", "nAnno", "nOverlap", "none"), top_num = 5, FDR.cutoff =
+0.05, CI.one = T, colormap = "lightgrey-grey-black", x.rotate = 90,
+x.text.size = 6, y.text.size = 6, shape = 22, size = 2, label =
+c("concise", "full"), verbose = T, ...)
 </pre>
 
 
@@ -44,191 +23,196 @@ verbose = T,
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>sortBy</code></td>
 <td>
-<p>which statistics will be used for sorting and viewing
-gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
-(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
-enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
-&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
-&quot;none&quot; for ordering according to ID of terms</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to FDR or
-adjusted p-values). If it is 'auto', only the significant terms (see
-below FDR.cutoff) will be displayed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-<p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>CI.one</code></td>
 <td>
-<p>logical to indicate whether to allow the inclusion of one
-in CI. By default, it is TURE (allowed)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.rotate</code></td>
 <td>
-<p>the angle to rotate the x tick labelings. By default,
-it is 60</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.text.size</code></td>
 <td>
-<p>the text size of the x tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>y.text.size</code></td>
 <td>
-<p>the text size of the y tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>shape</code></td>
 <td>
-<p>the number specifying the shape. By default, it is 19</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size</code></td>
 <td>
-<p>the number specifying the shape size. By default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label</code></td>
 <td>
-<p>how to label gene sets (terms). It can be &quot;concise&quot; or
-&quot;full&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional graphic parameters for xHeatmap</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;ggplot&quot;
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnrichViewer</code>, <code>xHeatmap</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-data(Haploid_regulators)
-## only IRF1 positive regulators
-data &lt;- subset(Haploid_regulators, Phenotype=='IRF1' &amp;
-MI&lt;0)[,c('Gene')]
-
-# 1) KEGGenvironmental
-eTerm &lt;- xEnricherGenes(data, ontology="KEGGenvironmental",
-size.range=c(10,2000), min.overlap=5, RData.location=RData.location)
-gp_ladder &lt;- xEnrichLadder(eTerm)
-
-# 2) PSG
-eTerm &lt;- xEnricherGenes(data,
-ontology=c("PSG","Approved","GWAS","CGL")[1], size.range=c(1,20000),
-min.overlap=0, RData.location=RData.location)
-gp_ladder &lt;- xEnrichLadder(eTerm, sortBy="none", top_num="auto",
-FDR.cutoff=1)
-gp_ladder+ coord_flip()
-
-# 3) save into the file "xEnrichLadder.pdf"
-mat &lt;- xSparseMatrix(gp_ladder$data)
-pdf("xEnrichLadder.pdf", width=2+ncol(mat)*0.075,
-height=2+nrow(mat)*0.1, compress=T)
-print(gp_ladder)
-dev.off()
-
-# 4) SIFTS2GOMF
-## df_fpocket
-SIFTS_fpocket &lt;-
-xRDataLoader(RData='SIFTS_fpocket',RData.location=RData.location)
-df_fpocket &lt;- as.data.frame(SIFTS_fpocket %&gt;%
-dplyr::filter(druggable=='Y') %&gt;% dplyr::group_by(Symbol,PDB_code)
-%&gt;% dplyr::summarise(num_pockets=n()) %&gt;%
-dplyr::arrange(Symbol,desc(num_pockets),PDB_code))
-df_fpocket &lt;- df_fpocket[!duplicated(df_fpocket$Symbol), ]
-## mat_fpocket
-mat_fpocket &lt;- df_fpocket %&gt;% tidyr::spread(Symbol, num_pockets)
-rownames(mat_fpocket) &lt;- mat_fpocket[,1]
-mat_fpocket &lt;- mat_fpocket[,-1]
-## gp_ladder
-set.seed(825)
-data &lt;- as.character(sample(unique(df_fpocket$Symbol), 100))
-eTerm &lt;- xEnricherGenes(data=data, ontology="SIFTS2GOMF",
-RData.location=RData.location)
-gp_ladder &lt;- xEnrichLadder(eTerm, sortBy="none", top_num=5,
-FDR.cutoff=0.01, x.rotate=90)
-#gp_ladder + coord_flip()
-## data_matrix
-ind &lt;- match(colnames(gp_ladder$matrix), colnames(mat_fpocket))
-data_matrix &lt;- mat_fpocket[,ind[!is.na(ind)]]
-ind &lt;- which(apply(!is.na(data_matrix), 1, sum)!=0)
-data_matrix &lt;- data_matrix[ind,]
-ind &lt;- match(data, colnames(data_matrix))
-data_matrix &lt;- data_matrix[,ind[!is.na(ind)]]
-## gp_pdb
-gp_pdb &lt;- xHeatmap(t(data_matrix), reorder="row", colormap="jet.top",
-x.rotate=90, shape=19, size=1, x.text.size=6,y.text.size=5,
-na.color='transparent', legend.title='# pockets')
-#gp_pdb + coord_flip()
-## plot_combined
-#plot_combined &lt;- cowplot::plot_grid(gp_ladder, gp_pdb, align="h", ncol=1, rel_heights=c(2,3))
-
-## enrichment analysis
-SIFTS_fpocket &lt;-
-xRDataLoader(RData='SIFTS_fpocket',RData.location=RData.location)
-annotation.file &lt;- SIFTS_fpocket[!duplicated(SIFTS_fpocket$Symbol),
-c('Symbol','druggable')]
-### 100 randomly chosen human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-### optionally, provide the test background (if not provided, all human genes)
-background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
-### perform enrichment analysis
-eTerm &lt;- xEnricherYours(data.file=data,
-annotation.file=annotation.file, background.file=background,
-size.range=c(10,20000))
-
-## End(Not run)
+## The function is currently defined as
+function (eTerm, sortBy = c("fdr", "or", "adjp", "pvalue", "zscore",
+"fc", "nAnno", "nOverlap", "none"), top_num = 5, FDR.cutoff = 0.05,
+CI.one = T, colormap = "lightgrey-grey-black", x.rotate = 90,
+x.text.size = 6, y.text.size = 6, shape = 22, size = 2, label =
+c("concise",
+"full"), verbose = T, ...)
+{
+sortBy &lt;- match.arg(sortBy)
+label &lt;- match.arg(label)
+gp_heatmap &lt;- NULL
+if (class(eTerm) == "eTerm") {
+df &lt;- xEnrichViewer(eTerm, top_num = "all")
+if (!CI.one) {
+ind &lt;- which(df$CIl &gt; 1 | df$CIu &lt; 1)
+df &lt;- df[ind, ]
+}
+if (FDR.cutoff == 1) {
+FDR.cutoff &lt;- FDR.cutoff + 0.01
+}
+if (top_num == "auto") {
+top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
+if (top_num &lt;= 1) {
+top_num &lt;- 10
+}
+}
+df_enrichment &lt;- xEnrichViewer(eTerm, top_num = top_num,
+sortBy = sortBy, details = T)
+}
+else if (class(eTerm) == "data.frame") {
+df_enrichment &lt;- eTerm
+}
+if (!is.null(df_enrichment)) {
+if (label == "concise") {
+df_enrichment$label &lt;- paste0(df_enrichment$name,
+" [OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp,
+", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno,
+"]")
+}
+else {
+df_enrichment$label &lt;- paste0(df_enrichment$name,
+"\n[OR=", df_enrichment$or, ", P=", df_enrichment$pvalue,
+", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap,
+"/", df_enrichment$nAnno, "]")
+}
+df_enrichment &lt;- df_enrichment[!duplicated(df_enrichment$name),
+]
+ls_path &lt;- lapply(1:nrow(df_enrichment), function(j) {
+x &lt;- df_enrichment$members_Overlap[j]
+query &lt;- unlist(strsplit(x, ", "))
+})
+names(ls_path) &lt;- df_enrichment$name
+if (length(ls_path) &gt;= 1) {
+all_genes &lt;- unique(unlist(ls_path))
+ls_vec &lt;- lapply(1:length(ls_path), function(j) {
+ind &lt;- match(all_genes, ls_path[[j]])
+vec &lt;- rep(NA, length(all_genes))
+vec[!is.na(ind)] &lt;- names(ls_path)[j]
+vec
+})
+df_res &lt;- do.call(cbind, ls_vec)
+colnames(df_res) &lt;- names(ls_path)
+rownames(df_res) &lt;- all_genes
+vec_sum &lt;- apply(!is.na(df_res), 1, sum)
+df_tmp &lt;- data.frame(num = vec_sum, df_res, gene = rownames(df_res),
+stringsAsFactors = F)
+df_tmp &lt;- df_tmp %&gt;% dplyr::arrange_all()
+df_tmp &lt;- df_tmp[nrow(df_tmp):1, ]
+colnames(df_tmp)[2:(ncol(df_tmp) - 1)] &lt;- colnames(df_res)
+vec_sum &lt;- df_tmp$num
+names(vec_sum) &lt;- df_tmp$gene
+df_res &lt;- df_tmp %&gt;% dplyr::select(2:(ncol(df_tmp) -
+1))
+rownames(df_res) &lt;- df_tmp$gene
+if (verbose) {
+message(sprintf("heatmap of %d rows X %d columns (%s) ...",
+nrow(df_res), ncol(df_res), as.character(Sys.time())),
+appendLF = TRUE)
+}
+if (1) {
+df_heatmap &lt;- 0 + !is.na(df_res)
+df_heatmap[df_heatmap == 0] &lt;- NA
+for (i in 1:nrow(df_heatmap)) {
+x &lt;- df_heatmap[i, ]
+df_heatmap[i, !is.na(x)] &lt;- vec_sum[i]
+}
+mat_heatmap &lt;- t(df_heatmap)
+ind &lt;- match(rownames(mat_heatmap), df_enrichment$name)
+rownames(mat_heatmap) &lt;- df_enrichment$label[ind]
+gp_heatmap &lt;- xHeatmap(mat_heatmap, reorder = "none",
+colormap = colormap, zlim = c(0, max(mat_heatmap,
+na.rm = T)), ncolors = 64, barwidth = 0.4,
+x.rotate = x.rotate, x.text.size = x.text.size,
+y.text.size = y.text.size, shape = shape, size = size,
+na.color = "transparent", ...)
+gp_heatmap &lt;- gp_heatmap + theme(legend.title = element_text(size = 8),
+legend.position = "none") + scale_y_discrete(position = "right")
+colsep &lt;- cumsum(table(vec_sum))
+colsep &lt;- length(vec_sum) - colsep[-length(colsep)]
+gp_heatmap &lt;- gp_heatmap + geom_vline(xintercept = colsep +
+0.5, color = "grey90", size = 0.5)
+gene &lt;- sample &lt;- val &lt;- NULL
+data_matrix &lt;- gp_heatmap$data %&gt;% dplyr::select(gene,
+sample, val) %&gt;% tidyr::spread(sample, val)
+rownames(data_matrix) &lt;- data_matrix$gene
+data_matrix &lt;- data_matrix[, -1]
+gp_heatmap$matrix &lt;- data_matrix
+}
+}
+}
+return(gp_heatmap)
+}
 </pre>
 
 

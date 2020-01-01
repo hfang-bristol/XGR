@@ -1,34 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to score lead or LD SNPs based on the given...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSNPscores"><tr><td>xSNPscores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to score lead or LD SNPs based on the given significance level</h2>
-
-<h3>Description</h3>
-
-<p><code>xSNPscores</code> is supposed to score a list of Lead SNPs together
-with the significance level. It can consider LD SNPs and the given
-threshold of the significant level.
-</p>
-
+<h2>xSNPscores</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSNPscores(
-data,
-include.LD = NA,
-LD.customised = NULL,
-LD.r2 = 0.8,
-significance.threshold = 5e-05,
-score.cap = 10,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xSNPscores(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
+significance.threshold = 5e-05, score.cap = 10, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -37,137 +21,293 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a named input vector containing the significance level for
-nodes (dbSNP). For this named vector, the element names are dbSNP
-(starting with rs or in the format of 'chrN:xxx', where N is either
-1-22 or X, xxx is number; for example, 'chr16:28525386'), the element
-values for the significance level (measured as p-value or fdr).
-Alternatively, it can be a matrix or data frame with two columns: 1st
-column for dbSNP, 2nd column for the significance level.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>include.LD</code></td>
 <td>
-<p>additional SNPs in LD with Lead SNPs are also
-included. By default, it is 'NA' to disable this option. Otherwise, LD
-SNPs will be included based on one or more of 26 populations and 5
-super populations from 1000 Genomics Project data (phase 3). The
-population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
-&quot;EUR&quot;, &quot;SAS&quot;), or one of 26 populations (&quot;ACB&quot;, &quot;ASW&quot;, &quot;BEB&quot;, &quot;CDX&quot;,
-&quot;CEU&quot;, &quot;CHB&quot;, &quot;CHS&quot;, &quot;CLM&quot;, &quot;ESN&quot;, &quot;FIN&quot;, &quot;GBR&quot;, &quot;GIH&quot;, &quot;GWD&quot;, &quot;IBS&quot;,
-&quot;ITU&quot;, &quot;JPT&quot;, &quot;KHV&quot;, &quot;LWK&quot;, &quot;MSL&quot;, &quot;MXL&quot;, &quot;PEL&quot;, &quot;PJL&quot;, &quot;PUR&quot;, &quot;STU&quot;,
-&quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
-<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>LD.customised</code></td>
 <td>
-<p>a user-input matrix or data frame with 3 columns:
-1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2
-value. It is designed to allow the user analysing their precalcuated LD
-info. This customisation (if provided) has the high priority over
-built-in LD SNPs</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>LD.r2</code></td>
 <td>
-<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
-in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
-be any value from 0.8 to 1</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>significance.threshold</code></td>
 <td>
-<p>the given significance threshold. By
-default, it is set to NULL, meaning there is no constraint on the
-significance level when transforming the significance level of SNPs
-into scores. If given, those SNPs below this are considered significant
-and thus scored positively. Instead, those above this are considered
-insigificant and thus receive no score</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>score.cap</code></td>
 <td>
-<p>the maximum score being capped. By default, it is set
-to 10. If NULL, no capping is applied</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame with following columns:
-</p>
-
-<ul>
-<li><p><code>SNP</code>: Lead and/or LD SNPs
-</p>
-</li>
-<li><p><code>Score</code>: the scores for SNPs calculated based on p-values
-taking into account the given threshold of the significant level
-</p>
-</li>
-<li><p><code>Pval</code>: the input p-values for Lead SNPs or R2-adjusted
-p-values for LD SNPs
-</p>
-</li>
-<li><p><code>Flag</code>: the flag to indicate whether the resulting SNPs are
-Lead SNPs or LD SNPs
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>None
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xRDataLoader</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-
-## Not run: 
-# a) provide the seed SNPs with the significance info
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]
-
-# b) calculate SNP scores (considering significant cutoff 5e-5)
-## without inclusion of LD SNPs
-df_SNP &lt;- xSNPscores(data=data, significance.threshold=5e-5,
-RData.location=RData.location)
-## include LD SNPs (calculated based on European populations)
-df_SNP &lt;- xSNPscores(data=data, significance.threshold=5e-5,
-include.LD="EUR", RData.location=RData.location)
-
-## End(Not run)
+## The function is currently defined as
+function (data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
+significance.threshold = 5e-05, score.cap = 10, verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+if (is.null(data)) {
+stop("The input data must be not NULL.\n")
+}
+else {
+if (class(data) == "DataFrame") {
+data &lt;- S4Vectors::as.matrix(data)
+}
+if (is.vector(data)) {
+if (length(data) &gt; 1) {
+if (is.null(names(data))) {
+stop("The input data must have names with attached dbSNP ID.\n")
+}
+}
+else {
+data &lt;- utils::read.delim(file = data, header = F,
+row.names = NULL, stringsAsFactors = F)
+}
+}
+if (is.vector(data)) {
+pval &lt;- data
+}
+else if (is.matrix(data) | is.data.frame(data)) {
+data &lt;- as.matrix(data)
+data_list &lt;- split(x = data[, 2], f = as.character(data[,
+1]))
+res_list &lt;- lapply(data_list, function(x) {
+x &lt;- as.numeric(x)
+x &lt;- x[!is.na(x)]
+if (length(x) &gt; 0) {
+min(x)
+}
+else {
+NULL
+}
+})
+pval &lt;- unlist(res_list)
+}
+tmp &lt;- min(pval[pval != 0])
+pval[pval &lt; tmp] &lt;- tmp
+}
+tmp &lt;- names(pval)
+tmp &lt;- gsub("_", ":", tmp, perl = T)
+names(pval) &lt;- gsub("imm:", "chr", tmp, perl = T)
+Lead_Sig &lt;- data.frame(SNP = names(pval), Sig = pval, row.names = NULL,
+stringsAsFactors = F)
+leads &lt;- Lead_Sig[, 1]
+sigs &lt;- Lead_Sig[, 2]
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("A total of %d Lead SNPs are input",
+length(leads)), appendLF = T)
+}
+if (LD.r2 &gt;= 0.8 &amp; LD.r2 &lt;= 1) {
+default.include.LD &lt;- c("ACB", "AFR", "AMR", "ASW", "BEB",
+"CDX", "CEU", "CHB", "CHS", "CLM", "EAS", "ESN",
+"EUR", "FIN", "GBR", "GIH", "GWD", "IBS", "ITU",
+"JPT", "KHV", "LWK", "MSL", "MXL", "PEL", "PJL",
+"PUR", "SAS", "STU", "TSI", "YRI")
+ind &lt;- match(default.include.LD, include.LD)
+include.LD &lt;- default.include.LD[!is.na(ind)]
+}
+else {
+include.LD &lt;- NULL
+}
+LLR &lt;- NULL
+if (length(include.LD) &gt; 0 &amp; is.null(LD.customised)) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Inclusion of LD SNPs is based on population (%s) with
+R2 &gt;= %f",
+paste(include.LD, collapse = ","), LD.r2), appendLF = T)
+}
+GWAS_LD &lt;- xRDataLoader("GWAS_LD", RData.location = RData.location,
+guid = guid, verbose = verbose)
+res_list &lt;- lapply(include.LD, function(x) {
+data_ld &lt;- ""
+eval(parse(text = paste("data_ld &lt;- GWAS_LD$", x,
+sep = "")))
+ind &lt;- match(rownames(data_ld), leads)
+ind_lead &lt;- which(!is.na(ind))
+if (length(ind_lead) &gt;= 2) {
+ind_ld &lt;- which(Matrix::colSums(data_ld[ind_lead,
+] &gt;= LD.r2) &gt; 0)
+sLL &lt;- data_ld[ind_lead, ind_ld]
+summ &lt;- summary(sLL)
+res &lt;- data.frame(Lead = rownames(sLL)[summ$i],
+LD = colnames(sLL)[summ$j], R2 = summ$x, stringsAsFactors = F)
+}
+else if (length(ind_lead) == 1) {
+ind_ld &lt;- which(data_ld[ind_lead, ] &gt;= LD.r2)
+sLL &lt;- data_ld[ind_lead, ind_ld]
+res &lt;- data.frame(Lead = rep(rownames(data_ld)[ind_lead],
+length(sLL)), LD = colnames(data_ld)[ind_ld],
+R2 = sLL, stringsAsFactors = F)
+}
+else {
+NULL
+}
+})
+LLR &lt;- do.call(rbind, res_list)
+if (1) {
+ImmunoBase_LD &lt;- xRDataLoader("ImmunoBase_LD", RData.location =
+RData.location,
+guid = guid, verbose = verbose)
+res_list &lt;- lapply(include.LD, function(x) {
+data_ld &lt;- ""
+eval(parse(text = paste("data_ld &lt;- ImmunoBase_LD$",
+x, sep = "")))
+ind &lt;- match(rownames(data_ld), leads)
+ind_lead &lt;- which(!is.na(ind))
+if (length(ind_lead) &gt;= 2) {
+ind_ld &lt;- which(Matrix::colSums(data_ld[ind_lead,
+] &gt;= LD.r2) &gt; 0)
+sLL &lt;- data_ld[ind_lead, ind_ld]
+summ &lt;- summary(sLL)
+res &lt;- data.frame(Lead = rownames(sLL)[summ$i],
+LD = colnames(sLL)[summ$j], R2 = summ$x,
+stringsAsFactors = F)
+}
+else if (length(ind_lead) == 1) {
+ind_ld &lt;- which(data_ld[ind_lead, ] &gt;= LD.r2)
+sLL &lt;- data_ld[ind_lead, ind_ld]
+res &lt;- data.frame(Lead = rep(rownames(data_ld)[ind_lead],
+length(sLL)), LD = colnames(data_ld)[ind_ld],
+R2 = sLL, stringsAsFactors = F)
+}
+else {
+NULL
+}
+})
+LLR_tmp &lt;- do.call(rbind, res_list)
+LLR &lt;- rbind(LLR, LLR_tmp)
+}
+}
+else if (!is.null(LD.customised)) {
+if (is.vector(LD.customised)) {
+LLR &lt;- utils::read.delim(file = LD.customised, header = F,
+row.names = NULL, stringsAsFactors = F)
+}
+else if (is.matrix(LD.customised) | is.data.frame(LD.customised)) {
+LLR &lt;- LD.customised
+}
+if (!is.null(LLR)) {
+flag &lt;- LLR[, 3] &gt;= LD.r2
+if (sum(flag) &gt; 0) {
+LLR &lt;- LLR[LLR[, 3] &gt;= LD.r2, ]
+colnames(LLR) &lt;- c("Lead", "LD", "R2")
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Inclusion of LD SNPs is based on customised data (%d
+Lead SNPs and %d LD SNPs) with R2&gt;=%f",
+length(unique(LLR[, 1])), length(unique(LLR[,
+2])), LD.r2), appendLF = T)
+}
+}
+else {
+LLR &lt;- NULL
+}
+}
+}
+if (!is.null(LLR)) {
+ld_list &lt;- split(x = LLR[, -2], f = LLR[, 2])
+res_list &lt;- lapply(ld_list, function(x) {
+ind &lt;- match(x$Lead, leads)
+min(sigs[ind]^x$R2)
+})
+vec &lt;- unlist(res_list)
+LD_Sig &lt;- data.frame(SNP = names(vec), Sig = vec, row.names = NULL,
+stringsAsFactors = F)
+df &lt;- rbind(Lead_Sig, as.matrix(LD_Sig))
+res_list &lt;- split(x = df$Sig, f = df$SNP)
+vec &lt;- unlist(lapply(res_list, min))
+SNP_Sig &lt;- data.frame(SNP = names(vec), FDR = vec, row.names = NULL,
+stringsAsFactors = F)
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Do not include any LD SNPs"), appendLF = T)
+}
+SNP_Sig &lt;- Lead_Sig
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("A total of %d Lead/LD SNPs are considered",
+nrow(SNP_Sig)), appendLF = T)
+}
+pval &lt;- as.numeric(SNP_Sig[, 2])
+names(pval) &lt;- SNP_Sig[, 1]
+if (is.null(significance.threshold)) {
+scores &lt;- log10((1 - pval)/pval)
+}
+else {
+scores &lt;- log10((1 - pval)/pval) - log10((1 -
+significance.threshold)/significance.threshold)
+}
+tmp_max &lt;- max(scores[!is.infinite(scores)])
+tmp_min &lt;- min(scores[!is.infinite(scores)])
+scores[scores &gt; tmp_max] &lt;- tmp_max
+scores[scores &lt; tmp_min] &lt;- tmp_min
+ind_remained &lt;- which(scores &gt; 0)
+seeds.snps &lt;- scores[ind_remained]
+pval &lt;- pval[ind_remained]
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("A total of %d Lead/LD SNPs are scored positively",
+sum(seeds.snps &gt; 0)), appendLF = T)
+}
+flag &lt;- rep("Lead", length(pval))
+ind &lt;- match(names(pval), Lead_Sig$SNP)
+flag[is.na(ind)] &lt;- "LD"
+df_SNP &lt;- data.frame(SNP = names(pval), Score = seeds.snps,
+Pval = pval, Flag = flag, row.names = NULL, stringsAsFactors = F)
+if (!is.null(score.cap)) {
+score.cap &lt;- as.numeric(score.cap)
+if (score.cap &lt;= max(df_SNP$Score)) {
+df_SNP$Score[df_SNP$Score &gt;= score.cap] &lt;- score.cap
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("SNP score capped to the maximum score %d.",
+score.cap), appendLF = T)
+}
+}
+}
+df_SNP &lt;- df_SNP[order(df_SNP$Flag, df_SNP$Score, -df_SNP$Pval,
+df_SNP$SNP, decreasing = TRUE), ]
+invisible(df_SNP)
+}
 </pre>
 
 

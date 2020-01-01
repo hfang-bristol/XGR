@@ -1,31 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert gene symbols to entrez geneid</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSymbol2GeneID"><tr><td>xSymbol2GeneID</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to convert gene symbols to entrez geneid</h2>
-
-<h3>Description</h3>
-
-<p><code>xSymbol2GeneID</code> is supposed to convert gene symbols to entrez
-geneid.
-</p>
-
+<h2>xSymbol2GeneID</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSymbol2GeneID(
-data,
-org = c("human", "mouse"),
-check.symbol.identity = F,
-details = F,
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xSymbol2GeneID(data, org = c("human", "mouse"), check.symbol.identity =
+F, details = F, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -34,86 +21,157 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector containing gene symbols</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>org</code></td>
 <td>
-<p>a character specifying an organism. Currently supported
-organisms are 'human' and 'mouse'. It can be an object 'EG'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>check.symbol.identity</code></td>
 <td>
-<p>logical to indicate whether to match the
-input data via Synonyms for those unmatchable by official gene symbols.
-By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
-<p>logical to indicate whether to result in a data frame
-(in great details). By default, it sets to false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a vector containing entrez geneid with 'NA' for the unmatched if
-(details set to false); otherwise, a data frame is returned
-</p>
-
-
-<h3>Note</h3>
-
-<p>If a symbol mapped many times, the one assiged as the &quot;protein-coding&quot;
-type of gene is preferred.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xSocialiserGenes</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
-Symbol &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-Symbol
-
-# b) convert into GeneID
-GeneID &lt;- xSymbol2GeneID(Symbol)
-
-# c) convert into a data frame
-df &lt;- xSymbol2GeneID(Symbol, details=TRUE)
-
-
-# advanced use
-df &lt;- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
-
-## End(Not run)
+## The function is currently defined as
+function (data, org = c("human", "mouse"), check.symbol.identity = F,
+details = F, verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+if (!is.vector(data)) {
+stop("The input data must be a vector.\n")
+}
+Symbol &lt;- as.character(data)
+if (class(org) == "EG") {
+df_eg &lt;- org$gene_info
+if (verbose) {
+message(sprintf("Customised organism (%s)", as.character(Sys.time())),
+appendLF = T)
+}
+}
+else {
+org &lt;- org[1]
+if (org == "human") {
+df_eg &lt;- xRDataLoader("org.Hs.eg", RData.location = RData.location,
+guid = guid, verbose = verbose)$gene_info
+}
+else if (org == "mouse") {
+df_eg &lt;- xRDataLoader("org.Mm.eg", RData.location = RData.location,
+guid = guid, verbose = verbose)$gene_info
+}
+if (verbose) {
+message(sprintf("%s organism (%s)", org, as.character(Sys.time())),
+appendLF = T)
+}
+}
+type_of_gene &lt;- ""
+df_eg &lt;- rbind(subset(df_eg, type_of_gene == "protein-coding"),
+subset(df_eg, type_of_gene != "protein-coding"))
+allGeneID &lt;- df_eg$GeneID
+allSymbol &lt;- as.vector(df_eg$Symbol)
+allSynonyms &lt;- as.vector(df_eg$Synonyms)
+allDescription &lt;- as.vector(df_eg$description)
+if (0) {
+a &lt;- Symbol
+flag &lt;- grep("-Mar$", a, ignore.case = T, perl = T, value = F)
+if (length(flag) &gt;= 1) {
+b &lt;- a[flag]
+c &lt;- sub("-Mar$", "", b, ignore.case = T, perl = T)
+d &lt;- sub("^0", "", c, ignore.case = T, perl = T)
+e &lt;- sapply(d, function(x) paste(c("March", x), collapse = ""))
+a[flag] &lt;- e
+Symbol &lt;- a
+}
+a &lt;- Symbol
+flag &lt;- grep("-Sep$", a, ignore.case = T, perl = T, value = F)
+if (length(flag) &gt;= 1) {
+b &lt;- a[flag]
+c &lt;- sub("-Sep$", "", b, ignore.case = T, perl = T)
+d &lt;- sub("^0", "", c, ignore.case = T, perl = T)
+e &lt;- sapply(d, function(x) paste(c("Sept", x), collapse = ""))
+a[flag] &lt;- e
+Symbol &lt;- a
+}
+}
+match_flag &lt;- match(Symbol, allSymbol)
+if (check.symbol.identity) {
+na_flag &lt;- is.na(match_flag)
+a &lt;- Symbol[na_flag]
+tmp_flag &lt;- is.na(match(tolower(allSymbol), tolower(Symbol)))
+tmp_Synonyms &lt;- allSynonyms[tmp_flag]
+Orig.index &lt;- seq(1, length(allSynonyms))
+Orig.index &lt;- Orig.index[tmp_flag]
+b &lt;- sapply(1:length(a), function(x) {
+tmp_pattern1 &lt;- paste("^", a[x], "\|", sep = "")
+tmp_pattern2 &lt;- paste("\|", a[x], "\|", sep = "")
+tmp_pattern3 &lt;- paste("\|", a[x], "$", sep = "")
+tmp_pattern &lt;- paste(tmp_pattern1, "|", tmp_pattern2,
+"|", tmp_pattern3, sep = "")
+tmp_result &lt;- grep(tmp_pattern, tmp_Synonyms, ignore.case = T,
+perl = T, value = F)
+ifelse(length(tmp_result) == 1, Orig.index[tmp_result[1]],
+NA)
+})
+match_flag[na_flag] &lt;- b
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Among %d symbols of input data, there are %d
+mappable via official gene symbols, %d mappable via gene alias but %d
+left unmappable",
+length(Symbol), (length(Symbol) - length(a)),
+sum(!is.na(b)), sum(is.na(b))), appendLF = T)
+}
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Among %d symbols of input data, there are %d
+mappable via official gene symbols but %d left unmappable",
+length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))),
+appendLF = T)
+}
+}
+df_res &lt;- df_eg[match_flag, ]
+if (details) {
+df_res &lt;- data.frame(Input = Symbol, df_res, stringsAsFactors = F)
+return(df_res)
+}
+else {
+return(df_res$GeneID)
+}
+}
 </pre>
 
 

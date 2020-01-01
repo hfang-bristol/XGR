@@ -1,61 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap together with sidebars on rows using...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xHeatmapAdv"><tr><td>xHeatmapAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to draw heatmap together with sidebars on rows using ggplot2</h2>
-
-<h3>Description</h3>
-
-<p><code>xHeatmapAdv</code> is supposed to draw heatmap together with sidebars
-on rows using ggplot2.
-</p>
-
+<h2>xHeatmapAdv</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xHeatmapAdv(
-data.main,
-data.meta,
-reorder = c("none", "row", "col", "both"),
-colormap = "spectral",
-ncolors = 64,
-zlim = NULL,
-barwidth = 0.3,
-barheight = 4,
-nbin = 64,
-legend.title = "Main",
-x.rotate = 60,
-x.text.size = 6,
-x.text.hjust = 0.5,
-y.text.size = 6,
-legend.text.size = 5,
-legend.title.size = 6,
-shape = 19,
-size = 2,
-plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
-font.family = "sans",
-na.color = "grey80",
-data.label = NULL,
-label.size = 1,
-label.color = "black",
-meta.colormap = "spectral",
-meta.x.rotate = 75,
-meta.shape.continuous = 15,
-meta.shape.discrete = 95,
-meta.size = 2,
-meta.location = c("right", "left"),
-meta.width = 0.5,
-gap.width = 0.5,
-legend.width = NULL,
-legend.direction = c("vertical", "horizontal"),
-legend.nrow = NULL,
-verbose = TRUE,
-...
-)
+xHeatmapAdv(data.main, data.meta, reorder = c("none", "row", "col",
+"both"), colormap = "spectral", ncolors = 64, zlim = NULL, barwidth =
+0.3, barheight = 4, nbin = 64, legend.title = "Main", x.rotate = 60,
+x.text.size = 6, x.text.hjust = 0.5, y.text.size = 6, legend.text.size
+= 5, legend.title.size = 6, shape = 19, size = 2, plot.margin =
+unit(c(5.5, 5.5, 5.5, 5.5), "pt"), font.family = "sans", na.color =
+"grey80", data.label = NULL, label.size = 1, label.color = "black",
+meta.colormap = "spectral", meta.x.rotate = 75, meta.shape.continuous =
+15, meta.shape.discrete = 95, meta.size = 2, meta.location = c("right",
+"left"), meta.width = 0.5, gap.width = 0.5, legend.width = NULL,
+legend.direction = c("vertical", "horizontal"), legend.nrow = NULL,
+verbose = TRUE, ...)
 </pre>
 
 
@@ -64,230 +30,353 @@ verbose = TRUE,
 <table summary="R argblock">
 <tr valign="top"><td><code>data.main</code></td>
 <td>
-<p>a data frame/matrix for main heatmap. The coloring can
-be continuous (numeric matrix) or discrete (factor matrix)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>data.meta</code></td>
 <td>
-<p>a data frame/matrix for metadata visualisation. The
-per-column coloring can be continuous (numeric) or discrete (factor)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>reorder</code></td>
 <td>
-<p>how to reorder rows and columns. It can be &quot;none&quot; for no
-reordering, &quot;row&quot; for reordering rows according to number of sharings
-(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
-rows and columns</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z values for which colors should be
-plotted, defaulting to the range of the finite values of displayed
-matrix</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barwidth</code></td>
 <td>
-<p>the width of the colorbar. Default value is
-'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barheight</code></td>
 <td>
-<p>the height of the colorbar. Default value is
-'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nbin</code></td>
 <td>
-<p>the number of bins for drawing colorbar</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.title</code></td>
 <td>
-<p>the title of the colorbar. By default, it is &rdquo;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.rotate</code></td>
 <td>
-<p>the angle to rotate the x tick labelings. By default,
-it is 60</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.text.size</code></td>
 <td>
-<p>the text size of the x tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.text.hjust</code></td>
 <td>
-<p>the hjust of the x tick labelings. By default, it
-is 0.5</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>y.text.size</code></td>
 <td>
-<p>the text size of the y tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.text.size</code></td>
 <td>
-<p>the text size of the legend tick labelings. By
-default, it is 5</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.title.size</code></td>
 <td>
-<p>the text size of the legend titles. By
-default, it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>shape</code></td>
 <td>
-<p>the number specifying the shape. By default, it is 19</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size</code></td>
 <td>
-<p>the number specifying the shape size. By default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>plot.margin</code></td>
 <td>
-<p>the margin (t, r, b, l) around plot. By default, it
-is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-<p>the font family for texts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>na.color</code></td>
 <td>
-<p>the color for NAs. By default, it is 'grey80'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>data.label</code></td>
 <td>
-<p>a data frame/matrix used for the labelling</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label.size</code></td>
 <td>
-<p>the label size</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label.color</code></td>
 <td>
-<p>the label color</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.colormap</code></td>
 <td>
-<p>the colormap for metadata</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.x.rotate</code></td>
 <td>
-<p>the angle to rotate the x tick labelings for the
-metadata. By default, it is 90</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.shape.continuous</code></td>
 <td>
-<p>the number specifying the shape for
-continuous metadata. By default, it is 15</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.shape.discrete</code></td>
 <td>
-<p>the number specifying the shape for discrete
-metadata. By default, it is 95</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.size</code></td>
 <td>
-<p>the number specifying the shape size for metadata. By
-default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.location</code></td>
 <td>
-<p>the location of metadata. It can be &quot;right&quot; or
-&quot;left&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>meta.width</code></td>
 <td>
-<p>the width for each column in metadata. By default, it
-is 0.5 (relative to each column in main data)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>gap.width</code></td>
 <td>
-<p>the width for the gap between panels. By default, it
-is 0.5 (relative to each column in main data)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.width</code></td>
 <td>
-<p>the width for the legend. By default, it is NULL
-automatically determined (which can be used as a reference to define
-later for the better visualisation)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.direction</code></td>
 <td>
-<p>the direction of the legend. It can be
-&quot;vertical&quot; or &quot;horizontal&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.nrow</code></td>
 <td>
-<p>the row number for legends. By default, it is 3 for
-the vertical direction of the legend; 6 for the horizontal direction of
-the legend</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional graphic parameters for
-supraHex::visTreeBootstrap</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a gtable object
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xHeatmap</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package
-library(XGR)
-data(mtcars)
-data.main &lt;- mtcars[,1:6]
-data.meta &lt;- mtcars[,7:11]
-gt &lt;- xHeatmapAdv(data.main, data.meta, barwidth=0.3, barheight=2.5,
-meta.location="right", legend.nrow=3, meta.width=0.4, gap.width=0.2,
-legend.width=NULL)
-gt &lt;- xHeatmapAdv(data.main, data.meta, barwidth=0.3, barheight=4,
-meta.location="right", legend.nrow=6, meta.width=0.4, gap.width=0.2,
-legend.width=4)
-dev.new(); grid::grid.draw(gt)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
+## The function is currently defined as
+function (data.main, data.meta, reorder = c("none", "row", "col",
+"both"), colormap = "spectral", ncolors = 64, zlim = NULL,
+barwidth = 0.3, barheight = 4, nbin = 64, legend.title = "Main",
+x.rotate = 60, x.text.size = 6, x.text.hjust = 0.5, y.text.size = 6,
+legend.text.size = 5, legend.title.size = 6, shape = 19,
+size = 2, plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
+font.family = "sans", na.color = "grey80", data.label = NULL,
+label.size = 1, label.color = "black", meta.colormap = "spectral",
+meta.x.rotate = 75, meta.shape.continuous = 15, meta.shape.discrete =
+95,
+meta.size = 2, meta.location = c("right", "left"), meta.width = 0.5,
+gap.width = 0.5, legend.width = NULL, legend.direction = c("vertical",
+"horizontal"), legend.nrow = NULL, verbose = TRUE, ...)
+{
+reorder &lt;- match.arg(reorder)
+meta.location &lt;- match.arg(meta.location)
+legend.direction &lt;- match.arg(legend.direction)
+if (is.null(legend.nrow)) {
+if (legend.direction == "vertical") {
+legend.nrow &lt;- 3
+}
+else if (legend.direction == "horizontal") {
+legend.nrow &lt;- 6
+}
+}
+gp_main &lt;- xHeatmap(data.main, reorder = reorder, colormap = colormap,
+ncolors = ncolors, zlim = zlim, barwidth = barwidth,
+barheight = barheight, nbin = nbin, legend.title = legend.title,
+x.rotate = x.rotate, x.text.size = x.text.size, x.text.hjust =
+x.text.hjust,
+y.text.size = y.text.size, legend.text.size = legend.text.size,
+legend.title.size = legend.title.size, shape = shape,
+size = size, plot.margin = plot.margin, font.family = font.family,
+na.color = na.color, data.label = data.label, label.size = label.size,
+label.color = label.color, ...)
+if (legend.direction == "horizontal") {
+gp_main &lt;- gp_main + theme(legend.position = "right",
+legend.direction = "horizontal") + guides(color = guide_colorbar(title
+= legend.title,
+title.position = "top", barwidth = barheight, barheight = barwidth))
+}
+gp_main_void &lt;- gp_main + theme(legend.position = "none",
+axis.title.x = element_blank(), axis.title.y = element_blank())
+if (is.null(rownames(data.meta))) {
+rownames(data.meta) &lt;- paste("R", 1:nrow(data.meta),
+sep = " ")
+}
+if (is.null(colnames(data.meta))) {
+colnames(data.meta) &lt;- paste("C", 1:ncol(data.meta),
+sep = " ")
+}
+if (class(data.meta) == "matrix") {
+data.meta &lt;- as.data.frame(data.meta)
+}
+main_y_texts &lt;- rev(levels(gp_main$data$gene))
+main_y_ind &lt;- match(main_y_texts, rownames(data.meta))
+meta &lt;- data.meta %&gt;% dplyr::arrange(main_y_ind)
+rownames(meta) &lt;- rownames(data.meta)[main_y_ind]
+ls_gp_meta &lt;- lapply(1:ncol(meta), function(i) {
+data &lt;- meta %&gt;% dplyr::select(i)
+meta.legend.title &lt;- colnames(meta)[i]
+colormap &lt;- meta.colormap
+meta.shape &lt;- meta.shape.continuous
+meta.plot.margin &lt;- unit(c(plot.margin[[1]], 0, plot.margin[[3]],
+0), "pt")
+if (is.factor(unlist(data))) {
+meta.shape &lt;- meta.shape.discrete
+if (meta.shape &gt; 25) {
+meta.size &lt;- meta.size * 1.5
+}
+}
+gp &lt;- xHeatmap(data, reorder = "none", colormap = meta.colormap,
+ncolors = ncolors, zlim = NULL, barwidth = barwidth,
+barheight = barheight, nbin = nbin, legend.title = meta.legend.title,
+x.rotate = meta.x.rotate, x.text.size = x.text.size,
+x.text.hjust = x.text.hjust, legend.text.size = legend.text.size,
+legend.title.size = legend.title.size, shape = meta.shape,
+size = meta.size, plot.margin = meta.plot.margin,
+font.family = font.family, na.color = na.color)
+if (legend.direction == "horizontal") {
+gp &lt;- gp + theme(legend.position = "right", legend.direction =
+"horizontal") +
+guides(color = guide_colorbar(title = meta.legend.title,
+title.position = "top", barwidth = barheight,
+barheight = barwidth))
+}
+return(gp)
+})
+ls_gp_meta_void &lt;- lapply(ls_gp_meta, function(gp) {
+gp_void &lt;- gp + theme(legend.position = "none", axis.title.x =
+element_blank(),
+axis.title.y = element_blank(), axis.text.y = element_blank(),
+axis.ticks.y = element_blank(), panel.border = element_blank())
+})
+extract_gp_legend &lt;- function(gp) {
+gt &lt;- ggplot_gtable(ggplot_build(gp))
+ind &lt;- which(sapply(gt$grobs, function(x) x$name) ==
+"guide-box")
+legend &lt;- gt$grobs[[ind]]
+invisible(legend)
+}
+ls_gp &lt;- c(list(gp_main), ls_gp_meta)
+ls_gp_legend &lt;- lapply(ls_gp, function(gp) {
+extract_gp_legend(gp)
+})
+gt_legend &lt;- gridExtra::arrangeGrob(grobs = ls_gp_legend,
+nrow = legend.nrow, as.table = TRUE, top = "", padding = unit(c(1,
+0, 0, 0), "line"))
+ls_gp_void &lt;- c(list(gp_main_void), ls_gp_meta_void)
+ls_gt_void &lt;- lapply(ls_gp_void, function(gp) {
+gt &lt;- ggplot_gtable(ggplot_build(gp))
+})
+ls_heights &lt;- lapply(ls_gt_void, function(gt) {
+gt$heights[4:5]
+})
+maxHeight &lt;- do.call(grid::unit.pmax, ls_heights)
+ls_gt_void_aligned &lt;- lapply(ls_gt_void, function(gt) {
+gt$heights[4:5] &lt;- maxHeight
+invisible(gt)
+})
+n1 &lt;- ncol(data.main)
+n2 &lt;- ncol(data.meta)
+gt_gap &lt;- grid::rectGrob(gp = grid::gpar(col = "transparent"))
+if (is.null(legend.width)) {
+legend.width &lt;- 3 * meta.width * ceiling((n2 + 1)/legend.nrow)
+}
+if (meta.location == "right") {
+grobs &lt;- c(ls_gt_void_aligned[1], list(gt_gap), ls_gt_void_aligned[-1],
+list(gt_gap), list(gt_legend))
+widths &lt;- c(n1, gap.width, rep(meta.width, n2), gap.width,
+legend.width)
+}
+else if (meta.location == "left") {
+grobs &lt;- c(list(gt_gap), ls_gt_void_aligned[-1], ls_gt_void_aligned[1],
+list(gt_gap), list(gt_legend))
+widths &lt;- c(gap.width, rep(meta.width, n2), n1, gap.width,
+legend.width)
+}
+gt_heatmap &lt;- gridExtra::arrangeGrob(grobs = grobs, nrow = 1,
+widths = widths)
+if (verbose) {
+message(sprintf("data.main: %d rows X %d columns", nrow(data.main),
+ncol(data.main)), appendLF = TRUE)
+n &lt;- sum(sapply(data.meta, is.factor))
+m &lt;- ncol(data.meta) - n
+message(sprintf("data.meta: %d rows X %d columns (%d continuous +
+%d discrete)",
+nrow(data.meta), ncol(data.meta), m, n), appendLF = TRUE)
+message(sprintf("widths: %.2f (meta), %.2f (blank), %.2f (legend)",
+meta.width, gap.width, legend.width), appendLF = TRUE)
+}
+invisible(gt_heatmap)
+}
 </pre>
 
 

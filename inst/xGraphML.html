@@ -1,47 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a graph object of...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGraphML"><tr><td>xGraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to generate a graphml file from a graph object of class &quot;igraph&quot;</h2>
-
-<h3>Description</h3>
-
-<p><code>xGraphML</code> is supposed to generate a graphml file from a graph
-object of class &quot;igraph&quot;.
-</p>
-
+<h2>xGraphML</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGraphML(
-g,
-node.label = NULL,
-label.wrap.width = NULL,
-node.label.size = 12,
-node.label.color = "#000000",
-node.tooltip = NULL,
-node.link = NULL,
-node.xcoord = "xcoord",
-node.ycoord = "ycoord",
-node.color.na = "#dddddd",
-node.color = NULL,
-colormap = "grey-orange-darkred",
-ncolors = 64,
-nlegend = 11,
-legend.label.size = 10,
-legend.interval = 0.05,
-zlim = NULL,
-node.size = 30,
-node.coord.scale = 300,
-edge.color = "#00000033",
-edge.width = 1,
-filename = "xGraphML",
-verbose = T
-)
+xGraphML(g, node.label = NULL, label.wrap.width = NULL, node.label.size
+= 12, node.label.color = "#000000", node.tooltip = NULL, node.link =
+NULL, node.xcoord = "xcoord", node.ycoord = "ycoord", node.color.na =
+"#dddddd", node.color = NULL, colormap = "grey-orange-darkred", ncolors
+= 64, nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
+zlim = NULL, node.size = 30, node.coord.scale = 300, edge.color =
+"#00000033", edge.width = 1, filename = "xGraphML", verbose = T)
 </pre>
 
 
@@ -50,198 +25,502 @@ verbose = T
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label</code></td>
 <td>
-<p>either a vector labelling nodes or a character
-specifying which node attribute used for the labelling. If NULL (by
-default), no node labelling. If provided as a vector, a node with 'NA'
-will be not labelled</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label.wrap.width</code></td>
 <td>
-<p>a positive integer specifying wrap width of
-name</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.size</code></td>
 <td>
-<p>the node label size</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.color</code></td>
 <td>
-<p>the node label color</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.tooltip</code></td>
 <td>
-<p>either a vector used for node tooltips or a
-character specifying which node attribute used for the tooltips. If
-NULL (by default), node attribute 'name' will be used node lab</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.link</code></td>
 <td>
-<p>either a vector used for node link or a character
-specifying which node attribute used for the link</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.xcoord</code></td>
 <td>
-<p>a vector specifying x coordinates. If NULL, it will
-be created using igraph::layout_with_kk</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.ycoord</code></td>
 <td>
-<p>a vector specifying y coordinates. If NULL, it will
-be created using igraph::layout_with_kk</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.color.na</code></td>
 <td>
-<p>the color for nodes with NA. By default, it is
-'#dddddd'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
-<p>a character specifying which node attribute used for
-node coloring. If NULL (by default), it is '#BFFFBF'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
-default color palette). Alternatively, any hyphen-separated HTML color
-names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nlegend</code></td>
 <td>
-<p>the number of colors specified in the legend. By
-default, it is 11</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.label.size</code></td>
 <td>
-<p>the legend label size. By default, it is 10</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.interval</code></td>
 <td>
-<p>the interval between legends. By default, it is
-0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z/patttern values for which colors
-should be plotted, defaulting to the range of the finite values of z.
-Each of the given colors will be used to color an equispaced interval
-of this range. The midpoints of the intervals cover the range, so that
-values just outside the range will be plotted</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.size</code></td>
 <td>
-<p>either a vector specifying node size or a character
-specifying which node attribute used for the node size. If NULL (by
-default), it will be 30</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.coord.scale</code></td>
 <td>
-<p>the node coord (-1,1) subjected to be rescaled.
-By default, it is 300</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-<p>a character specifying the edge colors. By default,
-it is #00000033</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.width</code></td>
 <td>
-<p>the edge width. By default, it is 1</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
-<p>the without-extension part of the name of the output
-file. By default, it is 'xGraphML'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>invisible (a string storing graphml-formatted content). If the filename
-is not NULL, a graphml-formatted file is also output.
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGraphML</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 1) load REACTOME
-# 1a) restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
-g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="R-HSA-168256", mode="out")
-nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
-ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
-# visualise the graph with vertices being color-coded by the pattern
-V(ig)$pattern &lt;- runif(vcount(ig))
-xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
-node.size=10, node.label.size=6)
-
-# 1b) restricted to Signal Transduction ('R-HSA-162582')
-g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="R-HSA-162582", mode="out")
-nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
-ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
-# visualise the graph with vertices being color-coded by the pattern
-V(ig)$pattern &lt;- runif(vcount(ig))
-xGraphML(g=ig, node.label="name", node.color="pattern", colormap="wyr",
-node.size=8, node.label.size=4)
-
-###########################
-# visualise gene network
-glayout &lt;- igraph::layout_with_kk(ig)
-V(ig)$xcoord &lt;- glayout[,1]
-V(ig)$ycoord &lt;- glayout[,2]
-V(ig)$node.link &lt;-
-paste0("http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
-V(ig)$name)
-xGraphML(g=ig, node.label="name", node.tooltip="description",
-node.xcoord="xcoord", node.ycoord="ycoord", node.color="pattern",
-colormap="grey-orange-darkred", node.link="node.link", nlegend=11,
-node.size=30, node.coord.scale=300)
-
-## End(Not run)
+## The function is currently defined as
+function (g, node.label = NULL, label.wrap.width = NULL,
+node.label.size = 12,
+node.label.color = "#000000", node.tooltip = NULL, node.link = NULL,
+node.xcoord = "xcoord", node.ycoord = "ycoord", node.color.na =
+"#dddddd",
+node.color = NULL, colormap = "grey-orange-darkred", ncolors = 64,
+nlegend = 11, legend.label.size = 10, legend.interval = 0.05,
+zlim = NULL, node.size = 30, node.coord.scale = 300, edge.color =
+"#00000033",
+edge.width = 1, filename = "xGraphML", verbose = T)
+{
+if (class(g) != "igraph") {
+stop("The function must apply to either 'igraph' or 'graphNEL'
+object.\n")
+}
+else {
+ig &lt;- g
+}
+df_legends &lt;- NULL
+if (!is.null(node.color)) {
+pattern &lt;- igraph::vertex_attr(ig, node.color)
+if (!is.null(pattern)) {
+pattern &lt;- as.numeric(pattern)
+pattern_nona &lt;- pattern[!is.na(pattern)]
+pattern_nona &lt;- as.numeric(pattern_nona)
+if (is.null(zlim)) {
+vmin &lt;- floor(stats::quantile(pattern_nona, 0.05))
+vmax &lt;- ceiling(stats::quantile(pattern_nona,
+0.95))
+if (vmin &lt; 0 &amp; vmax &gt; 0) {
+vsym &lt;- abs(min(vmin, vmax))
+vmin &lt;- -1 * vsym
+vmax &lt;- vsym
+}
+zlim &lt;- c(vmin, vmax)
+}
+vec2color &lt;- function(vec, colormap = colormap, ncolors = ncolors,
+zlim = zlim) {
+palette.name &lt;- xColormap(colormap = colormap)
+colors &lt;- palette.name(ncolors)
+scale &lt;- length(colors)/(max(zlim) - min(zlim))
+sapply(1:length(vec), function(x) {
+if (is.na(vec[x])) {
+"#dddddd"
+}
+else {
+ind &lt;- floor(1 + (vec[x] - min(zlim)) * scale)
+colors[max(1, min(ncolors, ind))]
+}
+})
+}
+node.color &lt;- vec2color(pattern, colormap = colormap,
+ncolors = ncolors, zlim = zlim)
+colors &lt;- xColormap(colormap = colormap)(ncolors)
+legend_colors &lt;- colors[round(seq(1, ncolors, length.out = nlegend))]
+df_legends &lt;- data.frame(name = paste0("l", 1:nlegend),
+colors = legend_colors, labels = signif(seq(min(zlim),
+max(zlim), length.out = nlegend), digits = 2),
+x = rep(-1.1, nlegend), y = 1 - cumsum(c(0, rep(legend.interval,
+nlegend - 1))), stringsAsFactors = FALSE)
+}
+else {
+warning("The input 'pattern' is ignored. Please check the help for
+enabling your input")
+node.color &lt;- rep("#BFFFBF", vcount(ig))
+}
+}
+else {
+node.color &lt;- rep("#BFFFBF", vcount(ig))
+}
+output.head &lt;- "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"
+standalone=\"no\"?&gt;\n&lt;graphml
+xmlns=\"http://graphml.graphdrawing.org/xmlns\"
+xmlns:java=\"http://www.yworks.com/xml/yfiles-common/1.0/java\"
+xmlns:sys=\"http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0\"
+xmlns:x=\"http://www.yworks.com/xml/yfiles-common/markup/2.0\"
+xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+xmlns:y=\"http://www.yworks.com/xml/graphml\"
+xmlns:yed=\"http://www.yworks.com/xml/yed/3\"
+xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns
+http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd\"&gt;\n
+&lt;!--Created by yEd 3.17--&gt;\n &lt;key for=\"node\" id=\"d1\"
+attr.name=\"url\" attr.type=\"string\"/&gt;\n &lt;key for=\"node\" id=\"d2\"
+attr.name=\"description\" attr.type=\"string\"/&gt;\n &lt;key for=\"node\"
+id=\"d3\" yfiles.type=\"nodegraphics\"/&gt;\n &lt;key for=\"edge\" id=\"d4\"
+attr.name=\"description\" attr.type=\"string\"/&gt;\n &lt;key for=\"edge\"
+id=\"d5\" yfiles.type=\"edgegraphics\"/&gt;\n &lt;key for=\"graphml\"
+id=\"d6\" yfiles.type=\"resources\"/&gt;\n &lt;graph edgedefault=\"directed\"
+id=\"G\"&gt;"
+nnode &lt;- igraph::vcount(ig)
+if (length(node.label) != nnode) {
+if (!is.null(node.label)) {
+node.label &lt;- igraph::vertex_attr(ig, node.label)
+}
+if (is.null(node.label)) {
+node.label &lt;- rep(NA, nnode)
+}
+}
+node.label &lt;- unlist(lapply(node.label, function(x) gsub("/",
+"-", x)))
+node.label &lt;- unlist(lapply(node.label, function(x) gsub("&amp;",
+"-", x)))
+if (!is.null(label.wrap.width)) {
+width &lt;- as.integer(label.wrap.width)
+res_list &lt;- lapply(node.label, function(x) {
+if (!is.na(x)) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = width)
+if (length(y) == 2) {
+paste(y, collapse = "\n")
+}
+else if (length(y) &gt; 2) {
+paste(y, collapse = "\n")
+}
+else {
+y
+}
+}
+else {
+x
+}
+})
+node.label &lt;- unlist(res_list)
+}
+if (length(node.tooltip) != nnode) {
+if (!is.null(node.tooltip)) {
+node.tooltip &lt;- igraph::vertex_attr(ig, node.tooltip)
+}
+if (is.null(node.tooltip)) {
+node.tooltip &lt;- igraph::vertex_attr(ig, "name")
+}
+}
+node.tooltip &lt;- unlist(lapply(node.tooltip, function(x) gsub("/",
+"-", x)))
+node.tooltip &lt;- unlist(lapply(node.tooltip, function(x) gsub("&amp;",
+"-", x)))
+if (length(node.link) != nnode) {
+if (!is.null(node.link)) {
+node.link &lt;- igraph::vertex_attr(ig, node.link)
+}
+if (is.null(node.link)) {
+node.link &lt;- igraph::vertex_attr(ig, "name")
+}
+}
+if (length(node.size) != nnode) {
+if (!is.null(node.size)) {
+tmp.node.size &lt;- igraph::vertex_attr(ig, node.size)
+}
+else {
+tmp.node.size &lt;- rep(30, nnode)
+}
+if (is.null(tmp.node.size)) {
+node.size &lt;- rep(node.size, nnode)
+}
+else {
+node.size &lt;- tmp.node.size
+}
+}
+V(ig)$label &lt;- V(ig)$name
+V(ig)$name &lt;- paste0("n", 1:vcount(ig))
+if (length(node.xcoord) != nnode | length(node.ycoord) !=
+nnode) {
+if (!is.null(node.xcoord)) {
+node.xcoord &lt;- igraph::vertex_attr(ig, node.xcoord)
+}
+if (!is.null(node.ycoord)) {
+node.ycoord &lt;- igraph::vertex_attr(ig, node.ycoord)
+}
+if (is.null(node.xcoord) | is.null(node.ycoord)) {
+glayout &lt;- igraph::layout_as_tree(ig, root = dnet::dDAGroot(ig),
+circular = TRUE, flip.y = TRUE)
+glayout &lt;- glayout[, c(2:1)]
+node.xcoord &lt;- glayout[, 1]
+node.ycoord &lt;- glayout[, 2]
+}
+}
+if (max(node.xcoord) != min(node.xcoord)) {
+node.xcoord &lt;- (node.xcoord - min(node.xcoord))/(max(node.xcoord) -
+min(node.xcoord)) * 2 - 1
+}
+if (max(node.ycoord) != min(node.ycoord)) {
+node.ycoord &lt;- (node.ycoord - min(node.ycoord))/(max(node.ycoord) -
+min(node.ycoord)) * 2 - 1
+}
+node.ycoord &lt;- -node.ycoord
+node.xcoord &lt;- node.xcoord * node.coord.scale
+node.ycoord &lt;- node.ycoord * node.coord.scale
+df_nodes &lt;- igraph::get.data.frame(ig, what = "vertices")
+df_nodes$node.label &lt;- node.label
+df_nodes$node.tooltip &lt;- node.tooltip
+df_nodes$node.link &lt;- node.link
+df_nodes$node.color &lt;- paste0(node.color, "cc")
+df_nodes$node.size &lt;- node.size
+ls_nodes &lt;- lapply(1:nrow(df_nodes), function(i) {
+k &lt;- 0
+vec &lt;- vector()
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;node id=\"", df_nodes$name[i], "\"&gt;")
+if (!is.null(node.link)) {
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d1\"&gt;&lt;![CDATA[", df_nodes$node.link[i],
+"]]&gt;&lt;/data&gt;")
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d2\"&gt;&lt;![CDATA[",
+df_nodes$node.tooltip[i],
+"]]&gt;&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d3\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Geometry height=\"", df_nodes$node.size[i],
+"\" width=\"", df_nodes$node.size[i], "\" x=\"",
+node.xcoord[i], "\" y=\"", node.ycoord[i], "\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Fill color=\"", df_nodes$node.color[i],
+"\" transparent=\"false\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:BorderStyle color=\"#dddddd\" raised=\"false\"
+type=\"line\" width=\"1\"/&gt;")
+k &lt;- k + 1
+if (!is.na(df_nodes$node.label[i])) {
+vec[k] &lt;- paste0("&lt;y:NodeLabel alignment=\"center\"
+autoSizePolicy=\"content\" borderDistance=\"0.0\" fontFamily=\"Arial\"
+fontSize=\"",
+node.label.size, "\" fontStyle=\"italic\" hasBackgroundColor=\"false\"
+hasLineColor=\"false\" height=\"30\" horizontalTextPosition=\"center\"
+iconTextGap=\"4\" modelName=\"sides\" modelPosition=\"n\"
+textColor=\"",
+node.label.color, "\" verticalTextPosition=\"bottom\" visible=\"true\"
+width=\"30\" x=\"0\" y=\"0\"&gt;",
+df_nodes$node.label[i], "&lt;/y:NodeLabel&gt;")
+}
+else {
+vec[k] &lt;- paste0("&lt;y:NodeLabel alignment=\"center\"
+autoSizePolicy=\"content\" borderDistance=\"0.0\" fontFamily=\"Arial\"
+fontSize=\"",
+node.label.size, "\" fontStyle=\"italic\" hasBackgroundColor=\"false\"
+hasLineColor=\"false\" height=\"30\" horizontalTextPosition=\"center\"
+iconTextGap=\"4\" modelName=\"sides\" modelPosition=\"n\"
+textColor=\"",
+node.label.color, "\" verticalTextPosition=\"bottom\" visible=\"false\"
+width=\"30\" x=\"0\" y=\"0\"&gt;",
+df_nodes$node.tooltip[i], "&lt;/y:NodeLabel&gt;")
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Shape type=\"ellipse\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/node&gt;")
+paste(vec, collapse = "\n")
+})
+vec_nodes &lt;- unlist(ls_nodes)
+output.nodes &lt;- paste(vec_nodes, collapse = "\n")
+if (!is.null(df_legends)) {
+ls_legends &lt;- lapply(1:nrow(df_legends), function(i) {
+k &lt;- 0
+vec &lt;- vector()
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;node id=\"", df_legends$name[i],
+"\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d2\"&gt;&lt;![CDATA[", df_legends$labels[i],
+"]]&gt;&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d3\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Geometry height=\"", legend.interval *
+node.coord.scale, "\" width=\"", legend.interval *
+node.coord.scale, "\" x=\"", df_legends$x[i] *
+node.coord.scale, "\" y=\"", df_legends$y[i] *
+node.coord.scale, "\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Fill color=\"", df_legends$colors[i],
+"\" transparent=\"false\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:BorderStyle color=\"#dddddd\" raised=\"false\"
+type=\"line\" width=\"1\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:NodeLabel alignment=\"center\"
+autoSizePolicy=\"content\" borderDistance=\"0.0\" fontFamily=\"Arial\"
+fontSize=\"",
+legend.label.size, "\" fontStyle=\"plain\" hasBackgroundColor=\"false\"
+hasLineColor=\"false\" height=\"30\" horizontalTextPosition=\"center\"
+iconTextGap=\"4\" modelName=\"sides\" modelPosition=\"w\"
+textColor=\"#000000\" verticalTextPosition=\"bottom\" visible=\"true\"
+width=\"30\" x=\"0\" y=\"0\"&gt;",
+df_legends$labels[i], "&lt;/y:NodeLabel&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Shape type=\"ellipse\"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/node&gt;")
+paste(vec, collapse = "\n")
+})
+vec_legends &lt;- unlist(ls_legends)
+output.legends &lt;- paste(vec_legends, collapse = "\n")
+}
+else {
+output.legends &lt;- NULL
+}
+df_edges &lt;- igraph::get.data.frame(ig, what = "edges")
+ls_edges &lt;- lapply(1:nrow(df_edges), function(i) {
+source &lt;- df_edges$from[i]
+target &lt;- df_edges$to[i]
+k &lt;- 0
+vec &lt;- vector()
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;edge id=\"", "e", i, "\" source=\"",
+source, "\" target=\"", target, "\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d5\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:GenericEdge configuration=\"DEFAULT\"&gt;")
+if (0) {
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Path sx=\"0\" sy=\"0\" tx=\"0\" ty=\"0\"/&gt;")
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:LineStyle color=\"", edge.color,
+"\" type=\"line\" width=\"", edge.width, "\"/&gt;")
+k &lt;- k + 1
+if (igraph::is_directed(ig)) {
+vec[k] &lt;- paste0("&lt;y:Arrows source=\"none\" target=\"standard\"/&gt;")
+}
+else {
+vec[k] &lt;- paste0("&lt;y:Arrows source=\"none\" target=\"none\"/&gt;")
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/y:GenericEdge&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/edge&gt;")
+paste(vec, collapse = "\n")
+})
+vec_edges &lt;- unlist(ls_edges)
+output.edges &lt;- paste(vec_edges, collapse = "\n")
+output.tail &lt;- "&lt;/graph&gt;\n &lt;data key=\"d6\"&gt;\n &lt;y:Resources/&gt;\n
+&lt;/data&gt;\n&lt;/graphml&gt;"
+if (is.null(output.legends)) {
+output &lt;- paste0(output.head, "\n", output.nodes, "\n",
+output.edges, "\n", output.tail, "\n")
+}
+else {
+output &lt;- paste0(output.head, "\n", output.nodes, "\n",
+output.legends, "\n", output.edges, "\n", output.tail,
+"\n")
+}
+if (!is.null(filename)) {
+filename &lt;- gsub(".graphml$", "", filename)
+outputfile &lt;- paste0(filename, ".graphml")
+fileConn &lt;- base::file(outputfile)
+base::writeLines(output, fileConn)
+base::close(fileConn)
+if (verbose) {
+message(sprintf("Congratulations! A file '%s' (in the directory %s)
+has been created!",
+outputfile, getwd()), appendLF = T)
+}
+}
+invisible(output)
+}
 </pre>
 
 

@@ -1,20 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to make enrichment results conciser by removing...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichConciser"><tr><td>xEnrichConciser</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to make enrichment results conciser by removing redundant terms</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichConciser</code> is supposed to make enrichment results conciser
-by removing redundant terms. A redundant term (called 'B') is claimed
-if its overlapped part (A&amp;B) with a more significant term (called 'A')
-meets both criteria: 1) |A&amp;B| &gt; 0.9*|B|; and 2) |A&amp;B| &gt; 0.5*|A|.
-</p>
-
+<h2>xEnrichConciser</h2>
 
 <h3>Usage</h3>
 
@@ -28,50 +19,81 @@ xEnrichConciser(eTerm, cutoff = c(0.9, 0.5), verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>cutoff</code></td>
 <td>
-<p>a cutoff vector used to remove redundant terms. By
-default, it has the first element 0.9 and the second element 0.5. It
-means, for a term (less significant; called 'B'), if there is a more
-significant term (called 'A'), their overlapped members cover at least
-90
-this term B will be defined as redundant and thus being removed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;eTerm&quot;, after redundant terms being removed.
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-eTerm_concise &lt;- xEnrichConciser(eTerm)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
+## The function is currently defined as
+function (eTerm, cutoff = c(0.9, 0.5), verbose = T)
+{
+if (is.null(eTerm)) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+return(NULL)
+}
+if (class(eTerm) == "eTerm") {
+cross &lt;- eTerm$cross
+df &lt;- xEnrichViewer(eTerm, top_num = "all", sortBy = "pvalue")
+ind &lt;- match(rownames(df), rownames(cross))
+cross &lt;- cross[ind, ind]
+nRedundant_1 &lt;- matrix(0, nrow = ncol(cross), ncol = ncol(cross))
+nRedundant_2 &lt;- matrix(0, nrow = ncol(cross), ncol = ncol(cross))
+for (j in seq(2, ncol(cross))) {
+for (i in seq(1, j - 1)) {
+nRedundant_1[i, j] &lt;- cross[i, j] &gt;= cross[j,
+j] * cutoff[1]
+nRedundant_2[i, j] &lt;- cross[i, j] &gt;= cross[i,
+i] * cutoff[2]
+}
+}
+nRedundant &lt;- apply(nRedundant_1 &amp; nRedundant_2, 2, sum)
+names(nRedundant) &lt;- colnames(cross)
+ind &lt;- match(names(eTerm$adjp), names(nRedundant))
+nRedundant &lt;- nRedundant[ind]
+flag &lt;- nRedundant == 0
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tAmong %d terms, there are %d non-redundant terms",
+length(flag), sum(flag)), appendLF = T)
+}
+eTerm$term_info &lt;- eTerm$term_info[flag, ]
+eTerm$annotation &lt;- eTerm$annotation[flag]
+eTerm$overlap &lt;- eTerm$overlap[flag]
+eTerm$fc &lt;- eTerm$fc[flag]
+eTerm$zscore &lt;- eTerm$zscore[flag]
+eTerm$pvalue &lt;- eTerm$pvalue[flag]
+eTerm$adjp &lt;- eTerm$adjp[flag]
+eTerm$or &lt;- eTerm$or[flag]
+eTerm$CIl &lt;- eTerm$CIl[flag]
+eTerm$CIu &lt;- eTerm$CIu[flag]
+eTerm$cross &lt;- eTerm$cross[flag, flag]
+res &lt;- eTerm
+}
+else {
+res &lt;- NULL
+message("The provided object cannot be used for removing redundant
+terms.\n")
+}
+res
+}
 </pre>
 
 

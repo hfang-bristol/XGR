@@ -1,57 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis via...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGR2xGeneAnnoAdv"><tr><td>xGR2xGeneAnnoAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct region-based enrichment analysis via crosslinked genes given a list of genomic region sets and a list of ontologies</h2>
-
-<h3>Description</h3>
-
-<p><code>xGR2xGeneAnnoAdv</code> is supposed to conduct enrichment analysis
-given a list of gene sets and a list of ontologies, using crosslinked
-gene annotations. It is an advanced version of <code>xGR2xGeneAnno</code>,
-returning an object of the class 'ls_eTerm'.
-</p>
-
+<h2>xGR2xGeneAnnoAdv</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGR2xGeneAnnoAdv(
-list_vec,
-background = NULL,
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-crosslink = c("genehancer", "PCHiC_combined", "GTEx_V6p_combined",
-"nearby"),
-crosslink.customised = NULL,
-crosslink.top = NULL,
-nearby.distance.max = 50000,
+xGR2xGeneAnnoAdv(list_vec, background = NULL, build.conversion = c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
+"PCHiC_combined", "GTEx_V6p_combined", "nearby"), crosslink.customised
+= NULL, crosslink.top = NULL, nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
-nearby.decay.exponent = 2,
-ontologies = NA,
-size.range = c(10, 2000),
-min.overlap = 5,
-which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"),
-background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01,
-lea.depth = 2,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F,
-verbose = F,
-silent = F,
-plot = T,
-fdr.cutoff = 0.05,
-displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+nearby.decay.exponent = 2, ontologies = NA, size.range = c(10, 2000),
+min.overlap = 5, which.distance = NULL, test = c("hypergeo", "fisher",
+"binomial"), background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"), elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
+F, silent = F, plot = T, fdr.cutoff = 0.05, displayBy = c("zscore",
+"fdr", "pvalue", "fc", "or"), RData.location =
+"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -60,275 +33,525 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>list_vec</code></td>
 <td>
-<p>an input vector containing genomic regions.
-Alternatively it can be a list of vectors, representing multiple groups
-of genomic regions. Formatted as &quot;chr:start-end&quot; are genomic regions</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-<p>a background vector containing genomic regions
-(formatted as &quot;chr:start-end&quot;) as the test background. If NULL, by
-default all annotatable are used as background</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
-<p>the conversion from one genome build to
-another. The conversions supported are &quot;hg38.to.hg19&quot; and
-&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>crosslink</code></td>
 <td>
-<p>the built-in crosslink info with a score quantifying
-the link of a GR to a gene. See <code>xGR2xGenes</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>crosslink.customised</code></td>
 <td>
-<p>the crosslink info with a score quantifying
-the link of a GR to a gene. A user-input matrix or data frame with 4
-columns: 1st column for genomic regions (formatted as &quot;chr:start-end&quot;,
-genome build 19), 2nd column for Genes, 3rd for crosslink score
-(crosslinking a genomic region to a gene, such as -log10 significance
-level), and 4th for contexts (optional; if not provided, it will be
-added as 'C'). Alternatively, it can be a file containing these 4
-columns. Required, otherwise it will return NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>crosslink.top</code></td>
 <td>
-<p>the number of the top genes defined by 'data' will
-be used for test. By default, it is NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.distance.max</code></td>
 <td>
-<p>the maximum distance between genes and GR.
-Only those genes no far way from this distance will be considered as
-seed genes. This parameter will influence the distance-component
-weights calculated for nearby GR per gene</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.decay.kernel</code></td>
 <td>
-<p>a character specifying a decay kernel
-function. It can be one of 'slow' for slow decay, 'linear' for linear
-decay, and 'rapid' for rapid decay. If no distance weight is used,
-please select 'constant'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nearby.decay.exponent</code></td>
 <td>
-<p>a numeric specifying a decay exponent. By
-default, it sets to 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontologies</code></td>
 <td>
-<p>the ontologies supported currently. By default, it is
-'NA' to disable this option. Pre-built ontology and annotation data are
-detailed in <code>xDefineOntology</code>.</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-<p>the minimum and maximum size of members of each term
-in consideration. By default, it sets to a minimum of 10 but no more
-than 2000</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-<p>the minimum number of overlaps. Only those terms
-with members that overlap with input data at least min.overlap (3 by
-default) will be processed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>which.distance</code></td>
 <td>
-<p>which terms with the distance away from the
-ontology root (if any) is used to restrict terms in consideration. By
-default, it sets to 'NULL' to consider all distances</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-<p>the test statistic used. It can be &quot;fisher&quot; for using
-fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
-&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
-independence between gene group (genes belonging to a group or not) and
-gene annotation (genes annotated by a term or not), and thus compare
-sampling to the left part of background (after sampling without
-replacement). Hypergeometric test is to sample at random (without
-replacement) from the background containing annotated and non-annotated
-genes, and thus compare sampling to background. Unlike hypergeometric
-test, binomial test is to sample at random (with replacement) from the
-background with the constant probability. In terms of the ease of
-finding the significance, they are in order: hypergeometric test &gt;
-fisher's exact test &gt; binomial test. In other words, in terms of the
-calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
-binomial test</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-<p>logical to indicate whether the
-background is further restricted to the annotatable. By default, it is
-NULL: if ontology.algorithm is not 'none', it is always TRUE;
-otherwise, it depends on the background (if not provided, it will be
-TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.tail</code></td>
 <td>
-<p>the tail used to calculate p-values. It can be either
-&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
-under-overrepresentation) or &quot;one-tail&quot; (by default) for the
-significance based on one tail (ie only over-representation)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-<p>the method used to adjust p-values. It can be
-one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
-first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
-discovery rate (FDR: the expected proportion of false discoveries
-amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
-&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
-the family-wise error rate (FWER). Notes: FDR is a less stringent
-condition than FWER</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontology.algorithm</code></td>
 <td>
-<p>the algorithm used to account for the
-hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
-&quot;lea&quot;. For details, please see 'Note' below</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>elim.pvalue</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;elim&quot;. It is used to control how to declare a signficantly enriched
-term (and subsequently all genes in this term are eliminated from all
-its ancestors)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>lea.depth</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;lea&quot;. It is used to control how many maximum depth is used to consider
-the children of a term (and subsequently all genes in these children
-term are eliminated from the use for the recalculation of the
-signifance at this term)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-<p>the mode of paths induced by vertices/nodes with input
-annotation data. It can be &quot;all_paths&quot; for all possible paths to the
-root, &quot;shortest_paths&quot; for only one path to the root (for each node in
-query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
-for each node, find all shortest paths with the equal lengths)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-<p>logical to indicate whether the true-path rule
-should be applied to propagate annotations. By default, it sets to
-false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-<p>logical to indicate whether the messages will be silent
-completely. By default, it sets to false. If true, verbose will be
-forced to be false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>plot</code></td>
 <td>
-<p>logical to indicate whether heatmap plot is drawn</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>fdr.cutoff</code></td>
 <td>
-<p>fdr cutoff used to declare the significant terms. By
-default, it is set to 0.05. This option only works when setting plot
-(see above) is TRUE</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-<p>which statistics will be used for drawing heatmap. It
-can be &quot;fc&quot; for enrichment fold change, &quot;fdr&quot; for adjusted p value (or
-FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score (by
-default), &quot;or&quot; for odds ratio. This option only works when setting plot
-(see above) is TRUE</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;ls_eTerm&quot;, a list with following components:
-</p>
-
-<ul>
-<li><p><code>df</code>: a data frame of n x 12, where the 17 columns are
-&quot;group&quot; (the input group names), &quot;ontology&quot; (input ontologies), &quot;id&quot;
-(term ID), &quot;name&quot; (term name), &quot;nAnno&quot; (number in members annotated by
-a term), &quot;nOverlap&quot; (number in overlaps), &quot;fc&quot; (enrichment fold
-changes), &quot;zscore&quot; (enrichment z-score), &quot;pvalue&quot; (nominal p value),
-&quot;adjp&quot; (adjusted p value (FDR)), &quot;or&quot; (odds ratio), &quot;CIl&quot; (lower bound
-confidence interval for the odds ratio), &quot;CIu&quot; (upper bound confidence
-interval for the odds ratio), &quot;distance&quot; (term distance or other
-information), &quot;namespace&quot;, &quot;members_Overlap&quot; (members (represented as
-Gene Symbols) in overlaps), &quot;members_Anno&quot; (members (represented as
-Gene Symbols) in annotations)
-</p>
-</li>
-<li><p><code>mat</code>: NULL if the plot is not drawn; otherwise, a matrix of
-term names X groups with numeric values for the signficant enrichment,
-NA for the insignificant ones
-</p>
-</li>
-<li><p><code>gp</code>: NULL if the plot is not drawn; otherwise, a 'ggplot'
-object
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGR2xGeneAnno</code>, <code>xEnrichViewer</code>,
-<code>xHeatmap</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# Enrichment analysis for GWAS SNPs from ImmunoBase
-## a) provide input data (bed-formatted)
-data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/ImmunoBase_GWAS.bed"
-input &lt;- read.delim(file=data.file, header=T, stringsAsFactors=F)
-data &lt;- paste0(input$chrom, ':', (input$chromStart+1), '-',
-input$chromEnd)
-
-# b) perform enrichment analysis
-## overlap with gene body
-ls_eTerm &lt;- xGR2xGeneAnnoAdv(data, crosslink="genehancer",
-ontologies=c("REACTOME_ImmuneSystem","REACTOME_SignalTransduction"),
-RData.location=RData.location)
-ls_eTerm
-## forest plot of enrichment results
-gp &lt;- xEnrichForest(ls_eTerm, top_num=10, CI.one=F)
-gp
-
-## End(Not run)
+## The function is currently defined as
+function (list_vec, background = NULL, build.conversion = c(NA,
+"hg38.to.hg19", "hg18.to.hg19"), crosslink = c("genehancer",
+"PCHiC_combined", "GTEx_V6p_combined", "nearby"), crosslink.customised
+= NULL,
+crosslink.top = NULL, nearby.distance.max = 50000, nearby.decay.kernel
+= c("rapid",
+"slow", "linear", "constant"), nearby.decay.exponent = 2,
+ontologies = NA, size.range = c(10, 2000), min.overlap = 5,
+which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
+background.annotatable.only = NULL, p.tail = c("one-tail",
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni",
+"holm", "hochberg", "hommel"), ontology.algorithm = c("none",
+"pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F, verbose = F, silent = F, plot = T, fdr.cutoff =
+0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"), RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+startT &lt;- Sys.time()
+if (!silent) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = TRUE)
+message("", appendLF = TRUE)
+}
+else {
+verbose &lt;- FALSE
+}
+build.conversion &lt;- match.arg(build.conversion)
+nearby.decay.kernel &lt;- match.arg(nearby.decay.kernel)
+test &lt;- match.arg(test)
+p.tail &lt;- match.arg(p.tail)
+p.adjust.method &lt;- match.arg(p.adjust.method)
+ontology.algorithm &lt;- match.arg(ontology.algorithm)
+path.mode &lt;- match.arg(path.mode)
+displayBy &lt;- match.arg(displayBy)
+if (length(list_vec) == 0) {
+return(NULL)
+}
+if (is.vector(list_vec) &amp; class(list_vec) != "list") {
+list_vec &lt;- list(list_vec)
+}
+else if (class(list_vec) == "list") {
+list_vec &lt;- base::Filter(base::Negate(is.null), list_vec)
+if (length(list_vec) == 0) {
+return(NULL)
+}
+}
+else {
+stop("The input data must be a vector or a list of vectors.\n")
+}
+list_names &lt;- names(list_vec)
+if (is.null(list_names)) {
+list_names &lt;- paste0("G", 1:length(list_vec))
+names(list_vec) &lt;- list_names
+}
+fast &lt;- T
+if (!fast) {
+ls_df &lt;- lapply(1:length(list_vec), function(i) {
+if (verbose) {
+message(sprintf("Analysing group %d ('%s') (%s) ...",
+i, names(list_vec)[i], as.character(Sys.time())),
+appendLF = T)
+}
+data &lt;- list_vec[[i]]
+ls_df &lt;- lapply(1:length(ontologies), function(j) {
+if (verbose) {
+message(sprintf("\tontology %d ('%s') (%s) ...",
+j, ontologies[j], as.character(Sys.time())),
+appendLF = T)
+}
+ontology &lt;- ontologies[j]
+eTerm &lt;- xGR2xGeneAnno(data = data, background = background,
+format = "chr:start-end", build.conversion = build.conversion,
+crosslink = crosslink, crosslink.customised = crosslink.customised,
+crosslink.top = crosslink.top, nearby.distance.max =
+nearby.distance.max,
+nearby.decay.kernel = nearby.decay.kernel,
+nearby.decay.exponent = nearby.decay.exponent,
+ontology = ontology, size.range = size.range,
+min.overlap = min.overlap, which.distance = which.distance,
+test = test, background.annotatable.only = background.annotatable.only,
+p.tail = p.tail, p.adjust.method = p.adjust.method,
+ontology.algorithm = ontology.algorithm, elim.pvalue = elim.pvalue,
+lea.depth = lea.depth, path.mode = path.mode,
+true.path.rule = true.path.rule, verbose = verbose,
+silent = !verbose, RData.location = RData.location,
+guid = guid)
+df &lt;- xEnrichViewer(eTerm, top_num = "all", sortBy = "or",
+details = TRUE)
+if (is.null(df)) {
+return(NULL)
+}
+else {
+cbind(group = rep(names(list_vec)[i], nrow(df)),
+ontology = rep(ontology, nrow(df)), id = rownames(df),
+df, stringsAsFactors = F)
+}
+})
+df &lt;- do.call(rbind, ls_df)
+})
+df_all &lt;- do.call(rbind, ls_df)
+}
+else {
+Score &lt;- Gene &lt;- NULL
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("First, import the background (%s) ...",
+as.character(now)), appendLF = T)
+}
+bGR &lt;- xGR(data = background, format = "chr:start-end",
+build.conversion = build.conversion, verbose = verbose,
+RData.location = RData.location, guid = guid)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Second, define crosslinked genes based on '%s' (%s)
+...",
+crosslink, as.character(now)), appendLF = T)
+}
+df_xGenes_background &lt;- xGR2xGenes(data = bGR, format = "GRanges",
+crosslink = crosslink, crosslink.customised = crosslink.customised,
+cdf.function = "original", scoring = TRUE, scoring.scheme = "max",
+scoring.rescale = F, nearby.distance.max = nearby.distance.max,
+nearby.decay.kernel = nearby.decay.kernel, nearby.decay.exponent =
+nearby.decay.exponent,
+verbose = verbose, silent = !verbose, RData.location = RData.location,
+guid = guid)
+if (!is.null(df_xGenes_background)) {
+bGR_genes &lt;- (df_xGenes_background %&gt;% dplyr::arrange(-Score))$Gene
+}
+else {
+bGR_genes &lt;- NULL
+}
+ls_df &lt;- lapply(1:length(list_vec), function(i) {
+if (verbose) {
+message(sprintf("Analysing group %d ('%s') (%s) ...",
+i, names(list_vec)[i], as.character(Sys.time())),
+appendLF = T)
+}
+data &lt;- list_vec[[i]]
+dGR &lt;- xGR(data = data, format = "chr:start-end",
+build.conversion = build.conversion, verbose = verbose,
+RData.location = RData.location, guid = guid)
+df_xGenes_data &lt;- xGR2xGenes(data = dGR, format = "GRanges",
+crosslink = crosslink, crosslink.customised = crosslink.customised,
+cdf.function = "original", scoring = TRUE, scoring.scheme = "max",
+scoring.rescale = F, nearby.distance.max = nearby.distance.max,
+nearby.decay.kernel = nearby.decay.kernel, nearby.decay.exponent =
+nearby.decay.exponent,
+verbose = verbose, silent = !verbose, RData.location = RData.location,
+guid = guid)
+df_xGenes_data &lt;- df_xGenes_data %&gt;% dplyr::arrange(-Score)
+if (is.null(crosslink.top)) {
+crosslink.top &lt;- nrow(df_xGenes_data)
+}
+if (crosslink.top &gt; nrow(df_xGenes_data)) {
+crosslink.top &lt;- nrow(df_xGenes_data)
+}
+crosslink.top &lt;- as.integer(crosslink.top)
+crosslink.cutoff &lt;- df_xGenes_data[crosslink.top,
+"Score"]
+dGR_genes &lt;- df_xGenes_data$Gene[df_xGenes_data$Score &gt;=
+crosslink.cutoff]
+if (verbose) {
+if (is.null(bGR_genes)) {
+message(sprintf("\t%d (out of %d crosslinked genes) are used.",
+length(dGR_genes), nrow(df_xGenes_data),
+as.character(Sys.time())), appendLF = T)
+}
+else {
+message(sprintf("\t%d (out of %d crosslinked genes) and %d
+background genes are used.",
+length(dGR_genes), nrow(df_xGenes_data),
+length(bGR_genes), as.character(Sys.time())),
+appendLF = T)
+}
+}
+ls_df &lt;- lapply(1:length(ontologies), function(j) {
+if (verbose) {
+message(sprintf("\tontology %d ('%s') (%s) ...",
+j, ontologies[j], as.character(Sys.time())),
+appendLF = T)
+}
+ontology &lt;- ontologies[j]
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xEnricherGenes' is being called (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+eTerm &lt;- xEnricherGenes(data = dGR_genes, background = bGR_genes,
+ontology = ontology, size.range = size.range,
+min.overlap = min.overlap, which.distance = which.distance,
+test = test, background.annotatable.only = background.annotatable.only,
+p.tail = p.tail, p.adjust.method = p.adjust.method,
+ontology.algorithm = ontology.algorithm, elim.pvalue = elim.pvalue,
+lea.depth = lea.depth, path.mode = path.mode,
+true.path.rule = true.path.rule, verbose = verbose,
+silent = !verbose, RData.location = RData.location,
+guid = guid)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xEnricherGenes' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+df &lt;- xEnrichViewer(eTerm, top_num = "all", sortBy = "or",
+details = TRUE)
+if (is.null(df)) {
+return(NULL)
+}
+else {
+cbind(group = rep(names(list_vec)[i], nrow(df)),
+ontology = rep(ontology, nrow(df)), id = rownames(df),
+df, stringsAsFactors = F)
+}
+})
+df &lt;- do.call(rbind, ls_df)
+})
+df_all &lt;- do.call(rbind, ls_df)
+df_all$group &lt;- factor(df_all$group, levels = names(list_vec))
+}
+if (plot &amp; !is.null(df_all)) {
+adjp &lt;- NULL
+gp &lt;- NULL
+mat &lt;- NULL
+ls_df &lt;- split(x = df_all[, -12], f = df_all$ontology)
+ls_df &lt;- ls_df[unique(df_all$ontology)]
+ls_mat &lt;- lapply(1:length(ls_df), function(i) {
+df &lt;- ls_df[[i]]
+ind &lt;- which(df$adjp &lt; fdr.cutoff)
+if (length(ind) &gt;= 1) {
+df &lt;- as.data.frame(df %&gt;% dplyr::filter(adjp &lt;
+fdr.cutoff))
+if (displayBy == "fdr") {
+mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
+"group", "adjp")], rows = unique(df$name),
+columns = names(list_vec)))
+mat[mat == 0] &lt;- NA
+mat &lt;- -log10(mat)
+}
+else if (displayBy == "pvalue") {
+mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
+"group", "pvalue")], rows = unique(df$name),
+columns = names(list_vec)))
+mat[mat == 0] &lt;- NA
+mat &lt;- -log10(mat)
+}
+else if (displayBy == "zscore") {
+mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
+"group", "zscore")], rows = unique(df$name),
+columns = names(list_vec)))
+mat[mat == 0] &lt;- NA
+}
+else if (displayBy == "fc") {
+mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
+"group", "fc")], rows = unique(df$name),
+columns = names(list_vec)))
+mat[mat == 0] &lt;- NA
+mat &lt;- log2(mat)
+}
+else if (displayBy == "or") {
+mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
+"group", "or")], rows = unique(df$name),
+columns = names(list_vec)))
+mat[mat == 0] &lt;- NA
+mat &lt;- log2(mat)
+}
+if (nrow(mat) == 1) {
+df_mat &lt;- mat
+}
+else {
+rname_ordered &lt;- rownames(mat)[order(-nchar(rownames(mat)))]
+if (names(ls_df)[i] == "PS2") {
+df_tmp &lt;- unique(df[, c("id", "name")])
+df_tmp &lt;- df_tmp[with(df_tmp, order(as.numeric(df_tmp$id))),
+]
+rname_ordered &lt;- df_tmp$name
+}
+ind &lt;- match(rname_ordered, rownames(mat))
+df_mat &lt;- as.matrix(mat[ind, ], ncol = ncol(mat))
+colnames(df_mat) &lt;- colnames(mat)
+colnames(df_mat) &lt;- colnames(mat)
+}
+return(df_mat)
+}
+else {
+return(NULL)
+}
+})
+mat &lt;- do.call(rbind, ls_mat)
+if (!is.null(mat)) {
+if (displayBy == "fdr" | displayBy == "pvalue") {
+colormap &lt;- "grey100-darkorange"
+zlim &lt;- c(0, ceiling(max(mat[!is.na(mat)])))
+if (displayBy == "fdr") {
+legend.title &lt;- expression(-log[10]("FDR"))
+}
+else if (displayBy == "pvalue") {
+legend.title &lt;- expression(-log[10]("p-value"))
+}
+}
+else if (displayBy == "fc" | displayBy == "zscore" |
+displayBy == "or") {
+tmp_max &lt;- ceiling(max(mat[!is.na(mat)]))
+tmp_min &lt;- floor(min(mat[!is.na(mat)]))
+if (tmp_max &gt; 0 &amp; tmp_min &lt; 0) {
+colormap &lt;- "deepskyblue-grey100-darkorange"
+tmp &lt;- max(tmp_max, abs(tmp_min))
+zlim &lt;- c(-tmp, tmp)
+}
+else if (tmp_max &lt;= 0) {
+colormap &lt;- "deepskyblue-grey100"
+zlim &lt;- c(tmp_min, 0)
+}
+else if (tmp_min &gt;= 0) {
+colormap &lt;- "grey100-darkorange"
+zlim &lt;- c(0, tmp_max)
+}
+if (displayBy == "fc") {
+legend.title &lt;- expression(log[2]("FC"))
+}
+else if (displayBy == "zscore") {
+legend.title &lt;- ("Z-score")
+}
+else if (displayBy == "or") {
+legend.title &lt;- expression(log[2]("OR"))
+}
+}
+gp &lt;- xHeatmap(mat, reorder = "none", colormap = colormap,
+ncolors = 64, zlim = zlim, legend.title = legend.title,
+barwidth = 0.4, x.rotate = 60, shape = 19, size = 2,
+x.text.size = 6, y.text.size = 6, na.color = "transparent",
+barheight = max(3, min(5, nrow(mat))))
+gp &lt;- gp + theme(legend.title = element_text(size = 8))
+}
+}
+else {
+mat &lt;- NULL
+gp &lt;- NULL
+}
+ls_eTerm &lt;- NULL
+if (!is.null(df_all)) {
+ls_eTerm &lt;- list(df = df_all, mat = mat, gp = gp)
+class(ls_eTerm) &lt;- "ls_eTerm"
+}
+endT &lt;- Sys.time()
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+if (!silent) {
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = TRUE)
+message(paste(c("Runtime in total (xGR2xGeneAnnoAdv): ",
+runTime, " secs\n"), collapse = ""), appendLF = TRUE)
+}
+invisible(ls_eTerm)
+}
 </pre>
 
 

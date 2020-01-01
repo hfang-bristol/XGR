@@ -1,44 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes given a list...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSNP2GeneScores"><tr><td>xSNP2GeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to identify likely modulated seed genes given a list of SNPs together with the significance level (e.g. GWAS reported p-values)</h2>
-
-<h3>Description</h3>
-
-<p><code>xSNP2GeneScores</code> is supposed to identify likely modulated seed
-genes from a list of SNPs together with the significance level
-(measured as p-values or fdr). To do so, it defines seed genes and
-their scores that take into account the distance to and the
-significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
-</p>
-
+<h2>xSNP2GeneScores</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSNP2GeneScores(
-data,
-include.LD = NA,
-LD.customised = NULL,
-LD.r2 = 0.8,
-significance.threshold = 5e-05,
-score.cap = 10,
-distance.max = 50000,
-decay.kernel = c("slow", "linear", "rapid", "constant"),
-decay.exponent = 2,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+xSNP2GeneScores(data, include.LD = NA, LD.customised = NULL, LD.r2 =
+0.8, significance.threshold = 5e-05, score.cap = 10, distance.max =
+50000, decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
+"dbSNP_Single"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
-"NPC"),
-scoring.scheme = c("max", "sum", "sequential"),
-verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+"NPC"), scoring.scheme = c("max", "sum", "sequential"), verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -47,210 +26,206 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a named input vector containing the sinificance level for
-nodes (dbSNP). For this named vector, the element names are dbSNP ID
-(or in the format such as 'chr16:28525386'), the element values for the
-significance level (measured as p-value or fdr). Alternatively, it can
-be a matrix or data frame with two columns: 1st column for dbSNP, 2nd
-column for the significance level</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>include.LD</code></td>
 <td>
-<p>additional SNPs in LD with Lead SNPs are also
-included. By default, it is 'NA' to disable this option. Otherwise, LD
-SNPs will be included based on one or more of 26 populations and 5
-super populations from 1000 Genomics Project data (phase 3). The
-population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
-&quot;EUR&quot;, &quot;SAS&quot;), or one of 26 populations (&quot;ACB&quot;, &quot;ASW&quot;, &quot;BEB&quot;, &quot;CDX&quot;,
-&quot;CEU&quot;, &quot;CHB&quot;, &quot;CHS&quot;, &quot;CLM&quot;, &quot;ESN&quot;, &quot;FIN&quot;, &quot;GBR&quot;, &quot;GIH&quot;, &quot;GWD&quot;, &quot;IBS&quot;,
-&quot;ITU&quot;, &quot;JPT&quot;, &quot;KHV&quot;, &quot;LWK&quot;, &quot;MSL&quot;, &quot;MXL&quot;, &quot;PEL&quot;, &quot;PJL&quot;, &quot;PUR&quot;, &quot;STU&quot;,
-&quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
-<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>LD.customised</code></td>
 <td>
-<p>a user-input matrix or data frame with 3 columns:
-1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2
-value. It is designed to allow the user analysing their precalcuated LD
-info. This customisation (if provided) has the high priority over
-built-in LD SNPs</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>LD.r2</code></td>
 <td>
-<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
-in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
-be any value from 0.8 to 1</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>significance.threshold</code></td>
 <td>
-<p>the given significance threshold. By
-default, it is set to NULL, meaning there is no constraint on the
-significance level when transforming the significance level of SNPs
-into scores. If given, those SNPs below this are considered significant
-and thus scored positively. Instead, those above this are considered
-insigificant and thus receive no score</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>score.cap</code></td>
 <td>
-<p>the maximum score being capped. By default, it is set
-to 10. If NULL, no capping is applied</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>
-<p>the maximum distance between genes and SNPs. Only
-those genes no far way from this distance will be considered as seed
-genes. This parameter will influence the distance-component weights
-calculated for nearby SNPs per gene</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>decay.kernel</code></td>
 <td>
-<p>a character specifying a decay kernel function. It
-can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay. If no distance weight is used, please select
-'constant'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>
-<p>a numeric specifying a decay exponent. By
-default, it sets to 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>GR.SNP</code></td>
 <td>
-<p>the genomic regions of SNPs. By default, it is
-'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
-SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
-Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
-(hg19). Alternatively, the user can specify the customised input. To do
-so, first save your RData file (containing an GR object) into your
-local computer, and make sure the GR object content names refer to
-dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;. Note: you can also load your customised GR object
-directly</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
-<p>the genomic regions of genes. By default, it is
-'UCSC_knownGene', that is, UCSC known genes (together with genomic
-locations) based on human genome assembly hg19. It can be
-'UCSC_knownCanonical', that is, UCSC known canonical genes (together
-with genomic locations) based on human genome assembly hg19.
-Alternatively, the user can specify the customised input. To do so,
-first save your RData file (containing an GR object) into your local
-computer, and make sure the GR object content names refer to Gene
-Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
-without extension), plus specify your file RData path in
-&quot;RData.location&quot;. Note: you can also load your customised GR object
-directly</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>include.TAD</code></td>
 <td>
-<p>TAD boundary regions are also included. By default,
-it is 'NA' to disable this option. Otherwise, inclusion of a TAD
-dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
-region will be kept). TAD datasets can be one of &quot;GM12878&quot;
-(lymphoblast), &quot;IMR90&quot; (fibroblast), &quot;MSC&quot; (mesenchymal stem cell)
-,&quot;TRO&quot; (trophoblasts-like cell), &quot;H1&quot; (embryonic stem cell), &quot;MES&quot;
-(mesendoderm) and &quot;NPC&quot; (neural progenitor cell). Explanations can be
-found at <a href="http://dx.doi.org/10.1016/j.celrep.2016.10.061">http://dx.doi.org/10.1016/j.celrep.2016.10.061</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>scoring.scheme</code></td>
 <td>
-<p>the method used to calculate seed gene scores
-under a set of SNPs. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for
-the maximum, and &quot;sequential&quot; for the sequential weighting. The
-sequential weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>,
-where <i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;mSeed&quot;, a list with following components:
-</p>
-
-<ul>
-<li><p><code>SNP</code>: a matrix of nSNP X 4 containing SNP information,
-where nSNP is the number of SNPs, and the 3 columns are &quot;SNP&quot; (Lead
-and/or LD SNPs), &quot;Score&quot; (the scores for SNPs calculated based on
-p-values taking into account the given threshold of the significant
-level), &quot;Pval&quot; (the input p-values for Lead SNPs or R2-adjusted
-p-values for LD SNPs), &quot;Flag&quot; (indicating as Lead or LD SNPs)
-</p>
-</li>
-<li><p><code>Gene</code>: a matrix of nGene X 3 containing Gene information,
-where nGene is the number of seed genes, and the 3 columns are &quot;Gene&quot;
-(gene symbol), &quot;Score&quot; (the scores for seed genes), &quot;Pval&quot; (pvalue-like
-significance level transformed from gene scores)
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>This function uses <code>xSNPscores</code> and
-<code>xSNP2nGenes</code> to define and score nearby genes that are
-located within distance window of input and/or LD SNPs.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xSNPscores</code>, <code>xSNP2nGenes</code>,
-<code>xSparseMatrix</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-
-## Not run: 
-# a) provide the seed SNPs with the significance info
-## load ImmunoBase
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-gr &lt;- ImmunoBase$AS$variant
-data &lt;- GenomicRanges::mcols(gr)[,c(1,3)]
-
-# b) define and score seed geens
-mSeed &lt;- xSNP2GeneScores(data=data, include.TAD="GM12878",
-RData.location=RData.location)
-
-# c) extract SNP info
-head(mSeed$SNP)
-
-# d) extract gene info
-head(mSeed$Gene)
-
-## End(Not run)
+## The function is currently defined as
+function (data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
+significance.threshold = 5e-05, score.cap = 10, distance.max = 50000,
+decay.kernel = c("slow", "linear", "rapid", "constant"),
+decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
+"dbSNP_Single"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO",
+"H1", "MES", "NPC"), scoring.scheme = c("max", "sum",
+"sequential"), verbose = T, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+decay.kernel &lt;- match.arg(decay.kernel)
+include.TAD &lt;- match.arg(include.TAD)
+scoring.scheme &lt;- match.arg(scoring.scheme)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xSNPscores' is being called to score SNPs (%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+df_SNP &lt;- xSNPscores(data = data, include.LD = include.LD,
+LD.customised = LD.customised, LD.r2 = LD.r2, significance.threshold =
+significance.threshold,
+score.cap = score.cap, verbose = verbose, RData.location =
+RData.location,
+guid = guid)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xSNPscores' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\n#######################################################",
+appendLF = T))
+message(sprintf("'xSNP2nGenes' is being called to define nearby genes
+(%s):",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################",
+appendLF = T))
+}
+df_nGenes &lt;- xSNP2nGenes(data = df_SNP$SNP, distance.max =
+distance.max,
+decay.kernel = decay.kernel, decay.exponent = decay.exponent,
+GR.SNP = GR.SNP, GR.Gene = GR.Gene, include.TAD = include.TAD,
+verbose = verbose, RData.location = RData.location, guid = guid)
+if (include.TAD != "none") {
+TAD &lt;- NULL
+df_nGenes &lt;- base::subset(df_nGenes, TAD != "Excluded")
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("#######################################################",
+appendLF = T))
+message(sprintf("'xSNP2nGenes' has been finished (%s)!",
+as.character(now)), appendLF = T)
+message(sprintf("#######################################################\n",
+appendLF = T))
+}
+allGenes &lt;- sort(df_nGenes$Gene)
+allSNPs &lt;- sort(df_SNP$SNP)
+G2S_n &lt;- xSparseMatrix(df_nGenes[, c("Gene", "SNP", "Weight")],
+rows = allGenes, columns = allSNPs, verbose = verbose)
+G2S &lt;- G2S_n
+ind &lt;- match(colnames(G2S), df_SNP$SNP)
+df_SNP &lt;- df_SNP[ind, ]
+SNP_score &lt;- df_SNP$Score
+names(SNP_score) &lt;- colnames(G2S)
+mat_SNP_score &lt;- matrix(rep(SNP_score, each = nrow(G2S)),
+nrow = nrow(G2S))
+G2S_score &lt;- G2S * mat_SNP_score
+Gene2SNP &lt;- xSM2DF(data = G2S_score, verbose = FALSE)
+colnames(Gene2SNP) &lt;- c("Gene", "SNP", "Score")
+ls_gene &lt;- split(x = Gene2SNP$Score, f = Gene2SNP$Gene)
+if (scoring.scheme == "max") {
+seeds.genes &lt;- sapply(ls_gene, max)
+}
+else if (scoring.scheme == "sum") {
+seeds.genes &lt;- sapply(ls_gene, sum)
+}
+else if (scoring.scheme == "sequential") {
+seeds.genes &lt;- sapply(ls_gene, function(x) {
+base::sum(x/base::rank(-x, ties.method = "min"))
+})
+}
+x &lt;- seeds.genes
+pval &lt;- 10^(-1 * x)
+df_Gene &lt;- data.frame(Gene = names(seeds.genes), Score = seeds.genes,
+Pval = pval, row.names = NULL, stringsAsFactors = F)
+df_Gene &lt;- df_Gene[order(df_Gene$Score, decreasing = TRUE),
+]
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("In summary, %d Genes are defined as seeds and scored
+using '%s' scoring scheme",
+length(seeds.genes), scoring.scheme, as.character(now)),
+appendLF = T)
+}
+df_SNP &lt;- df_SNP[order(df_SNP$Flag, df_SNP$Score, -df_SNP$Pval,
+df_SNP$SNP, decreasing = TRUE), ]
+mSeed &lt;- list(SNP = df_SNP, Gene = df_Gene, Call = match.call())
+class(mSeed) &lt;- "mSeed"
+invisible(mSeed)
+}
 </pre>
 
 

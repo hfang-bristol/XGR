@@ -1,52 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a pathway upon query</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGraphML2AA"><tr><td>xGraphML2AA</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to generate a graphml file from a pathway upon query</h2>
-
-<h3>Description</h3>
-
-<p><code>xGraphML2AA</code> is supposed to generate a graphml file from a
-pathway upon query. If data is provided, pathway gene members are
-color-coded.
-</p>
-
+<h2>xGraphML2AA</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xGraphML2AA(
-data = NULL,
-org = c("human", "mouse"),
-query = "AA:hsa04672",
-curation = c("manual", "automatic", "any"),
-node.label = "label",
-node.color = "lfc",
-colormap = "deepskyblue-lightyellow-darkorange",
-ncolors = 64,
-nlegend = 9,
-zlim = NULL,
-legend.title = "",
-title.thispath = NULL,
-node.tooltip = "tooltip",
-node.highlight = "fdr",
-node.highlight.cutoff = 0.05,
-edge.color = "#00000033",
-edge.width = 1,
-color.gene = "#dddddd",
-color.thispath = "#dddddd",
-color.otherpath = "#eeeeee",
-size.gene = 10,
-size.gene.found = 11,
-size.gene.highlight = 12,
-filename = "xGraphML2AA",
-verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+xGraphML2AA(data = NULL, org = c("human", "mouse"), query =
+"AA:hsa04672", curation = c("manual", "automatic", "any"), node.label =
+"label", node.color = "lfc", colormap =
+"deepskyblue-lightyellow-darkorange", ncolors = 64, nlegend = 9, zlim =
+NULL, legend.title = "", title.thispath = NULL, node.tooltip =
+"tooltip", node.highlight = "fdr", node.highlight.cutoff = 0.05,
+edge.color = "#00000033", edge.width = 1, color.gene = "#dddddd",
+color.thispath = "#dddddd", color.otherpath = "#eeeeee", size.gene =
+10, size.gene.found = 11, size.gene.highlight = 12, filename =
+"xGraphML2AA", verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -55,223 +29,676 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data frame</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>org</code></td>
 <td>
-<p>a character specifying an organism. Currently supported
-organisms are 'human' and 'mouse'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>query</code></td>
 <td>
-<p>the identity of a pathway in query. The full list of
-pathways can be found at
-<a href="http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=hsa">http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=hsa</a>
-for human and at
-<a href="http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=mmu">http://www.genome.jp/kegg-bin/show_organism?menu_type=pathway_maps&amp;org=mmu</a>
-for mouse. For example, 'AA:hsa04672' for 'NOD-like receptor signaling
-pathway', where the prefix 'AA:' can be ignored. Alternatively, it can
-be key words describing the pathway</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>curation</code></td>
 <td>
-<p>the type of curation. It can be one of &quot;manual&quot; (the
-manual one 'AA' followed by the semi-manual one 'AT'), &quot;automatic&quot;
-(only the automatic one) or &quot;any&quot; (first the manual one then the
-automatic one)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label</code></td>
 <td>
-<p>a character specifying which column used for node
-labelling. By default, it is 'label'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
-<p>a character specifying which column used for node
-coloring. By default, it is 'lfc'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
-default color palette). Alternatively, any hyphen-separated HTML color
-names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nlegend</code></td>
 <td>
-<p>the number of colors specified in the legend. By
-default, it is 11</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z/patttern values for which colors
-should be plotted, defaulting to the range of the finite values of z.
-Each of the given colors will be used to color an equispaced interval
-of this range. The midpoints of the intervals cover the range, so that
-values just outside the range will be plotted</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.title</code></td>
 <td>
-<p>the legend title. By default, it is &rdquo;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>title.thispath</code></td>
 <td>
-<p>the appended title for this pathway. By default,
-it is NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.tooltip</code></td>
 <td>
-<p>a character specifying which column used for node
-tooltip. By default, it is 'tooltip'. If not found, it will be
-'Symbol-Name-Color'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.highlight</code></td>
 <td>
-<p>a character specifying which column used for node
-highlighting. By default, it is 'fdr'. If so, those highlighted will
-have bold and larger labels</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.highlight.cutoff</code></td>
 <td>
-<p>a numeric specifying the cutoff for node
-highlighting. By default, it is 0.05 meaninght those less than this
-cutoff will be highlighted</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-<p>a character specifying the edge colors. By default,
-it is '#00000033'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.width</code></td>
 <td>
-<p>the edge width. By default, it is 1</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>color.gene</code></td>
 <td>
-<p>a character specifying the gene node colors. By
-default, it is '#dddddd'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>color.thispath</code></td>
 <td>
-<p>a character specifying the color for this pathway
-node. By default, it is '#dddddd'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>color.otherpath</code></td>
 <td>
-<p>a character specifying the color for other
-pathway nodes. By default, it is '#eeeeee'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.gene</code></td>
 <td>
-<p>an integer character specifying the gene label
-fontsize. By default, it is 10</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.gene.found</code></td>
 <td>
-<p>an integer character specifying the label
-fontsize for genes found/matched. By default, it is 11</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.gene.highlight</code></td>
 <td>
-<p>an integer character specifying the label
-fontsize for genes highlighted. By default, it is 12</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
-<p>the without-extension part of the name of the output
-file. By default, it is 'xGraphML2AA'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>invisible (a string storing graphml-formatted content). If the filename
-is not NULL, a graphml-formatted file is also output.
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGraphML2AA</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## Not run: 
-data(Haploid_regulators)
-## IRF1 regulators
-data &lt;- subset(Haploid_regulators, Phenotype=='IRF1')
-
-xGraphML2AA(query="AA:hsa04630", RData.location=RData.location,
-color.gene='#dde8f1',size.gene=11)
-
-## load GWAS genes
-GWAS_Gene &lt;- xRDataLoader(RData.customised='GWAS_Gene',
-RData.location=RData.location)
-data &lt;- GWAS_Gene %&gt;% filter(Odds_Ratio!='NULL',Disease_ID=='RA')
-%&gt;%
-transmute(label=Symbol,lfc=log2(as.numeric(Odds_Ratio)),fdr=Pvalue)
-%&gt;% group_by(label) %&gt;% summarise(lfc=max(lfc),fdr=min(fdr))
-
-## manual one (the same as curation='any')
-xGraphML2AA(data, query="AA:hsa04630", curation='manual',
-node.label="label", node.color="lfc", node.highlight='fdr',
-node.highlight.cutoff=5e-8, filename='xGraphML2AA',
-legend.title='log2(Odds ratio)', zlim=c(-1,1),
-RData.location=RData.location)
-## automatic one
-xGraphML2AA(data, query="AA:hsa04630", curation='automatic',
-node.label="label", node.color="lfc", node.highlight='fdr',
-node.highlight.cutoff=5e-8, filename='xGraphML2AA',
-legend.title='log2(Odds ratio)', zlim=c(-1,1),
-RData.location=RData.location)
-
-## key words 
-xGraphML2AA(data, query="Asthma", curation='any', node.label="label",
-node.color="lfc", node.highlight='fdr', node.highlight.cutoff=5e-8,
-filename='xGraphML2AA', RData.location=RData.location,
-legend.title='log2(Odds ratio)', zlim=c(-1,1))
-
-## End(Not run)
+## The function is currently defined as
+function (data = NULL, org = c("human", "mouse"), query =
+"AA:hsa04672",
+curation = c("manual", "automatic", "any"), node.label = "label",
+node.color = "lfc", colormap = "deepskyblue-lightyellow-darkorange",
+ncolors = 64, nlegend = 9, zlim = NULL, legend.title = "",
+title.thispath = NULL, node.tooltip = "tooltip", node.highlight =
+"fdr",
+node.highlight.cutoff = 0.05, edge.color = "#00000033", edge.width = 1,
+color.gene = "#dddddd", color.thispath = "#dddddd", color.otherpath =
+"#eeeeee",
+size.gene = 10, size.gene.found = 11, size.gene.highlight = 12,
+filename = "xGraphML2AA", verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+startT &lt;- Sys.time()
+if (verbose) {
+message(paste(c("Start at ", as.character(startT)), collapse = ""),
+appendLF = TRUE)
+message("", appendLF = TRUE)
+}
+curation &lt;- match.arg(curation)
+if (any(class(data) %in% c("tbl_df", "tbl"))) {
+data &lt;- as.data.frame(data)
+}
+if (all(c(node.label, node.color) %in% colnames(data))) {
+df &lt;- data.frame(Symbol = data[, node.label], LFC = signif(data[,
+node.color], digits = 2), stringsAsFactors = FALSE)
+}
+else {
+df &lt;- data.frame(Symbol = NA, LFC = 0, stringsAsFactors = FALSE)
+data &lt;- df
+}
+df$FDR &lt;- rep(1, nrow(df))
+if (!is.null(node.highlight)) {
+if (node.highlight %in% colnames(data)) {
+df$FDR &lt;- signif(data[, node.highlight], digits = 2)
+}
+}
+df &lt;- df[!is.na(as.numeric(df$LFC)), ]
+df &lt;- df[!is.na(as.numeric(df$FDR)), ]
+df_res &lt;- xSymbol2GeneID(df$Symbol, org = org, details = TRUE,
+verbose = verbose, RData.location = RData.location, guid = guid)
+df$GeneID &lt;- df_res$GeneID
+df$description &lt;- df_res$description
+if (node.highlight %in% colnames(data)) {
+df$tooltip &lt;- paste0("Symbol: ", df$Symbol, "\nName: ",
+df$description, "\nColor: ", df$LFC, "\nHightlight: ",
+df$FDR)
+}
+else {
+df$tooltip &lt;- paste0("Symbol: ", df$Symbol, "\nName: ",
+df$description, "\nColor: ", df$LFC)
+}
+if (!is.null(node.tooltip)) {
+if (node.tooltip %in% colnames(data)) {
+df$tooltip &lt;- data[, node.tooltip]
+}
+}
+df_legends &lt;- NULL
+if (!is.null(node.color)) {
+ind &lt;- match(node.color, colnames(data))
+if (!is.na(ind)) {
+pattern &lt;- as.numeric(df$LFC)
+pattern_nona &lt;- pattern[!is.na(pattern)]
+pattern_nona &lt;- as.numeric(pattern_nona)
+if (is.null(zlim)) {
+vmin &lt;- floor(stats::quantile(pattern_nona, 0.05))
+vmax &lt;- ceiling(stats::quantile(pattern_nona,
+0.95))
+if (vmin &lt; 0 &amp; vmax &gt; 0) {
+vsym &lt;- abs(min(vmin, vmax))
+vmin &lt;- -1 * vsym
+vmax &lt;- vsym
+}
+zlim &lt;- c(vmin, vmax)
+}
+vec2color &lt;- function(vec, colormap = colormap, ncolors = ncolors,
+zlim = zlim) {
+palette.name &lt;- xColormap(colormap = colormap)
+colors &lt;- palette.name(ncolors)
+if (max(zlim) != min(zlim)) {
+scale &lt;- length(colors)/(max(zlim) - min(zlim))
+sapply(1:length(vec), function(x) {
+if (is.na(vec[x])) {
+"transparent"
+}
+else {
+ind &lt;- floor(1 + (vec[x] - min(zlim)) *
+scale)
+colors[max(1, min(ncolors, ind))]
+}
+})
+}
+else {
+colors[rep(ncolors, length(vec))]
+}
+}
+node.color &lt;- vec2color(pattern, colormap = colormap,
+ncolors = ncolors, zlim = zlim)
+if (length(unique(node.color)) &gt; 1) {
+colors &lt;- xColormap(colormap = colormap)(ncolors)
+legend_colors &lt;- colors[round(seq(1, ncolors,
+length.out = nlegend))]
+df_legends &lt;- data.frame(name = paste0("Legend",
+(nlegend - 1):0), colors = legend_colors, labels =
+signif(seq(min(zlim),
+max(zlim), length.out = nlegend), digits = 2),
+stringsAsFactors = FALSE)
+}
+}
+else {
+node.color &lt;- rep("#BFFFBF", nrow(data))
+}
+}
+else {
+node.color &lt;- rep("#BFFFBF", nrow(data))
+}
+df$node.color &lt;- node.color
+manual_ind &lt;- NULL
+manual_ind_at &lt;- NULL
+if (curation %in% c("any", "manual")) {
+AA.template &lt;- xRDataLoader("AA.template", verbose = verbose,
+RData.location = RData.location, guid = guid)
+info &lt;- AA.template$info
+path &lt;- gsub("^AA:", "", info$id)
+query &lt;- gsub("^AA:", "", query)
+query &lt;- gsub("^path:", "", query)
+manual_ind &lt;- match(query, path)
+if (is.na(manual_ind)) {
+manual_ind &lt;- grep(query, info$name)
+if (length(manual_ind) &gt; 1) {
+warning(sprintf("Manual curation: %d found for queried %s: only 1st
+kept",
+length(manual_ind), query), appendLF = TRUE)
+manual_ind &lt;- manual_ind[1]
+}
+else if (length(manual_ind) == 0) {
+warning(sprintf("Manual curation: no found for queried '%s'",
+query), appendLF = TRUE)
+AT.path &lt;- xRDataLoader("AT.path", verbose = verbose,
+RData.location = RData.location, guid = guid)
+info &lt;- AT.path$info
+path &lt;- gsub("^AT:", "", info$id)
+query &lt;- gsub("^AT:", "", query)
+query &lt;- gsub("^path:", "", query)
+manual_ind_at &lt;- match(query, path)
+if (is.na(manual_ind_at)) {
+manual_ind_at &lt;- grep(query, info$name)
+if (length(manual_ind_at) &gt; 1) {
+warning(sprintf("Automatic curation: %d found for queried %s: only
+1st kept",
+length(manual_ind_at), query), appendLF = TRUE)
+manual_ind_at &lt;- manual_ind_at[1]
+}
+else if (length(manual_ind_at) == 0) {
+warning(sprintf("Automatic curation: no found for queried '%s'",
+query), appendLF = TRUE)
+if (curation == "manual") {
+return(NULL)
+}
+}
+}
+}
+}
+}
+if (length(manual_ind) != 0 | length(manual_ind_at) != 0) {
+if (length(manual_ind) != 0) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Manual curation: visualising '%s: %s' (%s) ...",
+AA.template$info$id[manual_ind], AA.template$info$name[manual_ind],
+as.character(now)), appendLF = TRUE)
+}
+detail &lt;- AA.template$detail[[manual_ind]]
+df_nodes &lt;- detail$nodes
+df_edges &lt;- detail$edges
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Automatic curation: visualising '%s: %s' (%s) ...",
+AT.path$info$id[manual_ind_at], AT.path$info$name[manual_ind_at],
+as.character(now)), appendLF = TRUE)
+}
+detail &lt;- AT.path$detail[[manual_ind_at]]
+df_nodes &lt;- detail$nodes
+df_nodes$node_id &lt;- gsub("::.*", "", df_nodes$node_id)
+df_edges &lt;- detail$edges
+df_edges$source &lt;- gsub("::.*", "", df_edges$source)
+df_edges$target &lt;- gsub("::.*", "", df_edges$target)
+}
+if (org[1] == "mouse") {
+Human2Mouse &lt;- xRDataLoader("Human2Mouse", RData.location =
+RData.location,
+guid = guid)
+ind &lt;- match(df_nodes$name, Human2Mouse$Human)
+df_nodes$name[!is.na(ind)] &lt;- Human2Mouse$Mouse[ind[!is.na(ind)]]
+}
+output.head &lt;- "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"
+standalone=\"no\"?&gt;\n\t&lt;graphml
+xmlns=\"http://graphml.graphdrawing.org/xmlns\"
+xmlns:java=\"http://www.yworks.com/xml/yfiles-common/1.0/java\"
+xmlns:sys=\"http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0\"
+xmlns:x=\"http://www.yworks.com/xml/yfiles-common/markup/2.0\"
+xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+xmlns:y=\"http://www.yworks.com/xml/graphml\"
+xmlns:yed=\"http://www.yworks.com/xml/yed/3\"
+xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns
+http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd\"&gt;\n\t
+&lt;!--Created by yEd 3.17--&gt;\n\t &lt;key for=\"node\" id=\"d1\"
+attr.name=\"url\" attr.type=\"string\"/&gt;\n\t &lt;key for=\"node\"
+id=\"d2\" attr.name=\"description\" attr.type=\"string\"/&gt;\n\t &lt;key
+for=\"node\" id=\"d3\" yfiles.type=\"nodegraphics\"/&gt;\n\t &lt;key
+for=\"edge\" id=\"d4\" attr.name=\"description\"
+attr.type=\"string\"/&gt;\n\t &lt;key for=\"edge\" id=\"d5\"
+yfiles.type=\"edgegraphics\"/&gt;\n\t &lt;key for=\"graphml\" id=\"d6\"
+yfiles.type=\"resources\"/&gt;\n\t &lt;graph edgedefault=\"directed\"
+id=\"G\"&gt;"
+n_total &lt;- 0
+n_matched &lt;- 0
+for (i in 1:nrow(df_nodes)) {
+if (grepl("Legend", df_nodes$name[i])) {
+if (is.null(df_legends)) {
+next
+}
+}
+ind_found &lt;- match(df_nodes$name[i], df$Symbol)
+ind_legend &lt;- match(df_nodes$name[i], df_legends$name)
+flag_gene &lt;- grepl("#BFFFBF", df_nodes$fill[i])
+flag_thispath &lt;- grepl("#00FF00", df_nodes$fill[i])
+flag_otherpath &lt;- grepl("#C0C0C0", df_nodes$fill[i])
+if (flag_gene &amp; is.na(ind_legend)) {
+n_total &lt;- n_total + 1
+if (!is.na(ind_found)) {
+n_matched &lt;- n_matched + 1
+}
+}
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\t %d genes in total and %d genes matched (%s)",
+n_total, n_matched, as.character(now)), appendLF = TRUE)
+}
+ls_nodes &lt;- lapply(1:nrow(df_nodes), function(i) {
+if (grepl("Legend", df_nodes$name[i])) {
+if (is.null(df_legends)) {
+return(NULL)
+}
+}
+ind_found &lt;- match(df_nodes$name[i], df$Symbol)
+ind_legend &lt;- match(df_nodes$name[i], df_legends$name)
+flag_gene &lt;- grepl("#BFFFBF", df_nodes$fill[i])
+flag_thispath &lt;- grepl("#00FF00", df_nodes$fill[i])
+flag_otherpath &lt;- grepl("#C0C0C0", df_nodes$fill[i])
+k &lt;- 0
+vec &lt;- vector()
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;node id=\"", df_nodes$node_id[i],
+"\"&gt;")
+if (!is.na(ind_found)) {
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d1\"&gt;&lt;![CDATA[",
+"https://www.ncbi.nlm.nih.gov/gene/", df$GeneID[ind_found],
+"]]&gt;&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d2\"&gt;&lt;![CDATA[",
+df$tooltip[ind_found], "]]&gt;&lt;/data&gt;")
+}
+else {
+if (!is.na(ind_legend)) {
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d2\"&gt;&lt;![CDATA[",
+df_legends$labels[ind_legend], "]]&gt;&lt;/data&gt;")
+}
+else {
+if (grepl("Legend", df_nodes$name[i])) {
+return(NULL)
+}
+else if (flag_gene) {
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d1\"&gt;&lt;![CDATA[",
+"http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+df_nodes$name[i], "]]&gt;&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d2\"&gt;&lt;![CDATA[",
+df_nodes$name[i], "]]&gt;&lt;/data&gt;")
+}
+}
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d3\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Geometry ", df_nodes$geometry[i],
+"/&gt;")
+fill &lt;- df_nodes$fill[i]
+if (!is.na(ind_found)) {
+fill &lt;- gsub("#BFFFBF", df$node.color[ind_found],
+fill)
+}
+else {
+if (!is.na(ind_legend)) {
+fill &lt;- gsub("#BFFFBF", df_legends$colors[ind_legend],
+fill)
+}
+else {
+fill &lt;- gsub("#BFFFBF", color.gene, fill)
+fill &lt;- gsub("#00FF00", color.thispath, fill)
+fill &lt;- gsub("#C0C0C0", color.otherpath, fill)
+}
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Fill ", fill, "/&gt;")
+borderstyle &lt;- df_nodes$borderstyle[i]
+if (!is.na(ind_legend)) {
+borderstyle &lt;- gsub("color=\"#\w+\"", "color=\"#cccccc\"",
+borderstyle)
+borderstyle &lt;- gsub("width=\".*\"", "width=\"0.8\"",
+borderstyle)
+}
+if (!is.na(ind_found)) {
+borderstyle &lt;- gsub("color=\"#\w+\"", "color=\"#ffffff00\"",
+borderstyle)
+borderstyle &lt;- gsub("width=\".*\"", "width=\"0\"",
+borderstyle)
+}
+else if (flag_gene) {
+borderstyle &lt;- gsub("color=\"#\w+\"", "color=\"#ffffff00\"",
+borderstyle)
+borderstyle &lt;- gsub("width=\".*\"", "width=\"0\"",
+borderstyle)
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:BorderStyle ", borderstyle,
+"/&gt;")
+nodelabel &lt;- df_nodes$nodelabel[i]
+nodelabel &lt;- gsub("fontFamily=\"\w+\"", "fontFamily=\"Arial\"",
+nodelabel)
+if (!is.na(ind_found)) {
+if (df$FDR[ind_found] &lt; node.highlight.cutoff) {
+nodelabel &lt;- gsub("fontStyle=\"\w+\"", "fontStyle=\"bolditalic\"",
+nodelabel)
+tmp &lt;- paste0("fontSize=\"", size.gene.highlight,
+"\"")
+nodelabel &lt;- gsub("fontSize=\"\w+\"", tmp,
+nodelabel)
+}
+else {
+nodelabel &lt;- gsub("fontStyle=\"\w+\"", "fontStyle=\"italic\"",
+nodelabel)
+tmp &lt;- paste0("fontSize=\"", size.gene.found,
+"\"")
+nodelabel &lt;- gsub("fontSize=\"\w+\"", tmp,
+nodelabel)
+}
+}
+else if (flag_gene &amp; is.na(ind_legend)) {
+nodelabel &lt;- gsub("fontStyle=\"\w+\"", "fontStyle=\"italic\"",
+nodelabel)
+tmp &lt;- paste0("fontSize=\"", size.gene, "\"")
+nodelabel &lt;- gsub("fontSize=\"\w+\"", tmp, nodelabel)
+}
+name_display &lt;- df_nodes$name[i]
+name_display &lt;- gsub("@@", "\n", name_display)
+if (flag_thispath) {
+if (!is.null(title.thispath)) {
+name_display &lt;- paste0(name_display, " ", title.thispath)
+}
+else {
+name_display &lt;- paste0(name_display, " (AA)")
+}
+}
+if (!is.na(ind_legend)) {
+name_display &lt;- df_legends$labels[ind_legend]
+}
+else {
+if (name_display %in% c("Pi rating", "5-star\nrating")) {
+name_display &lt;- legend.title
+nodelabel &lt;- gsub("modelPosition=\"\w+\"",
+"modelPosition=\"t\"", nodelabel)
+}
+}
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:NodeLabel ", nodelabel, "&gt;",
+name_display, "&lt;/y:NodeLabel&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Shape ", df_nodes$shape[i],
+"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/y:ShapeNode&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/node&gt;")
+paste(vec, collapse = "\n")
+})
+vec_nodes &lt;- unlist(ls_nodes)
+output.nodes &lt;- paste(vec_nodes, collapse = "\n")
+ls_edges &lt;- lapply(1:nrow(df_edges), function(i) {
+k &lt;- 0
+vec &lt;- vector()
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;edge id=\"", df_edges$edge_id[i],
+"\" source=\"", df_edges$source[i], "\" target=\"",
+df_edges$target[i], "\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;data key=\"d5\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:GenericEdge configuration=\"DEFAULT\"&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Path ", df_edges$path[i], "/&gt;")
+linestyle &lt;- df_edges$linestyle[i]
+linestyle &lt;- gsub("#000000", "#888888", linestyle)
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:LineStyle ", linestyle, "/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;y:Arrows ", df_edges$arrows[i],
+"/&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/y:GenericEdge&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/data&gt;")
+k &lt;- k + 1
+vec[k] &lt;- paste0("&lt;/edge&gt;")
+paste(vec, collapse = "\n")
+})
+vec_edges &lt;- unlist(ls_edges)
+output.edges &lt;- paste(vec_edges, collapse = "\n")
+output.tail &lt;- "&lt;/graph&gt;\n\t &lt;data key=\"d6\"&gt;\n\t\t&lt;y:Resources/&gt;\n\t
+&lt;/data&gt;\n\t&lt;/graphml&gt;"
+output &lt;- paste0(output.head, "\n", output.nodes, "\n",
+output.edges, "\n", output.tail, "\n")
+if (!is.null(filename)) {
+filename &lt;- gsub(".graphml$", "", filename)
+outputfile &lt;- paste0(filename, ".graphml")
+fileConn &lt;- base::file(outputfile)
+base::writeLines(output, fileConn)
+base::close(fileConn)
+if (verbose) {
+message(sprintf("Congratulations! A file '%s' (in the directory %s)
+has been created!",
+outputfile, getwd()), appendLF = T)
+}
+}
+}
+else if (curation %in% c("automatic", "any")) {
+ls_ig &lt;- xRDataLoader("ig.KEGG.list", verbose = verbose,
+RData.location = RData.location, guid = guid)
+kegg &lt;- gsub("^path:", "", sapply(ls_ig, function(x) x$path))
+query &lt;- gsub("^AA:", "", query)
+query &lt;- gsub("^AT:", "", query)
+query &lt;- gsub("^path:", "", query)
+automatic_ind &lt;- match(query, kegg)
+if (is.na(automatic_ind)) {
+automatic_ind &lt;- grep(query, names(kegg))
+if (length(automatic_ind) == 0) {
+warning(sprintf("Automated: no found for queried '%s'",
+query), appendLF = TRUE)
+return(NULL)
+}
+else if (length(automatic_ind) &gt; 1) {
+warning(sprintf("Automated: %d found for queried %s: only 1st kept",
+length(automatic_ind), query), appendLF = TRUE)
+automatic_ind &lt;- automatic_ind[1]
+}
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Automated: visualising '%s: %s' (%s) ...",
+kegg[automatic_ind], names(kegg[automatic_ind]),
+as.character(now)), appendLF = TRUE)
+}
+ig &lt;- ls_ig[[automatic_ind]]
+if (0) {
+ind &lt;- match(V(ig)$name, df$Symbol)
+nodes_query &lt;- V(ig)$name[!is.na(ind)]
+order &lt;- vcount(ig)
+order &lt;- 2
+neighs.out &lt;- igraph::neighborhood(ig, order = 2,
+nodes = nodes_query, mode = "in")
+neighbors &lt;- unique(names(unlist(neighs.out)))
+subg &lt;- dnet::dNetInduce(ig, nodes_query = neighbors,
+knn = 0, remove.loops = TRUE, largest.comp = FALSE)
+}
+else {
+subg &lt;- ig
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\t %d genes and %d edges (%s)",
+vcount(subg), ecount(subg), as.character(now)),
+appendLF = TRUE)
+}
+glayout &lt;- igraph::layout_with_kk(subg)
+V(subg)$xcoord &lt;- glayout[, 1]
+V(subg)$ycoord &lt;- glayout[, 2]
+ind &lt;- match(V(subg)$name, df$Symbol)
+V(subg)$LFC &lt;- df$LFC[ind]
+V(subg)$tooltip &lt;- df$tooltip[ind]
+V(subg)$tooltip[is.na(V(subg)$tooltip)] &lt;-
+V(subg)$description[is.na(V(subg)$tooltip)]
+V(subg)$FDR &lt;- df$FDR[ind]
+V(subg)$node.size &lt;- ifelse(V(subg)$FDR &lt; node.highlight.cutoff &amp;
+!is.na(V(subg)$FDR), 25, 15)
+output &lt;- xGraphML(g = subg, node.label = "name", node.label.size = 10,
+node.tooltip = "tooltip", node.xcoord = "xcoord",
+node.ycoord = "ycoord", node.color.na = color.gene,
+node.color = "LFC", node.link =
+"http://www.genecards.org/cgi-bin/carddisp.pl?gene=",
+nlegend = nlegend, node.size = "node.size", node.coord.scale = 300,
+zlim = zlim, colormap = colormap, filename = filename)
+}
+endT &lt;- Sys.time()
+runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
+%H:%M:%S"),
+strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
+if (verbose) {
+message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
+appendLF = TRUE)
+message(paste(c("Runtime in total is: ", runTime, " secs\n"),
+collapse = ""), appendLF = TRUE)
+}
+invisible(output)
+}
 </pre>
 
 

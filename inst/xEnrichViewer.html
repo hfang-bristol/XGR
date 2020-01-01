@@ -1,30 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to view enrichment results</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichViewer"><tr><td>xEnrichViewer</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to view enrichment results</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichViewer</code> is supposed to view results of enrichment
-analysis.
-</p>
-
+<h2>xEnrichViewer</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichViewer(
-eTerm,
-top_num = 10,
-sortBy = c("adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "or", "none"),
-decreasing = NULL,
-details = F
-)
+xEnrichViewer(eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
+"zscore", "fc", "nAnno", "nOverlap", "or", "none"), decreasing = NULL,
+details = F)
 </pre>
 
 
@@ -33,112 +21,152 @@ details = F
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to
-'sortBy' below) will be viewed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>sortBy</code></td>
 <td>
-<p>which statistics will be used for sorting and viewing
-gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
-(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
-enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
-&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
-&quot;none&quot; for ordering according to ID of terms</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>decreasing</code></td>
 <td>
-<p>logical to indicate whether to sort in a decreasing
-order. If it is null, it would be true for &quot;zscore&quot;, &quot;nAnno&quot; or
-&quot;nOverlap&quot;; otherwise it would be false</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>details</code></td>
 <td>
-<p>logical to indicate whether the detailed information of
-gene sets (terms) is also viewed. By default, it sets to false for no
-inclusion</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame with following components:
-</p>
-
-<ul>
-<li><p><code>id</code>: term ID; as rownames
-</p>
-</li>
-<li><p><code>name</code>: term name
-</p>
-</li>
-<li><p><code>nAnno</code>: number in members annotated by a term
-</p>
-</li>
-<li><p><code>nOverlap</code>: number in overlaps
-</p>
-</li>
-<li><p><code>fc</code>: enrichment fold changes
-</p>
-</li>
-<li><p><code>zscore</code>: enrichment z-score
-</p>
-</li>
-<li><p><code>pvalue</code>: nominal p value
-</p>
-</li>
-<li><p><code>adjp</code>: adjusted p value (FDR)
-</p>
-</li>
-<li><p><code>or</code>: a vector containing odds ratio
-</p>
-</li>
-<li><p><code>CIl</code>: a vector containing lower bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>CIu</code>: a vector containing upper bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>distance</code>: term distance or other information; optional, it
-is only appended when &quot;details&quot; is true
-</p>
-</li>
-<li><p><code>members_Overlap</code>: members (represented as Gene Symbols) in
-overlaps; optional, it is only appended when &quot;details&quot; is true
-</p>
-</li>
-<li><p><code>members_Anno</code>: members (represented as Gene Symbols) in
-annotations; optional, it is only appended when &quot;details&quot; is true
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-xEnrichViewer(eTerm)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
+## The function is currently defined as
+function (eTerm, top_num = 10, sortBy = c("adjp", "fdr", "pvalue",
+"zscore", "fc", "nAnno", "nOverlap", "or", "none"), decreasing = NULL,
+details = F)
+{
+sortBy &lt;- match.arg(sortBy)
+if (sortBy == "fdr") {
+sortBy &lt;- "adjp"
+}
+if (is.null(eTerm)) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+return(NULL)
+}
+if (class(eTerm) == "data.frame") {
+warnings("The function apply to a 'data.frame' object.\n")
+if (is.null(top_num)) {
+top_num &lt;- nrow(eTerm)
+}
+if (top_num &gt; nrow(eTerm)) {
+top_num &lt;- nrow(eTerm)
+}
+top_num &lt;- as.integer(top_num)
+tab &lt;- eTerm
+}
+else if (class(eTerm) == "eTerm") {
+if (is.null(top_num)) {
+top_num &lt;- length(eTerm$term_info$id)
+}
+if (top_num &gt; length(eTerm$term_info$id)) {
+top_num &lt;- length(eTerm$term_info$id)
+}
+top_num &lt;- as.integer(top_num)
+if (dim(eTerm$term_info)[1] == 1) {
+tab &lt;- data.frame(name = as.character(eTerm$term_info$name),
+nAnno = as.numeric(sapply(eTerm$annotation, length)),
+nOverlap = as.numeric(sapply(eTerm$overlap, length)),
+fc = as.numeric(eTerm$fc), zscore = as.numeric(eTerm$zscore),
+pvalue = as.numeric(eTerm$pvalue), adjp = as.numeric(eTerm$adjp),
+or = as.numeric(eTerm$or), CIl = as.numeric(eTerm$CIl),
+CIu = as.numeric(eTerm$CIu), distance = eTerm$term_info$distance,
+namespace = eTerm$term_info$namespace, members_Overlap =
+sapply(eTerm$overlap,
+function(x) paste(sort(x), collapse = ", ")),
+members_Anno = sapply(eTerm$annotation, function(x) paste(sort(x),
+collapse = ", ")), stringsAsFactors = F)
+}
+else {
+tab &lt;- data.frame(name = as.character(eTerm$term_info$name),
+nAnno = as.numeric(sapply(eTerm$annotation, length)),
+nOverlap = as.numeric(sapply(eTerm$overlap, length)),
+fc = as.numeric(eTerm$fc), zscore = as.numeric(eTerm$zscore),
+pvalue = as.numeric(eTerm$pvalue), adjp = as.numeric(eTerm$adjp),
+or = as.numeric(eTerm$or), CIl = as.numeric(eTerm$CIl),
+CIu = as.numeric(eTerm$CIu), distance = eTerm$term_info$distance,
+namespace = eTerm$term_info$namespace, members_Overlap =
+sapply(eTerm$overlap,
+function(x) paste(sort(x), collapse = ", ")),
+members_Anno = sapply(eTerm$annotation, function(x) paste(sort(x),
+collapse = ", ")), stringsAsFactors = F)
+}
+rownames(tab) &lt;- eTerm$term_info$id
+}
+if (details == T) {
+res &lt;- tab[, c(1:14)]
+}
+else {
+res &lt;- tab[, c(1:10)]
+}
+if (is.null(decreasing)) {
+if (sortBy == "zscore" | sortBy == "nAnno" | sortBy ==
+"nOverlap" | sortBy == "or") {
+decreasing &lt;- T
+}
+else {
+decreasing &lt;- F
+}
+}
+switch(sortBy, fdr = {
+res &lt;- res[with(res, order(adjp, -zscore))[1:top_num],
+]
+}, adjp = {
+res &lt;- res[with(res, order(adjp, -zscore))[1:top_num],
+]
+}, pvalue = {
+res &lt;- res[with(res, order(pvalue, -zscore))[1:top_num],
+]
+}, zscore = {
+res &lt;- res[with(res, order(-zscore, adjp))[1:top_num],
+]
+}, fc = {
+res &lt;- res[with(res, order(-fc, adjp))[1:top_num], ]
+}, or = {
+res &lt;- res[with(res, order(-or, adjp))[1:top_num], ]
+}, nAnno = {
+res &lt;- res[with(res, order(-nAnno, adjp, -zscore))[1:top_num],
+]
+}, nOverlap = {
+res &lt;- res[with(res, order(-nOverlap, adjp, -zscore))[1:top_num],
+]
+}, none = {
+res &lt;- res[order(rownames(res), decreasing = decreasing)[1:top_num],
+]
+})
+if (sortBy == "none") {
+suppressWarnings(flag &lt;- all(!is.na(as.numeric(rownames(res)))))
+if (flag) {
+res &lt;- res[order(as.numeric(rownames(res)), decreasing =
+decreasing)[1:top_num],
+]
+}
+}
+res
+}
 </pre>
 
 

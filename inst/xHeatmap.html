@@ -1,47 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw heatmap using ggplot2</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xHeatmap"><tr><td>xHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to draw heatmap using ggplot2</h2>
-
-<h3>Description</h3>
-
-<p><code>xHeatmap</code> is supposed to draw heatmap using ggplot2.
-</p>
-
+<h2>xHeatmap</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xHeatmap(
-data,
-reorder = c("none", "row", "col", "both"),
-colormap = "spectral",
-ncolors = 64,
-zlim = NULL,
-barwidth = 0.3,
-barheight = NULL,
-nbin = 64,
-legend.title = "",
-x.rotate = 90,
-x.text.size = 6,
-x.text.hjust = 0,
-y.text.size = 6,
-legend.text.size = 4,
-legend.title.size = 6,
-shape = 19,
-size = 2,
-plot.margin = unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
-font.family = "sans",
-na.color = "transparent",
-data.label = NULL,
-label.size = 1,
-label.color = "black",
-...
-)
+xHeatmap(data, reorder = c("none", "row", "col", "both"), colormap =
+"spectral", ncolors = 64, zlim = NULL, barwidth = 0.3, barheight =
+NULL, nbin = 64, legend.title = "", x.rotate = 90, x.text.size = 6,
+x.text.hjust = 0, y.text.size = 6, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 2, plot.margin = unit(c(5.5,
+5.5, 5.5, 5.5), "pt"), font.family = "sans", na.color = "transparent",
+data.label = NULL, label.size = 1, label.color = "black", ...)
 </pre>
 
 
@@ -50,163 +25,285 @@ label.color = "black",
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a data frame/matrix for coloring. The coloring can be
-continuous (numeric matrix) or discrete (factor matrix)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>reorder</code></td>
 <td>
-<p>how to reorder rows and columns. It can be &quot;none&quot; for no
-reordering, &quot;row&quot; for reordering rows according to number of sharings
-(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
-rows and columns</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z values for which colors should be
-plotted, defaulting to the range of the finite values of displayed
-matrix</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barwidth</code></td>
 <td>
-<p>the width of the colorbar. Default value is
-'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barheight</code></td>
 <td>
-<p>the height of the colorbar. Default value is
-'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>nbin</code></td>
 <td>
-<p>the number of bins for drawing colorbar</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.title</code></td>
 <td>
-<p>the title of the colorbar. By default, it is &rdquo;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.rotate</code></td>
 <td>
-<p>the angle to rotate the x tick labelings. By default,
-it is 60</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.text.size</code></td>
 <td>
-<p>the text size of the x tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>x.text.hjust</code></td>
 <td>
-<p>the hjust of the x tick labelings. By default, it
-is 0.5</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>y.text.size</code></td>
 <td>
-<p>the text size of the y tick labelings. By default,
-it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.text.size</code></td>
 <td>
-<p>the text size of the legend tick labelings. By
-default, it is 5</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>legend.title.size</code></td>
 <td>
-<p>the text size of the legend titles. By
-default, it is 6</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>shape</code></td>
 <td>
-<p>the number specifying the shape. By default, it is 19</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size</code></td>
 <td>
-<p>the number specifying the shape size. By default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>plot.margin</code></td>
 <td>
-<p>the margin (t, r, b, l) around plot. By default, it
-is unit(c(5.5,5.5,5.5,5.5),&quot;pt&quot;)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-<p>the font family for texts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>na.color</code></td>
 <td>
-<p>the color for NAs. By default, it is 'transparent'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>data.label</code></td>
 <td>
-<p>a data frame/matrix used for the labelling</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label.size</code></td>
 <td>
-<p>the label size</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>label.color</code></td>
 <td>
-<p>the label color</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>additional graphic parameters for
-supraHex::visTreeBootstrap</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a ggplot2 object
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xHeatmap</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-data(mtcars)
-gp &lt;- xHeatmap(mtcars, reorder="none", colormap='jet.top', x.rotate=45,
-shape=19, size=3, x.text.size=8,y.text.size=8, legend.title='mtcars')
-gp + theme(legend.position="bottom",legend.direction="horizontal") +
-guides(color=guide_colorbar(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
-gp + theme(legend.position="bottom",legend.direction="horizontal") +
-guides(color=guide_legend(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
-gp + geom_text(aes(x, y,
-label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
+## The function is currently defined as
+function (data, reorder = c("none", "row", "col", "both"), colormap =
+"spectral",
+ncolors = 64, zlim = NULL, barwidth = 0.3, barheight = NULL,
+nbin = 64, legend.title = "", x.rotate = 90, x.text.size = 6,
+x.text.hjust = 0, y.text.size = 6, legend.text.size = 4,
+legend.title.size = 6, shape = 19, size = 2, plot.margin = unit(c(5.5,
+5.5, 5.5, 5.5), "pt"), font.family = "sans", na.color = "transparent",
+data.label = NULL, label.size = 1, label.color = "black",
+...)
+{
+reorder &lt;- match.arg(reorder)
+if (is.null(rownames(data))) {
+rownames(data) &lt;- paste("R", 1:nrow(data), sep = "")
+}
+if (is.null(colnames(data))) {
+colnames(data) &lt;- paste("C", 1:ncol(data), sep = "")
+}
+mat_val &lt;- data
+if (!(all(!duplicated(rownames(mat_val))) &amp;
+all(!duplicated(colnames(mat_val))))) {
+rownames(mat_val) &lt;- make.names(rownames(mat_val), unique = TRUE)
+colnames(mat_val) &lt;- make.names(colnames(mat_val), unique = TRUE)
+}
+flag_factor &lt;- FALSE
+if (class(unlist(mat_val)) == "factor") {
+lvl &lt;- levels(unlist(mat_val))
+indx &lt;- sapply(mat_val, is.factor)
+mat_val[indx] &lt;- sapply(mat_val[, indx], function(x) as.numeric(x))
+flag_factor &lt;- F
+}
+if (nrow(mat_val) &gt; 1 &amp; nrow(mat_val) &gt; 1) {
+ind_row &lt;- 1:nrow(mat_val)
+if (ncol(mat_val) &gt; 1 &amp; (reorder == "row" | reorder ==
+"both")) {
+mat &lt;- mat_val
+colnames(mat) &lt;- 1:ncol(mat)
+rownames(mat) &lt;- 1:nrow(mat)
+mat[is.na(mat)] &lt;- 0
+set.seed(825)
+tree_bs &lt;- visTreeBootstrap(mat, visTree = FALSE,
+...)
+ind_row &lt;- match(tree_bs$tip.label, rownames(mat))
+}
+ind_col &lt;- 1:ncol(mat_val)
+if (nrow(mat_val) &gt; 1 &amp; (reorder == "col" | reorder ==
+"both")) {
+mat &lt;- mat_val
+colnames(mat) &lt;- 1:ncol(mat)
+rownames(mat) &lt;- 1:nrow(mat)
+mat[is.na(mat)] &lt;- 0
+set.seed(825)
+tree_bs &lt;- visTreeBootstrap(t(mat), visTree = FALSE,
+...)
+ind_col &lt;- match(tree_bs$tip.label, colnames(mat))
+}
+mat_tmp &lt;- as.matrix(mat_val[ind_row, ind_col], ncol = length(ind_col))
+rownames(mat_tmp) &lt;- rownames(mat_val)[ind_row]
+colnames(mat_tmp) &lt;- colnames(mat_val)[ind_col]
+mat_val &lt;- mat_tmp
+}
+if (class(mat_val) == "matrix") {
+mat_val &lt;- as.data.frame(mat_val)
+}
+if (class(mat_val) == "data.frame") {
+if (is.null(zlim)) {
+zlim &lt;- c(floor(min(mat_val, na.rm = T) * 10)/10,
+ceiling(max(mat_val, na.rm = T) * 10)/10)
+if (zlim[1] == zlim[2]) {
+zlim[1] &lt;- zlim[2]/2
+}
+}
+mat_val[mat_val &lt;= zlim[1]] &lt;- zlim[1]
+mat_val[mat_val &gt;= zlim[2]] &lt;- zlim[2]
+gene &lt;- sample &lt;- val &lt;- NULL
+df &lt;- mat_val %&gt;% dplyr::mutate(gene = rownames(mat_val)) %&gt;%
+tidyr::gather(sample, val, -gene)
+df$gene &lt;- factor(df$gene, levels = rev(rownames(mat_val)))
+df$sample &lt;- factor(df$sample, levels = colnames(mat_val))
+df &lt;- df %&gt;% dplyr::mutate(uid = paste(gene, sample,
+sep = ":"))
+df$y &lt;- as.numeric(df$gene)
+df$x &lt;- as.numeric(df$sample)
+if (flag_factor) {
+df$val &lt;- factor(df$val, levels = unique(df$val))
+}
+gp &lt;- ggplot(df, aes(x = sample, y = gene, color = val))
+gp &lt;- gp + geom_point(size = size, shape = shape)
+if (!flag_factor) {
+gp &lt;- gp + scale_colour_gradientn(colors =
+xColormap(colormap)(ncolors),
+limits = zlim, guide = guide_colorbar(title = legend.title,
+title.position = "top", barwidth = barwidth,
+barheight = barheight, nbin = nbin, draw.ulim = FALSE,
+draw.llim = FALSE), na.value = na.color)
+}
+else {
+gp &lt;- gp + scale_colour_manual(legend.title, values =
+xColormap(colormap)(length(lvl)),
+labels = lvl)
+if (is.null(barheight)) {
+barheight &lt;- barwidth
+}
+gp &lt;- gp + theme(legend.key.width = unit(barwidth,
+"pt"), legend.key.height = unit(barheight, "pt")) +
+guides(col = guide_legend(ncol = 1))
+}
+gp &lt;- gp + theme_bw() + theme(legend.position = "right",
+axis.title.x = element_blank(), axis.title.y = element_blank(),
+axis.text.x = element_text(face = "bold", color = "black",
+size = x.text.size, angle = x.rotate, hjust = x.text.hjust),
+axis.text.y = element_text(face = "bold", color = "black",
+size = y.text.size, angle = 0), panel.background = element_rect(fill =
+"transparent")) +
+theme(panel.grid.major = element_blank(), panel.grid.minor =
+element_blank()) +
+theme(plot.margin = plot.margin) + theme(legend.title =
+element_text(face = "bold",
+color = "black", size = legend.title.size), legend.text =
+element_text(face = "bold",
+color = "black", size = legend.text.size), legend.title.align = 0.5) +
+theme(legend.background = element_rect(fill = "transparent"))
+gp &lt;- gp + theme(axis.ticks = element_line(size = 0.25),
+axis.ticks.length = unit(0.1, "cm"))
+gp &lt;- gp + theme(text = element_text(family = font.family))
+gp_main &lt;- gp + scale_x_discrete(position = "top")
+if (!is.null(data.label)) {
+mat_label &lt;- as.data.frame(data.label[ind_row, ind_col],
+stringsAsFactors = F)
+gene &lt;- sample &lt;- val &lt;- NULL
+df_label &lt;- suppressWarnings(mat_label %&gt;% dplyr::mutate(gene =
+rownames(mat_label)) %&gt;%
+tidyr::gather(sample, val, -gene))
+df_label$gene &lt;- factor(df_label$gene, levels =
+rev(rownames(mat_label)))
+df_label$sample &lt;- factor(df_label$sample, levels =
+colnames(mat_label))
+df_label &lt;- df_label %&gt;% dplyr::mutate(uid = paste(gene,
+sample, sep = ":"))
+df_label$y &lt;- as.numeric(df_label$gene)
+df_label$x &lt;- as.numeric(df_label$sample)
+gp_main &lt;- gp_main + geom_text(data = df_label, aes(x = sample,
+y = gene, label = val), hjust = 0.5, vjust = 0.5,
+size = label.size, color = label.color)
+}
+invisible(gp_main)
+}
+else {
+return(NULL)
+}
+}
 </pre>
 
 

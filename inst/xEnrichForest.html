@@ -1,42 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a forest plot</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichForest"><tr><td>xEnrichForest</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to visualise enrichment results using a forest plot</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichForest</code> is supposed to visualise enrichment results using
-a forest plot. A point is colored by the significance level, and a
-horizontal line for the 95
-the wider the CI, the less reliable). It returns an object of class
-&quot;ggplot&quot;.
-</p>
-
+<h2>xEnrichForest</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichForest(
-eTerm,
-top_num = 10,
-FDR.cutoff = 0.05,
-CI.one = T,
-colormap = "ggplot2.top",
-ncolors = 64,
-zlim = NULL,
-barwidth = 0.5,
-barheight = NULL,
-wrap.width = NULL,
-font.family = "sans",
-signature = FALSE,
-drop = F,
-sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "none")
-)
+xEnrichForest(eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
+colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
+barheight = NULL, wrap.width = NULL, font.family = "sans", signature =
+FALSE, drop = F, sortBy = c("or", "adjp", "fdr", "pvalue", "zscore",
+"fc", "nAnno", "nOverlap", "none"))
 </pre>
 
 
@@ -45,145 +23,258 @@ sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
-can be a data frame having all these columns (named as
-'group','ontology','name','adjp','or','CIl','CIu')</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-<p>the number of the top terms (sorted according to OR).
-For the eTerm object, if it is 'auto' (for eTerm), only the significant
-terms (see below FDR.cutoff) will be displayed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-<p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05. Only works when top_num is 'auto' above</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>CI.one</code></td>
 <td>
-<p>logical to indicate whether to allow the inclusion of one
-in CI. By default, it is TURE (allowed)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta). Alternatively, any
-hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum z values for which colors should be
-plotted, defaulting to the range of the -log10(FDR)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barwidth</code></td>
 <td>
-<p>the width of the colorbar. Default value is
-'legend.key.width' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>barheight</code></td>
 <td>
-<p>the height of the colorbar. Default value is
-'legend.key.height' or 'legend.key.size' in 'theme' or theme</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-<p>a positive integer specifying wrap width of name</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-<p>the font family for texts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>signature</code></td>
 <td>
-<p>logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets TRUE showing which function is
-used to draw this graph</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>drop</code></td>
 <td>
-<p>logical to indicate whether all factor levels not used in
-the data will automatically be dropped. If FALSE (by default), all
-factor levels will be shown, regardless of whether or not they appear
-in the data</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>sortBy</code></td>
 <td>
-<p>which statistics will be used for sorting and viewing
-gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
-(FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score, &quot;fc&quot; for
-enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
-&quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
-&quot;none&quot; for ordering according to ID of terms. It only works when the
-input is an eTerm object</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;ggplot&quot;
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichViewer</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-data
-
-# optionally, provide the test background (if not provided, all human genes)
-#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
-
-# 1) Gene-based enrichment analysis using REACTOME pathways
-# perform enrichment analysis
-eTerm &lt;- xEnricherGenes(data, ontology="REACTOME",
-RData.location=RData.location)
-## forest plot of enrichment results
-gp &lt;- xEnrichForest(eTerm, top_num="auto", FDR.cutoff=0.05)
-
-# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-# perform enrichment analysis
-ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
-RData.location=RData.location)
-## forest plot of enrichment results
-gp &lt;- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
-
-## End(Not run)
+## The function is currently defined as
+function (eTerm, top_num = 10, FDR.cutoff = 0.05, CI.one = T,
+colormap = "ggplot2.top", ncolors = 64, zlim = NULL, barwidth = 0.5,
+barheight = NULL, wrap.width = NULL, font.family = "sans",
+signature = FALSE, drop = F, sortBy = c("or", "adjp", "fdr",
+"pvalue", "zscore", "fc", "nAnno", "nOverlap", "none"))
+{
+sortBy &lt;- match.arg(sortBy)
+if (is.null(eTerm)) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+return(NULL)
+}
+if (any(class(eTerm) %in% "eTerm")) {
+df &lt;- xEnrichViewer(eTerm, top_num = "all")
+if (!CI.one) {
+ind &lt;- which(df$CIl &gt; 1 | df$CIu &lt; 1)
+df &lt;- df[ind, ]
+}
+if (top_num == "auto") {
+top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
+if (top_num &lt;= 1) {
+warnings("There is no enrichment in the 'eTerm' object.\n")
+top_num &lt;- 10
+message(sprintf("0 or 1 term found; instead the top %d terms sorted by
+'%s' are shown!",
+top_num, sortBy), appendLF = TRUE)
+}
+}
+df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = sortBy)
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else if (any(class(eTerm) %in% "ls_eTerm") | any(class(eTerm) %in%
+c("data.frame", "tbl_df", "tbl"))) {
+if (any(class(eTerm) %in% "ls_eTerm")) {
+df &lt;- eTerm$df
+}
+else if (any(class(eTerm) %in% c("data.frame", "tbl_df",
+"tbl"))) {
+eTerm &lt;- as.data.frame(eTerm)
+if (all(c("group", "ontology", "name", "adjp", "or",
+"CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "ontology", "name",
+"adjp", "or", "CIl", "CIu")]
+}
+else if (all(c("group", "name", "adjp", "or", "CIl",
+"CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("group", "name", "adjp", "or",
+"CIl", "CIu")]
+df$ontology &lt;- "ontology"
+}
+else if (all(c("ontology", "name", "adjp", "or",
+"CIl", "CIu") %in% colnames(eTerm))) {
+df &lt;- eTerm[, c("ontology", "name", "adjp", "or",
+"CIl", "CIu")]
+df$group &lt;- "group"
+}
+else if (all(c("name", "adjp", "or", "CIl", "CIu") %in%
+colnames(eTerm))) {
+df &lt;- eTerm[, c("name", "adjp", "or", "CIl",
+"CIu")]
+df$group &lt;- "group"
+df$ontology &lt;- "ontology"
+}
+else {
+warnings("The input data.frame does not contain required columns:
+c('group','ontology','name','adjp','or','CIl','CIu').\n")
+return(NULL)
+}
+}
+df$group &lt;- factor(df$group, levels = unique(df$group))
+if (!CI.one) {
+ind &lt;- which(df$CIl &gt; 1 | df$CIu &lt; 1)
+df &lt;- df[ind, ]
+}
+or &lt;- group &lt;- ontology &lt;- rank &lt;- adjp &lt;- NULL
+df &lt;- df %&gt;% dplyr::arrange(-or)
+if (top_num == "auto") {
+df &lt;- subset(df, df$adjp &lt; FDR.cutoff)
+}
+else {
+top_num &lt;- as.integer(top_num)
+df &lt;- as.data.frame(df %&gt;% dplyr::group_by(group,
+ontology) %&gt;% dplyr::group_by(rank = rank(-or),
+add = TRUE) %&gt;% dplyr::filter(rank &lt;= top_num &amp;
+adjp &lt; FDR.cutoff))
+}
+}
+if (nrow(df) == 0) {
+return(NULL)
+}
+if (!is.null(wrap.width)) {
+width &lt;- as.integer(wrap.width)
+res_list &lt;- lapply(df$name, function(x) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = width)
+if (length(y) &gt; 1) {
+paste0(y[1], "...")
+}
+else {
+y
+}
+})
+df$name &lt;- unlist(res_list)
+}
+name &lt;- fdr &lt;- or &lt;- CIl &lt;- CIu &lt;- NULL
+group &lt;- ontology &lt;- NULL
+df$fdr &lt;- -log10(df$adjp)
+if (is.null(zlim)) {
+tmp &lt;- df$fdr
+zlim &lt;- c(floor(min(tmp)), ceiling(max(tmp[!is.infinite(tmp)])))
+}
+df$fdr[df$fdr &lt;= zlim[1]] &lt;- zlim[1]
+df$fdr[df$fdr &gt;= zlim[2]] &lt;- zlim[2]
+if (class(eTerm) == "eTerm" &amp; sortBy != "or") {
+df &lt;- df[rev(1:nrow(df)), ]
+}
+else {
+df &lt;- df[with(df, order(group, ontology, or, -fdr)),
+]
+}
+df$name &lt;- factor(df$name, levels = unique(df$name))
+bp &lt;- ggplot(df, aes(x = name, y = log2(or), ymin = log2(CIl),
+ymax = log2(CIu), color = fdr))
+bp &lt;- bp + geom_pointrange(size = 0.3) + ylab(expression(log[2]("odds
+ratio")))
+bp &lt;- bp + geom_hline(yintercept = 0, color = "black", linetype =
+"dashed") +
+coord_flip()
+bp &lt;- bp + theme_bw() + theme(legend.position = "right",
+axis.title.y = element_blank(), axis.text.y = element_text(size = 8,
+color = "black"), axis.title.x = element_text(size = 10,
+color = "black"))
+bp &lt;- bp + theme(panel.grid.major = element_blank(), panel.grid.minor =
+element_blank())
+bp &lt;- bp + scale_colour_gradientn(colors =
+xColormap(colormap)(ncolors),
+limits = zlim, guide = guide_colorbar(title =
+expression(-log[10]("FDR")),
+title.position = "top", barwidth = barwidth, barheight = barheight,
+draw.ulim = FALSE, draw.llim = FALSE))
+if (signature) {
+caption &lt;- paste("Created by xEnrichForest from XGR version",
+utils::packageVersion("XGR"))
+bp &lt;- bp + labs(caption = caption) + theme(plot.caption =
+element_text(hjust = 1,
+face = "bold.italic", size = 8, colour = "#002147"))
+}
+bp &lt;- bp + theme(text = element_text(family = font.family))
+bp &lt;- bp + theme(axis.line.x = element_line(arrow = arrow(angle = 30,
+length = unit(0.25, "cm"), type = "open")))
+ngroup &lt;- length(unique(df$group))
+nonto &lt;- length(unique(df$ontology))
+if (ngroup != 1 | nonto != 1) {
+scales &lt;- "free_y"
+space &lt;- "free_y"
+if (ngroup == 1) {
+bp &lt;- bp + facet_grid(ontology ~ ., scales = scales,
+space = space, drop = drop)
+}
+else if (nonto == 1) {
+bp &lt;- bp + facet_grid(. ~ group, scales = scales,
+space = space, drop = drop)
+}
+else {
+bp &lt;- bp + facet_grid(ontology ~ group, scales = scales,
+space = space, drop = drop)
+}
+bp &lt;- bp + theme(strip.background = element_rect(fill = "transparent",
+color = "transparent"), strip.text = element_text(size = 8,
+face = "bold.italic"))
+}
+invisible(bp)
+}
 </pre>
 
 

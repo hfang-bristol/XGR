@@ -1,42 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity given the...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSocialiser"><tr><td>xSocialiser</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to calculate pair-wise semantic similarity given the input data and the ontology and its annotation</h2>
-
-<h3>Description</h3>
-
-<p><code>xSocialiser</code> is supposed to calculate pair-wise semantic
-similarity given the input data and the ontology direct acyclic graph
-(DAG) and its annotation. It returns an object of class &quot;igraph&quot;, a
-network representation of socialized genes/SNPs. It first calculates
-semantic similarity between terms and then derives semantic similarity
-from term-term semantic similarity. Parallel computing is also
-supported.
-</p>
-
+<h2>xSocialiser</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xSocialiser(
-data,
-annotation,
-g,
-measure = c("BM.average", "BM.max", "BM.complete", "average", "max"),
-method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
-rescale = TRUE,
-force = TRUE,
-fast = TRUE,
-parallel = TRUE,
-multicores = NULL,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = TRUE,
-verbose = T
-)
+xSocialiser(data, annotation, g, measure = c("BM.average", "BM.max",
+"BM.complete", "average", "max"), method.term = c("Resnik", "Lin",
+"Schlicker", "Jiang", "Pesquita"), rescale = TRUE, force = TRUE, fast =
+TRUE, parallel = TRUE, multicores = NULL, path.mode = c("all_paths",
+"shortest_paths", "all_shortest_paths"), true.path.rule = TRUE, verbose
+= T)
 </pre>
 
 
@@ -45,182 +24,517 @@ verbose = T
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector containing a list of genes or SNPs of
-interest between which pair-wise semantic similarity is
-calculated/socialized</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>annotation</code></td>
 <td>
-<p>the vertices/nodes for which annotation data are
-provided. It can be a sparse Matrix of class &quot;dgCMatrix&quot; (with
-variants/genes as rows and terms as columns), or a list of nodes/terms
-each containing annotation data, or an object of class 'GS' (basically
-a list for each node/term with annotation data)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot; to represent DAG. It must have
-node/vertice attributes: &quot;name&quot; (i.e. &quot;Term ID&quot;), &quot;term_id&quot; (i.e. &quot;Term
-ID&quot;), &quot;term_name&quot; (i.e &quot;Term Name&quot;) and &quot;term_distance&quot; (i.e. Term
-Distance: the distance to the root; always 0 for the root itself)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>measure</code></td>
 <td>
-<p>the measure used to derive semantic similarity between
-genes/SNPs from semantic similarity between terms. Take the semantic
-similartity between SNPs as an example. It can be &quot;average&quot; for average
-similarity between any two terms (one from SNP 1, the other from SNP
-2), &quot;max&quot; for the maximum similarity between any two terms,
-&quot;BM.average&quot; for best-matching (BM) based average similarity (i.e. for
-each term of either SNP, first calculate maximum similarity to any term
-in the other SNP, then take average of maximum similarity; the final
-BM-based average similiary is the pre-calculated average between two
-SNPs in pair), &quot;BM.max&quot; for BM based maximum similarity (i.e. the same
-as &quot;BM.average&quot;, but the final BM-based maximum similiary is the
-maximum of the pre-calculated average between two SNPs in pair),
-&quot;BM.complete&quot; for BM-based complete-linkage similarity (inspired by
-complete-linkage concept: the least of any maximum similarity between a
-term of one SNP and a term of the other SNP). When comparing BM-based
-similarity between SNPs, &quot;BM.average&quot; and &quot;BM.max&quot; are sensitive to the
-number of terms involved; instead, &quot;BM.complete&quot; is much robust in this
-aspect. By default, it uses &quot;BM.average&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>method.term</code></td>
 <td>
-<p>the method used to measure semantic similarity
-between terms. It can be &quot;Resnik&quot; for information content (IC) of most
-informative common ancestor (MICA) (see
-<a href="http://dl.acm.org/citation.cfm?id=1625914">http://dl.acm.org/citation.cfm?id=1625914</a>), &quot;Lin&quot; for 2*IC at
-MICA divided by the sum of IC at pairs of terms, &quot;Schlicker&quot; for
-weighted version of 'Lin' by the 1-prob(MICA) (see
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/16776819">http://www.ncbi.nlm.nih.gov/pubmed/16776819</a>), &quot;Jiang&quot; for 1 -
-difference between the sum of IC at pairs of terms and 2*IC at MICA
-(see <a href="https://arxiv.org/pdf/cmp-lg/9709008.pdf">https://arxiv.org/pdf/cmp-lg/9709008.pdf</a>), &quot;Pesquita&quot; for
-graph information content similarity related to Tanimoto-Jacard index
-(ie. summed information content of common ancestors divided by summed
-information content of all ancestors of term1 and term2 (see
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>))</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>rescale</code></td>
 <td>
-<p>logical to indicate whether the resulting values are
-rescaled to the range [0,1]. By default, it sets to true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>force</code></td>
 <td>
-<p>logical to indicate whether the only most specific terms
-(for each SNP) will be used. By default, it sets to true. It is always
-advisable to use this since it is computationally fast but without
-compromising accuracy (considering the fact that true-path-rule has
-been applied when running <code>xDAGanno</code>)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>fast</code></td>
 <td>
-<p>logical to indicate whether a vectorised fast computation
-is used. By default, it sets to true. It is always advisable to use
-this vectorised fast computation; since the conventional computation is
-just used for understanding scripts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>parallel</code></td>
 <td>
-<p>logical to indicate whether parallel computation with
-multicores is used. By default, it sets to true, but not necessarily
-does so. It will depend on whether these two packages &quot;foreach&quot; and
-&quot;doParallel&quot; have been installed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>multicores</code></td>
 <td>
-<p>an integer to specify how many cores will be
-registered as the multicore parallel backend to the 'foreach' package.
-If NULL, it will use a half of cores available in a user's computer.
-This option only works when parallel computation is enabled</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-<p>the mode of paths induced by vertices/nodes with input
-annotation data. It can be &quot;all_paths&quot; for all possible paths to the
-root, &quot;shortest_paths&quot; for only one path to the root (for each node in
-query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
-for each node, find all shortest paths with the equal lengths)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-<p>logical to indicate whether the true-path rule
-should be applied to propagate annotations. By default, it sets to
-true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>It returns an object of class &quot;igraph&quot;, with nodes for input genes/SNPs
-and edges for pair-wise semantic similarity between them. Also added
-graph attribute is 'dag' storing the annotated ontology DAG used. If no
-similarity is calculuated, it returns NULL.
-</p>
-
-
-<h3>Note</h3>
-
-<p>For the mode &quot;shortest_paths&quot;, the induced subgraph is the most
-concise, and thus informative for visualisation when there are many
-nodes in query, while the mode &quot;all_paths&quot; results in the complete
-subgraph.
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xDAGsim</code>, <code>xSocialiserGenes</code>,
-<code>xSocialiserSNPs</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
-# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
-g &lt;- xRDataLoader('ig.EF')
-g
-
-# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
-anno &lt;- xRDataLoader(RData='GWAS2EF')
-
-# 1c) prepare the input SNPs of interest (eg 8 randomly chosen SNPs)
-allSNPs &lt;- rownames(anno)
-data &lt;- sample(allSNPs,8)
-
-# 1d) perform calculate pair-wise semantic similarity between 8 randomly chosen SNPs
-sim &lt;- xSocialiser(data=data, annotation=anno, g=g, parallel=FALSE,
-verbose=TRUE)
-sim
-
-# 1e) save similarity results to the file called 'EF_similarity.txt'
-output &lt;- igraph::get.data.frame(sim, what="edges")
-utils::write.table(output, file="EF_similarity.txt", sep="\t",
-row.names=FALSE)
-
-# 1f) visualise the SNP network
-## extract edge weight (with 2-digit precision)
-x &lt;- signif(as.numeric(E(sim)$weight), digits=2)
-## rescale into an interval [1,4] as edge width
-edge.width &lt;- 1 + (x-min(x))/(max(x)-min(x))*3
-## do visualisation
-xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width,
-edge.label=x, edge.label.cex=0.7)
-
-## End(Not run)
+## The function is currently defined as
+function (data, annotation, g, measure = c("BM.average", "BM.max",
+"BM.complete", "average", "max"), method.term = c("Resnik",
+"Lin", "Schlicker", "Jiang", "Pesquita"), rescale = TRUE,
+force = TRUE, fast = TRUE, parallel = TRUE, multicores = NULL,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE, verbose = T)
+{
+measure &lt;- match.arg(measure)
+method.term &lt;- match.arg(method.term)
+path.mode &lt;- match.arg(path.mode)
+if (class(annotation) == "GS") {
+originAnnos &lt;- annotation$gs
+}
+else if (class(annotation) == "list") {
+originAnnos &lt;- annotation
+}
+else if (class(annotation) == "dgCMatrix") {
+D &lt;- annotation
+originAnnos &lt;- sapply(1:ncol(D), function(j) {
+names(which(D[, j] != 0))
+})
+names(originAnnos) &lt;- colnames(annotation)
+}
+else {
+stop("The input annotation must be either 'GS' or 'list' or 'dgCMatrix'
+object.\n")
+}
+annotation &lt;- originAnnos
+ig &lt;- g
+if (class(ig) != "igraph") {
+stop("The function must apply to the 'igraph' object.\n")
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("First, generate a subgraph induced (via '%s' mode) by
+the annotation data (%s) ...",
+path.mode, as.character(now)), appendLF = T)
+}
+ig &lt;- xDAGanno(g = ig, annotation = annotation, path.mode = path.mode,
+true.path.rule = true.path.rule, verbose = verbose)
+}
+anno &lt;- V(ig)$anno
+allSNPs &lt;- sort(unique(unlist(anno)))
+SNPs &lt;- data[!is.na(data)]
+if (is.null(SNPs) || is.na(SNPs)) {
+}
+else {
+flag &lt;- SNPs %in% allSNPs
+if (sum(flag) != 0) {
+SNPs &lt;- SNPs[flag]
+}
+else {
+SNPs &lt;- SNPs[flag]
+}
+}
+if (length(SNPs) &lt;= 1 || is.na(SNPs)) {
+res &lt;- NULL
+warning("The function returns NULL as no similarity is found at
+all.\n")
+return(res)
+}
+allterms &lt;- 1:length(anno)
+sGT &lt;- Matrix::Matrix(0, nrow = length(SNPs), ncol = length(allterms),
+sparse = T)
+for (j in 1:length(allterms)) {
+ind &lt;- match(anno[[j]], SNPs)
+flag &lt;- ind[!is.na(ind)]
+if (length(flag) != 0) {
+sGT[flag, j] &lt;- 1
+}
+}
+colnames(sGT) &lt;- V(ig)$name
+rownames(sGT) &lt;- SNPs
+if (verbose) {
+message(sprintf("\tthere are %d inputs amongst %d annotatable",
+length(SNPs), length(allSNPs)), appendLF = T)
+}
+SNPs2terms &lt;- lapply(1:length(SNPs), function(x) {
+res &lt;- names(which(sGT[x, ] == 1))
+if (force) {
+subg &lt;- dnet::dDAGinduce(ig, nodes_query = res, path.mode =
+"all_paths")
+res &lt;- dnet::dDAGtip(subg)
+}
+return(res)
+})
+names(SNPs2terms) &lt;- SNPs
+terms &lt;- unique(unlist(SNPs2terms))
+SNPs2terms_index &lt;- lapply(SNPs2terms, function(x) {
+match(x, terms)
+})
+progress_indicate &lt;- function(i, B, step, flag = F) {
+if (i%%ceiling(B/step) == 0 | i == B | i == 1) {
+if (flag &amp; verbose) {
+message(sprintf("\t%d out of %d (%s)", i, B,
+as.character(Sys.time())), appendLF = T)
+}
+}
+}
+if (verbose) {
+now &lt;- Sys.time()
+if (force) {
+message(sprintf("Next, pre-compute semantic similarity between %d
+terms (forced to be the most specific for each gene/SNP) using '%s'
+method (%s)...",
+length(terms), method.term, as.character(now)),
+appendLF = T)
+}
+else {
+message(sprintf("Next, pre-compute semantic similarity between %d
+terms using '%s' method (%s)...",
+length(terms), method.term, as.character(now)),
+appendLF = T)
+}
+}
+sim.term &lt;- suppressMessages(xDAGsim(ig, terms = terms, method.term =
+method.term,
+fast = fast, parallel = parallel, multicores = multicores,
+verbose = T))
+if (class(sim.term) == "igraph") {
+sim.term &lt;- xConverter(sim.term, from = "igraph", to = "dgCMatrix",
+verbose = F)
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Last, calculate pair-wise semantic similarity between
+%d genes/SNPs using '%s' measure (%s)...",
+length(SNPs), measure, as.character(now)), appendLF = T)
+}
+num_SNPs &lt;- length(SNPs2terms)
+flag_parallel &lt;- F
+if (parallel == TRUE) {
+flag_parallel &lt;- xCheckParallel(multicores = multicores,
+verbose = verbose)
+if (flag_parallel) {
+if (measure == "average") {
+i &lt;- 1
+sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:(num_SNPs -
+1), .inorder = T, .combine = rbind), {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+fast &lt;- T
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+mean(sim12[, which(new_ind_js == k)])
+})
+x &lt;- rep(0, num_SNPs)
+x[js] &lt;- res
+x
+}
+})
+}
+else if (measure == "max") {
+i &lt;- 1
+sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:(num_SNPs -
+1), .inorder = T, .combine = rbind), {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+fast &lt;- T
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+max(sim12[, which(new_ind_js == k)])
+})
+x &lt;- rep(0, num_SNPs)
+x[js] &lt;- res
+x
+}
+})
+}
+else if (measure == "BM.average") {
+i &lt;- 1
+sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:(num_SNPs -
+1), .inorder = T, .combine = rbind), {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+fast &lt;- T
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+0.5 * (mean(apply(x, 1, max)) + mean(apply(x,
+2, max)))
+})
+x &lt;- rep(0, num_SNPs)
+x[js] &lt;- res
+x
+}
+})
+}
+else if (measure == "BM.max") {
+i &lt;- 1
+sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:(num_SNPs -
+1), .inorder = T, .combine = rbind), {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+fast &lt;- T
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+max(mean(apply(x, 1, max)), mean(apply(x,
+2, max)))
+})
+x &lt;- rep(0, num_SNPs)
+x[js] &lt;- res
+x
+}
+})
+}
+else if (measure == "BM.complete") {
+i &lt;- 1
+sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:(num_SNPs -
+1), .inorder = T, .combine = rbind), {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+fast &lt;- T
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+min(c(apply(x, 1, max), apply(x, 2, max)))
+})
+x &lt;- rep(0, num_SNPs)
+x[js] &lt;- res
+x
+}
+})
+}
+sim &lt;- rbind(sim, rep(0, num_SNPs))
+sim &lt;- sim + Matrix::t(sim)
+sim &lt;- Matrix::Matrix(sim, sparse = T)
+}
+}
+if (flag_parallel == F) {
+sim &lt;- Matrix::Matrix(0, nrow = length(SNPs), ncol = length(SNPs),
+sparse = T)
+if (measure == "average") {
+for (i in 1:(num_SNPs - 1)) {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+mean(sim12[, which(new_ind_js == k)])
+})
+sim[i, js] &lt;- res
+}
+else {
+for (j in (i + 1):num_SNPs) {
+ind2 &lt;- SNPs2terms_index[[j]]
+sim12 &lt;- as.matrix(sim.term[ind1, ind2])
+sim[i, j] &lt;- mean(sim12)
+}
+}
+}
+}
+else if (measure == "max") {
+for (i in 1:(num_SNPs - 1)) {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+max(sim12[, which(new_ind_js == k)])
+})
+sim[i, js] &lt;- res
+}
+else {
+for (j in (i + 1):num_SNPs) {
+ind2 &lt;- SNPs2terms_index[[j]]
+sim12 &lt;- as.matrix(sim.term[ind1, ind2])
+sim[i, j] &lt;- max(sim12)
+}
+}
+}
+}
+else if (measure == "BM.average") {
+for (i in 1:(num_SNPs - 1)) {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+0.5 * (mean(apply(x, 1, max)) + mean(apply(x,
+2, max)))
+})
+sim[i, js] &lt;- res
+}
+else {
+for (j in (i + 1):num_SNPs) {
+ind2 &lt;- SNPs2terms_index[[j]]
+sim12 &lt;- as.matrix(sim.term[ind1, ind2])
+sim[i, j] &lt;- 0.5 * (mean(apply(sim12, 1,
+max)) + mean(apply(sim12, 2, max)))
+}
+}
+}
+}
+else if (measure == "BM.max") {
+for (i in 1:(num_SNPs - 1)) {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+max(mean(apply(x, 1, max)), mean(apply(x,
+2, max)))
+})
+sim[i, js] &lt;- res
+}
+else {
+for (j in (i + 1):num_SNPs) {
+ind2 &lt;- SNPs2terms_index[[j]]
+sim12 &lt;- as.matrix(sim.term[ind1, ind2])
+sim[i, j] &lt;- max(mean(apply(sim12, 1, max)),
+mean(apply(sim12, 2, max)))
+}
+}
+}
+}
+else if (measure == "BM.complete") {
+for (i in 1:(num_SNPs - 1)) {
+ind1 &lt;- SNPs2terms_index[[i]]
+progress_indicate(i, num_SNPs, 10, flag = T)
+if (fast) {
+js &lt;- (i + 1):num_SNPs
+ind_js &lt;- SNPs2terms_index[js]
+sim12 &lt;- matrix(sim.term[ind1, unlist(ind_js)],
+nrow = length(ind1))
+new_ind_js &lt;- rep(1:length(ind_js), sapply(ind_js,
+length))
+res &lt;- sapply(1:length(ind_js), function(k) {
+x &lt;- as.matrix(sim12[, which(new_ind_js ==
+k)])
+min(c(apply(x, 1, max), apply(x, 2, max)))
+})
+sim[i, js] &lt;- res
+}
+else {
+for (j in (i + 1):num_SNPs) {
+ind2 &lt;- SNPs2terms_index[[j]]
+sim12 &lt;- as.matrix(sim.term[ind1, ind2])
+sim[i, j] &lt;- min(c(apply(sim12, 1, max),
+apply(sim12, 2, max)))
+}
+}
+}
+}
+sim &lt;- sim + Matrix::t(sim)
+}
+rownames(sim) &lt;- colnames(sim) &lt;- SNPs
+sim[as.matrix(is.na(sim))] &lt;- 0
+if (rescale) {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Also rescale similarity into the [0,1] range (%s)",
+as.character(now)), appendLF = T)
+}
+d_min &lt;- min(sim)
+d_max &lt;- max(sim)
+sim &lt;- apply(sim, 2, function(x) {
+(x - d_min)/(d_max - d_min)
+})
+sim &lt;- Matrix::Matrix(sim, sparse = T)
+}
+if (class(sim) == "dgCMatrix" | class(sim) == "dsCMatrix") {
+res &lt;- xConverter(sim, from = "dgCMatrix", to = "igraph",
+verbose = F)
+if (class(res) == "igraph") {
+if (!is.null(E(res)$weight)) {
+E(res)$weight &lt;- as.numeric(E(res)$weight)
+}
+}
+res$dag &lt;- ig
+}
+if (ecount(res) == 0) {
+res &lt;- NULL
+warning("The function returns NULL as no similarity is found at
+all.\n")
+}
+invisible(res)
+}
 </pre>
 
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for print.EG"><tr><td>print.EG</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>print.EG</h2>
+
+<h3>Usage</h3>
+
+<pre>
+print.EG(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (x, ...)
+{
+cat(sprintf("An object of S3 class '%s', with %d components:",
+class(x), length(names(x))), "\n", sep = "")
+cat(sprintf(" $gene_info: a data frame of %d rows X %d columns",
+nrow(x$set_info), ncol(x$set_info)), "\n", sep = "")
+cat("\n--------------------------------------------------\n")
+cat("$gene_info:\n")
+print(x$gene_info[1:2, ], row.names = FALSE)
+cat("......\n")
+}
+</pre>
+
+
+</body></html>

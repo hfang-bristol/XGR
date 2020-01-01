@@ -1,58 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create codes annotating nodes in an igraph object</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xOBOcode"><tr><td>xOBOcode</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to create codes annotating nodes in an igraph object</h2>
-
-<h3>Description</h3>
-
-<p><code>xOBOcode</code> is supposed to create codes annotating nodes in an
-igraph object. It returns two ggplot2 objects, one for visualing the
-network with nodes lablelled by codes, the other for listing code
-meaning in a table
-</p>
-
+<h2>xOBOcode</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xOBOcode(
-g,
-node.level = "term_distance",
-node.level.value = 2,
-node.label.size = 2,
-node.label.color = "darkblue",
-node.label.alpha = 0.8,
-node.label.padding = 0,
-node.label.arrow = 0.01,
-node.label.force = 0,
-node.shape = 19,
-node.xcoord = NULL,
-node.ycoord = NULL,
-node.color = NULL,
-node.color.title = NULL,
-colormap = "grey-grey",
-ncolors = 64,
-zlim = NULL,
-node.size.range = 4,
-title = "",
-edge.size = 0.5,
-edge.color = "black",
-edge.color.alpha = 0.4,
-edge.curve = 0.1,
-edge.arrow = 2,
-edge.arrow.gap = 0.02,
-node.table = "term_name",
-node.table.wrap = 50,
-table.base.size = 7,
-table.row.space = 2,
-table.nrow = 55,
-table.ncol = NULL,
-root.code = "RT"
-)
+xOBOcode(g, node.level = "term_distance", node.level.value = 2,
+node.label.size = 2, node.label.color = "darkblue", node.label.alpha =
+0.8, node.label.padding = 0, node.label.arrow = 0.01, node.label.force
+= 0, node.shape = 19, node.xcoord = NULL, node.ycoord = NULL,
+node.color = NULL, node.color.title = NULL, colormap = "grey-grey",
+ncolors = 64, zlim = NULL, node.size.range = 4, title = "", edge.size =
+0.5, edge.color = "black", edge.color.alpha = 0.4, edge.curve = 0.1,
+edge.arrow = 2, edge.arrow.gap = 0.02, node.table = "term_name",
+node.table.wrap = 50, table.base.size = 7, table.row.space = 2,
+table.nrow = 55, table.ncol = NULL, root.code = "RT")
 </pre>
 
 
@@ -61,399 +28,387 @@ root.code = "RT"
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot;</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.level</code></td>
 <td>
-<p>a character specifying which node attribute defining
-the node level. By default, it is 'term_distance'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.level.value</code></td>
 <td>
-<p>a positive integer specifying the level value
-as major branches. By default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.size</code></td>
 <td>
-<p>a character specifying which node attribute used
-for node label size</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.color</code></td>
 <td>
-<p>a character specifying which node attribute
-used for the node label color</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.alpha</code></td>
 <td>
-<p>the 0-1 value specifying transparency of node
-labelling</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.padding</code></td>
 <td>
-<p>the padding around the labeled node</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.arrow</code></td>
 <td>
-<p>the arrow pointing to the labeled node</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.label.force</code></td>
 <td>
-<p>the repelling force between overlapping labels</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.shape</code></td>
 <td>
-<p>an integer specifying node shape</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.xcoord</code></td>
 <td>
-<p>a vector specifying x coordinates. If NULL, it will
-be created using igraph::layout_with_kk</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.ycoord</code></td>
 <td>
-<p>a vector specifying y coordinates. If NULL, it will
-be created using igraph::layout_with_kk</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
-<p>a character specifying which node attribute used for
-node coloring</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.color.title</code></td>
 <td>
-<p>a character specifying the title for node
-coloring</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-<p>short name for the colormap. It can be one of &quot;jet&quot;
-(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
-colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
-colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
-&quot;rainbow&quot; (rainbow colormap, that is,
-red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
-default color palette). Alternatively, any hyphen-separated HTML color
-names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
-&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
-standard color names can be found in
-<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-<p>the number of colors specified over the colormap</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-<p>the minimum and maximum values for which colors should be
-plotted</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.size.range</code></td>
 <td>
-<p>the range of actual node size</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>title</code></td>
 <td>
-<p>a character specifying the title for the plot</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.size</code></td>
 <td>
-<p>a numeric value specifying the edge size. By default,
-it is 0.5</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-<p>a character specifying which edge attribute defining
-the the edge colors</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.color.alpha</code></td>
 <td>
-<p>the 0-1 value specifying transparency of edge
-colors</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.curve</code></td>
 <td>
-<p>a numeric value specifying the edge curve. 0 for the
-straight line</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.arrow</code></td>
 <td>
-<p>a numeric value specifying the edge arrow. By
-default, it is 2</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>edge.arrow.gap</code></td>
 <td>
-<p>a gap between the arrow and the node</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.table</code></td>
 <td>
-<p>a character specifying which node attribute for
-coding. By default, it is 'term_name'</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>node.table.wrap</code></td>
 <td>
-<p>a positive integer specifying wrap width of
-coded node labelling</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>table.base.size</code></td>
 <td>
-<p>a positive integer specifying font size in the
-table</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>table.row.space</code></td>
 <td>
-<p>a positive numeric value specifying amplying
-horizental space for a row with wrapped text</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>table.nrow</code></td>
 <td>
-<p>a positive integer specifying the number of rows in
-the table</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>table.ncol</code></td>
 <td>
-<p>NULL or a positive integer specifying the number of
-columns per page. If NULL, it will be 3 or less</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>root.code</code></td>
 <td>
-<p>a character specifying the root code. By default, it
-is 'RT'</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a list with 3 components, two ggplot objects (code and table) and an
-igraph object (ig appended with node attributes 'node.code' and
-'node.table')
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xGGnetwork</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# load REACTOME
-# 1a) restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
-g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="R-HSA-168256", mode="out")
-vids &lt;- V(g)[unique(unlist(neighs.out))]$name
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-
-# 1b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-# 1c) visualise the graph with nodes coded and colored by information content (IC)
-V(ig)$IC &lt;- -1*log10(V(ig)$nAnno/max(V(ig)$nAnno))
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
-node.shape=19, node.size.range=4, node.color='IC',
-node.color.title='IC', colormap='white-cyan-darkcyan')
-
-V(ig)$term_anno &lt;- log10(V(ig)$nAnno)
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
-node.shape=19, node.size.range=4, node.color='term_anno',
-node.color.title='# genes\n(log10)', colormap='white-cyan-darkcyan',
-zlim=c(1,4))
-
-
-# load EF (annotating GWAS reported genes)
-# 2a) restricted to disease ('EFO:0000408') and annotation (&gt;=10)
-# 2a) restricted to immune system disease ('EFO:0000540') and annotation (&gt;=10)
-g &lt;- xRDataLoader(RData.customised='ig.EF',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="EFO:0000540", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egEF',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=10])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 2b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=4,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-# 2c) ## GWAS genes for immune system disease ('EFO:0000540')
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egEF',
-RData.location=RData.location)
-genes &lt;- anno$gs[['EFO:0000540']]
-# 2d) ## GWAS SNPs for immune system disease ('EFO:0000540')
-annotation &lt;- xRDataLoader(RData.customised='GWAS2EF',
-RData.location=RData.location)
-dag &lt;- xDAGpropagate(g, annotation, path.mode="all_paths",
-propagation="min")
-snps &lt;- unlist(V(dag)[V(dag)$name=='EFO:0000540']$anno)
-# 2e) ## ChEMBL targets for immune system disease ('EFO:0000540')
-annotation &lt;- xRDataLoader(RData.customised='Target2EF',
-RData.location=RData.location)
-dag &lt;- xDAGpropagate(g, annotation, path.mode="all_paths",
-propagation="max")
-targets &lt;- unlist(V(dag)[V(dag)$name=='EFO:0000540']$anno)
-
-
-# load GOBP
-# 3a) restricted to immune system process ('GO:0002376') and annotation (&gt;=10)
-g &lt;- xRDataLoader(RData.customised='ig.GOBP',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="GO:0002376", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egGOBP',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=10])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 3b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-
-# load GOMF
-# 4a) restricted to molecular function ('GO:0003674') and annotation (&gt;=50)
-g &lt;- xRDataLoader(RData.customised='ig.GOMF',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="GO:0003674", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egGOMF',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=50])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 4b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-
-# load HPPA
-# 5a) restricted to Abnormality of the immune system ('HP:0002715') and annotation (&gt;=50)
-g &lt;- xRDataLoader(RData.customised='ig.HPPA',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="HP:0002715", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egHPPA',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=50])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 5b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=1,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-
-# load DO
-# 6a) restricted to immune system disease ('DOID:2914') and annotation (&gt;=10)
-g &lt;- xRDataLoader(RData.customised='ig.DO',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="DOID:2914", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egDO',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=10])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 6b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=2,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-
-# load MP
-# 7a) restricted to immune system phenotype ('MP:0005387') and annotation (&gt;=50)
-# 7a) restricted to abnormal immune system physiology ('MP:0001790') and annotation (&gt;=50)
-g &lt;- xRDataLoader(RData.customised='ig.MP',
-RData.location=RData.location)
-neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
-nodes="MP:0001790", mode="out")
-nodeClan &lt;- V(g)[unique(unlist(neighs.out))]$name
-anno &lt;- xRDataLoader(RData.customised='org.Hs.egMP',
-RData.location=RData.location)
-vec &lt;- sapply(anno$gs, length)
-nodeAnno &lt;- names(vec[vec&gt;=50])
-neighs.in &lt;- igraph::neighborhood(g, order=vcount(g), nodes=nodeAnno,
-mode="in")
-nodeAnno &lt;- V(g)[unique(unlist(neighs.in))]$name
-vids &lt;- intersect(nodeClan, nodeAnno)
-ig &lt;- igraph::induced.subgraph(g, vids=vids)
-V(ig)$anno &lt;- anno$gs[V(ig)$name]
-# 7b) visualise the graph with nodes coded
-ls_gp &lt;- xOBOcode(g=ig, node.level='term_distance', node.level.value=3,
-node.shape=19, node.size.range=4, edge.color.alpha=0.2)
-pdf('xOBOcode.pdf', useDingbats=FALSE, width=8, height=8)
-print(ls_gp$code + coord_equal(ratio=1))
-print(ls_gp$table)
-dev.off()
-
-## End(Not run)
+## The function is currently defined as
+function (g, node.level = "term_distance", node.level.value = 2,
+node.label.size = 2, node.label.color = "darkblue", node.label.alpha =
+0.8,
+node.label.padding = 0, node.label.arrow = 0.01, node.label.force = 0,
+node.shape = 19, node.xcoord = NULL, node.ycoord = NULL,
+node.color = NULL, node.color.title = NULL, colormap = "grey-grey",
+ncolors = 64, zlim = NULL, node.size.range = 4, title = "",
+edge.size = 0.5, edge.color = "black", edge.color.alpha = 0.4,
+edge.curve = 0.1, edge.arrow = 2, edge.arrow.gap = 0.02,
+node.table = "term_name", node.table.wrap = 50, table.base.size = 7,
+table.row.space = 2, table.nrow = 55, table.ncol = NULL,
+root.code = "RT")
+{
+if (any(class(g) %in% c("igraph"))) {
+ig &lt;- g
+}
+else {
+stop("The function must apply to a 'igraph' object.\n")
+}
+if (is.null(node.level)) {
+stop("The node level must be provided!\n")
+}
+else {
+node.level &lt;- igraph::vertex_attr(ig, node.level)
+if (is.null(node.level)) {
+stop("The node level provided does not exist!\n")
+}
+}
+ind &lt;- which(node.level == node.level.value)
+if (length(ind) == 0) {
+stop("The node level value provided is wrong!\n")
+}
+vec.name &lt;- V(ig)$name[ind]
+V(ig)$node.code &lt;- root.code
+for (k in 1:length(vec.name)) {
+x &lt;- vec.name[k]
+neighs.out &lt;- igraph::neighborhood(ig, order = vcount(ig),
+nodes = x, mode = "out")
+neighbors &lt;- names(unlist(neighs.out))
+tmp &lt;- igraph::distances(ig, v = x, to = V(ig), mode = "out")[1,
+]
+ind &lt;- match(names(tmp), V(ig)$name[V(ig)$code != root.code])
+tmp &lt;- tmp[is.na(ind)]
+tmp &lt;- tmp[!is.infinite(tmp)]
+if (k &lt;= 26) {
+code1 &lt;- letters[k]
+}
+else {
+code1 &lt;- LETTERS[k - 26]
+}
+V(ig)[names(tmp)[tmp == 0]]$node.code &lt;- code1
+ind &lt;- which(tmp != 0)
+ttmp &lt;- base::make.unique(as.character(tmp[ind]), sep = "-")
+tmp_ls &lt;- lapply(strsplit(ttmp, "-"), function(x) {
+x &lt;- as.numeric(x)
+a &lt;- x[1]
+if (a &gt;= 10 &amp; a &lt;= 35) {
+a &lt;- letters[a - 9]
+}
+else if (a &gt; 35) {
+a &lt;- LETTERS[a - 35]
+}
+if (length(x) == 1) {
+c(a, 1)
+}
+else {
+b &lt;- x[2] + 1
+if (b &gt;= 10 &amp; b &lt;= 35) {
+b &lt;- letters[b - 9]
+}
+else if (b &gt; 35 &amp; b &lt;= 61) {
+b &lt;- LETTERS[b - 35]
+}
+c(a, b)
+}
+})
+tmp_mat &lt;- do.call(rbind, tmp_ls)
+V(ig)[names(tmp)[ind]]$node.code &lt;- paste0(code1, tmp_mat[,
+1], tmp_mat[, 2])
+}
+gp_code &lt;- xGGnetwork(g = ig, node.label = "node.code",
+label.wrap.width = 30,
+node.label.size = node.label.size, node.label.color = node.label.color,
+node.label.alpha = node.label.alpha, node.label.padding =
+node.label.padding,
+node.label.arrow = node.label.arrow, node.label.force =
+node.label.force,
+node.shape = node.shape, node.xcoord = node.xcoord, node.ycoord =
+node.ycoord,
+node.color = node.color, node.color.title = node.color.title,
+colormap = colormap, ncolors = ncolors, zlim = zlim,
+node.size.range = node.size.range, title = title, edge.size =
+edge.size,
+edge.color = edge.color, edge.color.alpha = edge.color.alpha,
+edge.curve = edge.curve, edge.arrow = edge.arrow, edge.arrow.gap =
+edge.arrow.gap)
+if (is.null(node.table)) {
+stop("The node name must be provided for the table!\n")
+}
+else {
+node.table &lt;- igraph::vertex_attr(ig, node.table)
+if (is.null(node.table)) {
+stop("The node name for the table provided does not exist!\n")
+}
+}
+res_list &lt;- lapply(node.table, function(x) {
+if (!is.na(x)) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = node.table.wrap)
+if (length(y) == 2) {
+paste(y, collapse = "\n")
+}
+else if (length(y) &gt; 2) {
+paste0(paste(y[1:2], collapse = "\n"), "...")
+}
+else {
+y
+}
+}
+else {
+x
+}
+})
+V(ig)$node.table &lt;- unlist(res_list)
+df_code &lt;- data.frame(Code = V(ig)$node.code, Name = V(ig)$node.table,
+stringsAsFactors = FALSE)
+Code &lt;- NULL
+df_code &lt;- df_code %&gt;% dplyr::arrange(Code)
+tt &lt;- gridExtra::ttheme_default(base_size = table.base.size,
+padding = unit(c(1, 1), "mm"), core = list(fg_params = list(lineheight
+= 0.8,
+fontfamily = "sans"), bg_params = list(fill = c("snow1",
+"snow2"))), colhead = list(bg_params = list(fill = "snow3"),
+fg_params = list(cex = 1)), rowhead = list(fg_params = list(hjust = 0,
+x = 0, fontface = "bold.italic"), bg_params = list(fill = c("snow2",
+"snow1"))), )
+if (0) {
+ind &lt;- base::nchar(df_code$Code) == 1 | df_code$Code ==
+root.code
+df_code_sub &lt;- df_code[ind, ]
+df_code_other &lt;- df_code[!ind, ]
+ls_gt &lt;- lapply(df_code_sub$Code, function(x) {
+ind &lt;- grep(x, df_code_other$Code)
+if (length(ind) &gt; 0) {
+gridExtra::tableGrob(df_code_other[ind, ], theme = tt,
+rows = NULL)
+}
+else {
+NULL
+}
+})
+ls_gt &lt;- base::Filter(base::Negate(is.null), ls_gt)
+gridExtra::grid.arrange(grobs = ls_gt, ncol = 3, as.table = TRUE)
+gx &lt;- grid::textGrob("aa")
+}
+else {
+ind_root &lt;- df_code$Code == root.code
+ind_sub &lt;- base::nchar(df_code$Code) == 1
+df_code_sub &lt;- df_code[ind_sub, ]
+df_code_other &lt;- df_code[!(ind_sub | ind_root), ]
+ls_df &lt;- lapply(df_code_sub$Code, function(x) {
+ind &lt;- base::grep(paste0("^", x), df_code_other$Code)
+df_code_other[ind, ]
+})
+df_code_order &lt;- rbind(df_code[ind_root, ], df_code_sub,
+do.call(rbind, ls_df))
+if (0) {
+vec &lt;- ggplot2::cut_interval(1:nrow(df_code_order),
+length = 20)
+}
+else {
+vec_length &lt;- unlist(lapply(strsplit(df_code_order$Name,
+"\n"), length))
+vec_length[vec_length == 2] &lt;- table.row.space
+vec &lt;- ggplot2::cut_interval(cumsum(vec_length),
+length = table.nrow)
+}
+ls_gt &lt;- lapply(unique(vec), function(x) {
+ind &lt;- which(vec == x)
+y &lt;- df_code_order[ind, ]
+diff &lt;- table.nrow - sum(vec_length[ind])
+if (diff &gt; 0) {
+z &lt;- matrix(rep(c("", ""), diff), ncol = 2)
+colnames(z) &lt;- c("Code", "Name")
+y &lt;- rbind(y, z)
+}
+if (0) {
+rownames(y) &lt;- y$Code
+y &lt;- subset(y, select = "Name")
+gridExtra::tableGrob(y, theme = tt)
+}
+else {
+gridExtra::tableGrob(y, theme = tt, rows = NULL)
+}
+})
+ls_gt &lt;- base::Filter(base::Negate(is.null), ls_gt)
+if (is.null(table.ncol)) {
+table.ncol &lt;- 3
+}
+if (length(unique(vec)) &lt; table.ncol) {
+table.ncol &lt;- length(unique(vec))
+}
+top &lt;- ""
+if (table.ncol &gt; 3) {
+top &lt;- quote(paste("page", g, "of", pages))
+}
+gp_table &lt;- gridExtra::marrangeGrob(ls_gt, ncol = table.ncol,
+nrow = 1, as.table = FALSE, top = top)
+}
+ls_gp &lt;- list(code = gp_code, table = gp_table, ig = ig)
+invisible(ls_gp)
+}
 </pre>
 
 

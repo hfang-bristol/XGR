@@ -1,45 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given the input data...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnricher"><tr><td>xEnricher</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to conduct enrichment analysis given the input data and the ontology and its annotation</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnricher</code> is supposed to conduct enrichment analysis given the
-input data and the ontology direct acyclic graph (DAG) and its
-annotation. It returns an object of class &quot;eTerm&quot;. Enrichment analysis
-is based on either Fisher's exact test or Hypergeometric test. The test
-can respect the hierarchy of the ontology.
-</p>
-
+<h2>xEnricher</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnricher(
-data,
-annotation,
-g,
-background = NULL,
-size.range = c(10, 2000),
-min.overlap = 5,
-which.distance = NULL,
-test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"),
-elim.pvalue = 0.01,
-lea.depth = 2,
+xEnricher(data, annotation, g, background = NULL, size.range = c(10,
+2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL, p.tail =
+c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
+"bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm =
+c("none", "pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = TRUE,
-verbose = T
-)
+true.path.rule = TRUE, verbose = T)
 </pre>
 
 
@@ -48,297 +26,854 @@ verbose = T
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>an input vector containing a list of genes or SNPs of
-interest</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>annotation</code></td>
 <td>
-<p>the vertices/nodes for which annotation data are
-provided. It can be a sparse Matrix of class &quot;dgCMatrix&quot; (with
-variants/genes as rows and terms as columns), or a list of nodes/terms
-each containing annotation data, or an object of class 'GS' (basically
-a list for each node/term with annotation data)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an object of class &quot;igraph&quot; to represent DAG. It must have
-node/vertice attributes: &quot;name&quot; (i.e. &quot;Term ID&quot;), &quot;term_id&quot; (i.e. &quot;Term
-ID&quot;), &quot;term_name&quot; (i.e &quot;Term Name&quot;) and &quot;term_distance&quot; (i.e. Term
-Distance: the distance to the root; always 0 for the root itself)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-<p>a background vector. It contains a list of genes or
-SNPs as the test background. If NULL, by default all annotatable are
-used as background</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-<p>the minimum and maximum size of members of each term
-in consideration. By default, it sets to a minimum of 10 but no more
-than 2000</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-<p>the minimum number of overlaps. Only those terms
-with members that overlap with input data at least min.overlap (3 by
-default) will be processed</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>which.distance</code></td>
 <td>
-<p>which terms with the distance away from the
-ontology root (if any) is used to restrict terms in consideration. By
-default, it sets to 'NULL' to consider all distances</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-<p>the test statistic used. It can be &quot;fisher&quot; for using
-fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
-&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
-independence between gene group (genes belonging to a group or not) and
-gene annotation (genes annotated by a term or not), and thus compare
-sampling to the left part of background (after sampling without
-replacement). Hypergeometric test is to sample at random (without
-replacement) from the background containing annotated and non-annotated
-genes, and thus compare sampling to background. Unlike hypergeometric
-test, binomial test is to sample at random (with replacement) from the
-background with the constant probability. In terms of the ease of
-finding the significance, they are in order: hypergeometric test &gt;
-fisher's exact test &gt; binomial test. In other words, in terms of the
-calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
-binomial test</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-<p>logical to indicate whether the
-background is further restricted to the annotatable. By default, it is
-NULL: if ontology.algorithm is not 'none', it is always TRUE;
-otherwise, it depends on the background (if not provided, it will be
-TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.tail</code></td>
 <td>
-<p>the tail used to calculate p-values. It can be either
-&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
-under-overrepresentation) or &quot;one-tail&quot; (by default) for the
-significance based on one tail (ie only over-representation)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-<p>the method used to adjust p-values. It can be
-one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
-first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
-discovery rate (FDR: the expected proportion of false discoveries
-amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
-&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
-the family-wise error rate (FWER). Notes: FDR is a less stringent
-condition than FWER</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>ontology.algorithm</code></td>
 <td>
-<p>the algorithm used to account for the
-hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
-&quot;lea&quot;. For details, please see 'Note' below</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>elim.pvalue</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;elim&quot;. It is used to control how to declare a signficantly enriched
-term (and subsequently all genes in this term are eliminated from all
-its ancestors)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>lea.depth</code></td>
 <td>
-<p>the parameter only used when &quot;ontology.algorithm&quot; is
-&quot;lea&quot;. It is used to control how many maximum depth is used to consider
-the children of a term (and subsequently all genes in these children
-term are eliminated from the use for the recalculation of the
-signifance at this term)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-<p>the mode of paths induced by vertices/nodes with input
-annotation data. It can be &quot;all_paths&quot; for all possible paths to the
-root, &quot;shortest_paths&quot; for only one path to the root (for each node in
-query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
-for each node, find all shortest paths with the equal lengths)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-<p>logical to indicate whether the true-path rule
-should be applied to propagate annotations. By default, it sets to
-true</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;eTerm&quot;, a list with following components:
-</p>
-
-<ul>
-<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
-information, where nTerm is the number of terms, and the 4 columns are
-&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
-&quot;distance&quot;
-</p>
-</li>
-<li><p><code>annotation</code>: a list of terms containing annotations, each
-term storing its annotations. Always, terms are identified by &quot;id&quot;
-</p>
-</li>
-<li><p><code>g</code>: an igraph object to represent DAG
-</p>
-</li>
-<li><p><code>data</code>: a vector containing input data in consideration. It
-is not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>background</code>: a vector containing the background data. It is
-not always the same as the input data as only those mappable are
-retained
-</p>
-</li>
-<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
-snps/genes overlapped between a snp/gene set and the given input data
-(i.e. the snps/genes of interest). Always, gene sets are identified by
-&quot;id&quot;
-</p>
-</li>
-<li><p><code>fc</code>: a vector containing fold changes
-</p>
-</li>
-<li><p><code>zscore</code>: a vector containing z-scores
-</p>
-</li>
-<li><p><code>pvalue</code>: a vector containing p-values
-</p>
-</li>
-<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
-value but after being adjusted for multiple comparisons
-</p>
-</li>
-<li><p><code>or</code>: a vector containing odds ratio
-</p>
-</li>
-<li><p><code>CIl</code>: a vector containing lower bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>CIu</code>: a vector containing upper bound confidence interval
-for the odds ratio
-</p>
-</li>
-<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
-for the overlapped-members observed in an individaul term, and
-off-diagnal cell for the overlapped-members shared between two terms
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
-</p>
-</li></ul>
-
-
-
-<h3>Note</h3>
-
-<p>The interpretation of the algorithms used to account for the hierarchy
-of the ontology is:
-</p>
-
-<ul>
-<li><p>&quot;none&quot;: does not consider the ontology hierarchy at all.
-</p>
-</li>
-<li><p>&quot;lea&quot;: estimates the significance of a term in terms of the
-significance of its children at the maximum depth (e.g. 2). Precisely,
-once snps/genes are already annotated to any children terms with a more
-signficance than itself, then all these snps/genes are eliminated from
-the use for the recalculation of the signifance at that term. The final
-p-values takes the maximum of the original p-value and the recalculated
-p-value.
-</p>
-</li>
-<li><p>&quot;elim&quot;: estimates the significance of a term in terms of the
-significance of its all children. Precisely, once snps/genes are
-already annotated to a signficantly enriched term under the cutoff of
-e.g. pvalue&lt;1e-2, all these snps/genes are eliminated from the
-ancestors of that term).
-</p>
-</li>
-<li><p>&quot;pc&quot;: requires the significance of a term not only using the
-whole snps/genes as background but also using snps/genes annotated to
-all its direct parents/ancestors as background. The final p-value takes
-the maximum of both p-values in these two calculations.
-</p>
-</li>
-<li><p>&quot;Notes&quot;: the order of the number of significant terms is: &quot;none&quot;
-&gt; &quot;lea&quot; &gt; &quot;elim&quot; &gt; &quot;pc&quot;.
-</p>
-</li></ul>
-
-
-
-<h3>See Also</h3>
-
-<p><code>xDAGanno</code>, <code>xEnricherGenes</code>,
-<code>xEnricherSNPs</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
-# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
-g &lt;- xRDataLoader('ig.EF')
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
-anno &lt;- xRDataLoader(RData='GWAS2EF')
-
-# 1c) optionally, provide the test background (if not provided, all annotatable SNPs)
-background &lt;- rownames(anno)
-
-# 1d) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')
-ind &lt;- which(colnames(anno)=='EFO:0002690')
-data &lt;- rownames(anno)[anno[,ind]==1]
-data
-
-# 1e) perform enrichment analysis
-eTerm &lt;- xEnricher(data=data, annotation=anno, background=background,
-g=g, path.mode=c("all_paths"))
-
-# 1f) view enrichment results for the top significant terms
-xEnrichViewer(eTerm)
-
-# 1f') save enrichment results to the file called 'EF_enrichments.txt'
-res &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
-details=TRUE)
-output &lt;- data.frame(term=rownames(res), res)
-utils::write.table(output, file="EF_enrichments.txt", sep="\t",
-row.names=FALSE)
-
-# 1g) barplot of significant enrichment results
-bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
-print(bp)
-
-# 1h) visualise the top 10 significant terms in the ontology hierarchy
-# color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
-xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
-node.info=c("full_term_name"))
-# color-code terms according to the z-scores
-xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
-node.info=c("full_term_name"))
-
-## End(Not run)
+## The function is currently defined as
+function (data, annotation, g, background = NULL, size.range = c(10,
+2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
+"hypergeo", "binomial"), background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH",
+"BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm =
+c("none",
+"pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = TRUE, verbose = T)
+{
+test &lt;- match.arg(test)
+p.tail &lt;- match.arg(p.tail)
+p.adjust.method &lt;- match.arg(p.adjust.method)
+ontology.algorithm &lt;- match.arg(ontology.algorithm)
+path.mode &lt;- match.arg(path.mode)
+p.tail &lt;- match.arg(p.tail)
+if (is.vector(data)) {
+data &lt;- unique(data)
+}
+else {
+warnings("The input data must be a vector.\n")
+return(NULL)
+}
+if (class(annotation) == "GS") {
+originAnnos &lt;- annotation$gs
+}
+else if (class(annotation) == "list") {
+originAnnos &lt;- annotation
+}
+else if (class(annotation) == "dgCMatrix") {
+D &lt;- annotation
+originAnnos &lt;- sapply(1:ncol(D), function(j) {
+names(which(D[, j] != 0))
+})
+names(originAnnos) &lt;- colnames(annotation)
+}
+else {
+warnings("The input annotation must be either 'GS' or 'list' or
+'dgCMatrix' object.\n")
+return(NULL)
+}
+annotation &lt;- originAnnos
+ig &lt;- g
+if (class(ig) != "igraph") {
+warnings("The function must apply to the 'igraph' object.\n")
+return(NULL)
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("First, generate a subgraph induced (via '%s' mode) by
+the annotation data (%s) ...",
+path.mode, as.character(now)), appendLF = T)
+}
+subg &lt;- xDAGanno(g = ig, annotation = annotation, path.mode =
+path.mode,
+true.path.rule = true.path.rule, verbose = verbose)
+gs &lt;- V(subg)$anno
+names(gs) &lt;- V(subg)$name
+gs.distance &lt;- V(subg)$term_distance
+names(gs.distance) &lt;- V(subg)$name
+}
+if (1) {
+if (is.vector(background)) {
+background &lt;- base::unique(background)
+background &lt;- background[!is.null(background)]
+background &lt;- background[!is.na(background)]
+}
+if (length(background) &gt; 0) {
+if (1) {
+background &lt;- base::union(background, data)
+}
+gs &lt;- lapply(gs, function(x) {
+ind &lt;- match(x, background)
+x[!is.na(ind)]
+})
+}
+}
+if (!is.null(which.distance) &amp; sum(is.na(gs.distance)) ==
+0) {
+distance_filtered &lt;- lapply(which.distance, function(x) {
+names(gs)[(gs.distance == as.integer(x))]
+})
+distance_filtered &lt;- unlist(distance_filtered)
+}
+else {
+distance_filtered &lt;- names(gs)
+}
+ind.distance &lt;- match(distance_filtered, names(gs))
+gs.length &lt;- sapply(gs, length)
+ind.length &lt;- which(gs.length &gt;= size.range[1] &amp; gs.length &lt;=
+size.range[2])
+ind &lt;- intersect(ind.distance, ind.length)
+gs &lt;- gs[ind]
+if (length(gs) == 0) {
+warnings("There are no terms being used.\n")
+return(NULL)
+}
+doFisherTest &lt;- function(genes.group, genes.term, genes.universe) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+cTab &lt;- matrix(c(X, K - X, M - X, N - M - K + X), nrow = 2,
+dimnames = list(c("anno", "notAnno"), c("group",
+"notGroup")))
+if (0) {
+p.value &lt;- ifelse(all(cTab == 0), 1, stats::fisher.test(cTab,
+alternative = "greater")$p.value)
+}
+else {
+if (all(cTab == 0)) {
+p.value &lt;- 1
+}
+else {
+if (p.tail == "one-tail") {
+p.value &lt;- stats::fisher.test(cTab, alternative = "greater")$p.value
+}
+else {
+if (X &gt;= K * M/N) {
+p.value &lt;- stats::fisher.test(cTab, alternative = "greater")$p.value
+}
+else {
+p.value &lt;- stats::fisher.test(cTab, alternative = "less")$p.value
+}
+}
+}
+}
+return(p.value)
+}
+doHypergeoTest &lt;- function(genes.group, genes.term, genes.universe,
+p.tail) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+x &lt;- X
+m &lt;- M
+n &lt;- N - M
+k &lt;- K
+if (m == 0 || k == 0) {
+p.value &lt;- 1
+}
+else {
+if (p.tail == "one-tail") {
+p.value &lt;- stats::phyper(x, m, n, k, lower.tail = F,
+log.p = F)
+}
+else {
+if (X &gt;= K * M/N) {
+p.value &lt;- stats::phyper(x, m, n, k, lower.tail = F,
+log.p = F)
+}
+else {
+p.value &lt;- stats::phyper(x, m, n, k, lower.tail = T,
+log.p = F)
+}
+}
+}
+return(p.value)
+}
+doBinomialTest &lt;- function(genes.group, genes.term, genes.universe,
+p.tail) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+if (K == 0 || M == 0 || N == 0) {
+p.value &lt;- 1
+}
+else {
+if (p.tail == "one-tail") {
+p.value &lt;- stats::pbinom(X, K, M/N, lower.tail = F,
+log.p = F)
+}
+else {
+if (X &gt;= K * M/N) {
+p.value &lt;- stats::pbinom(X, K, M/N, lower.tail = F,
+log.p = F)
+}
+else {
+p.value &lt;- stats::pbinom(X, K, M/N, lower.tail = T,
+log.p = F)
+}
+}
+}
+return(p.value)
+}
+zscoreHyper &lt;- function(genes.group, genes.term, genes.universe) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+if (1) {
+x.exp &lt;- K * M/N
+var.exp &lt;- K * M/N * (N - M)/N * (N - K)/(N - 1)
+if (is.na(var.exp)) {
+z &lt;- NA
+}
+else {
+if (var.exp != 0) {
+suppressWarnings(z &lt;- (X - x.exp)/sqrt(var.exp))
+}
+else {
+z &lt;- NA
+}
+}
+}
+else {
+x &lt;- X
+m &lt;- M
+n &lt;- N - M
+k &lt;- K
+suppressWarnings(d &lt;- stats::dhyper(x, m, n, k, log = TRUE) -
+log(2))
+suppressWarnings(pupper &lt;- stats::phyper(x, m, n,
+k, lower.tail = FALSE, log.p = TRUE))
+suppressWarnings(plower &lt;- stats::phyper(x - 1, m,
+n, k, lower.tail = TRUE, log.p = TRUE))
+d[is.na(d)] &lt;- -Inf
+pupper[is.na(pupper)] &lt;- -Inf
+plower[is.na(plower)] &lt;- -Inf
+a &lt;- pupper
+b &lt;- d - pupper
+a[b &gt; 0] &lt;- d[b &gt; 0]
+b &lt;- -abs(b)
+pmidupper &lt;- a + log1p(exp(b))
+pmidupper[is.infinite(a)] &lt;- a[is.infinite(a)]
+a &lt;- plower
+b &lt;- d - plower
+a[b &gt; 0] &lt;- d[b &gt; 0]
+b &lt;- -abs(b)
+pmidlower &lt;- a + log1p(exp(b))
+pmidlower[is.infinite(a)] &lt;- a[is.infinite(a)]
+up &lt;- pmidupper &lt; pmidlower
+if (any(up))
+z &lt;- stats::qnorm(pmidupper, lower.tail = FALSE,
+log.p = TRUE)
+if (any(!up))
+z &lt;- stats::qnorm(pmidlower, lower.tail = TRUE,
+log.p = TRUE)
+}
+return(z)
+}
+fcHyper &lt;- function(genes.group, genes.term, genes.universe) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+x.exp &lt;- K * M/N
+fc &lt;- X/x.exp
+return(fc)
+}
+orFisher &lt;- function(genes.group, genes.term, genes.universe) {
+genes.hit &lt;- intersect(genes.group, genes.term)
+X &lt;- length(genes.hit)
+K &lt;- length(genes.group)
+M &lt;- length(genes.term)
+N &lt;- length(genes.universe)
+cTab &lt;- matrix(c(X, K - X, M - X, N - M - K + X), nrow = 2,
+dimnames = list(c("anno", "notAnno"), c("group",
+"notGroup")))
+res &lt;- stats::fisher.test(cTab)
+return(c(as.vector(res$estimate), as.vector(res$conf.int)))
+}
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Next, prepare enrichment analysis (%s) ...",
+as.character(now)), appendLF = T)
+}
+if (ontology.algorithm != "none") {
+background.annotatable.only &lt;- T
+}
+else {
+if (is.null(background.annotatable.only)) {
+if (length(background) == 0) {
+background.annotatable.only &lt;- T
+}
+else {
+background.annotatable.only &lt;- F
+}
+}
+}
+terms &lt;- names(gs)
+if (background.annotatable.only) {
+genes.universe &lt;- unique(unlist(gs[terms]))
+}
+else {
+genes.universe &lt;- background
+}
+genes.group &lt;- intersect(genes.universe, data)
+if (length(genes.group) == 0) {
+warnings("There is no gene being used.\n")
+return(NULL)
+}
+else {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("\tThere are %d genes/SNPs of interest tested against
+%d genes/SNPs as the background (annotatable only? %s) (%s)",
+length(genes.group), length(genes.universe),
+background.annotatable.only, as.character(now)),
+appendLF = T)
+}
+}
+subg &lt;- dnet::dDAGinduce(g = subg, nodes_query = terms, path.mode =
+path.mode)
+set_info &lt;- data.frame(id = V(subg)$term_id, name = V(subg)$term_name,
+distance = V(subg)$term_distance, namespace = V(subg)$term_namespace,
+row.names = V(subg)$name, stringsAsFactors = F)
+if (ontology.algorithm == "none") {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Third, perform enrichment analysis using '%s' test
+(%s) ...",
+test, as.character(now)), appendLF = T)
+if (is.null(which.distance)) {
+message(sprintf("\tThere are %d terms being used, each restricted
+within [%s] annotations",
+length(terms), paste(size.range, collapse = ",")),
+appendLF = T)
+}
+else {
+message(sprintf("\tThere are %d terms being used, each restricted
+within [%s] annotations and [%s] distance",
+length(terms), paste(size.range, collapse = ","),
+paste(which.distance, collapse = ",")), appendLF = T)
+}
+}
+pvals &lt;- sapply(terms, function(term) {
+genes.term &lt;- unique(unlist(gs[term]))
+p.value &lt;- switch(test, fisher = doFisherTest(genes.group,
+genes.term, genes.universe), hypergeo = doHypergeoTest(genes.group,
+genes.term, genes.universe, p.tail = p.tail),
+binomial = doBinomialTest(genes.group, genes.term,
+genes.universe, p.tail = p.tail))
+})
+zscores &lt;- sapply(terms, function(term) {
+genes.term &lt;- unique(unlist(gs[term]))
+zscoreHyper(genes.group, genes.term, genes.universe)
+})
+fcs &lt;- sapply(terms, function(term) {
+genes.term &lt;- unique(unlist(gs[term]))
+fcHyper(genes.group, genes.term, genes.universe)
+})
+ls_or &lt;- lapply(terms, function(term) {
+genes.term &lt;- unique(unlist(gs[term]))
+orFisher(genes.group, genes.term, genes.universe)
+})
+df_or &lt;- do.call(rbind, ls_or)
+ors &lt;- df_or[, 1]
+CIl &lt;- df_or[, 2]
+CIu &lt;- df_or[, 3]
+}
+else if (ontology.algorithm == "pc" || ontology.algorithm ==
+"elim" || ontology.algorithm == "lea") {
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Third, perform enrichment analysis based on '%s'
+test, and also using '%s' algorithm to respect ontology structure
+(%s) ...",
+test, ontology.algorithm, as.character(now)),
+appendLF = T)
+}
+if (verbose) {
+message(sprintf("\tThere are %d terms being used",
+length(V(subg))), appendLF = T)
+}
+level2node &lt;- dnet::dDAGlevel(subg, level.mode = "longest_path",
+return.mode = "level2node")
+level2node.Hash &lt;- list2env(level2node)
+nLevels &lt;- length(level2node)
+node2pval.Hash &lt;- new.env(hash = T, parent = emptyenv())
+node2zscore.Hash &lt;- new.env(hash = T, parent = emptyenv())
+node2fc.Hash &lt;- new.env(hash = T, parent = emptyenv())
+node2or.Hash &lt;- new.env(hash = T, parent = emptyenv())
+node2CIl.Hash &lt;- new.env(hash = T, parent = emptyenv())
+node2CIu.Hash &lt;- new.env(hash = T, parent = emptyenv())
+if (ontology.algorithm == "pc") {
+for (i in nLevels:2) {
+currNodes &lt;- get(as.character(i), envir = level2node.Hash,
+mode = "character")
+for (currNode in currNodes) {
+genes.term &lt;- unique(unlist(gs[currNode]))
+pvalue_whole &lt;- switch(test, fisher = doFisherTest(genes.group,
+genes.term, genes.universe), hypergeo = doHypergeoTest(genes.group,
+genes.term, genes.universe, p.tail = p.tail),
+binomial = doBinomialTest(genes.group, genes.term,
+genes.universe, p.tail = p.tail))
+zscore_whole &lt;- zscoreHyper(genes.group, genes.term,
+genes.universe)
+fc_whole &lt;- fcHyper(genes.group, genes.term,
+genes.universe)
+vec_whole &lt;- orFisher(genes.group, genes.term,
+genes.universe)
+or_whole &lt;- vec_whole[1]
+CIl_whole &lt;- vec_whole[2]
+CIu_whole &lt;- vec_whole[3]
+neighs.in &lt;- igraph::neighborhood(subg, order = 1,
+nodes = currNode, mode = "in")
+adjNodes &lt;- setdiff(V(subg)[unlist(neighs.in)]$name,
+currNode)
+genes.parent &lt;- unique(unlist(gs[adjNodes]))
+genes.group.parent &lt;- intersect(genes.group,
+genes.parent)
+genes.term.parent &lt;- intersect(genes.term,
+genes.parent)
+pvalue_relative &lt;- switch(test, fisher =
+doFisherTest(genes.group.parent,
+genes.term.parent, genes.parent), hypergeo =
+doHypergeoTest(genes.group.parent,
+genes.term.parent, genes.parent, p.tail = p.tail),
+binomial = doBinomialTest(genes.group.parent,
+genes.term.parent, genes.parent, p.tail = p.tail))
+zscore_relative &lt;- zscoreHyper(genes.group.parent,
+genes.term.parent, genes.parent)
+fc_relative &lt;- fcHyper(genes.group.parent,
+genes.term.parent, genes.parent)
+vec_relative &lt;- orFisher(genes.group.parent,
+genes.term.parent, genes.parent)
+or_relative &lt;- vec_relative[1]
+CIl_relative &lt;- vec_relative[2]
+CIu_relative &lt;- vec_relative[3]
+pvalue &lt;- max(pvalue_whole, pvalue_relative)
+assign(currNode, pvalue, envir = node2pval.Hash)
+zscore &lt;- ifelse(pvalue_whole &gt; pvalue_relative,
+zscore_whole, zscore_relative)
+assign(currNode, zscore, envir = node2zscore.Hash)
+fc &lt;- ifelse(pvalue_whole &gt; pvalue_relative,
+fc_whole, fc_relative)
+assign(currNode, fc, envir = node2fc.Hash)
+or &lt;- ifelse(pvalue_whole &gt; pvalue_relative,
+or_whole, or_relative)
+assign(currNode, or, envir = node2or.Hash)
+CIl &lt;- ifelse(pvalue_whole &gt; pvalue_relative,
+CIl_whole, CIl_relative)
+assign(currNode, CIl, envir = node2CIl.Hash)
+CIu &lt;- ifelse(pvalue_whole &gt; pvalue_relative,
+CIu_whole, CIu_relative)
+assign(currNode, CIu, envir = node2CIu.Hash)
+}
+if (verbose) {
+message(sprintf("\tAt level %d, there are %d nodes/terms",
+i, length(currNodes), appendLF = T))
+}
+}
+root &lt;- dnet::dDAGroot(subg)
+assign(root, 1, envir = node2pval.Hash)
+assign(root, 0, envir = node2zscore.Hash)
+}
+else if (ontology.algorithm == "elim") {
+sigNode2pval.Hash &lt;- new.env(hash = T, parent = emptyenv())
+ancNode2gene.Hash &lt;- new.env(hash = T, parent = emptyenv())
+if (is.null(elim.pvalue) || is.na(elim.pvalue) ||
+elim.pvalue &gt; 1 || elim.pvalue &lt; 0) {
+elim.pvalue &lt;- 0.01
+}
+pval.cutoff &lt;- elim.pvalue
+for (i in nLevels:1) {
+currNodes &lt;- get(as.character(i), envir = level2node.Hash,
+mode = "character")
+currAnno &lt;- gs[currNodes]
+for (currNode in currNodes) {
+genes.term &lt;- unique(unlist(gs[currNode]))
+if (exists(currNode, envir = ancNode2gene.Hash,
+mode = "numeric")) {
+genes.elim &lt;- get(currNode, envir = ancNode2gene.Hash,
+mode = "numeric")
+genes.term &lt;- setdiff(genes.term, genes.elim)
+}
+pvalue &lt;- switch(test, fisher = doFisherTest(genes.group,
+genes.term, genes.universe), hypergeo = doHypergeoTest(genes.group,
+genes.term, genes.universe, p.tail = p.tail),
+binomial = doBinomialTest(genes.group, genes.term,
+genes.universe, p.tail = p.tail))
+zscore &lt;- zscoreHyper(genes.group, genes.term,
+genes.universe)
+fc &lt;- fcHyper(genes.group, genes.term, genes.universe)
+vec &lt;- orFisher(genes.group, genes.term, genes.universe)
+or &lt;- vec[1]
+CIl &lt;- vec[2]
+CIu &lt;- vec[3]
+assign(currNode, pvalue, envir = node2pval.Hash)
+assign(currNode, zscore, envir = node2zscore.Hash)
+assign(currNode, fc, envir = node2fc.Hash)
+assign(currNode, or, envir = node2or.Hash)
+assign(currNode, CIl, envir = node2CIl.Hash)
+assign(currNode, CIu, envir = node2CIu.Hash)
+if (pvalue &lt; pval.cutoff) {
+assign(currNode, pvalue, envir = sigNode2pval.Hash)
+elimGenesID &lt;- currAnno[[currNode]]
+dag.ancestors &lt;- dnet::dDAGinduce(subg, currNode,
+path.mode = "all_paths")
+ancestors &lt;- setdiff(V(dag.ancestors)$name,
+currNode)
+oldAncestors2GenesID &lt;- sapply(ancestors,
+function(ancestor) {
+if (exists(ancestor, envir = ancNode2gene.Hash,
+mode = "numeric")) {
+get(ancestor, envir = ancNode2gene.Hash,
+mode = "numeric")
+}
+})
+newAncestors2GenesID &lt;- lapply(oldAncestors2GenesID,
+function(oldGenes) {
+base::union(oldGenes, elimGenesID)
+})
+if (length(newAncestors2GenesID) &gt; 0) {
+sapply(names(newAncestors2GenesID), function(ancestor) {
+assign(ancestor, newAncestors2GenesID[[ancestor]],
+envir = ancNode2gene.Hash)
+})
+}
+}
+}
+if (verbose) {
+num.signodes &lt;- length(ls(sigNode2pval.Hash))
+num.ancnodes &lt;- length(ls(ancNode2gene.Hash))
+num.elimgenes &lt;- length(unique(unlist(as.list(ancNode2gene.Hash))))
+message(sprintf("\tAt level %d, there are %d nodes/terms: up to %d
+significant nodes, %d ancestral nodes changed (%d genes/SNPs
+eliminated)",
+i, length(currNodes), num.signodes, num.ancnodes,
+num.elimgenes), appendLF = T)
+}
+}
+}
+else if (ontology.algorithm == "lea") {
+node2pvalo.Hash &lt;- new.env(hash = T, parent = emptyenv())
+if (is.null(lea.depth) || is.na(lea.depth) || lea.depth &lt;
+0) {
+lea.depth &lt;- 2
+}
+depth.cutoff &lt;- as.integer(lea.depth)
+for (i in nLevels:1) {
+currNodes &lt;- get(as.character(i), envir = level2node.Hash,
+mode = "character")
+currAnno &lt;- gs[currNodes]
+num.recalculate &lt;- 0
+for (currNode in currNodes) {
+genes.term &lt;- unique(unlist(gs[currNode]))
+pvalue.old &lt;- switch(test, fisher = doFisherTest(genes.group,
+genes.term, genes.universe), hypergeo = doHypergeoTest(genes.group,
+genes.term, genes.universe, p.tail = p.tail),
+binomial = doBinomialTest(genes.group, genes.term,
+genes.universe, p.tail = p.tail))
+zscore.old &lt;- zscoreHyper(genes.group, genes.term,
+genes.universe)
+fc.old &lt;- fcHyper(genes.group, genes.term,
+genes.universe)
+vec.old &lt;- orFisher(genes.group, genes.term,
+genes.universe)
+or.old &lt;- vec.old[1]
+CIl.old &lt;- vec.old[2]
+CIu.old &lt;- vec.old[3]
+assign(currNode, pvalue.old, envir = node2pvalo.Hash)
+neighs.out &lt;- igraph::neighborhood(subg, order = depth.cutoff,
+nodes = currNode, mode = "out")
+adjNodes &lt;- setdiff(V(subg)[unlist(neighs.out)]$name,
+currNode)
+if (length(adjNodes) != 0) {
+if (1) {
+pvalue.children &lt;- sapply(adjNodes, function(child) {
+if (exists(child, envir = node2pvalo.Hash,
+mode = "numeric")) {
+get(child, envir = node2pvalo.Hash,
+mode = "numeric")
+}
+})
+}
+else {
+pvalue.children &lt;- sapply(adjNodes, function(child) {
+if (exists(child, envir = node2pval.Hash,
+mode = "numeric")) {
+get(child, envir = node2pval.Hash,
+mode = "numeric")
+}
+})
+}
+chNodes &lt;- names(pvalue.children[pvalue.children &lt;
+pvalue.old])
+if (length(chNodes) &gt; 0) {
+num.recalculate &lt;- num.recalculate + 1
+genes.elim &lt;- unique(unlist(gs[chNodes]))
+genes.term.new &lt;- setdiff(genes.term, genes.elim)
+pvalue.new &lt;- switch(test, fisher = doFisherTest(genes.group,
+genes.term.new, genes.universe), hypergeo = doHypergeoTest(genes.group,
+genes.term.new, genes.universe, p.tail = p.tail),
+binomial = doBinomialTest(genes.group,
+genes.term.new, genes.universe, p.tail = p.tail))
+zscore.new &lt;- zscoreHyper(genes.group,
+genes.term.new, genes.universe)
+fc.new &lt;- fcHyper(genes.group, genes.term.new,
+genes.universe)
+vec.new &lt;- orFisher(genes.group, genes.term.new,
+genes.universe)
+or.new &lt;- vec.new[1]
+CIl.new &lt;- vec.new[2]
+CIu.new &lt;- vec.new[3]
+pvalue &lt;- max(pvalue.new, pvalue.old)
+zscore &lt;- ifelse(pvalue.new &gt; pvalue.old,
+zscore.new, zscore.old)
+fc &lt;- ifelse(pvalue.new &gt; pvalue.old, fc.new,
+fc.old)
+or &lt;- ifelse(pvalue.new &gt; pvalue.old, or.new,
+or.old)
+CIl &lt;- ifelse(pvalue.new &gt; pvalue.old,
+CIl.new, CIl.old)
+CIu &lt;- ifelse(pvalue.new &gt; pvalue.old,
+CIu.new, CIu.old)
+}
+else {
+pvalue &lt;- pvalue.old
+zscore &lt;- zscore.old
+fc &lt;- fc.old
+or &lt;- or.old
+CIl &lt;- CIl.old
+CIu &lt;- CIu.old
+}
+}
+else {
+pvalue &lt;- pvalue.old
+zscore &lt;- zscore.old
+fc &lt;- fc.old
+or &lt;- or.old
+CIl &lt;- CIl.old
+CIu &lt;- CIu.old
+}
+assign(currNode, pvalue, envir = node2pval.Hash)
+assign(currNode, zscore, envir = node2zscore.Hash)
+assign(currNode, fc, envir = node2fc.Hash)
+assign(currNode, or, envir = node2or.Hash)
+assign(currNode, CIl, envir = node2CIl.Hash)
+assign(currNode, CIu, envir = node2CIu.Hash)
+}
+if (verbose) {
+message(sprintf("\tAt level %d, there are %d nodes/terms and %d
+being recalculated",
+i, length(currNodes), num.recalculate), appendLF = T)
+}
+}
+}
+pvals &lt;- unlist(as.list(node2pval.Hash))
+zscores &lt;- unlist(as.list(node2zscore.Hash))
+fcs &lt;- unlist(as.list(node2fc.Hash))
+ors &lt;- unlist(as.list(node2or.Hash))
+CIl &lt;- unlist(as.list(node2CIl.Hash))
+CIu &lt;- unlist(as.list(node2CIu.Hash))
+}
+overlaps &lt;- lapply(names(gs), function(term) {
+genes.term &lt;- unique(unlist(gs[term]))
+x &lt;- intersect(genes.group, genes.term)
+x
+})
+names(overlaps) &lt;- names(gs)
+flag_filter &lt;- sapply(overlaps, function(x) ifelse(length(x) &gt;=
+min.overlap, T, F))
+if (sum(flag_filter) == 0) {
+warnings("It seems there are no terms meeting the specified
+'size.range' and 'min.overlap'.\n")
+return(NULL)
+}
+gs &lt;- gs[flag_filter]
+overlaps &lt;- overlaps[flag_filter]
+common &lt;- intersect(names(gs), names(zscores))
+ind_gs &lt;- match(common, names(gs))
+ind_zscores &lt;- match(common, names(zscores))
+gs &lt;- gs[ind_gs[!is.na(ind_gs)]]
+overlaps &lt;- overlaps[ind_gs[!is.na(ind_gs)]]
+zscores &lt;- zscores[ind_zscores[!is.na(ind_zscores)]]
+fcs &lt;- fcs[ind_zscores[!is.na(ind_zscores)]]
+pvals &lt;- pvals[ind_zscores[!is.na(ind_zscores)]]
+ors &lt;- ors[ind_zscores[!is.na(ind_zscores)]]
+CIl &lt;- CIl[ind_zscores[!is.na(ind_zscores)]]
+CIu &lt;- CIu[ind_zscores[!is.na(ind_zscores)]]
+flag &lt;- !is.na(zscores)
+gs &lt;- gs[flag]
+overlaps &lt;- overlaps[flag]
+zscores &lt;- zscores[flag]
+fcs &lt;- fcs[flag]
+pvals &lt;- pvals[flag]
+ors &lt;- ors[flag]
+CIl &lt;- CIl[flag]
+CIu &lt;- CIu[flag]
+if (length(pvals) == 0) {
+warnings("There are no pvals being calculated.\n")
+return(NULL)
+}
+ind &lt;- match(rownames(set_info), names(pvals))
+set_info &lt;- set_info[!is.na(ind), ]
+zscores &lt;- signif(zscores, digits = 3)
+fcs &lt;- signif(fcs, digits = 3)
+pvals &lt;- sapply(pvals, function(x) min(x, 1))
+ors &lt;- signif(ors, digits = 3)
+CIl &lt;- signif(CIl, digits = 3)
+CIu &lt;- signif(CIu, digits = 3)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Last, adjust the p-values for %d terms (with %d
+minimum overlaps) using the %s method (%s) ...",
+length(pvals), min.overlap, p.adjust.method, as.character(now)),
+appendLF = T)
+}
+adjpvals &lt;- stats::p.adjust(pvals, method = p.adjust.method)
+pvals &lt;- signif(pvals, digits = 2)
+adjpvals &lt;- sapply(adjpvals, function(x) min(x, 1))
+adjpvals &lt;- signif(adjpvals, digits = 2)
+if (0) {
+tmp &lt;- as.numeric(format(.Machine)["double.xmin"])
+tmp &lt;- signif(tmp, digits = 2)
+pvals[pvals &lt; tmp] &lt;- tmp
+adjpvals[adjpvals &lt; tmp] &lt;- tmp
+}
+pvals &lt;- sapply(pvals, function(x) {
+if (x &lt; 0.1 &amp; x != 0) {
+as.numeric(format(x, scientific = T))
+}
+else {
+x
+}
+})
+adjpvals &lt;- sapply(adjpvals, function(x) {
+if (x &lt; 0.1 &amp; x != 0) {
+as.numeric(format(x, scientific = T))
+}
+else {
+x
+}
+})
+cross &lt;- matrix(0, nrow = length(overlaps), ncol = length(overlaps))
+if (length(overlaps) &gt;= 2) {
+for (i in seq(1, length(overlaps) - 1)) {
+x1 &lt;- overlaps[[i]]
+for (j in seq(i + 1, length(overlaps))) {
+x2 &lt;- overlaps[[j]]
+cross[i, j] &lt;- length(intersect(x1, x2))
+cross[j, i] &lt;- length(intersect(x1, x2))
+}
+}
+colnames(cross) &lt;- rownames(cross) &lt;- names(overlaps)
+diag(cross) &lt;- sapply(overlaps, length)
+}
+eTerm &lt;- list(term_info = set_info, annotation = gs, g = subg,
+data = genes.group, background = genes.universe, overlap = overlaps,
+fc = fcs, zscore = zscores, pvalue = pvals, adjp = adjpvals,
+or = ors, CIl = CIl, CIu = CIu, cross = cross, call = match.call())
+class(eTerm) &lt;- "eTerm"
+invisible(eTerm)
+}
 </pre>
 
 

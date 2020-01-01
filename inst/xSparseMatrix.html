@@ -1,18 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a sparse matrix for an input file with...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSparseMatrix"><tr><td>xSparseMatrix</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to create a sparse matrix for an input file with three columns</h2>
-
-<h3>Description</h3>
-
-<p><code>xSparseMatrix</code> is supposed to create a sparse matrix for an input
-file with three columns.
-</p>
-
+<h2>xSparseMatrix</h2>
 
 <h3>Usage</h3>
 
@@ -26,63 +19,99 @@ xSparseMatrix(input.file, rows = NULL, columns = NULL, verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>input.file</code></td>
 <td>
-<p>an input file containing three columns: 1st column
-for rows, 2nd for columns, and 3rd for numeric values. Alternatively,
-the input.file can be a matrix or data frame, assuming that input file
-has been read. Note: the file should use the tab delimiter as the field
-separator between columns</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>rows</code></td>
 <td>
-<p>a vector specifying row names. By default, it is NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>columns</code></td>
 <td>
-<p>a vector specifying column names. By default, it is
-NULL</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to TRUE for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of the dgCMatrix class (a sparse matrix)
-</p>
-
-
-<h3>Note</h3>
-
-<p>If rows (or columns) are not NULL, the rows (or columns) of resulting
-sparse matrix will be union of those from input.file and those from
-rows (or columns).
-None
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xSparseMatrix</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-# create a sparse matrix of 4 X 2
-input.file &lt;- rbind(c('R1','C1',1), c('R2','C1',1), c('R2','C2',1),
-c('R3','C2',1), c('R4','C1',1))
-res &lt;- xSparseMatrix(input.file)
-res
-# get a full matrix
-as.matrix(res)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-res &lt;- xSparseMatrix(input.file, columns=c('C1','C2','C3'))
-res
+## The function is currently defined as
+function (input.file, rows = NULL, columns = NULL, verbose = T)
+{
+if (is.matrix(input.file) | is.data.frame(input.file)) {
+if (verbose) {
+message(sprintf("Load the input data matrix of %d X %d ...",
+dim(input.file)[1], dim(input.file)[2]), appendLF = T)
+}
+if (ncol(input.file) == 2) {
+input.file &lt;- cbind(input.file, rep(1, nrow(input.file)))
+}
+if (is.data.frame(input.file)) {
+input &lt;- cbind(as.character(input.file[, 1]), as.character(input.file[,
+2]), as.character(input.file[, 3]))
+}
+else {
+input &lt;- input.file
+}
+}
+else if (is.character(input.file) &amp; sum(input.file != "")) {
+if (verbose) {
+message(sprintf("Read the input file '%s' ...", input.file),
+appendLF = T)
+}
+input &lt;- utils::read.delim(input.file, header = T, sep = "\t",
+colClasses = "character")
+if (ncol(input) == 2) {
+input &lt;- cbind(input, rep(1, nrow(input)))
+}
+}
+else {
+return(NULL)
+}
+x &lt;- input
+if (!is.null(x)) {
+if (is.null(rows)) {
+x_row &lt;- sort(unique(x[, 1]))
+}
+else {
+x_row &lt;- rows
+}
+if (is.null(columns)) {
+x_col &lt;- sort(unique(x[, 2]))
+}
+else {
+x_col &lt;- columns
+}
+ind_row &lt;- match(x[, 1], x_row)
+ind_col &lt;- match(x[, 2], x_col)
+x.sparse &lt;- Matrix::sparseMatrix(i = ind_row, j = ind_col,
+x = as.numeric(x[, 3]), dims = c(length(x_row), length(x_col)))
+rownames(x.sparse) &lt;- x_row
+colnames(x.sparse) &lt;- x_col
+if (verbose) {
+message(sprintf("There are %d entries, converted into a sparse matrix
+of %d X %d.",
+nrow(x), dim(x.sparse)[1], dim(x.sparse)[2]),
+appendLF = T)
+}
+}
+else {
+return(NULL)
+}
+invisible(x.sparse)
+}
 </pre>
 
 

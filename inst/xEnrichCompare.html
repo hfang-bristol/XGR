@@ -1,34 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to compare enrichment results using side-by-side...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichCompare"><tr><td>xEnrichCompare</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to compare enrichment results using side-by-side barplots</h2>
-
-<h3>Description</h3>
-
-<p><code>xEnrichCompare</code> is supposed to compare enrichment results using
-side-by-side barplots. It returns an object of class &quot;ggplot&quot;.
-</p>
-
+<h2>xEnrichCompare</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichCompare(
-list_eTerm,
-displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
-FDR.cutoff = 0.05,
-bar.label = TRUE,
-bar.label.size = 2.5,
-wrap.width = NULL,
-sharings = NULL,
-font.family = "sans",
-facet = TRUE,
-signature = TRUE
-)
+xEnrichCompare(list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
+"pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 2.5,
+wrap.width = NULL, sharings = NULL, font.family = "sans", facet = TRUE,
+signature = TRUE)
 </pre>
 
 
@@ -37,135 +22,249 @@ signature = TRUE
 <table summary="R argblock">
 <tr valign="top"><td><code>list_eTerm</code></td>
 <td>
-<p>a list of &quot;eTerm&quot; objects</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-<p>which statistics will be used for comparison. It can
-be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
-adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
-enrichment z-score</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-<p>FDR cutoff used to declare the significant terms. By
-default, it is set to 0.05</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>bar.label</code></td>
 <td>
-<p>logical to indicate whether to label each bar with
-FDR. By default, it sets to true for bar labelling</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>bar.label.size</code></td>
 <td>
-<p>an integer specifying the bar labelling text
-size. By default, it sets to 3</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-<p>a positive integer specifying wrap width of name</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>sharings</code></td>
 <td>
-<p>a numeric vector specifying whether only shared terms
-will be displayed. For example, when comparing three groups of
-enrichment results, it can be set into c(2,3) to display only shared
-terms by any two or all three. By default, it is NULL meaning no such
-restriction</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-<p>the font family for texts</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>facet</code></td>
 <td>
-<p>logical to indicate whether to facet/wrap a 1d of panels
-into 2d. By default, it sets TRUE</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>signature</code></td>
 <td>
-<p>logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets TRUE showing which function is
-used to draw this graph</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;ggplot&quot;, but appended with a 'g' (an igraph object
-to represent DAG after being unionised)
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichDAGplotAdv</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
-cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
-RData.location=RData.location)
-ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
-df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
-data &lt;- df_cis$variant
-
-# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
-# 2a) Without considering LD SNPs and without respecting ontology tree
-eTerm_noLD_noTree &lt;- xEnricherSNPs(data, ontology="EF_disease",
-include.LD=NA, ontology.algorithm="none",
-RData.location=RData.location)
-# 2b) Without considering LD SNPs but respecting ontology tree
-eTerm_noLD_Tree &lt;- xEnricherSNPs(data, ontology="EF_disease",
-include.LD=NA, ontology.algorithm="lea", RData.location=RData.location)
-# 2c) Considering LD SNPs but without respecting ontology tree
-eTerm_LD_noTree &lt;- xEnricherSNPs(data, ontology="EF_disease",
-include.LD="EUR", LD.r2=0.8, ontology.algorithm="none",
-RData.location=RData.location)
-# 2d) Considering LD SNPs and respecting ontology tree
-eTerm_LD_Tree &lt;- xEnricherSNPs(data, ontology="EF_disease",
-include.LD="EUR", LD.r2=0.8, ontology.algorithm="lea",
-RData.location=RData.location)
-
-# 3) Compare enrichment results
-list_eTerm &lt;- list(eTerm_noLD_noTree, eTerm_noLD_Tree, eTerm_LD_noTree,
-eTerm_LD_Tree)
-names(list_eTerm) &lt;- c('LD(-) &amp; Tree(-)','LD(-) &amp; Tree(+)','LD(+) &amp;
-Tree(-)','LD(+) &amp; Tree(+)')
-## side-by-side comparisons 
-bp &lt;- xEnrichCompare(list_eTerm, displayBy="fc")
-#pdf(file="enrichment_compared.pdf", height=6, width=12, compress=TRUE)
-print(bp)
-#dev.off()
-## modify y axis text
-bp + theme(axis.text.y=element_text(size=10,color="black"))
-## modify x axis title
-bp + theme(axis.title.x=element_text(color="black"))
-## modify fill colors
-bp + scale_fill_manual(values=c("black","#888888"))
-## show legend title but hide strip
-bp + theme(legend.position="right", strip.text=element_blank())
-
-# 4) DAGplot of comparative enrichment results in the context of ontology tree
-xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
-
-## End(Not run)
+## The function is currently defined as
+function (list_eTerm, displayBy = c("fc", "adjp", "fdr", "zscore",
+"pvalue"), FDR.cutoff = 0.05, bar.label = TRUE, bar.label.size = 2.5,
+wrap.width = NULL, sharings = NULL, font.family = "sans",
+facet = TRUE, signature = TRUE)
+{
+displayBy &lt;- match.arg(displayBy)
+list_eTerm &lt;- base::Filter(base::Negate(is.null), list_eTerm)
+if (length(list_eTerm) == 0) {
+return(NULL)
+}
+list_names &lt;- names(list_eTerm)
+if (is.null(list_names)) {
+list_names &lt;- paste("Enrichment", 1:length(list_eTerm),
+sep = " ")
+}
+res_ls &lt;- lapply(1:length(list_eTerm), function(i) {
+df &lt;- xEnrichViewer(list_eTerm[[i]], top_num = "all",
+sortBy = "none")
+if (is.null(df)) {
+return(NULL)
+}
+else {
+cbind(group = rep(list_names[i], nrow(df)), id = rownames(df),
+df, stringsAsFactors = F)
+}
+})
+df_all &lt;- do.call(rbind, res_ls)
+rownames(df_all) &lt;- NULL
+ind &lt;- which(df_all$adjp &lt; FDR.cutoff)
+d &lt;- df_all[ind, c("id", "name", "fc", "adjp", "zscore",
+"pvalue", "group")]
+d$group &lt;- factor(d$group, levels = rev(list_names))
+if (!is.null(wrap.width)) {
+width &lt;- as.integer(wrap.width)
+res_list &lt;- lapply(d$name, function(x) {
+x &lt;- gsub("_", " ", x)
+y &lt;- strwrap(x, width = width)
+if (length(y) &gt; 1) {
+paste0(y[1], "...")
+}
+else {
+y
+}
+})
+d$name &lt;- unlist(res_list)
+}
+id_ls &lt;- split(x = d$group, f = d$id)
+ind &lt;- match(d$id, names(id_ls))
+id_full_ls &lt;- id_ls[ind]
+nSig &lt;- unlist(lapply(id_full_ls, length))
+d$nSig &lt;- nSig
+code &lt;- lapply(id_full_ls, function(x) {
+res &lt;- rep(0, length(levels(x)))
+ind &lt;- match(x, levels(x))
+res[ind] &lt;- 1
+paste(res, collapse = "-")
+})
+d$code &lt;- unlist(code)
+if (!is.null(sharings)) {
+sharings &lt;- as.numeric(sharings)
+ind &lt;- match(sharings, unique(d$nSig))
+found &lt;- sharings[!is.na(ind)]
+if (length(found) &gt; 0) {
+flag &lt;- match(d$nSig, found)
+d &lt;- d[!is.na(flag), ]
+nSig &lt;- nSig[!is.na(flag)]
+}
+}
+name &lt;- fc &lt;- group &lt;- adjp &lt;- zscore &lt;- pvalue &lt;- label &lt;- direction
+&lt;- height &lt;- hjust &lt;- NULL
+d &lt;- d %&gt;% dplyr::mutate(direction = ifelse(zscore &gt; 0, 1,
+-1))
+if (displayBy == "fc") {
+d &lt;- d %&gt;% dplyr::arrange(nSig, group, direction, fc,
+desc(adjp)) %&gt;% dplyr::mutate(height = log2(fc)) %&gt;%
+dplyr::mutate(hjust = ifelse(height &gt;= 0, 1, 0))
+d$name &lt;- factor(d$name, levels = unique(d$name))
+ind &lt;- match(unique(d$id), names(nSig))
+xintercept &lt;- which(!duplicated(nSig[ind]))[-1]
+p &lt;- ggplot(d, aes(x = name, y = height, fill = group))
+p &lt;- p + ylab(expression(paste("Enrichment changes: ",
+log[2]("FC"))))
+}
+else if (displayBy == "adjp" | displayBy == "fdr") {
+d &lt;- d %&gt;% dplyr::arrange(nSig, group, direction, desc(adjp),
+zscore) %&gt;% dplyr::mutate(height = -1 * log10(adjp)) %&gt;%
+dplyr::mutate(hjust = 1)
+d$name &lt;- factor(d$name, levels = unique(d$name))
+ind &lt;- match(unique(d$id), names(nSig))
+xintercept &lt;- which(!duplicated(nSig[ind]))[-1]
+p &lt;- ggplot(d, aes(x = name, y = height, fill = group))
+p &lt;- p + ylab(expression(paste("Enrichment significance: ",
+-log[10]("FDR"))))
+}
+else if (displayBy == "zscore") {
+d &lt;- d %&gt;% dplyr::arrange(nSig, group, direction, zscore,
+desc(adjp)) %&gt;% dplyr::mutate(height = zscore) %&gt;%
+dplyr::mutate(hjust = ifelse(height &gt;= 0, 1, 0))
+d$name &lt;- factor(d$name, levels = unique(d$name))
+ind &lt;- match(unique(d$id), names(nSig))
+xintercept &lt;- which(!duplicated(nSig[ind]))[-1]
+p &lt;- ggplot(d, aes(x = name, y = height, fill = group))
+p &lt;- p + ylab("Enrichment z-scores")
+}
+else if (displayBy == "pvalue") {
+d &lt;- d %&gt;% dplyr::arrange(nSig, group, direction, desc(pvalue),
+zscore) %&gt;% dplyr::mutate(height = -1 * log10(pvalue)) %&gt;%
+dplyr::mutate(hjust = 1)
+d$name &lt;- factor(d$name, levels = unique(d$name))
+ind &lt;- match(unique(d$id), names(nSig))
+xintercept &lt;- which(!duplicated(nSig[ind]))[-1]
+p &lt;- ggplot(d, aes(x = name, y = height, fill = group))
+p &lt;- p + ylab(expression(paste("Enrichment significance: ",
+-log[10]("p-value"))))
+}
+bp &lt;- p + geom_bar(stat = "identity") + theme_bw() +
+theme(legend.position = "none",
+legend.title = element_blank(), axis.title.y = element_blank(),
+axis.text.y = element_text(size = 10, color = "black"),
+axis.title.x = element_text(size = 14, color = "black")) +
+geom_vline(xintercept = xintercept - 0.5, color = "black",
+linetype = "dotdash") + coord_flip()
+bp &lt;- bp + theme(panel.grid.major = element_blank(), panel.grid.minor =
+element_blank())
+bp &lt;- bp + theme(strip.background = element_rect(fill = "transparent",
+color = "transparent"), strip.text = element_text(size = 12,
+face = "italic"))
+if (bar.label) {
+to_scientific_notation &lt;- function(x) {
+res &lt;- format(x, scientific = T)
+res &lt;- sub("\+0?", "", res)
+sub("-0?", "-", res)
+}
+label &lt;- to_scientific_notation(d$adjp)
+d$label &lt;- paste("FDR", as.character(label), sep = "=")
+df_sub &lt;- d %&gt;% dplyr::filter(hjust == 1)
+bp &lt;- bp + geom_text(data = df_sub, aes(label = label),
+hjust = 1, size = bar.label.size, family = font.family)
+df_sub &lt;- d %&gt;% dplyr::filter(hjust == 0)
+bp &lt;- bp + geom_text(data = df_sub, aes(label = label),
+hjust = 0, size = bar.label.size, family = font.family)
+}
+title &lt;- paste0("Enrichments (FDR &lt; ", FDR.cutoff, ")")
+bp &lt;- bp + labs(title = title) + theme(plot.title = element_text(hjust
+= 0.5))
+if (signature) {
+caption &lt;- paste("Created by xEnrichCompare from XGR version",
+utils::packageVersion("XGR"))
+bp &lt;- bp + labs(caption = caption) + theme(plot.caption =
+element_text(hjust = 1,
+face = "bold.italic", size = 8, colour = "#002147"))
+}
+bp &lt;- bp + theme(text = element_text(family = font.family))
+bp &lt;- bp + theme(axis.line.x = element_line(arrow = arrow(angle = 30,
+length = unit(0.25, "cm"), type = "open")))
+if (facet) {
+bp &lt;- bp + facet_grid(~group)
+}
+else {
+bp &lt;- bp + theme(legend.position = "bottom", legend.title =
+element_text(size = 10,
+color = "black", face = "bold")) + guides(fill = guide_legend(title =
+"",
+title.position = "left", reverse = TRUE, nrow = 1,
+byrow = TRUE))
+}
+flag &lt;- sapply(list_eTerm, function(x) !is.null(x$g))
+if (all(flag)) {
+ls_edges &lt;- lapply(list_eTerm, function(x) {
+df_edge &lt;- igraph::get.data.frame(x$g, what = "edges")
+})
+relations &lt;- do.call(rbind, ls_edges)
+relations &lt;- relations[!duplicated(relations), ]
+ls_nodes &lt;- lapply(list_eTerm, function(x) {
+df_nodes &lt;- igraph::get.data.frame(x$g, what = "vertices")
+})
+nodes &lt;- do.call(rbind, ls_nodes)[, 1:4]
+nodes &lt;- nodes[!duplicated(nodes), ]
+ig &lt;- igraph::graph.data.frame(d = relations, directed = T,
+vertices = nodes)
+bp$g &lt;- ig
+}
+invisible(bp)
+}
 </pre>
 
 

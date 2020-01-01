@@ -1,45 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define a gene network</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xDefineNet"><tr><td>xDefineNet</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to define a gene network</h2>
-
-<h3>Description</h3>
-
-<p><code>xDefineNet</code> is supposed to define a gene network sourced from the
-STRING database or the Pathway Commons database. It returns an object
-of class &quot;igraph&quot;.
-</p>
-
+<h2>xDefineNet</h2>
 
 <h3>Usage</h3>
 
 <pre>
-xDefineNet(
-network = c("STRING_highest", "STRING_high", "STRING_medium",
-"STRING_low",
-"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
-"PCommonsDN_medium",
-"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
-"PCommonsDN_PID",
+xDefineNet(network = c("STRING_highest", "STRING_high",
+"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
+"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic",
-"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
-"KEGG_disease", "REACTOME",
-"TRRUST"),
-STRING.only = c(NA, "neighborhood_score", "fusion_score",
-"cooccurence_score",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal", "KEGG_disease", "REACTOME", "TRRUST"), STRING.only =
+c(NA, "neighborhood_score", "fusion_score", "cooccurence_score",
 "coexpression_score", "experimental_score", "database_score",
-"textmining_score")[1],
-weighted = FALSE,
-verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL
-)
+"textmining_score")[1], weighted = FALSE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 </pre>
 
 
@@ -48,132 +30,241 @@ guid = NULL
 <table summary="R argblock">
 <tr valign="top"><td><code>network</code></td>
 <td>
-<p>the built-in network. Currently two sources of network
-information are supported: the STRING database (version 10) and the
-Pathway Commons database (version 7). STRING is a meta-integration of
-undirect interactions from the functional aspect, while Pathways
-Commons mainly contains both undirect and direct interactions from the
-physical/pathway aspect. Both have scores to control the confidence of
-interactions. Therefore, the user can choose the different quality of
-the interactions. In STRING, &quot;STRING_highest&quot; indicates interactions
-with highest confidence (confidence scores&gt;=900), &quot;STRING_high&quot; for
-interactions with high confidence (confidence scores&gt;=700),
-&quot;STRING_medium&quot; for interactions with medium confidence (confidence
-scores&gt;=400), and &quot;STRING_low&quot; for interactions with low confidence
-(confidence scores&gt;=150). For undirect/physical interactions from
-Pathways Commons, &quot;PCommonsUN_high&quot; indicates undirect interactions
-with high confidence (supported with the PubMed references plus at
-least 2 different sources), &quot;PCommonsUN_medium&quot; for undirect
-interactions with medium confidence (supported with the PubMed
-references). For direct (pathway-merged) interactions from Pathways
-Commons, &quot;PCommonsDN_high&quot; indicates direct interactions with high
-confidence (supported with the PubMed references plus at least 2
-different sources), and &quot;PCommonsUN_medium&quot; for direct interactions
-with medium confidence (supported with the PubMed references). In
-addition to pooled version of pathways from all data sources, the user
-can also choose the pathway-merged network from individual sources,
-that is, &quot;PCommonsDN_Reactome&quot; for those from Reactome,
-&quot;PCommonsDN_KEGG&quot; for those from KEGG, &quot;PCommonsDN_HumanCyc&quot; for those
-from HumanCyc, &quot;PCommonsDN_PID&quot; for those froom PID,
-&quot;PCommonsDN_PANTHER&quot; for those from PANTHER, &quot;PCommonsDN_ReconX&quot; for
-those from ReconX, &quot;PCommonsDN_TRANSFAC&quot; for those from TRANSFAC,
-&quot;PCommonsDN_PhosphoSite&quot; for those from PhosphoSite, and
-&quot;PCommonsDN_CTD&quot; for those from CTD. For direct (pathway-merged)
-interactions sourced from KEGG, it can be 'KEGG' for all,
-'KEGG_metabolism' for pathways grouped into 'Metabolism',
-'KEGG_genetic' for 'Genetic Information Processing' pathways,
-'KEGG_environmental' for 'Environmental Information Processing'
-pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
-'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease'
-for 'Human Diseases' pathways. 'REACTOME' for protein-protein
-interactions derived from Reactome pathways. 'TRRUST' for TRRUST
-curated TF-target relations</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>STRING.only</code></td>
 <td>
-<p>the further restriction of STRING by interaction
-type. If NA, no such restriction. Otherwide, it can be one or more of
-&quot;neighborhood_score&quot;,&quot;fusion_score&quot;,&quot;cooccurence_score&quot;,&quot;coexpression_score&quot;,&quot;experimental_score&quot;,&quot;database_score&quot;,&quot;textmining_score&quot;.
-Useful options are c(&quot;experimental_score&quot;,&quot;database_score&quot;): only
-experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
-and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
-and Reactome) are used</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>weighted</code></td>
 <td>
-<p>logical to indicate whether edge weights should be
-considered. By default, it sets to false. If true, it only works for
-the network from the STRING database</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to true for display</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-<p>the characters to tell the location of built-in
-RData files. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-<p>a valid (5-character) Global Unique IDentifier for an OSF
-project. See <code>xRDataLoader</code> for details</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of class &quot;igraph&quot;
-</p>
-
-
-<h3>Note</h3>
-
-<p>The input graph will treat as an unweighted graph if there is no
-'weight' edge attribute associated with
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xCombineNet</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
-
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-## Not run: 
-# STRING (high quality)
-g &lt;- xDefineNet(network="STRING_high", RData.location=RData.location)
-# STRING (high quality), with edges weighted 
-g &lt;- xDefineNet(network="STRING_high", weighted=T,
-RData.location=RData.location)
-# STRING (high quality), only edges sourced from experimental or curated data
-g &lt;- xDefineNet(network="STRING_high",
-STRING.only=c("experimental_score","database_score"),
-RData.location=RData.location)
-
-# Pathway Commons 
-g &lt;- xDefineNet(network="PCommonsDN_medium",
-RData.location=RData.location)
-
-# KEGG (all)
-g &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
-# KEGG ('Organismal Systems')
-g &lt;- xDefineNet(network="KEGG_organismal",
-RData.location=RData.location)
-
-## End(Not run)
+## The function is currently defined as
+function (network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD", "KEGG", "KEGG_metabolism", "KEGG_genetic",
+"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_disease", "REACTOME", "TRRUST"), STRING.only = c(NA,
+"neighborhood_score", "fusion_score", "cooccurence_score",
+"coexpression_score", "experimental_score", "database_score",
+"textmining_score")[1], weighted = FALSE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL)
+{
+network &lt;- match.arg(network)
+if (verbose) {
+now &lt;- Sys.time()
+message(sprintf("Load the network %s (%s) ...", network,
+as.character(now)), appendLF = TRUE)
+}
+if (length(grep("STRING", network, perl = TRUE)) &gt; 0) {
+g &lt;- xRDataLoader(RData.customised = "org.Hs.string",
+RData.location = RData.location, guid = guid, verbose = verbose)
+flag &lt;- unlist(strsplit(network, "_"))[2]
+if (flag == "highest") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[combined_score&gt;=900])"))
+}
+else if (flag == "high") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[combined_score&gt;=700])"))
+}
+else if (flag == "medium") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[combined_score&gt;=400])"))
+}
+else if (flag == "low") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[combined_score&gt;=150])"))
+}
+default.STRING.only &lt;- c("neighborhood_score", "fusion_score",
+"cooccurence_score", "coexpression_score", "experimental_score",
+"database_score", "textmining_score")
+ind &lt;- match(default.STRING.only, STRING.only)
+STRING.only &lt;- default.STRING.only[!is.na(ind)]
+if (length(STRING.only) &gt; 0) {
+x &lt;- sapply(STRING.only, function(x) paste0(x, "&gt;0"))
+x &lt;- paste0(x, collapse = " | ")
+x &lt;- paste0("g &lt;- igraph::subgraph.edges(g, eids=E(g)[",
+x, "])")
+eval(parse(text = x))
+}
+V(g)$name &lt;- V(g)$symbol
+if (weighted) {
+relations &lt;- igraph::get.data.frame(g, what = "edges")[,
+c(1, 2, 10)]
+colnames(relations) &lt;- c("from", "to", "weight")
+}
+else {
+relations &lt;- igraph::get.data.frame(g, what = "edges")[,
+c(1, 2)]
+colnames(relations) &lt;- c("from", "to")
+relations$weight &lt;- rep(1, nrow(relations))
+}
+if (0) {
+ind &lt;- which(!(grepl("HLA-", relations$from) &amp; grepl("HLA-",
+relations$to)))
+relations &lt;- relations[ind, ]
+}
+g &lt;- igraph::delete_vertex_attr(g, "name")
+g &lt;- igraph::delete_vertex_attr(g, "seqid")
+g &lt;- igraph::delete_vertex_attr(g, "geneid")
+nodes &lt;- igraph::get.data.frame(g, what = "vertices")
+nodes &lt;- nodes[!duplicated(nodes), ]
+g &lt;- igraph::graph.data.frame(d = relations, directed = FALSE,
+vertices = nodes)
+}
+else if (length(grep("PCommonsUN", network, perl = TRUE)) &gt;
+0) {
+g &lt;- xRDataLoader(RData.customised = "org.Hs.PCommons_UN",
+RData.location = RData.location, guid = guid, verbose = verbose)
+flag &lt;- unlist(strsplit(network, "_"))[2]
+if (flag == "high") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[in_complex_with&gt;=102 | interacts_with&gt;=102])"))
+}
+else if (flag == "medium") {
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[in_complex_with&gt;=101 | interacts_with&gt;=101])"))
+}
+relations &lt;- igraph::get.data.frame(g, what = "edges")[,
+c(1, 2)]
+colnames(relations) &lt;- c("from", "to")
+nodes &lt;- igraph::get.data.frame(g, what = "vertices")[,
+c(3, 4)]
+g &lt;- igraph::graph.data.frame(d = relations, directed = FALSE,
+vertices = nodes)
+}
+else if (length(grep("PCommonsDN", network, perl = TRUE)) &gt;
+0) {
+flag &lt;- unlist(strsplit(network, "_"))[2]
+if (flag == "high") {
+g &lt;- xRDataLoader(RData.customised = "org.Hs.PCommons_DN",
+RData.location = RData.location, guid = guid,
+verbose = verbose)
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[catalysis_precedes&gt;=102 | controls_expression_of&gt;=102 |
+controls_phosphorylation_of&gt;=102 | controls_state_change_of&gt;=102 |
+controls_transport_of&gt;=102])"))
+}
+else if (flag == "medium") {
+g &lt;- xRDataLoader(RData.customised = "org.Hs.PCommons_DN",
+RData.location = RData.location, guid = guid,
+verbose = verbose)
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[catalysis_precedes&gt;=101 | controls_expression_of&gt;=101 |
+controls_phosphorylation_of&gt;=101 | controls_state_change_of&gt;=101 |
+controls_transport_of&gt;=101])"))
+}
+else {
+g &lt;- xRDataLoader(RData.customised = "org.Hs.PCommons_DN.source",
+RData.location = RData.location, guid = guid,
+verbose = verbose)
+g &lt;- g[[flag]]
+eval(parse(text = "g &lt;- igraph::subgraph.edges(g,
+eids=E(g)[catalysis_precedes&gt;=101 | controls_expression_of&gt;=101 |
+controls_phosphorylation_of&gt;=101 | controls_state_change_of&gt;=101 |
+controls_transport_of&gt;=101])"))
+}
+relations &lt;- igraph::get.data.frame(g, what = "edges")[,
+c(1, 2)]
+colnames(relations) &lt;- c("from", "to")
+relations$weight &lt;- rep(1, nrow(relations))
+nodes &lt;- igraph::get.data.frame(g, what = "vertices")[,
+c(3, 4)]
+g &lt;- igraph::graph.data.frame(d = relations, directed = TRUE,
+vertices = nodes)
+}
+else if (network == "KEGG") {
+g &lt;- xRDataLoader(RData.customised = "ig.KEGG.merged",
+RData.location = RData.location, guid = guid, verbose = verbose)
+g &lt;- igraph::delete_vertex_attr(g, "hsa")
+g &lt;- igraph::delete_vertex_attr(g, "GeneID")
+g &lt;- igraph::delete_vertex_attr(g, "Symbol")
+E(g)$weight &lt;- 1
+if (1) {
+v &lt;- V(g)[grepl("HLA-", V(g)$name)]
+g &lt;- delete_vertices(g, v)
+}
+}
+else if (length(grep("KEGG_", network, perl = TRUE)) &gt; 0) {
+ls_ig &lt;- xRDataLoader(RData.customised = "ig.KEGG.mergedCategory",
+RData.location = RData.location, guid = guid, verbose = verbose)
+if (network == "KEGG_metabolism") {
+g &lt;- ls_ig[["Metabolism"]]
+}
+else if (network == "KEGG_genetic") {
+g &lt;- ls_ig[["Genetic Information Processing"]]
+}
+else if (network == "KEGG_environmental") {
+g &lt;- ls_ig[["Environmental Information Processing"]]
+}
+else if (network == "KEGG_cellular") {
+g &lt;- ls_ig[["Cellular Processes"]]
+}
+else if (network == "KEGG_organismal") {
+g &lt;- ls_ig[["Organismal Systems"]]
+}
+else if (network == "KEGG_disease") {
+g &lt;- ls_ig[["Human Diseases"]]
+}
+g &lt;- igraph::delete_vertex_attr(g, "hsa")
+g &lt;- igraph::delete_vertex_attr(g, "GeneID")
+g &lt;- igraph::delete_vertex_attr(g, "Symbol")
+E(g)$weight &lt;- 1
+if (1) {
+v &lt;- V(g)[grepl("HLA-", V(g)$name)]
+g &lt;- delete_vertices(g, v)
+}
+}
+else if (network == "REACTOME") {
+g &lt;- xRDataLoader(RData.customised = "ig.REACTOME.merged",
+RData.location = RData.location, guid = guid, verbose = verbose)
+g &lt;- igraph::delete_vertex_attr(g, "geneid")
+g &lt;- igraph::delete_vertex_attr(g, "symbol")
+E(g)$weight &lt;- 1
+}
+else if (network == "TRRUST") {
+g &lt;- xRDataLoader(RData.customised = "ig.TRRUST", RData.location =
+RData.location,
+guid = guid, verbose = verbose)
+E(g)$weight &lt;- 1
+}
+invisible(g)
+}
 </pre>
 
 

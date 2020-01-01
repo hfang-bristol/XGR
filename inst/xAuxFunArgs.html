@@ -1,18 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to assign (and evaluate) arguments with default...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xAuxFunArgs"><tr><td>xAuxFunArgs</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to assign (and evaluate) arguments with default values for a given function</h2>
-
-<h3>Description</h3>
-
-<p><code>xAuxFunArgs</code> is supposed to assign (and evaluate) arguments with
-default values for a given function.
-</p>
-
+<h2>xAuxFunArgs</h2>
 
 <h3>Usage</h3>
 
@@ -26,49 +19,76 @@ xAuxFunArgs(fun, action = NULL, verbose = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>fun</code></td>
 <td>
-<p>character specifying the name of the function</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>action</code></td>
 <td>
-<p>logical to indicate whether the function will act as it
-should be (with assigned values in the current environment). By
-default, it sets to NULL, return a string specifying the assignment to
-be evalated</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to TRUE for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>If action is logical, a list containing arguments and their default
-values. If action is NULL, a string specifying the assignment to be
-evalated.
-</p>
-
-
-<h3>Note</h3>
-
-<p>This auxiliary function is potentially useful when debugging as it
-frees developers from specifying default values for all arguments
-except those arguments of interest
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xAuxFunArgs</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-xAuxFunArgs(fun="xRDataLoader")
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (fun, action = NULL, verbose = TRUE)
+{
+args_list &lt;- base::formals(fun)
+args_names &lt;- names(args_list)
+if (is.null(action)) {
+ls_vec &lt;- lapply(1:length(args_list), function(i) {
+lft &lt;- args_names[[i]]
+rgt &lt;- paste(base::deparse(args_list[[i]]), collapse = "")
+if (rgt != "") {
+paste0(lft, "=", rgt, "[1];")
+}
+else {
+NULL
+}
+})
+res &lt;- noquote(paste(unlist(ls_vec), collapse = ""))
+return(res)
+}
+else {
+for (i in 1:length(args_list)) {
+lft &lt;- args_names[[i]]
+rgt &lt;- paste(base::deparse(args_list[[i]]), collapse = "")
+if (rgt != "") {
+tmp &lt;- paste(lft, "&lt;-", rgt, sep = " ")
+if (action == T) {
+base::eval(base::parse(text = tmp), envir = parent.frame())
+}
+else if (action == F) {
+base::eval(base::parse(text = tmp))
+}
+}
+}
+}
+if (verbose) {
+if (action == T) {
+message(sprintf("For the function '%s', %d arguments have been
+assigned with default values in the current environment.",
+fun, length(args_names)), appendLF = T)
+}
+else {
+message(sprintf("For the function '%s', there are %d arguments.",
+fun, length(args_names)), appendLF = T)
+}
+}
+invisible(args_list)
+}
 </pre>
 
 

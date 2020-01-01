@@ -1,25 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Definition for S3 class 'aOnto'</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for aOnto"><tr><td>aOnto</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Definition for S3 class <code>aOnto</code></h2>
-
-<h3>Description</h3>
-
-<p><code>aOnto</code> has 2 components: g, anno.
-</p>
-
+<h2>aOnto</h2>
 
 <h3>Usage</h3>
 
 <pre>
 aOnto(g, anno)
-
-## S3 method for class 'aOnto'
-print(x, ...)
 </pre>
 
 
@@ -28,42 +19,34 @@ print(x, ...)
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-<p>an igraph object</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>anno</code></td>
 <td>
-<p>a list</p>
-</td></tr>
-<tr valign="top"><td><code>x</code></td>
-<td>
-<p>an object of class <code>aOnto</code></p>
-</td></tr>
-<tr valign="top"><td><code>...</code></td>
-<td>
-<p>other parameters</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>an object of S3 class <code>aOnto</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
-## End(Not run)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-## Not run: 
-aOnto(g, anno)
-
-## End(Not run)
+## The function is currently defined as
+function (g, anno)
+{
+if (class(g) != "igraph" | class(anno) != "list") {
+stop("The S3 class 'aOnto' object failed to pass integrity checks!\n")
+}
+value &lt;- list(g = g, anno = anno)
+class(value) &lt;- "aOnto"
+return(value)
+}
 </pre>
 
 

@@ -1,19 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a data frame (with three columns) from a...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSM2DF"><tr><td>xSM2DF</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to create a data frame (with three columns) from a (sparse) matrix</h2>
-
-<h3>Description</h3>
-
-<p><code>xSM2DF</code> is supposed to create a data frame (with three columns)
-from a (sparse) matrix. Only nonzero/nonna entries from the matrix will
-be kept in the resulting data frame.
-</p>
-
+<h2>xSM2DF</h2>
 
 <h3>Usage</h3>
 
@@ -27,47 +19,84 @@ xSM2DF(data, verbose = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-<p>a matrix or an object of the dgCMatrix class (a sparse
-matrix)</p>
+
+
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-<p>logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to TRUE for display</p>
+
+
 </td></tr>
 </table>
-
-
-<h3>Value</h3>
-
-<p>a data frame containing three columns: 1st column for row names, 2nd
-for column names, and 3rd for numeric values
-</p>
-
-
-<h3>Note</h3>
-
-<p>none
-None
-</p>
-
-
-<h3>See Also</h3>
-
-<p><code>xSM2DF</code>
-</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-# create a sparse matrix of 4 X 2
-input.file &lt;- rbind(c('R1','C1',1), c('R2','C1',1), c('R2','C2',1),
-c('R3','C2',2), c('R4','C1',1))
-data &lt;- xSparseMatrix(input.file)
-# convert into a data frame
-res_df &lt;- xSM2DF(data)
-res_df
+##---- Should be DIRECTLY executable !! ----
+##-- ==&gt;  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (data, verbose = TRUE)
+{
+if (class(data) == "dgCMatrix" | is.data.frame(data)) {
+}
+if (is.null(rownames(data))) {
+names_row &lt;- 1:nrow(data)
+}
+else {
+names_row &lt;- rownames(data)
+}
+if (is.null(colnames(data))) {
+names_col &lt;- 1:ncol(data)
+}
+else {
+names_col &lt;- colnames(data)
+}
+if (is.data.frame(data) | class(data) == "matrix" | class(data) ==
+"dgeMatrix") {
+data &lt;- as.matrix(data)
+xy &lt;- which(data != 0, arr.ind = TRUE)
+ind &lt;- which(data != 0, arr.ind = FALSE)
+if (nrow(xy) &gt; 0) {
+res_df &lt;- data.frame(rownames = names_row[xy[, 1]],
+colnames = names_col[xy[, 2]], values = data[ind],
+stringsAsFactors = FALSE)
+res_df &lt;- res_df[order(res_df$rownames, res_df$values,
+decreasing = FALSE), ]
+if (verbose) {
+message(sprintf("A matrix of %d X %d has been converted into a data
+frame of %d X 3.",
+dim(data)[1], dim(data)[2], nrow(res_df)),
+appendLF = T)
+}
+}
+else {
+res_df &lt;- NULL
+}
+}
+else if (class(data) == "dgCMatrix" | class(data) == "dsCMatrix") {
+ijx &lt;- summary(data)
+if (nrow(ijx) &gt; 0) {
+res_df &lt;- data.frame(rownames = names_row[ijx[, 1]],
+colnames = names_col[ijx[, 2]], values = ijx[,
+3], stringsAsFactors = FALSE)
+res_df &lt;- res_df[order(res_df$rownames, res_df$values,
+decreasing = FALSE), ]
+if (verbose) {
+message(sprintf("A matrix of %d X %d has been converted into a data
+frame of %d X 3.",
+dim(data)[1], dim(data)[2], nrow(res_df)),
+appendLF = T)
+}
+}
+else {
+res_df &lt;- NULL
+}
+}
+invisible(res_df)
+}
 </pre>
 
 
