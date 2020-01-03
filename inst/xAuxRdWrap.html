@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to wrap texts from Rd files</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xAuxRdWrap"><tr><td>xAuxRdWrap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xAuxRdWrap</h2>
+<h2>Function to wrap texts from Rd files</h2>
+
+<h3>Description</h3>
+
+<p><code>xAuxRdWrap</code> is supposed to wrap texts from Rd files under a given
+directory.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -19,70 +26,40 @@ xAuxRdWrap(path = "./XGR/man", remove.dontrun = FALSE)
 <table summary="R argblock">
 <tr valign="top"><td><code>path</code></td>
 <td>
-
-
+<p>a directory containing Rd files</p>
 </td></tr>
 <tr valign="top"><td><code>remove.dontrun</code></td>
 <td>
-
-
+<p>logical to indicate whether to remove the
+restriction of not running examples. By default, it sets to FALSE
+without any modefications</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>none
+</p>
+
+
+<h3>Note</h3>
+
+<p>This auxiliary function helps create a new package. The orignal Rd
+files will be replaced with new ones.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xAuxRdWrap</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (path = "./XGR/man", remove.dontrun = FALSE)
-{
-for (nm in list.files(path, pattern = "\.Rd$")) {
-input_file &lt;- file.path(path, nm)
-message(sprintf(input_file), appendLF = T)
-x &lt;- readLines(input_file)
-y &lt;- vector()
-flag_examples &lt;- F
-flag_examples_dontrun &lt;- F
-num_examples_brace &lt;- 0
-for (i in 1:length(x)) {
-if (length(grep("^#", x[i])) == 0 &amp; length(grep("^\\title",
-x[i])) == 0) {
-y &lt;- c(y, strwrap(x[i]))
-}
-else {
-y &lt;- c(y, x[i])
-}
-if (remove.dontrun == T) {
-if (x[i] == "\examples{") {
-flag_examples &lt;- T
-}
-if (flag_examples == T) {
-if (x[i] == "\dontrun{") {
-y &lt;- y[-1 * length(y)]
-flag_examples_dontrun &lt;- T
-}
-if (flag_examples_dontrun == T) {
-if (x[i] == "}") {
-num_examples_brace &lt;- num_examples_brace +
-1
-}
-if (num_examples_brace == 1) {
-y &lt;- y[-1 * length(y)]
-flag_examples &lt;- F
-}
-}
-}
-}
-}
-fileConn &lt;- file(input_file)
-writeLines(y, fileConn)
-close(fileConn)
-}
-}
+# xAuxRdWrap(path="./XGR/man", remove.dontrun=FALSE)
 </pre>
 
 

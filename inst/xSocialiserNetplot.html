@@ -1,24 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise terms used to annotate an input SNP or...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSocialiserNetplot"><tr><td>xSocialiserNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSocialiserNetplot</h2>
+<h2>Function to visualise terms used to annotate an input SNP or gene using different network layouts</h2>
+
+<h3>Description</h3>
+
+<p><code>xSocialiserNetplot</code> is supposed to visualise terms used to
+annotate an input SNP or gene using different network layouts. It
+returns an object of class 'igraph'.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xSocialiserNetplot(g, query, displayBy = c("IC", "none"), path.mode =
-c("all_paths", "shortest_paths", "all_shortest_paths"), node.info =
-c("none", "term_id", "term_name", "both", "full_term_name"), wrap.width
-= 15, colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr", "rainbow",
-"wb"), ncolors = 40, zlim = NULL, colorbar = T, newpage = T, glayout =
-layout_as_tree, vertex.frame.color = NA, vertex.size = NULL,
-vertex.color = NULL, vertex.shape = NULL, vertex.label = NULL,
-vertex.label.cex = NULL, vertex.label.dist = 0.3, vertex.label.color =
-"blue", edge.arrow.size = 0.3, ...)
+xSocialiserNetplot(
+g,
+query,
+displayBy = c("IC", "none"),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+node.info = c("none", "term_id", "term_name", "both",
+"full_term_name"),
+wrap.width = 15,
+colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr", "rainbow", "wb"),
+ncolors = 40,
+zlim = NULL,
+colorbar = T,
+newpage = T,
+glayout = layout_as_tree,
+vertex.frame.color = NA,
+vertex.size = NULL,
+vertex.color = NULL,
+vertex.shape = NULL,
+vertex.label = NULL,
+vertex.label.cex = NULL,
+vertex.label.dist = 0.3,
+vertex.label.color = "blue",
+edge.arrow.size = 0.3,
+...
+)
 </pre>
 
 
@@ -27,294 +51,196 @@ vertex.label.cex = NULL, vertex.label.dist = 0.3, vertex.label.color =
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot; (resulting from similarity
+analysis)</p>
 </td></tr>
 <tr valign="top"><td><code>query</code></td>
 <td>
-
-
+<p>an object in query (for example, an SNP or Gene)</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for displaying. It can
+be &quot;IC&quot; for information content (by default), &quot;none&quot; for no
+color-coding on nodes/terms</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-
-
+<p>the mode of paths induced by nodes in query. It can be
+&quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
+only one path to the root (for each node in query),
+&quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
+node, find all shortest paths with the equal lengths)</p>
 </td></tr>
 <tr valign="top"><td><code>node.info</code></td>
 <td>
-
-
+<p>tells the ontology term information used to label
+nodes. It can be one of &quot;none&quot; for no node labeling, &quot;term_id&quot; for
+using Term ID, &quot;term_name&quot; for using Term Name, &quot;both&quot; for using both
+of Term ID and Name (the first 15 characters), and &quot;full_term_name&quot; for
+using the full Term Name</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-
-
+<p>a positive integer specifying wrap width of Term
+Name. By default, first 15 characters</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-
-
+<p>the number of colors specified over the colormap</p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum z/patttern values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
 </td></tr>
 <tr valign="top"><td><code>colorbar</code></td>
 <td>
-
-
+<p>logical to indicate whether to append a colorbar. If
+pattern is null, it always sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>newpage</code></td>
 <td>
-
-
+<p>logical to indicate whether to open a new page. By
+default, it sets to true for opening a new page</p>
 </td></tr>
 <tr valign="top"><td><code>glayout</code></td>
 <td>
-
-
+<p>either a function or a numeric matrix configuring how
+the vertices will be placed on the plot. If layout is a function, this
+function will be called with the graph as the single parameter to
+determine the actual coordinates. This function can be one of
+&quot;layout_nicely&quot; (previously &quot;layout.auto&quot;), &quot;layout_randomly&quot;
+(previously &quot;layout.random&quot;), &quot;layout_in_circle&quot; (previously
+&quot;layout.circle&quot;), &quot;layout_on_sphere&quot; (previously &quot;layout.sphere&quot;),
+&quot;layout_with_fr&quot; (previously &quot;layout.fruchterman.reingold&quot;),
+&quot;layout_with_kk&quot; (previously &quot;layout.kamada.kawai&quot;), &quot;layout_as_tree&quot;
+(previously &quot;layout.reingold.tilford&quot;), &quot;layout_with_lgl&quot; (previously
+&quot;layout.lgl&quot;), &quot;layout_with_graphopt&quot; (previously &quot;layout.graphopt&quot;),
+&quot;layout_with_sugiyama&quot; (previously &quot;layout.kamada.kawai&quot;),
+&quot;layout_with_dh&quot; (previously &quot;layout.davidson.harel&quot;),
+&quot;layout_with_drl&quot; (previously &quot;layout.drl&quot;), &quot;layout_with_gem&quot;
+(previously &quot;layout.gem&quot;), &quot;layout_with_mds&quot;. A full explanation of
+these layouts can be found in
+<a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/layout_nicely.html</a></p>
 </td></tr>
 <tr valign="top"><td><code>vertex.frame.color</code></td>
 <td>
-
-
+<p>the color of the frame of the vertices. If it
+is NA, then there is no frame</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.size</code></td>
 <td>
-
-
+<p>the size of each vertex. If it is a vector, each
+vertex may differ in size</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.color</code></td>
 <td>
-
-
+<p>the fill color of the vertices. If it is NA, then
+there is no fill color. If the pattern is given, this setup will be
+ignored</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.shape</code></td>
 <td>
-
-
+<p>the shape of each vertex. It can be one of
+&quot;circle&quot;, &quot;square&quot;, &quot;csquare&quot;, &quot;rectangle&quot;, &quot;crectangle&quot;, &quot;vrectangle&quot;,
+&quot;pie&quot; (<a href="http://igraph.org/r/doc/vertex.shape.pie.html">http://igraph.org/r/doc/vertex.shape.pie.html</a>), &quot;sphere&quot;,
+and &quot;none&quot;. If it sets to NULL, these vertices with negative will be
+&quot;csquare&quot; and the rest &quot;circle&quot;.</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.label</code></td>
 <td>
-
-
+<p>the label of the vertices. If it is NA, then there
+is no label. The default vertex labels are the name attribute of the
+nodes</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.label.cex</code></td>
 <td>
-
-
+<p>the font size of vertex labels.</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.label.dist</code></td>
 <td>
-
-
+<p>the distance of the label from the center of
+the vertex. If it is 0 then the label is centered on the vertex. If it
+is 1 then the label is displayed beside the vertex.</p>
 </td></tr>
 <tr valign="top"><td><code>vertex.label.color</code></td>
 <td>
-
-
+<p>the color of vertex labels.</p>
 </td></tr>
 <tr valign="top"><td><code>edge.arrow.size</code></td>
 <td>
-
-
+<p>the size of the arrows for the directed edge.
+The default value is 1.</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-
-
+<p>additional graphic parameters. See
+<a href="http://igraph.org/r/doc/plot.common.html">http://igraph.org/r/doc/plot.common.html</a> for the complete list.</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an igraph object to represent DAG, appended with a node attribute
+called 'inherited' indicative of whether terms are inherited or not
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
 
-## The function is currently defined as
-function (g, query, displayBy = c("IC", "none"), path.mode =
-c("all_paths",
-"shortest_paths", "all_shortest_paths"), node.info = c("none",
-"term_id", "term_name", "both", "full_term_name"), wrap.width = 15,
-colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr", "rainbow",
-"wb"), ncolors = 40, zlim = NULL, colorbar = T, newpage = T,
-glayout = layout_as_tree, vertex.frame.color = NA, vertex.size = NULL,
-vertex.color = NULL, vertex.shape = NULL, vertex.label = NULL,
-vertex.label.cex = NULL, vertex.label.dist = 0.3, vertex.label.color =
-"blue",
-edge.arrow.size = 0.3, ...)
-{
-displayBy &lt;- match.arg(displayBy)
-path.mode &lt;- match.arg(path.mode)
-node.info &lt;- match.arg(node.info)
-if (is.logical(g)) {
-stop("There is no similarity in the 'igraph' object.\n")
-}
-if (class(g) != "igraph") {
-stop("The function must apply to the 'igraph' object.\n")
-}
-if (is.null(g$dag)) {
-dag &lt;- g
-}
-else {
-dag &lt;- g$dag
-}
-if (is.null(V(dag)$anno) | is.null(V(dag)$IC)) {
-stop("The function requires that input graph has already contained
-annotation data and also information content (IC).\n")
-}
-flag &lt;- sapply(V(dag)$anno, function(x) {
-ind &lt;- match(query, x)
-if (is.na(ind)) {
-0
-}
-else {
-if (is.null(names(x[ind]))) {
-1
-}
-else if (names(x[ind]) == "o") {
-1
-}
-else if (names(x[ind]) == "i") {
-2
-}
-}
-})
-terms &lt;- V(dag)$name[flag &gt; 0]
-terms_origin &lt;- V(dag)$name[flag == 1]
-if (length(terms) == 0) {
-stop("No terms are found to annotate the entity in query!")
-}
-subg &lt;- dnet::dDAGinduce(g = dag, nodes_query = terms, path.mode =
-path.mode)
-inherited &lt;- rep(1, length(V(subg)$name))
-names(inherited) &lt;- V(subg)$name
-if (length(terms_origin) &gt; 0) {
-inherited[terms_origin] &lt;- 0
-}
-V(subg)$inherited &lt;- inherited
-if (displayBy == "IC") {
-data &lt;- V(subg)$IC
-names(data) &lt;- V(subg)$name
-}
-else {
-data &lt;- NULL
-}
-if (is.null(vertex.label)) {
-getTermInfo &lt;- function(g, vids, numChar = 15, mulLines = F) {
-fullNames &lt;- V(g)[vids]$term_name
-names(fullNames) &lt;- V(g)[vids]$name
-if (mulLines == F) {
-shortNames &lt;- paste(substr(fullNames, 1, numChar),
-ifelse(nchar(fullNames) &gt; numChar, "...", ""),
-sep = "")
-}
-else {
-shortNames &lt;- sapply(fullNames, function(x) {
-return(paste(strwrap(x, numChar), sep = "",
-collapse = "\n"))
-})
-}
-names(shortNames) &lt;- names(fullNames)
-return(shortNames)
-}
-termNames &lt;- getTermInfo(subg, vids = V(subg)$term_id,
-numChar = 15, mulLines = F)
-vertex.label &lt;- switch(node.info, none = NULL, term_id =
-V(subg)$term_id,
-term_name = V(subg)$term_name, both = paste(V(subg)$term_id,
-termNames, sep = "\n"), full_term_name = getTermInfo(subg,
-vids = V(subg)$term_id, numChar = wrap.width,
-mulLines = T))
-}
-pattern &lt;- data
-if (!is.null(pattern)) {
-flag &lt;- 0
-if (!is.null(names(pattern))) {
-pattern &lt;- pattern[V(subg)$name]
-}
-if (length(pattern) == vcount(subg)) {
-flag &lt;- 1
-}
-if (flag == 1) {
-pattern &lt;- as.numeric(pattern)
-pattern_nona &lt;- pattern[!is.na(pattern)]
-pattern_nona &lt;- as.numeric(pattern_nona)
-if (is.null(zlim)) {
-vmin &lt;- floor(stats::quantile(pattern_nona, 0.05))
-vmax &lt;- ceiling(stats::quantile(pattern_nona,
-0.95))
-if (vmin &lt; 0 &amp; vmax &gt; 0) {
-vsym &lt;- abs(min(vmin, vmax))
-vmin &lt;- -1 * vsym
-vmax &lt;- vsym
-}
-zlim &lt;- c(vmin, vmax)
-}
-vec2color &lt;- function(vec, colormap = colormap, ncolors = ncolors,
-zlim = zlim) {
-palette.name &lt;- supraHex::visColormap(colormap = colormap)
-colors &lt;- palette.name(ncolors)
-scale &lt;- length(colors)/(max(zlim) - min(zlim))
-sapply(1:length(vec), function(x) {
-if (is.na(vec[x])) {
-"transparent"
-}
-else {
-ind &lt;- floor(1 + (vec[x] - min(zlim)) * scale)
-colors[max(1, min(ncolors, ind))]
-}
-})
-}
-vertex.color &lt;- vec2color(pattern, colormap = colormap,
-ncolors = ncolors, zlim = zlim)
-vertex.frame.color &lt;- vec2color(pattern, colormap = colormap,
-ncolors = ncolors, zlim = zlim)
-vertex.frame.color[vertex.frame.color == "transparent"] &lt;- "grey"
-}
-else {
-warning("The input 'pattern' is ignored. Please check the help for
-enabling your input")
-pattern &lt;- NULL
-if (is.null(vertex.color)) {
-vertex.color &lt;- "SkyBlue2"
-}
-}
-}
-else {
-if (is.null(vertex.color)) {
-vertex.color &lt;- "SkyBlue2"
-}
-}
-par_old &lt;- graphics::par()
-dnet::visNet(g = subg, pattern = pattern, colormap = colormap,
-ncolors = ncolors, zlim = zlim, colorbar = colorbar,
-newpage = newpage, glayout = glayout, vertex.frame.color =
-vertex.frame.color,
-vertex.size = vertex.size, vertex.color = vertex.color,
-vertex.shape = vertex.shape, vertex.label = vertex.label,
-vertex.label.cex = vertex.label.cex, vertex.label.dist =
-vertex.label.dist,
-vertex.label.color = vertex.label.color, edge.arrow.size =
-edge.arrow.size,
-...)
-suppressWarnings(graphics::par(par_old))
-invisible(subg)
-}
+# 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+# provide genes and SNPs reported in AS GWAS studies
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+## get lead SNPs reported in AS GWAS
+example.snps &lt;- names(ImmunoBase$AS$variants)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA,
+RData.location=RData.location)
+
+# 2) Circos plot involving nodes 'rs6871626'
+xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626",
+RData.location=RData.location)
+
+# 3) Net plot visualising terms used to annotate an SNP 'rs6871626'
+dag &lt;- xSocialiserNetplot(g=SNP.g, query='rs6871626', displayBy="IC",
+node.info=c("none"), vertex.label=NA, wrap.width=30)
+
+## End(Not run)
 </pre>
 
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Haploid mutagenesis screens for regulators of protein...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Haploid_regulators"><tr><td>Haploid_regulators</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Haploid mutagenesis screens for regulators of protein phenotypes </h2>
+
+<h3>Description</h3>
+
+<p>This dataset contains regulators of 11 protein phenotypes identified by
+haploid mutagenesis screens.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+data(Haploid_regulators)
+</pre>
+
+
+<h3>Value</h3>
+
+<p>a data frame. It has the following columns: &quot;Gene&quot; (gene symbol;
+regulators), &quot;MI&quot; (mutation index; negative values for positive
+regulators and positive values for negative regulators), &quot;FDR&quot; and
+&quot;Phenotype&quot; (one of 11 protein phenotypes).
+</p>
+
+
+<h3>References</h3>
+
+<p>Brockmann et al. (2017). Genetic wiring maps of single-cell protein
+states reveal an off-switch for GPCR signalling. <em>Nature</em>,
+546:307-11.
+<br />
+Mezzadra et al. (2017). Identification of CMTM6 and CMTM4 as PD-L1
+protein regulators. <em>Nature</em>, 549:106-10.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+Haploid_regulators &lt;- xRDataLoader('Haploid_regulators')
+Haploid_regulators[1:5,]
+## for 'PDL1'
+ind &lt;- grepl('PDL1', Haploid_regulators$Phenotype)
+df &lt;- Haploid_regulators[ind,c('Gene','MI','FDR')]
+
+## End(Not run)
+</pre>
+
+
+</body></html>

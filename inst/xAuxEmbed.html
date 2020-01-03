@@ -1,17 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to encode a file as a base64 string for embedding</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xAuxEmbed"><tr><td>xAuxEmbed</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xAuxEmbed</h2>
+<h2>Function to encode a file as a base64 string for embedding</h2>
+
+<h3>Description</h3>
+
+<p><code>xAuxEmbed</code> is supposed to encode a file as a base64 string for
+embedding such as into the R markdown rendering html file. It returns a
+hyperlink.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xAuxEmbed(file, download.attribute = basename(file), link.text =
-paste0("Download ", download.attribute))
+xAuxEmbed(
+file,
+download.attribute = basename(file),
+link.text = paste0("Download ", download.attribute)
+)
 </pre>
 
 
@@ -20,59 +31,47 @@ paste0("Download ", download.attribute))
 <table summary="R argblock">
 <tr valign="top"><td><code>file</code></td>
 <td>
-
-
+<p>a file to encode</p>
 </td></tr>
 <tr valign="top"><td><code>download.attribute</code></td>
 <td>
-
-
+<p>the download attribute specifying the target
+to be downloaded instead of being explored. By default, it is the
+filename of the input file. The filename of the downloaded file can be
+different from the input file if provided differently</p>
 </td></tr>
 <tr valign="top"><td><code>link.text</code></td>
 <td>
-
-
+<p>the link text (the visible part of the hyperlink)</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a hyperlink in the form of: &lt;a href=&quot;encoded base64 string&quot;
+download=&quot;download.attribute&quot;&gt;&quot;link.text&quot;&lt;/a&gt;
+</p>
+
+
+<h3>Note</h3>
+
+<p>This auxiliary function helps embed a file into the R markdown
+rendering html file for the download.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xAuxEmbed</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (file, download.attribute = basename(file), link.text =
-paste0("Download ",
-download.attribute))
-{
-ext &lt;- tools::file_ext(file)
-if (ext %in% c("txt")) {
-type &lt;- "text/plain"
-}
-else if (ext %in% c("csv")) {
-type &lt;- "text/csv"
-}
-else if (ext %in% c("html")) {
-type &lt;- "text/html"
-}
-else if (ext %in% c("pdf")) {
-type &lt;- "application/pdf"
-}
-else if (ext %in% c("Rmd", "rmd")) {
-type &lt;- "text/x-markdown"
-}
-else {
-type &lt;- "text/plain"
-}
-encoded &lt;- sprintf("data:%s;base64,%s", type,
-base64enc::base64encode(file))
-res &lt;- sprintf("&lt;a href='%s' download='%s'&gt;%s&lt;/a&gt;", encoded,
-download.attribute, link.text)
-invisible(res)
-}
+# file &lt;- system.file("DESCRIPTION",package="XGR")
+# res &lt;- xAuxEmbed(file)
 </pre>
 
 

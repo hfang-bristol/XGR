@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to check whether parallel computing should be used...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xCheckParallel"><tr><td>xCheckParallel</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xCheckParallel</h2>
+<h2>Function to check whether parallel computing should be used and how</h2>
+
+<h3>Description</h3>
+
+<p><code>xCheckParallel</code> is used to check whether parallel computing
+should be used and how
+</p>
+
 
 <h3>Usage</h3>
 
@@ -19,58 +26,47 @@ xCheckParallel(multicores = NULL, verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>multicores</code></td>
 <td>
-
-
+<p>an integer to specify how many cores will be
+registered as the multicore parallel backend to the 'foreach' package.
+If NULL, it will use a half of cores available in a user's computer</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>TRUE for using parallel computing; FALSE otherwise
+</p>
+
+
+<h3>Note</h3>
+
+<p>Whether parallel computation with multicores is used is
+system-specific. Also, it will depend on whether these two packages
+&quot;foreach&quot; and &quot;doParallel&quot; have been installed.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xDAGsim</code>, <code>xSocialiser</code>,
+<code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>,
+<code>xGRviaGenomicAnnoAdv</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+xCheckParallel()
 
-## The function is currently defined as
-function (multicores = NULL, verbose = T)
-{
-flag_parallel &lt;- F
-pkgs &lt;- c("doParallel", "foreach")
-if (all(pkgs %in% rownames(utils::installed.packages()))) {
-tmp &lt;- sapply(pkgs, function(pkg) {
-requireNamespace(pkg, quietly = T)
-})
-if (all(tmp)) {
-doParallel::registerDoParallel()
-cores &lt;- foreach::getDoParWorkers()
-if (is.null(multicores)) {
-multicores &lt;- max(1, ceiling(cores))
-}
-else if (is.na(multicores)) {
-multicores &lt;- max(1, ceiling(cores))
-}
-else if (multicores &lt; 1 | multicores &gt; 2 * cores) {
-multicores &lt;- max(1, ceiling(cores))
-}
-else {
-multicores &lt;- as.integer(multicores)
-}
-doParallel::registerDoParallel(cores = multicores)
-if (verbose) {
-message(sprintf("\tdo parallel computation using %d cores ...",
-multicores, as.character(Sys.time())), appendLF = T)
-}
-flag_parallel &lt;- T
-}
-}
-return(flag_parallel)
-}
+## End(Not run)
 </pre>
 
 

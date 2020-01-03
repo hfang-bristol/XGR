@@ -1,26 +1,50 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given a list of gene...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnricherGenesAdv"><tr><td>xEnricherGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnricherGenesAdv</h2>
+<h2>Function to conduct enrichment analysis given a list of gene sets and a list of ontologies</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnricherGenesAdv</code> is supposed to conduct enrichment analysis
+given a list of gene sets and a list of ontologies. It is an advanced
+version of <code>xEnricherGenes</code>, returning an object of the class
+'ls_eTerm'.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnricherGenesAdv(list_vec, background = NULL, check.symbol.identity =
-F, ontologies = NA, size.range = c(10, 2000), min.overlap = 5,
-which.distance = NULL, test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
-"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
-"lea"), elim.pvalue = 0.01, lea.depth = 2, path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), true.path.rule = F, verbose =
-F, silent = FALSE, plot = TRUE, fdr.cutoff = 0.05, displayBy =
-c("zscore", "fdr", "pvalue", "fc", "or"), RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+xEnricherGenesAdv(
+list_vec,
+background = NULL,
+check.symbol.identity = F,
+ontologies = NA,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = F,
+verbose = F,
+silent = FALSE,
+plot = TRUE,
+fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -29,247 +53,239 @@ c("zscore", "fdr", "pvalue", "fc", "or"), RData.location =
 <table summary="R argblock">
 <tr valign="top"><td><code>list_vec</code></td>
 <td>
-
-
+<p>an input vector containing gene symbols. Alternatively
+it can be a list of vectors, representing multiple groups of genes</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-
-
+<p>a background vector containing gene symbols as the
+test background. If NULL, by default all annotatable are used as
+background</p>
 </td></tr>
 <tr valign="top"><td><code>check.symbol.identity</code></td>
 <td>
-
-
+<p>logical to indicate whether to match the
+input data/background via Synonyms for those unmatchable by official
+gene symbols. By default, it sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>ontologies</code></td>
 <td>
-
-
+<p>the ontologies supported currently. Pre-built
+ontology and annotation data are detailed in
+<code>xDefineOntology</code>.</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-
-
+<p>the minimum and maximum size of members of each term
+in consideration. By default, it sets to a minimum of 10 but no more
+than 2000</p>
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-
-
+<p>the minimum number of overlaps. Only those terms
+with members that overlap with input data at least min.overlap (3 by
+default) will be processed</p>
 </td></tr>
 <tr valign="top"><td><code>which.distance</code></td>
 <td>
-
-
+<p>which terms with the distance away from the
+ontology root (if any) is used to restrict terms in consideration. By
+default, it sets to 'NULL' to consider all distances</p>
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-
-
+<p>the test statistic used. It can be &quot;fisher&quot; for using
+fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
+&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
+independence between gene group (genes belonging to a group or not) and
+gene annotation (genes annotated by a term or not), and thus compare
+sampling to the left part of background (after sampling without
+replacement). Hypergeometric test is to sample at random (without
+replacement) from the background containing annotated and non-annotated
+genes, and thus compare sampling to background. Unlike hypergeometric
+test, binomial test is to sample at random (with replacement) from the
+background with the constant probability. In terms of the ease of
+finding the significance, they are in order: hypergeometric test &gt;
+fisher's exact test &gt; binomial test. In other words, in terms of the
+calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
+binomial test</p>
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-
-
+<p>logical to indicate whether the
+background is further restricted to the annotatable. By default, it is
+NULL: if ontology.algorithm is not 'none', it is always TRUE;
+otherwise, it depends on the background (if not provided, it will be
+TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
 </td></tr>
 <tr valign="top"><td><code>p.tail</code></td>
 <td>
-
-
+<p>the tail used to calculate p-values. It can be either
+&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
+under-overrepresentation) or &quot;one-tail&quot; (by default) for the
+significance based on one tail (ie only over-representation)</p>
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-
-
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
 </td></tr>
 <tr valign="top"><td><code>ontology.algorithm</code></td>
 <td>
-
-
+<p>the algorithm used to account for the
+hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
+&quot;lea&quot;. For details, please see 'Note' below</p>
 </td></tr>
 <tr valign="top"><td><code>elim.pvalue</code></td>
 <td>
-
-
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;elim&quot;. It is used to control how to declare a signficantly enriched
+term (and subsequently all genes in this term are eliminated from all
+its ancestors)</p>
 </td></tr>
 <tr valign="top"><td><code>lea.depth</code></td>
 <td>
-
-
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;lea&quot;. It is used to control how many maximum depth is used to consider
+the children of a term (and subsequently all genes in these children
+term are eliminated from the use for the recalculation of the
+signifance at this term)</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-
-
+<p>the mode of paths induced by vertices/nodes with input
+annotation data. It can be &quot;all_paths&quot; for all possible paths to the
+root, &quot;shortest_paths&quot; for only one path to the root (for each node in
+query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
+for each node, find all shortest paths with the equal lengths)</p>
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-
-
+<p>logical to indicate whether the true-path rule
+should be applied to propagate annotations. By default, it sets to
+false</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
 </td></tr>
 <tr valign="top"><td><code>plot</code></td>
 <td>
-
-
+<p>logical to indicate whether heatmap plot is drawn</p>
 </td></tr>
 <tr valign="top"><td><code>fdr.cutoff</code></td>
 <td>
-
-
+<p>fdr cutoff used to declare the significant terms. By
+default, it is set to 0.05. This option only works when setting plot
+(see above) is TRUE</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for drawing heatmap. It
+can be &quot;fc&quot; for enrichment fold change, &quot;fdr&quot; for adjusted p value (or
+FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score (by
+default), &quot;or&quot; for odds ratio. This option only works when setting plot
+(see above) is TRUE</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ls_eTerm&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>df</code>: a data frame of n x 12, where the 12 columns are
+&quot;group&quot; (the input group names), &quot;ontology&quot; (input ontologies), &quot;id&quot;
+(term ID), &quot;name&quot; (term name), &quot;nAnno&quot; (number in members annotated by
+a term), &quot;nOverlap&quot; (number in overlaps), &quot;fc&quot; (enrichment fold
+changes), &quot;zscore&quot; (enrichment z-score), &quot;pvalue&quot; (nominal p value),
+&quot;adjp&quot; (adjusted p value (FDR)), &quot;or&quot; (odds ratio), &quot;CIl&quot; (lower bound
+confidence interval for the odds ratio), &quot;CIu&quot; (upper bound confidence
+interval for the odds ratio), &quot;distance&quot; (term distance or other
+information), &quot;members&quot; (members (represented as Gene Symbols) in
+overlaps)
+</p>
+</li>
+<li><p><code>mat</code>: NULL if the plot is not drawn; otherwise, a matrix of
+term names X groups with numeric values for the signficant enrichment,
+NA for the insignificant ones
+</p>
+</li>
+<li><p><code>gp</code>: NULL if the plot is not drawn; otherwise, a 'ggplot'
+object
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xEnricherGenes</code>,
+<code>xEnrichViewer</code>, <code>xHeatmap</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (list_vec, background = NULL, check.symbol.identity = F,
-ontologies = NA, size.range = c(10, 2000), min.overlap = 5,
-which.distance = NULL, test = c("fisher", "hypergeo", "binomial"),
-background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni",
-"holm", "hochberg", "hommel"), ontology.algorithm = c("none",
-"pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F, verbose = F, silent = FALSE, plot = TRUE,
-fdr.cutoff = 0.05, displayBy = c("zscore", "fdr", "pvalue",
-"fc", "or"), RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-startT &lt;- Sys.time()
-if (!silent) {
-message(paste(c("Start at ", as.character(startT)), collapse = ""),
-appendLF = TRUE)
-message("", appendLF = TRUE)
-}
-else {
-verbose &lt;- FALSE
-}
-test &lt;- match.arg(test)
-p.tail &lt;- match.arg(p.tail)
-p.adjust.method &lt;- match.arg(p.adjust.method)
-ontology.algorithm &lt;- match.arg(ontology.algorithm)
-path.mode &lt;- match.arg(path.mode)
-p.tail &lt;- match.arg(p.tail)
-displayBy &lt;- match.arg(displayBy)
-if (class(list_vec) == "cModule") {
-list_vec &lt;- split(x = list_vec$mem$nodes, f = list_vec$mem$modules)
-}
-if (length(list_vec) == 0) {
-return(NULL)
-}
-if (is.vector(list_vec) &amp; class(list_vec) != "list") {
-list_vec &lt;- list(list_vec)
-}
-else if (class(list_vec) == "list") {
-list_vec &lt;- base::Filter(base::Negate(is.null), list_vec)
-if (length(list_vec) == 0) {
-return(NULL)
-}
-}
-else {
-stop("The input data must be a vector or a list of vectors.\n")
-}
-list_names &lt;- names(list_vec)
-if (is.null(list_names)) {
-list_names &lt;- paste0("G", 1:length(list_vec))
-names(list_vec) &lt;- list_names
-}
-ls_df &lt;- lapply(1:length(list_vec), function(i) {
-if (verbose) {
-message(sprintf("Analysing group %d ('%s') (%s) ...",
-i, names(list_vec)[i], as.character(Sys.time())),
-appendLF = T)
-}
-data &lt;- list_vec[[i]]
-ls_df &lt;- lapply(1:length(ontologies), function(j) {
-if (verbose) {
-message(sprintf("\tontology %d ('%s') (%s) ...",
-j, ontologies[j], as.character(Sys.time())),
-appendLF = T)
-}
-ontology &lt;- ontologies[j]
-eTerm &lt;- xEnricherGenes(data = data, background = background,
-check.symbol.identity = check.symbol.identity,
-ontology = ontology, size.range = size.range,
-min.overlap = min.overlap, which.distance = which.distance,
-test = test, background.annotatable.only = background.annotatable.only,
-p.tail = p.tail, p.adjust.method = p.adjust.method,
-ontology.algorithm = ontology.algorithm, elim.pvalue = elim.pvalue,
-lea.depth = lea.depth, path.mode = path.mode,
-true.path.rule = true.path.rule, verbose = verbose,
-silent = !verbose, RData.location = RData.location,
-guid = guid)
-df &lt;- xEnrichViewer(eTerm, top_num = "all", sortBy = "or",
-details = TRUE)
-if (is.null(df)) {
-return(NULL)
-}
-else {
-cbind(group = rep(names(list_vec)[i], nrow(df)),
-ontology = rep(ontology, nrow(df)), id = rownames(df),
-df, stringsAsFactors = F)
-}
-})
-df &lt;- do.call(rbind, ls_df)
-})
-df_all &lt;- do.call(rbind, ls_df)
-df_all$group &lt;- factor(df_all$group, levels = names(list_vec))
-if (plot &amp; !is.null(df_all)) {
-gp &lt;- xEnrichHeatmap(list_eTerm = df_all, fdr.cutoff = fdr.cutoff,
-displayBy = displayBy, colormap = NULL, zlim = NULL,
-reorder = "none")
-mat &lt;- gp$mat
-gp$mat &lt;- NULL
-}
-else {
-mat &lt;- NULL
-gp &lt;- NULL
-}
-ls_eTerm &lt;- list(df = df_all, mat = mat, gp = gp)
-class(ls_eTerm) &lt;- "ls_eTerm"
-endT &lt;- Sys.time()
-runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
-%H:%M:%S"),
-strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
-if (!silent) {
-message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
-appendLF = TRUE)
-message(paste(c("Runtime in total (xEnricherGenesAdv): ",
-runTime, " secs\n"), collapse = ""), appendLF = TRUE)
-}
-invisible(ls_eTerm)
-}
+# Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
+# a) provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data
+
+# optionally, provide the test background (if not provided, all human genes)
+#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+
+# b) perform enrichment analysis
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+RData.location=RData.location)
+ls_eTerm
+## forest plot of enrichment results
+gp &lt;- xEnrichForest(ls_eTerm, top_num=10)
+## heatmap plot of enrichment results
+gp &lt;- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="or")
+
+## End(Not run)
 </pre>
 
 

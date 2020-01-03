@@ -1,17 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Definition for S3 class 'eTerm'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for eTerm"><tr><td>eTerm</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>eTerm</h2>
+<h2>Definition for S3 class <code>eTerm</code></h2>
+
+<h3>Description</h3>
+
+<p><code>eTerm</code> mush have following components: term_info, annotation, g,
+data, background, overlap, fc, zscore, pvalue, adjp, cross.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-eTerm(term_info, annotation, g, data, background, overlap, fc, zscore,
-pvalue, adjp, cross)
+eTerm(
+term_info,
+annotation,
+g,
+data,
+background,
+overlap,
+fc,
+zscore,
+pvalue,
+adjp,
+cross
+)
+
+## S3 method for class 'eTerm'
+print(x, ...)
 </pre>
 
 
@@ -20,83 +41,79 @@ pvalue, adjp, cross)
 <table summary="R argblock">
 <tr valign="top"><td><code>term_info</code></td>
 <td>
-
-
+<p>a data frame</p>
 </td></tr>
 <tr valign="top"><td><code>annotation</code></td>
 <td>
-
-
+<p>a list</p>
 </td></tr>
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an 'igraph' object</p>
 </td></tr>
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>overlap</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>fc</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>zscore</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>pvalue</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>adjp</code></td>
 <td>
-
-
+<p>a vector</p>
 </td></tr>
 <tr valign="top"><td><code>cross</code></td>
 <td>
-
-
+<p>a matrix</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>eTerm</code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other parameters</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of S3 class <code>eTerm</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
 
-## The function is currently defined as
-function (term_info, annotation, g, data, background, overlap,
-fc, zscore, pvalue, adjp, cross)
-{
-if (class(term_info) != "data.frame" | class(g) != "igraph") {
-stop("The S3 class 'eTerm' object failed to pass integrity checks!\n")
-}
-value &lt;- list(term_info = term_info, annotation = annotation,
-g = g, data = data, background = background, overlap = overlap,
-fc = fc, zscore = zscore, pvalue = pvalue, adjp = adjp,
-cross = cross)
-class(value) &lt;- "eTerm"
-return(value)
-}
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+eTerm(term_info, annotation, g, data, background, overlap, fc, zscore,
+pvalue, adjp, cross)
+
+## End(Not run)
 </pre>
 
 

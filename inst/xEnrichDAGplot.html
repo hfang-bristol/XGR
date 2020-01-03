@@ -1,25 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a direct...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichDAGplot"><tr><td>xEnrichDAGplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnrichDAGplot</h2>
+<h2>Function to visualise enrichment results using a direct acyclic graph (DAG)</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichDAGplot</code> is supposed to visualise enrichment results using
+a direct acyclic graph (DAG) with node colorings. By default,
+significant terms (of interest) are highlighted by box-shaped nodes,
+the others by ellipse nodes. It returns an object of class 'Ragraph'.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichDAGplot(eTerm, top_num = 10, ig = NULL, displayBy = c("fc",
-"adjp", "fdr", "zscore", "pvalue"), path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), height = 7, width = 7, margin
-= rep(0.1, 4), colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br",
-"rainbow", "wb", "lightyellow-orange"), ncolors = 40, zlim = NULL,
-colorbar = T, colorbar.fraction = 0.1, newpage = T, layout.orientation
-= c("top_bottom", "left_right", "bottom_top", "right_left"), node.info
-= c("none", "term_id", "term_name", "both", "full_term_name"),
-wrap.width = NULL, graph.node.attrs = NULL, graph.edge.attrs = NULL,
-node.attrs = NULL)
+xEnrichDAGplot(
+eTerm,
+top_num = 10,
+ig = NULL,
+displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+height = 7,
+width = 7,
+margin = rep(0.1, 4),
+colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"),
+ncolors = 40,
+zlim = NULL,
+colorbar = T,
+colorbar.fraction = 0.1,
+newpage = T,
+layout.orientation = c("top_bottom", "left_right", "bottom_top",
+"right_left"),
+node.info = c("none", "term_id", "term_name", "both",
+"full_term_name"),
+wrap.width = NULL,
+graph.node.attrs = NULL,
+graph.edge.attrs = NULL,
+node.attrs = NULL
+)
 </pre>
 
 
@@ -28,190 +52,293 @@ node.attrs = NULL)
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-
-
+<p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-
-
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
+0.05) will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>
-
-
+<p>the igraph object. If provided, only those terms within it
+will be visualised. By default, it is NULL meaning no surch
+restriction</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for displaying. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
+adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
+enrichment z-score</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-
-
+<p>the mode of paths induced by nodes in query. It can be
+&quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
+only one path to the root (for each node in query),
+&quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
+node, find all shortest paths with the equal lengths)</p>
 </td></tr>
 <tr valign="top"><td><code>height</code></td>
 <td>
-
-
+<p>a numeric value specifying the height of device</p>
 </td></tr>
 <tr valign="top"><td><code>width</code></td>
 <td>
-
-
+<p>a numeric value specifying the width of device</p>
 </td></tr>
 <tr valign="top"><td><code>margin</code></td>
 <td>
-
-
+<p>margins as units of length 4 or 1</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;lightyellow-orange&quot; (by
+default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
+&quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
+found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-
-
+<p>the number of colors specified over the colormap</p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum z/data values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
 </td></tr>
 <tr valign="top"><td><code>colorbar</code></td>
 <td>
-
-
+<p>logical to indicate whether to append a colorbar. If
+data is null, it always sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>colorbar.fraction</code></td>
 <td>
-
-
+<p>the relative fraction of colorbar block
+against the device size</p>
 </td></tr>
 <tr valign="top"><td><code>newpage</code></td>
 <td>
-
-
+<p>logical to indicate whether to open a new page. By
+default, it sets to true for opening a new page</p>
 </td></tr>
 <tr valign="top"><td><code>layout.orientation</code></td>
 <td>
-
-
+<p>the orientation of the DAG layout. It can be
+one of &quot;left_right&quot; for the left-right layout (viewed from the DAG root
+point), &quot;top_bottom&quot; for the top-bottom layout, &quot;bottom_top&quot; for the
+bottom-top layout, and &quot;right_left&quot; for the right-left layout</p>
 </td></tr>
 <tr valign="top"><td><code>node.info</code></td>
 <td>
-
-
+<p>tells the ontology term information used to label
+nodes. It can be one of &quot;none&quot; for no node labeling, &quot;term_id&quot; for
+using Term ID, &quot;term_name&quot; for using Term Name (the first 15
+characters), &quot;both&quot; for using both of Term ID and Name (the first 15
+characters), and &quot;full_term_name&quot; for using the full Term Name</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-
-
+<p>a positive integer specifying wrap width of Term
+Name</p>
 </td></tr>
 <tr valign="top"><td><code>graph.node.attrs</code></td>
 <td>
-
-
+<p>a list of global node attributes. These node
+attributes will be changed globally. See 'Note' below for details on
+the attributes</p>
 </td></tr>
 <tr valign="top"><td><code>graph.edge.attrs</code></td>
 <td>
-
-
+<p>a list of global edge attributes. These edge
+attributes will be changed globally. See 'Note' below for details on
+the attributes</p>
 </td></tr>
 <tr valign="top"><td><code>node.attrs</code></td>
 <td>
-
-
+<p>a list of local edge attributes. These node
+attributes will be changed locally; as such, for each attribute, the
+input value must be a named vector (i.e. using Term ID as names). See
+'Note' below for details on the attributes</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>An object of class 'Ragraph'
+</p>
+
+
+<h3>Note</h3>
+
+<p>A list of global node attributes used in &quot;graph.node.attrs&quot;:
+</p>
+
+<ul>
+<li><p>&quot;shape&quot;: the shape of the node: &quot;circle&quot;, &quot;rectangle&quot;, &quot;rect&quot;,
+&quot;box&quot; and &quot;ellipse&quot;
+</p>
+</li>
+<li><p>&quot;fixedsize&quot;: the logical to use only width and height attributes.
+By default, it sets to true for not expanding for the width of the
+label
+</p>
+</li>
+<li><p>&quot;fillcolor&quot;: the background color of the node
+</p>
+</li>
+<li><p>&quot;color&quot;: the color for the node, corresponding to the outside
+edge of the node
+</p>
+</li>
+<li><p>&quot;fontcolor&quot;: the color for the node text/labelings
+</p>
+</li>
+<li><p>&quot;fontsize&quot;: the font size for the node text/labelings
+</p>
+</li>
+<li><p>&quot;height&quot;: the height (in inches) of the node: 0.5 by default
+</p>
+</li>
+<li><p>&quot;width&quot;: the width (in inches) of the node: 0.75 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: the line style for the node: &quot;solid&quot;, &quot;dashed&quot;,
+&quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+<p>A list of global edge attributes used in &quot;graph.edge.attrs&quot;:
+</p>
+
+<ul>
+<li><p>&quot;color&quot;: the color of the edge: gray by default
+</p>
+</li>
+<li><p>&quot;weight&quot;: the weight of the edge: 1 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: the line style for the edge: &quot;solid&quot;, &quot;dashed&quot;,
+&quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+<p>A list of local node attributes used in &quot;node.attrs&quot; (only those named
+Term IDs will be changed locally!):
+</p>
+
+<ul>
+<li><p>&quot;label&quot;: a named vector specifying the node text/labelings
+</p>
+</li>
+<li><p>&quot;shape&quot;: a named vector specifying the shape of the node:
+&quot;circle&quot;, &quot;rectangle&quot;, &quot;rect&quot;, &quot;box&quot; and &quot;ellipse&quot;
+</p>
+</li>
+<li><p>&quot;fixedsize&quot;: a named vector specifying whether it sets to true
+for not expanding for the width of the label
+</p>
+</li>
+<li><p>&quot;fillcolor&quot;: a named vector specifying the background color of
+the node
+</p>
+</li>
+<li><p>&quot;color&quot;: a named vector specifying the color for the node,
+corresponding to the outside edge of the node
+</p>
+</li>
+<li><p>&quot;fontcolor&quot;: a named vector specifying the color for the node
+text/labelings
+</p>
+</li>
+<li><p>&quot;fontsize&quot;: a named vector specifying the font size for the node
+text/labelings
+</p>
+</li>
+<li><p>&quot;height&quot;: a named vector specifying the height (in inches) of the
+node: 0.5 by default
+</p>
+</li>
+<li><p>&quot;width&quot;: a named vector specifying the width (in inches) of the
+node: 0.75 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: a named vector specifying the line style for the node:
+&quot;solid&quot;, &quot;dashed&quot;, &quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (eTerm, top_num = 10, ig = NULL, displayBy = c("fc",
-"adjp", "fdr", "zscore", "pvalue"), path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), height = 7, width = 7,
-margin = rep(0.1, 4), colormap = c("yr", "bwr", "jet", "gbr",
-"wyr", "br", "rainbow", "wb", "lightyellow-orange"),
-ncolors = 40, zlim = NULL, colorbar = T, colorbar.fraction = 0.1,
-newpage = T, layout.orientation = c("top_bottom", "left_right",
-"bottom_top", "right_left"), node.info = c("none", "term_id",
-"term_name", "both", "full_term_name"), wrap.width = NULL,
-graph.node.attrs = NULL, graph.edge.attrs = NULL, node.attrs = NULL)
-{
-displayBy &lt;- match.arg(displayBy)
-path.mode &lt;- match.arg(path.mode)
-layout.orientation &lt;- match.arg(layout.orientation)
-node.info &lt;- match.arg(node.info)
-if (is.null(eTerm)) {
-warnings("There is no enrichment in the 'eTerm' object.\n")
-return(NULL)
-}
-if (class(eTerm)[1] == "eTerm") {
-df &lt;- xEnrichViewer(eTerm, top_num = "all")
-if (top_num == "auto") {
-top_num &lt;- sum(df$adjp &lt; 0.05)
-if (top_num &lt;= 1) {
-top_num &lt;- sum(df$adjp &lt; 0.1)
-}
-if (top_num &lt;= 1) {
-top_num &lt;- 10
-}
-}
-df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = "adjp")
-nodes_query &lt;- rownames(df)
-if (class(ig) == "igraph") {
-nodes_query_tmp &lt;- intersect(nodes_query, V(ig)$name)
-if (length(nodes_query_tmp) &gt; 0) {
-nodes_query &lt;- nodes_query_tmp
-}
-}
-g &lt;- eTerm$g
-subg &lt;- dnet::dDAGinduce(g, nodes_query, path.mode = path.mode)
-if (displayBy == "adjp" | displayBy == "fdr") {
-data &lt;- -1 * log10(df$adjp)
-}
-else if (displayBy == "fc") {
-data &lt;- df$fc
-}
-else if (displayBy == "pvalue") {
-data &lt;- -1 * log10(df$pvalue)
-}
-else if (displayBy == "zscore") {
-data &lt;- df$zscore
-}
-names(data) &lt;- rownames(df)
-data &lt;- data[V(subg)$name]
-}
-else {
-stop("Cannot find an 'eTerm' object.\n")
-}
-if (is.null(graph.edge.attrs)) {
-}
-if (is.null(node.attrs)) {
-hightlighted.shape &lt;- rep("box", length(nodes_query))
-names(hightlighted.shape) &lt;- V(subg)[nodes_query]$name
-node.attrs &lt;- list(shape = hightlighted.shape)
-}
-agDAG &lt;- visDAG(g = subg, data = data, height = height, width = width,
-margin = margin, colormap = colormap, ncolors = ncolors,
-zlim = zlim, colorbar = colorbar, colorbar.fraction =
-colorbar.fraction,
-newpage = newpage, layout.orientation = layout.orientation,
-node.info = node.info, numChar = wrap.width, graph.node.attrs =
-graph.node.attrs,
-graph.edge.attrs = graph.edge.attrs, node.attrs = node.attrs)
-invisible(agDAG)
-}
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
+df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data &lt;- df_cis$variant
+
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# Considering LD SNPs and respecting ontology tree
+eTerm &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) DAG plot of enrichment results
+agDAG &lt;- xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("full_term_name"))
+## modify node labels
+xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("full_term_name"),
+graph.node.attrs=list(fontsize=25,fontcolor="blue",color="transparent"))
+## modify node shapes
+xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("full_term_name"),
+graph.node.attrs=list(fixedsize=FALSE,shape=c("ellipse","box","circle","plaintext")[2]))
+## further modify edge color
+xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25),
+graph.edge.attrs=list(color="black"))
+
+# 4) hide labels for ellipse nodes
+library(Rgraphviz)
+name_nodes &lt;- sapply(AgNode(agDAG), name)
+shape_nodes &lt;- sapply(AgNode(agDAG), shape)
+names(shape_nodes) &lt;- name_nodes
+ind &lt;- which(shape_nodes=='ellipse')
+label_nodes &lt;- rep('', length(ind))
+names(label_nodes) &lt;- name_nodes[ind]
+xEnrichDAGplot(eTerm, top_num="auto", displayBy="fc",
+node.info=c("full_term_name"), node.attrs=list(label=label_nodes,
+shape=shape_nodes))
+
+
+## End(Not run)
 </pre>
 
 

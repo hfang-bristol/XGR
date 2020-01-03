@@ -1,40 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define ontology and its annotations</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xDefineOntology"><tr><td>xDefineOntology</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xDefineOntology</h2>
+<h2>Function to define ontology and its annotations</h2>
+
+<h3>Description</h3>
+
+<p><code>xDefineOntology</code> is supposed to define ontology and its
+annotations. It returns an object of class &quot;aOnto&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xDefineOntology(ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
-"PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF",
-"MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
-"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
-"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
+xDefineOntology(
+ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF",
+"Pfam", "DO",
+"HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
+"MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA",
+"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF",
 "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p",
-"GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
-"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN",
-"CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG", "KEGGmetabolism",
-"KEGGgenetic", "KEGGenvironmental", "KEGGcellular", "KEGGorganismal",
-"KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem",
+"GTExV7",
+"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
+"CreedsDrugUP",
+"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG",
+"KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental", "KEGGcellular",
+"KEGGorganismal", "KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem",
 "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP", "SIFTS2GOMF",
-"SIFTS2GOCC", "EnrichrARCHS4Cells", "EnrichrARCHS4Tissues",
-"EnrichrHumanGeneAtlas", "EnrichrTissueHumanProteomeMap",
-"EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD",
-"EnrichrAchillesFitnessI", "EnrichrDSigDB", "EnrichrOMIM",
-"EnrichrOMIMexpanded",
-"EnrichrdbGaP", "EnrichrJensenDiseases", "EnrichrJensenTissues",
-"EnrichrBioCarta", "EnrichrKEGG", "EnrichrNCIpathway",
+"SIFTS2GOCC",
+"EnrichrARCHS4Cells", "EnrichrARCHS4Tissues", "EnrichrHumanGeneAtlas",
+"EnrichrTissueHumanProteomeMap", "EnrichrTissueProteomicsDB",
+"EnrichrAchillesFitnessD", "EnrichrAchillesFitnessI", "EnrichrDSigDB",
+"EnrichrOMIM",
+"EnrichrOMIMexpanded", "EnrichrdbGaP", "EnrichrJensenDiseases",
+"EnrichrJensenTissues", "EnrichrBioCarta", "EnrichrKEGG",
+"EnrichrNCIpathway",
 "EnrichrPanther", "EnrichrReactome", "EnrichrWikiPathways",
-"EnrichrhuMAP", "EnrichrChEA", "EnrichrConsensusTFs",
-"EnrichrEncodeTF", "EnrichrTFlof", "EnrichrTFpert"),
-ontology.customised = NULL, anno.identity = c("GeneID", "Symbol"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
+"EnrichrhuMAP",
+"EnrichrChEA", "EnrichrConsensusTFs", "EnrichrEncodeTF",
+"EnrichrTFlof",
+"EnrichrTFpert"),
+ontology.customised = NULL,
+anno.identity = c("GeneID", "Symbol"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -43,205 +61,121 @@ guid = NULL)
 <table summary="R argblock">
 <tr valign="top"><td><code>ontology</code></td>
 <td>
-
-
+<p>the ontology supported currently. It can be &quot;GOBP&quot; for
+Gene Ontology Biological Process, &quot;GOMF&quot; for Gene Ontology Molecular
+Function, &quot;GOCC&quot; for Gene Ontology Cellular Component, &quot;PSG&quot; for
+phylostratigraphy (phylostratific age), &quot;PS&quot; for sTOL-based
+phylostratific age information, &quot;PS2&quot; for the collapsed PS version
+(inferred ancestors being collapsed into one with the known taxonomy
+information), &quot;SF&quot; for SCOP domain superfamilies, &quot;Pfam&quot; for Pfam
+domain families, &quot;DO&quot; for Disease Ontology, &quot;HPPA&quot; for Human Phenotype
+Phenotypic Abnormality, &quot;HPMI&quot; for Human Phenotype Mode of Inheritance,
+&quot;HPCM&quot; for Human Phenotype Clinical Modifier, &quot;HPMA&quot; for Human
+Phenotype Mortality Aging, &quot;MP&quot; for Mammalian Phenotype, &quot;EF&quot; for
+Experimental Factor Ontology (used to annotate GWAS Catalog genes),
+Drug-Gene Interaction database (&quot;DGIdb&quot;) for druggable categories,
+tissue-specific eQTL-containing genes from GTEx (&quot;GTExV4&quot;, &quot;GTExV6p&quot;
+and &quot;GTExV7&quot;), crowd extracted expression of differential signatures
+from CREEDS (&quot;CreedsDisease&quot;, &quot;CreedsDiseaseUP&quot;, &quot;CreedsDiseaseDN&quot;,
+&quot;CreedsDrug&quot;, &quot;CreedsDrugUP&quot;, &quot;CreedsDrugDN&quot;, &quot;CreedsGene&quot;,
+&quot;CreedsGeneUP&quot; and &quot;CreedsGeneDN&quot;), KEGG pathways (including 'KEGG' for
+all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
+'Genetic Information Processing' pathways, 'KEGGenvironmental' for
+'Environmental Information Processing' pathways, 'KEGGcellular' for
+'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
+Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
+'REACTOME' for REACTOME pathways or 'REACTOME_x' for its sub-ontologies
+(where x can be 'CellCellCommunication', 'CellCycle',
+'CellularResponsesToExternalStimuli', 'ChromatinOrganization',
+'CircadianClock', 'DevelopmentalBiology', 'DigestionAndAbsorption',
+'Disease', 'DNARepair', 'DNAReplication',
+'ExtracellularMatrixOrganization', 'GeneExpression(Transcription)',
+'Hemostasis', 'ImmuneSystem', 'Metabolism', 'MetabolismOfProteins',
+'MetabolismOfRNA', 'Mitophagy', 'MuscleContraction', 'NeuronalSystem',
+'OrganelleBiogenesisAndMaintenance', 'ProgrammedCellDeath',
+'Reproduction', 'SignalTransduction', 'TransportOfSmallMolecules',
+'VesicleMediatedTransport'), and the molecular signatures database
+(Msigdb, including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;,
+&quot;MsigdbC2CPall&quot;, &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;,
+&quot;MsigdbC2BIOCARTA&quot;, &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;,
+&quot;MsigdbC4CM&quot;, &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;,
+&quot;MsigdbC7&quot;), and the SIFTS database (&quot;SIFTS2GOBP&quot; for Gene Ontology
+Biological Process, &quot;SIFTS2GOMF&quot; for Gene Ontology Molecular Function,
+&quot;SIFTS2GOCC&quot; for Gene Ontology Cellular Component), and 'EnrichrX' for
+Enrichr libraries (where X can be
+&quot;AchillesFitnessD&quot;,&quot;AchillesFitnessI&quot;,&quot;ARCHS4Cells&quot;,&quot;ARCHS4Tissues&quot;,&quot;BioCarta&quot;,&quot;ChEA&quot;,&quot;ConsensusTFs&quot;,&quot;dbGaP&quot;,&quot;DSigDB&quot;,&quot;EncodeTF&quot;,&quot;HumanGeneAtlas&quot;,&quot;huMAP&quot;,&quot;JensenDiseases&quot;,&quot;JensenTissues&quot;,&quot;KEGG&quot;,&quot;NCIpathway&quot;,&quot;OMIM&quot;,&quot;OMIMexpanded&quot;,&quot;Panther&quot;,&quot;Reactome&quot;,&quot;TFlof&quot;,&quot;TFpert&quot;,&quot;TissueHumanProteomeMap&quot;,&quot;TissueProteomicsDB&quot;,&quot;WikiPathways&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>ontology.customised</code></td>
 <td>
-
-
+<p>an object 'GS'. Higher priority over
+'ontology' above. Required, otherwise it will return NULL</p>
 </td></tr>
 <tr valign="top"><td><code>anno.identity</code></td>
 <td>
-
-
+<p>identity for gene annotations. It can be &quot;GeneID&quot;
+for Gene ID and &quot;Symbol&quot; for gene symbol. Does not support the
+customised ontology</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;aOnto&quot;, a list with two components: an igraph
+object 'g' (with graph attributes 'ontology' and 'type' [either 'dag'
+or 'iso']) and a list 'anno'
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS",
-"PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA",
-"MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
-"MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
-"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
-"DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease",
-"CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP",
-"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN",
-"KEGG", "KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental",
-"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
-"REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL",
-"SIFTS2GOBP", "SIFTS2GOMF", "SIFTS2GOCC", "EnrichrARCHS4Cells",
-"EnrichrARCHS4Tissues", "EnrichrHumanGeneAtlas",
-"EnrichrTissueHumanProteomeMap",
-"EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD",
-"EnrichrAchillesFitnessI",
-"EnrichrDSigDB", "EnrichrOMIM", "EnrichrOMIMexpanded", "EnrichrdbGaP",
-"EnrichrJensenDiseases", "EnrichrJensenTissues", "EnrichrBioCarta",
-"EnrichrKEGG", "EnrichrNCIpathway", "EnrichrPanther",
-"EnrichrReactome",
-"EnrichrWikiPathways", "EnrichrhuMAP", "EnrichrChEA",
-"EnrichrConsensusTFs",
-"EnrichrEncodeTF", "EnrichrTFlof", "EnrichrTFpert"),
-ontology.customised = NULL,
-anno.identity = c("GeneID", "Symbol"), verbose = T, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-anno.identity &lt;- match.arg(anno.identity)
-ontology &lt;- ontology[1]
-ontology.input &lt;- ontology
-g &lt;- NULL
-anno &lt;- NULL
-if (!is.null(ontology.customised)) {
-if (class(ontology.customised) == "GS") {
-GS &lt;- ontology.customised
-anno &lt;- GS$gs
-nodes &lt;- data.frame(name = as.character(GS$set_info$setID),
-term_id = as.character(GS$set_info$setID), term_name =
-as.character(GS$set_info$name),
-term_distance = as.character(GS$set_info$distance),
-term_namespace = as.character(GS$set_info$namespace),
-stringsAsFactors = F)
-nodes &lt;- rbind(nodes, c("root", "root", "root", "root",
-"root"))
-relations &lt;- data.frame(from = "root", to = nodes$name)
-g &lt;- igraph::graph.data.frame(d = relations, directed = T,
-vertices = nodes)
-g$type &lt;- "iso"
-ontology.input &lt;- "customised"
-}
-}
-else {
-if (!is.na(ontology)) {
-if (verbose) {
-message(sprintf("Load the ontology %s and its gene annotations (%s)
-...",
-ontology, as.character(Sys.time())), appendLF = T)
-}
-flag_PS2 &lt;- FALSE
-if (ontology == "PS2") {
-flag_PS2 &lt;- TRUE
-ontology &lt;- "PS"
-}
-flag_REACTOME &lt;- FALSE
-if (grepl("REACTOME_", ontology)) {
-flag_REACTOME &lt;- TRUE
-ontology_REACTOME &lt;- ontology
-ontology &lt;- "REACTOME"
-}
-GS &lt;- xRDataLoader(paste("org.Hs.eg", ontology, sep = ""),
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-if (flag_PS2) {
-tmp &lt;- as.character(unique(GS$set_info$name))
-inds &lt;- sapply(tmp, function(x) which(GS$set_info$name ==
-x))
-set_info &lt;- data.frame()
-for (i in 1:length(inds)) {
-set_info &lt;- rbind(set_info, as.matrix(GS$set_info[max(inds[[i]]),
-]))
-}
-gs &lt;- list()
-for (i in 1:length(inds)) {
-gs[[i]] &lt;- unlist(GS$gs[inds[[i]]], use.names = F)
-}
-names(gs) &lt;- rownames(set_info)
-GS$set_info &lt;- set_info
-GS$gs &lt;- gs
-}
-if (flag_REACTOME) {
-flag &lt;- unlist(strsplit(ontology_REACTOME, "_"))[2]
-if (flag %in% GS$set_info$namespace) {
-GS$set_info &lt;- GS$set_info[GS$set_info$namespace ==
-flag, ]
-ind &lt;- match(names(GS$gs), GS$set_info$setID)
-GS$gs &lt;- GS$gs[!is.na(ind)]
-}
-}
-anno &lt;- GS$gs
-if (anno.identity == "Symbol") {
-EG &lt;- xRDataLoader(RData.customised = paste("org.Hs.eg",
-sep = ""), RData.location = RData.location,
-guid = guid, verbose = verbose)
-anno_symbols &lt;- lapply(anno, function(x) {
-xGeneID2Symbol(x, org = EG, details = F, verbose = F)
-})
-anno &lt;- anno_symbols
-}
-all.ontologies &lt;- c("GOBP", "GOMF", "GOCC", "DO",
-"HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "SIFTS2GOBP",
-"SIFTS2GOMF", "SIFTS2GOCC", "REACTOME")
-flag_ontology &lt;- ontology %in% all.ontologies
-if (flag_ontology) {
-ontology &lt;- gsub("^SIFTS2", "", ontology)
-g &lt;- xRDataLoader(RData.customised = paste("ig.",
-ontology, sep = ""), RData.location = RData.location,
-guid = guid, verbose = verbose)
-if (is.null(V(g)$term_namespace)) {
-V(g)$term_namespace &lt;- ontology
-}
-if (flag_REACTOME) {
-if (0) {
-g &lt;- dnet::dDAGinduce(g, nodes_query = GS$set_info$setID,
-path.mode = "all_paths")
-}
-else {
-ind &lt;- match(V(g)$name, GS$set_info$setID)
-vids &lt;- V(g)$name[!is.na(ind)]
-neighs.in &lt;- igraph::neighborhood(g, order = vcount(g),
-nodes = vids, mode = "in")
-neighbors &lt;- unique(names(unlist(neighs.in)))
-g &lt;- dnet::dNetInduce(g, nodes_query = neighbors,
-knn = 0, remove.loops = TRUE, largest.comp = T)
-}
-}
-g$type &lt;- "dag"
-}
-else {
-nodes &lt;- data.frame(name = as.character(GS$set_info$setID),
-term_id = as.character(GS$set_info$setID),
-term_name = as.character(GS$set_info$name),
-term_distance = as.character(GS$set_info$distance),
-term_namespace = as.character(GS$set_info$namespace),
-stringsAsFactors = F)
-nodes &lt;- rbind(nodes, c("root", "root", "root",
-"root", "root"))
-relations &lt;- data.frame(from = "root", to = nodes$name)
-g &lt;- igraph::graph.data.frame(d = relations,
-directed = T, vertices = nodes)
-g$type &lt;- "iso"
-}
-}
-}
-g$ontology &lt;- ontology.input
-aOnto &lt;- list(g = g, anno = anno)
-class(aOnto) &lt;- "aOnto"
-invisible(aOnto)
-}
+## Not run: 
+aOnto &lt;- xDefineOntology("HPPA", RData.location=RData.location)
+
+# only support internally (please contact us if you would like to use)
+aOnto &lt;- xDefineOntology("REACTOME_ImmuneSystem",
+RData.location=RData.location)
+aOnto &lt;- xDefineOntology("KEGGenvironmental",
+RData.location=RData.location)
+aOnto &lt;- xDefineOntology("CGL", RData.location=RData.location)
+
+# advanced use: customisation
+GS &lt;- xRDataLoader('org.Mm.egKEGG', RData.location=RData.location)
+res &lt;- xDefineOntology(ontology.customised=GS)
+
+## End(Not run)
 </pre>
 
 

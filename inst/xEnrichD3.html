@@ -1,18 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a D3 plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichD3"><tr><td>xEnrichD3</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnrichD3</h2>
+<h2>Function to visualise enrichment results using a D3 plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichD3</code> is supposed to visualise enrichment results using a D3
+plot. It returns an object of class &quot;htmlwidget&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichD3(eTerm, top_num = 10, FDR.cutoff = 0.05, type = c("sankey",
-"force", "radial", "diagonal"), colormap = "ggplot2", filename =
-"xEnrichD3", ...)
+xEnrichD3(
+eTerm,
+top_num = 10,
+FDR.cutoff = 0.05,
+type = c("sankey", "force", "radial", "diagonal"),
+colormap = "ggplot2",
+filename = "xEnrichD3",
+...
+)
 </pre>
 
 
@@ -21,174 +34,85 @@ xEnrichD3(eTerm, top_num = 10, FDR.cutoff = 0.05, type = c("sankey",
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-
-
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns (named as
+'group','ontology','name','adjp','zscore')</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-
-
+<p>the number of the top terms (sorted according to adjp).
+For the eTerm object, if it is 'auto' (for eTerm), only the significant
+terms (see below FDR.cutoff) will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-
-
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
 </td></tr>
 <tr valign="top"><td><code>type</code></td>
 <td>
-
-
+<p>the D3 type of the plot. It can be &quot;sankey&quot; for sankey
+network, &quot;force&quot; for force directed network graph, &quot;radial&quot; for radial
+network and &quot;diagonal&quot; for diagonal network</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the group/ontology colormap</p>
 </td></tr>
 <tr valign="top"><td><code>filename</code></td>
 <td>
-
-
+<p>the without-extension part of the name of the output
+html file. By default, it is 'xEnrichD3'</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-
-
+<p>additional graphic parameters used in
+networkD3::sankeyNetwork, networkD3::forceNetwork,
+networkD3::radialNetwork and networkD3::diagonalNetwork</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;htmlwidget&quot;, appended with an &quot;igraph&quot; object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (eTerm, top_num = 10, FDR.cutoff = 0.05, type = c("sankey",
-"force", "radial", "diagonal"), colormap = "ggplot2", filename =
-"xEnrichD3",
-...)
-{
-type &lt;- match.arg(type)
-if (is.null(eTerm)) {
-warnings("There is no enrichment in the 'eTerm' object.\n")
-return(NULL)
-}
-if (class(eTerm) == "eTerm") {
-df &lt;- xEnrichViewer(eTerm, top_num = "all")
-if (top_num == "auto") {
-top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
-if (top_num &lt;= 1) {
-top_num &lt;- 10
-}
-}
-df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = "adjp")
-df$group &lt;- "group"
-df$ontology &lt;- "ontology"
-}
-else if (class(eTerm) == "ls_eTerm" | class(eTerm) == "data.frame") {
-if (class(eTerm) == "ls_eTerm") {
-df &lt;- eTerm$df
-}
-else if (class(eTerm) == "data.frame") {
-if (all(c("group", "ontology", "name", "adjp", "zscore") %in%
-colnames(eTerm))) {
-df &lt;- eTerm[, c("group", "ontology", "name",
-"adjp", "zscore")]
-}
-else if (all(c("group", "name", "adjp", "zscore") %in%
-colnames(eTerm))) {
-df &lt;- eTerm[, c("group", "name", "adjp", "zscore")]
-df$ontology &lt;- "ontology"
-}
-else if (all(c("ontology", "name", "adjp", "zscore") %in%
-colnames(eTerm))) {
-df &lt;- eTerm[, c("ontology", "name", "adjp", "zscore")]
-df$group &lt;- "group"
-}
-else if (all(c("name", "adjp", "zscore") %in% colnames(eTerm))) {
-df &lt;- eTerm[, c("name", "adjp", "zscore")]
-df$group &lt;- "group"
-df$ontology &lt;- "ontology"
-}
-else {
-warnings("The input data.frame does not contain required columns:
-c('group','ontology','name','adjp','zscore').\n")
-return(NULL)
-}
-}
-group &lt;- ontology &lt;- rank &lt;- adjp &lt;- NULL
-df &lt;- df %&gt;% dplyr::arrange(adjp)
-if (top_num == "auto") {
-df &lt;- subset(df, df$adjp &lt; FDR.cutoff)
-}
-else {
-top_num &lt;- as.integer(top_num)
-df &lt;- as.data.frame(df %&gt;% dplyr::group_by(group,
-ontology) %&gt;% dplyr::group_by(rank = rank(adjp),
-add = TRUE) %&gt;% dplyr::filter(rank &lt;= top_num &amp;
-adjp &lt; FDR.cutoff))
-}
-}
-df_nodes_group &lt;- data.frame(name = unique(df$group), category =
-"group",
-stringsAsFactors = FALSE)
-df_nodes_ontology &lt;- unique(data.frame(name = df$name, category =
-df$ontology,
-stringsAsFactors = FALSE))
-df_nodes &lt;- rbind(df_nodes_group, df_nodes_ontology)
-tmp &lt;- table(df_nodes$category)
-color_category &lt;- xColormap(colormap)(length(tmp))
-names(color_category) &lt;- names(tmp)
-df_nodes$color &lt;- color_category[df_nodes$category]
-df_edges &lt;- df[, c("group", "name", "zscore")]
-g &lt;- igraph::graph.data.frame(d = df_edges, directed = TRUE,
-vertices = df_nodes)
-if (type == "sankey") {
-d3 &lt;- networkD3::igraph_to_networkD3(g, group = df_nodes$category)
-colors &lt;- paste(color_category, collapse = "\", \"")
-colourScale &lt;- paste("d3.scaleOrdinal([\"", colors, "\"])")
-res &lt;- networkD3::sankeyNetwork(Links = d3$links, Nodes = d3$nodes,
-Source = "source", Target = "target", Value = "value",
-NodeID = "name", NodeGroup = "group", colourScale = colourScale,
-fontSize = 12, sinksRight = F, ...)
-}
-else if (type == "force") {
-d3 &lt;- networkD3::igraph_to_networkD3(g, group = df_nodes$category)
-d3 &lt;- networkD3::igraph_to_networkD3(g, group = df_nodes$category)
-d3$links$value &lt;- 1 + 4 * (d3$links$value -
-min(d3$links$value))/(max(d3$links$value) -
-min(d3$links$value))
-linkWidth &lt;- networkD3::JS("function(d) { return d.value; }")
-colors &lt;- paste(color_category, collapse = "\", \"")
-colourScale &lt;- paste("d3.scaleOrdinal([\"", colors, "\"])")
-res &lt;- networkD3::forceNetwork(Links = d3$links, Nodes = d3$nodes,
-Source = "source", Target = "target", Value = "value",
-NodeID = "name", Group = "group", colourScale = colourScale,
-zoom = T, linkDistance = 200, linkWidth = linkWidth,
-...)
-}
-else if (type %in% c("radial", "diagonal")) {
-if (0) {
-}
-data &lt;- xConverter(g, from = "igraph", to = "lol", verbose = F)
-if (type == "radial") {
-res &lt;- networkD3::radialNetwork(data, ...)
-}
-else {
-res &lt;- networkD3::diagonalNetwork(data, ...)
-}
-}
-if (all(!is.null(filename), !is.na(filename), filename !=
-"")) {
-filename &lt;- gsub(".html$", "", filename)
-filename &lt;- paste0(filename, ".html")
-res %&gt;% networkD3::saveNetwork(file = filename)
-}
-res$ig &lt;- g
-invisible(res)
-}
+res &lt;- xEnrichD3(eTerm, type="sankey", width=500, height=500)
+res &lt;- xEnrichD3(eTerm,type="radial", fontSize=12,
+nodeColour="steelblue", nodeStroke="fff")
+res
+res$ig
+ig &lt;- xConverter(res$ig, from='igraph', to='igraph_tree')
+
+# BiocManager::install('webshot')
+# webshot::install_phantomjs()
+# BiocManager::install('r2d3')
+# r2d3::save_d3_png(res, file='xEnrichD3.png', zoom=2)
+
+## End(Not run)
 </pre>
 
 

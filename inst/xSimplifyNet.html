@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to simplify networks from an igraph object</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSimplifyNet"><tr><td>xSimplifyNet</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSimplifyNet</h2>
+<h2>Function to simplify networks from an igraph object</h2>
+
+<h3>Description</h3>
+
+<p><code>xSimplifyNet</code> is supposed to simplify networks from an igraph
+object by keeping root-tip shortest paths only.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -19,64 +26,50 @@ xSimplifyNet(g, verbose = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an &quot;igraph&quot; object</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;igraph&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSimplifyNet</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
 
-## The function is currently defined as
-function (g, verbose = TRUE)
-{
-if (class(g) == "igraph") {
-ig &lt;- g
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("The input graph has %d nodes and %d edges (%s)
-...",
-vcount(ig), ecount(ig), as.character(now)), appendLF = TRUE)
-}
-}
-else {
-stop("The function must apply to the 'igraph' object.\n")
-}
-if (!igraph::is_directed(ig)) {
-stop("The function must apply to the direct graph.\n")
-}
-root &lt;- dnet::dDAGroot(ig)
-if (verbose) {
-message(sprintf("\tthe number of roots: %d", length(root)),
-appendLF = TRUE)
-}
-tips &lt;- dnet::dDAGtip(ig)
-if (verbose) {
-message(sprintf("\tthe number of tips: %d", length(tips)),
-appendLF = TRUE)
-}
-epaths &lt;- igraph::get.shortest.paths(ig, from = root, to = tips,
-output = "epath")
-subg &lt;- igraph::subgraph.edges(ig, eids = unlist(epaths$epath),
-delete.vertices = TRUE)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("The simplified graph has %d nodes and %d edges (%s)
-...",
-vcount(subg), ecount(subg), as.character(now)), appendLF = TRUE)
-}
-invisible(subg)
-}
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+g &lt;- xRDataLoader(RData.customised='ig.DO',
+RData.location=RData.location)
+ig &lt;- xSimplifyNet(g)
+
+## End(Not run)
 </pre>
 
 

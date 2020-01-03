@@ -1,18 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity between...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xDAGsim"><tr><td>xDAGsim</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xDAGsim</h2>
+<h2>Function to calculate pair-wise semantic similarity between input terms based on a direct acyclic graph (DAG) with annotated data</h2>
+
+<h3>Description</h3>
+
+<p><code>xDAGsim</code> is supposed to calculate pair-wise semantic similarity
+between input terms based on a direct acyclic graph (DAG) with
+annotated data. It returns an object of class &quot;igraph&quot;, a network
+representation of input terms. Parallel computing is also supported for
+Linux or Mac operating systems.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xDAGsim(g, terms = NULL, method.term = c("Resnik", "Lin", "Schlicker",
-"Jiang", "Pesquita"), fast = T, parallel = TRUE, multicores = NULL,
-verbose = T)
+xDAGsim(
+g,
+terms = NULL,
+method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
+fast = T,
+parallel = TRUE,
+multicores = NULL,
+verbose = T
+)
 </pre>
 
 
@@ -21,427 +37,123 @@ verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot;. It must contain a vertex
+attribute called 'anno' for storing annotation data (see example for
+howto)</p>
 </td></tr>
 <tr valign="top"><td><code>terms</code></td>
 <td>
-
-
+<p>the terms/nodes between which pair-wise semantic
+similarity is calculated. If NULL, all terms in the input DAG will be
+used for calcluation, which is very prohibitively expensive!</p>
 </td></tr>
 <tr valign="top"><td><code>method.term</code></td>
 <td>
-
-
+<p>the method used to measure semantic similarity
+between input terms. It can be &quot;Resnik&quot; for information content (IC) of
+most informative common ancestor (MICA) (see
+<a href="http://dl.acm.org/citation.cfm?id=1625914">http://dl.acm.org/citation.cfm?id=1625914</a>), &quot;Lin&quot; for 2*IC at
+MICA divided by the sum of IC at pairs of terms, &quot;Schlicker&quot; for
+weighted version of 'Lin' by the 1-prob(MICA) (see
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16776819">http://www.ncbi.nlm.nih.gov/pubmed/16776819</a>), &quot;Jiang&quot; for 1 -
+difference between the sum of IC at pairs of terms and 2*IC at MICA
+(see <a href="https://arxiv.org/pdf/cmp-lg/9709008.pdf">https://arxiv.org/pdf/cmp-lg/9709008.pdf</a>), &quot;Pesquita&quot; for
+graph information content similarity related to Tanimoto-Jacard index
+(ie. summed information content of common ancestors divided by summed
+information content of all ancestors of term1 and term2 (see
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>)). By default, it
+uses &quot;Schlicker&quot; method</p>
 </td></tr>
 <tr valign="top"><td><code>fast</code></td>
 <td>
-
-
+<p>logical to indicate whether a vectorised fast computation
+is used. By default, it sets to true. It is always advisable to use
+this vectorised fast computation; since the conventional computation is
+just used for understanding scripts</p>
 </td></tr>
 <tr valign="top"><td><code>parallel</code></td>
 <td>
-
-
+<p>logical to indicate whether parallel computation with
+multicores is used. By default, it sets to true, but not necessarily
+does so. It will depend on whether these two packages &quot;foreach&quot; and
+&quot;doParallel&quot; have been installed</p>
 </td></tr>
 <tr valign="top"><td><code>multicores</code></td>
 <td>
-
-
+<p>an integer to specify how many cores will be
+registered as the multicore parallel backend to the 'foreach' package.
+If NULL, it will use a half of cores available in a user's computer.
+This option only works when parallel computation is enabled</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>It returns an object of class &quot;igraph&quot;, with nodes for input terms and
+edges for pair-wise semantic similarity between terms.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xDAGanno</code>, <code>xConverter</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# 1) SNP-based ontology
+# 1a) ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+g
 
-## The function is currently defined as
-function (g, terms = NULL, method.term = c("Resnik", "Lin",
-"Schlicker",
-"Jiang", "Pesquita"), fast = T, parallel = TRUE, multicores = NULL,
-verbose = T)
-{
-method.term &lt;- match.arg(method.term)
-ig &lt;- g
-if (class(ig) != "igraph") {
-stop("The function must apply to the 'igraph' object.\n")
-}
-if (is.null(V(ig)$anno) | is.null(V(ig)$IC)) {
-stop("The function requires that input graph has already contained
-annotation data.  Please first run 'xDAGanno'.\n")
-}
-IC &lt;- V(ig)$IC
-names(IC) &lt;- V(ig)$name
-terms &lt;- terms[!is.na(terms)]
-if (is.null(terms) || is.na(terms)) {
-terms &lt;- V(ig)$name
-}
-else {
-flag &lt;- terms %in% V(ig)$name
-if (sum(flag) != 0) {
-terms &lt;- terms[flag]
-}
-else {
-terms &lt;- V(ig)$name
-}
-}
-progress_indicate &lt;- function(i, B, step, flag = F) {
-if (i%%ceiling(B/step) == 0 | i == B | i == 1) {
-if (flag &amp; verbose) {
-message(sprintf("\t%d out of %d (%s)", i, B,
-as.character(Sys.time())), appendLF = T)
-}
-}
-}
-num_terms &lt;- length(terms)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Calculate semantic similarity between %d terms using
-'%s' method (%s)...",
-num_terms, method.term, as.character(now)), appendLF = T)
-}
-sCP &lt;- dnet::dDAGancestor(ig, term1 = terms, term2 = NULL,
-verbose = T)
-allterms &lt;- V(ig)$name
-ind &lt;- match(terms, allterms)
-flag_parallel &lt;- F
-if (parallel == TRUE) {
-flag_parallel &lt;- xCheckParallel(multicores = multicores,
-verbose = verbose)
-if (flag_parallel) {
-if (method.term == "Resnik") {
-i &lt;- 1
-sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:num_terms,
-.inorder = T, .combine = rbind), {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-fast &lt;- T
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i -
-1
-res &lt;- IC[mica_js]
-x &lt;- rep(0, num_terms)
-x[js] &lt;- res
-x
-}
-})
-}
-else if (method.term == "Lin") {
-i &lt;- 1
-sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:num_terms,
-.inorder = T, .combine = rbind), {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-fast &lt;- T
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i -
-1
-res &lt;- 2 * IC[mica_js]/(IC[ind[i]] + IC[ind[js]])
-x &lt;- rep(0, num_terms)
-x[js] &lt;- res
-x
-}
-})
-}
-else if (method.term == "Schlicker") {
-i &lt;- 1
-sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:num_terms,
-.inorder = T, .combine = rbind), {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-fast &lt;- T
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i -
-1
-res &lt;- (2 * IC[mica_js]/(IC[ind[i]] + IC[ind[js]])) *
-(1 - 10^(-IC[mica_js]))
-x &lt;- rep(0, num_terms)
-x[js] &lt;- res
-x
-}
-})
-}
-else if (method.term == "Jiang") {
-i &lt;- 1
-sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:num_terms,
-.inorder = T, .combine = rbind), {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-fast &lt;- T
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i -
-1
-tmp &lt;- IC[ind[i]] + IC[ind[js]] - 2 * IC[mica_js]
-tmp[tmp &gt; 1] &lt;- 1
-res &lt;- 1 - tmp
-x &lt;- rep(0, num_terms)
-x[js] &lt;- res
-x
-}
-})
-}
-else if (method.term == "Pesquita") {
-i &lt;- 1
-sim &lt;- foreach::`%dopar%`(foreach::foreach(i = 1:num_terms,
-.inorder = T, .combine = rbind), {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-fast &lt;- T
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i -
-1
-allan_js_list &lt;- split(ancestor_js[, 2],
-ancestor_js[, 1])
-allan_union &lt;- sapply(allan_js_list, function(x) {
-ux &lt;- base::union(x, ancestor_i)
-sum(IC[ux])
-})
-allca_union &lt;- sapply(ca_js_list, function(x) {
-sum(IC[x])
-})
-res &lt;- allca_union/allan_union
-x &lt;- rep(0, num_terms)
-x[js] &lt;- res
-x
-}
-})
-}
-sim &lt;- sim + Matrix::t(sim)
-sim &lt;- Matrix::Matrix(sim, sparse = T)
-}
-}
-if (flag_parallel == F) {
-sim &lt;- Matrix::Matrix(0, nrow = num_terms, ncol = num_terms,
-sparse = T)
-if (method.term == "Resnik") {
-for (i in 1:num_terms) {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i - 1
-res &lt;- IC[mica_js]
-sim[i, js] &lt;- res
-}
-else {
-for (j in i:num_terms) {
-ancestor_j &lt;- which(sCP[j, ] == 1)
-ancestors &lt;- intersect(ancestor_i, ancestor_j)
-mica &lt;- ancestors[which.max(IC[ancestors])]
-res &lt;- IC[mica]
-sim[i, j] &lt;- res
-}
-}
-}
-}
-else if (method.term == "Lin") {
-for (i in 1:num_terms) {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i - 1
-res &lt;- 2 * IC[mica_js]/(IC[ind[i]] + IC[ind[js]])
-sim[i, js] &lt;- res
-}
-else {
-for (j in i:num_terms) {
-ancestor_j &lt;- which(sCP[j, ] == 1)
-ancestors &lt;- intersect(ancestor_i, ancestor_j)
-mica &lt;- ancestors[which.max(IC[ancestors])]
-res &lt;- 2 * IC[mica]/(IC[ind[i]] + IC[ind[j]])
-sim[i, j] &lt;- res
-}
-}
-}
-}
-else if (method.term == "Schlicker") {
-for (i in 1:num_terms) {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i - 1
-res &lt;- (2 * IC[mica_js]/(IC[ind[i]] + IC[ind[js]])) *
-(1 - 10^(-IC[mica_js]))
-sim[i, js] &lt;- res
-}
-else {
-for (j in i:num_terms) {
-ancestor_j &lt;- which(sCP[j, ] == 1)
-ancestors &lt;- intersect(ancestor_i, ancestor_j)
-mica &lt;- ancestors[which.max(IC[ancestors])]
-res &lt;- (2 * IC[mica]/(IC[ind[i]] + IC[ind[j]])) *
-(1 - 10^(-IC[mica]))
-sim[i, j] &lt;- res
-}
-}
-}
-}
-else if (method.term == "Jiang") {
-for (i in 1:num_terms) {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i - 1
-tmp &lt;- IC[ind[i]] + IC[ind[js]] - 2 * IC[mica_js]
-tmp[tmp &gt; 1] &lt;- 1
-res &lt;- 1 - tmp
-sim[i, js] &lt;- res
-}
-else {
-for (j in i:num_terms) {
-ancestor_j &lt;- which(sCP[j, ] == 1)
-ancestors &lt;- intersect(ancestor_i, ancestor_j)
-mica &lt;- ancestors[which.max(IC[ancestors])]
-res &lt;- 1 - min(1, IC[ind[i]] + IC[ind[j]] -
-2 * IC[mica])
-sim[i, j] &lt;- res
-}
-}
-}
-}
-else if (method.term == "Pesquita") {
-for (i in 1:num_terms) {
-ancestor_i &lt;- which(sCP[i, ] == 1)
-progress_indicate(i, num_terms, 10, flag = T)
-if (fast) {
-mat &lt;- sCP[i:num_terms, ]
-ancestor_js &lt;- which(matrix(mat == 1, nrow = num_terms -
-i + 1), arr.ind = T)
-flag &lt;- is.element(ancestor_js[, 2], ancestor_i)
-ca_js &lt;- ancestor_js[flag, ]
-ca_js_list &lt;- split(ca_js[, 2], ca_js[, 1])
-mica_js &lt;- sapply(ca_js_list, function(x) {
-x[which.max(IC[x])]
-})
-js &lt;- as.numeric(names(ca_js_list)) + i - 1
-allan_js_list &lt;- split(ancestor_js[, 2], ancestor_js[,
-1])
-allan_union &lt;- sapply(allan_js_list, function(x) {
-ux &lt;- base::union(x, ancestor_i)
-sum(IC[ux])
-})
-allca_union &lt;- sapply(ca_js_list, function(x) {
-sum(IC[x])
-})
-res &lt;- allca_union/allan_union
-sim[i, js] &lt;- res
-}
-else {
-for (j in i:num_terms) {
-ancestor_j &lt;- which(sCP[j, ] == 1)
-ancestors &lt;- intersect(ancestor_i, ancestor_j)
-mica &lt;- ancestors[which.max(IC[ancestors])]
-allancestors &lt;- base::union(ancestor_i, ancestor_j)
-res &lt;- sum(IC[ancestors])/sum(IC[allancestors])
-sim[i, j] &lt;- res
-}
-}
-}
-}
-sim &lt;- sim + Matrix::t(sim)
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Semantic similarity has been calculated (%s)!",
-as.character(now)), appendLF = T)
-}
-rownames(sim) &lt;- colnames(sim) &lt;- terms
-sim[as.matrix(is.na(sim))] &lt;- 0
-if (class(sim) == "dgCMatrix") {
-res &lt;- xConverter(sim, from = "dgCMatrix", to = "igraph",
-verbose = verbose)
-}
-invisible(res)
-}
+# 1b) load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+anno &lt;- xRDataLoader(RData='GWAS2EF')
+
+# 1c) prepare for ontology and its annotation information 
+dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
+true.path.rule=TRUE, verbose=TRUE)
+
+# 1d) calculate pair-wise semantic similarity between 5 randomly chosen terms 
+terms &lt;- sample(V(dag)$name, 5)
+sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
+parallel=FALSE)
+sim
+
+###########################################################
+# 2) Gene-based ontology
+# 2a) ig.MP (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.MP')
+
+# 2b) load human genes annotated by MP (an object of class "GS" containing the 'gs' component)
+GS &lt;- xRDataLoader(RData='org.Hs.egMP')
+anno &lt;- GS$gs # notes: This is a list
+
+# 2c) prepare for annotation data
+dag &lt;- xDAGanno(g=g, annotation=anno, path.mode="all_paths",
+true.path.rule=TRUE, verbose=TRUE)
+
+# 2d) calculate pair-wise semantic similarity between 5 randomly chosen terms 
+terms &lt;- sample(V(dag)$name, 5)
+sim &lt;- xDAGsim(g=dag, terms=terms, method.term="Schlicker",
+parallel=FALSE)
+sim
+
+## End(Not run)
 </pre>
 
 

@@ -1,11 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to mark a network within another network</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xMarkNet"><tr><td>xMarkNet</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xMarkNet</h2>
+<h2>Function to mark a network within another network</h2>
+
+<h3>Description</h3>
+
+<p><code>xMarkNet</code> is supposed to mark a network within another network.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -19,70 +25,67 @@ xMarkNet(ig1, ig2, verbose = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>ig1</code></td>
 <td>
-
-
+<p>a &quot;igraph&quot; object within which the mark happens</p>
 </td></tr>
 <tr valign="top"><td><code>ig2</code></td>
 <td>
-
-
+<p>a &quot;igraph&quot; object to be marked. Only overlapped nodes and
+edges are marked</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;igraph&quot; appended with a node attribute 'mark' (0
+for the background, 1 for the marked) and an edge attribute 'mark' (0
+for the background, 1 for the marked)
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xMarkNet</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
 
-## The function is currently defined as
-function (ig1, ig2, verbose = TRUE)
-{
-if (!(any(class(ig1) %in% "igraph")) &amp; !(any(class(ig2) %in%
-"igraph"))) {
-return(NULL)
-}
-flag_direct &lt;- "undirect"
-vec &lt;- sapply(list(ig1, ig2), igraph::is_directed)
-if (sum(vec) == length(vec)) {
-flag_direct &lt;- "direct"
-}
-mark &lt;- name &lt;- NULL
-node1 &lt;- ig1 %&gt;% igraph::as_data_frame("vertices")
-edge1 &lt;- ig1 %&gt;% igraph::as_data_frame("edges")
-node2 &lt;- ig2 %&gt;% igraph::as_data_frame("vertices") %&gt;%
-dplyr::mutate(mark = 1) %&gt;%
-dplyr::select(name, mark)
-edge2 &lt;- ig2 %&gt;% igraph::as_data_frame("edges") %&gt;%
-dplyr::mutate(mark = 1)
-node1 &lt;- node1 %&gt;% dplyr::left_join(node2, by = c("name")) %&gt;%
-dplyr::mutate(mark = ifelse(is.na(mark), 0, mark))
-edge1 &lt;- edge1 %&gt;% dplyr::left_join(edge2, by = c("from",
-"to")) %&gt;% dplyr::mutate(mark = ifelse(is.na(mark), 0,
-mark))
-if (flag_direct == "direct") {
-ig &lt;- igraph::graph_from_data_frame(d = edge1, directed = TRUE,
-vertices = node1)
-}
-else {
-ig &lt;- igraph::graph_from_data_frame(d = edge1, directed = FALSE,
-vertices = node1)
-}
-if (verbose) {
-message(sprintf("The '%s' network (%d nodes and %d edges) has %d
-nodes and %d edges marked",
-flag_direct, vcount(ig), ecount(ig), sum(V(ig)$mark),
-sum(E(ig)$mark), appendLF = TRUE))
-}
-invisible(ig)
-}
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+ig1 &lt;- xDefineNet(network="KEGG_environmental",
+RData.location=RData.location)
+ig2 &lt;- xDefineNet(network="KEGG_organismal",
+RData.location=RData.location)
+ig &lt;- xMarkNet(ig1, ig2)
+
+E(ig)$color &lt;- ifelse(E(ig)$mark==0, 'lightblue1', 'darkgreen')
+E(ig)$color.alpha &lt;- ifelse(E(ig)$mark==0, 0.3, 0.7)
+ig &lt;- ig %&gt;% xLayout("gplot.layout.fruchtermanreingold")
+gp &lt;- xGGnetwork(ig, node.xcoord='xcoord', node.ycoord='ycoord',
+node.color="mark", colormap="orange-darkgreen", node.color.alpha=0.7,
+edge.color="color", edge.color.alpha="color.alpha", edge.arrow.gap=0) +
+theme(legend.position='none')
+
+## End(Not run)
 </pre>
 
 

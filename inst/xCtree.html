@@ -1,20 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw a tree-like circular plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xCtree"><tr><td>xCtree</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xCtree</h2>
+<h2>Function to draw a tree-like circular plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xCtree</code> is supposed to draw a tree-like circular plot (dendrogram
+circular layout), with tips labelled (outwards or inwards). The tree is
+provided as an object of class &quot;igraph&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xCtree(ig, leave.label.orientation = c("outwards", "inwards"),
-leave.label.size = 2, leave.label.color = "steelblue",
-leave.label.alpha = 0.7, leave.label.wrap = NULL, leave.label.expansion
-= NULL, leave.size = 0, limit.expansion = 1.1, edge.color = "grey",
-edge.alpha = 0.5, edge.width = 0.5)
+xCtree(
+ig,
+leave.label.orientation = c("outwards", "inwards"),
+leave.label.size = 2,
+leave.label.color = "steelblue",
+leave.label.alpha = 0.7,
+leave.label.wrap = NULL,
+leave.label.expansion = NULL,
+leave.size = 0,
+limit.expansion = 1.1,
+edge.color = "grey",
+edge.alpha = 0.5,
+edge.width = 0.5
+)
 </pre>
 
 
@@ -23,165 +40,113 @@ edge.alpha = 0.5, edge.width = 0.5)
 <table summary="R argblock">
 <tr valign="top"><td><code>ig</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot; with node attribute 'name'. It
+could be a 'phylo' object converted to. Note: the leave labels would be
+the node attribute 'name' unless the node attribute 'label' is
+explicitely provided</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.orientation</code></td>
 <td>
-
-
+<p>the leave label orientation. It can be
+&quot;outwards&quot; and &quot;inwards&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.size</code></td>
 <td>
-
-
+<p>the text size of the leave labelings. By
+default, it is 2</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.color</code></td>
 <td>
-
-
+<p>the color of the leave labelings</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.alpha</code></td>
 <td>
-
-
+<p>the alpha of the leave labelings</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.wrap</code></td>
 <td>
-
-
+<p>the wrap width of the leave labelings</p>
 </td></tr>
 <tr valign="top"><td><code>leave.label.expansion</code></td>
 <td>
-
-
+<p>the x- and y-expansion of the leave
+labelings. The value of 1 for the exact location of the leave, and the
+outwards (&gt;1; by default 1.05 if NULL) and the inwards (&lt;1; by default
+0.98 if NULL)</p>
 </td></tr>
 <tr valign="top"><td><code>leave.size</code></td>
 <td>
-
-
+<p>the size of the leave nodes. By default, it is 0</p>
 </td></tr>
 <tr valign="top"><td><code>limit.expansion</code></td>
 <td>
-
-
+<p>the x- and y-limit expansion. By default, it is
+1.1. Beware the orignial limit is [-1,1]</p>
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-
-
+<p>the color of edges</p>
 </td></tr>
 <tr valign="top"><td><code>edge.alpha</code></td>
 <td>
-
-
+<p>the alpha of edges</p>
 </td></tr>
 <tr valign="top"><td><code>edge.width</code></td>
 <td>
-
-
+<p>the width of edges</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object appended with 'ig' and 'data' which should contain
+columns 'x','y', 'leaf' (T/F), 'name' (the same as V(ig)$name), 'tipid'
+(tip id), 'label' (if not given in ig, a 'name' varient), 'angle' and
+'hjust' (assist in leave label orientation).
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xCtree</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (ig, leave.label.orientation = c("outwards", "inwards"),
-leave.label.size = 2, leave.label.color = "steelblue",
-leave.label.alpha = 0.7,
-leave.label.wrap = NULL, leave.label.expansion = NULL, leave.size = 0,
-limit.expansion = 1.1, edge.color = "grey", edge.alpha = 0.5,
-edge.width = 0.5)
-{
-leave.label.orientation &lt;- match.arg(leave.label.orientation)
-if (0) {
-if (any(duplicated(tree$node.label)))
-tree$node.label &lt;- NULL
-ig &lt;- as.igraph(tree, directed = T, use.labels = T)
-}
-if (class(ig) != "igraph") {
-warnings("The function must apply to the 'igraph' object.\n")
-return(NULL)
-}
-else {
-if (!all(c("name") %in% igraph::vertex_attr_names(ig))) {
-warnings("The igraph object must have vertex attribute 'name'.\n")
-return(NULL)
-}
-}
-if (!("label" %in% igraph::vertex_attr_names(ig))) {
-V(ig)$label &lt;- V(ig)$name
-}
-if (!is.null(leave.label.wrap)) {
-width &lt;- as.integer(leave.label.wrap)
-res_list &lt;- lapply(V(ig)$label, function(x) {
-x &lt;- gsub("_", " ", x)
-y &lt;- strwrap(x, width = width)
-if (length(y) &gt; 1) {
-paste(y, collapse = "\n")
-}
-else {
-y
-}
-})
-V(ig)$label &lt;- unlist(res_list)
-}
-if (!("tipid" %in% igraph::vertex_attr_names(ig))) {
-ind &lt;- match(V(ig)$name, dnet::dDAGtip(ig))
-V(ig)$tipid &lt;- NA
-V(ig)$tipid[!is.na(ind)] &lt;- 1:sum(!is.na(ind))
-}
-V(ig)$angle &lt;- 90 - 360 * V(ig)$tipid/sum(!is.na(V(ig)$tipid))
-if (leave.label.orientation == "outwards") {
-V(ig)$hjust &lt;- ifelse(V(ig)$angle &lt; -90, 1, 0)
-if (is.null(leave.label.expansion)) {
-leave.label.expansion &lt;- 1.05
-}
-}
-else if (leave.label.orientation == "inwards") {
-V(ig)$hjust &lt;- ifelse(V(ig)$angle &lt; -90, 0, 1)
-if (is.null(leave.label.expansion)) {
-leave.label.expansion &lt;- 0.98
-}
-}
-V(ig)$angle &lt;- ifelse(V(ig)$angle &lt; -90, V(ig)$angle + 180,
-V(ig)$angle)
-x &lt;- y &lt;- leaf &lt;- label &lt;- angle &lt;- hjust &lt;- NULL
-gp &lt;- ggraph::ggraph(ig, layout = "dendrogram", circular = TRUE)
-gp &lt;- gp + ggraph::geom_edge_diagonal(color = edge.color,
-alpha = edge.alpha, width = edge.width)
-gp &lt;- gp + ggraph::geom_node_point(aes(filter = leaf), size =
-leave.size,
-color = edge.color, alpha = edge.alpha)
-gp &lt;- gp + ggraph::geom_node_text(aes(x = x * leave.label.expansion,
-y = y * leave.label.expansion, filter = leaf, label = label,
-angle = angle, hjust = hjust), show.legend = F, color =
-leave.label.color,
-size = leave.label.size, alpha = leave.label.alpha, fontface = "bold")
-+
-expand_limits(x = c(-limit.expansion, limit.expansion),
-y = c(-limit.expansion, limit.expansion))
-gp &lt;- gp + coord_fixed() + theme(legend.position = "bottom") +
-ggraph::theme_graph(base_family = "sans", plot_margin = margin(0,
-0, 0, 0))
-if (0) {
-tipid &lt;- NULL
-}
-if (1) {
-ggraph.orig_index &lt;- NULL
+AA.template &lt;- xRDataLoader("AA.template",
+RData.location=RData.location)
+# consensus tree
+ig &lt;- AA.template$consensus$ig
+
+# outwards
+gp &lt;- xCtree(ig, leave.label.orientation="outwards",
+leave.label.wrap=50, limit.expansion=1.5, leave.size=2)
+head(gp$data %&gt;% dplyr::arrange(tipid))
+
+# inwards
+gp &lt;- xCtree(ig, leave.label.orientation="inwards",
+leave.label.wrap=30)
+
+# obtain 'xcoord' and 'ycoord'
+gp &lt;- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
 data &lt;- gp$data %&gt;% dplyr::arrange(ggraph.orig_index)
-V(ig)$xcoord &lt;- data[, "x"]
-V(ig)$ycoord &lt;- data[, "y"]
-}
-gp$ig &lt;- ig
-invisible(gp)
-}
+V(ig)$xcoord &lt;- data[,'x']
+V(ig)$ycoord &lt;- data[,'y']
+
+## End(Not run)
 </pre>
 
 

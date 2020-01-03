@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to sort by chromosomes/seqnames, start and end...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGRsort"><tr><td>xGRsort</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xGRsort</h2>
+<h2>Function to sort by chromosomes/seqnames, start and end coordinates of the intervals.</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRsort</code> is supposed to sort by chromosomes/seqnames, start and
+end coordinates of the intervals.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -19,43 +26,46 @@ xGRsort(data)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>input genomic regions (GR). GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>index
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGRsort</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (data)
-{
-data &lt;- gsub(",.*", "", data)
-input &lt;- do.call(rbind, strsplit(data, ":|-|,"))
-if (ncol(input) == 2) {
-data &lt;- paste(input[, 1], ":", input[, 2], "-", input[,
-2], sep = "")
-}
-suppressWarnings(gr &lt;- xGR(data, format = "chr:start-end"))
-if (is.null(gr)) {
-return(NULL)
-}
-gr &lt;- GenomeInfoDb::sortSeqlevels(gr)
-gr &lt;- sort(gr)
-df &lt;- data.frame(sid = 1:length(gr), gr = names(gr), stringsAsFactors =
-F)
-ind &lt;- match(data, df$gr)
-df &lt;- df[ind, ]
-df$oid &lt;- 1:length(data)
-sid &lt;- NULL
-df &lt;- df %&gt;% dplyr::arrange(sid)
-invisible(df$oid)
-}
+# a) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+cse &lt;- xGRcse(gr)
+
+# b) sort index
+ind &lt;- xGRsort(cse)
+data &lt;- cse[ind]
+
+## End(Not run)
 </pre>
 
 

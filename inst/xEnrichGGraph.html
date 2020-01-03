@@ -1,19 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a ggraph-like...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichGGraph"><tr><td>xEnrichGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnrichGGraph</h2>
+<h2>Function to visualise enrichment results using a ggraph-like lauout</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichGGraph</code> is supposed to visualise enrichment results using
+a ggraph-like lauout.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichGGraph(eTerm, ig = NULL, fixed = T, node.color = c("zscore",
-"adjp", "or"), colormap = "grey-orange-darkred", zlim = NULL, node.size
-= c("adjp", "zscore", "or"), slim = NULL, node.size.range = c(0.5, 4),
-node.label.size = 2, leave = T, ncolumns = NULL, ...)
+xEnrichGGraph(
+eTerm,
+ig = NULL,
+fixed = T,
+node.color = c("zscore", "adjp", "or"),
+colormap = "grey-orange-darkred",
+zlim = NULL,
+node.size = c("adjp", "zscore", "or"),
+slim = NULL,
+node.size.range = c(0.5, 4),
+node.label.size = 2,
+leave = T,
+ncolumns = NULL,
+...
+)
 </pre>
 
 
@@ -22,281 +40,152 @@ node.label.size = 2, leave = T, ncolumns = NULL, ...)
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-
-
+<p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
+can be a data frame having all these columns
+('name','adjp','or','zscore'; 'group' optionally)</p>
 </td></tr>
 <tr valign="top"><td><code>ig</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot; with node attribute 'name'. Note:
+the node labels would be the node attribute 'name' unless the node
+attribute 'label' is explicitely provided. If provided, only those
+terms within it will be visualised. By default, it is NULL meaning no
+surch restriction</p>
 </td></tr>
 <tr valign="top"><td><code>fixed</code></td>
 <td>
-
-
+<p>logical to indicate whether all terms in ig will be
+visualised. By default, it is TURE; otherwise only overlapped terms
+from eTerm will be visualised</p>
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
-
-
+<p>which statistics will be used for node coloring. It
+can be &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and
+&quot;zscore&quot; for enrichment z-score</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum values for which colors should be
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>node.size</code></td>
 <td>
-
-
+<p>which statistics will be used for node size. It can be
+&quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and &quot;zscore&quot;
+for enrichment z-score</p>
 </td></tr>
 <tr valign="top"><td><code>slim</code></td>
 <td>
-
-
+<p>the minimum and maximum values for which sizes should be
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>node.size.range</code></td>
 <td>
-
-
+<p>the range of actual node size</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.size</code></td>
 <td>
-
-
+<p>the text size of the node labelings. By default,
+it is 2. If 0, all labellings will be disabled</p>
 </td></tr>
 <tr valign="top"><td><code>leave</code></td>
 <td>
-
-
+<p>the logic specifying whether or not only leaves
+(nodes/labellings) shown. This can be disenabled if the layout does not
+support tips</p>
 </td></tr>
 <tr valign="top"><td><code>ncolumns</code></td>
 <td>
-
-
+<p>an integer specifying the number of columns for
+facet_wrap. By defaul, it is NULL (decided on according to the number
+of groups that will be visualised)</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-
-
+<p>additional graphic parameters used in xGGraph</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object appended with 'ig', 'data' which should contain
+columns 'x','y', 'name' (the same as V(ig)$name), 'label' (if not given
+in ig, a 'name' varient), 'data_enrichment' (enrichment results), and
+'gp_template' with labelling if multiple groups (together with no
+labelling for the colored plots).
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGGraph</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (eTerm, ig = NULL, fixed = T, node.color = c("zscore",
-"adjp", "or"), colormap = "grey-orange-darkred", zlim = NULL,
-node.size = c("adjp", "zscore", "or"), slim = NULL, node.size.range =
-c(0.5,
-4), node.label.size = 2, leave = T, ncolumns = NULL,
-...)
-{
-node.color &lt;- match.arg(node.color)
-node.size &lt;- match.arg(node.size)
-if (is.null(eTerm)) {
-warnings("There is no enrichment in the 'eTerm' object.\n")
-return(NULL)
-}
-if (0) {
-if (class(ig) != "igraph") {
-warnings("The 'ig' object must be provided.\n")
-return(NULL)
-}
-else {
-if (!("name" %in% igraph::vertex_attr_names(ig))) {
-warnings("The 'ig' object must contain a node attribute 'name'.\n")
-return(NULL)
-}
-}
-}
-if (class(eTerm) == "eTerm") {
-df_enrichment_group &lt;- xEnrichViewer(eTerm, top_num = "all")
-df_enrichment_group$group &lt;- "group"
-}
-else if (class(eTerm) == "ls_eTerm" | class(eTerm) == "data.frame") {
-if (class(eTerm) == "ls_eTerm") {
-df_enrichment_group &lt;- eTerm$df[, c("group", "name",
-"adjp", "or", "zscore")]
-}
-else if (class(eTerm) == "data.frame") {
-if (all(c("group", "name", "adjp", "or", "zscore") %in%
-colnames(eTerm))) {
-df_enrichment_group &lt;- eTerm[, c("group", "name",
-"adjp", "or", "zscore")]
-}
-else if (all(c("name", "adjp", "or", "zscore") %in%
-colnames(eTerm))) {
-df_enrichment_group &lt;- eTerm[, c("name", "adjp",
-"or", "zscore")]
-df_enrichment_group$group &lt;- "group"
-}
-}
-}
-if (class(df_enrichment_group$group) == "factor") {
-if (length(unique(df_enrichment_group$group)) !=
-length(levels(df_enrichment_group$group))) {
-df_enrichment_group$group &lt;- factor(df_enrichment_group$group,
-levels = sort(unique(df_enrichment_group$group)))
-}
-}
-if (class(ig) != "igraph") {
-if (class(eTerm) == "eTerm") {
-ig &lt;- eTerm$g
-V(ig)$name &lt;- V(ig)$term_name
-}
-else {
-return(NULL)
-}
-}
-if (!fixed) {
-ind &lt;- match(V(ig)$name, df_enrichment_group$name)
-nodes_query &lt;- V(ig)$name[!is.na(ind)]
-if (class(suppressWarnings(try(ig &lt;- dnet::dDAGinduce(ig,
-nodes_query, path.mode = "all_paths"), T))) == "try-error") {
-ig &lt;- NULL
-}
-}
-gp &lt;- NULL
-if (class(ig) == "igraph") {
-df_enrichment_group$or[is.infinite(df_enrichment_group$or)] &lt;-
-max(df_enrichment_group$or[!is.infinite(df_enrichment_group$or)])
-ls_df &lt;- split(x = df_enrichment_group[, c("name", "zscore",
-"adjp", "or")], f = df_enrichment_group$group)
-ls_igg &lt;- lapply(ls_df, function(df_enrichment) {
-igg &lt;- ig
-V(igg)$zscore &lt;- 0
-ind &lt;- match(V(igg)$name, df_enrichment$name)
-V(igg)$zscore[!is.na(ind)] &lt;- df_enrichment$zscore[ind[!is.na(ind)]]
-V(igg)$adjp &lt;- 0
-ind &lt;- match(V(igg)$name, df_enrichment$name)
-V(igg)$adjp[!is.na(ind)] &lt;- -1 *
-log10(df_enrichment$adjp)[ind[!is.na(ind)]]
-V(igg)$or &lt;- 0
-ind &lt;- match(V(igg)$name, df_enrichment$name)
-V(igg)$or[!is.na(ind)] &lt;- log2(df_enrichment$or)[ind[!is.na(ind)]]
-igg
-})
-if (node.color == "or") {
-node.color.title &lt;- expression(log[2](OR))
-if (is.null(zlim)) {
-zlim &lt;- c(0, ceiling(max(log2(df_enrichment_group$or))))
-}
-}
-else if (node.color == "adjp") {
-node.color.title &lt;- expression(-log[10](FDR))
-if (is.null(zlim)) {
-zlim &lt;- c(0, ceiling(max(-1 * log10(df_enrichment_group$adjp))))
-}
-}
-else if (node.color == "zscore") {
-node.color.title &lt;- "Z-score"
-if (is.null(zlim)) {
-zlim &lt;- c(0, ceiling(max(df_enrichment_group$zscore)))
-}
-}
-if (node.size == "or") {
-node.size.title &lt;- expression(log[2](OR))
-if (is.null(slim)) {
-slim &lt;- c(0, ceiling(max(log2(df_enrichment_group$or))))
-}
-}
-else if (node.size == "adjp") {
-node.size.title &lt;- expression(-log[10](FDR))
-if (is.null(slim)) {
-slim &lt;- c(0, ceiling(max(-1 * log10(df_enrichment_group$adjp))))
-}
-}
-else if (node.size == "zscore") {
-node.size.title &lt;- "Z-score"
-if (is.null(slim)) {
-slim &lt;- c(0, ceiling(max(df_enrichment_group$zscore)))
-}
-}
-x &lt;- y &lt;- leaf &lt;- x_group &lt;- y_group &lt;- group &lt;- group_id &lt;- color &lt;-
-size &lt;- NULL
-if (length(ls_igg) &gt; 1) {
-gp_template &lt;- xGGraph(ig, leave = leave, node.label.size =
-node.label.size,
-...)
-gp &lt;- xGGraph(ig, leave = leave, node.label.size = 0,
-node.size = 0, ...)
-}
-else {
-gp &lt;- xGGraph(ig, leave = leave, node.label.size = node.label.size,
-node.size = 0, ...)
-}
-if (leave &amp; !is.null(gp$data$leaf)) {
-df_data &lt;- subset(gp$data, leaf == T)
-}
-else {
-df_data &lt;- gp$data
-}
-ls_df &lt;- lapply(1:length(ls_igg), function(i) {
-g &lt;- ls_igg[[i]]
-group &lt;- names(ls_igg)[i]
-ind &lt;- match(V(g)$name, df_data$name)
-if (node.color == "or") {
-color &lt;- V(g)$or[!is.na(ind)]
-}
-else if (node.color == "adjp") {
-color &lt;- V(g)$adjp[!is.na(ind)]
-}
-else if (node.color == "zscore") {
-color &lt;- V(g)$zscore[!is.na(ind)]
-}
-color[color &lt;= zlim[1]] &lt;- zlim[1]
-color[color &gt;= zlim[2]] &lt;- zlim[2]
-if (node.size == "or") {
-size &lt;- V(g)$or[!is.na(ind)]
-}
-else if (node.size == "adjp") {
-size &lt;- V(g)$adjp[!is.na(ind)]
-}
-else if (node.size == "zscore") {
-size &lt;- V(g)$zscore[!is.na(ind)]
-}
-size[size &lt;= slim[1]] &lt;- slim[1]
-size[size &gt;= slim[2]] &lt;- slim[2]
-df &lt;- data.frame(df_data[ind[!is.na(ind)], ], color = color,
-size = size, group = group, group_id = i, stringsAsFactors = F)
-})
-df &lt;- do.call(rbind, ls_df)
-gp &lt;- gp + geom_point(data = df, aes(x = x * 1, y = y *
-1, color = color, size = size))
-gp &lt;- gp + scale_size_continuous(limits = slim, range =
-node.size.range,
-guide = guide_legend(node.size.title, title.position = "top",
-ncol = 1)) + scale_colour_gradientn(colors = xColormap(colormap)(64),
-limits = zlim, guide = guide_colorbar(title = node.color.title,
-title.position = "top", barwidth = 0.5))
-if (length(ls_igg) &gt; 1) {
-if (is.null(ncolumns)) {
-ncolumns &lt;- ceiling(sqrt(length(ls_igg)))
-}
-group &lt;- NULL
-gp &lt;- gp + facet_wrap(~group, ncol = ncolumns)
-gp &lt;- gp + theme(strip.background = element_rect(fill = "transparent",
-color = "transparent"), strip.text = element_text(size = 12,
-face = "bold"), strip.placement = "inside", panel.spacing = unit(0,
-"lines"))
-gp$gp_template &lt;- gp_template
-}
-gp$data_enrichment &lt;- df
-}
-return(gp)
-}
+# load the atlas of AA pathways
+AA.template &lt;- xRDataLoader("AA.template",
+RData.location=RData.location)
+# consensus tree
+ig &lt;- AA.template$consensus$ig
+
+# enrichment analysis using AA pathways
+input &lt;- xRDataLoader('Haploid_regulators_all',
+RData.location=RData.location)
+data &lt;- subset(input, Phenotype=="AKT")
+genes &lt;- data$Gene[data$FDR&lt;0.05]
+background &lt;- data$Gene
+eTerm &lt;- xEnricherGenes(genes, background=background, ontology="AA",
+min.overlap=5, test="fisher", RData.location=RData.location)
+
+# circular visualisation of enriched AA pathways
+gp &lt;- xEnrichGGraph(eTerm, ig)
+
+###############################
+# advanced use: multiple groups
+# enrichment analysis using AA pathways
+Haploid &lt;- subset(input, FDR&lt;0.05)
+ls_group &lt;- split(x=Haploid$Gene, f=Haploid$Phenotype)
+background &lt;- unique(input$Gene)
+ls_eTerm &lt;- xEnricherGenesAdv(ls_group, background=background,
+ontologies="AA", test="fisher", min.overlap=5,
+RData.location=RData.location)
+
+# circular visualisation of enriched AA pathways
+gp &lt;- xEnrichGGraph(ls_eTerm, ig)
+gp
+gp$gp_template
+
+## End(Not run)
 </pre>
 
 

@@ -1,18 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an object between graph classes</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xConverter"><tr><td>xConverter</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xConverter</h2>
+<h2>Function to convert an object between graph classes</h2>
+
+<h3>Description</h3>
+
+<p><code>xConverter</code> is supposed to convert an object between classes
+&quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, and &quot;json&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xConverter(obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
-"json"), to = c("dgCMatrix", "igraph", "dtree", "lol", "json",
-"igraph_tree"), verbose = TRUE)
+xConverter(
+obj,
+from = c("igraph", "dgCMatrix", "dtree", "lol", "json"),
+to = c("dgCMatrix", "igraph", "dtree", "lol", "json", "igraph_tree"),
+verbose = TRUE
+)
 </pre>
 
 
@@ -21,220 +31,94 @@ xConverter(obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
 <table summary="R argblock">
 <tr valign="top"><td><code>obj</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;,
+and &quot;json&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>from</code></td>
 <td>
-
-
+<p>a character specifying the class converted from. It can be
+one of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, &quot;json&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>to</code></td>
 <td>
-
-
+<p>a character specifying the class converted to. It can be one
+of &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, &quot;json&quot; and &quot;igraph_tree&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;igraph&quot;, &quot;dgCMatrix&quot;, &quot;dtree&quot;, &quot;lol&quot;, or &quot;json&quot;.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Conversion is supported directly: 1) from 'igraph' to
+&quot;dgCMatrix&quot;,&quot;dtree&quot;,&quot;lol&quot;,&quot;json&quot;,&quot;igraph_tree&quot;; 2) from 'dgCMatrix' to
+&quot;igraph&quot;; 3) from 'dtree' to &quot;igraph&quot;,&quot;lol&quot;,&quot;json&quot;; 4) from 'lol' to
+&quot;dtree&quot;,&quot;json&quot;; 5) from 'json' to &quot;lol&quot;,&quot;dtree&quot;. In summary:
+&quot;dgCMatrix&quot; &ndash; &quot;igraph&quot; (hub) &ndash; &quot;dtree&quot; (hub) &ndash; &quot;lol&quot; &ndash; &quot;json&quot;.
+Note: 1) igraph &ndash;as.igraph&ndash; phylo &ndash;as.hclust/as.phylo&ndash; hclust
+&ndash;as.dendrogram/as.hclust&ndash; dendro; 2) igraph &ndash;ggraph::den_to_igraph&ndash;
+dendro
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# generate a ring graph
+g &lt;- make_ring(10, directed=TRUE)
 
-## The function is currently defined as
-function (obj, from = c("igraph", "dgCMatrix", "dtree", "lol",
-"json"), to = c("dgCMatrix", "igraph", "dtree", "lol", "json",
-"igraph_tree"), verbose = TRUE)
-{
-from &lt;- match.arg(from)
-to &lt;- match.arg(to)
-if (from != "igraph" &amp; to != "igraph") {
-}
-if (from == to) {
-warnings(sprintf("Since the class '%s' converted from is the same as
-the class '%s' converted to, it will return exactly what you
-input.\n",
-from, to))
-return(obj)
-}
-if (from == "igraph") {
-if (to == "dgCMatrix") {
-if ("weight" %in% list.edge.attributes(obj)) {
-E(obj)$weight &lt;- as.numeric(E(obj)$weight)
-objConverted &lt;- igraph::as_adjacency_matrix(obj,
-type = "both", attr = "weight", edges = F,
-names = T, sparse = getIgraphOpt("sparsematrices"))
-}
-else {
-objConverted &lt;- igraph::as_adjacency_matrix(obj,
-type = "both", attr = NULL, edges = F, names = T,
-sparse = getIgraphOpt("sparsematrices"))
-}
-}
-else if (to %in% c("dtree", "lol", "json", "igraph_tree")) {
-df_edges &lt;- igraph::get.data.frame(obj, what = "edges")
-df &lt;- df_edges
-root &lt;- setdiff(df[, 1], df[, 2])
-if (length(root) != 1) {
-df_root &lt;- data.frame("ROOT", unique(root), stringsAsFactors = F)
-if (ncol(df_edges) &gt;= 3) {
-for (i in 3:ncol(df_edges)) {
-df_root[, i] &lt;- NA
-}
-}
-colnames(df_root) &lt;- colnames(df_edges)
-df &lt;- rbind(df_root, df)
-}
-if (to == "igraph_tree") {
-objConverted &lt;- igraph::graph_from_data_frame(d = df,
-directed = T)
-}
-else {
-dtree &lt;- data.tree::FromDataFrameNetwork(df)
-if (to %in% c("lol", "json")) {
-lol &lt;- data.tree::ToListExplicit(dtree, unname = TRUE)
-if (0) {
-func.igraph2list &lt;- function(g, thisNode) {
-nm &lt;- igraph::vertex_attr(g, "name", thisNode)
-childNodes &lt;- V(g)[which(igraph::shortest.paths(g,
-thisNode, mode = "out") == 1)]
-if (length(childNodes) == 0) {
-return(list(name = nm))
-}
-list(name = nm, children = unname(lapply(childNodes,
-func.igraph2list, g = g)))
-}
-ig &lt;- igraph::graph_from_data_frame(d = df,
-directed = T)
-root &lt;- setdiff(df[, 1], df[, 2])
-lol &lt;- func.igraph2list(ig, V(ig)[root])
-}
-if (to == "json") {
-json &lt;- jsonlite::toJSON(lol)
-objConverted &lt;- json
-}
-else {
-objConverted &lt;- lol
-}
-}
-else {
-objConverted &lt;- dtree
-}
-}
-}
-}
-else if (from == "dgCMatrix") {
-if (to == "igraph") {
-nodes &lt;- data.frame(name = rownames(obj))
-nodenames &lt;- rownames(obj)
-adjM &lt;- obj
-tmp &lt;- which(as.matrix(adjM != 0), arr.ind = T)
-if (from == "dgCMatrix") {
-ind &lt;- which(tmp[, 1] &lt; tmp[, 2])
-ttmp &lt;- matrix(0, nrow = length(ind), ncol = 2)
-ttmp[1:length(ind), ] &lt;- tmp[ind, ]
-tmp &lt;- ttmp
-}
-weight_flag &lt;- T
-if (all(adjM[tmp] == 1)) {
-weight_flag &lt;- F
-}
-if (weight_flag) {
-relations &lt;- data.frame(from = nodenames[tmp[,
-1]], to = nodenames[tmp[, 2]], weight = adjM[tmp])
-}
-else {
-relations &lt;- data.frame(from = nodenames[tmp[,
-1]], to = nodenames[tmp[, 2]])
-}
-if (from == "dgCMatrix") {
-objConverted &lt;- igraph::graph_from_data_frame(d = relations,
-directed = F, vertices = nodes)
-}
-}
-else {
-warnings(sprintf("Conversion between '%s' and '%s' is not supported;
-instead converted to the 'igraph' object first.\n",
-from, to))
-return(obj)
-}
-}
-else if (from == "dtree") {
-if (to %in% c("lol", "json")) {
-lol &lt;- data.tree::ToListExplicit(obj, unname = TRUE)
-if (to == "json") {
-json &lt;- jsonlite::toJSON(lol)
-objConverted &lt;- json
-}
-else {
-objConverted &lt;- lol
-}
-}
-else if (to == "igraph") {
-df_edges &lt;- data.tree::ToDataFrameNetwork(obj)[,
-c(1, 2)]
-df_edges[, 1] &lt;- gsub(".*/", "", df_edges[, 1])
-df_edges[, 2] &lt;- gsub(".*/", "", df_edges[, 2])
-ig &lt;- igraph::graph_from_data_frame(d = df_edges,
-directed = T)
-objConverted &lt;- ig
-}
-else {
-warnings(sprintf("Conversion between '%s' and '%s' is not supported;
-instead converted to the 'igraph' object first.\n",
-from, to))
-return(obj)
-}
-}
-else if (from == "lol") {
-if (to == "json") {
-json &lt;- jsonlite::toJSON(obj)
-objConverted &lt;- json
-}
-else if (to == "dtree") {
-dtree &lt;- data.tree::FromListExplicit(obj)
-objConverted &lt;- dtree
-}
-else {
-warnings(sprintf("Conversion between '%s' and '%s' is not supported;
-instead converted to the 'data.tree' object first.\n",
-from, to))
-return(obj)
-}
-}
-else if (from == "json") {
-if (to %in% c("lol", "dtree")) {
-lol &lt;- jsonlite::fromJSON(obj, simplifyDataFrame = F)
-if (to == "dtree") {
-dtree &lt;- data.tree::FromListExplicit(lol)
-objConverted &lt;- dtree
-}
-else {
-objConverted &lt;- lol
-}
-}
-else {
-warnings(sprintf("Conversion between '%s' and '%s' is not supported;
-instead converted to the 'data.tree' object first.\n",
-from, to))
-return(obj)
-}
-}
-if (verbose) {
-message(sprintf("Your input object of class '%s' has been converted
-into an object of class '%s'.",
-from, to), appendLF = T)
-}
-return(objConverted)
-}
+# convert the object from 'igraph' to 'dgCMatrix' class
+xConverter(g, from='igraph', to='dgCMatrix')
+
+## Not run: 
+# Conversion between 'dgCMatrix' and 'igraph'
+# ig.EF (an object of class "igraph" storing as a directed graph)
+g &lt;- xRDataLoader('ig.EF')
+g
+
+# convert the object from 'igraph' to 'dgCMatrix' class
+s &lt;- xConverter(g, from='igraph', to='dgCMatrix')
+s[1:10,1:10]
+
+# convert the object from 'dgCMatrix' to 'igraph' class
+ig &lt;- xConverter(s, from="dgCMatrix", to="igraph")
+ig
+
+##############
+g &lt;- make_graph("Zachary")
+
+# from 'igraph' to "dtree","lol","json"
+dtree &lt;- xConverter(g, from='igraph', to='dtree')
+lol &lt;- xConverter(g, from='igraph', to='lol')
+json &lt;- xConverter(g, from='igraph', to='json')
+
+# from "lol","json" to 'dtree' 
+dtree &lt;- xConverter(lol, from='lol', to='dtree')
+dtree &lt;- xConverter(json, from='json', to='dtree')
+
+# from 'dtree' to "igraph"
+g &lt;- xConverter(dtree, from='dtree', to='igraph')
+
+# force 'igraph' to a tree
+gtree &lt;- xConverter(g, from='igraph', to='igraph_tree')
+
+## End(Not run)
 </pre>
 
 

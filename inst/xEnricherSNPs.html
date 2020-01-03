@@ -1,25 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given a list of SNPs...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnricherSNPs"><tr><td>xEnricherSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnricherSNPs</h2>
+<h2>Function to conduct enrichment analysis given a list of SNPs and the ontology in query</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnricherSNPs</code> is supposed to conduct enrichment analysis given
+the input data and the ontology in query. It returns an object of class
+&quot;eTerm&quot;. Enrichment analysis is based on either Fisher's exact test or
+Hypergeometric test. The test can respect the hierarchy of the
+ontology. Now it supports enrichment analysis for SNPs using GWAS
+Catalog traits mapped to Experimental Factor Ontology. If required,
+additional SNPs that are in linkage disequilibrium (LD) with input SNPs
+are also be used for test.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnricherSNPs(data, background = NULL, ontology = c("EF", "EF_disease",
-"EF_phenotype", "EF_bp"), include.LD = NA, LD.r2 = 0.8, size.range =
-c(10, 2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL, p.tail =
-c("one-tail", "two-tails"), p.adjust.method = c("BH", "BY",
-"bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm =
-c("none", "pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
+xEnricherSNPs(
+data,
+background = NULL,
+ontology = c("EF", "EF_disease", "EF_phenotype", "EF_bp"),
+include.LD = NA,
+LD.r2 = 0.8,
+size.range = c(10, 2000),
+min.overlap = 5,
+which.distance = NULL,
+test = c("fisher", "hypergeo", "binomial"),
+background.annotatable.only = NULL,
+p.tail = c("one-tail", "two-tails"),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
+ontology.algorithm = c("none", "pc", "elim", "lea"),
+elim.pvalue = 0.01,
+lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T, verbose = T, silent = FALSE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+true.path.rule = T,
+verbose = T,
+silent = FALSE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -28,262 +55,328 @@ true.path.rule = T, verbose = T, silent = FALSE, RData.location =
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>an input vector. It contains a list of SNPs of interest</p>
 </td></tr>
 <tr valign="top"><td><code>background</code></td>
 <td>
-
-
+<p>a background vector. It contains a list of SNPs as
+the test background. If NULL, by default all annotatable are used as
+background</p>
 </td></tr>
 <tr valign="top"><td><code>ontology</code></td>
 <td>
-
-
+<p>the ontology supported currently. Now it is only &quot;EF&quot;
+for Experimental Factor Ontology (used to annotate GWAS Catalog SNPs).
+However, there are several subparts of this ontology to choose:
+'EF_disease' for the subpart under the term 'disease' (EFO:0000408),
+'EF_phenotype' for the subpart under the term 'phenotype'
+(EFO:0000651), 'EF_bp' for the subpart under the term 'biological
+process' (GO:0008150)</p>
 </td></tr>
 <tr valign="top"><td><code>include.LD</code></td>
 <td>
-
-
+<p>additional SNPs in LD with Lead SNPs are also
+included. By default, it is 'NA' to disable this option. Otherwise, LD
+SNPs will be included based on one or more of 26 populations and 5
+super populations from 1000 Genomics Project data (phase 3). The
+population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, &quot;EAS&quot;,
+&quot;EUR&quot;, &quot;SAS&quot;), or one of 26 populations (&quot;ACB&quot;, &quot;ASW&quot;, &quot;BEB&quot;, &quot;CDX&quot;,
+&quot;CEU&quot;, &quot;CHB&quot;, &quot;CHS&quot;, &quot;CLM&quot;, &quot;ESN&quot;, &quot;FIN&quot;, &quot;GBR&quot;, &quot;GIH&quot;, &quot;GWD&quot;, &quot;IBS&quot;,
+&quot;ITU&quot;, &quot;JPT&quot;, &quot;KHV&quot;, &quot;LWK&quot;, &quot;MSL&quot;, &quot;MXL&quot;, &quot;PEL&quot;, &quot;PJL&quot;, &quot;PUR&quot;, &quot;STU&quot;,
+&quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
+<a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
 </td></tr>
 <tr valign="top"><td><code>LD.r2</code></td>
 <td>
-
-
+<p>the LD r2 value. By default, it is 0.8, meaning that SNPs
+in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
+be any value from 0.8 to 1</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>
-
-
+<p>the minimum and maximum size of members of each term
+in consideration. By default, it sets to a minimum of 10 but no more
+than 2000</p>
 </td></tr>
 <tr valign="top"><td><code>min.overlap</code></td>
 <td>
-
-
+<p>the minimum number of overlaps. Only those terms
+with members that overlap with input data at least min.overlap (3 by
+default) will be processed</p>
 </td></tr>
 <tr valign="top"><td><code>which.distance</code></td>
 <td>
-
-
+<p>which terms with the distance away from the
+ontology root (if any) is used to restrict terms in consideration. By
+default, it sets to 'NULL' to consider all distances</p>
 </td></tr>
 <tr valign="top"><td><code>test</code></td>
 <td>
-
-
+<p>the test statistic used. It can be &quot;fisher&quot; for using
+fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
+&quot;binomial&quot; for using binomial test. Fisher's exact test is to test the
+independence between gene group (genes belonging to a group or not) and
+gene annotation (genes annotated by a term or not), and thus compare
+sampling to the left part of background (after sampling without
+replacement). Hypergeometric test is to sample at random (without
+replacement) from the background containing annotated and non-annotated
+genes, and thus compare sampling to background. Unlike hypergeometric
+test, binomial test is to sample at random (with replacement) from the
+background with the constant probability. In terms of the ease of
+finding the significance, they are in order: hypergeometric test &gt;
+fisher's exact test &gt; binomial test. In other words, in terms of the
+calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
+binomial test</p>
 </td></tr>
 <tr valign="top"><td><code>background.annotatable.only</code></td>
 <td>
-
-
+<p>logical to indicate whether the
+background is further restricted to the annotatable. By default, it is
+NULL: if ontology.algorithm is not 'none', it is always TRUE;
+otherwise, it depends on the background (if not provided, it will be
+TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
 </td></tr>
 <tr valign="top"><td><code>p.tail</code></td>
 <td>
-
-
+<p>the tail used to calculate p-values. It can be either
+&quot;two-tails&quot; for the significance based on two-tails (ie both over- and
+under-overrepresentation) or &quot;one-tail&quot; (by default) for the
+significance based on one tail (ie only over-representation)</p>
 </td></tr>
 <tr valign="top"><td><code>p.adjust.method</code></td>
 <td>
-
-
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
 </td></tr>
 <tr valign="top"><td><code>ontology.algorithm</code></td>
 <td>
-
-
+<p>the algorithm used to account for the
+hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
+&quot;lea&quot;. For details, please see 'Note' below</p>
 </td></tr>
 <tr valign="top"><td><code>elim.pvalue</code></td>
 <td>
-
-
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;elim&quot;. It is used to control how to declare a signficantly enriched
+term (and subsequently all genes in this term are eliminated from all
+its ancestors)</p>
 </td></tr>
 <tr valign="top"><td><code>lea.depth</code></td>
 <td>
-
-
+<p>the parameter only used when &quot;ontology.algorithm&quot; is
+&quot;lea&quot;. It is used to control how many maximum depth is used to consider
+the children of a term (and subsequently all genes in these children
+term are eliminated from the use for the recalculation of the
+signifance at this term)</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-
-
+<p>the mode of paths induced by vertices/nodes with input
+annotation data. It can be &quot;all_paths&quot; for all possible paths to the
+root, &quot;shortest_paths&quot; for only one path to the root (for each node in
+query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
+for each node, find all shortest paths with the equal lengths)</p>
 </td></tr>
 <tr valign="top"><td><code>true.path.rule</code></td>
 <td>
-
-
+<p>logical to indicate whether the true-path rule
+should be applied to propagate annotations. By default, it sets to
+true</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 <tr valign="top"><td><code>silent</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;eTerm&quot;, a list with following components:
+</p>
+
+<ul>
+<li><p><code>term_info</code>: a matrix of nTerm X 4 containing snp/gene set
+information, where nTerm is the number of terms, and the 4 columns are
+&quot;id&quot; (i.e. &quot;Term ID&quot;), &quot;name&quot; (i.e. &quot;Term Name&quot;), &quot;namespace&quot; and
+&quot;distance&quot;
+</p>
+</li>
+<li><p><code>annotation</code>: a list of terms containing annotations, each
+term storing its annotations. Always, terms are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>g</code>: an igraph object to represent DAG
+</p>
+</li>
+<li><p><code>data</code>: a vector containing input data in consideration. It
+is not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>background</code>: a vector containing the background data. It is
+not always the same as the input data as only those mappable are
+retained
+</p>
+</li>
+<li><p><code>overlap</code>: a list of overlapped snp/gene sets, each storing
+snps overlapped between a snp/gene set and the given input data (i.e.
+the snps of interest). Always, gene sets are identified by &quot;id&quot;
+</p>
+</li>
+<li><p><code>fc</code>: a vector containing fold changes
+</p>
+</li>
+<li><p><code>zscore</code>: a vector containing z-scores
+</p>
+</li>
+<li><p><code>pvalue</code>: a vector containing p-values
+</p>
+</li>
+<li><p><code>adjp</code>: a vector containing adjusted p-values. It is the p
+value but after being adjusted for multiple comparisons
+</p>
+</li>
+<li><p><code>or</code>: a vector containing odds ratio
+</p>
+</li>
+<li><p><code>CIl</code>: a vector containing lower bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>CIu</code>: a vector containing upper bound confidence interval
+for the odds ratio
+</p>
+</li>
+<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
+for the overlapped-members observed in an individaul term, and
+off-diagnal cell for the overlapped-members shared betwene two terms
+</p>
+</li>
+<li><p><code>call</code>: the call that produced this result
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>The interpretation of the algorithms used to account for the hierarchy
+of the ontology is:
+</p>
+
+<ul>
+<li><p>&quot;none&quot;: does not consider the ontology hierarchy at all.
+</p>
+</li>
+<li><p>&quot;lea&quot;: computers the significance of a term in terms of the
+significance of its children at the maximum depth (e.g. 2). Precisely,
+once snps are already annotated to any children terms with a more
+signficance than itself, then all these snps are eliminated from the
+use for the recalculation of the signifance at that term. The final
+p-values takes the maximum of the original p-value and the recalculated
+p-value.
+</p>
+</li>
+<li><p>&quot;elim&quot;: computers the significance of a term in terms of the
+significance of its all children. Precisely, once snps are already
+annotated to a signficantly enriched term under the cutoff of e.g.
+pvalue&lt;1e-2, all these snps are eliminated from the ancestors of that
+term).
+</p>
+</li>
+<li><p>&quot;pc&quot;: requires the significance of a term not only using the
+whole snps as background but also using snps annotated to all its
+direct parents/ancestors as background. The final p-value takes the
+maximum of both p-values in these two calculations.
+</p>
+</li>
+<li><p>&quot;Notes&quot;: the order of the number of significant terms is: &quot;none&quot;
+&gt; &quot;lea&quot; &gt; &quot;elim&quot; &gt; &quot;pc&quot;.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xEnricher</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (data, background = NULL, ontology = c("EF", "EF_disease",
-"EF_phenotype", "EF_bp"), include.LD = NA, LD.r2 = 0.8, size.range =
-c(10,
-2000), min.overlap = 5, which.distance = NULL, test = c("fisher",
-"hypergeo", "binomial"), background.annotatable.only = NULL,
-p.tail = c("one-tail", "two-tails"), p.adjust.method = c("BH",
-"BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm =
-c("none",
-"pc", "elim", "lea"), elim.pvalue = 0.01, lea.depth = 2,
-path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = T, verbose = T, silent = FALSE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-startT &lt;- Sys.time()
-if (!silent) {
-message(paste(c("Start at ", as.character(startT)), collapse = ""),
-appendLF = TRUE)
-message("", appendLF = TRUE)
-}
-else {
-verbose &lt;- FALSE
-}
-ontology &lt;- match.arg(ontology)
-test &lt;- match.arg(test)
-p.tail &lt;- match.arg(p.tail)
-p.adjust.method &lt;- match.arg(p.adjust.method)
-ontology.algorithm &lt;- match.arg(ontology.algorithm)
-path.mode &lt;- match.arg(path.mode)
-p.tail &lt;- match.arg(p.tail)
-if (length(data) == 0) {
-return(NULL)
-}
-if (is.vector(data)) {
-data &lt;- unique(data)
-}
-else {
-stop("The input data must be a vector.\n")
-}
-data &lt;- as.character(data)
-if (!is.na(ontology)) {
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Load the ontology %s and its SNP annotations (%s)
-...",
-ontology, as.character(now)), appendLF = T)
-}
-ig &lt;- xRDataLoader(RData = paste("ig.EF", sep = ""),
-RData.location = RData.location, guid = guid, verbose = verbose)
-V(ig)$namespace &lt;- ontology
-if (ontology != "EF") {
-if (ontology == "EF_disease") {
-node &lt;- "EFO:0000408"
-}
-else if (ontology == "EF_phenotype") {
-node &lt;- "EFO:0000651"
-}
-else if (ontology == "EF_bp") {
-node &lt;- "GO:0008150"
-}
-neighs.out &lt;- igraph::neighborhood(ig, order = vcount(ig),
-nodes = node, mode = "out")
-nodeInduced &lt;- V(ig)[unique(unlist(neighs.out))]$name
-g &lt;- igraph::induced.subgraph(ig, vids = nodeInduced)
-V(g)$namespace &lt;- ontology
-}
-else {
-g &lt;- ig
-}
-if (is.null(V(g)$term_namespace)) {
-V(g)$term_namespace &lt;- ontology
-}
-anno &lt;- xRDataLoader(RData = paste("GWAS2EF", sep = ""),
-RData.location = RData.location, guid = guid, verbose = verbose)
-if (LD.r2 &gt;= 0.8 &amp; LD.r2 &lt;= 1) {
-default.include.LD &lt;- c("ACB", "AFR", "AMR", "ASW",
-"BEB", "CDX", "CEU", "CHB", "CHS", "CLM", "EAS",
-"ESN", "EUR", "FIN", "GBR", "GIH", "GWD", "IBS",
-"ITU", "JPT", "KHV", "LWK", "MSL", "MXL", "PEL",
-"PJL", "PUR", "SAS", "STU", "TSI", "YRI")
-ind &lt;- match(default.include.LD, include.LD)
-include.LD &lt;- default.include.LD[!is.na(ind)]
-if (length(include.LD) &gt; 0) {
-GWAS_LD &lt;- xRDataLoader(RData = "GWAS_LD", RData.location =
-RData.location,
-guid = guid, verbose = verbose)
-ld.list &lt;- lapply(include.LD, function(x) {
-data_ld &lt;- ""
-eval(parse(text = paste("data_ld &lt;- GWAS_LD$",
-x, sep = "")))
-ind &lt;- match(colnames(data_ld), data)
-ld &lt;- rownames(data_ld)[which(Matrix::rowSums(data_ld[,
-!is.na(ind)] &gt;= LD.r2) &gt; 0)]
-ld
-})
-data &lt;- base::union(unlist(ld.list), data)
-}
-}
-}
-else {
-stop("There is no input for the ontology.\n")
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("\n#######################################################",
-appendLF = T))
-message(sprintf("'xEnricher' is being called (%s):",
-as.character(now)), appendLF = T)
-message(sprintf("#######################################################",
-appendLF = T))
-}
-eTerm &lt;- xEnricher(data = data, annotation = anno, g = g,
-background = background, size.range = size.range, min.overlap =
-min.overlap,
-which.distance = which.distance, test = test,
-background.annotatable.only = background.annotatable.only,
-p.tail = p.tail, p.adjust.method = p.adjust.method, ontology.algorithm
-= ontology.algorithm,
-elim.pvalue = elim.pvalue, lea.depth = lea.depth, path.mode =
-path.mode,
-true.path.rule = true.path.rule, verbose = verbose)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("#######################################################",
-appendLF = T))
-message(sprintf("'xEnricher' has been finished (%s)!",
-as.character(now)), appendLF = T)
-message(sprintf("#######################################################\n",
-appendLF = T))
-}
-endT &lt;- Sys.time()
-runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
-%H:%M:%S"),
-strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
-if (!silent) {
-message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
-appendLF = TRUE)
-message(paste(c("Runtime in total (xEnricherSNPs): ",
-runTime, " secs\n"), collapse = ""), appendLF = TRUE)
-}
-invisible(eTerm)
-}
+# SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
+# a) provide the input SNPs of interest (eg 'EFO:0002690' for 'systemic lupus erythematosus')
+## load GWAS SNPs annotated by EF (an object of class "dgCMatrix" storing a spare matrix)
+anno &lt;- xRDataLoader(RData='GWAS2EF', RData.location=RData.location)
+ind &lt;- which(colnames(anno)=='EFO:0002690')
+data &lt;- rownames(anno)[anno[,ind]!=0]
+data
+
+# optionally, provide the test background (if not provided, all annotatable SNPs)
+#background &lt;- rownames(anno)
+
+# b) perform enrichment analysis
+eTerm &lt;- xEnricherSNPs(data=data, ontology="EF",
+path.mode=c("all_paths"), RData.location=RData.location)
+
+# b') optionally, enrichment analysis for input SNPs plus their LD SNPs
+## LD based on European population (EUR) with r2&gt;=0.8
+#eTerm &lt;- xEnricherSNPs(data=data, include.LD="EUR", LD.r2=0.8, RData.location=RData.location)
+
+# c) view enrichment results for the top significant terms
+xEnrichViewer(eTerm)
+
+# d) save enrichment results to the file called 'EF_enrichments.txt'
+res &lt;- xEnrichViewer(eTerm, top_num=length(eTerm$adjp), sortBy="adjp",
+details=TRUE)
+output &lt;- data.frame(term=rownames(res), res)
+utils::write.table(output, file="EF_enrichments.txt", sep="\t",
+row.names=FALSE)
+
+# e) barplot of significant enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="adjp")
+print(bp)
+
+# f) visualise the top 10 significant terms in the ontology hierarchy
+# color-code terms according to the adjust p-values (taking the form of 10-based negative logarithm)
+xEnrichDAGplot(eTerm, top_num=10, displayBy="adjp",
+node.info=c("full_term_name"))
+# color-code terms according to the z-scores
+xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore",
+node.info=c("full_term_name"))
+
+## End(Not run)
 </pre>
 
 

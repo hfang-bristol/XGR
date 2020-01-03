@@ -1,23 +1,45 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a network as a circos plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xCircos"><tr><td>xCircos</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xCircos</h2>
+<h2>Function to visualise a network as a circos plot</h2>
+
+<h3>Description</h3>
+
+<p><code>xCircos</code> is used to visualise a network as a circos plot. The
+network must be a 'igraph' object. The degree of similarity between
+SNPs (or genes) is visualised by the colour of links. This function can
+be used either to visualise the most similar links or to plot links
+involving an input SNP (or gene).
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xCircos(g, entity = c("SNP", "Gene", "Both"), top_num = 50, colormap =
-c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
-"lightyellow-orange"), rescale = T, nodes.query = NULL, ideogram = T,
-chr.exclude = "auto", entity.label.cex = 0.7, entity.label.side =
-c("in", "out"), entity.label.track = 1, entity.label.query = NULL,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"), GR.Gene =
-c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T, RData.location
-= "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+xCircos(
+g,
+entity = c("SNP", "Gene", "Both"),
+top_num = 50,
+colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
+"lightyellow-orange"),
+rescale = T,
+nodes.query = NULL,
+ideogram = T,
+chr.exclude = "auto",
+entity.label.cex = 0.7,
+entity.label.side = c("in", "out"),
+entity.label.track = 1,
+entity.label.query = NULL,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -26,339 +48,200 @@ c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T, RData.location
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot;. For example, it stores semantic
+similarity results with nodes for genes/SNPs and edges for pair-wise
+semantic similarity between them</p>
 </td></tr>
 <tr valign="top"><td><code>entity</code></td>
 <td>
-
-
+<p>the entity of similarity analysis for which results are
+being plotted. It can be either &quot;SNP&quot; or &quot;Gene&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-
-
+<p>the top number of similarity edges to be plotted</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;lightyellow-orange&quot; (by
+default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
+&quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
+found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>rescale</code></td>
 <td>
-
-
+<p>logical to indicate whether the edge values are rescaled
+to the range [0,1]. By default, it sets to true</p>
 </td></tr>
 <tr valign="top"><td><code>nodes.query</code></td>
 <td>
-
-
+<p>nodes in query for which edges attached to them will
+be displayed. By default, it sets to NULL meaning no such restriction</p>
 </td></tr>
 <tr valign="top"><td><code>ideogram</code></td>
 <td>
-
-
+<p>logical to indicate whether chromosome banding is
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>chr.exclude</code></td>
 <td>
-
-
+<p>a character vector of chromosomes to exclude from
+the plot, e.g. c(&quot;chrX&quot;, &quot;chrY&quot;). By defautl, it is 'auto' meaning
+those chromosomes without data will be excluded. If NULL, no chromosome
+is excluded</p>
 </td></tr>
 <tr valign="top"><td><code>entity.label.cex</code></td>
 <td>
-
-
+<p>the font size of genes/SNPs labels. Default is
+0.8</p>
 </td></tr>
 <tr valign="top"><td><code>entity.label.side</code></td>
 <td>
-
-
+<p>the position of genes/SNPs labels relative to
+chromosome ideogram. It can be &quot;out&quot; (by default) or &quot;in&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>entity.label.track</code></td>
 <td>
-
-
+<p>an integer specifying the plot track for
+genes/SNPs labels. Default is 1</p>
 </td></tr>
 <tr valign="top"><td><code>entity.label.query</code></td>
 <td>
-
-
+<p>which genes/SNPs in query will be labelled.
+By default, it sets to NULL meaning all will be displayed. If labels in
+query can not be found, then all will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>GR.SNP</code></td>
 <td>
-
-
+<p>the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
-
-
+<p>the genomic regions of genes. By default, it is
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a circos plot with edge weights between input snps/genes represented by
+the colour of the links
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (g, entity = c("SNP", "Gene", "Both"), top_num = 50,
-colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow",
-"wb", "lightyellow-orange"), rescale = T, nodes.query = NULL,
-ideogram = T, chr.exclude = "auto", entity.label.cex = 0.7,
-entity.label.side = c("in", "out"), entity.label.track = 1,
-entity.label.query = NULL, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common",
-"dbSNP_Single"), GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-entity &lt;- match.arg(entity)
-entity.label.side &lt;- match.arg(entity.label.side)
-flag_package &lt;- F
-pkgs &lt;- c("RCircos")
-if (all(pkgs %in% rownames(utils::installed.packages()))) {
-tmp &lt;- sapply(pkgs, function(pkg) {
-requireNamespace(pkg, quietly = T)
-})
-if (all(tmp)) {
-flag_package &lt;- T
-}
-}
-if (!flag_package) {
-stop("The package 'RCircos' is not available.\n")
-}
-if (class(g) != "igraph") {
-stop("The function must apply to a 'igraph' object.\n")
-}
-df &lt;- igraph::get.data.frame(g, what = "edges")
-if (is.null(df$weight)) {
-df$weight &lt;- rep(1, nrow(df))
-rescale &lt;- F
-}
-else {
-df$weight &lt;- as.numeric(df$weight)
-}
-df &lt;- df[with(df, order(-weight)), ]
-if (!is.null(nodes.query)) {
-ind_from &lt;- which(!is.na(match(df[, 1], nodes.query)))
-ind_to &lt;- which(!is.na(match(df[, 2], nodes.query)))
-ind &lt;- union(ind_from, ind_to)
-if (length(ind) &gt; 0) {
-df &lt;- df[ind, ]
-if (verbose) {
-ind &lt;- match(nodes.query, union(df[, 1], df[,
-2]))
-nodes.query &lt;- nodes.query[!is.na(ind)]
-now &lt;- Sys.time()
-message(sprintf("Circos plot restricted to nodes '%s' (%s) ...",
-paste(nodes.query, collapse = ","), as.character(now)),
-appendLF = T)
-}
-}
-}
-if (is.null(top_num)) {
-top_num &lt;- nrow(df)
-}
-if (top_num &gt; nrow(df)) {
-top_num &lt;- nrow(df)
-}
-top_num &lt;- as.integer(top_num)
-df &lt;- df[1:top_num, ]
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Loading positional information for %s (%s) ...",
-entity, as.character(now)), appendLF = T)
-}
-if (entity == "SNP" | entity == "Both") {
-if (class(GR.SNP) == "GRanges") {
-pos_snp &lt;- GR.SNP
-}
-else {
-pos_snp &lt;- xRDataLoader(RData.customised = GR.SNP[1],
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-if (is.null(pos_snp)) {
-GR.SNP &lt;- "dbSNP_GWAS"
-if (verbose) {
-message(sprintf("Instead, %s will be used",
-GR.SNP), appendLF = T)
-}
-pos_snp &lt;- xRDataLoader(RData.customised = GR.SNP,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-}
-}
-}
-if (entity == "Gene" | entity == "Both") {
-if (class(GR.Gene) == "GRanges") {
-pos_gene &lt;- GR.Gene
-}
-else {
-pos_gene &lt;- xRDataLoader(RData.customised = GR.Gene[1],
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-if (is.null(pos_gene)) {
-GR.Gene &lt;- "UCSC_knownGene"
-if (verbose) {
-message(sprintf("Instead, %s will be used",
-GR.Gene), appendLF = T)
-}
-pos_gene &lt;- xRDataLoader(RData.customised = GR.Gene,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-}
-}
-}
-if (entity == "SNP") {
-pos &lt;- pos_snp
-}
-else if (entity == "Gene") {
-pos &lt;- pos_gene
-}
-else if (entity == "Both") {
-GenomicRanges::mcols(pos_gene) &lt;- NULL
-GenomicRanges::mcols(pos_snp) &lt;- NULL
-pos &lt;- c(pos_gene, pos_snp)
-}
-allnames &lt;- names(pos)
-A &lt;- match(df$from, allnames)
-B &lt;- match(df$to, allnames)
-flag &lt;- !is.na(A) &amp; !is.na(B)
-AA &lt;- A[flag]
-BB &lt;- B[flag]
-input.data.A &lt;- GenomicRanges::as.data.frame(pos[AA], row.names = NULL)
-input.data.B &lt;- GenomicRanges::as.data.frame(pos[BB], row.names = NULL)
-input.data &lt;- cbind.data.frame(input.data.A[, 1:3], input.data.B[,
-1:3])
-if (is.null(df$weight)) {
-input.data$similarity &lt;- rep(1, sum(flag))
-}
-else {
-input.data$similarity &lt;- as.numeric(as.character(df$weight[flag]))
-}
-label.data &lt;- rbind(input.data.A[, 1:3], input.data.B[, 1:3])
-label.data$Name &lt;- c(df$from[flag], df$to[flag])
-if (!is.null(chr.exclude)) {
-chr.exclude &lt;- chr.exclude[!is.na(chr.exclude)]
-if (length(chr.exclude) == 0) {
-chr.exclude &lt;- NULL
-}
-else if (sum(chr.exclude == "auto") &gt; 0) {
-flag &lt;- levels(label.data$seqnames) %in%
-as.character(unique(label.data$seqnames))
-chr.exclude &lt;- levels(label.data$seqnames)[!flag]
-}
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Loading human chromosome banding information (hg19)
-(%s) ...",
-as.character(now)), appendLF = T)
-}
-eval(parse(text = "data(UCSC.HG19.Human.CytoBandIdeogram)"))
-cyto.info &lt;- ""
-eval(parse(text = paste("cyto.info &lt;-
-UCSC.HG19.Human.CytoBandIdeogram",
-sep = "")))
-if (ideogram == F) {
-cyto.info$Stain &lt;- rep("gpos100", nrow(cyto.info))
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Initialising RCircos Core Components (%s) ...",
-as.character(now)), appendLF = T)
-}
-num.inside &lt;- 1
-num.outside &lt;- 1
-suppressMessages(RCircos.Set.Core.Components(cyto.info, chr.exclude,
-num.inside, num.outside))
-params &lt;- RCircos.Get.Plot.Parameters()
-if (0) {
-params$track.padding &lt;- 0
-params$track.height &lt;- 0.05
-params$chr.ideog.pos &lt;- 1
-params$highlight.pos &lt;- 1.1
-params$chr.name.pos &lt;- 1.1
-params$track.out.start &lt;- 1.2
-params$highlight.width &lt;- 0
-}
-params$text.size &lt;- entity.label.cex
-RCircos.Reset.Plot.Parameters(params)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Plotting chromosome ideogram (%s) ...",
-as.character(now)), appendLF = T)
-}
-RCircos.Set.Plot.Area()
-RCircos.Chromosome.Ideogram.Plot()
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Plotting link data (%s) ...", as.character(now)),
-appendLF = T)
-}
-if (rescale) {
-sim &lt;- input.data$similarity
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Also rescale similarity into the [0,1] range (%s)",
-as.character(now)), appendLF = T)
-}
-input.data$similarity &lt;- (sim - min(sim))/(max(sim) -
-min(sim))
-}
-palette.name &lt;- xColormap(colormap = colormap)
-cut_index &lt;- as.numeric(cut(input.data$similarity, breaks =
-min(input.data$similarity) +
-(max(input.data$similarity) - min(input.data$similarity)) *
-seq(0, 1, 0.05)))
-cut_index[is.na(cut_index)] &lt;- 1
-input.data$PlotColor &lt;- palette.name(20)[cut_index]
-input.data &lt;- input.data[order(input.data$similarity, decreasing = F),
-]
-RCircos.Link.Plot(input.data, track.num = 1, FALSE)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Adding SNP and/or gene names (%s) ...",
-as.character(now)), appendLF = T)
-}
-name.col &lt;- "Name"
-side &lt;- entity.label.side
-track.num &lt;- entity.label.track
-label.data &lt;- label.data[!duplicated(label.data$Name), ]
-if (!is.null(entity.label.query)) {
-ind &lt;- match(label.data$Name, entity.label.query)
-if (sum(!is.na(ind)) &gt;= 1) {
-label.data &lt;- label.data[!is.na(ind), ]
-}
-}
-if (verbose) {
-RCircos.Gene.Name.Plot(label.data, name.col, track.num,
-side)
-}
-else {
-suppressMessages(RCircos.Gene.Name.Plot(label.data, name.col,
-track.num, side))
-}
-invisible()
-}
+library(RCircos)
+
+# provide genes and SNPs reported in GWAS studies
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+
+# 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+## Get lead SNPs reported in AS GWAS
+example.snps &lt;- names(ImmunoBase$AS$variants)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA,
+RData.location=RData.location)
+# Circos plot of the EF-based SNP similarity network
+#out.file &lt;- "SNP_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=SNP.g, entity="SNP", RData.location=RData.location)
+#dev.off()
+# Circos plot involving nodes 'rs6871626'
+xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626",
+RData.location=RData.location)
+
+# 2) Gene-based similarity analysis using Disease Ontology (DO)
+## Get genes within 10kb away from AS GWAS lead SNPs
+example.genes &lt;- names(which(ImmunoBase$AS$genes_variants&lt;=10000))
+gene.g &lt;- xSocialiserGenes(example.genes, ontology="DO",
+RData.location=RData.location)
+# Circos plot of the DO-based gene similarity network
+#out.file &lt;- "Gene_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=gene.g, entity="Gene", chr.exclude="chrY",
+RData.location=RData.location)
+#dev.off()
+
+# 3) Advanced usages: Gene-SNP pairs from trans-eQTL mapping
+JKscience_TS3A &lt;- xRDataLoader(RData.customised='JKscience_TS3A',
+RData.location=RData.location)
+## extract the significant trans-eQTL in IFN
+ind &lt;- -1*log10(JKscience_TS3A$IFN_fdr)
+ind &lt;- which(!is.na(ind) &amp; ind&gt;2)
+relations &lt;- JKscience_TS3A[ind, c("Symbol","variant","IFN_fdr")]
+relations &lt;- data.frame(from=relations$Symbol, to=relations$variant,
+weight=-log10(relations$IFN_fdr))
+ig_Gene2SNP &lt;- igraph::graph.data.frame(d=relations, directed=TRUE)
+# Circos plot of the eQTL (Gene-SNP) network
+#out.file &lt;- "eQTL_Circos.pdf"
+#pdf(file=out.file, height=12, width=12, compress=TRUE)
+xCircos(g=ig_Gene2SNP, entity="Both", top_num=NULL,
+nodes.query=c("GAD1","TNFRSF1B"), chr.exclude=NULL,
+entity.label.side="out", RData.location=RData.location)
+#dev.off()
+
+## End(Not run)
 </pre>
 
 

@@ -1,21 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define nearby genes given a list of SNPs</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSNP2nGenes"><tr><td>xSNP2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSNP2nGenes</h2>
+<h2>Function to define nearby genes given a list of SNPs</h2>
+
+<h3>Description</h3>
+
+<p><code>xSNP2nGenes</code> is supposed to define nearby genes given a list of
+SNPs within certain distance window. The distance weight is calcualted
+as a decaying function of the gene-to-SNP distance.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xSNP2nGenes(data, distance.max = 2e+05, decay.kernel = c("rapid",
-"slow", "linear", "constant"), decay.exponent = 2, GR.SNP =
-c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"), GR.Gene =
-c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD = c("none",
-"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+xSNP2nGenes(
+data,
+distance.max = 2e+05,
+decay.kernel = c("rapid", "slow", "linear", "constant"),
+decay.exponent = 2,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -24,258 +39,158 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>an input vector containing SNPs. SNPs should be provided as
+dbSNP ID (ie starting with rs). Alternatively, they can be in the
+format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
+positional number; for example, 'chr16:28525386'</p>
 </td></tr>
 <tr valign="top"><td><code>distance.max</code></td>
 <td>
-
-
+<p>the maximum distance between genes and SNPs. Only
+those genes no far way from this distance will be considered as seed
+genes. This parameter will influence the distance-component weights
+calculated for nearby SNPs per gene</p>
 </td></tr>
 <tr valign="top"><td><code>decay.kernel</code></td>
 <td>
-
-
+<p>a character specifying a decay kernel function. It
+can be one of 'slow' for slow decay, 'linear' for linear decay, and
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'</p>
 </td></tr>
 <tr valign="top"><td><code>decay.exponent</code></td>
 <td>
-
-
+<p>a numeric specifying a decay exponent. By
+default, it sets to 2</p>
 </td></tr>
 <tr valign="top"><td><code>GR.SNP</code></td>
 <td>
-
-
+<p>the genomic regions of SNPs. By default, it is
+'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
+SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is,
+Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs
+(hg19). Alternatively, the user can specify the customised input. To do
+so, first save your RData file (containing an GR object) into your
+local computer, and make sure the GR object content names refer to
+dbSNP IDs. Then, tell &quot;GR.SNP&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
-
-
+<p>the genomic regions of genes. By default, it is
+'UCSC_knownGene', that is, UCSC known genes (together with genomic
+locations) based on human genome assembly hg19. It can be
+'UCSC_knownCanonical', that is, UCSC known canonical genes (together
+with genomic locations) based on human genome assembly hg19.
+Alternatively, the user can specify the customised input. To do so,
+first save your RData file (containing an GR object) into your local
+computer, and make sure the GR object content names refer to Gene
+Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
+without extension), plus specify your file RData path in
+&quot;RData.location&quot;. Note: you can also load your customised GR object
+directly</p>
 </td></tr>
 <tr valign="top"><td><code>include.TAD</code></td>
 <td>
-
-
+<p>TAD boundary regions are also included. By default,
+it is 'none' to disable this option. Otherwise, inclusion of a TAD
+dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
+region will be kept). TAD datasets can be one of &quot;GM12878&quot;
+(lymphoblast), &quot;IMR90&quot; (fibroblast), &quot;MSC&quot; (mesenchymal stem cell)
+,&quot;TRO&quot; (trophoblasts-like cell), &quot;H1&quot; (embryonic stem cell), &quot;MES&quot;
+(mesendoderm) and &quot;NPC&quot; (neural progenitor cell). Explanations can be
+found at <a href="http://dx.doi.org/10.1016/j.celrep.2016.10.061">http://dx.doi.org/10.1016/j.celrep.2016.10.061</a></p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>Gene</code>: nearby genes
+</p>
+</li>
+<li><p><code>SNP</code>: SNPs
+</p>
+</li>
+<li><p><code>Dist</code>: the genomic distance between the gene and the SNP
+</p>
+</li>
+<li><p><code>Weight</code>: the distance weight based on the genomic distance
+</p>
+</li>
+<li><p><code>Gap</code>: the genomic gap between the gene and the SNP (in the
+form of 'chr:start-end')
+</p>
+</li>
+<li><p><code>TAD</code>: if applied, it can be 'Excluded' or the TAD boundary
+region (in the form of 'chr:start-end') that the genomic interval falls
+into. Also if SNP within the gene body, Gap and TAD will be SNP
+location (in the form of 'chr:start-end')
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>For details on the decay kernels, please refer to
+<code>xVisKernels</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>, <code>xVisKernels</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (data, distance.max = 2e+05, decay.kernel = c("rapid",
-"slow", "linear", "constant"), decay.exponent = 2, GR.SNP =
-c("dbSNP_GWAS",
-"dbSNP_Common", "dbSNP_Single"), GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), include.TAD = c("none", "GM12878",
-"IMR90", "MSC", "TRO", "H1", "MES", "NPC"), verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-decay.kernel &lt;- match.arg(decay.kernel)
-include.TAD &lt;- match.arg(include.TAD)
-data &lt;- gsub("_", ":", data, perl = T)
-data &lt;- gsub("imm:", "chr", data, perl = T)
-data &lt;- unique(data)
-gr_SNP &lt;- xSNPlocations(data = data, GR.SNP = GR.SNP, verbose =
-verbose,
-RData.location = RData.location, guid = guid)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Load positional information for Genes (%s) ...",
-as.character(now)), appendLF = T)
-}
-if (class(GR.Gene) == "GRanges") {
-gr_Gene &lt;- GR.Gene
-}
-else {
-gr_Gene &lt;- xRDataLoader(GR.Gene[1], verbose = verbose,
-RData.location = RData.location, guid = guid)
-if (is.null(gr_Gene)) {
-GR.Gene &lt;- "UCSC_knownGene"
-if (verbose) {
-message(sprintf("Instead, %s will be used", GR.Gene),
-appendLF = T)
-}
-gr_Gene &lt;- xRDataLoader(GR.Gene, verbose = verbose,
-RData.location = RData.location, guid = guid)
-}
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Define nearby genes (%s) ...", as.character(now)),
-appendLF = T)
-}
-maxgap &lt;- distance.max - 1
-minoverlap &lt;- 0L
-subject &lt;- gr_Gene
-query &lt;- gr_SNP
-q2r &lt;-
-as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query
-= query,
-subject = subject, maxgap = maxgap, minoverlap = minoverlap,
-type = "any", select = "all", ignore.strand = T))))
-if (length(q2r) &gt; 0) {
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Calculate distance (%s) ...", as.character(now)),
-appendLF = T)
-}
-if (1) {
-x &lt;- subject[q2r[, 2], ]
-y &lt;- query[q2r[, 1], ]
-dists &lt;- GenomicRanges::distance(x, y, select = "all",
-ignore.strand = T)
-df_y &lt;- GenomicRanges::as.data.frame(y, row.names = NULL)
-df_x &lt;- GenomicRanges::as.data.frame(x, row.names = NULL)
-if (0) {
-df_interval &lt;- data.frame(seqnames = df_y$seqnames,
-start = df_y$start, end = df_y$end, stringsAsFactors = FALSE)
-ind &lt;- df_y$start &lt; df_x$start
-df_interval[ind, ] &lt;- data.frame(seqnames = df_y$seqnames[ind],
-start = df_y$start[ind], end = df_x$start[ind],
-stringsAsFactors = FALSE)
-ind &lt;- df_y$start &gt; df_x$end
-df_interval[ind, ] &lt;- data.frame(seqnames = df_y$seqnames[ind],
-start = df_x$end[ind], end = df_y$start[ind],
-stringsAsFactors = FALSE)
-}
-else {
-df_interval &lt;- data.frame(seqnames = df_y$seqnames,
-start = df_y$start, end = df_y$end, stringsAsFactors = FALSE)
-ind &lt;- df_x$strand == "+"
-df_interval[ind, ] &lt;- data.frame(seqnames = df_y$seqnames[ind],
-start = df_y$start[ind], end = df_x$start[ind],
-stringsAsFactors = FALSE)
-ind &lt;- df_x$strand == "-"
-df_interval[ind, ] &lt;- data.frame(seqnames = df_y$seqnames[ind],
-start = df_y$start[ind], end = df_x$end[ind],
-stringsAsFactors = FALSE)
-ind &lt;- df_x$strand == "*"
-df_interval[ind, ] &lt;- data.frame(seqnames = df_y$seqnames[ind],
-start = df_y$start[ind], end = (df_x$start[ind] +
-df_x$end[ind])/2, stringsAsFactors = FALSE)
-ind &lt;- df_interval$start &gt; df_interval$end
-df_interval[ind, ] &lt;- data.frame(seqnames = df_interval$seqnames[ind],
-start = df_interval$end[ind], end = df_interval$start[ind],
-stringsAsFactors = FALSE)
-}
-df_interval[dists == 0, "start"] &lt;- df_y$start[dists ==
-0]
-df_interval[dists == 0, "end"] &lt;- df_y$end[dists ==
-0]
-vec_interval &lt;- paste0(df_interval$seqnames, ":",
-as.character(df_interval$start), "-", as.character(df_interval$end))
-df_nGenes &lt;- data.frame(Gene = names(x), SNP = names(y),
-Dist = dists, Gap = vec_interval, stringsAsFactors = F)
-}
-if (distance.max == 0) {
-x &lt;- df_nGenes$Dist
-}
-else {
-x &lt;- df_nGenes$Dist/distance.max
-}
-if (decay.kernel == "slow") {
-y &lt;- 1 - (x)^decay.exponent
-}
-else if (decay.kernel == "rapid") {
-y &lt;- (1 - x)^decay.exponent
-}
-else if (decay.kernel == "linear") {
-y &lt;- 1 - x
-}
-else {
-y &lt;- 1
-}
-df_nGenes$Weight &lt;- y
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("%d Genes are defined as nearby genes within %d(bp)
-genomic distance window using '%s' decay kernel (%s)",
-length(unique(df_nGenes$Gene)), distance.max,
-decay.kernel, as.character(now)), appendLF = T)
-}
-df_nGenes &lt;- df_nGenes[, c("Gene", "SNP", "Dist", "Weight",
-"Gap")]
-df_nGenes &lt;- df_nGenes[order(df_nGenes$Gene, df_nGenes$Dist,
-decreasing = FALSE), ]
-}
-else {
-df_nGenes &lt;- NULL
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("No nearby genes are defined"), appendLF = T)
-}
-}
-default.include.TAD &lt;- c("GM12878", "IMR90", "MSC", "TRO",
-"H1", "MES", "MES")
-ind &lt;- match(default.include.TAD, include.TAD)
-include.TAD &lt;- default.include.TAD[!is.na(ind)]
-if (length(include.TAD) &gt; 0) {
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Inclusion of TAD boundary regions is based on '%s'",
-include.TAD), appendLF = T)
-}
-df_nGenes$TAD &lt;- rep("Excluded", nrow(df_nGenes))
-TAD &lt;- xRDataLoader(paste0("TAD.", include.TAD), RData.location =
-RData.location,
-guid = guid, verbose = verbose)
-iGR &lt;- xGR(data = df_nGenes$Gap, format = "chr:start-end",
-RData.location = RData.location, guid = guid)
-q2r &lt;-
-as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query
-= iGR,
-subject = TAD, type = "within", select = "all", ignore.strand = T))))
-q2r &lt;- q2r[!duplicated(q2r[, 1]), ]
-df_nGenes$TAD[q2r[, 1]] &lt;- GenomicRanges::mcols(TAD)[q2r[,
-2], ]
-df_nGenes$TAD[df_nGenes$Dist == 0] &lt;- df_nGenes$Gap[df_nGenes$Dist ==
-0]
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("\t%d out of %d SNP-nGene pairs are within the same
-TAD boundary regions",
-sum(df_nGenes$TAD != "Excluded"), length(iGR)),
-appendLF = T)
-message(sprintf("\t%d out of %d genes are defined as nearby genes
-after considering TAD boundary regions",
-length(unique(df_nGenes[df_nGenes$TAD != "Excluded",
-"Gene"])), length(unique(df_nGenes$Gene))),
-appendLF = T)
-}
-}
-if (!is.null(df_nGenes)) {
-ind &lt;- xSymbol2GeneID(df_nGenes$Gene, details = FALSE,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-df_nGenes &lt;- df_nGenes[!is.na(ind), ]
-if (nrow(df_nGenes) == 0) {
-df_nGenes &lt;- NULL
-}
-}
-invisible(df_nGenes)
-}
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+data &lt;- names(gr)
+
+# b) define nearby genes
+df_nGenes &lt;- xSNP2nGenes(data=data, distance.max=200000,
+decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
+
+# c) define nearby genes (considering TAD boundary regions in GM12878)
+df_nGenes &lt;- xSNP2nGenes(data=data, distance.max=200000,
+decay.kernel="slow", decay.exponent=2, include.TAD='GM12878',
+RData.location=RData.location)
+
+## End(Not run)
 </pre>
 
 

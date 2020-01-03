@@ -1,49 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define genomic annotations</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xDefineGenomicAnno"><tr><td>xDefineGenomicAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xDefineGenomicAnno</h2>
+<h2>Function to define genomic annotations</h2>
+
+<h3>Description</h3>
+
+<p><code>xDefineGenomicAnno</code> is supposed to define genomic annotations. It
+returns an object of class &quot;GenomicRangesList&quot; (GRL).
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xDefineGenomicAnno(GR.annotation = c(NA, "Uniform_TFBS",
-"ENCODE_TFBS_ClusteredV3", "ENCODE_TFBS_ClusteredV3_CellTypes",
-"Uniform_DNaseI_HS", "ENCODE_DNaseI_ClusteredV3",
+xDefineGenomicAnno(
+GR.annotation = c(NA, "Uniform_TFBS", "ENCODE_TFBS_ClusteredV3",
+"ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
+"ENCODE_DNaseI_ClusteredV3",
 "ENCODE_DNaseI_ClusteredV3_CellTypes", "Broad_Histone", "SYDH_Histone",
-"UW_Histone", "FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
-"FANTOM5_Enhancer_Extensive", "FANTOM5_Enhancer",
-"Segment_Combined_Gm12878", "Segment_Combined_H1hesc",
+"UW_Histone",
+"FANTOM5_Enhancer_Cell", "FANTOM5_Enhancer_Tissue",
+"FANTOM5_Enhancer_Extensive",
+"FANTOM5_Enhancer", "Segment_Combined_Gm12878",
+"Segment_Combined_H1hesc",
 "Segment_Combined_Helas3", "Segment_Combined_Hepg2",
-"Segment_Combined_Huvec", "Segment_Combined_K562", "TFBS_Conserved",
-"TS_miRNA", "TCGA", "ReMap_Public_TFBS", "ReMap_Encode_TFBS",
-"ReMap_PublicAndEncode_TFBS", "ReMap_Public_mergedTFBS",
-"ReMap_Encode_mergedTFBS", "ReMap_PublicAndEncode_mergedTFBS",
-"Blueprint_BoneMarrow_Histone", "Blueprint_CellLine_Histone",
-"Blueprint_CordBlood_Histone", "Blueprint_Thymus_Histone",
-"Blueprint_VenousBlood_Histone", "Blueprint_DNaseI",
+"Segment_Combined_Huvec",
+"Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
+"ReMap_Public_TFBS", "ReMap_Encode_TFBS", "ReMap_PublicAndEncode_TFBS",
+"ReMap_Public_mergedTFBS", "ReMap_Encode_mergedTFBS",
+"ReMap_PublicAndEncode_mergedTFBS", "Blueprint_BoneMarrow_Histone",
+"Blueprint_CellLine_Histone", "Blueprint_CordBlood_Histone",
+"Blueprint_Thymus_Histone", "Blueprint_VenousBlood_Histone",
+"Blueprint_DNaseI",
 "Blueprint_Methylation_hyper", "Blueprint_Methylation_hypo",
 "EpigenomeAtlas_15Segments_E029", "EpigenomeAtlas_15Segments_E030",
-"EpigenomeAtlas_15Segments_E031",
-"EpigenomeAtlas_15Segments_E032", "EpigenomeAtlas_15Segments_E033",
-"EpigenomeAtlas_15Segments_E034", "EpigenomeAtlas_15Segments_E035",
-"EpigenomeAtlas_15Segments_E036", "EpigenomeAtlas_15Segments_E037",
-"EpigenomeAtlas_15Segments_E038", "EpigenomeAtlas_15Segments_E039",
-"EpigenomeAtlas_15Segments_E040", "EpigenomeAtlas_15Segments_E041",
-"EpigenomeAtlas_15Segments_E042", "EpigenomeAtlas_15Segments_E043",
-"EpigenomeAtlas_15Segments_E044", "EpigenomeAtlas_15Segments_E045",
-"EpigenomeAtlas_15Segments_E046",
+"EpigenomeAtlas_15Segments_E031", "EpigenomeAtlas_15Segments_E032",
+"EpigenomeAtlas_15Segments_E033", "EpigenomeAtlas_15Segments_E034",
+"EpigenomeAtlas_15Segments_E035", "EpigenomeAtlas_15Segments_E036",
+"EpigenomeAtlas_15Segments_E037", "EpigenomeAtlas_15Segments_E038",
+"EpigenomeAtlas_15Segments_E039", "EpigenomeAtlas_15Segments_E040",
+"EpigenomeAtlas_15Segments_E041", "EpigenomeAtlas_15Segments_E042",
+"EpigenomeAtlas_15Segments_E043", "EpigenomeAtlas_15Segments_E044",
+"EpigenomeAtlas_15Segments_E045", "EpigenomeAtlas_15Segments_E046",
 "EpigenomeAtlas_15Segments_E047", "EpigenomeAtlas_15Segments_E048",
 "EpigenomeAtlas_15Segments_E050", "EpigenomeAtlas_15Segments_E051",
 "EpigenomeAtlas_15Segments_E062", "CpG_anno", "Genic_anno",
-"FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue", "FANTOM5_CAT_DO",
-"FANTOM5_CAT_EFO", "FANTOM5_CAT_HPO", "FANTOM5_CAT_MESH",
-"FANTOM5_CAT_PICS", "EpigenomeAtlas_DNaseNarrow",
-"EpigenomeAtlas_DNaseBroad"), verbose = T, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+"FANTOM5_CAT_Cell",
+"FANTOM5_CAT_Tissue", "FANTOM5_CAT_DO", "FANTOM5_CAT_EFO",
+"FANTOM5_CAT_HPO",
+"FANTOM5_CAT_MESH", "FANTOM5_CAT_PICS", "EpigenomeAtlas_DNaseNarrow",
+"EpigenomeAtlas_DNaseBroad"),
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -52,105 +66,600 @@ xDefineGenomicAnno(GR.annotation = c(NA, "Uniform_TFBS",
 <table summary="R argblock">
 <tr valign="top"><td><code>GR.annotation</code></td>
 <td>
-
-
+<p>the genomic regions of annotation data. By
+default, it is 'NA' to disable this option. Pre-built genomic
+annotation data are detailed in the section 'Note'. Alternatively, the
+user can also directly provide a customised GR object (or a list of GR
+objects or a GRL object)</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a GRL object
+</p>
+
+
+<h3>Note</h3>
+
+<p>The genomic annotation data are described below according to the data
+sources and data types.<br />
+1. ENCODE Transcription Factor ChIP-seq data
+</p>
+
+<ul>
+<li><p><code>Uniform_TFBS</code>: a list (690 combinations of cell types and
+transcription factors) of GenomicRanges objects; each is an GR object
+containing uniformly identified peaks per cell type per transcription
+factor.
+</p>
+</li>
+<li><p><code>ENCODE_TFBS_ClusteredV3</code>: a list (161 transcription
+factors) of GenomicRanges objects; each is an GR object containing
+clustered peaks per transcription factor, along with a meta-column
+'cells' telling cell types associtated with a clustered peak.
+</p>
+</li>
+<li><p><code>ENCODE_TFBS_ClusteredV3_CellTypes</code>: a list (91 cell types)
+of a list (transcription factors) of GenomicRanges objects. Each cell
+type is a list (transcription factor) of GenomicRanges objects; each is
+an GR object containing clustered peaks per transcription factor.
+</p>
+</li></ul>
+
+<p>2. ENCODE DNaseI Hypersensitivity site data
+</p>
+
+<ul>
+<li><p><code>Uniform_DNaseI_HS</code>: a list (125 cell types) of
+GenomicRanges objects; each is an GR object containing uniformly
+identified peaks per cell type.
+</p>
+</li>
+<li><p><code>ENCODE_DNaseI_ClusteredV3</code>: an GR object containing
+clustered peaks, along with a meta-column 'num_cells' telling how many
+cell types associtated with a clustered peak.
+</p>
+</li>
+<li><p><code>ENCODE_DNaseI_ClusteredV3_CellTypes</code>: a list (125 cell
+types) of GenomicRanges objects; each is an GR object containing
+clustered peaks per cell type.
+</p>
+</li></ul>
+
+<p>3. ENCODE Histone Modification ChIP-seq data from different sources
+</p>
+
+<ul>
+<li><p><code>Broad_Histone</code>: a list (156 combinations of cell types and
+histone modifications) of GenomicRanges objects; each is an GR object
+containing identified peaks per cell type and per histone modification.
+This dataset was generated from ENCODE/Broad Institute.
+</p>
+</li>
+<li><p><code>SYDH_Histone</code>: a list (29 combinations of cell types and
+histone modifications) of GenomicRanges objects; each is an GR object
+containing identified peaks per cell type and per histone modification.
+This dataset was generated from ENCODE/Stanford/Yale/Davis/Harvard.
+</p>
+</li>
+<li><p><code>UW_Histone</code>: a list (172 combinations of cell types and
+histone modifications) of GenomicRanges objects; each is an GR object
+containing identified peaks per cell type and per histone modification.
+This dataset was generated from ENCODE/University of Washington.
+</p>
+</li></ul>
+
+<p>4. FANTOM5 expressed enhancer atlas
+</p>
+
+<ul>
+<li><p><code>FANTOM5_Enhancer_Cell</code>: a list (71 cell types) of
+GenomicRanges objects; each is an GR object containing enhancers
+specifically expressed in a cell type.
+</p>
+</li>
+<li><p><code>FANTOM5_Enhancer_Tissue</code>: a list (41 tissues) of
+GenomicRanges objects; each is an GR object containing enhancers
+specifically expressed in a tissue.
+</p>
+</li>
+<li><p><code>FANTOM5_Enhancer_Extensive</code>: a list (5 categories of
+extensitive enhancers) of GenomicRanges objects; each is an GR object
+containing extensitive enhancers. They are:
+&quot;Extensive_ubiquitous_enhancers_cells&quot; for ubiquitous enhancers
+expressed over the entire set of cell types;
+&quot;Extensive_ubiquitous_enhancers_organs&quot; for ubiquitous enhancers
+expressed over the entire set of tissues;
+&quot;Extensive_enhancers_tss_associations&quot; for TSS-enhancer
+associations(RefSeq promoters only); &quot;Extensive_permissive_enhancers&quot;
+and &quot;Extensive_robust_enhancers&quot; for permissive and robust enhancer
+sets.
+</p>
+</li>
+<li><p><code>FANTOM5_Enhancer</code>: a list (117 cell
+types/tissues/categories) of GenomicRanges objects; each is an GR
+object.
+</p>
+</li></ul>
+
+<p>5. ENCODE combined (ChromHMM and Segway) Genome Segmentation data
+</p>
+
+<ul>
+<li><p><code>Segment_Combined_Gm12878</code>: a list (7 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the cell line GM12878 (a lymphoblastoid cell
+line).
+</p>
+</li>
+<li><p><code>Segment_Combined_H1hesc</code>: a list (7 categories of segments)
+of GenomicRanges objects; each is an GR object containing segments per
+category in the cell line H1-hESC (H1 human embryonic stem cells).
+</p>
+</li>
+<li><p><code>Segment_Combined_Helas3</code>: a list (7 categories of segments)
+of GenomicRanges objects; each is an GR object containing segments per
+category in the cell line HeLa S3.
+</p>
+</li>
+<li><p><code>Segment_Combined_Hepg2</code>: a list (7 categories of segments)
+of GenomicRanges objects; each is an GR object containing segments per
+category in the cell line HepG2 (liver hepatocellular carcinoma).
+</p>
+</li>
+<li><p><code>Segment_Combined_Huvec</code>: a list (7 categories of segments)
+of GenomicRanges objects; each is an GR object containing segments per
+category in the cell line HUVEC (Human Umbilical Vein Endothelial
+Cells).
+</p>
+</li>
+<li><p><code>Segment_Combined_K562</code>: a list (7 categories of segments)
+of GenomicRanges objects; each is an GR object containing segments per
+category in the cell line K562 (human erythromyeloblastoid leukemia
+cell line).
+</p>
+</li></ul>
+
+<p>6. Conserved TFBS
+</p>
+
+<ul>
+<li><p><code>TFBS_Conserved</code>: a list (245 PWM) of GenomicRanges objects;
+each is an GR object containing human/mouse/rat conserved TFBS for each
+PWM.
+</p>
+</li></ul>
+
+<p>7. TargetScan miRNA regulatory sites
+</p>
+
+<ul>
+<li><p><code>TS_miRNA</code>: a list (153 miRNA) of GenomicRanges objects;
+each is an GR object containing miRNA regulatory sites for each miRNA.
+</p>
+</li></ul>
+
+<p>8. TCGA exome mutation data
+</p>
+
+<ul>
+<li><p><code>TCGA</code>: a list (11 tumor types) of GenomicRanges objects;
+each is an GR object containing exome mutation across tumor patients of
+the same tumor type.
+</p>
+</li></ul>
+
+<p>9. ReMap integration of transcription factor ChIP-seq data (publicly
+available and ENCODE)
+</p>
+
+<ul>
+<li><p><code>ReMap_Public_TFBS</code>: a list (1759 combinations of GSE
+studies and transcription factors and cell types) of GenomicRanges
+objects; each is an GR object containing identified peaks per GSE study
+per transcripton factor per cell type.
+</p>
+</li>
+<li><p><code>ReMap_Encode_TFBS</code>: a list (1066 combinations of ENCODE
+transcription factors and cell types) of GenomicRanges objects; each is
+an GR object containing identified peaks per ENCODE study per
+transcripton factor per cell type.
+</p>
+</li>
+<li><p><code>ReMap_PublicAndEncode_TFBS</code>: a list (2825 combinations of
+GSE/ENCODE studies and transcription factors and cell types) of
+GenomicRanges objects; each is an GR object containing identified peaks
+per GSE/ENCODE study per transcripton factor per cell type.
+</p>
+</li>
+<li><p><code>ReMap_Public_mergedTFBS</code>: a list (331 transcription factors
+under GSE studies) of GenomicRanges objects; each is an GR object
+containing merged peaks per transcripton factor.
+</p>
+</li>
+<li><p><code>ReMap_Encode_mergedTFBS</code>: a list (279 transcription factors
+under ENCODE) of GenomicRanges objects; each is an GR object containing
+merged peaks per transcripton factor.
+</p>
+</li>
+<li><p><code>ReMap_PublicAndEncode_mergedTFBS</code>: a list (485
+transcription factors under GSE studies and ENCODE) of GenomicRanges
+objects; each is an GR object containing identified peaks per
+transcripton factor.
+</p>
+</li></ul>
+
+<p>10. Blueprint Histone Modification ChIP-seq data
+</p>
+
+<ul>
+<li><p><code>Blueprint_BoneMarrow_Histone</code>: a list (132 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample (from bone
+marrow).
+</p>
+</li>
+<li><p><code>Blueprint_CellLine_Histone</code>: a list (38 combinations of
+histone modifications and cell lines) of GenomicRanges objects; each is
+an GR object containing identified peaks per histone per cell line.
+</p>
+</li>
+<li><p><code>Blueprint_CordBlood_Histone</code>: a list (126 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample (from cord
+blood).
+</p>
+</li>
+<li><p><code>Blueprint_Thymus_Histone</code>: a list (5 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample (from
+thymus).
+</p>
+</li>
+<li><p><code>Blueprint_VenousBlood_Histone</code>: a list (296 combinations of
+histone modifications and samples) of GenomicRanges objects; each is an
+GR object containing identified peaks per histone per sample (from
+venous blood).
+</p>
+</li></ul>
+
+<p>11. BLUEPRINT DNaseI Hypersensitivity site data
+</p>
+
+<ul>
+<li><p><code>Blueprint_DNaseI</code>: a list (36 samples) of GenomicRanges
+objects; each is an GR object containing identified peaks per sample.
+</p>
+</li></ul>
+
+<p>12. BLUEPRINT DNA Methylation data
+</p>
+
+<ul>
+<li><p><code>Blueprint_Methylation_hyper</code>: a list (206 samples) of
+GenomicRanges objects; each is an GR object containing hyper-methylated
+CpG regions per sample.
+</p>
+</li>
+<li><p><code>Blueprint_Methylation_hypo</code>: a list (206 samples) of
+GenomicRanges objects; each is an GR object containing hypo-methylated
+CpG regions per sample.
+</p>
+</li></ul>
+
+<p>13. Roadmap Epigenomics Core 15-state Genome Segmentation data for
+primary cells (blood and T cells)
+</p>
+
+<ul>
+<li><p><code>EpigenomeAtlas_15Segments_E033</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E033 (Primary T cells
+from cord blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E034</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E034 (Primary T cells
+from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E037</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E037 (Primary T helper
+memory cells from peripheral blood 2).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E038</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E038 (Primary T helper
+naive cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E039</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E039 (Primary T helper
+naive cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E040</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E040 (Primary T helper
+memory cells from peripheral blood 1).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E041</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E041 (Primary T helper
+cells PMA-I stimulated).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E042</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E042 (Primary T helper
+17 cells PMA-I stimulated).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E043</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E043 (Primary T helper
+cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E044</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E044 (Primary T
+regulatory cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E045</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E045 (Primary T cells
+effector/memory enriched from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E047</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E047 (Primary T killer
+naive cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E048</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E048 (Primary T killer
+memory cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E062</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E062 (Primary
+mononuclear cells from peripheral blood).
+</p>
+</li></ul>
+
+<p>14. Roadmap Epigenomics Core 15-state Genome Segmentation data for
+primary cells (HSC and B cells)
+</p>
+
+<ul>
+<li><p><code>EpigenomeAtlas_15Segments_E029</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E029 (Primary
+monocytes from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E030</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E030 (Primary
+neutrophils from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E031</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E031 (Primary B cells
+from cord blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E032</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E032 (Primary B cells
+from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E035</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E035 (Primary
+hematopoietic stem cells).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E036</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E036 (Primary
+hematopoietic stem cells short term culture).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E046</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E046 (Primary Natural
+Killer cells from peripheral blood).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E050</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E050 (Primary
+hematopoietic stem cells G-CSF-mobilized Female).
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_15Segments_E051</code>: a list (15 categories of
+segments) of GenomicRanges objects; each is an GR object containing
+segments per category in the reference epigenome E051 (Primary
+hematopoietic stem cells G-CSF-mobilized Male).
+</p>
+</li></ul>
+
+<p>15. CpG annotation
+</p>
+
+<ul>
+<li><p><code>CpG_anno</code>: a list (4 categories) of GenomicRanges objects;
+each is an GR object. They are exclusive, including (in order)
+&quot;CpG_islands&quot;, &quot;CpG_shores&quot; (2Kb upstream/downstream from the ends of
+the CpG islands), &quot;CpG_shelves&quot; (2Kb upstream/downstream of the
+farthest upstream/downstream limits of the CpG shores), and &quot;CpG_inter&quot;
+(the remaining inter-CGI genomic regions 'open sea'). 
+</p>
+</li></ul>
+
+<p>16. Genic annotation
+</p>
+
+<ul>
+<li><p><code>Genic_anno</code>: a list (12 categories) of GenomicRanges
+objects; each is an GR object. They are not exclusively, including
+&quot;Genic_1to5kb&quot; (1-5Kb upstream of TSS), &quot;Genic_promoters&quot; (1Kb upstream
+of TSS), &quot;Genic_5UTRs&quot;, &quot;Genic_firstexons&quot; (first exons),
+&quot;Genic_exons&quot;, &quot;Genic_exonintronboundaries&quot;, &quot;Genic_introns&quot;,
+&quot;Genic_intronexonboundaries&quot;, &quot;Genic_cds&quot;, &quot;Genic_3UTRs&quot;,
+&quot;Genic_intergenic&quot; (the intergenic regions exclude the previous list of
+annotations), and &quot;Genic_lncRNA&quot; (GENCODE long non-coding RNA (lncRNA)
+transcripts). 
+</p>
+</li></ul>
+
+<p>17. FANTOM5 sample-ontology-enriched CAT genes
+</p>
+
+<ul>
+<li><p><code>FANTOM5_CAT_Cell</code>: a list (173 cell types) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a cell type.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_Tissue</code>: a list (174 tissues) of GenomicRanges
+objects; each is an GR object containing CAT genes specifically
+expressed in a tissue.
+</p>
+</li></ul>
+
+<p>18. FANTOM5 trait-associated CAT genes
+</p>
+
+<ul>
+<li><p><code>FANTOM5_CAT_DO</code>: a list (299 traits grouped by disease
+ontology) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_EFO</code>: a list (93 traits grouped by experiment
+factor ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_HPO</code>: a list (176 traits grouped by human
+phenotype ontology) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_MESH</code>: a list (210 traits grouped by Medical
+Subject Headings) of GenomicRanges objects; each is an GR object
+containing CAT genes harboring at least one trait-associated SNP.
+</p>
+</li>
+<li><p><code>FANTOM5_CAT_PICS</code>: a list (39 traits grouped by PICS
+dieases) of GenomicRanges objects; each is an GR object containing CAT
+genes harboring at least one trait-associated SNP.
+</p>
+</li></ul>
+
+<p>19. GWAS Catalog trait-associated SNPs
+</p>
+
+<ul>
+<li><p><code>GWAScatalog_alltraits</code>: a list (390 traits grouped by EFO)
+of GenomicRanges objects; each is an GR object containing
+trait-associated SNPs.
+</p>
+</li>
+<li><p><code>GWAScatalog_bloodindex</code>: a list (29 traits grouped by EFO)
+of GenomicRanges objects; each is an GR object containing
+trait-associated SNPs.
+</p>
+</li></ul>
+
+<p>20. Roadmap Epigenomics DNase-seq peaks
+</p>
+
+<ul>
+<li><p><code>EpigenomeAtlas_DNaseNarrow</code>: a list (39 cell types) of
+GenomicRanges objects; each is an GR object containing narrow Peaks in
+FDR 0.01 hotspots.
+</p>
+</li>
+<li><p><code>EpigenomeAtlas_DNaseBroad</code>: a list (39 cell types) of
+GenomicRanges objects; each is an GR object containing broad Peaks in
+FDR 0.01 hotspots.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xEnrichViewer</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (GR.annotation = c(NA, "Uniform_TFBS",
-"ENCODE_TFBS_ClusteredV3",
-"ENCODE_TFBS_ClusteredV3_CellTypes", "Uniform_DNaseI_HS",
-"ENCODE_DNaseI_ClusteredV3", "ENCODE_DNaseI_ClusteredV3_CellTypes",
-"Broad_Histone", "SYDH_Histone", "UW_Histone", "FANTOM5_Enhancer_Cell",
-"FANTOM5_Enhancer_Tissue", "FANTOM5_Enhancer_Extensive",
-"FANTOM5_Enhancer", "Segment_Combined_Gm12878",
-"Segment_Combined_H1hesc",
-"Segment_Combined_Helas3", "Segment_Combined_Hepg2",
-"Segment_Combined_Huvec",
-"Segment_Combined_K562", "TFBS_Conserved", "TS_miRNA", "TCGA",
-"ReMap_Public_TFBS", "ReMap_Encode_TFBS", "ReMap_PublicAndEncode_TFBS",
-"ReMap_Public_mergedTFBS", "ReMap_Encode_mergedTFBS",
-"ReMap_PublicAndEncode_mergedTFBS",
-"Blueprint_BoneMarrow_Histone", "Blueprint_CellLine_Histone",
-"Blueprint_CordBlood_Histone", "Blueprint_Thymus_Histone",
-"Blueprint_VenousBlood_Histone", "Blueprint_DNaseI",
-"Blueprint_Methylation_hyper",
-"Blueprint_Methylation_hypo", "EpigenomeAtlas_15Segments_E029",
-"EpigenomeAtlas_15Segments_E030", "EpigenomeAtlas_15Segments_E031",
-"EpigenomeAtlas_15Segments_E032", "EpigenomeAtlas_15Segments_E033",
-"EpigenomeAtlas_15Segments_E034", "EpigenomeAtlas_15Segments_E035",
-"EpigenomeAtlas_15Segments_E036", "EpigenomeAtlas_15Segments_E037",
-"EpigenomeAtlas_15Segments_E038", "EpigenomeAtlas_15Segments_E039",
-"EpigenomeAtlas_15Segments_E040", "EpigenomeAtlas_15Segments_E041",
-"EpigenomeAtlas_15Segments_E042", "EpigenomeAtlas_15Segments_E043",
-"EpigenomeAtlas_15Segments_E044", "EpigenomeAtlas_15Segments_E045",
-"EpigenomeAtlas_15Segments_E046", "EpigenomeAtlas_15Segments_E047",
-"EpigenomeAtlas_15Segments_E048", "EpigenomeAtlas_15Segments_E050",
-"EpigenomeAtlas_15Segments_E051", "EpigenomeAtlas_15Segments_E062",
-"CpG_anno", "Genic_anno", "FANTOM5_CAT_Cell", "FANTOM5_CAT_Tissue",
-"FANTOM5_CAT_DO", "FANTOM5_CAT_EFO", "FANTOM5_CAT_HPO",
-"FANTOM5_CAT_MESH",
-"FANTOM5_CAT_PICS", "EpigenomeAtlas_DNaseNarrow",
-"EpigenomeAtlas_DNaseBroad"),
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-grl &lt;- NULL
-if (class(GR.annotation) == "GenomicRangesList") {
-grl &lt;- GR.annotation
-}
-else {
-lgr &lt;- NULL
-if (class(GR.annotation) == "list") {
-lgr &lt;- GR.annotation
-if (!all(sapply(lgr, function(x) class(x) == "GRanges"))) {
-lgr &lt;- NULL
-}
-}
-else if (class(GR.annotation) == "GRanges") {
-lgr &lt;- list(Customised = GR.annotation)
-}
-else {
-if (length(GR.annotation) &gt; 1) {
-GR.annotation &lt;- GR.annotation[1]
-}
-if (!is.na(GR.annotation)) {
-lgr &lt;- xRDataLoader(RData.customised = GR.annotation,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-}
-}
-if (class(lgr) == "list") {
-lgr &lt;- base::Filter(base::Negate(is.null), lgr)
-grl &lt;- GenomicRanges::GRangesList(lgr)
-}
-}
-invisible(grl)
-}
+## Not run: 
+grl &lt;- xDefineGenomicAnno("Uniform_TFBS",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("Uniform_DNaseI_HS",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("FANTOM5_Enhancer_Cell",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("ReMap_Public_TFBS",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("EpigenomeAtlas_15Segments_E029",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("FANTOM5_CAT_Cell",
+RData.location=RData.location)
+grl &lt;- xDefineGenomicAnno("GWAScatalog_alltraits",
+RData.location=RData.location)
+
+# the customised
+## a GR object
+GR.annotation &lt;- grl[[1]]
+grl_customised &lt;- xDefineGenomicAnno(GR.annotation,
+RData.location=RData.location)
+## a list of GR objects
+GR.annotation &lt;- lapply(grl[1:2], function(x) x)
+grl_customised &lt;- xDefineGenomicAnno(GR.annotation,
+RData.location=RData.location)
+
+## End(Not run)
 </pre>
 
 

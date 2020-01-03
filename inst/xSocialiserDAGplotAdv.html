@@ -1,24 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to draw DAG plot for comparing two sets of terms...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSocialiserDAGplotAdv"><tr><td>xSocialiserDAGplotAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSocialiserDAGplotAdv</h2>
+<h2>Function to draw DAG plot for comparing two sets of terms used to annotate two SNPs or genes in query</h2>
+
+<h3>Description</h3>
+
+<p><code>xSocialiserDAGplotAdv</code> is supposed to use DAG plot for comparing
+two sets of terms used to annotate two queried SNPs or genes (usually
+predicted to be similar). Per term, comparative results are coded in
+the form of 'x1-x2', where x1 is for query 1 and x2 for query 2 (the
+value for x1 or x2 can be '0' encoding for no anntation, '1' for
+inherited annotation, '2' for direct annotation). It returns an object
+of class 'Ragraph' or class 'igraph'.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xSocialiserDAGplotAdv(g, query1, query2, displayBy = c("IC", "none"),
+xSocialiserDAGplotAdv(
+g,
+query1,
+query2,
+displayBy = c("IC", "none"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-height = 7, width = 7, margin = rep(0.1, 4), colormap = c("wyr", "bwr",
-"jet", "gbr", "yr", "br", "rainbow", "wb", "lightyellow-orange"),
-ncolors = 40, zlim = NULL, colorbar = T, colorbar.fraction = 0.1,
-newpage = T, layout.orientation = c("top_bottom", "left_right",
-"bottom_top", "right_left"), node.info = c("term_name", "term_id"),
-wrap.width = NULL, graph.node.attrs = NULL, graph.edge.attrs = NULL,
-node.attrs = NULL, output.format = c("Ragraph", "igraph"))
+height = 7,
+width = 7,
+margin = rep(0.1, 4),
+colormap = c("wyr", "bwr", "jet", "gbr", "yr", "br", "rainbow", "wb",
+"lightyellow-orange"),
+ncolors = 40,
+zlim = NULL,
+colorbar = T,
+colorbar.fraction = 0.1,
+newpage = T,
+layout.orientation = c("top_bottom", "left_right", "bottom_top",
+"right_left"),
+node.info = c("term_name", "term_id"),
+wrap.width = NULL,
+graph.node.attrs = NULL,
+graph.edge.attrs = NULL,
+node.attrs = NULL,
+output.format = c("Ragraph", "igraph")
+)
 </pre>
 
 
@@ -27,196 +55,289 @@ node.attrs = NULL, output.format = c("Ragraph", "igraph"))
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot; (resulting from similarity
+analysis)</p>
 </td></tr>
 <tr valign="top"><td><code>query1</code></td>
 <td>
-
-
+<p>the first object in query (for example, an SNP or Gene)</p>
 </td></tr>
 <tr valign="top"><td><code>query2</code></td>
 <td>
-
-
+<p>the second object in query (for example, an SNP or Gene)</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for displaying. It can
+be &quot;IC&quot; for information content (by default), &quot;none&quot; for no
+color-coding on nodes/terms</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
-
-
+<p>the mode of paths induced by nodes/terms. It can be
+&quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
+only one path to the root (for each node in query),
+&quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
+node, find all shortest paths with the equal lengths)</p>
 </td></tr>
 <tr valign="top"><td><code>height</code></td>
 <td>
-
-
+<p>a numeric value specifying the height of device</p>
 </td></tr>
 <tr valign="top"><td><code>width</code></td>
 <td>
-
-
+<p>a numeric value specifying the width of device</p>
 </td></tr>
 <tr valign="top"><td><code>margin</code></td>
 <td>
-
-
+<p>margins as units of length 4 or 1</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;lightyellow-orange&quot; (by
+default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
+&quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
+found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-
-
+<p>the number of colors specified over the colormap</p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum z/data values for which colors
+should be plotted, defaulting to the range of the finite values of z.
+Each of the given colors will be used to color an equispaced interval
+of this range. The midpoints of the intervals cover the range, so that
+values just outside the range will be plotted</p>
 </td></tr>
 <tr valign="top"><td><code>colorbar</code></td>
 <td>
-
-
+<p>logical to indicate whether to append a colorbar. If
+data is null, it always sets to false</p>
 </td></tr>
 <tr valign="top"><td><code>colorbar.fraction</code></td>
 <td>
-
-
+<p>the relative fraction of colorbar block
+against the device size</p>
 </td></tr>
 <tr valign="top"><td><code>newpage</code></td>
 <td>
-
-
+<p>logical to indicate whether to open a new page. By
+default, it sets to true for opening a new page</p>
 </td></tr>
 <tr valign="top"><td><code>layout.orientation</code></td>
 <td>
-
-
+<p>the orientation of the DAG layout. It can be
+one of &quot;left_right&quot; for the left-right layout (viewed from the DAG root
+point), &quot;top_bottom&quot; for the top-bottom layout, &quot;bottom_top&quot; for the
+bottom-top layout, and &quot;right_left&quot; for the right-left layout</p>
 </td></tr>
 <tr valign="top"><td><code>node.info</code></td>
 <td>
-
-
+<p>tells the ontology term information used to label
+nodes. It can be &quot;term_id&quot; for using Term ID, &quot;term_name&quot; for using
+Term Name</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-
-
+<p>a positive integer specifying wrap width of Term
+Name</p>
 </td></tr>
 <tr valign="top"><td><code>graph.node.attrs</code></td>
 <td>
-
-
+<p>a list of global node attributes. These node
+attributes will be changed globally. See 'Note' below for details on
+the attributes</p>
 </td></tr>
 <tr valign="top"><td><code>graph.edge.attrs</code></td>
 <td>
-
-
+<p>a list of global edge attributes. These edge
+attributes will be changed globally. See 'Note' below for details on
+the attributes</p>
 </td></tr>
 <tr valign="top"><td><code>node.attrs</code></td>
 <td>
-
-
+<p>a list of local edge attributes. These node
+attributes will be changed locally; as such, for each attribute, the
+input value must be a named vector (i.e. using Term ID as names). See
+'Note' below for details on the attributes</p>
 </td></tr>
 <tr valign="top"><td><code>output.format</code></td>
 <td>
-
-
+<p>the format specifying the return value. It can be
+&quot;Ragraph&quot; (by default) or &quot;igraph&quot;</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>An object of class 'Ragraph' or 'igraph'.  If the returned is an
+Ragraph object, an image will be shown. If the returned is an igraph
+object, no image will be shown; in this case, the returned igraph
+object stores ontology terms used to annotate the query, including a
+new node attribute 'code' indicative of how terms are shared or unique
+to two queries (in the form of 'x1-x2', x1 for query 1 and x2 for query
+2, x1 or x2 can be '0' for no anntation, '1' for inherited annotation,
+'2' for direct annotation).
+</p>
+
+
+<h3>Note</h3>
+
+<p>A list of global node attributes used in &quot;graph.node.attrs&quot;:
+</p>
+
+<ul>
+<li><p>&quot;shape&quot;: the shape of the node: &quot;circle&quot;, &quot;rectangle&quot;, &quot;rect&quot;,
+&quot;box&quot; and &quot;ellipse&quot;
+</p>
+</li>
+<li><p>&quot;fixedsize&quot;: the logical to use only width and height attributes.
+By default, it sets to true for not expanding for the width of the
+label
+</p>
+</li>
+<li><p>&quot;fillcolor&quot;: the background color of the node
+</p>
+</li>
+<li><p>&quot;color&quot;: the color for the node, corresponding to the outside
+edge of the node
+</p>
+</li>
+<li><p>&quot;fontcolor&quot;: the color for the node text/labelings
+</p>
+</li>
+<li><p>&quot;fontsize&quot;: the font size for the node text/labelings
+</p>
+</li>
+<li><p>&quot;height&quot;: the height (in inches) of the node: 0.5 by default
+</p>
+</li>
+<li><p>&quot;width&quot;: the width (in inches) of the node: 0.75 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: the line style for the node: &quot;solid&quot;, &quot;dashed&quot;,
+&quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+<p>A list of global edge attributes used in &quot;graph.edge.attrs&quot;:
+</p>
+
+<ul>
+<li><p>&quot;color&quot;: the color of the edge: gray by default
+</p>
+</li>
+<li><p>&quot;weight&quot;: the weight of the edge: 1 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: the line style for the edge: &quot;solid&quot;, &quot;dashed&quot;,
+&quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+<p>A list of local node attributes used in &quot;node.attrs&quot; (only those named
+Term IDs will be changed locally!):
+</p>
+
+<ul>
+<li><p>&quot;label&quot;: a named vector specifying the node text/labelings
+</p>
+</li>
+<li><p>&quot;shape&quot;: a named vector specifying the shape of the node:
+&quot;circle&quot;, &quot;rectangle&quot;, &quot;rect&quot;, &quot;box&quot; and &quot;ellipse&quot;
+</p>
+</li>
+<li><p>&quot;fixedsize&quot;: a named vector specifying whether it sets to true
+for not expanding for the width of the label
+</p>
+</li>
+<li><p>&quot;fillcolor&quot;: a named vector specifying the background color of
+the node
+</p>
+</li>
+<li><p>&quot;color&quot;: a named vector specifying the color for the node,
+corresponding to the outside edge of the node
+</p>
+</li>
+<li><p>&quot;fontcolor&quot;: a named vector specifying the color for the node
+text/labelings
+</p>
+</li>
+<li><p>&quot;fontsize&quot;: a named vector specifying the font size for the node
+text/labelings
+</p>
+</li>
+<li><p>&quot;height&quot;: a named vector specifying the height (in inches) of the
+node: 0.5 by default
+</p>
+</li>
+<li><p>&quot;width&quot;: a named vector specifying the width (in inches) of the
+node: 0.75 by default
+</p>
+</li>
+<li><p>&quot;style&quot;: a named vector specifying the line style for the node:
+&quot;solid&quot;, &quot;dashed&quot;, &quot;dotted&quot;, &quot;invis&quot; and &quot;bold&quot;
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xSocialiserGenes</code>, <code>xSocialiserSNPs</code>,
+<code>xSocialiserDAGplot</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location="~/Sites/SVN/github/bigdata"
 
-## The function is currently defined as
-function (g, query1, query2, displayBy = c("IC", "none"), path.mode =
-c("all_paths",
-"shortest_paths", "all_shortest_paths"), height = 7, width = 7,
-margin = rep(0.1, 4), colormap = c("wyr", "bwr", "jet", "gbr",
-"yr", "br", "rainbow", "wb", "lightyellow-orange"), ncolors = 40,
-zlim = NULL, colorbar = T, colorbar.fraction = 0.1, newpage = T,
-layout.orientation = c("top_bottom", "left_right", "bottom_top",
-"right_left"), node.info = c("term_name", "term_id"),
-wrap.width = NULL, graph.node.attrs = NULL, graph.edge.attrs = NULL,
-node.attrs = NULL, output.format = c("Ragraph", "igraph"))
-{
-displayBy &lt;- match.arg(displayBy)
-path.mode &lt;- match.arg(path.mode)
-layout.orientation &lt;- match.arg(layout.orientation)
-node.info &lt;- match.arg(node.info)
-output.format &lt;- match.arg(output.format)
-ig_SNP1 &lt;- xSocialiserDAGplot(g, query = query1, output.format =
-"igraph")
-ig_SNP2 &lt;- xSocialiserDAGplot(g, query = query2, output.format =
-"igraph")
-if (is.null(ig_SNP1) | is.null(ig_SNP2)) {
-warnings("No terms are found to annotate one or two entities in
-query!")
-return(NULL)
-}
-list_igraph &lt;- list(ig_SNP1, ig_SNP2)
-names(list_igraph) &lt;- c(query1, query2)
-ls_edges &lt;- lapply(list_igraph, function(x) {
-df_edge &lt;- igraph::get.data.frame(x, what = "edges")
-})
-relations &lt;- do.call(rbind, ls_edges)
-relations &lt;- relations[!duplicated(relations), ]
-ls_nodes &lt;- lapply(list_igraph, function(x) {
-df_nodes &lt;- igraph::get.data.frame(x, what = "vertices")
-})
-nodes &lt;- do.call(rbind, ls_nodes)
-nodes &lt;- nodes[, -7]
-nodes &lt;- nodes[!duplicated(nodes), ]
-ig &lt;- igraph::graph.data.frame(d = relations, directed = T,
-vertices = nodes)
-ls_res &lt;- lapply(list_igraph, function(x) {
-ind &lt;- match(V(ig)$name, V(x)$name)
-res &lt;- V(x)$inherited[ind] * (-1) + 2
-res[is.na(res)] &lt;- 0
-res
-})
-df_res &lt;- do.call(cbind, ls_res)
-code &lt;- apply(df_res, 1, paste, collapse = "-")
-V(ig)$code &lt;- code
-subg &lt;- ig
-V(subg)$name &lt;- paste(V(subg)$code, V(subg)$name, sep = "\\n")
-V(subg)$term_name &lt;- paste(V(subg)$code, V(subg)$term_name,
-sep = "\\n")
-if (displayBy == "IC") {
-data &lt;- V(subg)$IC
-names(data) &lt;- V(subg)$name
-}
-else {
-data &lt;- NULL
-}
-if (output.format == "igraph") {
-invisible(ig)
-}
-else if (output.format == "Ragraph") {
-if (is.null(graph.edge.attrs)) {
-}
-agDAG &lt;- visDAG(g = subg, data = data, height = height,
-width = width, margin = margin, colormap = colormap,
-ncolors = ncolors, zlim = zlim, colorbar = colorbar,
-colorbar.fraction = colorbar.fraction, newpage = newpage,
-layout.orientation = layout.orientation, node.info = node.info,
-numChar = wrap.width, graph.node.attrs = graph.node.attrs,
-graph.edge.attrs = graph.edge.attrs, node.attrs = node.attrs)
-invisible(agDAG)
-}
-}
+# 1) SNP-based similarity analysis using GWAS Catalog traits (mapped to EF)
+# provide genes and SNPs reported in AS GWAS studies
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+## get lead SNPs reported in AS GWAS
+example.snps &lt;- names(ImmunoBase$AS$variants)
+SNP.g &lt;- xSocialiserSNPs(example.snps, include.LD=NA,
+RData.location=RData.location)
+
+# 2) Circos plot involving nodes 'rs6871626'
+xCircos(g=SNP.g, entity="SNP", nodes.query="rs6871626",
+RData.location=RData.location)
+
+# 3) DAG plot visualising terms used to annotate an SNP
+## 3a) for 'rs6871626'
+xSocialiserDAGplot(g=SNP.g, query='rs6871626', displayBy="IC",
+node.info=c("term_name"),
+graph.node.attrs=list(fontsize=20,fontcolor="blue",color="transparent"))
+## 3b) for 'rs1250550'
+xSocialiserDAGplot(g=SNP.g, query='rs1250550', displayBy="IC",
+node.info=c("term_name"),
+graph.node.attrs=list(fontsize=20,fontcolor="blue",color="transparent"))
+
+# 4) DAG plot comparing two sets of terms used to annotate two queried SNPs
+xSocialiserDAGplotAdv(g=SNP.g, query1='rs6871626', query2='rs1250550',
+node.info=c("term_name"),
+graph.node.attrs=list(fontsize=25,fontcolor="blue",color="transparent"))
+
+# 5) Return an igraph object storing ontology terms used to annotate an SNP 'rs6871626'
+dag &lt;- xSocialiserDAGplotAdv(g=SNP.g, query1='rs6871626',
+query2='rs1250550', output.format="igraph")
+
+## End(Not run)
 </pre>
 
 

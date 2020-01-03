@@ -1,27 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise an igraph object using ggnetwork</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGGnetwork"><tr><td>xGGnetwork</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xGGnetwork</h2>
+<h2>Function to visualise an igraph object using ggnetwork</h2>
+
+<h3>Description</h3>
+
+<p><code>xGGnetwork</code> is supposed to visualise an igraph object using
+ggnetwork.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xGGnetwork(g, node.label = NULL, label.wrap.width = NULL,
-label.wrap.lineheight = 0.8, node.label.size = NULL,
-node.label.fontface = "plain", node.label.color = "darkblue",
-node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
-0.01, node.label.force = 1, node.shape = 19, node.shape.title = NULL,
-node.xcoord = NULL, node.ycoord = NULL, node.color = NULL,
-node.color.title = NULL, colormap = "grey-orange-darkred", ncolors =
-64, zlim = NULL, na.color = "grey80", node.color.alpha = 1, node.size =
-NULL, node.size.title = NULL, node.size.range = c(1, 4), slim = NULL,
-title = "", edge.size = 0.5, edge.color = "black", edge.color.alpha =
-0.5, edge.curve = 0.1, edge.arrow = 2, edge.arrow.gap = 0.02, ncolumns
-= NULL)
+xGGnetwork(
+g,
+node.label = NULL,
+label.wrap.width = NULL,
+label.wrap.lineheight = 0.8,
+node.label.size = NULL,
+node.label.fontface = "plain",
+node.label.color = "darkblue",
+node.label.alpha = 0.8,
+node.label.padding = 1,
+node.label.arrow = 0.01,
+node.label.force = 1,
+node.shape = 19,
+node.shape.title = NULL,
+node.xcoord = NULL,
+node.ycoord = NULL,
+node.color = NULL,
+node.color.title = NULL,
+colormap = "grey-orange-darkred",
+ncolors = 64,
+zlim = NULL,
+na.color = "grey80",
+node.color.alpha = 1,
+node.size = NULL,
+node.size.title = NULL,
+node.size.range = c(1, 4),
+slim = NULL,
+title = "",
+edge.size = 0.5,
+edge.color = "black",
+edge.color.alpha = 0.5,
+edge.curve = 0.1,
+edge.arrow = 2,
+edge.arrow.gap = 0.02,
+ncolumns = NULL
+)
 </pre>
 
 
@@ -30,601 +61,322 @@ title = "", edge.size = 0.5, edge.color = "black", edge.color.alpha =
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot;. For an advanced use, it can be a
+list of igraph objects; in this case, multiple panels will be shown
+(particularly useful when visualising the same network but color-coded
+differently)</p>
 </td></tr>
 <tr valign="top"><td><code>node.label</code></td>
 <td>
-
-
+<p>either a vector labelling nodes or a character
+specifying which node attribute used for the labelling. If NULL (by
+default), no node labelling</p>
 </td></tr>
 <tr valign="top"><td><code>label.wrap.width</code></td>
 <td>
-
-
+<p>a positive integer specifying wrap width of
+node labelling</p>
 </td></tr>
 <tr valign="top"><td><code>label.wrap.lineheight</code></td>
 <td>
-
-
+<p>line height spacing for text in ggplot. By
+default it is 0.8</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.size</code></td>
 <td>
-
-
+<p>a character specifying which node attribute used
+for node label size</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.fontface</code></td>
 <td>
-
-
+<p>a character specifying which node attribute
+used for node label fontface ('plain', 'bold', 'italic',
+'bold.italic')</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.color</code></td>
 <td>
-
-
+<p>a character specifying which node attribute
+used for the node label color</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.alpha</code></td>
 <td>
-
-
+<p>the 0-1 value specifying transparency of node
+labelling</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.padding</code></td>
 <td>
-
-
+<p>the padding around the labeled node</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.arrow</code></td>
 <td>
-
-
+<p>the arrow pointing to the labeled node</p>
 </td></tr>
 <tr valign="top"><td><code>node.label.force</code></td>
 <td>
-
-
+<p>the repelling force between overlapping labels</p>
 </td></tr>
 <tr valign="top"><td><code>node.shape</code></td>
 <td>
-
-
+<p>an integer specifying node shape or a character
+specifying which node attribute used for the node shape (no matter
+whether it is numeric or character)</p>
 </td></tr>
 <tr valign="top"><td><code>node.shape.title</code></td>
 <td>
-
-
+<p>a character specifying the title for node
+shaping</p>
 </td></tr>
 <tr valign="top"><td><code>node.xcoord</code></td>
 <td>
-
-
+<p>a vector specifying x coordinates. If NULL, it will
+be created using igraph::layout_as_tree</p>
 </td></tr>
 <tr valign="top"><td><code>node.ycoord</code></td>
 <td>
-
-
+<p>a vector specifying y coordinates. If NULL, it will
+be created using igraph::layout_as_tree</p>
 </td></tr>
 <tr valign="top"><td><code>node.color</code></td>
 <td>
-
-
+<p>a character specifying which node attribute used for
+node coloring</p>
 </td></tr>
 <tr valign="top"><td><code>node.color.title</code></td>
 <td>
-
-
+<p>a character specifying the title for node
+coloring</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
-
-
+<p>the number of colors specified over the colormap</p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum values for which colors should be
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>na.color</code></td>
 <td>
-
-
+<p>the color for NAs. By default, it is 'grey80'</p>
 </td></tr>
 <tr valign="top"><td><code>node.color.alpha</code></td>
 <td>
-
-
+<p>the 0-1 value specifying transparency of node
+colors</p>
 </td></tr>
 <tr valign="top"><td><code>node.size</code></td>
 <td>
-
-
+<p>either a vector specifying node size or a character
+specifying which node attribute used for the node size</p>
 </td></tr>
 <tr valign="top"><td><code>node.size.title</code></td>
 <td>
-
-
+<p>a character specifying the title for node
+sizing</p>
 </td></tr>
 <tr valign="top"><td><code>node.size.range</code></td>
 <td>
-
-
+<p>the range of actual node size. Can be two values
+(range) or a value (fixed size)</p>
 </td></tr>
 <tr valign="top"><td><code>slim</code></td>
 <td>
-
-
+<p>the minimum and maximum values for which sizes should be
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>title</code></td>
 <td>
-
-
+<p>a character specifying the title for the plot</p>
 </td></tr>
 <tr valign="top"><td><code>edge.size</code></td>
 <td>
-
-
+<p>a numeric value specifying the edge size. By default,
+it is 0.5. It can be a character specifying which edge attribute
+defining the edge size (though without the legend)</p>
 </td></tr>
 <tr valign="top"><td><code>edge.color</code></td>
 <td>
-
-
+<p>a character specifying the edge color. By default, it
+is &quot;black&quot;. It can be a character specifying which edge attribute
+defining the edge color (though</p>
 </td></tr>
 <tr valign="top"><td><code>edge.color.alpha</code></td>
 <td>
-
-
+<p>the 0-1 value specifying transparency of edge
+color. By default, it is 0.5. It can be a character specifying which
+edge attribute defining the transparency of edge color (though without
+the legend)</p>
 </td></tr>
 <tr valign="top"><td><code>edge.curve</code></td>
 <td>
-
-
+<p>a numeric value specifying the edge curve. 0 for the
+straight line</p>
 </td></tr>
 <tr valign="top"><td><code>edge.arrow</code></td>
 <td>
-
-
+<p>a numeric value specifying the edge arrow. By
+default, it is 2</p>
 </td></tr>
 <tr valign="top"><td><code>edge.arrow.gap</code></td>
 <td>
-
-
+<p>a gap between the arrow and the node</p>
 </td></tr>
 <tr valign="top"><td><code>ncolumns</code></td>
 <td>
-
-
+<p>an integer specifying the number of columns for
+facet_wrap. By defaul, it is NULL (decided on according to the number
+of groups that will be visualised)</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object, appended with 'data_nodes' and 'data_edges'
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGGnetwork</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (g, node.label = NULL, label.wrap.width = NULL,
-label.wrap.lineheight = 0.8,
-node.label.size = NULL, node.label.fontface = "plain", node.label.color
-= "darkblue",
-node.label.alpha = 0.8, node.label.padding = 1, node.label.arrow =
-0.01,
-node.label.force = 1, node.shape = 19, node.shape.title = NULL,
-node.xcoord = NULL, node.ycoord = NULL, node.color = NULL,
-node.color.title = NULL, colormap = "grey-orange-darkred",
-ncolors = 64, zlim = NULL, na.color = "grey80", node.color.alpha = 1,
-node.size = NULL, node.size.title = NULL, node.size.range = c(1,
-4), slim = NULL, title = "", edge.size = 0.5, edge.color = "black",
-edge.color.alpha = 0.5, edge.curve = 0.1, edge.arrow = 2,
-edge.arrow.gap = 0.02, ncolumns = NULL)
-{
-if (any(class(g) %in% c("igraph"))) {
-ls_ig &lt;- list(g)
-}
-else if (class(g) == "list") {
-ls_ig &lt;- base::Filter(base::Negate(is.null), g)
-if (length(ls_ig) == 0) {
-return(NULL)
-}
-}
-else {
-stop("The function must apply to 'list' of 'igraph' objects or a
-'igraph' object.\n")
-}
-ls_names &lt;- names(ls_ig)
-if (is.null(ls_names)) {
-ls_names &lt;- paste("IG", 1:length(ls_ig), sep = "_")
-names(ls_ig) &lt;- ls_names
-}
-ls_df &lt;- lapply(1:length(ls_ig), function(i) {
-ig &lt;- ls_ig[[i]]
-if (igraph::vcount(ig) == 0) {
-return(NULL)
-}
-if (is.null(V(ig)$name)) {
-V(ig)$name &lt;- 1:vcount(ig)
-}
-node_attrs &lt;- igraph::vertex_attr_names(ig)
-for (k in 1:length(node_attrs)) {
-if (class(igraph::vertex_attr(ig, node_attrs[k])) ==
-"list") {
-ig &lt;- ig %&gt;% igraph::delete_vertex_attr(node_attrs[k])
-}
-}
-nnode &lt;- igraph::vcount(ig)
-if (length(node.xcoord) != nnode | length(node.ycoord) !=
-nnode) {
-if (!is.null(node.xcoord)) {
-node.xcoord &lt;- igraph::vertex_attr(ig, node.xcoord)
-}
-if (!is.null(node.ycoord)) {
-node.ycoord &lt;- igraph::vertex_attr(ig, node.ycoord)
-}
-if (is.null(node.xcoord) | is.null(node.ycoord)) {
-glayout &lt;- igraph::layout_as_tree(ig, root = dnet::dDAGroot(ig),
-circular = TRUE, flip.y = TRUE)
-if (all(is.na(glayout))) {
-glayout &lt;- igraph::layout_with_kk(ig)
-}
-glayout &lt;- glayout[, c(2:1)]
-node.xcoord &lt;- glayout[, 1]
-node.ycoord &lt;- glayout[, 2]
-}
-}
-if (max(node.xcoord) != min(node.xcoord)) {
-node.xcoord &lt;- (node.xcoord - min(node.xcoord))/(max(node.xcoord) -
-min(node.xcoord)) * 2 - 1
-}
-if (max(node.ycoord) != min(node.ycoord)) {
-node.ycoord &lt;- (node.ycoord - min(node.ycoord))/(max(node.ycoord) -
-min(node.ycoord)) * 2 - 1
-}
-if (length(node.label) != nnode) {
-if (!is.null(node.label)) {
-node.label &lt;- igraph::vertex_attr(ig, node.label)
-}
-if (is.null(node.label)) {
-node.label &lt;- rep("", nnode)
-}
-}
-if (!is.null(label.wrap.width)) {
-width &lt;- as.integer(label.wrap.width)
-res_list &lt;- lapply(node.label, function(x) {
-if (!is.na(x)) {
-x &lt;- gsub("_", " ", x)
-y &lt;- strwrap(x, width = width)
-if (length(y) == 2) {
-paste(y, collapse = "\n")
-}
-else if (length(y) &gt; 2) {
-paste0(paste(y[1:2], collapse = "\n"), "...")
-}
-else {
-y
-}
-}
-else {
-x
-}
-})
-node.label &lt;- unlist(res_list)
-}
-V(ig)$n.label &lt;- node.label
-if (length(node.label.size) != nnode) {
-if (!is.null(node.label.size)) {
-tmp.node.label.size &lt;- igraph::vertex_attr(ig,
-node.label.size)
-}
-else {
-tmp.node.label.size &lt;- rep(0, nnode)
-}
-if (is.null(tmp.node.label.size)) {
-node.label.size &lt;- rep(node.label.size, nnode)
-}
-else {
-node.label.size &lt;- tmp.node.label.size
-}
-}
-V(ig)$n.label.size &lt;- node.label.size
-if (length(node.label.fontface) != nnode) {
-if (!is.null(node.label.fontface)) {
-tmp.node.label.fontface &lt;- igraph::vertex_attr(ig,
-node.label.fontface)
-}
-else {
-tmp.node.label.fontface &lt;- rep(0, nnode)
-}
-if (is.null(tmp.node.label.fontface)) {
-node.label.fontface &lt;- rep(node.label.fontface,
-nnode)
-}
-else {
-node.label.fontface &lt;- tmp.node.label.fontface
-}
-}
-V(ig)$n.label.fontface &lt;- node.label.fontface
-if (length(node.label.color) != nnode) {
-if (!is.null(node.label.color)) {
-tmp.node.label.color &lt;- igraph::vertex_attr(ig,
-node.label.color)
-}
-else {
-tmp.node.label.color &lt;- rep(0, nnode)
-}
-if (is.null(tmp.node.label.color)) {
-node.label.color &lt;- rep(node.label.color, nnode)
-}
-else {
-node.label.color &lt;- tmp.node.label.color
-}
-}
-V(ig)$n.label.color &lt;- node.label.color
-if (length(node.color) != nnode) {
-if (!is.null(node.color)) {
-node.color &lt;- igraph::vertex_attr(ig, node.color)
-}
-if (is.null(node.color)) {
-node.color &lt;- rep(0, nnode)
-}
-}
-if (is.null(zlim)) {
-zlim &lt;- c(min(node.color), max(node.color))
-}
-node.color[node.color &lt;= zlim[1]] &lt;- zlim[1]
-node.color[node.color &gt;= zlim[2]] &lt;- zlim[2]
-V(ig)$n.color &lt;- node.color
-if (length(node.size) != nnode) {
-if (!is.null(node.size)) {
-tmp.node.size &lt;- igraph::vertex_attr(ig, node.size)
-}
-else {
-tmp.node.size &lt;- rep(0, nnode)
-}
-if (is.null(tmp.node.size)) {
-node.size &lt;- rep(node.size, nnode)
-}
-else {
-node.size &lt;- tmp.node.size
-}
-}
-if (is.null(slim)) {
-slim &lt;- c(min(node.size), max(node.size))
-}
-node.size[node.size &lt;= slim[1]] &lt;- slim[1]
-node.size[node.size &gt;= slim[2]] &lt;- slim[2]
-V(ig)$n.size &lt;- node.size
-if (length(node.shape) != nnode) {
-if (!is.null(node.shape)) {
-tmp.node.shape &lt;- igraph::vertex_attr(ig, node.shape)
-}
-else {
-tmp.node.shape &lt;- rep(19, nnode)
-}
-if (is.null(tmp.node.shape)) {
-node.shape &lt;- rep(node.shape, nnode)
-}
-else {
-node.shape &lt;- tmp.node.shape
-}
-}
-V(ig)$n.shape &lt;- node.shape
-nedge &lt;- igraph::ecount(ig)
-if (length(edge.color) != nedge) {
-if (!is.null(edge.color)) {
-tmp.edge.color &lt;- igraph::edge_attr(ig, edge.color)
-}
-else {
-tmp.edge.color &lt;- rep("black", nedge)
-}
-if (is.null(tmp.edge.color)) {
-edge.color &lt;- rep(edge.color, nedge)
-}
-else {
-edge.color &lt;- tmp.edge.color
-}
-}
-E(ig)$e.color &lt;- edge.color
-if (length(edge.color.alpha) != nedge) {
-if (!is.null(edge.color.alpha)) {
-tmp.edge.color.alpha &lt;- igraph::edge_attr(ig,
-edge.color.alpha)
-}
-else {
-tmp.edge.color.alpha &lt;- rep(0.5, nedge)
-}
-if (is.null(tmp.edge.color.alpha)) {
-edge.color.alpha &lt;- rep(edge.color.alpha, nedge)
-}
-else {
-edge.color.alpha &lt;- tmp.edge.color.alpha
-}
-}
-E(ig)$e.color.alpha &lt;- edge.color.alpha
-if (length(edge.size) != nedge) {
-if (!is.null(edge.size)) {
-tmp.edge.size &lt;- igraph::edge_attr(ig, edge.size)
-}
-else {
-tmp.edge.size &lt;- rep(0.5, nedge)
-}
-if (is.null(tmp.edge.size)) {
-edge.size &lt;- rep(edge.size, nedge)
-}
-else {
-edge.size &lt;- tmp.edge.size
-}
-}
-E(ig)$e.size &lt;- edge.size
-gnet &lt;- ggnetwork::ggnetwork(ig, layout = cbind(node.xcoord,
-node.ycoord), arrow.gap = edge.arrow.gap, cell.jitter = 0.75)
-data.frame(gnet, group = rep(names(ls_ig)[i], nrow(gnet)),
-stringsAsFactors = F)
-})
-df &lt;- do.call(rbind, ls_df)
-i &lt;- sapply(df, is.factor)
-df[i] &lt;- lapply(df[i], as.character)
-df$group &lt;- factor(df$group, levels = names(ls_ig))
-df$n.color &lt;- as.numeric(df$n.color)
-df$n.size &lt;- as.numeric(df$n.size)
-df$n.shape &lt;- factor(df$n.shape, levels = sort(unique(df$n.shape)))
-n.color &lt;- n.size &lt;- n.shape &lt;- n.label &lt;- n.label.size &lt;-
-n.label.color &lt;- NULL
-x &lt;- y &lt;- xend &lt;- yend &lt;- NULL
-gp &lt;- ggplot(df, aes(x = x, y = y, xend = xend, yend = yend))
-e.color &lt;- subset(df, !is.na(na.y))$e.color
-e.color.alpha &lt;- subset(df, !is.na(na.y))$e.color.alpha
-e.size &lt;- subset(df, !is.na(na.y))$e.size
-if (igraph::is_directed(ls_ig[[1]])) {
-gp &lt;- gp + ggnetwork::geom_edges(color = e.color, size = e.size,
-alpha = e.color.alpha, curvature = edge.curve, arrow = arrow(length =
-unit(edge.arrow,
-"pt"), type = "closed"), show.legend = FALSE)
-}
-else {
-gp &lt;- gp + ggnetwork::geom_edges(color = e.color, size = e.size,
-alpha = e.color.alpha, curvature = edge.curve, show.legend = FALSE)
-}
-if (length(unique(df$n.shape)) == 1) {
-if (!is.numeric(node.shape)) {
-node.shape &lt;- 19
-}
-gp &lt;- gp + ggnetwork::geom_nodes(aes(color = n.color,
-size = n.size), shape = node.shape, alpha = node.color.alpha)
-}
-else {
-gp &lt;- gp + ggnetwork::geom_nodes(aes(color = n.color,
-size = n.size, shape = n.shape), alpha = node.color.alpha)
-gp &lt;- gp + scale_shape(guide = guide_legend(node.shape.title,
-title.position = "top", ncol = 1))
-}
-if (is.null(node.color.title)) {
-node.color.title &lt;- "Node color"
-}
-if (is.null(zlim)) {
-zlim &lt;- range(df$n.color[!is.na(df$n.color)])
-}
-if (zlim[1] != zlim[2]) {
-gp &lt;- gp + scale_colour_gradientn(colors =
-xColormap(colormap)(ncolors),
-limits = zlim, guide = guide_colorbar(title = node.color.title,
-title.position = "top", barwidth = 0.5, nbin = 64,
-draw.ulim = FALSE, draw.llim = FALSE), na.value = na.color)
-}
-else {
-gp &lt;- gp + scale_colour_gradientn(colors =
-xColormap(colormap)(ncolors),
-guide = guide_colorbar(title = node.color.title,
-title.position = "top", barwidth = 0.5))
-}
-if (is.null(node.size.title)) {
-node.size.title &lt;- "Node size"
-}
-if (is.null(slim)) {
-slim &lt;- range(df$n.size)
-}
-if (slim[1] != slim[2]) {
-gp &lt;- gp + scale_size_continuous(limits = slim, range =
-node.size.range,
-guide = guide_legend(node.size.title, title.position = "top",
-ncol = 1))
-}
-else {
-gp &lt;- gp + scale_size_continuous(limits = slim, range =
-node.size.range,
-guide = guide_legend(node.size.title, title.position = "top",
-ncol = 1))
-}
-gp &lt;- gp + ggnetwork::theme_blank()
-gp &lt;- gp + theme(text = element_text(family = "sans")) +
-labs(title = title) + theme(plot.title = element_text(hjust = 0.5,
-size = 10, face = "bold"), plot.margin = unit(rep(0,
-4), rep("lines", 4)))
-if ((zlim[1] != zlim[2]) &amp; (slim[1] != slim[2])) {
-gp &lt;- gp + theme(legend.position = "right")
-}
-else {
-if (slim[1] == slim[2]) {
-gp &lt;- gp + guides(size = "none")
-}
-if (zlim[1] == zlim[2]) {
-gp &lt;- gp + guides(color = "none")
-}
-if (length(unique(df$n.shape)) == 1) {
-gp &lt;- gp + guides(shape = "none")
-}
-}
-gp &lt;- gp + theme(legend.title = element_text(size = 8, face = "bold"),
-legend.text = element_text(size = 6))
-if (length(ls_ig) &gt; 1) {
-if (is.null(ncolumns)) {
-ncolumns &lt;- ceiling(sqrt(length(ls_ig)))
-}
-group &lt;- NULL
-gp &lt;- gp + facet_wrap(~group, ncol = ncolumns)
-gp &lt;- gp + theme(strip.background = element_rect(fill = "transparent",
-color = "transparent"), strip.text = element_text(size = 12,
-face = "bold"), strip.placement = "inside", panel.spacing = unit(0,
-"lines"))
-}
-if (sum(df$n.label == "") != nrow(df)) {
-StatNodes &lt;- ggplot2::ggproto("StatNodes", ggplot2::Stat,
-compute_layer = function(data, scales, params) {
-if (all(c("xend", "yend") %in% names(data))) {
-unique(subset(data, select = c(-xend, -yend)))
-}
-else {
-unique(data)
-}
-})
-my_geom_nodetext_repel &lt;- function(mapping = NULL, data = NULL,
-parse = FALSE, ..., box.padding = unit(0.25, "lines"),
-point.padding = unit(1e-06, "lines"), segment.size = 0.5,
-arrow = NULL, force = 1, max.iter = 2000, nudge_x = 0,
-nudge_y = 0, na.rm = FALSE, show.legend = F, inherit.aes = TRUE) {
-ggplot2::layer(data = data, mapping = mapping, stat = StatNodes,
-geom = ggrepel::GeomTextRepel, position = "identity",
-show.legend = show.legend, inherit.aes = inherit.aes,
-params = list(parse = parse, na.rm = na.rm, box.padding = box.padding,
-point.padding = point.padding, segment.size = segment.size,
-arrow = arrow, force = force, max.iter = max.iter,
-nudge_x = nudge_x, nudge_y = nudge_y, ...))
-}
-n.label.size &lt;- subset(df, is.na(na.y))$n.label.size
-n.label.fontface &lt;- subset(df, is.na(na.y))$n.label.fontface
-n.label.color &lt;- subset(df, is.na(na.y))$n.label.color
-gp &lt;- gp + my_geom_nodetext_repel(aes(label = n.label),
-lineheight = label.wrap.lineheight, size = n.label.size,
-color = n.label.color, fontface = n.label.fontface,
-alpha = node.label.alpha, box.padding = unit(0.5,
-"lines"), point.padding = unit(node.label.padding,
-"lines"), segment.alpha = 0.2, segment.size = 0.2,
-arrow = arrow(length = unit(node.label.arrow, "npc")),
-force = node.label.force)
-}
-if (1) {
-df &lt;- gp$data
-na.y &lt;- NULL
-df_sub &lt;- subset(df, is.na(na.y))
-ind &lt;- match(colnames(df_sub), c("na.x", "na.y", "e.color",
-"edge.color", "e.size"))
-df_sub &lt;- df_sub[, is.na(ind)]
-df_sub &lt;- df_sub[!duplicated(df_sub), ]
-gp$data_nodes &lt;- df_sub
-df_sub &lt;- subset(df, !is.na(na.y))
-ind &lt;- match(colnames(df_sub), c("x", "y", "xend", "yend",
-"e.color", "edge.color", "e.size"))
-df_sub &lt;- df_sub[, !is.na(ind)]
-df_sub &lt;- df_sub[!duplicated(df_sub), ]
-gp$data_edges &lt;- df_sub
-}
-invisible(gp)
-}
+###########################
+# load REACTOME
+# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+g &lt;- xRDataLoader(RData.customised='ig.REACTOME',
+RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
+nodes="R-HSA-168256", mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# visualise the graph with vertices being color-coded
+V(ig)$degree &lt;- igraph::degree(ig)
+gp &lt;- xGGnetwork(g=ig, node.label='term_id', label.wrap.width=30,
+node.label.size=2, node.label.color='black', node.label.alpha=0.8,
+node.label.padding=0, node.label.arrow=0, node.label.force=1,
+node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
+node.color='degree', node.color.title='Degree',
+colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10),
+node.size.range=3,
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+# advanced use: visualise the list of graphs
+ls_ig &lt;- list(ig, ig)
+gp &lt;- xGGnetwork(g=ls_ig, node.label='term_id', label.wrap.width=30,
+node.label.size=2, node.label.color='black', node.label.alpha=0.8,
+node.label.padding=0, node.label.arrow=0, node.label.force=1,
+node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
+node.color='degree', node.color.title='Degree',
+colormap='grey-orange-darkred', ncolors=64, zlim=c(0,10),
+node.size.range=3,
+edge.color="black",edge.color.alpha=0.3,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+
+###########################
+# load PhasedTargets
+# restricted to disease ('EFO:0000408') or immune system disease ('EFO:0000540')
+g &lt;- xRDataLoader(RData.customised='ig.PhasedTargets',
+RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
+nodes="EFO:0000408", mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# append with the number of approved and phased targets
+dag &lt;- ig
+V(dag)$num_approved &lt;- sapply(V(ig)$max_phase,function(x)
+sum(x$max_phase&gt;=4))
+V(dag)$num_phased &lt;- sapply(V(ig)$max_phase,function(x)
+sum(x$max_phase&gt;=0))
+# keep nodes with num_approved &gt;=20
+dag_ig &lt;- igraph::induced.subgraph(dag,
+vids=which(V(dag)$num_approved&gt;=20))
+# (optional) further restricted to the direct children of the root
+root &lt;- dnet::dDAGroot(dag_ig)
+neighs.out &lt;- igraph::neighborhood(dag_ig, order=1, nodes=root,
+mode="out")
+nodeInduced &lt;- V(dag_ig)[unique(unlist(neighs.out))]$name
+dag_ig &lt;- igraph::induced.subgraph(dag_ig, vids=nodeInduced)
+# nodes colored by num_approved
+V(dag_ig)$node_color &lt;- log2(V(dag_ig)$num_approved)
+glayout &lt;- igraph::layout_with_kk(dag_ig)
+V(dag_ig)$xcoord &lt;- glayout[,1]
+V(dag_ig)$ycoord &lt;- glayout[,2]
+gp &lt;- xGGnetwork(g=dag_ig, node.label='term_name', label.wrap.width=30,
+node.label.size=2, node.label.color='black', node.label.alpha=0.9,
+node.label.padding=0, node.label.arrow=0, node.label.force=0.5,
+node.shape=19, node.xcoord='xcoord', node.ycoord='ycoord',
+node.color='node_color', node.color.title='Approved\n(log2-scale)',
+colormap='ggplot2.top', ncolors=64, node.size.range=3,
+edge.color="orange",edge.color.alpha=0.5,edge.curve=0.05,edge.arrow.gap=0.02,
+title='')
+
+###########################
+# visualise gene network
+glayout &lt;- igraph::layout_with_kk(g)
+V(g)$xcoord &lt;- glayout[,1]
+V(g)$ycoord &lt;- glayout[,2]
+V(g)$degree &lt;- igraph::degree(g)
+gp &lt;- xGGnetwork(g=g, node.label='name', node.label.size=2,
+node.label.color='black', node.label.alpha=0.8, node.label.padding=0,
+node.label.arrow=0, node.label.force=0.01, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',
+node.color.title='5-star\nrating', colormap='yellow-red', ncolors=64,
+zlim=c(0,5), node.size='degree', node.size.title='Degree', slim=c(0,5),
+edge.color="orange",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0.025,
+title='')
+gp_rating &lt;- xGGnetwork(g=g, node.label='name', node.label.size=2,
+node.label.color='black', node.label.alpha=0.8, node.label.padding=0.1,
+node.label.arrow=0, node.label.force=0.01, node.shape=19,
+node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority',
+node.color.title='5-star\nrating', colormap='white-yellow-red',
+ncolors=64, zlim=c(0,5), node.size.range=5,
+edge.color="orange",edge.color.alpha=0.3,edge.curve=0,edge.arrow.gap=0.02,
+title='')
+
+###########################
+# use edge weight to color/size edges (without legends)
+# edge color
+#E(g)$color &lt;- xColormap(colormap='RdYlBu', data=E(g)$weight)
+#E(g)$size &lt;- (E(g)$weight - min(E(g)$weight)) / (max(E(g)$weight) - min(E(g)$weight))
+e.color &lt;- subset(gp$data, !is.na(na.y))$e.color
+gp + ggnetwork::geom_edges(color=e.color, show.legend=FALSE)
+# edge size/thickness
+e.size &lt;- subset(gp$data, !is.na(na.y))$e.size
+gp + ggnetwork::geom_edges(size=e.size, show.legend=FALSE)
+
+## End(Not run)
 </pre>
 
 

@@ -1,19 +1,35 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a barplot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichBarplot"><tr><td>xEnrichBarplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnrichBarplot</h2>
+<h2>Function to visualise enrichment results using a barplot</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichBarplot</code> is supposed to visualise enrichment results using
+a barplot. It returns an object of class &quot;ggplot&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichBarplot(eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, bar.color = "lightyellow-orange", bar.width = 0.8,
-wrap.width = NULL, font.family = "sans", signature = TRUE)
+xEnrichBarplot(
+eTerm,
+top_num = 10,
+displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
+FDR.cutoff = 0.05,
+bar.label = TRUE,
+bar.label.size = 3,
+bar.color = "lightyellow-orange",
+bar.width = 0.8,
+wrap.width = NULL,
+font.family = "sans",
+signature = TRUE
+)
 </pre>
 
 
@@ -22,206 +38,128 @@ wrap.width = NULL, font.family = "sans", signature = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>eTerm</code></td>
 <td>
-
-
+<p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>top_num</code></td>
 <td>
-
-
+<p>the number of the top terms (sorted according to FDR or
+adjusted p-values). If it is 'auto', only the significant terms (see
+below FDR.cutoff) will be displayed</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for displaying. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
+adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
+enrichment z-score</p>
 </td></tr>
 <tr valign="top"><td><code>FDR.cutoff</code></td>
 <td>
-
-
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05. This option only works when setting top_num
+(see above) is 'auto'</p>
 </td></tr>
 <tr valign="top"><td><code>bar.label</code></td>
 <td>
-
-
+<p>logical to indicate whether to label each bar with
+FDR. By default, it sets to true for bar labelling</p>
 </td></tr>
 <tr valign="top"><td><code>bar.label.size</code></td>
 <td>
-
-
+<p>an integer specifying the bar labelling text
+size. By default, it sets to 3</p>
 </td></tr>
 <tr valign="top"><td><code>bar.color</code></td>
 <td>
-
-
+<p>either NULL or fill color names ('lightyellow-orange'
+by default)</p>
 </td></tr>
 <tr valign="top"><td><code>bar.width</code></td>
 <td>
-
-
+<p>bar width. By default, 80
+data</p>
 </td></tr>
 <tr valign="top"><td><code>wrap.width</code></td>
 <td>
-
-
+<p>a positive integer specifying wrap width of name</p>
 </td></tr>
 <tr valign="top"><td><code>font.family</code></td>
 <td>
-
-
+<p>the font family for texts</p>
 </td></tr>
 <tr valign="top"><td><code>signature</code></td>
 <td>
-
-
+<p>logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE showing which function is
+used to draw this graph</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
+<code>xEnrichViewer</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (eTerm, top_num = 10, displayBy = c("fc", "adjp", "fdr",
-"zscore", "pvalue"), FDR.cutoff = 0.05, bar.label = TRUE,
-bar.label.size = 3, bar.color = "lightyellow-orange", bar.width = 0.8,
-wrap.width = NULL, font.family = "sans", signature = TRUE)
-{
-displayBy &lt;- match.arg(displayBy)
-if (is.null(eTerm)) {
-warnings("There is no enrichment in the 'eTerm' object.\n")
-return(NULL)
-}
-df &lt;- xEnrichViewer(eTerm, top_num = "all")
-if (top_num == "auto") {
-top_num &lt;- sum(df$adjp &lt; FDR.cutoff)
-if (top_num &lt;= 1) {
-top_num &lt;- 10
-}
-}
-df &lt;- xEnrichViewer(eTerm, top_num = top_num, sortBy = "adjp")
-if (!is.null(wrap.width)) {
-width &lt;- as.integer(wrap.width)
-res_list &lt;- lapply(df$name, function(x) {
-x &lt;- gsub("_", " ", x)
-y &lt;- strwrap(x, width = width)
-if (length(y) &gt; 1) {
-paste0(y[1], "...")
-}
-else {
-y
-}
-})
-df$name &lt;- unlist(res_list)
-}
-name &lt;- height &lt;- direction &lt;- hjust &lt;- NULL
-adjp &lt;- zscore &lt;- pvalue &lt;- fc &lt;- NULL
-df &lt;- df %&gt;% dplyr::mutate(direction = ifelse(zscore &gt; 0,
-1, -1))
-if (displayBy == "adjp" | displayBy == "fdr") {
-df &lt;- df %&gt;% dplyr::arrange(direction, desc(adjp), zscore) %&gt;%
-dplyr::mutate(height = -1 * log10(adjp)) %&gt;% dplyr::mutate(hjust = 1)
-df$name &lt;- factor(df$name, levels = df$name)
-if (length(df$height[!is.infinite(df$height)]) == 0) {
-df$height &lt;- 10
-}
-else {
-df$height[is.infinite(df$height)] &lt;-
-max(df$height[!is.infinite(df$height)])
-}
-p &lt;- ggplot(df, aes(x = name, y = height))
-p &lt;- p + ylab(expression(paste("Enrichment significance: ",
--log[10]("FDR"))))
-}
-else if (displayBy == "fc") {
-df &lt;- df %&gt;% dplyr::arrange(direction, fc, desc(adjp)) %&gt;%
-dplyr::mutate(height = log2(fc)) %&gt;% dplyr::mutate(hjust =
-ifelse(height &gt;=
-0, 1, 0))
-df$name &lt;- factor(df$name, levels = df$name)
-p &lt;- ggplot(df, aes(x = name, y = height))
-p &lt;- p + ylab(expression(paste("Enrichment changes: ",
-log[2]("FC"))))
-}
-else if (displayBy == "pvalue") {
-df &lt;- df %&gt;% dplyr::arrange(direction, desc(pvalue),
-zscore) %&gt;% dplyr::mutate(height = -1 * log10(pvalue)) %&gt;%
-dplyr::mutate(hjust = 1)
-df$name &lt;- factor(df$name, levels = df$name)
-if (length(df$height[!is.infinite(df$height)]) == 0) {
-df$height &lt;- 10
-}
-else {
-df$height[is.infinite(df$height)] &lt;-
-max(df$height[!is.infinite(df$height)])
-}
-p &lt;- ggplot(df, aes(x = name, y = height))
-p &lt;- p + ylab(expression(paste("Enrichment significance: ",
--log[10]("p-value"))))
-}
-else if (displayBy == "zscore") {
-df &lt;- df %&gt;% dplyr::arrange(direction, zscore, desc(adjp)) %&gt;%
-dplyr::mutate(height = zscore) %&gt;% dplyr::mutate(hjust =
-ifelse(height &gt;=
-0, 1, 0))
-df$name &lt;- factor(df$name, levels = df$name)
-p &lt;- ggplot(df, aes(x = name, y = height))
-p &lt;- p + ylab("Enrichment z-scores")
-}
-if (is.null(bar.color)) {
-bp &lt;- p + geom_col(color = "grey80", fill = "transparent",
-width = bar.width)
-}
-else {
-bar.color &lt;- unlist(strsplit(bar.color, "-"))
-if (length(bar.color) == 2) {
-bp &lt;- p + geom_col(aes(fill = height), width = bar.width) +
-scale_fill_gradient(low = bar.color[1], high = bar.color[2])
-}
-else {
-bp &lt;- p + geom_col(color = "grey80", fill = "transparent",
-width = bar.width)
-}
-}
-bp &lt;- bp + theme_bw() + theme(legend.position = "none", axis.title.y =
-element_blank(),
-axis.text.y = element_text(size = 10, color = "black"),
-axis.title.x = element_text(size = 12, color = "black")) +
-coord_flip()
-bp &lt;- bp + theme(panel.grid.major = element_blank(), panel.grid.minor =
-element_blank())
-if (bar.label) {
-to_scientific_notation &lt;- function(x) {
-res &lt;- format(x, scientific = T)
-res &lt;- sub("\+0?", "", res)
-sub("-0?", "-", res)
-}
-label &lt;- to_scientific_notation(df$adjp)
-df$label &lt;- paste("FDR", as.character(label), sep = "=")
-df_sub &lt;- df %&gt;% dplyr::filter(hjust == 1)
-bp &lt;- bp + geom_text(data = df_sub, aes(label = label),
-hjust = 1, size = bar.label.size, family = font.family)
-df_sub &lt;- df %&gt;% dplyr::filter(hjust == 0)
-bp &lt;- bp + geom_text(data = df_sub, aes(label = label),
-hjust = 0, size = bar.label.size, family = font.family)
-}
-if (signature) {
-caption &lt;- paste("Created by xEnrichBarplot from XGR version",
-utils::packageVersion("XGR"))
-bp &lt;- bp + labs(caption = caption) + theme(plot.caption =
-element_text(hjust = 1,
-face = "bold.italic", size = 8, colour = "#002147"))
-}
-bp &lt;- bp + theme(text = element_text(family = font.family))
-bp &lt;- bp + theme(axis.line.x = element_line(arrow = arrow(angle = 30,
-length = unit(0.25, "cm"), type = "open")))
-bp &lt;- bp + scale_y_continuous(position = "top")
-invisible(bp)
-}
+# 1) load eQTL mapping results: cis-eQTLs significantly induced by IFN
+cis &lt;- xRDataLoader(RData.customised='JKscience_TS2A',
+RData.location=RData.location)
+ind &lt;- which(cis$IFN_t &gt; 0 &amp; cis$IFN_fdr &lt; 0.05)
+df_cis &lt;- cis[ind, c('variant','Symbol','IFN_t','IFN_fdr')]
+data &lt;- df_cis$variant
+
+# 2) Enrichment analysis using Experimental Factor Ontology (EFO)
+# Considering LD SNPs and respecting ontology tree
+eTerm &lt;- xEnricherSNPs(data, ontology="EF", include.LD="EUR",
+LD.r2=0.8, ontology.algorithm="lea", RData.location=RData.location)
+
+# 3) Barplot of enrichment results
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc")
+#pdf(file="enrichment_barplot.pdf", height=6, width=12, compress=TRUE)
+print(bp)
+#dev.off()
+
+## End(Not run)
+
+# 4) use font family (Arial)
+## Not run: 
+BiocManager::install("extrafont")
+library(extrafont)
+font_import()
+fonttable()
+## creating PDF files with fonts
+library(extrafont)
+loadfonts()
+bp &lt;- xEnrichBarplot(eTerm, top_num="auto", displayBy="fc",
+font.family="Arial Black")
+pdf(file="enrichment_barplot_fonts.pdf", height=6, width=12,
+family="Arial Black")
+print(bp)
+dev.off()
+
+## End(Not run)
 </pre>
 
 

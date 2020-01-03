@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a minimum spanning tree for subnetworks</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSubneterGenesMST"><tr><td>xSubneterGenesMST</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSubneterGenesMST</h2>
+<h2>Function to identify a minimum spanning tree for subnetworks</h2>
+
+<h3>Description</h3>
+
+<p><code>xSubneterGenesAdv</code> is supposed to identify a minimum spanning
+tree for subnetworks. It returns an object of class &quot;igraph&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -20,116 +27,71 @@ verbose = T)
 <table summary="R argblock">
 <tr valign="top"><td><code>isubg</code></td>
 <td>
-
-
+<p>an &quot;iSubg&quot; object resulting from
+<code>xSubneterGenesAdv</code></p>
 </td></tr>
 <tr valign="top"><td><code>metric</code></td>
 <td>
-
-
+<p>the distance metric for subnetworks. It can be either
+&quot;max&quot; for the maximum distance between any two nodes (one from a
+subnetwork, and other from another subnetwork) based on the whole
+network, or &quot;jaccard&quot; for jaccard distance between two subnetworks
+(nodes overlapped), or &quot;hybrid&quot; (that is, &quot;max&quot; multiplied by
+&quot;jaccard&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a minimum spanning tree, an object of class &quot;igraph&quot;. It has graph
+attributes ('summary', 'detail' and 'matrix'), and node attributes
+('xcoord', 'ycoord', 'num_nodes', 'num_edges', 'weight' and
+'weight_scaled' [1,5] for visualisation).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xSubneterGenesAdv</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (isubg, metric = c("hybrid", "max", "jaccard"), verbose = T)
-{
-metric &lt;- match.arg(metric)
-if (class(isubg) == "iSubg") {
-ls_subg &lt;- isubg$ls_subg
-g &lt;- isubg$g
-ls_subg &lt;- base::Filter(base::Negate(is.null), ls_subg)
-if (length(ls_subg) &lt;= 1) {
-return(NULL)
-}
-}
-else {
-stop("The function must apply to a 'iSubg' objects.\n")
-}
-ls_df &lt;- lapply(1:length(ls_subg), function(i) {
-x &lt;- ls_subg[[i]]
-y &lt;- range(as.numeric(V(x)$significance))
-data.frame(iteration = i, num.node = vcount(x), num.edge = ecount(x),
-num.linker = sum(V(x)$type == "linker"), threshold = x$threshold,
-sig.min = y[1], sig.max = y[2], stringsAsFactors = F)
-})
-df_summary &lt;- do.call(rbind, ls_df)
-ls_df &lt;- lapply(1:length(ls_subg), function(i) {
-x &lt;- ls_subg[[i]]
-y &lt;- as_data_frame(x, what = "vertices")
-data.frame(iteration = i, y, stringsAsFactors = F)
-})
-df_detail &lt;- do.call(rbind, ls_df)
-name &lt;- iteration &lt;- score &lt;- NULL
-mat &lt;- df_detail %&gt;% dplyr::select(name, iteration, score) %&gt;%
-tidyr::spread(key = iteration, value = score)
-rownames(mat) &lt;- mat[, 1]
-mat &lt;- mat[, -1]
-mat[is.na(mat)] &lt;- 0
-mat[mat &lt; 0] &lt;- -1
-mat[mat &gt; 0] &lt;- 1
-mat &lt;- data.matrix(mat)
-n &lt;- ncol(mat)
-mat_max &lt;- matrix(0, nrow = n, ncol = n)
-mat_jaccard &lt;- matrix(0, nrow = n, ncol = n)
-for (i in 1:(n - 1)) {
-name_i &lt;- names(which(mat[, i] != 0))
-v &lt;- match(name_i, V(g)$name)
-for (j in (i + 1):n) {
-name_j &lt;- names(which(mat[, j] != 0))
-to &lt;- match(name_j, V(g)$name)
-dist_tmp &lt;- igraph::distances(g, v = v, to = to,
-mode = "all")
-mat_max[i, j] &lt;- max(dist_tmp)
-mat_jaccard[i, j] &lt;- 1 - length(intersect(v, to))/length(union(v,
-to))
-}
-}
-mat_max &lt;- mat_max + t(mat_max)
-colnames(mat_max) &lt;- rownames(mat_max) &lt;- colnames(mat)
-mat_jaccard &lt;- mat_jaccard + t(mat_jaccard)
-colnames(mat_jaccard) &lt;- rownames(mat_jaccard) &lt;- colnames(mat)
-if (metric == "max") {
-mat_dist &lt;- mat_max
-}
-else if (metric == "jaccard") {
-mat_dist &lt;- mat_jaccard
-}
-else if (metric == "hybrid") {
-mat_dist &lt;- mat_max * mat_jaccard
-}
-g_subg &lt;- xConverter(mat_dist, from = "dgCMatrix", to = "igraph",
-verbose = verbose)
-mst &lt;- igraph::minimum.spanning.tree(g_subg, weights =
-E(g_subg)$weight)
-w &lt;- E(mst)$weight
-E(mst)$weight_scaled &lt;- 1 + 4 * (w - min(w))/(max(w) - min(w))
-set.seed(825)
-coords &lt;- igraph::layout_with_fr(mst, weights = 5 -
-(E(mst)$weight_scaled -
-1))
-V(mst)$xcoord &lt;- coords[, 1]
-V(mst)$ycoord &lt;- coords[, 2]
-ind &lt;- match(V(mst)$name, df_summary$iteration)
-V(mst)$num_nodes &lt;- df_summary$num.node[ind]
-V(mst)$num_edges &lt;- df_summary$num.edge[ind]
-mst$summary &lt;- df_summary
-mst$detail &lt;- df_detail
-mst$matrix &lt;- mat
-return(mst)
-}
+# a) provide the input nodes/genes with the significance info
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+sig &lt;- rbeta(500, shape1=0.5, shape2=1)
+data &lt;- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
+
+# b) find a series of maximum-scoring subnets with the desired node number=50
+isubg &lt;- xSubneterGenesAdv(data=data, network="STRING_high",
+subnet.size=50, RData.location=RData.location)
+
+# c) represent a series of subnets as a minimum spanning tree
+mst &lt;- xSubneterGenesMST(isubg)
+mst$summary
+head(mst$detail)
+head(mst$matrix)
+gp_mst &lt;- xGGnetwork(mst, node.label='name', node.label.size=3,
+node.label.force=1, node.xcoord='xcoord', node.ycoord='ycoord',
+edge.size='weight_scaled', node.size='num_edges', node.size.title="Num
+of \nedges", node.size.range=c(1,4))
+
+## End(Not run)
 </pre>
 
 

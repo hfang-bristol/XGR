@@ -1,19 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define eQTL genes given a list of SNPs or a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xSNP2eGenes"><tr><td>xSNP2eGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xSNP2eGenes</h2>
+<h2>Function to define eQTL genes given a list of SNPs or a customised eQTL mapping data</h2>
+
+<h3>Description</h3>
+
+<p><code>xSNP2eGenes</code> is supposed to define eQTL genes given a list of
+SNPs or a customised eQTL mapping data. The eQTL weight is calcualted
+as Cumulative Distribution Function of negative log-transformed
+eQTL-reported signficance level.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xSNP2eGenes(data, include.eQTL = NA, eQTL.customised = NULL,
-cdf.function = c("empirical", "exponential"), plot = FALSE, verbose =
-TRUE, RData.location = "http://galahad.well.ox.ac.uk/bigdata", guid =
-NULL)
+xSNP2eGenes(
+data,
+include.eQTL = NA,
+eQTL.customised = NULL,
+cdf.function = c("empirical", "exponential"),
+plot = FALSE,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -22,157 +37,112 @@ NULL)
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>an input vector containing SNPs. SNPs should be provided as
+dbSNP ID (ie starting with rs). Alternatively, they can be in the
+format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for
+example, 'chr16:28525386'</p>
 </td></tr>
 <tr valign="top"><td><code>include.eQTL</code></td>
 <td>
-
-
+<p>the eQTL supported currently. By default, it is
+'NA' to disable this option. Pre-built eQTL datasets are detailed in
+<code>xDefineEQTL</code></p>
 </td></tr>
 <tr valign="top"><td><code>eQTL.customised</code></td>
 <td>
-
-
+<p>a user-input matrix or data frame with 4
+columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL
+mapping significance level (p-values or FDR), and 4th for contexts
+(required even though only one context is input). Alternatively, it can
+be a file containing these 4 columns. It is designed to allow the user
+analysing their eQTL data. This customisation (if provided) will
+populate built-in eQTL data</p>
 </td></tr>
 <tr valign="top"><td><code>cdf.function</code></td>
 <td>
-
-
+<p>a character specifying a Cumulative Distribution
+Function (cdf). It can be one of 'exponential' based on exponential
+cdf, 'empirical' for empirical cdf</p>
 </td></tr>
 <tr valign="top"><td><code>plot</code></td>
 <td>
-
-
+<p>logical to indicate whether the histogram plot (plus
+density or CDF plot) should be drawn. By default, it sets to false for
+no plotting</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>Gene</code>: eQTL-containing genes
+</p>
+</li>
+<li><p><code>SNP</code>: eQTLs
+</p>
+</li>
+<li><p><code>Sig</code>: the eQTL mapping significant level (the
+best/minimum)
+</p>
+</li>
+<li><p><code>Weight</code>: the eQTL weight
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
 
-## The function is currently defined as
-function (data, include.eQTL = NA, eQTL.customised = NULL, cdf.function
-= c("empirical",
-"exponential"), plot = FALSE, verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-cdf.function &lt;- match.arg(cdf.function)
-data &lt;- gsub("_", ":", data, perl = TRUE)
-data &lt;- gsub("imm:", "chr", data, perl = TRUE)
-data &lt;- unique(data)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("A total of %d SNPs are input", length(data)),
-appendLF = TRUE)
-}
-df_SGS &lt;- xDefineEQTL(data = NULL, include.eQTL = include.eQTL,
-eQTL.customised = eQTL.customised, verbose = verbose,
-RData.location = RData.location, guid = guid)
-if (!is.null(df_SGS)) {
-uid &lt;- paste(df_SGS[, 1], df_SGS[, 2], sep = "_")
-df &lt;- cbind(uid, df_SGS)
-res_list &lt;- split(x = df$Sig, f = df$uid)
-vec &lt;- unlist(lapply(res_list, min))
-raw_score &lt;- -1 * log10(vec)
-if (cdf.function == "exponential") {
-lambda &lt;- MASS::fitdistr(raw_score, "exponential")$estimate
-ind &lt;- match(df_SGS[, 1], data)
-df &lt;- data.frame(df_SGS[!is.na(ind), ])
-wE &lt;- stats::pexp(-log10(df$Sig), rate = lambda)
-if (nrow(df) == 0) {
-df_eGenes &lt;- NULL
-}
-else {
-df_eGenes &lt;- data.frame(Gene = df$Gene, SNP = df$SNP,
-Sig = df$Sig, Weight = wE, row.names = NULL,
-stringsAsFactors = FALSE)
-}
-if (plot) {
-hist(raw_score, breaks = 1000, freq = FALSE,
-col = "grey", xlab = "-log10(p-values)", main = "")
-curve(stats::dexp(x = raw_score, rate = lambda),
-0:max(raw_score), col = 2, add = TRUE)
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("eQTL weights are CDF of exponential empirical
-distributions (parameter lambda=%f)",
-lambda), appendLF = TRUE)
-}
-}
-else if (cdf.function == "empirical") {
-my.CDF &lt;- stats::ecdf(raw_score)
-ind &lt;- match(df_SGS[, 1], data)
-df &lt;- data.frame(df_SGS[!is.na(ind), ])
-wE &lt;- my.CDF(-log10(df$Sig))
-if (nrow(df) == 0) {
-df_eGenes &lt;- NULL
-}
-else {
-df_eGenes &lt;- data.frame(Gene = df$Gene, SNP = df$SNP,
-Sig = df$Sig, Weight = wE, row.names = NULL,
-stringsAsFactors = FALSE)
-df_eGenes &lt;- df_eGenes[order(df_eGenes$Gene,
-df_eGenes$Sig, df_eGenes$SNP, decreasing = FALSE),
-]
-}
-if (plot) {
-plot(my.CDF, xlab = "-log10(p-values)", ylab = "Empirical CDF (eQTL
-weights)",
-main = "")
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("eQTL weights are CDF of empirical distributions"),
-appendLF = TRUE)
-}
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("%d eGenes are defined involving %d eQTL",
-length(unique(df_eGenes$Gene)), length(unique(df_eGenes$SNP))),
-appendLF = TRUE)
-}
-}
-else {
-df_eGenes &lt;- NULL
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("No eQTL genes are defined"), appendLF = TRUE)
-}
-}
-if (!is.null(df_eGenes)) {
-ind &lt;- xSymbol2GeneID(df_eGenes$Gene, details = FALSE,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-df_eGenes &lt;- df_eGenes[!is.na(ind), ]
-if (nrow(df_eGenes) == 0) {
-df_eGenes &lt;- NULL
-}
-}
-invisible(df_eGenes)
-}
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+# a) provide the SNPs with the significance info
+data(ImmunoBase)
+gr &lt;- ImmunoBase$AS$variants
+AS &lt;- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
+
+# b) define eQTL genes
+df_eGenes &lt;- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A",
+RData.location=RData.location)
+
+## End(Not run)
 </pre>
 
 

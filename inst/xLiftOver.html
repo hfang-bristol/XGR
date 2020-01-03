@@ -1,20 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to lift genomic intervals from one genome build to...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xLiftOver"><tr><td>xLiftOver</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xLiftOver</h2>
+<h2>Function to lift genomic intervals from one genome build to another.</h2>
+
+<h3>Description</h3>
+
+<p><code>xLiftOver</code> is supposed to lift genomic intervals from one genome
+build to another. Supported are the conversions between genome builds
+'hg38' (GRCh38), 'hg19' (GRCh37) and 'h18'.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xLiftOver(data.file, format.file = c("data.frame", "bed",
-"chr:start-end", "GRanges"), build.conversion = c(NA, "hg38.to.hg19",
-"hg19.to.hg38", "hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), merged
-= T, verbose = T, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+xLiftOver(
+data.file,
+format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
+"hg19.to.hg18",
+"hg18.to.hg38", "hg18.to.hg19"),
+merged = T,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -23,205 +37,89 @@ xLiftOver(data.file, format.file = c("data.frame", "bed",
 <table summary="R argblock">
 <tr valign="top"><td><code>data.file</code></td>
 <td>
-
-
+<p>an input data file, containing a list of genomic
+regions to test. If the input file is formatted as a 'data.frame'
+(specified by the parameter 'format.file' below), the first three
+columns correspond to the chromosome (1st column), the starting
+chromosome position (2nd column), and the ending chromosome position
+(3rd column). If the format is indicated as 'bed' (browser extensible
+data), the same as 'data.frame' format but the position is 0-based
+offset from chromomose position. If the genomic regions provided are
+not ranged but only the single position, the ending chromosome position
+(3rd column) is allowed not to be provided. If the format is indicated
+as &quot;chr:start-end&quot;, instead of using the first 3 columns, only the
+first column will be used and processed. If the file also contains
+other columns, these additional columns will be ignored. Alternatively,
+the input file can be the content itself assuming that input file has
+been read. Note: the file should use the tab delimiter as the field
+separator between columns</p>
 </td></tr>
 <tr valign="top"><td><code>format.file</code></td>
 <td>
-
-
+<p>the format for input files. It can be one of
+&quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
-
-
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot;, &quot;hg19.to.hg38&quot;,
+&quot;hg19.to.hg18&quot;, &quot;hg18.to.hg38&quot; and &quot;hg18.to.hg19&quot;. By default it is NA,
+forcing the user to specify the corrent one.</p>
 </td></tr>
 <tr valign="top"><td><code>merged</code></td>
 <td>
-
-
+<p>logical to indicate whether multiple ranges should be
+merged into the one per a range in query. By default, it sets to true</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an GR oject storing converted genomic intervals.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xLiftOver</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (data.file, format.file = c("data.frame", "bed",
-"chr:start-end",
-"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
-"hg19.to.hg18", "hg18.to.hg38", "hg18.to.hg19"), merged = T,
-verbose = T, RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-startT &lt;- Sys.time()
-message(paste(c("Start at ", as.character(startT)), collapse = ""),
-appendLF = T)
-message("", appendLF = T)
-format.file &lt;- match.arg(format.file)
-build.conversion &lt;- match.arg(build.conversion)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("First, import the files formatted as '%s' (%s) ...",
-format.file, as.character(now)), appendLF = T)
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("\timport the data file (%s) ...", as.character(now)),
-appendLF = T)
-}
-if (is.matrix(data.file) | is.data.frame(data.file) | class(data.file)
-==
-"GRanges") {
-data &lt;- data.file
-}
-else if (!is.null(data.file) &amp; any(!is.na(data.file))) {
-if (length(data.file) == 1) {
-if (file.exists(data.file)) {
-data &lt;- utils::read.delim(file = data.file, header = F,
-row.names = NULL, stringsAsFactors = F)
-data &lt;- unique(data[, 1])
-}
-else {
-data &lt;- data.file
-}
-}
-else {
-data &lt;- data.file
-}
-}
-else {
-warning("The file 'data.file' must be provided!\n")
-return(NULL)
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Second, construct GenomicRanges object (%s) ...",
-as.character(now)), appendLF = T)
-}
-if (format.file == "data.frame") {
-if (ncol(data) &gt;= 3) {
-data &lt;- data
-}
-else if (ncol(data) == 2) {
-data &lt;- cbind(data, data[, 2])
-}
-else {
-stop("Your input 'data.file' is not as expected!\n")
-}
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-data &lt;- data[ind, ]
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[,
-2]), end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
-nrow(data))))
-}
-else if (format.file == "chr:start-end") {
-input &lt;- do.call(rbind, strsplit(data[, 1], ":|-"))
-if (ncol(input) &gt;= 3) {
-data &lt;- input
-}
-else if (ncol(input) == 2) {
-data &lt;- cbind(input, input[, 2])
-}
-else {
-stop("Your input 'data.file' does not meet the format
-'chr:start-end'!\n")
-}
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-data &lt;- data[ind, ]
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[,
-2]), end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
-nrow(data))))
-}
-else if (format.file == "bed") {
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-data &lt;- data[ind, ]
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[,
-2]) + 1, end = as.numeric(data[, 3])), strand = S4Vectors::Rle(rep("*",
-nrow(data))))
-}
-else if (format.file == "GRanges") {
-dGR &lt;- data
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Third, lift intervals between genome builds '%s'
-(%s) ...",
-build.conversion, as.character(now)), appendLF = T)
-}
-chains &lt;- xRDataLoader(RData.customised = "chain", RData.location =
-RData.location,
-guid = guid, verbose = verbose)
-chain &lt;- ""
-eval(parse(text = paste("chain &lt;- chains$", build.conversion,
-sep = "")))
-suppressMessages(res_GRL &lt;- rtracklayer::liftOver(dGR, chain))
-res_GR &lt;- BiocGenerics::unlist(res_GRL)
-if (merged) {
-mcols_data &lt;- GenomicRanges::mcols(dGR)
-if (is.null(names(dGR))) {
-names(dGR) &lt;- 1:length(dGR)
-}
-names_data &lt;- names(dGR)
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Finally, keep the first range if multiple found (%s)
-...",
-as.character(now)), appendLF = T)
-}
-res_df &lt;- GenomicRanges::as.data.frame(res_GR, row.names = NULL)
-uid &lt;- names(res_GR)
-res_ls &lt;- split(x = res_df[, c(1:3, 5)], f = uid)
-ls_df &lt;- lapply(res_ls, function(x) {
-c(as.character(unique(x$seqnames))[1], min(x$start),
-max(x$end), as.character(unique(x$strand))[1])
-})
-df &lt;- do.call(rbind, ls_df)
-gr &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(df[,
-1]), ranges = IRanges::IRanges(start = as.numeric(df[,
-2]), end = as.numeric(df[, 3])), strand = S4Vectors::Rle(df[,
-4]))
-ind &lt;- match(rownames(df), names_data)
-names(gr) &lt;- names_data[ind]
-GenomicRanges::mcols(gr) &lt;- mcols_data[ind, ]
-res_GR &lt;- gr
-}
-endT &lt;- Sys.time()
-message(paste(c("\nEnd at ", as.character(endT)), collapse = ""),
-appendLF = T)
-runTime &lt;- as.numeric(difftime(strptime(endT, "%Y-%m-%d
-%H:%M:%S"),
-strptime(startT, "%Y-%m-%d %H:%M:%S"), units = "secs"))
-message(paste(c("Runtime in total is: ", runTime, " secs\n"),
-collapse = ""), appendLF = T)
-invisible(res_GR)
-}
+# Provide UCSC genes (hg19)
+UCSC_genes &lt;- xRDataLoader(RData.customised='UCSC_genes',
+RData.location=RData.location)
+UCSC_genes
+
+# Lift over to hg38
+gr &lt;- xLiftOver(UCSC_genes, format.file="GRanges",
+build.conversion="hg19.to.hg38", RData.location=RData.location)
+gr
+
+## End(Not run)
 </pre>
 
 

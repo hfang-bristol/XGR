@@ -1,18 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using heatmap</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xEnrichHeatmap"><tr><td>xEnrichHeatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xEnrichHeatmap</h2>
+<h2>Function to visualise enrichment results using heatmap</h2>
+
+<h3>Description</h3>
+
+<p><code>xEnrichHeatmap</code> is supposed to visualise enrichment results using
+heatmap. It returns an object of class &quot;ggplot&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xEnrichHeatmap(list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
-"fdr", "pvalue", "fc", "or"), colormap = NULL, zlim = NULL, reorder =
-c("none", "row", "col", "both"))
+xEnrichHeatmap(
+list_eTerm,
+fdr.cutoff = 0.05,
+displayBy = c("zscore", "fdr", "pvalue", "fc", "or"),
+colormap = NULL,
+zlim = NULL,
+reorder = c("none", "row", "col", "both")
+)
 </pre>
 
 
@@ -21,240 +33,97 @@ c("none", "row", "col", "both"))
 <table summary="R argblock">
 <tr valign="top"><td><code>list_eTerm</code></td>
 <td>
-
-
+<p>an object of class &quot;ls_eTerm&quot;. Alterntively, it can
+be a data frame having all these columns (named as
+'group','ontology','name','adjp') and one of these columns
+(&quot;zscore&quot;,&quot;fdr&quot;,&quot;pvalue&quot;,&quot;fc&quot;,&quot;or&quot;). Note, the column 'fdr' can be
+inferred from the column 'adjp'</p>
 </td></tr>
 <tr valign="top"><td><code>fdr.cutoff</code></td>
 <td>
-
-
+<p>FDR cutoff used to declare the significant terms. By
+default, it is set to 0.05</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-
-
+<p>which statistics will be used for comparison. It can
+be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; for adjusted p
+value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for enrichment z-score,
+&quot;or&quot; for enrichment odd ratio</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>zlim</code></td>
 <td>
-
-
+<p>the minimum and maximum z values for which colors should be
+plotted, defaulting to the range of the -log10(FDR)</p>
 </td></tr>
 <tr valign="top"><td><code>reorder</code></td>
 <td>
-
-
+<p>how to reorder rows and columns. It can be &quot;none&quot; for no
+reordering, &quot;row&quot; for reordering rows according to number of sharings
+(by default), &quot;col&quot; for reordering columns, and &quot;both&quot; for reordering
+rows and columns</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot;
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xHeatmap</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (list_eTerm, fdr.cutoff = 0.05, displayBy = c("zscore",
-"fdr", "pvalue", "fc", "or"), colormap = NULL, zlim = NULL,
-reorder = c("none", "row", "col", "both"))
-{
-displayBy &lt;- match.arg(displayBy)
-reorder &lt;- match.arg(reorder)
-if (is.null(list_eTerm)) {
-warnings("There is no enrichment in the 'eTerm' object.\n")
-return(NULL)
-}
-if (class(list_eTerm) == "ls_eTerm" | class(list_eTerm) ==
-"data.frame") {
-if (class(list_eTerm) == "ls_eTerm") {
-df &lt;- list_eTerm$df
-}
-else if (class(list_eTerm) == "data.frame") {
-if (displayBy == "fdr") {
-if (is.null(list_eTerm$fdr)) {
-list_eTerm$fdr &lt;- list_eTerm$adjp
-}
-}
-if (is.null(list_eTerm$id) &amp; !is.null(list_eTerm$name)) {
-list_eTerm$id &lt;- list_eTerm$name
-}
-if (all(c("group", "ontology", "id", "name", "adjp",
-displayBy) %in% colnames(list_eTerm))) {
-df &lt;- list_eTerm[, c("group", "ontology", "id",
-"name", "adjp", displayBy)]
-}
-else if (all(c("group", "id", "name", "adjp", displayBy) %in%
-colnames(list_eTerm))) {
-df &lt;- list_eTerm[, c("group", "id", "name", "adjp",
-displayBy)]
-df$ontology &lt;- "ontology"
-}
-else if (all(c("ontology", "id", "name", "adjp",
-displayBy) %in% colnames(list_eTerm))) {
-df &lt;- list_eTerm[, c("ontology", "id", "name",
-"adjp", displayBy)]
-df$group &lt;- "group"
-}
-else if (all(c("id", "name", "adjp", displayBy) %in%
-colnames(list_eTerm))) {
-df &lt;- list_eTerm[, c("id", "name", "adjp", displayBy)]
-df$group &lt;- "group"
-df$ontology &lt;- "ontology"
-}
-else {
-warnings("The input data.frame does not contain required columns:
-c('group','ontology','name','adjp').\n")
-return(NULL)
-}
-}
-df_all &lt;- df
-if (!is.null(df_all)) {
-adjp &lt;- NULL
-gp &lt;- NULL
-mat &lt;- NULL
-ls_df &lt;- split(x = df_all, f = df_all$ontology)
-ls_df &lt;- ls_df[unique(df_all$ontology)]
-ls_mat &lt;- lapply(1:length(ls_df), function(i) {
-df &lt;- ls_df[[i]]
-ind &lt;- which(df$adjp &lt; fdr.cutoff)
-if (length(ind) &gt;= 1) {
-df &lt;- as.data.frame(df %&gt;% dplyr::filter(adjp &lt;
-fdr.cutoff))
-if (displayBy == "fdr") {
-mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
-"group", "adjp")], rows = unique(df$name),
-columns = unique(df_all$group)))
-mat[mat == 0] &lt;- NA
-mat &lt;- -log10(mat)
-}
-else if (displayBy == "pvalue") {
-mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
-"group", "pvalue")], rows = unique(df$name),
-columns = unique(df_all$group)))
-mat[mat == 0] &lt;- NA
-mat &lt;- -log10(mat)
-}
-else if (displayBy == "zscore") {
-mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
-"group", "zscore")], rows = unique(df$name),
-columns = unique(df_all$group)))
-mat[mat == 0] &lt;- NA
-}
-else if (displayBy == "fc") {
-mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
-"group", "fc")], rows = unique(df$name),
-columns = unique(df_all$group)))
-mat[mat == 0] &lt;- NA
-mat &lt;- log2(mat)
-}
-else if (displayBy == "or") {
-mat &lt;- as.matrix(xSparseMatrix(df[, c("name",
-"group", "or")], rows = unique(df$name),
-columns = unique(df_all$group)))
-mat[mat == 0] &lt;- NA
-mat &lt;- log2(mat)
-}
-if (nrow(mat) == 1) {
-df_mat &lt;- mat
-}
-else {
-rname_ordered &lt;- rownames(mat)[order(-nchar(rownames(mat)))]
-if (names(ls_df)[i] == "PS2" || names(ls_df)[i] ==
-"PSG") {
-df_tmp &lt;- unique(df[, c("id", "name")])
-df_tmp &lt;- df_tmp[with(df_tmp, order(as.numeric(df_tmp$id))),
-]
-rname_ordered &lt;- df_tmp$name
-}
-ind &lt;- match(rname_ordered, rownames(mat))
-df_mat &lt;- as.matrix(mat[ind, ], ncol = ncol(mat))
-colnames(df_mat) &lt;- colnames(mat)
-colnames(df_mat) &lt;- colnames(mat)
-}
-return(df_mat)
-}
-else {
-return(NULL)
-}
-})
-mat &lt;- do.call(rbind, ls_mat)
-if (!is.null(mat)) {
-if (displayBy == "fdr" | displayBy == "pvalue") {
-if (is.null(colormap)) {
-colormap &lt;- "grey100-darkorange"
-}
-if (is.null(zlim)) {
-zlim &lt;- c(0, ceiling(max(mat[!is.na(mat)])))
-}
-if (displayBy == "fdr") {
-legend.title &lt;- expression(-log[10]("FDR"))
-}
-else if (displayBy == "pvalue") {
-legend.title &lt;- expression(-log[10]("p-value"))
-}
-}
-else if (displayBy == "fc" | displayBy == "zscore" |
-displayBy == "or") {
-tmp_max &lt;- ceiling(max(mat[!is.na(mat)]))
-tmp_min &lt;- floor(min(mat[!is.na(mat)]))
-if (tmp_max &gt; 0 &amp; tmp_min &lt; 0) {
-if (is.null(colormap)) {
-colormap &lt;- "deepskyblue-grey100-darkorange"
-}
-if (is.null(zlim)) {
-tmp &lt;- max(tmp_max, abs(tmp_min))
-zlim &lt;- c(-tmp, tmp)
-}
-}
-else if (tmp_max &lt;= 0) {
-if (is.null(colormap)) {
-colormap &lt;- "deepskyblue-grey100"
-}
-if (is.null(zlim)) {
-zlim &lt;- c(tmp_min, 0)
-}
-}
-else if (tmp_min &gt;= 0) {
-if (is.null(colormap)) {
-colormap &lt;- "grey100-darkorange"
-}
-if (is.null(zlim)) {
-zlim &lt;- c(0, tmp_max)
-}
-}
-if (displayBy == "fc") {
-legend.title &lt;- expression(log[2]("FC"))
-}
-else if (displayBy == "zscore") {
-legend.title &lt;- ("Z-score")
-}
-else if (displayBy == "or") {
-legend.title &lt;- expression(log[2]("OR"))
-}
-}
-gp &lt;- xHeatmap(mat, reorder = reorder, colormap = colormap,
-ncolors = 64, zlim = zlim, legend.title = legend.title,
-barwidth = 0.4, x.rotate = 60, shape = 19,
-size = 2, x.text.size = 6, y.text.size = 6,
-na.color = "transparent", barheight = max(3,
-min(5, nrow(mat))))
-gp &lt;- gp + theme(legend.title = element_text(size = 8))
-gp$mat &lt;- mat
-}
-}
-else {
-mat &lt;- NULL
-gp &lt;- NULL
-}
-}
-invisible(gp)
-}
+# provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data
+
+# optionally, provide the test background (if not provided, all human genes)
+#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+
+# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
+# perform enrichment analysis
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+RData.location=RData.location)
+## heatmap plot of enrichment results
+gp &lt;- xEnrichHeatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
+
+## End(Not run)
 </pre>
 
 

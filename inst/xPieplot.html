@@ -1,18 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise data frame using pie plots</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xPieplot"><tr><td>xPieplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xPieplot</h2>
+<h2>Function to visualise data frame using pie plots</h2>
+
+<h3>Description</h3>
+
+<p><code>xPieplot</code> is supposed to visualise data frame using pie plots. It
+returns an object of class &quot;ggplot&quot;.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xPieplot(df, columns, colormap = "ggplot2", pie.radius = NULL,
-pie.color = "transparent", pie.color.alpha = 1, pie.thick = 0.1,
-legend.title = "", gp = NULL)
+xPieplot(
+df,
+columns,
+colormap = "ggplot2",
+pie.radius = NULL,
+pie.color = "transparent",
+pie.color.alpha = 1,
+pie.thick = 0.1,
+legend.title = "",
+gp = NULL
+)
 </pre>
 
 
@@ -21,124 +36,83 @@ legend.title = "", gp = NULL)
 <table summary="R argblock">
 <tr valign="top"><td><code>df</code></td>
 <td>
-
-
+<p>a data frame</p>
 </td></tr>
 <tr valign="top"><td><code>columns</code></td>
 <td>
-
-
+<p>a vector containing column names of the input data
+frame. These columns are used to draw pie charts</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
-
-
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap),
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta), and &quot;ggplot2&quot; (emulating ggplot2
+default color palette). Alternatively, any hyphen-separated HTML color
+names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
 <tr valign="top"><td><code>pie.radius</code></td>
 <td>
-
-
+<p>the radius of a pie. If NULL, it equals roughly 1/75</p>
 </td></tr>
 <tr valign="top"><td><code>pie.color</code></td>
 <td>
-
-
+<p>the border color of a pie</p>
 </td></tr>
 <tr valign="top"><td><code>pie.color.alpha</code></td>
 <td>
-
-
+<p>the 0-1 value specifying transparency of pie
+border colors</p>
 </td></tr>
 <tr valign="top"><td><code>pie.thick</code></td>
 <td>
-
-
+<p>the pie border thickness</p>
 </td></tr>
 <tr valign="top"><td><code>legend.title</code></td>
 <td>
-
-
+<p>the legend title</p>
 </td></tr>
 <tr valign="top"><td><code>gp</code></td>
 <td>
-
-
+<p>an existing ggplot object or NULL. It is used for
+overlapping</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xPieplot</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
 
-## The function is currently defined as
-function (df, columns, colormap = "ggplot2", pie.radius = NULL,
-pie.color = "transparent", pie.color.alpha = 1, pie.thick = 0.1,
-legend.title = "", gp = NULL)
-{
-if (class(df) != "data.frame") {
-stop("The function must apply to a data frame.\n")
-}
-ind &lt;- colnames(df) %in% c("x", "y", columns)
-if (sum(ind) != (length(columns) + 2)) {
-stop("The input data frame must contain columns 'x', 'y' and those in
-columns provided.\n")
-}
-df_sub &lt;- df[, ind]
-df_sub &lt;- df_sub[!duplicated(df_sub), ]
-df_sub &lt;- df_sub[apply(df_sub[, c(-1, -2)], 1, sum) != 0,
-]
-geom_pie &lt;- function(mapping = NULL, data, columns, ...) {
-if (is.null(mapping)) {
-mapping &lt;- ggplot2::aes_(x = ~x, y = ~y)
-}
-mapping &lt;- utils::modifyList(mapping, ggplot2::aes_(r0 = 0,
-fill = ~type, amount = ~value))
-if (!("r" %in% names(mapping))) {
-xvar &lt;- "x"
-tmp &lt;- base::diff(range(data[, xvar]))
-if (tmp == 0) {
-tmp &lt;- 1
-}
-size &lt;- tmp/75
-mapping &lt;- utils::modifyList(mapping, aes_(r = size))
-}
-names(mapping)[match(c("x", "y"), names(mapping))] &lt;- c("x0",
-"y0")
-df &lt;- tidyr::gather(data, "type", "value", columns, factor_key = TRUE)
-ggforce::geom_arc_bar(mapping, data = df, stat = "pie",
-inherit.aes = FALSE, ...)
-}
-x &lt;- y &lt;- NULL
-if (all(class(gp) %in% c("gg", "ggplot"))) {
-gp &lt;- gp
-}
-else {
-gp &lt;- ggplot()
-}
-if (is.null(pie.radius)) {
-gp &lt;- gp + geom_pie(data = df_sub, aes(x = x, y = y),
-columns = columns, show.legend = TRUE, color = pie.color,
-alpha = pie.color.alpha, size = pie.thick)
-}
-else {
-df_sub$pie.radius &lt;- rep(pie.radius, nrow(df_sub))
-gp &lt;- gp + geom_pie(data = df_sub, aes(x = x, y = y,
-r = pie.radius), columns = columns, show.legend = TRUE,
-color = pie.color, alpha = pie.color.alpha, size = pie.thick)
-}
-gp &lt;- gp + coord_equal() + guides(fill = guide_legend(title =
-legend.title,
-title.position = "top", keywidth = 0.6, keyheight = 0.6,
-override.aes = list(shape = 19)))
-my_colors &lt;- xColormap(colormap)(length(columns))
-names(my_colors) &lt;- columns
-gp &lt;- gp + scale_fill_manual(values = my_colors)
-invisible(gp)
-}
+## End(Not run)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+gp &lt;- xPieplot(df,
+columns=c('dGene','pGene','fGene','nGene','eGene','cGene'),
+legend.title='Seeds')
+
+## End(Not run)
 </pre>
 
 

@@ -1,11 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to score genomic regions based on the given...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGRscores"><tr><td>xGRscores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xGRscores</h2>
+<h2>Function to score genomic regions based on the given significance level</h2>
+
+<h3>Description</h3>
+
+<p><code>xGRscores</code> is supposed to score a list of genomic regions
+together with the significance level.
+</p>
+
 
 <h3>Usage</h3>
 
@@ -20,119 +27,93 @@ xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>a named input vector containing the sinificance level for
+genomic regions (GR). For this named vector, the element names are GR,
+in the format of 'chrN:start-end', where N is either 1-22 or X, start
+(or end) is genomic positional number; for example, 'chr1:13-20'. The
+element values for the significance level (measured as p-value or fdr).
+Alternatively, it can be a matrix or data frame with two columns: 1st
+column for GR, 2nd column for the significance level.</p>
 </td></tr>
 <tr valign="top"><td><code>significance.threshold</code></td>
 <td>
-
-
+<p>the given significance threshold. By
+default, it is set to NULL, meaning there is no constraint on the
+significance level when transforming the significance level of GR into
+scores. If given, those GR below this are considered significant and
+thus scored positively. Instead, those above this are considered
+insigificant and thus receive no score</p>
 </td></tr>
 <tr valign="top"><td><code>score.cap</code></td>
 <td>
-
-
+<p>the maximum score being capped. By default, it is set
+to 10. If NULL, no capping is applied</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>GR</code>: genomic regions
+</p>
+</li>
+<li><p><code>Score</code>: the scores for GR calculated based on p-values
+taking into account the given threshold of the significant level
+</p>
+</li>
+<li><p><code>Pval</code>: the input p-values for GR
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>None
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (data, significance.threshold = 0.05, score.cap = 10,
-verbose = T)
-{
-if (is.null(data)) {
-stop("The input data must be not NULL.\n")
-}
-else {
-if (class(data) == "DataFrame") {
-data &lt;- S4Vectors::as.matrix(data)
-}
-if (is.vector(data)) {
-if (length(data) &gt; 1) {
-if (is.null(names(data))) {
-stop("The input data must have names with attached dbSNP ID.\n")
-}
-}
-else {
-data &lt;- utils::read.delim(file = data, header = F,
-row.names = NULL, stringsAsFactors = F)
-}
-}
-if (is.vector(data)) {
-pval &lt;- data
-}
-else if (is.matrix(data) | is.data.frame(data)) {
-data &lt;- as.matrix(data)
-data_list &lt;- split(x = data[, 2], f = as.character(data[,
-1]))
-res_list &lt;- lapply(data_list, function(x) {
-x &lt;- as.numeric(x)
-x &lt;- x[!is.na(x)]
-if (length(x) &gt; 0) {
-min(x)
-}
-else {
-NULL
-}
-})
-pval &lt;- unlist(res_list)
-}
-tmp &lt;- min(pval[pval != 0])
-pval[pval &lt; tmp] &lt;- tmp
-}
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("A total of %d GR are input", length(pval)),
-appendLF = T)
-}
-if (is.null(significance.threshold)) {
-scores &lt;- log10((1 - pval)/pval)
-}
-else {
-scores &lt;- log10((1 - pval)/pval) - log10((1 -
-significance.threshold)/significance.threshold)
-}
-tmp_max &lt;- max(scores[!is.infinite(scores)])
-tmp_min &lt;- min(scores[!is.infinite(scores)])
-scores[scores &gt; tmp_max] &lt;- tmp_max
-scores[scores &lt; tmp_min] &lt;- tmp_min
-ind_remained &lt;- which(scores &gt; 0)
-seeds.snps &lt;- scores[ind_remained]
-pval &lt;- pval[ind_remained]
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("A total of %d GR are scored positively",
-sum(seeds.snps &gt; 0)), appendLF = T)
-}
-df_GR &lt;- data.frame(GR = names(pval), Score = seeds.snps,
-Pval = pval, row.names = NULL, stringsAsFactors = F)
-if (!is.null(score.cap)) {
-score.cap &lt;- as.numeric(score.cap)
-if (score.cap &lt;= max(df_GR$Score)) {
-df_GR$Score[df_GR$Score &gt;= score.cap] &lt;- score.cap
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("GR score capped to the maximum score %d.",
-score.cap), appendLF = T)
-}
-}
-}
-df_GR &lt;- df_GR[order(df_GR$Score, -df_GR$Pval, df_GR$GR,
-decreasing = TRUE), ]
-invisible(df_GR)
-}
+# a) provide the seed SNPs with the significance info
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+df &lt;- as.data.frame(gr, row.names=NULL)
+chr &lt;- df$seqnames
+start &lt;- df$start
+end &lt;- df$end
+sig &lt;- df$Pvalue
+GR &lt;- paste(chr,':',start,'-',end, sep='')
+data &lt;- cbind(GR=GR, Sig=sig)
+
+# b) calculate GR scores (considering significant cutoff 5e-5)
+df_GR &lt;- xGRscores(data=data, significance.threshold=5e-5)
+
+## End(Not run)
 </pre>
 
 

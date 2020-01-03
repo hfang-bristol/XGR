@@ -1,19 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a GRanges object given a list of genomic...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xGR"><tr><td>xGR</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xGR</h2>
+<h2>Function to create a GRanges object given a list of genomic regions</h2>
+
+<h3>Description</h3>
+
+<p><code>xGR</code> is supposed to create a GRanges object given a list of
+genomic regions.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xGR(data, format = c("chr:start-end", "data.frame", "bed", "GRanges"),
-build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"), add.name = T,
-remove.mcol = F, include.strand = F, verbose = T, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
+xGR(
+data,
+format = c("chr:start-end", "data.frame", "bed", "GRanges"),
+build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
+add.name = T,
+remove.mcol = F,
+include.strand = F,
+verbose = T,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -22,205 +36,101 @@ remove.mcol = F, include.strand = F, verbose = T, RData.location =
 <table summary="R argblock">
 <tr valign="top"><td><code>data</code></td>
 <td>
-
-
+<p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
+(see the next parameter 'format' below), GR should be provided as a
+vector in the format of 'chrN:start-end', where N is either 1-22 or X,
+start (or end) is genomic positional number; for example, 'chr1:13-20'.
+If formatted as a 'data.frame', the first three columns correspond to
+the chromosome (1st column), the starting chromosome position (2nd
+column), and the ending chromosome position (3rd column). If the format
+is indicated as 'bed' (browser extensible data), the same as
+'data.frame' format but the position is 0-based offset from chromomose
+position. If the genomic regions provided are not ranged but only the
+single position, the ending chromosome position (3rd column) is allowed
+not to be provided. The data could also be an object of 'GRanges' (in
+this case, formatted as 'GRanges')</p>
 </td></tr>
 <tr valign="top"><td><code>format</code></td>
 <td>
-
-
+<p>the format of the input data. It can be one of
+&quot;chr:start-end&quot;, &quot;data.frame&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>build.conversion</code></td>
 <td>
-
-
+<p>the conversion from one genome build to
+another. The conversions supported are &quot;hg38.to.hg19&quot; and
+&quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
 <tr valign="top"><td><code>add.name</code></td>
 <td>
-
-
+<p>logical to add names. By default, it sets to true</p>
 </td></tr>
 <tr valign="top"><td><code>remove.mcol</code></td>
 <td>
-
-
+<p>logical to remove meta-columns. By default, it sets
+to false</p>
 </td></tr>
 <tr valign="top"><td><code>include.strand</code></td>
 <td>
-
-
+<p>logical to include strand. By default, it sets to
+false. It only works when the format is &quot;data.frame&quot; or &quot;bed&quot; and the
+input data has 4 columns</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
-
-
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
-
-
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>guid</code></td>
 <td>
-
-
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>a GenomicRanges object
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the XGR package and specify the location of built-in data
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
-## The function is currently defined as
-function (data, format = c("chr:start-end", "data.frame", "bed",
-"GRanges"), build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-add.name = T, remove.mcol = F, include.strand = F, verbose = T,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-format &lt;- match.arg(format)
-build.conversion &lt;- match.arg(build.conversion)
-if (is.null(data)) {
-return(NULL)
-}
-if (is.matrix(data) | is.data.frame(data) | class(data) ==
-"GRanges") {
-data &lt;- data
-}
-else if (!is.null(data) &amp; any(!is.na(data))) {
-if (length(data) == 1) {
-if (file.exists(data)) {
-data &lt;- utils::read.delim(file = data, header = F,
-row.names = NULL, stringsAsFactors = F)
-data &lt;- unique(data[, 1])
-}
-else {
-data &lt;- data
-}
-}
-else {
-data &lt;- data
-}
-}
-else {
-warning("The file 'data' must be provided!\n")
-return(NULL)
-}
-if (format == "data.frame") {
-if (ncol(data) &gt;= 3) {
-data &lt;- data
-}
-else if (ncol(data) == 2) {
-data &lt;- cbind(data, data[, 2])
-}
-else {
-warning("Your input 'data.file' is not as expected!\n")
-return(NULL)
-}
-if (include.strand) {
-if (ncol(data) &lt;= 3) {
-include.strand &lt;- F
-}
-}
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-if (include.strand) {
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[ind,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[ind,
-2]), end = as.numeric(data[ind, 3])), strand = S4Vectors::Rle(data[ind,
-4]))
-}
-else {
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[ind,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[ind,
-2]), end = as.numeric(data[ind, 3])), strand = S4Vectors::Rle(rep("*",
-length(ind))))
-}
-if (add.name) {
-names(dGR) &lt;- paste(data[ind, 1], ":", data[ind,
-2], "-", data[ind, 3], sep = "")
-}
-}
-else if (format == "chr:start-end") {
-data &lt;- unique(data[!is.na(data)])
-input &lt;- do.call(rbind, strsplit(data, ":|-|,"))
-if (ncol(input) &gt;= 3) {
-data &lt;- matrix(input[, 1:3], nrow = nrow(input))
-}
-else if (ncol(input) == 2) {
-data &lt;- matrix(input[, c(1, 2, 2)], nrow = nrow(input))
-}
-else {
-warning("Your input 'data' does not meet the format
-'chr:start-end'!\n")
-return(NULL)
-}
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[ind,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[ind,
-2]), end = as.numeric(data[ind, 3])), strand = S4Vectors::Rle(rep("*",
-length(ind))))
-if (add.name) {
-names(dGR) &lt;- paste(data[ind, 1], ":", data[ind,
-2], "-", data[ind, 3], sep = "")
-}
-}
-else if (format == "bed") {
-if (include.strand) {
-if (ncol(data) &lt;= 3) {
-include.strand &lt;- F
-}
-}
-ind &lt;- suppressWarnings(which(!is.na(as.numeric(data[,
-2])) &amp; !is.na(as.numeric(data[, 3]))))
-if (include.strand) {
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[ind,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[ind,
-2]) + 1, end = as.numeric(data[ind, 3])), strand =
-S4Vectors::Rle(data[ind,
-4]))
-}
-else {
-dGR &lt;- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(data[ind,
-1]), ranges = IRanges::IRanges(start = as.numeric(data[ind,
-2]) + 1, end = as.numeric(data[ind, 3])), strand =
-S4Vectors::Rle(rep("*",
-length(ind))))
-}
-if (add.name) {
-names(dGR) &lt;- paste(data[ind, 1], ":", data[ind,
-2] + 1, "-", data[ind, 3], sep = "")
-}
-}
-else if (format == "GRanges") {
-dGR &lt;- data
-if (remove.mcol) {
-GenomicRanges::mcols(dGR) &lt;- NULL
-}
-if (is.null(names(dGR)) &amp; add.name) {
-df &lt;- as.data.frame(dGR, row.names = NULL)
-names(dGR) &lt;- paste(df$seqnames, ":", df$start, "-",
-df$end, sep = "")
-}
-}
-if (!is.na(build.conversion)) {
-if (verbose) {
-message(sprintf("\tdata genomic regions: lifted over via genome build
-conversion `%s`",
-build.conversion), appendLF = T)
-}
-dGR &lt;- xLiftOver(data.file = dGR, format.file = "GRanges",
-build.conversion = build.conversion, merged = F,
-verbose = verbose, RData.location = RData.location,
-guid = guid)
-}
-invisible(dGR)
-}
+# a) provide the genomic regions
+## load ImmunoBase
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+gr &lt;- ImmunoBase$AS$variant
+df &lt;- as.data.frame(gr, row.names=NULL)
+chr &lt;- df$seqnames
+start &lt;- df$start
+end &lt;- df$end
+data &lt;- paste(chr,':',start,'-',end, sep='')
+
+# b) create a GRanges object
+GR &lt;- xGR(data=data, format="chr:start-end",
+RData.location=RData.location)
+
+## End(Not run)
 </pre>
 
 

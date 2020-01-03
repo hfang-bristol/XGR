@@ -1,29 +1,45 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define graph node coordinates according to...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xLayout"><tr><td>xLayout</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xLayout</h2>
+<h2>Function to define graph node coordinates according to igraph- or sna-style layout</h2>
+
+<h3>Description</h3>
+
+<p><code>xLayout</code> is supposed to define graph node coordinates according
+to igraph- or sna-style layout.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xLayout(g, layout = c("layout_nicely", "layout_randomly",
-"layout_in_circle", "layout_on_sphere", "layout_with_fr",
-"layout_with_kk", "layout_as_tree", "layout_with_lgl",
+xLayout(
+g,
+layout = c("layout_nicely", "layout_randomly", "layout_in_circle",
+"layout_on_sphere",
+"layout_with_fr", "layout_with_kk", "layout_as_tree",
+"layout_with_lgl",
 "layout_with_graphopt", "layout_with_sugiyama", "layout_with_dh",
-"layout_with_drl", "layout_with_gem", "layout_with_mds",
-"layout_as_bipartite", "gplot.layout.adj", "gplot.layout.circle",
-"gplot.layout.circrand", "gplot.layout.eigen",
+"layout_with_drl",
+"layout_with_gem", "layout_with_mds", "layout_as_bipartite",
+"gplot.layout.adj",
+"gplot.layout.circle", "gplot.layout.circrand", "gplot.layout.eigen",
 "gplot.layout.fruchtermanreingold", "gplot.layout.geodist",
-"gplot.layout.hall", "gplot.layout.kamadakawai", "gplot.layout.mds",
-"gplot.layout.princoord", "gplot.layout.random", "gplot.layout.rmds",
-"gplot.layout.segeo", "gplot.layout.seham", "gplot.layout.spring",
-"gplot.layout.springrepulse", "gplot.layout.target",
-"graphlayouts.layout_with_stress", "graphlayouts.layout_as_backbone",
-"gephi.forceatlas2"), seed = 825, flip = F)
+"gplot.layout.hall",
+"gplot.layout.kamadakawai", "gplot.layout.mds",
+"gplot.layout.princoord",
+"gplot.layout.random", "gplot.layout.rmds", "gplot.layout.segeo",
+"gplot.layout.seham", "gplot.layout.spring",
+"gplot.layout.springrepulse",
+"gplot.layout.target", "graphlayouts.layout_with_stress",
+"graphlayouts.layout_as_backbone", "gephi.forceatlas2"),
+seed = 825,
+flip = F
+)
 </pre>
 
 
@@ -32,204 +48,85 @@ xLayout(g, layout = c("layout_nicely", "layout_randomly",
 <table summary="R argblock">
 <tr valign="top"><td><code>g</code></td>
 <td>
-
-
+<p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph</p>
 </td></tr>
 <tr valign="top"><td><code>layout</code></td>
 <td>
-
-
+<p>a character specifying graph layout function. This
+character can be used to indicate igraph-style layout
+(&quot;layout_nicely&quot;,&quot;layout_randomly&quot;,&quot;layout_in_circle&quot;,&quot;layout_on_sphere&quot;,&quot;layout_with_fr&quot;,&quot;layout_with_kk&quot;,&quot;layout_as_tree&quot;,&quot;layout_with_lgl&quot;,&quot;layout_with_graphopt&quot;,&quot;layout_with_sugiyama&quot;,&quot;layout_with_dh&quot;,&quot;layout_with_drl&quot;,&quot;layout_with_gem&quot;,&quot;layout_with_mds&quot;,&quot;layout_as_bipartite&quot;),
+or sna-style layout
+(&quot;gplot.layout.adj&quot;,&quot;gplot.layout.circle&quot;,&quot;gplot.layout.circrand&quot;,&quot;gplot.layout.eigen&quot;,&quot;gplot.layout.fruchtermanreingold&quot;,&quot;gplot.layout.geodist&quot;,&quot;gplot.layout.hall&quot;,&quot;gplot.layout.kamadakawai&quot;,&quot;gplot.layout.mds&quot;,&quot;gplot.layout.princoord&quot;,&quot;gplot.layout.random&quot;,&quot;gplot.layout.rmds&quot;,&quot;gplot.layout.segeo&quot;,&quot;gplot.layout.seham&quot;,&quot;gplot.layout.spring&quot;,&quot;gplot.layout.springrepulse&quot;,&quot;gplot.layout.target&quot;),
+or graphlayouts-style layout
+(&quot;graphlayouts.layout_with_stress&quot;,&quot;graphlayouts.layout_as_backbone&quot;),
+or ForeceAtlas2 layout used in Dephi (&quot;gephi.forceatlas2&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>seed</code></td>
 <td>
-
-
+<p>an integer specifying the seed</p>
 </td></tr>
 <tr valign="top"><td><code>flip</code></td>
 <td>
-
-
+<p>logical to indicate whether x- and y-coordiates flip. By
+default, it sets to false</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>It returns an igraph object, appended by node attributes including
+&quot;xcoord&quot; for x-coordinates, &quot;ycoord&quot; for y-coordiates.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xGGnetwork</code>
+</p>
 
 
 <h3>Examples</h3>
 
 <pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Not run: 
+# Load the library
+library(XGR)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-## The function is currently defined as
-function (g, layout = c("layout_nicely", "layout_randomly",
-"layout_in_circle",
-"layout_on_sphere", "layout_with_fr", "layout_with_kk",
-"layout_as_tree",
-"layout_with_lgl", "layout_with_graphopt", "layout_with_sugiyama",
-"layout_with_dh", "layout_with_drl", "layout_with_gem",
-"layout_with_mds",
-"layout_as_bipartite", "gplot.layout.adj", "gplot.layout.circle",
-"gplot.layout.circrand", "gplot.layout.eigen",
-"gplot.layout.fruchtermanreingold",
-"gplot.layout.geodist", "gplot.layout.hall",
-"gplot.layout.kamadakawai",
-"gplot.layout.mds", "gplot.layout.princoord", "gplot.layout.random",
-"gplot.layout.rmds", "gplot.layout.segeo", "gplot.layout.seham",
-"gplot.layout.spring", "gplot.layout.springrepulse",
-"gplot.layout.target",
-"graphlayouts.layout_with_stress", "graphlayouts.layout_as_backbone",
-"gephi.forceatlas2"), seed = 825, flip = F)
-{
-layout &lt;- layout[1]
-if (class(g) == "graphNEL") {
-ig &lt;- igraph.from.graphNEL(g)
-}
-else {
-ig &lt;- g
-}
-if (class(ig) != "igraph") {
-stop("The function must apply to either 'igraph' or 'graphNEL'
-object.\n")
-}
-glayout &lt;- NULL
-if (grepl("gplot", layout)) {
-m &lt;- as.matrix(xConverter(ig, from = "igraph", to = "dgCMatrix",
-verbose = F))
-set.seed(seed)
-eval(parse(text = paste0("glayout &lt;- sna::", layout,
-"(m, NULL)")))
-}
-else if (grepl("graphlayouts", layout)) {
-layout &lt;- gsub("graphlayouts.", "", layout)
-set.seed(seed)
-eval(parse(text = paste0("glayout &lt;- graphlayouts::",
-layout, "(ig)")))
-if (layout == "layout_as_backbone") {
-glayout &lt;- glayout$xy
-}
-}
-else if (layout == "gephi.forceatlas2") {
-iterations = 100
-linlog = FALSE
-pos = NULL
-nohubs = FALSE
-k = 400
-gravity = 1
-ks = 0.1
-ksmax = 10
-delta = 1
-center = NULL
-tolerance = 0.1
-dim = 2
-if (length(names(igraph::edge.attributes(ig))) == 0) {
-attr_g &lt;- NULL
-}
-else {
-attr_g &lt;- names(igraph::edge.attributes(ig))
-}
-A &lt;- igraph::get.adjacency(ig, type = "both", attr = attr_g,
-edges = F, names = T, sparse = F)
-if (is.null(center))
-center &lt;- rep(0, dim)
-nnodes &lt;- nrow(A)
-Binary &lt;- A
-Binary[Binary != 0] &lt;- 1
-Deg &lt;- rowSums(Binary)
-Forces1 &lt;- matrix(0, nrow = dim, ncol = nnodes)
-if (is.null(pos)) {
-difference &lt;- 2000/(nnodes * dim)
-set.seed(seed)
-position &lt;- matrix(sample(seq(-1000, 1000, difference),
-nnodes * dim), nnodes, dim)
-}
-else {
-position &lt;- pos
-}
-temp &lt;- which(position[, 1] == center[1])
-for (index in 2:ncol(position)) {
-temp &lt;- intersect(temp, which(position[, index] ==
-center[index]))
-}
-position[temp, ] &lt;- center + 0.01
-displacement &lt;- matrix(0, nrow = dim, ncol = nnodes)
-m &lt;- nrow(position)
-for (iteration in 1:iterations) {
-displacement &lt;- displacement * 0
-Forces2 &lt;- Forces1
-Forces1 &lt;- matrix(, nrow = dim, ncol = 0)
-distances &lt;- as.matrix(stats::dist(position))
-distances[which(distances &lt; 0.01)] &lt;- 0.01
-mylist &lt;- vector("list", dim)
-for (j in 1:dim) {
-mylist[[j]] &lt;- (tcrossprod(position[, j], rep(1,
-m)) - tcrossprod(rep(1, m), position[, j]))/distances
-}
-Fr &lt;- k * ((tcrossprod(rep(1, m), Deg) + 1) * (tcrossprod(Deg,
-rep(1, m)) + 1))/distances
-Fa &lt;- distances
-if (linlog) {
-Fa &lt;- log(1 + Fa)
-}
-Fa &lt;- (A^delta) * Fa
-if (nohubs) {
-Fa &lt;- Fa/(tcrossprod(Deg, rep(1, m)) + 1)
-}
-Farfunction &lt;- function(x) rowSums(x * (Fr - Fa),
-na.rm = T)
-Far &lt;- do.call(rbind, lapply(mylist, Farfunction))
-uv2 &lt;- apply(matrix(rep(center, m), nrow = m, byrow = T) -
-position, 1, function(x) x/sqrt(sum(x^2)))
-Fg &lt;- uv2 * matrix(rep(gravity * (Deg + 1), dim),
-nrow = dim, byrow = T)
-Forces1 &lt;- Far + Fg
-Forces1 &lt;- round(Forces1, 2)
-swing &lt;- abs(colSums((Forces1 - Forces2)^2)^(1/2))
-Global_swing &lt;- sum((Deg + 1) * swing)
-if (all(swing == 0)) {
-message(sprintf("Convergence reached at step %d (%s)",
-iteration, as.character(Sys.time())), appendLF = T)
-break
-}
-tra &lt;- abs(colSums((Forces1 + Forces2)^2)^(1/2))/2
-Global_tra &lt;- sum((Deg + 1) * tra)
-Global_speed &lt;- tolerance * Global_tra/Global_swing
-speed &lt;- ks * Global_speed/(1 + Global_speed * (swing)^(1/2))
-speed_constrain &lt;- ksmax/abs(colSums((Forces1^2))^(1/2))
-speed &lt;- ifelse(speed &gt;= speed_constrain, speed_constrain,
-speed)
-displacement &lt;- Forces1 * t(matrix(rep(speed, dim),
-nnodes, dim))
-position &lt;- position + t(displacement)
-}
-glayout &lt;- position
-}
-else {
-set.seed(seed)
-eval(parse(text = paste0("glayout &lt;- ", layout, "(ig)")))
-}
-if (!is.null(glayout)) {
-if (flip) {
-node.xcoord &lt;- glayout[, 2]
-node.ycoord &lt;- glayout[, 1]
-}
-else {
-node.xcoord &lt;- glayout[, 1]
-node.ycoord &lt;- glayout[, 2]
-}
-if (max(node.xcoord) != min(node.xcoord)) {
-node.xcoord &lt;- (node.xcoord - min(node.xcoord))/(max(node.xcoord) -
-min(node.xcoord)) * 2 - 1
-}
-if (max(node.ycoord) != min(node.ycoord)) {
-node.ycoord &lt;- (node.ycoord - min(node.ycoord))/(max(node.ycoord) -
-min(node.ycoord)) * 2 - 1
-}
-glayout &lt;- cbind(node.xcoord, node.ycoord)
-V(ig)$xcoord &lt;- glayout[, 1]
-V(ig)$ycoord &lt;- glayout[, 2]
-}
-invisible(ig)
-}
+# load REACTOME
+# restricted to Immune System ('R-HSA-168256') or Signal Transduction ('R-HSA-162582')
+g &lt;- xRDataLoader('ig.REACTOME', RData.location=RData.location)
+neighs.out &lt;- igraph::neighborhood(g, order=vcount(g),
+nodes="R-HSA-168256", mode="out")
+nodeInduced &lt;- V(g)[unique(unlist(neighs.out))]$name
+ig &lt;- igraph::induced.subgraph(g, vids=nodeInduced)
+
+# compare Fruchterman and Reingold force-directed placement algorithm
+## based on igraph layout
+ig1 &lt;- xLayout(ig, layout="layout_with_fr")
+gp1 &lt;- xGGnetwork(ig1, node.xcoord="xcoord", node.ycoord="ycoord")
+## based on sna layout
+ig2 &lt;- xLayout(ig, layout="gplot.layout.fruchtermanreingold")
+gp2 &lt;- xGGnetwork(ig2, node.xcoord="xcoord", node.ycoord="ycoord")
+
+# compare Kamada-Kawai force-directed placement algorithm
+## based on igraph layout
+ig1 &lt;- xLayout(ig, layout="layout_with_kk")
+gp1 &lt;- xGGnetwork(ig1, node.xcoord="xcoord", node.ycoord="ycoord")
+## based on sna layout
+ig2 &lt;- xLayout(ig, layout="gplot.layout.kamadakawai")
+gp2 &lt;- xGGnetwork(ig2, node.xcoord="xcoord", node.ycoord="ycoord")
+## do together
+layouts &lt;-
+c("layout_with_fr","gplot.layout.fruchtermanreingold","layout_with_kk","gplot.layout.kamadakawai",
+"gephi.forceatlas2")
+ls_ig &lt;- lapply(layouts, function(x) xLayout(ig, layout=x))
+names(ls_ig) &lt;- layouts
+gp &lt;- xGGnetwork(ls_ig, node.xcoord='xcoord', node.ycoord='ycoord',
+ncolumns=5)
+
+## End(Not run)
 </pre>
 
 

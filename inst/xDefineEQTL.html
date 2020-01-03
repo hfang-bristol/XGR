@@ -1,200 +1,50 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract eQTL-gene pairs given a list of SNPs or a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
 <table width="100%" summary="page for xDefineEQTL"><tr><td>xDefineEQTL</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>xDefineEQTL</h2>
+<h2>Function to extract eQTL-gene pairs given a list of SNPs or a customised eQTL mapping data</h2>
+
+<h3>Description</h3>
+
+<p><code>xDefineEQTL</code> is supposed to extract eQTL-gene pairs given a list
+of SNPs or a customised eQTL mapping data.
+</p>
+
 
 <h3>Usage</h3>
 
 <pre>
-xDefineEQTL(data = NULL, include.eQTL = c(NA, "JKscience_CD14",
-"JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN", "JKscience_TS2A",
-"JKscience_TS2A_CD14", "JKscience_TS2A_LPS2", "JKscience_TS2A_LPS24",
-"JKscience_TS2A_IFN", "JKscience_TS2B", "JKscience_TS2B_CD14",
+xDefineEQTL(
+data = NULL,
+include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
+"JKscience_LPS24",
+"JKscience_IFN", "JKscience_TS2A", "JKscience_TS2A_CD14",
+"JKscience_TS2A_LPS2",
+"JKscience_TS2A_LPS24", "JKscience_TS2A_IFN", "JKscience_TS2B",
+"JKscience_TS2B_CD14",
 "JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24", "JKscience_TS2B_IFN",
-"JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis", "JKng_bcell_trans",
-"JKng_mono", "JKng_mono_cis", "JKng_mono_trans", "JKpg_CD4",
-"JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8", "JKpg_CD8_cis",
-"JKpg_CD8_trans",
-"JKnc_neutro", "JKnc_neutro_cis", "JKnc_neutro_trans",
-"WESTRAng_blood", "WESTRAng_blood_cis", "WESTRAng_blood_trans",
+"JKscience_TS3A",
+"JKng_bcell", "JKng_bcell_cis", "JKng_bcell_trans", "JKng_mono",
+"JKng_mono_cis",
+"JKng_mono_trans", "JKpg_CD4", "JKpg_CD4_cis", "JKpg_CD4_trans",
+"JKpg_CD8",
+"JKpg_CD8_cis", "JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
+"JKnc_neutro_trans", "WESTRAng_blood", "WESTRAng_blood_cis",
+"WESTRAng_blood_trans",
 "JK_nk", "JK_nk_cis", "JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous",
 "GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
-"GTEx_V4_Esophagus_Mucosa", "GTEx_V4_Esophagus_Muscularis",
-"GTEx_V4_Heart_Left_Ventricle", "GTEx_V4_Lung",
+"GTEx_V4_Esophagus_Mucosa",
+"GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
+"GTEx_V4_Lung",
 "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
-"GTEx_V4_Thyroid", "GTEx_V4_Whole_Blood",
-"GTEx_V6p_Adipose_Subcutaneous",
+"GTEx_V4_Thyroid",
+"GTEx_V4_Whole_Blood", "GTEx_V6p_Adipose_Subcutaneous",
 "GTEx_V6p_Adipose_Visceral_Omentum", "GTEx_V6p_Adrenal_Gland",
 "GTEx_V6p_Artery_Aorta", "GTEx_V6p_Artery_Coronary",
-"GTEx_V6p_Artery_Tibial",
-"GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24",
-"GTEx_V6p_Brain_Caudate_basal_ganglia",
-"GTEx_V6p_Brain_Cerebellar_Hemisphere", "GTEx_V6p_Brain_Cerebellum",
-"GTEx_V6p_Brain_Cortex", "GTEx_V6p_Brain_Frontal_Cortex_BA9",
-"GTEx_V6p_Brain_Hippocampus", "GTEx_V6p_Brain_Hypothalamus",
-"GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia",
-"GTEx_V6p_Brain_Putamen_basal_ganglia",
-"GTEx_V6p_Breast_Mammary_Tissue",
-"GTEx_V6p_Cells_EBVtransformed_lymphocytes",
-"GTEx_V6p_Cells_Transformed_fibroblasts", "GTEx_V6p_Colon_Sigmoid",
-"GTEx_V6p_Colon_Transverse",
-"GTEx_V6p_Esophagus_Gastroesophageal_Junction",
-"GTEx_V6p_Esophagus_Mucosa", "GTEx_V6p_Esophagus_Muscularis",
-"GTEx_V6p_Heart_Atrial_Appendage", "GTEx_V6p_Heart_Left_Ventricle",
-"GTEx_V6p_Liver", "GTEx_V6p_Lung", "GTEx_V6p_Muscle_Skeletal",
-"GTEx_V6p_Nerve_Tibial", "GTEx_V6p_Ovary", "GTEx_V6p_Pancreas",
-"GTEx_V6p_Pituitary",
-"GTEx_V6p_Prostate", "GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
-"GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
-"GTEx_V6p_Small_Intestine_Terminal_Ileum", "GTEx_V6p_Spleen",
-"GTEx_V6p_Stomach", "GTEx_V6p_Testis", "GTEx_V6p_Thyroid",
-"GTEx_V6p_Uterus", "GTEx_V6p_Vagina", "GTEx_V6p_Whole_Blood",
-"eQTLGen", "eQTLGen_cis", "eQTLGen_trans", "scRNAseq_eQTL_Bcell",
-"scRNAseq_eQTL_CD4", "scRNAseq_eQTL_CD8", "scRNAseq_eQTL_cMono",
-"scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono", "scRNAseq_eQTL_ncMono",
-"scRNAseq_eQTL_NK",
-"scRNAseq_eQTL_PBMC", "jpRNAseq_eQTL_Bcell", "jpRNAseq_eQTL_CD4",
-"jpRNAseq_eQTL_CD8", "jpRNAseq_eQTL_Mono", "jpRNAseq_eQTL_NK",
-"jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell", "Pi_eQTL_Blood", "Pi_eQTL_CD14",
-"Pi_eQTL_CD4", "Pi_eQTL_CD8", "Pi_eQTL_IFN", "Pi_eQTL_LPS2",
-"Pi_eQTL_LPS24", "Pi_eQTL_Monocyte", "Pi_eQTL_Neutrophil",
-"Pi_eQTL_NK", "Pi_eQTL_shared_CD14", "Pi_eQTL_shared_IFN",
-"Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24", "Osteoblast_eQTL"),
-eQTL.customised = NULL, verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata", guid = NULL)
-</pre>
-
-
-<h3>Arguments</h3>
-
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
-<td>
-
-
-</td></tr>
-<tr valign="top"><td><code>include.eQTL</code></td>
-<td>
-
-
-</td></tr>
-<tr valign="top"><td><code>eQTL.customised</code></td>
-<td>
-
-
-</td></tr>
-<tr valign="top"><td><code>verbose</code></td>
-<td>
-
-
-</td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
-<td>
-
-
-</td></tr>
-<tr valign="top"><td><code>guid</code></td>
-<td>
-
-
-</td></tr>
-</table>
-
-
-<h3>Examples</h3>
-
-<pre>
-##---- Should be DIRECTLY executable !! ----
-##-- ==&gt;  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (data = NULL, include.eQTL = c(NA, "JKscience_CD14",
-"JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN", "JKscience_TS2A",
-"JKscience_TS2A_CD14", "JKscience_TS2A_LPS2", "JKscience_TS2A_LPS24",
-"JKscience_TS2A_IFN", "JKscience_TS2B", "JKscience_TS2B_CD14",
-"JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24", "JKscience_TS2B_IFN",
-"JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis", "JKng_bcell_trans",
-"JKng_mono", "JKng_mono_cis", "JKng_mono_trans", "JKpg_CD4",
-"JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8", "JKpg_CD8_cis",
-"JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
-"JKnc_neutro_trans",
-"WESTRAng_blood", "WESTRAng_blood_cis", "WESTRAng_blood_trans",
-"JK_nk", "JK_nk_cis", "JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous",
-"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
-"GTEx_V4_Esophagus_Mucosa",
-"GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
-"GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
-"GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
-"GTEx_V4_Thyroid", "GTEx_V4_Whole_Blood",
-"GTEx_V6p_Adipose_Subcutaneous",
-"GTEx_V6p_Adipose_Visceral_Omentum", "GTEx_V6p_Adrenal_Gland",
-"GTEx_V6p_Artery_Aorta", "GTEx_V6p_Artery_Coronary",
-"GTEx_V6p_Artery_Tibial",
-"GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24",
-"GTEx_V6p_Brain_Caudate_basal_ganglia",
-"GTEx_V6p_Brain_Cerebellar_Hemisphere", "GTEx_V6p_Brain_Cerebellum",
-"GTEx_V6p_Brain_Cortex", "GTEx_V6p_Brain_Frontal_Cortex_BA9",
-"GTEx_V6p_Brain_Hippocampus", "GTEx_V6p_Brain_Hypothalamus",
-"GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia",
-"GTEx_V6p_Brain_Putamen_basal_ganglia",
-"GTEx_V6p_Breast_Mammary_Tissue",
-"GTEx_V6p_Cells_EBVtransformed_lymphocytes",
-"GTEx_V6p_Cells_Transformed_fibroblasts", "GTEx_V6p_Colon_Sigmoid",
-"GTEx_V6p_Colon_Transverse",
-"GTEx_V6p_Esophagus_Gastroesophageal_Junction",
-"GTEx_V6p_Esophagus_Mucosa", "GTEx_V6p_Esophagus_Muscularis",
-"GTEx_V6p_Heart_Atrial_Appendage", "GTEx_V6p_Heart_Left_Ventricle",
-"GTEx_V6p_Liver", "GTEx_V6p_Lung", "GTEx_V6p_Muscle_Skeletal",
-"GTEx_V6p_Nerve_Tibial", "GTEx_V6p_Ovary", "GTEx_V6p_Pancreas",
-"GTEx_V6p_Pituitary", "GTEx_V6p_Prostate",
-"GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
-"GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
-"GTEx_V6p_Small_Intestine_Terminal_Ileum",
-"GTEx_V6p_Spleen", "GTEx_V6p_Stomach", "GTEx_V6p_Testis",
-"GTEx_V6p_Thyroid", "GTEx_V6p_Uterus", "GTEx_V6p_Vagina",
-"GTEx_V6p_Whole_Blood", "eQTLGen", "eQTLGen_cis", "eQTLGen_trans",
-"scRNAseq_eQTL_Bcell", "scRNAseq_eQTL_CD4", "scRNAseq_eQTL_CD8",
-"scRNAseq_eQTL_cMono", "scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono",
-"scRNAseq_eQTL_ncMono", "scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC",
-"jpRNAseq_eQTL_Bcell", "jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8",
-"jpRNAseq_eQTL_Mono", "jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC",
-"Pi_eQTL_Bcell", "Pi_eQTL_Blood", "Pi_eQTL_CD14", "Pi_eQTL_CD4",
-"Pi_eQTL_CD8", "Pi_eQTL_IFN", "Pi_eQTL_LPS2", "Pi_eQTL_LPS24",
-"Pi_eQTL_Monocyte", "Pi_eQTL_Neutrophil", "Pi_eQTL_NK",
-"Pi_eQTL_shared_CD14",
-"Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2", "Pi_eQTL_shared_LPS24",
-"Osteoblast_eQTL"), eQTL.customised = NULL, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata",
-guid = NULL)
-{
-default.include.eQTL &lt;- c("JKscience_CD14", "JKscience_LPS2",
-"JKscience_LPS24", "JKscience_IFN", "JKscience_TS2A",
-"JKscience_TS2A_CD14", "JKscience_TS2A_LPS2", "JKscience_TS2A_LPS24",
-"JKscience_TS2A_IFN", "JKscience_TS2B", "JKscience_TS2B_CD14",
-"JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24", "JKscience_TS2B_IFN",
-"JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis", "JKng_bcell_trans",
-"JKng_mono", "JKng_mono_cis", "JKng_mono_trans", "JKpg_CD4",
-"JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8", "JKpg_CD8_cis",
-"JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
-"JKnc_neutro_trans",
-"WESTRAng_blood", "WESTRAng_blood_cis", "WESTRAng_blood_trans",
-"JK_nk", "JK_nk_cis", "JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous",
-"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
-"GTEx_V4_Esophagus_Mucosa",
-"GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
-"GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
-"GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
-"GTEx_V4_Thyroid", "GTEx_V4_Whole_Blood", "eQTLdb_NK",
-"eQTLdb_CD14", "eQTLdb_LPS2", "eQTLdb_LPS24", "eQTLdb_IFN",
-"GTEx_V6p_Adipose_Subcutaneous", "GTEx_V6p_Adipose_Visceral_Omentum",
-"GTEx_V6p_Adrenal_Gland", "GTEx_V6p_Artery_Aorta",
-"GTEx_V6p_Artery_Coronary",
 "GTEx_V6p_Artery_Tibial",
 "GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24",
 "GTEx_V6p_Brain_Caudate_basal_ganglia",
@@ -212,445 +62,667 @@ default.include.eQTL &lt;- c("JKscience_CD14", "JKscience_LPS2",
 "GTEx_V6p_Esophagus_Mucosa",
 "GTEx_V6p_Esophagus_Muscularis", "GTEx_V6p_Heart_Atrial_Appendage",
 "GTEx_V6p_Heart_Left_Ventricle", "GTEx_V6p_Liver", "GTEx_V6p_Lung",
-"GTEx_V6p_Muscle_Skeletal", "GTEx_V6p_Nerve_Tibial",
-"GTEx_V6p_Ovary", "GTEx_V6p_Pancreas", "GTEx_V6p_Pituitary",
-"GTEx_V6p_Prostate", "GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
+"GTEx_V6p_Muscle_Skeletal", "GTEx_V6p_Nerve_Tibial", "GTEx_V6p_Ovary",
+"GTEx_V6p_Pancreas", "GTEx_V6p_Pituitary", "GTEx_V6p_Prostate",
+"GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
 "GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
-"GTEx_V6p_Small_Intestine_Terminal_Ileum",
-"GTEx_V6p_Spleen", "GTEx_V6p_Stomach", "GTEx_V6p_Testis",
-"GTEx_V6p_Thyroid", "GTEx_V6p_Uterus", "GTEx_V6p_Vagina",
+"GTEx_V6p_Small_Intestine_Terminal_Ileum", "GTEx_V6p_Spleen",
+"GTEx_V6p_Stomach",
+"GTEx_V6p_Testis", "GTEx_V6p_Thyroid", "GTEx_V6p_Uterus",
+"GTEx_V6p_Vagina",
 "GTEx_V6p_Whole_Blood", "eQTLGen", "eQTLGen_cis", "eQTLGen_trans",
 "scRNAseq_eQTL_Bcell", "scRNAseq_eQTL_CD4", "scRNAseq_eQTL_CD8",
 "scRNAseq_eQTL_cMono", "scRNAseq_eQTL_DC", "scRNAseq_eQTL_Mono",
 "scRNAseq_eQTL_ncMono", "scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC",
 "jpRNAseq_eQTL_Bcell", "jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8",
-"jpRNAseq_eQTL_Mono", "jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC",
-"Pi_eQTL_Bcell", "Pi_eQTL_Blood", "Pi_eQTL_CD14", "Pi_eQTL_CD4",
-"Pi_eQTL_CD8", "Pi_eQTL_IFN", "Pi_eQTL_LPS2", "Pi_eQTL_LPS24",
-"Pi_eQTL_Monocyte", "Pi_eQTL_Neutrophil", "Pi_eQTL_NK",
+"jpRNAseq_eQTL_Mono",
+"jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC", "Pi_eQTL_Bcell",
+"Pi_eQTL_Blood",
+"Pi_eQTL_CD14", "Pi_eQTL_CD4", "Pi_eQTL_CD8", "Pi_eQTL_IFN",
+"Pi_eQTL_LPS2",
+"Pi_eQTL_LPS24", "Pi_eQTL_Monocyte", "Pi_eQTL_Neutrophil",
+"Pi_eQTL_NK",
 "Pi_eQTL_shared_CD14", "Pi_eQTL_shared_IFN", "Pi_eQTL_shared_LPS2",
-"Pi_eQTL_shared_LPS24", "Osteoblast_eQTL")
-ind &lt;- match(default.include.eQTL, include.eQTL)
-include.eQTL &lt;- default.include.eQTL[!is.na(ind)]
-df_SGS &lt;- NULL
-if (length(include.eQTL) &gt; 0) {
-if (sum(grepl("GTEx_V4_", include.eQTL, perl = TRUE)) &gt;
-0) {
-GTEx_V4 &lt;- xRDataLoader(RData.customised = "GTEx_V4",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-}
-if (sum(grepl("GTEx_V6p_", include.eQTL, perl = TRUE)) &gt;
-0) {
-GTEx_V6p &lt;- xRDataLoader(RData.customised = "GTEx_V6p",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-}
-if (sum(grepl("scRNAseq_eQTL_", include.eQTL, perl = TRUE)) &gt;
-0) {
-scRNAseq_eQTL &lt;- xRDataLoader(RData.customised = "scRNAseq_eQTL",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-}
-if (sum(grepl("jpRNAseq_eQTL_", include.eQTL, perl = TRUE)) &gt;
-0) {
-jpRNAseq_eQTL &lt;- xRDataLoader(RData.customised = "jpRNAseq_eQTL",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-}
-res_list &lt;- lapply(include.eQTL, function(x) {
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("Processing %s ...", x), appendLF = TRUE)
-}
-if (sum(grep("JKscience_TS2A", x, perl = TRUE)) &gt;
-0) {
-cis &lt;- xRDataLoader(RData.customised = "JKscience_TS2A",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-if (x == "JKscience_TS2A") {
-minFDR &lt;- apply(cis[, c(9:12)], 1, base::min,
-na.rm = TRUE)
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-4], Sig = minFDR, stringsAsFactors = FALSE)
-}
-else {
-if (x == "JKscience_TS2A_CD14") {
-j &lt;- 9
-}
-else if (x == "JKscience_TS2A_LPS2") {
-j &lt;- 10
-}
-else if (x == "JKscience_TS2A_LPS24") {
-j &lt;- 11
-}
-else if (x == "JKscience_TS2A_IFN") {
-j &lt;- 12
-}
-ind &lt;- which(!is.na(cis[, j]) &amp; cis[, j] &lt;
-0.05)
-df &lt;- data.frame(SNP = cis[ind, 1], Gene = cis[ind,
-4], Sig = cis[ind, j], stringsAsFactors = FALSE)
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKscience_TS2B", x, perl = TRUE)) &gt;
-0) {
-cis &lt;- xRDataLoader(RData.customised = "JKscience_TS2B",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-if (x == "JKscience_TS2B") {
-minFDR &lt;- apply(cis[, c(9:12)], 1, base::min,
-na.rm = TRUE)
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-4], Sig = minFDR, stringsAsFactors = FALSE)
-}
-else {
-if (x == "JKscience_TS2B_CD14") {
-j &lt;- 9
-}
-else if (x == "JKscience_TS2B_LPS2") {
-j &lt;- 10
-}
-else if (x == "JKscience_TS2B_LPS24") {
-j &lt;- 11
-}
-else if (x == "JKscience_TS2B_IFN") {
-j &lt;- 12
-}
-ind &lt;- which(!is.na(cis[, j]) &amp; cis[, j] &lt;
-0.05)
-df &lt;- data.frame(SNP = cis[ind, 1], Gene = cis[ind,
-4], Sig = cis[ind, j], stringsAsFactors = FALSE)
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (x == "JKscience_TS3A") {
-trans &lt;- xRDataLoader(RData.customised = "JKscience_TS3A",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-minFDR &lt;- apply(trans[, c(9:12)], 1, base::min,
-na.rm = TRUE)
-df &lt;- data.frame(SNP = trans[, 1], Gene = trans[,
-4], Sig = minFDR, stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (x == "JKscience_CD14" | x == "JKscience_LPS2" |
-x == "JKscience_LPS24" | x == "JKscience_IFN") {
-cis &lt;- xRDataLoader(RData.customised = "JKscience_TS2A",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-trans &lt;- xRDataLoader(RData.customised = "JKscience_TS3A",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df &lt;- rbind(cis, trans)
-if (x == "JKscience_CD14") {
-j &lt;- 9
-}
-else if (x == "JKscience_LPS2") {
-j &lt;- 10
-}
-else if (x == "JKscience_LPS24") {
-j &lt;- 11
-}
-else if (x == "JKscience_IFN") {
-j &lt;- 12
-}
-ind &lt;- which(!is.na(df[, j]) &amp; df[, j] &lt; 0.05)
-df &lt;- data.frame(SNP = df[ind, 1], Gene = df[ind,
-4], Sig = df[ind, j], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKng_bcell", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JKng_bcell",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 5], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-5], stringsAsFactors = FALSE)
-if (x == "JKng_bcell") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JKng_bcell_cis") {
-df &lt;- df_cis
-}
-else if (x == "JKng_bcell_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKng_mono", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JKng_mono",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 5], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-5], stringsAsFactors = FALSE)
-if (x == "JKng_mono") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JKng_mono_cis") {
-df &lt;- df_cis
-}
-else if (x == "JKng_mono_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKpg_CD4", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JKpg_CD4",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-if (x == "JKpg_CD4") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JKpg_CD4_cis") {
-df &lt;- df_cis
-}
-else if (x == "JKpg_CD4_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKpg_CD8", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JKpg_CD8",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-if (x == "JKpg_CD8") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JKpg_CD8_cis") {
-df &lt;- df_cis
-}
-else if (x == "JKpg_CD8_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JKnc_neutro", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JKnc_neutro",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-if (x == "JKnc_neutro") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JKnc_neutro_cis") {
-df &lt;- df_cis
-}
-else if (x == "JKnc_neutro_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("WESTRAng_blood", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = "WESTRAng_blood",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-if (x == "WESTRAng_blood") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "WESTRAng_blood_cis") {
-df &lt;- df_cis
-}
-else if (x == "WESTRAng_blood_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("eQTLGen", x, perl = TRUE)) &gt; 0) {
-res_ls &lt;- xRDataLoader(RData.customised = "eQTLGen",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 3], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-3], stringsAsFactors = FALSE)
-if (x == "eQTLGen") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "eQTLGen_cis") {
-df &lt;- df_cis
-}
-else if (x == "eQTLGen_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("JK_nk", x, perl = TRUE)) &gt; 0) {
-res_ls &lt;- xRDataLoader(RData.customised = "JK_nk",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-if (x == "JK_nk") {
-df &lt;- rbind(df_cis, df_trans)
-}
-else if (x == "JK_nk_cis") {
-df &lt;- df_cis
-}
-else if (x == "JK_nk_trans") {
-df &lt;- df_trans
-}
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("GTEx_V4_", x, perl = TRUE)) &gt;
-0) {
-y &lt;- gsub("GTEx_V4_", "", x)
-cis &lt;- ""
-eval(parse(text = paste("cis &lt;- GTEx_V4$", y,
-sep = "")))
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-2], Sig = cis[, 5], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("GTEx_V6p_", x, perl = TRUE)) &gt;
-0) {
-y &lt;- gsub("GTEx_V6p_", "", x)
-cis &lt;- ""
-eval(parse(text = paste("cis &lt;- GTEx_V6p$", y,
-sep = "")))
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-2], Sig = cis[, 5], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("scRNAseq_eQTL_", x, perl = TRUE)) &gt;
-0) {
-y &lt;- gsub("scRNAseq_eQTL_", "", x)
-cis &lt;- ""
-eval(parse(text = paste("cis &lt;- scRNAseq_eQTL$",
-y, sep = "")))
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-2], Sig = cis[, 5], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("jpRNAseq_eQTL_", x, perl = TRUE)) &gt;
-0) {
-y &lt;- gsub("jpRNAseq_eQTL_", "", x)
-cis &lt;- ""
-eval(parse(text = paste("cis &lt;- jpRNAseq_eQTL$",
-y, sep = "")))
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-2], Sig = cis[, 3], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (x == "Osteoblast_eQTL") {
-cis &lt;- xRDataLoader(RData.customised = "Osteoblast_eQTL",
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df &lt;- data.frame(SNP = cis[, 2], Gene = cis[,
-3], Sig = cis[, 7], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("eQTLdb_", x, perl = TRUE)) &gt; 0) {
-cis &lt;- xRDataLoader(RData.customised = x, RData.location =
-RData.location,
-guid = guid, verbose = verbose)
-df &lt;- data.frame(SNP = cis[, 1], Gene = cis[,
-2], Sig = cis[, 5], stringsAsFactors = FALSE)
-df &lt;- cbind(df, Context = rep(x, nrow(df)), stringsAsFactors = FALSE)
-}
-else if (sum(grep("Pi_eQTL_", x, perl = TRUE)) &gt;
-0) {
-res_ls &lt;- xRDataLoader(RData.customised = x,
-RData.location = RData.location, guid = guid,
-verbose = verbose)
-df_cis &lt;- data.frame(SNP = res_ls$cis[, 1], Gene = res_ls$cis[,
-2], Sig = res_ls$cis[, 6], stringsAsFactors = FALSE)
-df_trans &lt;- data.frame(SNP = res_ls$trans[, 1],
-Gene = res_ls$trans[, 2], Sig = res_ls$trans[,
-6], stringsAsFactors = FALSE)
-df &lt;- rbind(df_cis, df_trans)
-df &lt;- data.frame(df, Context = x, stringsAsFactors = FALSE)
-}
-else {
-df &lt;- NULL
-}
-return(df)
-})
-SGS &lt;- do.call(rbind, res_list)
-df_SGS &lt;- SGS[!is.na(SGS[, 1]) &amp; !is.na(SGS[, 2]), ]
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("%d eGenes are built-in", length(unique(df_SGS[,
-2]))), appendLF = TRUE)
-}
-}
-df_SGS_customised &lt;- NULL
-if (!is.null(eQTL.customised)) {
-if (is.vector(eQTL.customised)) {
-df &lt;- utils::read.delim(file = eQTL.customised, header = TRUE,
-row.names = NULL, stringsAsFactors = FALSE)
-}
-else if (is.matrix(eQTL.customised) | is.data.frame(eQTL.customised)) {
-df &lt;- eQTL.customised
-}
-if (!is.null(df)) {
-colnames(df) &lt;- c("SNP", "Gene", "Sig", "Context")
-SGS_customised &lt;- df
-df_SGS_customised &lt;- SGS_customised[!is.na(SGS_customised[,
-1]) &amp; !is.na(SGS_customised[, 2]), ]
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("%d eGenes are customised for %d contexts",
-length(unique(df_SGS_customised[, 2])),
-length(unique(df_SGS_customised[,
-4]))), appendLF = TRUE)
-}
-}
-}
-df_SGS &lt;- do.call(rbind, list(df_SGS, df_SGS_customised))
-if (!is.null(df_SGS)) {
-df_SGS &lt;- df_SGS[df_SGS[, 1] != "" &amp; df_SGS[, 2] != "",
-]
-}
-if (!is.null(data)) {
-data &lt;- gsub("_", ":", data, perl = TRUE)
-data &lt;- gsub("imm:", "chr", data, perl = TRUE)
-data &lt;- unique(data)
-ind &lt;- match(df_SGS[, 1], data)
-df_SGS &lt;- data.frame(df_SGS[!is.na(ind), ])
-if (verbose) {
-now &lt;- Sys.time()
-message(sprintf("A total of %d input SNPs with %d eGenes",
-length(data), length(unique(df_SGS[, 2]))), appendLF = TRUE)
-}
-}
-invisible(df_SGS)
-}
+"Pi_eQTL_shared_LPS24", "Osteoblast_eQTL"),
+eQTL.customised = NULL,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>NULL or an input vector containing SNPs. If NULL, all SNPs
+will be considered. If a input vector containing SNPs, SNPs should be
+provided as dbSNP ID (ie starting with rs). Alternatively, they can be
+in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is
+number; for example, 'chr16:28525386'</p>
+</td></tr>
+<tr valign="top"><td><code>include.eQTL</code></td>
+<td>
+<p>genes modulated by eQTL (also Lead SNPs or in LD
+with Lead SNPs) are also included. By default, it is 'NA' to disable
+this option. Otherwise, those genes modulated by eQTL will be included.
+Pre-built eQTL datasets are detailed in the section 'Note'</p>
+</td></tr>
+<tr valign="top"><td><code>eQTL.customised</code></td>
+<td>
+<p>a user-input matrix or data frame with 4
+columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL
+mapping significance level (p-values or FDR), and 4th for contexts
+(required even though only one context is input). Alternatively, it can
+be a file containing these 4 columns. It is designed to allow the user
+analysing their eQTL data. This customisation (if provided) will
+populate built-in eQTL data; mysql -e &quot;use pi; SELECT
+rs_id_dbSNP147_GRCh37p13,gene_name,pval_nominal,Tissue FROM
+GTEx_V7_pair WHERE rs_id_dbSNP147_GRCh37p13!='.';&quot; &gt;
+/var/www/bigdata/eQTL.customised.txt</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a data frame with following columns:
+</p>
+
+<ul>
+<li><p><code>SNP</code>: eQTLs
+</p>
+</li>
+<li><p><code>Gene</code>: eQTL-containing genes
+</p>
+</li>
+<li><p><code>Sig</code>: the eQTL mapping significant level
+</p>
+</li>
+<li><p><code>Context</code>: the context in which eQTL data was generated
+</p>
+</li></ul>
+
+
+
+<h3>Note</h3>
+
+<p>Pre-built eQTL datasets are described below according to the data
+sources.<br />
+1. Context-specific eQTLs in monocytes: resting and activating states.
+Sourced from Science 2014, 343(6175):1246949
+</p>
+
+<ul>
+<li><p><code>JKscience_TS2A</code>: cis-eQTLs in either state (based on 228
+individuals with expression data available for all experimental
+conditions).
+</p>
+</li>
+<li><p><code>JKscience_TS2A_CD14</code>: cis-eQTLs only in the resting/CD14+
+state (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2A_LPS2</code>: cis-eQTLs only in the activating
+state induced by 2-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2A_LPS24</code>: cis-eQTLs only in the activating
+state induced by 24-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2A_IFN</code>: cis-eQTLs only in the activating state
+induced by 24-hour interferon-gamma (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2B</code>: cis-eQTLs in either state (based on 432
+individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2B_CD14</code>: cis-eQTLs only in the resting/CD14+
+state (based on 432 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2B_LPS2</code>: cis-eQTLs only in the activating
+state induced by 2-hour LPS (based on 432 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2B_LPS24</code>: cis-eQTLs only in the activating
+state induced by 24-hour LPS (based on 432 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS2B_IFN</code>: cis-eQTLs only in the activating state
+induced by 24-hour interferon-gamma (based on 432 individuals).
+</p>
+</li>
+<li><p><code>JKscience_TS3A</code>: trans-eQTLs in either state.
+</p>
+</li>
+<li><p><code>JKscience_CD14</code>: cis and trans-eQTLs in the resting/CD14+
+state (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_LPS2</code>: cis and trans-eQTLs in the activating
+state induced by 2-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_LPS24</code>: cis and trans-eQTLs in the activating
+state induced by 24-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>JKscience_IFN</code>: cis and trans-eQTLs in the activating state
+induced by 24-hour interferon-gamma (based on 228 individuals).
+</p>
+</li></ul>
+
+<p>2. eQTLs in B cells. Sourced from Nature Genetics 2012, 44(5):502-510
+</p>
+
+<ul>
+<li><p><code>JKng_bcell</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JKng_bcell_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JKng_bcell_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>3. eQTLs in monocytes. Sourced from Nature Genetics 2012, 44(5):502-510
+</p>
+
+<ul>
+<li><p><code>JKng_mono</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JKng_mono_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JKng_mono_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>4. eQTLs in neutrophils. Sourced from Nature Communications 2015,
+7(6):7545
+</p>
+
+<ul>
+<li><p><code>JKnc_neutro</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JKnc_neutro_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JKnc_neutro_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>5. eQTLs in NK cells. Unpublished (restricted access)
+</p>
+
+<ul>
+<li><p><code>JK_nk</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JK_nk_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JK_nk_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>6. Tissue-specific eQTLs from GTEx (version 4; including 13 tissues).
+Sourced from Science 2015, 348(6235):648-60
+</p>
+
+<ul>
+<li><p><code>GTEx_V4_Adipose_Subcutaneous</code>: cis-eQTLs in tissue 'Adipose
+Subcutaneous'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Artery_Aorta</code>: cis-eQTLs in tissue 'Artery Aorta'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Artery_Tibial</code>: cis-eQTLs in tissue 'Artery
+Tibial'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Esophagus_Mucosa</code>: cis-eQTLs in tissue 'Esophagus
+Mucosa'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Esophagus_Muscularis</code>: cis-eQTLs in tissue
+'Esophagus Muscularis'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Heart_Left_Ventricle</code>: cis-eQTLs in tissue 'Heart
+Left Ventricle'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Lung</code>: cis-eQTLs in tissue 'Lung'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Muscle_Skeletal</code>: cis-eQTLs in tissue 'Muscle
+Skeletal'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Nerve_Tibial</code>: cis-eQTLs in tissue 'Nerve Tibial'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Skin_Sun_Exposed_Lower_leg</code>: cis-eQTLs in tissue
+'Skin Sun Exposed Lower leg'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Stomach</code>: cis-eQTLs in tissue 'Stomach'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Thyroid</code>: cis-eQTLs in tissue 'Thyroid'.
+</p>
+</li>
+<li><p><code>GTEx_V4_Whole_Blood</code>: cis-eQTLs in tissue 'Whole Blood'.
+</p>
+</li></ul>
+
+<p>7. eQTLs in CD4 T cells. Sourced from PLoS Genetics 2017,
+13(3):e1006643
+</p>
+
+<ul>
+<li><p><code>JKpg_CD4</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JKpg_CD4_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JKpg_CD4_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>8. eQTLs in CD8 T cells. Sourced from PLoS Genetics 2017,
+13(3):e1006643
+</p>
+
+<ul>
+<li><p><code>JKpg_CD8</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>JKpg_CD8_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>JKpg_CD8_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>9. eQTLs in blood. Sourced from Nature Genetics 2013, 45(10):1238-1243
+</p>
+
+<ul>
+<li><p><code>WESTRAng_blood</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>WESTRAng_blood_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>WESTRAng_blood_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>10. Tissue-specific eQTLs from GTEx (version 6p; including 44 tissues).
+Sourced from http://www.biorxiv.org/content/early/2016/09/09/074450
+</p>
+
+<ul>
+<li><p><code>GTEx_V6p_Adipose_Subcutaneous</code>: cis-eQTLs in tissue
+&quot;Adipose Subcutaneous&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Adipose_Visceral_Omentum</code>: cis-eQTLs in tissue
+&quot;Adipose Visceral (Omentum)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Adrenal_Gland</code>: cis-eQTLs in tissue &quot;Adrenal
+Gland&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Artery_Aorta</code>: cis-eQTLs in tissue &quot;Artery
+Aorta&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Artery_Coronary</code>: cis-eQTLs in tissue &quot;Artery
+Coronary&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Artery_Tibial</code>: cis-eQTLs in tissue &quot;Artery
+Tibial&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24</code>: cis-eQTLs
+in tissue &quot;Brain Anterior cingulate cortex (BA24)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Caudate_basal_ganglia</code>: cis-eQTLs in tissue
+&quot;Brain Caudate (basal ganglia)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Cerebellar_Hemisphere</code>: cis-eQTLs in tissue
+&quot;Brain Cerebellar Hemisphere&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Cerebellum</code>: cis-eQTLs in tissue &quot;Brain
+Cerebellum&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Cortex</code>: cis-eQTLs in tissue &quot;Brain
+Cortex&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Frontal_Cortex_BA9</code>: cis-eQTLs in tissue
+&quot;Brain Frontal Cortex (BA9)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Hippocampus</code>: cis-eQTLs in tissue &quot;Brain
+Hippocampus&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Hypothalamus</code>: cis-eQTLs in tissue &quot;Brain
+Hypothalamus&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia</code>: cis-eQTLs
+in tissue &quot;Brain Nucleus accumbens (basal ganglia)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Brain_Putamen_basal_ganglia</code>: cis-eQTLs in tissue
+&quot;Brain Putamen (basal ganglia)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Breast_Mammary_Tissue</code>: cis-eQTLs in tissue
+&quot;Breast Mammary Tissue&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Cells_EBVtransformed_lymphocytes</code>: cis-eQTLs in
+tissue &quot;Cells EBV-transformed lymphocytes&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Cells_Transformed_fibroblasts</code>: cis-eQTLs in
+tissue &quot;Cells Transformed fibroblasts&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Colon_Sigmoid</code>: cis-eQTLs in tissue &quot;Colon
+Sigmoid&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Colon_Transverse</code>: cis-eQTLs in tissue &quot;Colon
+Transverse&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Esophagus_Gastroesophageal_Junction</code>: cis-eQTLs in
+tissue &quot;Esophagus Gastroesophageal Junction&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Esophagus_Mucosa</code>: cis-eQTLs in tissue &quot;Esophagus
+Mucosa&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Esophagus_Muscularis</code>: cis-eQTLs in tissue
+&quot;Esophagus Muscularis&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Heart_Atrial_Appendage</code>: cis-eQTLs in tissue
+&quot;Heart Atrial Appendage&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Heart_Left_Ventricle</code>: cis-eQTLs in tissue &quot;Heart
+Left Ventricle&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Liver</code>: cis-eQTLs in tissue &quot;Liver&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Lung</code>: cis-eQTLs in tissue &quot;Lung&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Muscle_Skeletal</code>: cis-eQTLs in tissue &quot;Muscle
+Skeletal&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Nerve_Tibial</code>: cis-eQTLs in tissue &quot;Nerve
+Tibial&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Ovary</code>: cis-eQTLs in tissue &quot;Ovary&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Pancreas</code>: cis-eQTLs in tissue &quot;Pancreas&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Pituitary</code>: cis-eQTLs in tissue &quot;Pituitary&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Prostate</code>: cis-eQTLs in tissue &quot;Prostate&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic</code>: cis-eQTLs in
+tissue &quot;Skin Not Sun Exposed (Suprapubic)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Skin_Sun_Exposed_Lower_leg</code>: cis-eQTLs in tissue
+&quot;Skin Sun Exposed (Lower leg)&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Small_Intestine_Terminal_Ileum</code>: cis-eQTLs in
+tissue &quot;Small Intestine Terminal Ileum&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Spleen</code>: cis-eQTLs in tissue &quot;Spleen&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Stomach</code>: cis-eQTLs in tissue &quot;Stomach&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Testis</code>: cis-eQTLs in tissue &quot;Testis&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Thyroid</code>: cis-eQTLs in tissue &quot;Thyroid&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Uterus</code>: cis-eQTLs in tissue &quot;Uterus&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Vagina</code>: cis-eQTLs in tissue &quot;Vagina&quot;.
+</p>
+</li>
+<li><p><code>GTEx_V6p_Whole_Blood</code>: cis-eQTLs in tissue &quot;Whole Blood&quot;.
+</p>
+</li></ul>
+
+<p>11. eQTLs in eQTLGen. Sourced from bioRxiv, 2018, doi:10.1101/447367
+</p>
+
+<ul>
+<li><p><code>eQTLGen</code>: cis- and trans-eQTLs.
+</p>
+</li>
+<li><p><code>eQTLGen_cis</code>: cis-eQTLs only.
+</p>
+</li>
+<li><p><code>eQTLGen_trans</code>: trans-eQTLs only.
+</p>
+</li></ul>
+
+<p>12. Single-cell-RNA-identified celltype-specific cis-eQTLs (including 9
+cell types). Sourced from Nature Genetics 2018, 50(4):493-497
+</p>
+
+<ul>
+<li><p><code>scRNAseq_eQTL_Bcell</code>: cis-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_CD4</code>: cis-eQTLs in CD4+ T cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_CD8</code>: cis-eQTLs in CD8+ T cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_DC</code>: cis-eQTLs in dendritic cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_cMono</code>: cis-eQTLs in classical monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_ncMono</code>: cis-eQTLs in nonclassical
+monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_Mono</code>: cis-eQTLs in monocytes.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_NK</code>: cis-eQTLs in NK cells.
+</p>
+</li>
+<li><p><code>scRNAseq_eQTL_PBMC</code>: cis-eQTLs in PBMC.
+</p>
+</li></ul>
+
+<p>13. Japanese celltype-specific cis-eQTLs (including 6 cell types).
+Sourced from Nature Genetics 2017, 49(7):1120-1125
+</p>
+
+<ul>
+<li><p><code>jpRNAseq_eQTL_Bcell</code>: cis-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_CD4</code>: cis-eQTLs in CD4+ T cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_CD8</code>: cis-eQTLs in CD8+ T cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_Mono</code>: cis-eQTLs in monocytes.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_NK</code>: cis-eQTLs in NK cells.
+</p>
+</li>
+<li><p><code>jpRNAseq_eQTL_PBMC</code>: cis-eQTLs in PBMC.
+</p>
+</li></ul>
+
+<p>14. Pi eQTL
+</p>
+
+<ul>
+<li><p><code>Pi_eQTL_CD14</code>: cis and trans-eQTLs in the resting/CD14+
+state.
+</p>
+</li>
+<li><p><code>Pi_eQTL_LPS2</code>: cis and trans-eQTLs in the activating state
+induced by 2-hour LPS.
+</p>
+</li>
+<li><p><code>Pi_eQTL_LPS24</code>: cis and trans-eQTLs in the activating state
+induced by 24-hour LPS.
+</p>
+</li>
+<li><p><code>Pi_eQTL_IFN</code>: cis and trans-eQTLs in the activating state
+induced by 24-hour interferon-gamma.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Bcell</code>: cis and trans-eQTLs in B cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Blood</code>: cis and trans-eQTLs in the blood.
+</p>
+</li>
+<li><p><code>Pi_eQTL_CD4</code>: cis and trans-eQTLs in the CD4 cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_CD8</code>: cis and trans-eQTLs in the CD8 cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Monocyte</code>: cis and trans-eQTLs in the monocytes.
+</p>
+</li>
+<li><p><code>Pi_eQTL_Neutrophil</code>: cis and trans-eQTLs in the
+neutrophils.
+</p>
+</li>
+<li><p><code>Pi_eQTL_NK</code>: cis and trans-eQTLs in the NK cells.
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_CD14</code>: cis and trans-eQTLs in the
+resting/CD14+ state (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_LPS2</code>: cis and trans-eQTLs in the activating
+state induced by 2-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_LPS24</code>: cis and trans-eQTLs in the
+activating state induced by 24-hour LPS (based on 228 individuals).
+</p>
+</li>
+<li><p><code>Pi_eQTL_shared_IFN</code>: cis and trans-eQTLs in the activating
+state induced by 24-hour interferon-gamma (based on 228 individuals).
+</p>
+</li></ul>
+
+<p>15. Osteoblast cis-eQTLs. Sourced from Genome Research 2009,
+19(11):1942-52
+</p>
+
+<ul>
+<li><p><code>Osteoblast_eQTL</code>: cis-eQTLs in Osteoblast.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>xRDataLoader</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+# a) provide the SNPs with the significance info
+data(ImmunoBase)
+gr &lt;- ImmunoBase$AS$variants
+data &lt;- gr$Variant
+
+# b) define eQTL genes
+df_SGS &lt;- xDefineEQTL(data, include.eQTL="JKscience_TS2A",
+RData.location=RData.location)
+
+## End(Not run)
 </pre>
 
 
