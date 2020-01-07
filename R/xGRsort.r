@@ -44,7 +44,8 @@ xGRsort <- function(data)
 		return(NULL)
 	}
 	
-	gr <- GenomeInfoDb::sortSeqlevels(gr)
+	eval(parse(text=paste0('gr <- GenomeInfoDb::sortSeqlevels(gr)')))
+	
 	gr <- sort(gr)
 	
 	############################
