@@ -77,10 +77,14 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
             	requireNamespace(pkg, quietly=T)
         	})
         	if(all(tmp)){
-        	
-				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
+        		
+        		######################################
+				## temporarily mask the package "osfr"
+				prj <- fls <- res <- NULL
+				
+				if(all(class(suppressWarnings(try(eval(parse(text=paste0('prj<-osfr::osf_retrieve_node(guid)'))), T))) != "try-error")){
 					target <- paste0(RData,".RData")
-					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
+					eval(parse(text=noquote(paste0('fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)'))))
 					if(nrow(fls)>0){
 						ind <- match(fls$name, target)
 						ind <- ind[!is.na(ind)]
@@ -89,7 +93,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 						
 							## specify the temporary file
 							destfile <- file.path(tempdir(), fl$name)
-							res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)
+							eval(parse(text=paste0('res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)')))
 							#res %>% osf_open()
 							# verify the file downloaded locally
 							if(file.exists(res$local_path)){
@@ -102,6 +106,8 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 						}
 					}
 				}
+				######################################
+
 			}
         }
 	}

@@ -20,7 +20,7 @@ EG(gene_info)
 an object of S3 class \code{GS}
 }
 \description{
-\code{aOnto} has 1 component: gene_info.
+\code{EG} has 1 component: gene_info.
 }
 \examples{
 \dontrun{

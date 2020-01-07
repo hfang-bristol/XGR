@@ -192,7 +192,7 @@ print.GS <- function(x, ...) {
 # EG
 ######################################################################
 #' @title Definition for S3 class \code{EG}
-#' @description \code{aOnto} has 1 component: gene_info.
+#' @description \code{EG} has 1 component: gene_info.
 #' @param gene_info a data frame
 #' @return an object of S3 class \code{GS}
 #' @keywords S3 classes
