@@ -17,7 +17,7 @@ EG(gene_info)
 \item{...}{other parameters}
 }
 \value{
-an object of S3 class \code{GS}
+an object of S3 class \code{EG}
 }
 \description{
 \code{EG} has 1 component: gene_info.

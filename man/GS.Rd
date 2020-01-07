@@ -22,7 +22,7 @@ GS(set_info, gs)
 an object of S3 class \code{GS}
 }
 \description{
-\code{aOnto} has 2 components: set_info, gs.
+\code{GS} has 2 components: set_info, gs.
 }
 \examples{
 \dontrun{

@@ -148,7 +148,7 @@ print.aOnto <- function(x, ...) {
 # GS
 ######################################################################
 #' @title Definition for S3 class \code{GS}
-#' @description \code{aOnto} has 2 components: set_info, gs.
+#' @description \code{GS} has 2 components: set_info, gs.
 #' @param set_info a data frame
 #' @param gs a list
 #' @return an object of S3 class \code{GS}
@@ -194,7 +194,7 @@ print.GS <- function(x, ...) {
 #' @title Definition for S3 class \code{EG}
 #' @description \code{EG} has 1 component: gene_info.
 #' @param gene_info a data frame
-#' @return an object of S3 class \code{GS}
+#' @return an object of S3 class \code{EG}
 #' @keywords S3 classes
 #' @export
 #' @examples
