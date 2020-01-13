@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.1.8
+-----------------------
+
+NEW FEATURES
+
+    o Add a new auxiliary function 'xAuxSI'
+    
+
 CHANGES IN VERSION 1.1.7
 -----------------------
 
@@ -15,7 +23,7 @@ NEW FEATURES
     
     o Modify the function 'xLayout' with new layouts (dephi and graphlayouts)
     
-    o Modify the function 'xRDataLoader' supporting buit-in datasets hosted at OSF
+    o Modify the function 'xRDataLoader' supporting built-in datasets hosted at OSF
     
     o Add a function ('xMarkNet') supporting network marking
     

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to collect information on the R session</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xAuxSI"><tr><td>xAuxSI</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to collect information on the R session</h2>
+
+<h3>Description</h3>
+
+<p><code>xAuxSI</code> is supposed to collect information on the R session. Only
+attached
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xAuxSI(si = utils::sessionInfo(), file = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>si</code></td>
+<td>
+<p>an object of the class &quot;sessionInfo&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>a file name. By defaul it is NULL</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If the file is not NULL, it will write into the file. Otherwise it will
+return a tibble with columns 'kind' ('other' other attached packages,
+'loaded' for loaded but not attached packages), 'pkg' (the package
+name), 'version' (the package version), 'title' (the package title) and
+'description' (the package description)
+</p>
+
+
+<h3>Note</h3>
+
+<p>none.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xAuxSI</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# res &lt;- xAuxSI()
+</pre>
+
+
+</body></html>

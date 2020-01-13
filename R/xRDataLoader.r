@@ -22,7 +22,10 @@
 #' @importFrom supraHex visColormap visTreeBootstrap visHeatmapAdv
 #' @importFrom stats sd median mad ecdf na.omit predict prcomp lm quantile as.dist hclust cor as.dendrogram order.dendrogram wilcox.test coef p.adjust dist
 #' @importFrom BiocGenerics unlist start end
-#' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all slice left_join
+#' @importFrom tibble tibble enframe 
+#' @importFrom dplyr select filter arrange mutate group_by summarise desc n arrange_all slice left_join pull bind_rows
+#' @importFrom purrr map_chr
+#' @importFrom readr write_delim
 #' @importFrom ggnetwork ggnetwork geom_nodes geom_edges
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom Matrix Diagonal colSums Matrix t
