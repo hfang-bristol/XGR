@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to prepare a gene_info RData file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xReadGenesets"><tr><td>xReadGenesets</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to prepare a gene_info RData file</h2>
+
+<h3>Description</h3>
+
+<p><code>xReadGenesets</code> is supposed to prepare a gene_info RData file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xReadGenesets(
+association.file = NULL,
+set_info.file = NULL,
+output.prefix = NULL,
+output.dir = "./"
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>association.file</code></td>
+<td>
+<p>an input file for association</p>
+</td></tr>
+<tr valign="top"><td><code>set_info.file</code></td>
+<td>
+<p>an input file for set_info</p>
+</td></tr>
+<tr valign="top"><td><code>output.prefix</code></td>
+<td>
+<p>a prefix for the output file</p>
+</td></tr>
+<tr valign="top"><td><code>output.dir</code></td>
+<td>
+<p>the output directory</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a GS object
+</p>
+
+
+<h3>Note</h3>
+
+<p>None
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xReadGenesets</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+GS &lt;- xReadGenesets(association.file="GENE2GOMF.txt",
+set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
+
+## End(Not run)
+</pre>
+
+
+</body></html>
