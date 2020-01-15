@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to read RDS files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xRDS"><tr><td>xRDS</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to read RDS files</h2>
+
+<h3>Description</h3>
+
+<p><code>xRDS</code> is supposed to read RDS files.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xRDS(RDS = NULL, verbose = T, placeholder = NULL, guid = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>RDS</code></td>
+<td>
+<p>which RDS to load. To support the remote reading of a
+compressed RDS file, it must be compressed via the gzip method</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to TRUE for display</p>
+</td></tr>
+<tr valign="top"><td><code>placeholder</code></td>
+<td>
+<p>the characters to tell the placeholder of RDS files</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid
+provided and the query matched, it has priority over the one specified
+via placeholder</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>the loaded RDS. If the data cannot be loaded, it returns NULL.
+</p>
+
+
+<h3>Note</h3>
+
+<p>To enable 'guid', please also install a package &quot;osfr&quot; via
+<code>BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xRDS</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+org.Hs.eg &lt;- xRDS('org.Hs.eg')
+ig.HPPA &lt;- xRDS('ig.HPPA')
+org.Hs.egHPPA &lt;- xRDS('org.Hs.egHPPA')
+
+# from OSF
+org.Mm.egKEGG &lt;- xRDS('org.Mm.egKEGG', guid='gskpn')
+org.Mm.string_high &lt;- xRDS('org.Mm.string_high', guid='gskpn')
+
+## End(Not run)
+</pre>
+
+
+</body></html>

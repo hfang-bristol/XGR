@@ -1,26 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to prepare a gene_info RData file</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to prepare a gene_info RDS file</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xReadGenesets"><tr><td>xReadGenesets</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xMakeGenesets"><tr><td>xMakeGenesets</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to prepare a gene_info RData file</h2>
+<h2>Function to prepare a gene_info RDS file</h2>
 
 <h3>Description</h3>
 
-<p><code>xReadGenesets</code> is supposed to prepare a gene_info RData file.
+<p><code>xMakeGenesets</code> is supposed to prepare a gene_info RDS file.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xReadGenesets(
+xMakeGenesets(
 association.file = NULL,
 set_info.file = NULL,
 output.prefix = NULL,
-output.dir = "./"
+output.dir = "./",
+version = as.Date(Sys.time())
 )
 </pre>
 
@@ -44,6 +45,11 @@ output.dir = "./"
 <td>
 <p>the output directory</p>
 </td></tr>
+<tr valign="top"><td><code>version</code></td>
+<td>
+<p>the version associated with this RDS file. By default it
+is the date when the file created</p>
+</td></tr>
 </table>
 
 
@@ -61,7 +67,7 @@ output.dir = "./"
 
 <h3>See Also</h3>
 
-<p><code>xReadGenesets</code>
+<p><code>xMakeGenesets</code>
 </p>
 
 
@@ -72,7 +78,7 @@ output.dir = "./"
 # Load the library
 library(XGR)
 
-GS &lt;- xReadGenesets(association.file="GENE2GOMF.txt",
+GS &lt;- xMakeGenesets(association.file="GENE2GOMF.txt",
 set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
 
 ## End(Not run)

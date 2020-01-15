@@ -1,31 +1,32 @@
-#' Function to prepare a gene_info RData file
+#' Function to prepare a gene_info RDS file
 #'
-#' \code{xReadGenesets} is supposed to prepare a gene_info RData file.
+#' \code{xMakeGenesets} is supposed to prepare a gene_info RDS file.
 #'
 #' @param association.file an input file for association
 #' @param set_info.file an input file for set_info
 #' @param output.prefix a prefix for the output file
 #' @param output.dir the output directory
+#' @param version the version associated with this RDS file. By default it is the date when the file created
 #' @return a GS object
 #' @note None
 #' @export
-#' @seealso \code{\link{xReadGenesets}}
-#' @include xReadGenesets.r
+#' @seealso \code{\link{xMakeGenesets}}
+#' @include xMakeGenesets.r
 #' @examples
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
 #' 
-#' GS <- xReadGenesets(association.file="GENE2GOMF.txt", set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
+#' GS <- xMakeGenesets(association.file="GENE2GOMF.txt", set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
 #' }
 
-xReadGenesets <- function(association.file=NULL, set_info.file=NULL, output.prefix=NULL, output.dir="./")
+xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.prefix=NULL, output.dir="./", version=as.Date(Sys.time()))
 {
     
     setID <- NULL
     
     if(!is.null(association.file) & !is.null(set_info.file) & !is.null(output.prefix)){
-    	output.file <- paste0(output.dir, output.prefix, ".RData")
+    	output.file <- paste0(output.dir, output.prefix, ".RDS")
     	
     	## import set info
     	set_info <- readr::read_delim(set_info.file, delim="\t")
@@ -41,13 +42,13 @@ xReadGenesets <- function(association.file=NULL, set_info.file=NULL, output.pref
     	## define genesets
     	association %>% dplyr::semi_join(set_info, by="setID") -> df
     	gs <- split(x=df$GeneID, f=df$setID)
-   	
+    	gs %>% tibble::enframe(name='setID', value='GeneID') -> gs
+
     	## GS
-    	GS <- list(gs=gs, set_info=set_info)
+    	GS <- list(gs=gs, set_info=set_info, version=version)
    	 	class(GS) <- "GS"
-   	 	
-   	 	do.call(assign, list(output.prefix, GS))
-    	save(list=output.prefix, file=output.file, compress="xz")
+    	saveRDS(GS, file=output.file, compress="gzip")
+    	#readr::write_rds(GS, path=output.file, compress="gz")
     	
     	message(sprintf("Saved into '%s' (%s)!", output.file, as.character(Sys.time())), appendLF=T)
     	invisible(GS)
