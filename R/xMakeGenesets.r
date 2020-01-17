@@ -6,7 +6,7 @@
 #' @param set_info.file an input file for set_info
 #' @param output.prefix a prefix for the output file
 #' @param output.dir the output directory
-#' @param version the version associated with this RDS file. By default it is the date when the file created
+#' @param stamp the stamp associated with this RDS file. By default it is the date when the file created
 #' @return a GS object
 #' @note None
 #' @export
@@ -20,7 +20,7 @@
 #' GS <- xMakeGenesets(association.file="GENE2GOMF.txt", set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
 #' }
 
-xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.prefix=NULL, output.dir="./", version=as.Date(Sys.time()))
+xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.prefix=NULL, output.dir="./", stamp=as.Date(Sys.time()))
 {
     
     setID <- NULL
@@ -45,7 +45,7 @@ xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.pref
     	gs %>% tibble::enframe(name='setID', value='GeneID') -> gs
 
     	## GS
-    	GS <- list(gs=gs, set_info=set_info, version=version)
+    	GS <- list(gs=gs, set_info=set_info, stamp=stamp)
    	 	class(GS) <- "GS"
     	saveRDS(GS, file=output.file, compress="gzip")
     	#readr::write_rds(GS, path=output.file, compress="gz")

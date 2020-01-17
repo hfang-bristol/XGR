@@ -9,7 +9,7 @@ association.file = NULL,
 set_info.file = NULL,
 output.prefix = NULL,
 output.dir = "./",
-version = as.Date(Sys.time())
+stamp = as.Date(Sys.time())
 )
 }
 \arguments{
@@ -21,8 +21,8 @@ version = as.Date(Sys.time())
 
 \item{output.dir}{the output directory}
 
-\item{version}{the version associated with this RDS file. By default it
-is the date when the file created}
+\item{stamp}{the stamp associated with this RDS file. By default it is
+the date when the file created}
 }
 \value{
 a GS object

@@ -5,7 +5,7 @@
 #' @param gene_info.file an input file for gene_info
 #' @param output.prefix a prefix for the output file
 #' @param output.dir the output directory
-#' @param version the version associated with this RDS file. By default it is the date when the file created
+#' @param stamp the stamp associated with this RDS file. By default it is the date when the file created
 #' @return an EG object
 #' @note None
 #' @export
@@ -19,7 +19,7 @@
 #' EG <- xMakeGenes(gene_info.file="GeneInfo.9606", output.prefix="org.Hs.eg")
 #' }
 
-xMakeGenes <- function(gene_info.file=NULL, output.prefix=NULL, output.dir="./", version=as.Date(Sys.time()))
+xMakeGenes <- function(gene_info.file=NULL, output.prefix=NULL, output.dir="./", stamp=as.Date(Sys.time()))
 {
     
     GeneID <- NULL
@@ -30,7 +30,7 @@ xMakeGenes <- function(gene_info.file=NULL, output.prefix=NULL, output.dir="./",
     	gene_info <- readr::read_delim(gene_info.file, delim="\t")
     	gene_info %>% arrange(GeneID) -> gene_info
     	
-    	EG <- list(gene_info=gene_info, version=version)
+    	EG <- list(gene_info=gene_info, stamp=stamp)
    	 	class(EG) <- "EG"
     	saveRDS(EG, file=output.file, compress="gzip")
     	#readr::write_rds(EG, path=output.file, compress="gz")
