@@ -4,6 +4,12 @@ CHANGES IN VERSION 1.1.8
 NEW FEATURES
 
     o Add a new auxiliary function 'xAuxSI'
+
+    o Add new functions ('xMakeGenes' and 'xMakeGenesets') for constructing genes and genesets
+
+    o Add a function 'xRDS' for loading RDS files
+    
+    o Add new functions ('xTBL2IG' and 'xIG2TBL') for conversion between igraph and tibble
     
 
 CHANGES IN VERSION 1.1.7

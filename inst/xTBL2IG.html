@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an igraph from one or two tibbles</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xTBL2IG"><tr><td>xTBL2IG</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to convert an igraph from one or two tibbles</h2>
+
+<h3>Description</h3>
+
+<p><code>xTBL2IG</code> is supposed to convert an igraph from one or two
+tibbles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xTBL2IG(edges, nodes = NULL, directed = F, intersected = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>edges</code></td>
+<td>
+<p>a tibble or data frame for edge attributes</p>
+</td></tr>
+<tr valign="top"><td><code>nodes</code></td>
+<td>
+<p>a tibble or data frame for node attributes. It can be
+NULL</p>
+</td></tr>
+<tr valign="top"><td><code>directed</code></td>
+<td>
+<p>a logic specifying whether to create a directed graph.
+By default it is false</p>
+</td></tr>
+<tr valign="top"><td><code>intersected</code></td>
+<td>
+<p>a logic or NULL specifying whether to restrict to
+only the intersected vertices (from input nodes and edges). By default
+it is NULL; it will be forced true (if the input nodes do not contain
+all vertices in the input edges); however, the input nodes can contain
+vertices not in the input edges. It only works when the input nodes are
+not NULL</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an igraph object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xIG2TBL</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+ig &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
+ig %&gt;% xIG2TBL('edges') -&gt; edges
+ig %&gt;% xIG2TBL('nodes') -&gt; nodes
+
+xTBL2IG(edges, nodes) -&gt; ig
+
+## End(Not run)
+</pre>
+
+
+</body></html>

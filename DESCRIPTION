@@ -115,5 +115,7 @@ Collate:
     'xMakeGenesets.r'
     'xMakeGenes.r'
     'xRDS.r'
+    'xTBL2IG.r'
+    'xIG2TBL.r'
 License: GPL-2
 biocViews: Bioinformatics

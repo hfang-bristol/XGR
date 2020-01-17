@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an igraph into a tibble for nodes or...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xIG2TBL"><tr><td>xIG2TBL</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to convert an igraph into a tibble for nodes or edges</h2>
+
+<h3>Description</h3>
+
+<p><code>xIG2TBL</code> is supposed to convert an igraph into a tibble for nodes
+or edges.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xIG2TBL(ig, what = c("edges", "nodes"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>ig</code></td>
+<td>
+<p>an &quot;igraph&quot; object</p>
+</td></tr>
+<tr valign="top"><td><code>what</code></td>
+<td>
+<p>what to extract. It can be &quot;edges&quot; for edges and &quot;nodes&quot;
+for nodes</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a tibble object
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xTBL2IG</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(XGR)
+
+## End(Not run)
+
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
+ig &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
+ig %&gt;% xIG2TBL('edges')
+ig %&gt;% xIG2TBL('nodes')
+
+## End(Not run)
+</pre>
+
+
+</body></html>
