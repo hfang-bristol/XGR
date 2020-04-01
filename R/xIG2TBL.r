@@ -10,7 +10,7 @@
 #' @export
 #' @seealso \code{\link{xTBL2IG}}
 #' @include xIG2TBL.r
-#' @examples
+#' @examples	
 #' \dontrun{
 #' # Load the library
 #' library(XGR)
@@ -30,10 +30,10 @@ xIG2TBL <- function(ig, what=c('edges','nodes'))
    	if(any(class(ig) %in% c("igraph"))){
    		
    		if(what=='edges'){
-   			edges <- igraph::as_data_frame(ig, what="edges") %>% as_tibble()
+   			edges <- igraph::as_data_frame(ig, what="edges") %>% tibble::as_tibble()
    			return(edges)
    		}else if(what=='nodes'){
-   			nodes <- igraph::as_data_frame(ig, what="vertices") %>% as_tibble()
+   			nodes <- igraph::as_data_frame(ig, what="vertices") %>% tibble::as_tibble()
    			return(nodes)
    		}
 	}else{

@@ -23,7 +23,7 @@
 xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.prefix=NULL, output.dir="./", stamp=as.Date(Sys.time()))
 {
     
-    setID <- NULL
+    setID <- distance <- NULL
     
     if(!is.null(association.file) & !is.null(set_info.file) & !is.null(output.prefix)){
     	output.file <- paste0(output.dir, output.prefix, ".RDS")
@@ -38,7 +38,7 @@ xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.pref
 		colnames(association) <- c("GeneID","setID")
 		
 		## focus those gene sets in common
-		set_info %>% dplyr::semi_join(association, by="setID") %>% dplyr::arrange(setID) -> set_info
+		set_info %>% dplyr::semi_join(association, by="setID") %>% dplyr::arrange(distance) -> set_info
     	## define genesets
     	association %>% dplyr::semi_join(set_info, by="setID") -> df
     	gs <- split(x=df$GeneID, f=df$setID)

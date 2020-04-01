@@ -164,9 +164,9 @@ xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, 
 	df_dt_all <- df_data[as.numeric(names(dt_ls)), ]
     sGR_list <- lapply(1:ncol(df_samples), function(j){
 		sGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(df_dt_all$seqnames),
+			seqnames=df_dt_all$seqnames,
 			ranges = IRanges::IRanges(start=df_samples[,j], end=df_samples[,j]+df_dt_all$width-1),
-			strand = S4Vectors::Rle(df_dt_all$strand)
+			strand = df_dt_all$strand
 		)
     })
 

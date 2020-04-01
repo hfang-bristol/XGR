@@ -101,15 +101,16 @@ displayed in the screen. By default, it sets to false for no display</p>
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-
+## Not run: 
 res &lt;- xReport(eTerm)
 
 # advanced use
 output_format &lt;-
-rmarkdown::html_document(number_sections=T,theme="journal",
+rmarkdown::html_document(number_sections=TRUE,theme="journal",
 hightlight="espresso",code_folding="hide")
 res &lt;- xReport(eTerm, output_format=output_format)
 
+## End(Not run)
 </pre>
 
 

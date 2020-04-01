@@ -48,9 +48,9 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
     }else{
     	
     	if(class(data)=='DataFrame'){
-    		data <- S4Vectors::as.matrix(data)
+    		#data <- S4Vectors::as.matrix(data)
     	}
-    
+
 		if (is.vector(data)){
 			if(length(data)>1){
 				# assume a vector

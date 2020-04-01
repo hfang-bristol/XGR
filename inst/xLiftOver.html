@@ -109,8 +109,8 @@ project. See <code>xRDataLoader</code> for details</p>
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-# Provide UCSC genes (hg19)
-UCSC_genes &lt;- xRDataLoader(RData.customised='UCSC_genes',
+# Provide UCSC known genes (hg19)
+UCSC_genes &lt;- xRDataLoader('UCSC_knownGene',
 RData.location=RData.location)
 UCSC_genes
 

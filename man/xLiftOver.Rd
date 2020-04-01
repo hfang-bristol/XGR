@@ -68,8 +68,8 @@ build to another. Supported are the conversions between genome builds
 library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
-# Provide UCSC genes (hg19)
-UCSC_genes <- xRDataLoader(RData.customised='UCSC_genes',
+# Provide UCSC known genes (hg19)
+UCSC_genes <- xRDataLoader('UCSC_knownGene',
 RData.location=RData.location)
 UCSC_genes
 

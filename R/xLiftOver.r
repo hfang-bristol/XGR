@@ -20,8 +20,8 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
-#' # Provide UCSC genes (hg19)
-#' UCSC_genes <- xRDataLoader(RData.customised='UCSC_genes', RData.location=RData.location)
+#' # Provide UCSC known genes (hg19)
+#' UCSC_genes <- xRDataLoader('UCSC_knownGene', RData.location=RData.location)
 #' UCSC_genes
 #' 
 #' # Lift over to hg38
@@ -90,9 +90,9 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 		
 	}else if(format.file=="chr:start-end"){
@@ -110,9 +110,9 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 		
 	}else if(format.file=="bed"){
@@ -121,9 +121,9 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2])+1, end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 
 	}else if(format.file=="GRanges"){
@@ -167,9 +167,9 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	
 		## construct GR object
 		gr <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(df[,1]),
+				seqnames=df[,1],
 				ranges = IRanges::IRanges(start=as.numeric(df[,2]), end=as.numeric(df[,3])),
-				strand = S4Vectors::Rle(df[,4])
+				strand = df[,4]
 			)
 	
 		## append back meta data

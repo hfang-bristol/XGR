@@ -191,9 +191,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 		
 		if(!is.null(annotation)){
@@ -209,9 +209,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
 				gr <- GenomicRanges::GRanges(
-					seqnames=S4Vectors::Rle(x[,1]),
+					seqnames=x[,1],
 					ranges = IRanges::IRanges(start=as.numeric(x[,2]), end=as.numeric(x[,3])),
-					strand = S4Vectors::Rle(rep('*',nrow(x)))
+					strand = rep('*',nrow(x))
 				)
 			})
 		}else{
@@ -232,9 +232,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
 			background <- background[ind,]
 			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
+				seqnames=background[,1],
 				ranges = IRanges::IRanges(start=as.numeric(background[,2]), end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(background)))
+				strand = rep('*',nrow(background))
 			)
 		}else{
 			bGR <- NULL
@@ -255,9 +255,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2]), end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 		
 		if(!is.null(annotation)){
@@ -276,9 +276,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
 				gr <- GenomicRanges::GRanges(
-					seqnames=S4Vectors::Rle(x[,1]),
+					seqnames=x[,1],
 					ranges = IRanges::IRanges(start=as.numeric(x[,2]), end=as.numeric(x[,3])),
-					strand = S4Vectors::Rle(rep('*',nrow(x)))
+					strand = rep('*',nrow(x))
 				)
 			})
 		}else{
@@ -300,9 +300,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
 			background <- background[ind,]
 			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
+				seqnames=background[,1],
 				ranges = IRanges::IRanges(start=as.numeric(background[,2]), end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(data)))
+				strand = rep('*',nrow(data))
 			)
 		}else{
 			bGR <- NULL
@@ -314,9 +314,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		data <- data[ind,]
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[,1]),
+			seqnames=data[,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[,2])+1, end=as.numeric(data[,3])),
-			strand = S4Vectors::Rle(rep('*',nrow(data)))
+			strand = rep('*',nrow(data))
 		)
 		
 		if(!is.null(annotation)){
@@ -327,9 +327,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 				ind <- suppressWarnings(which(!is.na(as.numeric(x[,2])) & !is.na(as.numeric(x[,3]))))
 				x <- x[ind,]
 				gr <- GenomicRanges::GRanges(
-					seqnames=S4Vectors::Rle(x[,1]),
+					seqnames=x[,1],
 					ranges = IRanges::IRanges(start=as.numeric(x[,2])+1, end=as.numeric(x[,3])),
-					strand = S4Vectors::Rle(rep('*',nrow(x)))
+					strand = rep('*',nrow(x))
 				)
 			})
 		}else{
@@ -343,9 +343,9 @@ xGRviaGenomicAnno <- function(data.file, annotation.file=NULL, background.file=N
 			ind <- suppressWarnings(which(!is.na(as.numeric(background[,2])) & !is.na(as.numeric(background[,3]))))
 			background <- background[ind,]
 			bGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(background[,1]),
+				seqnames=background[,1],
 				ranges = IRanges::IRanges(start=as.numeric(background[,2])+1, end=as.numeric(background[,3])),
-				strand = S4Vectors::Rle(rep('*',nrow(data)))
+				strand = rep('*',nrow(data))
 			)
 		}else{
 			bGR <- NULL

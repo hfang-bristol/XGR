@@ -21,11 +21,11 @@
 #' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
-#' \donttest{
+#' \dontrun{
 #' res <- xReport(eTerm)
 #' 
 #' # advanced use
-#' output_format <- rmarkdown::html_document(number_sections=T,theme="journal", hightlight="espresso",code_folding="hide")
+#' output_format <- rmarkdown::html_document(number_sections=TRUE,theme="journal", hightlight="espresso",code_folding="hide")
 #' res <- xReport(eTerm, output_format=output_format)
 #' }
 

@@ -92,15 +92,15 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		if(include.strand){
 			dGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(data[ind,1]),
+				seqnames=data[ind,1],
 				ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
-				strand = S4Vectors::Rle(data[ind,4])
+				strand = data[ind,4]
 			)
 		}else{
 			dGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(data[ind,1]),
+				seqnames=data[ind,1],
 				ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
-				strand = S4Vectors::Rle(rep('*',length(ind)))
+				strand = rep('*',length(ind))
 			)
 		}
 		if(add.name){
@@ -121,9 +121,9 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		## make sure positions are numeric
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		dGR <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(data[ind,1]),
+			seqnames=data[ind,1],
 			ranges = IRanges::IRanges(start=as.numeric(data[ind,2]), end=as.numeric(data[ind,3])),
-			strand = S4Vectors::Rle(rep('*',length(ind)))
+			strand = rep('*',length(ind))
 		)
 		if(add.name){
 			names(dGR) <- paste(data[ind,1], ':', data[ind,2], '-', data[ind,3], sep='')
@@ -144,15 +144,15 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		ind <- suppressWarnings(which(!is.na(as.numeric(data[,2])) & !is.na(as.numeric(data[,3]))))
 		if(include.strand){
 			dGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(data[ind,1]),
+				seqnames=data[ind,1],
 				ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
-				strand = S4Vectors::Rle(data[ind,4])
+				strand = data[ind,4]
 			)
 		}else{
 			dGR <- GenomicRanges::GRanges(
-				seqnames=S4Vectors::Rle(data[ind,1]),
+				seqnames=data[ind,1],
 				ranges = IRanges::IRanges(start=as.numeric(data[ind,2])+1, end=as.numeric(data[ind,3])),
-				strand = S4Vectors::Rle(rep('*',length(ind)))
+				strand = rep('*',length(ind))
 			)
 		}
 		

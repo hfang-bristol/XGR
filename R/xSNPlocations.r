@@ -82,9 +82,9 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Sing
 		res_ls <- strsplit(data_rest, ":")
 		res_df <- do.call(rbind, res_ls)
 		res_gr <- GenomicRanges::GRanges(
-			seqnames=S4Vectors::Rle(res_df[,1]),
+			seqnames=res_df[,1],
 			ranges = IRanges::IRanges(start=as.numeric(res_df[,2]), end=as.numeric(res_df[,2]), names=data_rest),
-			strand = S4Vectors::Rle(rep('*',nrow(res_df)))
+			strand = rep('*',nrow(res_df))
 		)
 	}else{
 		res_gr <- NULL

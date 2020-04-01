@@ -53,7 +53,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     }else{
     	
     	if(class(data)=='DataFrame'){
-    		data <- S4Vectors::as.matrix(data)
+    		#data <- S4Vectors::as.matrix(data)
     	}
     
 		if (is.vector(data)){
