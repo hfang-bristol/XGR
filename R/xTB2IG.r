@@ -1,6 +1,6 @@
 #' Function to convert an igraph from one or two tibbles
 #'
-#' \code{xTBL2IG} is supposed to convert an igraph from one or two tibbles.
+#' \code{xTB2IG} is supposed to convert an igraph from one or two tibbles.
 #'
 #' @param edges a tibble or data frame for edge attributes
 #' @param nodes a tibble or data frame for node attributes. It can be NULL
@@ -10,8 +10,8 @@
 #' an igraph object
 #' @note none
 #' @export
-#' @seealso \code{\link{xIG2TBL}}
-#' @include xTBL2IG.r
+#' @seealso \code{\link{xIG2TB}}
+#' @include xTB2IG.r
 #' @examples
 #' \dontrun{
 #' # Load the library
@@ -21,13 +21,13 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ig <- xDefineNet(network="KEGG", RData.location=RData.location)
-#' ig %>% xIG2TBL('edges') -> edges
-#' ig %>% xIG2TBL('nodes') -> nodes
+#' ig %>% xIG2TB('edges') -> edges
+#' ig %>% xIG2TB('nodes') -> nodes
 #'
-#' xTBL2IG(edges, nodes) -> ig
+#' xTB2IG(edges, nodes) -> ig
 #' }
 
-xTBL2IG <- function(edges, nodes=NULL, directed=F, intersected=NULL)
+xTB2IG <- function(edges, nodes=NULL, directed=F, intersected=NULL)
 {
     if(any(class(edges) %in% c("tbl"))){
     	edges <- edges %>% as.data.frame()

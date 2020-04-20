@@ -89,8 +89,7 @@ cannot be loaded, it returns NULL.
 If there are no use-specified variable that is given on the right side
 of the assigement sign '<-', then no RData will be loaded onto the
 working environment. To enable 'guid', please also install a package
-"osfr" via
-\code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
+"osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
 }
 \examples{
 \dontrun{

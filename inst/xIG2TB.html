@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xIG2TBL"><tr><td>xIG2TBL</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xIG2TB"><tr><td>xIG2TB</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to convert an igraph into a tibble for nodes or edges</h2>
 
 <h3>Description</h3>
 
-<p><code>xIG2TBL</code> is supposed to convert an igraph into a tibble for nodes
+<p><code>xIG2TB</code> is supposed to convert an igraph into a tibble for nodes
 or edges.
 </p>
 
@@ -17,7 +17,7 @@ or edges.
 <h3>Usage</h3>
 
 <pre>
-xIG2TBL(ig, what = c("edges", "nodes"))
+xIG2TB(ig, what = c("edges", "nodes"))
 </pre>
 
 
@@ -50,7 +50,7 @@ for nodes</p>
 
 <h3>See Also</h3>
 
-<p><code>xTBL2IG</code>
+<p><code>xTB2IG</code>
 </p>
 
 
@@ -66,8 +66,8 @@ library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 ig &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
-ig %&gt;% xIG2TBL('edges')
-ig %&gt;% xIG2TBL('nodes')
+ig %&gt;% xIG2TB('edges')
+ig %&gt;% xIG2TB('nodes')
 
 ## End(Not run)
 </pre>

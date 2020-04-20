@@ -1,6 +1,6 @@
 #' Function to convert an igraph into a tibble for nodes or edges
 #'
-#' \code{xIG2TBL} is supposed to convert an igraph into a tibble for nodes or edges.
+#' \code{xIG2TB} is supposed to convert an igraph into a tibble for nodes or edges.
 #'
 #' @param ig an "igraph" object
 #' @param what what to extract. It can be "edges" for edges and "nodes" for nodes
@@ -8,8 +8,8 @@
 #' a tibble object
 #' @note none
 #' @export
-#' @seealso \code{\link{xTBL2IG}}
-#' @include xIG2TBL.r
+#' @seealso \code{\link{xTB2IG}}
+#' @include xIG2TB.r
 #' @examples	
 #' \dontrun{
 #' # Load the library
@@ -19,11 +19,11 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ig <- xDefineNet(network="KEGG", RData.location=RData.location)
-#' ig %>% xIG2TBL('edges')
-#' ig %>% xIG2TBL('nodes')
+#' ig %>% xIG2TB('edges')
+#' ig %>% xIG2TB('nodes')
 #' }
 
-xIG2TBL <- function(ig, what=c('edges','nodes'))
+xIG2TB <- function(ig, what=c('edges','nodes'))
 {
     what <- match.arg(what)
     

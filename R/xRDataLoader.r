@@ -9,7 +9,7 @@
 #' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid provided and the query matched, it has priority over the one specified via RData.location
 #' @return 
 #' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData. If the data cannot be loaded, it returns NULL.
-#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment. To enable 'guid', please also install a package "osfr" via \code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
+#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment. To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
 #' @export
 #' @import dnet
 #' @import igraph
@@ -29,6 +29,7 @@
 #' @importFrom ggrepel geom_text_repel geom_label_repel GeomTextRepel
 #' @importFrom Matrix Diagonal colSums Matrix t
 #' @importFrom MASS fitdistr
+#' @importFrom osfr osf_retrieve_node osf_ls_files osf_download
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples
@@ -83,19 +84,16 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
         		######################################
 				## temporarily mask the package "osfr"
 				prj <- fls <- res <- NULL
-				
-				if(all(class(suppressWarnings(try(eval(parse(text=paste0('prj<-osfr::osf_retrieve_node(guid)'))), T))) != "try-error")){
+				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
 					target <- paste0(RData,".RData")
-					eval(parse(text=noquote(paste0('fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)'))))
+					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
 					if(nrow(fls)>0){
 						ind <- match(fls$name, target)
 						ind <- ind[!is.na(ind)]
 						if(length(ind)==1){
 							fl <- fls[ind,]
-						
-							## specify the temporary file
-							destfile <- file.path(tempdir(), fl$name)
-							eval(parse(text=paste0('res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)')))
+							
+							res <- fl %>% osfr::osf_download(path=tempdir(),conflicts='overwrite')
 							#res %>% osf_open()
 							# verify the file downloaded locally
 							if(file.exists(res$local_path)){

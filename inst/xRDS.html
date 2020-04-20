@@ -56,7 +56,7 @@ via placeholder</p>
 <h3>Note</h3>
 
 <p>To enable 'guid', please also install a package &quot;osfr&quot; via
-<code>BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)</code>.
+<code>BiocManager::install("osfr",dependencies=T)</code>.
 </p>
 
 
@@ -75,6 +75,7 @@ ig.HPPA &lt;- xRDS('ig.HPPA')
 org.Hs.egHPPA &lt;- xRDS('org.Hs.egHPPA')
 
 # from OSF
+ig.HPPA &lt;- xRDS('ig.HPPA', guid='gskpn')
 org.Mm.egKEGG &lt;- xRDS('org.Mm.egKEGG', guid='gskpn')
 org.Mm.string_high &lt;- xRDS('org.Mm.string_high', guid='gskpn')
 

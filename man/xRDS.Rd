@@ -28,7 +28,7 @@ the loaded RDS. If the data cannot be loaded, it returns NULL.
 }
 \note{
 To enable 'guid', please also install a package "osfr" via
-\code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
+\code{BiocManager::install("osfr",dependencies=T)}.
 }
 \examples{
 \dontrun{
@@ -37,6 +37,7 @@ ig.HPPA <- xRDS('ig.HPPA')
 org.Hs.egHPPA <- xRDS('org.Hs.egHPPA')
 
 # from OSF
+ig.HPPA <- xRDS('ig.HPPA', guid='gskpn')
 org.Mm.egKEGG <- xRDS('org.Mm.egKEGG', guid='gskpn')
 org.Mm.string_high <- xRDS('org.Mm.string_high', guid='gskpn')
 }

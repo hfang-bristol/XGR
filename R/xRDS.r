@@ -8,7 +8,7 @@
 #' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid provided and the query matched, it has priority over the one specified via placeholder
 #' @return 
 #' the loaded RDS. If the data cannot be loaded, it returns NULL.
-#' @note To enable 'guid', please also install a package "osfr" via \code{BiocManager::install(c("remotes","centerforopenscience/osfr"),dependencies=T)}.
+#' @note To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
 #' @export
 #' @seealso \code{\link{xRDS}}
 #' @include xRDS.r
@@ -19,6 +19,7 @@
 #' org.Hs.egHPPA <- xRDS('org.Hs.egHPPA')
 #' 
 #' # from OSF
+#' ig.HPPA <- xRDS('ig.HPPA', guid='gskpn')
 #' org.Mm.egKEGG <- xRDS('org.Mm.egKEGG', guid='gskpn')
 #' org.Mm.string_high <- xRDS('org.Mm.string_high', guid='gskpn')
 #' }
@@ -59,9 +60,11 @@ xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
 				## temporarily mask the package "osfr"
 				prj <- fls <- res <- NULL
 				
-				if(all(class(suppressWarnings(try(eval(parse(text=paste0('prj<-osfr::osf_retrieve_node(guid)'))), T))) != "try-error")){
+				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
+				#if(all(class(suppressWarnings(try(eval(parse(text=paste0('prj<-osfr::osf_retrieve_node(guid)'))), T))) != "try-error")){
 					target <- paste0(RDS,".RDS")
-					eval(parse(text=noquote(paste0('fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)'))))
+					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
+					#eval(parse(text=noquote(paste0('fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)'))))
 					if(nrow(fls)>0){
 						ind <- match(fls$name, target)
 						ind <- ind[!is.na(ind)]
@@ -69,12 +72,13 @@ xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
 							fl <- fls[ind,]
 						
 							## specify the temporary file
-							destfile <- file.path(tempdir(), fl$name)
-							eval(parse(text=paste0('res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)')))
+							res <- fl %>% osfr::osf_download(path=tempdir(), conflicts="overwrite")
+							#destfile <- file.path(tempdir(), fl$name)
+							#eval(parse(text=paste0('res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)')))
 							#res %>% osf_open()
 							# verify the file downloaded locally
 							if(file.exists(res$local_path)){
-								out <- get(load(res$local_path))
+								out <- readRDS(res$local_path)
 								load_RDS <- sprintf("'%s' at %s", prj$name, paste0('https://osf.io/',prj$id))
 								RDS <- target
 								flag_osf <- T

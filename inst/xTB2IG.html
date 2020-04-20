@@ -3,21 +3,20 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xTBL2IG"><tr><td>xTBL2IG</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xTB2IG"><tr><td>xTB2IG</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to convert an igraph from one or two tibbles</h2>
 
 <h3>Description</h3>
 
-<p><code>xTBL2IG</code> is supposed to convert an igraph from one or two
-tibbles.
+<p><code>xTB2IG</code> is supposed to convert an igraph from one or two tibbles.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xTBL2IG(edges, nodes = NULL, directed = F, intersected = NULL)
+xTB2IG(edges, nodes = NULL, directed = F, intersected = NULL)
 </pre>
 
 
@@ -64,7 +63,7 @@ not NULL</p>
 
 <h3>See Also</h3>
 
-<p><code>xIG2TBL</code>
+<p><code>xIG2TB</code>
 </p>
 
 
@@ -80,10 +79,10 @@ library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 ig &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
-ig %&gt;% xIG2TBL('edges') -&gt; edges
-ig %&gt;% xIG2TBL('nodes') -&gt; nodes
+ig %&gt;% xIG2TB('edges') -&gt; edges
+ig %&gt;% xIG2TB('nodes') -&gt; nodes
 
-xTBL2IG(edges, nodes) -&gt; ig
+xTB2IG(edges, nodes) -&gt; ig
 
 ## End(Not run)
 </pre>

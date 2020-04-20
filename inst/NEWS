@@ -9,7 +9,7 @@ NEW FEATURES
 
     o Add a function 'xRDS' for loading RDS files
     
-    o Add new functions ('xTBL2IG' and 'xIG2TBL') for conversion between igraph and tibble
+    o Add new functions ('xTB2IG' and 'xIG2TB') for conversion between igraph and tibble
     
 
 CHANGES IN VERSION 1.1.7
