@@ -56,10 +56,6 @@ a ggplot object.
 returns an object of class "ggplot".
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 gp <- xPieplot(df,
@@ -68,5 +64,5 @@ legend.title='Seeds')
 }
 }
 \seealso{
-\code{\link{xPieplot}}
+\code{\link{xColormap}}
 }

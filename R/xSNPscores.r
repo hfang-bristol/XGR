@@ -24,10 +24,6 @@
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xSNPscores.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' \dontrun{
@@ -45,14 +41,14 @@
 #' df_SNP <- xSNPscores(data=data, significance.threshold=5e-5, include.LD="EUR", RData.location=RData.location)
 #' }
 
-xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     if(is.null(data)){
         stop("The input data must be not NULL.\n")
     }else{
     	
-    	if(class(data)=='DataFrame'){
+    	if(is(data,'DataFrame')){
     		#data <- S4Vectors::as.matrix(data)
     	}
     
@@ -64,7 +60,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 				}
 			}else{
 				# assume a file
-				data <- utils::read.delim(file=data, header=F, row.names=NULL, stringsAsFactors=F)
+				data <- utils::read.delim(file=data, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 			}
 		}
 		
@@ -93,17 +89,17 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	
 	## replace '_' with ':'
 	tmp <- names(pval)
-	tmp <- gsub("_", ":", tmp, perl=T)
+	tmp <- gsub("_", ":", tmp, perl=TRUE)
 	## replace 'imm:' with 'chr'
-	names(pval) <- gsub("imm:", "chr", tmp, perl=T)
+	names(pval) <- gsub("imm:", "chr", tmp, perl=TRUE)
 	
-	Lead_Sig <- data.frame(SNP=names(pval), Sig=pval, row.names=NULL, stringsAsFactors=F)
+	Lead_Sig <- data.frame(SNP=names(pval), Sig=pval, row.names=NULL, stringsAsFactors=FALSE)
 	leads <- Lead_Sig[,1]
 	sigs <- Lead_Sig[,2]
 
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d Lead SNPs are input", length(leads)), appendLF=T)
+		message(sprintf("A total of %d Lead SNPs are input", length(leads)), appendLF=TRUE)
 	}
 
 	###########################
@@ -121,7 +117,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Inclusion of LD SNPs is based on population (%s) with R2 >= %f", paste(include.LD, collapse=','), LD.r2), appendLF=T)
+			message(sprintf("Inclusion of LD SNPs is based on population (%s) with R2 >= %f", paste(include.LD, collapse=','), LD.r2), appendLF=TRUE)
 		}
 	
 		GWAS_LD <- xRDataLoader('GWAS_LD', RData.location=RData.location, guid=guid, verbose=verbose)
@@ -135,11 +131,11 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 				ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
 				sLL <- data_ld[ind_lead, ind_ld]
 				summ <- summary(sLL)
-				res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+				res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=FALSE)
 			}else if(length(ind_lead) == 1){
 				ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
 				sLL <- data_ld[ind_lead, ind_ld]
-				res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=F)
+				res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=FALSE)
 			}else{
 				NULL
 			}
@@ -161,11 +157,11 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 					ind_ld <- which(Matrix::colSums(data_ld[ind_lead,]>=LD.r2)>0)
 					sLL <- data_ld[ind_lead, ind_ld]
 					summ <- summary(sLL)
-					res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=F)
+					res <- data.frame(Lead=rownames(sLL)[summ$i], LD=colnames(sLL)[summ$j], R2=summ$x, stringsAsFactors=FALSE)
 				}else if(length(ind_lead) == 1){
 					ind_ld <- which(data_ld[ind_lead,]>=LD.r2)
 					sLL <- data_ld[ind_lead, ind_ld]
-					res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=F)
+					res <- data.frame(Lead=rep(rownames(data_ld)[ind_lead],length(sLL)), LD=colnames(data_ld)[ind_ld], R2=sLL, stringsAsFactors=FALSE)
 				}else{
 					NULL
 				}
@@ -180,7 +176,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	}else if(!is.null(LD.customised)){
 		if (is.vector(LD.customised)){
 			# assume a file
-			LLR <- utils::read.delim(file=LD.customised, header=F, row.names=NULL, stringsAsFactors=F)
+			LLR <- utils::read.delim(file=LD.customised, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 		}else if(is.matrix(LD.customised) | is.data.frame(LD.customised)){
 			LLR <- LD.customised
 		}
@@ -193,7 +189,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 			
 				if(verbose){
 					now <- Sys.time()
-					message(sprintf("Inclusion of LD SNPs is based on customised data (%d Lead SNPs and %d LD SNPs) with R2>=%f", length(unique(LLR[,1])), length(unique(LLR[,2])), LD.r2), appendLF=T)
+					message(sprintf("Inclusion of LD SNPs is based on customised data (%d Lead SNPs and %d LD SNPs) with R2>=%f", length(unique(LLR[,1])), length(unique(LLR[,2])), LD.r2), appendLF=TRUE)
 				}
 			}else{
 				LLR <- NULL
@@ -211,17 +207,17 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 			min(sigs[ind] ^ x$R2)
 		})
 		vec <- unlist(res_list)
-		LD_Sig <- data.frame(SNP=names(vec), Sig=vec, row.names=NULL, stringsAsFactors=F)
+		LD_Sig <- data.frame(SNP=names(vec), Sig=vec, row.names=NULL, stringsAsFactors=FALSE)
 
 		## merge Lead and LD
 		df <- rbind(Lead_Sig, as.matrix(LD_Sig))
 		res_list <- split(x=df$Sig, f=df$SNP)
 		vec <- unlist(lapply(res_list, min))
-		SNP_Sig <- data.frame(SNP=names(vec), FDR=vec, row.names=NULL, stringsAsFactors=F)
+		SNP_Sig <- data.frame(SNP=names(vec), FDR=vec, row.names=NULL, stringsAsFactors=FALSE)
 	}else{
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Do not include any LD SNPs"), appendLF=T)
+			message(sprintf("Do not include any LD SNPs"), appendLF=TRUE)
 		}
 	
 		SNP_Sig <- Lead_Sig
@@ -230,7 +226,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d Lead/LD SNPs are considered", nrow(SNP_Sig)), appendLF=T)
+		message(sprintf("A total of %d Lead/LD SNPs are considered", nrow(SNP_Sig)), appendLF=TRUE)
 	}
 	
 	pval <- as.numeric(SNP_Sig[,2])
@@ -260,7 +256,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d Lead/LD SNPs are scored positively", sum(seeds.snps>0)), appendLF=T)
+		message(sprintf("A total of %d Lead/LD SNPs are scored positively", sum(seeds.snps>0)), appendLF=TRUE)
 	}
     
     #########
@@ -268,7 +264,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     ind <- match(names(pval), Lead_Sig$SNP)
     flag[is.na(ind)] <- 'LD'
     
-    df_SNP <- data.frame(SNP=names(pval), Score=seeds.snps, Pval=pval, Flag=flag, row.names=NULL, stringsAsFactors=F)
+    df_SNP <- data.frame(SNP=names(pval), Score=seeds.snps, Pval=pval, Flag=flag, row.names=NULL, stringsAsFactors=FALSE)
     
     ##############################
     ## cap the maximum score
@@ -279,7 +275,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
     		
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("SNP score capped to the maximum score %d.", score.cap), appendLF=T)
+				message(sprintf("SNP score capped to the maximum score %d.", score.cap), appendLF=TRUE)
 			}
     	}
     }

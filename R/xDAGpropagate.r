@@ -91,18 +91,18 @@ xDAGpropagate <- function (g, annotation, path.mode=c("all_paths","shortest_path
     propagation <- match.arg(propagation)
     
     ig <- g
-    if (class(ig) != "igraph"){
+    if (!is(ig,"igraph")){
         stop("The function must apply to the 'igraph' object.\n")
     }
     
-    if(class(annotation)=="list"){
+    if(is(annotation,"list")){
     	oAnnos <- annotation
     }else{
-		if(class(annotation)=="data.frame"){
+		if(is(annotation,"data.frame")){
 			annotation <- xSparseMatrix(annotation, verbose=FALSE)
 		}
 	
-		if(class(annotation)=="dgCMatrix"){
+		if(is(annotation,"dgCMatrix")){
 			D <- annotation
 			oAnnos <- lapply(1:ncol(D), function(j){
 				ind <- which(D[,j]!=0)

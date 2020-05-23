@@ -35,9 +35,6 @@ None
 }
 \examples{
 \dontrun{
-# Load the library
-library(XGR)
-
 GS <- xMakeGenesets(association.file="GENE2GOMF.txt",
 set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
 }

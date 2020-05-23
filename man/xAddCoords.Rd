@@ -67,7 +67,7 @@ set.seed(825); cs <- igraph::cluster_spinglass(g)
 V(g)$community <- cs$membership
 ig <- xAddCoords(g, node.attr="community",
 edge.color.alternative=c("grey50","grey95"))
-if(class(V(ig)$community)=='character') V(ig)$community <-
+if(is(V(ig)$community,'character')) V(ig)$community <-
 as.factor(V(ig)$community)
 gp <- xGGnetwork(ig, node.label='name', node.label.size=2,
 node.label.color='black', node.label.alpha=0.8, node.label.padding=0,

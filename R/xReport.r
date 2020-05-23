@@ -38,7 +38,7 @@ xReport <- function(obj, rmd=NULL, output_format=NULL, output_file=NULL, output_
 		output_dir <- getwd()
 	}
 	
-    if(class(obj)=='eTerm'){
+    if(is(obj,'eTerm')){
     	if(is.null(rmd)){
     		rmd <- system.file("DynamicReport", "eTerm.Rmd", package="XGR")
     	}

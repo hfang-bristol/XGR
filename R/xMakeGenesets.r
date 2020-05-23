@@ -14,9 +14,6 @@
 #' @include xMakeGenesets.r
 #' @examples
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' 
 #' GS <- xMakeGenesets(association.file="GENE2GOMF.txt", set_info.file="GO.txt", output.prefix="org.Hs.egGOMF")
 #' }
 
@@ -50,7 +47,7 @@ xMakeGenesets <- function(association.file=NULL, set_info.file=NULL, output.pref
     	saveRDS(GS, file=output.file, compress="gzip")
     	#readr::write_rds(GS, path=output.file, compress="gz")
     	
-    	message(sprintf("Saved into '%s' (%s)!", output.file, as.character(Sys.time())), appendLF=T)
+    	message(sprintf("Saved into '%s' (%s)!", output.file, as.character(Sys.time())), appendLF=TRUE)
     	invisible(GS)
     	
     }

@@ -26,7 +26,6 @@ ncolors = 40,
 zlim = NULL,
 colorbar = TRUE,
 newpage = TRUE,
-signature = TRUE,
 glayout = layout_with_kk,
 vertex.frame.color = NA,
 vertex.size = NULL,
@@ -96,11 +95,6 @@ pattern is null, it always sets to false</p>
 <td>
 <p>logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page</p>
-</td></tr>
-<tr valign="top"><td><code>signature</code></td>
-<td>
-<p>logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets FALSE</p>
 </td></tr>
 <tr valign="top"><td><code>glayout</code></td>
 <td>
@@ -197,13 +191,14 @@ The default value is 1.</p>
 
 <h3>See Also</h3>
 
-<p><code>xSubneterGenes</code>, <code>xSubneterSNPs</code>
+<p><code>xVisNet</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # 1) generate a ring graph
 g &lt;- make_ring(10, directed=TRUE)

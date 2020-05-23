@@ -23,18 +23,12 @@ or edges.
 none
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-\dontrun{
-ig <- xDefineNet(network="KEGG", RData.location=RData.location)
+set.seed(825)
+ig <- sample_pa(20)
+V(ig)$name <- seq(1,vcount(ig))
 ig \%>\% xIG2TB('edges')
 ig \%>\% xIG2TB('nodes')
 }
-}
 \seealso{
-\code{\link{xTB2IG}}
+\code{\link{xIG2TB}}
 }

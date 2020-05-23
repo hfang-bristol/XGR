@@ -83,7 +83,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		message(sprintf("\timport the data file (%s) ...", as.character(now)), appendLF=T)
 	}
     ## import data file
-    if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
+    if(is.matrix(data.file) | is.data.frame(data.file) | is(data.file,"GRanges")){
         data <- data.file
     }else if(!is.null(data.file) & any(!is.na(data.file))){
     	if(length(data.file)==1){
@@ -101,7 +101,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		message(sprintf("\timport the annotation file (%s) ...", as.character(now)), appendLF=T)
 	}
     ## import annotation file
-    if(is.matrix(annotation.file) | is.data.frame(annotation.file) | class(annotation.file)=="list"){
+    if(is.matrix(annotation.file) | is.data.frame(annotation.file) | is(annotation.file,"list")){
         annotation <- annotation.file
     }else if(!is.null(annotation.file)){
 		annotation <- utils::read.delim(file=annotation.file, header=F, row.names=NULL, stringsAsFactors=F)
@@ -115,7 +115,7 @@ xGRviaGenomicAnnoAdv <- function(data.file, annotation.file=NULL, background.fil
 		message(sprintf("\timport the background file (%s) ...", as.character(now)), appendLF=T)
 	}
 	## import background file
-    if(is.matrix(background.file) | is.data.frame(background.file) | class(background.file)=="GRanges"){
+    if(is.matrix(background.file) | is.data.frame(background.file) | is(background.file,"GRanges")){
         background <- background.file
     }else if(!is.null(background.file)){
     	if(length(background.file)==1){

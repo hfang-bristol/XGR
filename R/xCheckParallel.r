@@ -8,25 +8,26 @@
 #' @note
 #' Whether parallel computation with multicores is used is system-specific. Also, it will depend on whether these two packages "foreach" and "doParallel" have been installed.
 #' @export
-#' @seealso \code{\link{xDAGsim}}, \code{\link{xSocialiser}}, \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}, \code{\link{xGRviaGenomicAnnoAdv}}
+#' @seealso \code{\link{xCheckParallel}}
 #' @include xCheckParallel.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' xCheckParallel()
 #' }
 
-xCheckParallel <- function(multicores=NULL, verbose=T)
+xCheckParallel <- function(multicores=NULL, verbose=TRUE)
 {
     
     # @import doParallel
     # @import foreach
     
-    flag_parallel <- F
+    flag_parallel <- FALSE
     pkgs <- c("doParallel","foreach")
     if(all(pkgs %in% rownames(utils::installed.packages()))){
         tmp <- sapply(pkgs, function(pkg) {
-            #suppressPackageStartupMessages(require(pkg, character.only=T))
-            requireNamespace(pkg, quietly=T)
+            #suppressPackageStartupMessages(require(pkg, character.only=TRUE))
+            requireNamespace(pkg, quietly=TRUE)
         })
         
         if(all(tmp)){
@@ -44,9 +45,9 @@ xCheckParallel <- function(multicores=NULL, verbose=T)
             doParallel::registerDoParallel(cores=multicores) # register the multicore parallel backend with the 'foreach' package
             
             if(verbose){
-                message(sprintf("\tdo parallel computation using %d cores ...", multicores, as.character(Sys.time())), appendLF=T)
+                message(sprintf("\tdo parallel computation using %d cores ...", multicores, as.character(Sys.time())), appendLF=TRUE)
             }
-            flag_parallel <- T
+            flag_parallel <- TRUE
         }
         
     }

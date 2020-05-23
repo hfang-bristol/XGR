@@ -43,7 +43,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
     reorder <- match.arg(reorder)
     legend.direction <- match.arg(legend.direction)
     
-    if(class(list_eTerm)=="list"){
+    if(is(list_eTerm,"list")){
 		## Remove null elements in a list
 		list_eTerm <- base::Filter(base::Negate(is.null), list_eTerm)
 	
@@ -66,7 +66,7 @@ xEnrichMatrix <- function(list_eTerm, method=c("ggplot2","circle","square","colo
 		ind <- which(df_all$adjp < FDR.cutoff)
 		d <- df_all[ind, c("id","name","fc","adjp","zscore","pvalue","group")]
 		
-	}else if(class(list_eTerm)=="data.frame"){
+	}else if(is(list_eTerm,"data.frame")){
 		ind <- colnames(list_eTerm) %in% c("group","name","adjp",displayBy)
 		if(sum(ind)==4){
 			#df_all <- list_eTerm[,ind]

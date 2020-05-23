@@ -14,11 +14,8 @@
 #' @seealso \code{\link{xAggregate}}
 #' @include xAggregate.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #' # HiC-gene pairs per cell types/states
 #' g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location)
 #' df <- do.call(cbind, igraph::edge_attr(g))
@@ -28,7 +25,7 @@
 #' res <- xAggregate(data)
 #' }
 
-xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
+xAggregate <- function(data, bin=FALSE, nbin=10, scale.log=TRUE, verbose=TRUE)
 {
 	
     startT <- Sys.time()
@@ -47,7 +44,7 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
 	## whether to bin first
 	if(bin){
 		if(verbose){
-			message(sprintf("The input data of %d X %d is first binned into %d ranks per column (%s) ...", nrow(data), ncol(data), nbin, as.character(Sys.time())), appendLF=T)
+			message(sprintf("The input data of %d X %d is first binned into %d ranks per column (%s) ...", nrow(data), ncol(data), nbin, as.character(Sys.time())), appendLF=TRUE)
 		}
 	
 		for(j in 1:ncol(data)){
@@ -61,14 +58,14 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
 	
 	}else{
 		if(verbose){
-			message(sprintf("The input data of %d X %d is directly used for aggregation (%s) ...", nrow(data), ncol(data), as.character(Sys.time())), appendLF=T)
+			message(sprintf("The input data of %d X %d is directly used for aggregation (%s) ...", nrow(data), ncol(data), as.character(Sys.time())), appendLF=TRUE)
 		}
 		
 	}
 	
     ####################################################################################
 	num_nonna <- apply(data, 1, function(x) sum(!is.na(x)))
-	sum_nonna <- apply(data, 1, function(x) sum(x,na.rm=T))
+	sum_nonna <- apply(data, 1, function(x) sum(x,na.rm=TRUE))
 	
 	### avoid Inf
 	tmp <- max(sum_nonna[!is.infinite(sum_nonna)])
@@ -77,17 +74,17 @@ xAggregate <- function(data, bin=F, nbin=10, scale.log=T, verbose=T)
 	
 	if(scale.log){
 		if(verbose){
-			message(sprintf("The per-row sum is log-scaled"), appendLF=T)
+			message(sprintf("The per-row sum is log-scaled"), appendLF=TRUE)
 		}
 		sum_nonna[sum_nonna==0] <- NA
 		sum_nonna <- log(sum_nonna)
 	}else{
 		if(verbose){
-			message(sprintf("The per-row sum is WITHOUT log-scaled"), appendLF=T)
+			message(sprintf("The per-row sum is WITHOUT log-scaled"), appendLF=TRUE)
 		}
 	}
 	
-	scale_sum <- (sum_nonna - min(sum_nonna,na.rm=T)) / (max(sum_nonna,na.rm=T) - min(sum_nonna,na.rm=T)) * 0.9999999
+	scale_sum <- (sum_nonna - min(sum_nonna,na.rm=TRUE)) / (max(sum_nonna,na.rm=TRUE) - min(sum_nonna,na.rm=TRUE)) * 0.9999999
 	data_input$Aggregate <- num_nonna + scale_sum
     
   ####################################################################################

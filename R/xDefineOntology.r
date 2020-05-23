@@ -12,11 +12,9 @@
 #' an object of class "aOnto", a list with two components: an igraph object 'g' (with graph attributes 'ontology' and 'type' [either 'dag' or 'iso']) and a list 'anno'
 #' @note none
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xRDataLoader}}, \code{\link{xGeneID2Symbol}}
 #' @include xDefineOntology.r
 #' @examples
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' \dontrun{
@@ -32,7 +30,7 @@
 #' res <- xDefineOntology(ontology.customised=GS)
 #' }
 
-xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC", "EnrichrARCHS4Cells","EnrichrARCHS4Tissues","EnrichrHumanGeneAtlas","EnrichrTissueHumanProteomeMap","EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD","EnrichrAchillesFitnessI","EnrichrDSigDB","EnrichrOMIM","EnrichrOMIMexpanded","EnrichrdbGaP", "EnrichrJensenDiseases","EnrichrJensenTissues", "EnrichrBioCarta","EnrichrKEGG","EnrichrNCIpathway","EnrichrPanther","EnrichrReactome","EnrichrWikiPathways","EnrichrhuMAP", "EnrichrChEA","EnrichrConsensusTFs","EnrichrEncodeTF","EnrichrTFlof","EnrichrTFpert"), ontology.customised=NULL, anno.identity=c("GeneID","Symbol"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem", "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP","SIFTS2GOMF","SIFTS2GOCC", "EnrichrARCHS4Cells","EnrichrARCHS4Tissues","EnrichrHumanGeneAtlas","EnrichrTissueHumanProteomeMap","EnrichrTissueProteomicsDB", "EnrichrAchillesFitnessD","EnrichrAchillesFitnessI","EnrichrDSigDB","EnrichrOMIM","EnrichrOMIMexpanded","EnrichrdbGaP", "EnrichrJensenDiseases","EnrichrJensenTissues", "EnrichrBioCarta","EnrichrKEGG","EnrichrNCIpathway","EnrichrPanther","EnrichrReactome","EnrichrWikiPathways","EnrichrhuMAP", "EnrichrChEA","EnrichrConsensusTFs","EnrichrEncodeTF","EnrichrTFlof","EnrichrTFpert"), ontology.customised=NULL, anno.identity=c("GeneID","Symbol"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -47,17 +45,17 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
     anno <- NULL
     
     if(!is.null(ontology.customised)){
-    	if(class(ontology.customised) == "GS"){
+    	if(is(ontology.customised,"GS")){
     		GS <- ontology.customised
     		
 			## get annotation information
 			anno <- GS$gs
 			
 			## construct g
-			nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=F)
+			nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=FALSE)
 			nodes <- rbind(nodes, c('root','root','root','root','root'))
 			relations <- data.frame(from='root', to=nodes$name)
-			g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+			g <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
 			
 			
 			###############
@@ -73,7 +71,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 		if(!is.na(ontology)){
 	
 			if(verbose){
-				message(sprintf("Load the ontology %s and its gene annotations (%s) ...", ontology, as.character(Sys.time())), appendLF=T)
+				message(sprintf("Load the ontology %s and its gene annotations (%s) ...", ontology, as.character(Sys.time())), appendLF=TRUE)
 			}
 
 			#########
@@ -108,7 +106,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 				## new gs
 				gs <- list()
 				for(i in 1:length(inds)){
-					gs[[i]] <- unlist(GS$gs[inds[[i]]], use.names=F)
+					gs[[i]] <- unlist(GS$gs[inds[[i]]], use.names=FALSE)
 				}
 				names(gs) <- rownames(set_info)
 		
@@ -138,7 +136,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 				EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 				## anno_symbols
 				anno_symbols <- lapply(anno,function(x){
-					xGeneID2Symbol(x, org=EG, details=F, verbose=F)
+					xGeneID2Symbol(x, org=EG, details=FALSE, verbose=FALSE)
 				})
 				anno <- anno_symbols	
 			}
@@ -169,7 +167,7 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 						vids <- V(g)$name[!is.na(ind)]
 						neighs.in <- igraph::neighborhood(g, order=vcount(g), nodes=vids, mode="in")
 						neighbors <- unique(names(unlist(neighs.in)))
-						g <- dnet::dNetInduce(g, nodes_query=neighbors, knn=0, remove.loops=TRUE, largest.comp=T)
+						g <- dnet::dNetInduce(g, nodes_query=neighbors, knn=0, remove.loops=TRUE, largest.comp=TRUE)
 						#g <- delete_vertices(g, V(g)$term_name!=unlist(strsplit(ontology_REACTOME, '_'))[2])
 					}
 				}
@@ -182,10 +180,10 @@ xDefineOntology <- function(ontology=c(NA,"GOBP","GOMF","GOCC","PSG","PS","PS2",
 
 			}else{
 				## construct g
-				nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=F)
+				nodes <- data.frame(name=as.character(GS$set_info$setID), term_id=as.character(GS$set_info$setID), term_name=as.character(GS$set_info$name), term_distance=as.character(GS$set_info$distance), term_namespace=as.character(GS$set_info$namespace), stringsAsFactors=FALSE)
 				nodes <- rbind(nodes, c('root','root','root','root','root'))
 				relations <- data.frame(from='root', to=nodes$name)
-				g <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+				g <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
 				
 				###############
 				##### g$type: either dag or iso

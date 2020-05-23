@@ -10,31 +10,29 @@
 #' an igraph object
 #' @note none
 #' @export
-#' @seealso \code{\link{xIG2TB}}
+#' @seealso \code{\link{xTB2IG}}
 #' @include xTB2IG.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
-#'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-#' \dontrun{
-#' ig <- xDefineNet(network="KEGG", RData.location=RData.location)
+#' set.seed(825)
+#' ig <- sample_pa(20)
+#' V(ig)$name <- seq(1,vcount(ig))
 #' ig %>% xIG2TB('edges') -> edges
 #' ig %>% xIG2TB('nodes') -> nodes
-#'
-#' xTB2IG(edges, nodes) -> ig
-#' }
+#' 
+#' xTB2IG(edges, nodes) -> g
+#' 
+#' # nodes do not cointain all vertices in the edges
+#' nodes[1:10,] -> nodes2
+#' xTB2IG(edges, nodes2) -> g2
 
-xTB2IG <- function(edges, nodes=NULL, directed=F, intersected=NULL)
+xTB2IG <- function(edges, nodes=NULL, directed=FALSE, intersected=NULL)
 {
-    if(any(class(edges) %in% c("tbl"))){
-    	edges <- edges %>% as.data.frame()
+    if(is(edges,"tbl")){
+    	edges <- edges %>% base::as.data.frame()
     }
     
-    if(any(class(nodes) %in% c("tbl"))){
-    	nodes <- nodes %>% as.data.frame()
+    if(is(nodes,"tbl")){
+    	nodes <- nodes %>% base::as.data.frame()
     }
     
     if(!is.null(nodes)){
@@ -49,7 +47,7 @@ xTB2IG <- function(edges, nodes=NULL, directed=F, intersected=NULL)
     		nodes %>% dplyr::select(name) %>% dplyr::n_distinct() -> num_nodes
     		if(num_nodes < num_nodes_in_edges){
     			# force to the restriction
-    			intersected <- T
+    			intersected <- TRUE
     		}
     	}
     	

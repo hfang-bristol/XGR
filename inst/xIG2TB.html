@@ -50,26 +50,18 @@ for nodes</p>
 
 <h3>See Also</h3>
 
-<p><code>xTB2IG</code>
+<p><code>xIG2TB</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-
-## End(Not run)
-
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-## Not run: 
-ig &lt;- xDefineNet(network="KEGG", RData.location=RData.location)
+set.seed(825)
+ig &lt;- sample_pa(20)
+V(ig)$name &lt;- seq(1,vcount(ig))
 ig %&gt;% xIG2TB('edges')
 ig %&gt;% xIG2TB('nodes')
-
-## End(Not run)
 </pre>
 
 

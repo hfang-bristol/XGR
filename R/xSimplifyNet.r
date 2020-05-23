@@ -25,7 +25,7 @@
 xSimplifyNet <- function(g, verbose=TRUE)
 {
 
-    if(class(g)=="igraph"){
+    if(is(g,"igraph")){
     	ig <- g
     
 		if(verbose){

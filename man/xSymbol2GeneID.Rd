@@ -7,9 +7,9 @@
 xSymbol2GeneID(
 data,
 org = c("human", "mouse"),
-check.symbol.identity = F,
-details = F,
-verbose = T,
+check.symbol.identity = FALSE,
+details = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -49,9 +49,8 @@ If a symbol mapped many times, the one assiged as the "protein-coding"
 type of gene is preferred.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the library
-library(XGR)
 
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
@@ -71,5 +70,5 @@ df <- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
 }
 }
 \seealso{
-\code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
+\code{\link{xRDataLoader}}
 }

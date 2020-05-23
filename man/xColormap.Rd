@@ -110,3 +110,6 @@ palette.name(3)
 # 4) return mapped colors
 xColormap(colormap="RdYlBu", data=runif(5))
 }
+\seealso{
+\code{\link{xColormap}}
+}

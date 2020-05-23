@@ -71,7 +71,7 @@ xEnrichCtree <- function(eTerm, ig, FDR.cutoff=NULL, node.color=c("zscore","adjp
         return(NULL)
     }
     
-	if(class(ig)!="igraph"){
+	if(!is(ig,"igraph")){
 		warnings("The 'ig' object must be provided.\n")
 		return(NULL)
 	}else{
@@ -81,15 +81,15 @@ xEnrichCtree <- function(eTerm, ig, FDR.cutoff=NULL, node.color=c("zscore","adjp
 		}
 	}
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		df_enrichment_group <- xEnrichViewer(eTerm, top_num="all")
 		df_enrichment_group$group <- 'group'
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame')){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(is(eTerm,'ls_eTerm')){
 			df_enrichment_group <- eTerm$df
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(is(eTerm,'data.frame')){
 			if(all(c('group','name','adjp','or','zscore','nOverlap') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore','nOverlap')]
 			}else if(all(c('name','adjp','or','zscore','nOverlap') %in% colnames(eTerm))){
@@ -106,7 +106,7 @@ xEnrichCtree <- function(eTerm, ig, FDR.cutoff=NULL, node.color=c("zscore","adjp
 	}
 	##########
 	
-	if(class(df_enrichment_group$group)=='factor'){
+	if(is(df_enrichment_group$group,'factor')){
 		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
 			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
 		}
@@ -114,7 +114,7 @@ xEnrichCtree <- function(eTerm, ig, FDR.cutoff=NULL, node.color=c("zscore","adjp
 	
 	gp <- NULL
 	
-	if(class(ig)=="igraph"){
+	if(is(ig,"igraph")){
 		
 		#########################
 		## replace those infinite

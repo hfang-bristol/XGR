@@ -21,13 +21,11 @@
 #' a subgraph with a maximum score, an object of class "igraph". It has node attributes (significance, score, type) and a graph attribute (threshold; determined when scanning 'subnet.size'). If permutation test is enabled, it also has a graph attribute (combinedP) and an edge attribute (edgeConfidence).
 #' @note The algorithm identifying a subnetwork is implemented in the dnet package (http://genomemedicine.biomedcentral.com/articles/10.1186/s13073-014-0064-8). In brief, from an input network with input node/gene information (the significant level; p-values or FDR), the way of searching for a maximum-scoring subnetwork is done as follows. Given the threshold of tolerable p-value, it gives positive scores for nodes with p-values below the threshold (nodes of interest), and negative scores for nodes with threshold-above p-values (intolerable). After score transformation, the search for a maximum scoring subnetwork is deduced to find the connected subnetwork that is enriched with positive-score nodes, allowing for a few negative-score nodes as linkers. This objective is met through minimum spanning tree finding and post-processing, previously used as a heuristic solver of prize-collecting Steiner tree problem. The solver is deterministic, only determined by the given tolerable p-value threshold. For identification of the subnetwork with a desired number of nodes, an iterative procedure is also developed to fine-tune tolerable thresholds. This explicit control over the node size may be necessary for guiding follow-up experiments.
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xDefineNet}}
+#' @seealso \code{\link{xDefineNet}}
 #' @include xSubneterGenes.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #'
 #' # a) provide the input nodes/genes with the significance info
 #' ## load human genes
@@ -82,7 +80,7 @@
 #' gridExtra::grid.arrange(grobs=list(gp_FDR, gp_FC), ncol=2, as.table=TRUE)
 #' }
 
-xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=T, subnet.significance=0.01, subnet.size=NULL, test.permutation=F, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD", "KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease","REACTOME"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], network.customised=NULL, seed.genes=TRUE, subnet.significance=0.01, subnet.size=NULL, test.permutation=FALSE, num.permutation=100, respect=c("none","degree"), aggregateBy=c("Ztransform","fishers","logistic","orderStatistic"), verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     startT <- Sys.time()
@@ -112,7 +110,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 			}
 		}else{
 			# assume a file
-			data <- utils::read.delim(file=data, header=F, row.names=NULL, stringsAsFactors=F)
+			data <- utils::read.delim(file=data, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 		}
     }
     if (is.vector(data)){
@@ -133,10 +131,10 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 		pval <- unlist(res_list)
     }
     
-    if(!is.null(network.customised) && class(network.customised)=="igraph"){
+    if(!is.null(network.customised) && is(network.customised,"igraph")){
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Load the customised network (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Load the customised network (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 		g <- network.customised
 		
@@ -144,7 +142,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=T)
+			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=TRUE)
 		}
         
         g <- xDefineNet(network=network, STRING.only=STRING.only, weighted=FALSE, verbose=FALSE, RData.location=RData.location, guid=guid)
@@ -152,7 +150,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	}
 
     if(verbose){
-        message(sprintf("The network you choose has %d nodes and %d edges", vcount(g),ecount(g)), appendLF=T)
+        message(sprintf("The network you choose has %d nodes and %d edges", vcount(g),ecount(g)), appendLF=TRUE)
     }
 	
 	if(seed.genes){
@@ -160,7 +158,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 		ind <- match(V(g)$name, names(pval))
 		## for extracted graph
 		nodes_mapped <- V(g)$name[!is.na(ind)]
-		g <- dnet::dNetInduce(g=g, nodes_query=nodes_mapped, knn=0, remove.loops=F, largest.comp=T)
+		g <- dnet::dNetInduce(g=g, nodes_query=nodes_mapped, knn=0, remove.loops=FALSE, largest.comp=TRUE)
 	}else{
 		ind <- match(V(g)$name, names(pval))
 		nodes_not_mapped <- V(g)$name[is.na(ind)]
@@ -171,19 +169,19 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 	
 	    
     if(verbose){
-        message(sprintf("Restricted to data/nodes of interest, the network (with the largest interconnected component) has %d nodes and %d edges", vcount(g),ecount(g)), appendLF=T)
+        message(sprintf("Restricted to data/nodes of interest, the network (with the largest interconnected component) has %d nodes and %d edges", vcount(g),ecount(g)), appendLF=TRUE)
     }
     
     #############################################################################################
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("Start to identify a subnetwork (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("Start to identify a subnetwork (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
-	if(class(suppressWarnings(try(subnet <- dnet::dNetPipeline(g=g, pval=pval, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=verbose), T)))=="try-error"){
+	if(is(suppressWarnings(try(subnet <- dnet::dNetPipeline(g=g, pval=pval, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=verbose), TRUE)),"try-error")){
 		subnet <- NULL
 		
 	}else{
@@ -191,7 +189,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 		if(test.permutation & !is.null(subnet.size)){
 		
 			if(verbose){
-				message(sprintf("Estimate the significance of the identified network (%d nodes) based on %d permutation test respecting '%s' (%s) ...", vcount(subnet), num.permutation, respect, as.character(Sys.time())), appendLF=T)
+				message(sprintf("Estimate the significance of the identified network (%d nodes) based on %d permutation test respecting '%s' (%s) ...", vcount(subnet), num.permutation, respect, as.character(Sys.time())), appendLF=TRUE)
 			}
 			
 			####################
@@ -213,14 +211,14 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 				set.seed(825)
 				### per node
 				ls_df <- lapply(1:length(pval), function(i){
-					#message(sprintf("%d (%s) ...", i, as.character(Sys.time())), appendLF=T)
+					#message(sprintf("%d (%s) ...", i, as.character(Sys.time())), appendLF=TRUE)
 					x <- pval[i]
 					## all_to_sample:
 					ind <- match(names(x), names(pval_degree))
 					all_to_sample <- which(pval_degree == pval_degree[ind])
 					## ind_sampled
-					ind_sampled <- base::sample(all_to_sample, B, replace=T)
-					res <- data.frame(name=names(pval[i]), pval=pval[ind_sampled], B=1:B, stringsAsFactors=F)
+					ind_sampled <- base::sample(all_to_sample, B, replace=TRUE)
+					res <- data.frame(name=names(pval[i]), pval=pval[ind_sampled], B=1:B, stringsAsFactors=FALSE)
 				})
 				df_ind_B <- do.call(rbind, ls_df)
 			
@@ -228,13 +226,13 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 				ls_index <- split(x=df_ind_B[,c("name","pval")], f=df_ind_B$B)
 				ls_subnet_permutated <- lapply(1:length(ls_index), function(j){
 					if(verbose & j%%10==0){
-						message(sprintf("\t%d (out of %d) (%s) ...", j, B, as.character(Sys.time())), appendLF=T)
+						message(sprintf("\t%d (out of %d) (%s) ...", j, B, as.character(Sys.time())), appendLF=TRUE)
 					}
 					pval_permutated <- ls_index[[j]]$pval
 					names(pval_permutated) <- ls_index[[j]]$name
 					# For permutated pval
-					#subnet_permutated <- dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=F)
-					if(class(suppressWarnings(try(subnet_permutated <- suppressMessages(dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=F)), T)))=="try-error"){
+					#subnet_permutated <- dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=FALSE)
+					if(is(suppressWarnings(try(subnet_permutated <- suppressMessages(dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=FALSE)), TRUE)),"try-error")){
 						return(NULL)
 					}else{
 						return(subnet_permutated)
@@ -251,14 +249,14 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 				set.seed(825)
 				for(j in 1:B){
 					if(verbose & j%%10!=0){
-						message(sprintf("\t%d (out of %d) (%s) ...", j, B, as.character(Sys.time())), appendLF=T)
+						message(sprintf("\t%d (out of %d) (%s) ...", j, B, as.character(Sys.time())), appendLF=TRUE)
 					}
-					ind <- base::sample(1:length(pval), replace=T)
+					ind <- base::sample(1:length(pval), replace=TRUE)
 					pval_permutated <- pval[ind]
 					names(pval_permutated) <- names(pval)
 					# For permutated pval
-					#ls_subnet_permutated[[j]] <- dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=F)
-					if(class(suppressWarnings(try(ls_subnet_permutated[[j]] <- suppressMessages(dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=F)), T)))=="try-error"){
+					#ls_subnet_permutated[[j]] <- dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=FALSE)
+					if(is(suppressWarnings(try(ls_subnet_permutated[[j]] <- suppressMessages(dnet::dNetPipeline(g=g, pval=pval_permutated, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=FALSE)), TRUE)),"try-error")){
 						ls_subnet_permutated[[j]] <- NULL
 					}
 				}
@@ -268,7 +266,7 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 			}
 			
 			# append the confidence information from the source graphs into the target graph
-			subnet <- dNetConfidence(target=subnet, sources=ls_subnet_permutated, plot=F)
+			subnet <- dNetConfidence(target=subnet, sources=ls_subnet_permutated, plot=FALSE)
 			E(subnet)$edgeConfidence <- E(subnet)$edgeConfidence/100
 			
 			# combined P-values for aggregated/global p-value
@@ -276,16 +274,16 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 			subnet$combinedP <- p_combined
 			
 			if(verbose){
-				message(sprintf("\t'%s' combined p-value (%1.2e) of the identified network (%d nodes) based on %d permutation test respecting '%s' (%s)", aggregateBy, subnet$combinedP, vcount(subnet), num.permutation, respect, as.character(Sys.time())), appendLF=T)
+				message(sprintf("\t'%s' combined p-value (%1.2e) of the identified network (%d nodes) based on %d permutation test respecting '%s' (%s)", aggregateBy, subnet$combinedP, vcount(subnet), num.permutation, respect, as.character(Sys.time())), appendLF=TRUE)
 			}
 			
 		}
 	}
-    #subnet <- dnet::dNetPipeline(g=g, pval=pval, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=F, verbose=verbose)
+    #subnet <- dnet::dNetPipeline(g=g, pval=pval, method="customised", significance.threshold=subnet.significance, nsize=subnet.size, plot=FALSE, verbose=verbose)
 
 	# extract relevant info
-	#if(igraph::ecount(subnet)>0 && class(subnet)=="igraph"){
-	if(class(subnet)=="igraph"){
+	#if(igraph::ecount(subnet)>0 && is(subnet,"igraph")){
+	if(is(subnet,"igraph")){
 		relations <- igraph::get.data.frame(subnet, what="edges")[,c(1,2)]
 		if(!is.null(subnet$combinedP)){
 			relations$edgeConfidence <- igraph::get.data.frame(subnet, what="edges")[,"edgeConfidence"]
@@ -308,9 +306,9 @@ xSubneterGenes <- function(data, network=c("STRING_highest","STRING_high","STRIN
 
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("The subnetwork has been identified (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("The subnetwork has been identified (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################

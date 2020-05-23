@@ -13,9 +13,10 @@
 #' @seealso \code{\link{xMEabf}}
 #' @include xMEabf.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' res <- xMEabf(eqtl.summary, gwas.summary)
-#' utils::write.table(res$results, file="df_abf.txt", row.names=F, col.names=T, quote=F, sep="\t")
+#' utils::write.table(res$results, file="df_abf.txt", row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t")
 #' }
 
 xMEabf <- function(eqtl.summary, gwas.summary, prior.eqtl=1e-4, prior.gwas=1e-4, prior.both=1e-5)
@@ -49,7 +50,7 @@ xMEabf <- function(eqtl.summary, gwas.summary, prior.eqtl=1e-4, prior.gwas=1e-4,
     		lABF <- 0.5 * (log(1 - r) + (r * z^2))
     		
     		## output: df_eQTL
-    		df_eQTL <- data.frame(eqtl.V=V, eqtl.z=z, eqtl.r=r, eqtl.lABF=lABF, snp=eqtl.summary$snp, stringsAsFactors=F)
+    		df_eQTL <- data.frame(eqtl.V=V, eqtl.z=z, eqtl.r=r, eqtl.lABF=lABF, snp=eqtl.summary$snp, stringsAsFactors=FALSE)
     		
     	}else{
     		return(NULL)
@@ -79,7 +80,7 @@ xMEabf <- function(eqtl.summary, gwas.summary, prior.eqtl=1e-4, prior.gwas=1e-4,
     	lABF <- 0.5 * (log(1 - r) + (r * z^2))
     	
     	## output: df_gwas
-    	df_gwas <- data.frame(gwas.V=V, gwas.z=z, gwas.r=r, gwas.lABF=lABF, snp=gwas.summary$snp, stringsAsFactors=F)
+    	df_gwas <- data.frame(gwas.V=V, gwas.z=z, gwas.r=r, gwas.lABF=lABF, snp=gwas.summary$snp, stringsAsFactors=FALSE)
 
     }else{
     	return(NULL)

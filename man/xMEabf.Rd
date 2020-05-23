@@ -54,10 +54,11 @@ integrating GWAS and eQTL summary data through Wakefield's Approximate
 Bayes Factor (ABF).
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 res <- xMEabf(eqtl.summary, gwas.summary)
-utils::write.table(res$results, file="df_abf.txt", row.names=F,
-col.names=T, quote=F, sep="\t")
+utils::write.table(res$results, file="df_abf.txt", row.names=FALSE,
+col.names=TRUE, quote=FALSE, sep="\t")
 }
 }
 \seealso{

@@ -4,7 +4,7 @@
 \alias{xRDS}
 \title{Function to read RDS files}
 \usage{
-xRDS(RDS = NULL, verbose = T, placeholder = NULL, guid = NULL)
+xRDS(RDS = NULL, verbose = TRUE, placeholder = NULL, guid = NULL)
 }
 \arguments{
 \item{RDS}{which RDS to load. To support the remote reading of a
@@ -28,18 +28,13 @@ the loaded RDS. If the data cannot be loaded, it returns NULL.
 }
 \note{
 To enable 'guid', please also install a package "osfr" via
-\code{BiocManager::install("osfr",dependencies=T)}.
+\code{BiocManager::install("osfr",dependencies=TRUE)}.
 }
 \examples{
+guid <- 'gskpn'
 \dontrun{
-org.Hs.eg <- xRDS('org.Hs.eg')
-ig.HPPA <- xRDS('ig.HPPA')
-org.Hs.egHPPA <- xRDS('org.Hs.egHPPA')
-
 # from OSF
 ig.HPPA <- xRDS('ig.HPPA', guid='gskpn')
-org.Mm.egKEGG <- xRDS('org.Mm.egKEGG', guid='gskpn')
-org.Mm.string_high <- xRDS('org.Mm.string_high', guid='gskpn')
 }
 }
 \seealso{

@@ -68,7 +68,7 @@ xGGraph <- function(ig, layout='partition', circular=T, leave=T, node.label.size
 		ig <- as.igraph(tree, directed=T, use.labels=T)
 	}
 	
-    if(class(ig) != "igraph"){
+    if(!is(ig,"igraph")){
         warnings("The function must apply to the 'igraph' object.\n")
         return(NULL)
     }else{

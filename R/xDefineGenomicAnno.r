@@ -173,20 +173,20 @@ xDefineGenomicAnno <- function(GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_Cl
     
     grl <- NULL
     
-    if(class(GR.annotation) == "GenomicRangesList"){
+    if(is(GR.annotation,"GenomicRangesList")){
     	grl <- GR.annotation
     	
     }else{
     
 		lgr <- NULL
-		if(class(GR.annotation) == "list"){
+		if(is(GR.annotation,"list")){
 			lgr <- GR.annotation
 		
-			if(!all(sapply(lgr, function(x) class(x) == "GRanges"))){
+			if(!all(sapply(lgr, function(x) is(x,"GRanges")))){
 				lgr <- NULL
 			}
 		
-		}else if(class(GR.annotation) == "GRanges"){
+		}else if(is(GR.annotation,"GRanges")){
 			lgr <- list(Customised=GR.annotation)
 	
 		}else{
@@ -200,7 +200,7 @@ xDefineGenomicAnno <- function(GR.annotation=c(NA,"Uniform_TFBS","ENCODE_TFBS_Cl
 			}
 		}
 	
-		if(class(lgr) == "list"){
+		if(is(lgr,"list")){
 			## Remove null elements in a list
 			lgr <- base::Filter(base::Negate(is.null), lgr)
 			grl <- GenomicRanges::GRangesList(lgr)	

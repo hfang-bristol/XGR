@@ -18,17 +18,13 @@
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' eTerm(term_info, annotation, g, data, background, overlap, fc, zscore, pvalue, adjp, cross)
 #' }
 eTerm <- function(term_info, annotation, g, data, background, overlap, fc, zscore, pvalue, adjp, cross){
 	## integrity checks
-	if(class(term_info)!='data.frame' | class(g)!='igraph'){
+	if(!is(term_info,'data.frame') | !is(g,'igraph')){
 		stop("The S3 class 'eTerm' object failed to pass integrity checks!\n")
 	}
 	value <- list(term_info=term_info, annotation=annotation, g=g, data=data, background=background, overlap=overlap, fc=fc, zscore=zscore, pvalue=pvalue, adjp=adjp, cross=cross)
@@ -67,17 +63,13 @@ print.eTerm <- function(x, ...) {
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ls_eTerm(df, mat, gp)
 #' }
 ls_eTerm <- function(df, mat, gp){
 	## integrity checks
-	if(class(df)!='data.frame' | class(mat)!='matrix' | all(class(gp) %in% c('ggplot','gg'))){
+	if(!is(df,'data.frame') | !is(mat,'matrix') | is(gp,'ggplot')){
 		stop("The S3 class 'ls_eTerm' object failed to pass integrity checks!\n")
 	}
 	value <- list(df=df, mat=mat, gp=gp)
@@ -111,17 +103,13 @@ print.ls_eTerm <- function(x, ...) {
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' aOnto(g, anno)
 #' }
 aOnto <- function(g, anno){
 	## integrity checks
-	if(class(g)!='igraph' | class(anno)!='list'){
+	if(!is(g,'igraph') | !is(anno,'list')){
 		stop("The S3 class 'aOnto' object failed to pass integrity checks!\n")
 	}
 	value <- list(g=g, anno=anno)
@@ -155,17 +143,13 @@ print.aOnto <- function(x, ...) {
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' GS(set_info, gs)
 #' }
 GS <- function(set_info, gs){
 	## integrity checks
-	if(class(set_info)!='data.frame' | class(gs)!='list'){
+	if(!is(set_info,'data.frame') | !is(gs,'list')){
 		stop("The S3 class 'GS' object failed to pass integrity checks!\n")
 	}
 	value <- list(set_info=set_info, gs=gs)
@@ -198,17 +182,13 @@ print.GS <- function(x, ...) {
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' EG(gene_info)
 #' }
 EG <- function(gene_info){
 	## integrity checks
-	if(class(gene_info)!='data.frame'){
+	if(!is(gene_info,'data.frame')){
 		stop("The S3 class 'EG' object failed to pass integrity checks!\n")
 	}
 	value <- list(gene_info=gene_info)
@@ -241,17 +221,13 @@ print.EG <- function(x, ...) {
 #' @keywords S3 classes
 #' @export
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' iSubg(g, ls_subg)
 #' }
 iSubg <- function(g, ls_subg){
 	## integrity checks
-	if(class(g)!='igraph' | class(ls_subg)!='list'){
+	if(!is(g,'igraph') | !is(ls_subg,'list')){
 		stop("The S3 class 'iSubg' object failed to pass integrity checks!\n")
 	}
 	value <- list(g=g, ls_subg=ls_subg)

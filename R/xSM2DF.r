@@ -14,14 +14,16 @@
 #' # create a sparse matrix of 4 X 2
 #' input.file <- rbind(c('R1','C1',1), c('R2','C1',1), c('R2','C2',1), c('R3','C2',2), c('R4','C1',1))
 #' data <- xSparseMatrix(input.file)
+#' \dontrun{
 #' # convert into a data frame
 #' res_df <- xSM2DF(data)
 #' res_df
+#' }
 
 xSM2DF <- function(data, verbose=TRUE)
 {
     
-    if(class(data) == 'dgCMatrix' | is.data.frame(data)){
+    if(is(data,'dgCMatrix') | is.data.frame(data)){
     	#data <- as.matrix(data)
 	}
     
@@ -39,7 +41,7 @@ xSM2DF <- function(data, verbose=TRUE)
     	names_col <- colnames(data)
     }
 	
-	if(is.data.frame(data) | class(data) == 'matrix' | class(data) == 'dgeMatrix'){
+	if(is.data.frame(data) | is(data,'matrix') | is(data,'dgeMatrix')){
 		data <- as.matrix(data)
 		
 		## values
@@ -52,14 +54,14 @@ xSM2DF <- function(data, verbose=TRUE)
 			res_df <- res_df[order(res_df$rownames,res_df$values,decreasing=FALSE),]
 		
 			if(verbose){
-				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=T)
+				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=TRUE)
 			}
 		
 		}else{
 			res_df <- NULL
 		}
 
-	}else if(class(data) == 'dgCMatrix' | class(data) == 'dsCMatrix'){
+	}else if(is(data,'dgCMatrix') | is(data,'dsCMatrix')){
 		ijx <- summary(data)
 		if(nrow(ijx)>0){
 			res_df <- data.frame(rownames=names_row[ijx[,1]], colnames=names_col[ijx[,2]], values=ijx[,3], stringsAsFactors=FALSE)
@@ -67,7 +69,7 @@ xSM2DF <- function(data, verbose=TRUE)
 			res_df <- res_df[order(res_df$rownames,res_df$values,decreasing=FALSE),]
 		
 			if(verbose){
-				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=T)
+				message(sprintf("A matrix of %d X %d has been converted into a data frame of %d X 3.", dim(data)[1], dim(data)[2], nrow(res_df)), appendLF=TRUE)
 			}
 		}else{
 			res_df <- NULL

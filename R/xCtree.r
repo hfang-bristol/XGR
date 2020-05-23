@@ -55,7 +55,7 @@ xCtree <- function(ig, leave.label.orientation=c('outwards','inwards'), leave.la
 		ig <- as.igraph(tree, directed=T, use.labels=T)
 	}
 	
-    if(class(ig) != "igraph"){
+    if(!is(ig,"igraph")){
         warnings("The function must apply to the 'igraph' object.\n")
         return(NULL)
     }else{
@@ -106,6 +106,12 @@ xCtree <- function(ig, leave.label.orientation=c('outwards','inwards'), leave.la
 		}
 	}
 	V(ig)$angle <- ifelse(V(ig)$angle < -90, V(ig)$angle+180, V(ig)$angle)
+	
+	## to be tested
+	if(0){
+		V(ig)$angle[is.na(V(ig)$angle)] <- 0
+		V(ig)$hjust[is.na(V(ig)$hjust)] <- 0
+	}
 	#####################################
 	x <- y <- leaf <- label <- angle <- hjust <- NULL
 	

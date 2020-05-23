@@ -22,7 +22,7 @@ elim.pvalue = 0.01,
 lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 true.path.rule = TRUE,
-verbose = T
+verbose = TRUE
 )
 }
 \arguments{
@@ -189,6 +189,7 @@ the maximum of both p-values in these two calculations.}
 }
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 # 1a) ig.EF (an object of class "igraph" storing as a directed graph)
@@ -233,6 +234,5 @@ node.info=c("full_term_name"))
 }
 }
 \seealso{
-\code{\link{xDAGanno}}, \code{\link{xEnricherGenes}},
-\code{\link{xEnricherSNPs}}
+\code{\link{xDAGanno}}
 }

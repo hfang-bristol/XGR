@@ -10,8 +10,8 @@ format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
 "hg19.to.hg18",
 "hg18.to.hg38", "hg18.to.hg19"),
-merged = T,
-verbose = T,
+merged = TRUE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -63,10 +63,8 @@ build to another. Supported are the conversions between genome builds
 'hg38' (GRCh38), 'hg19' (GRCh37) and 'h18'.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # Provide UCSC known genes (hg19)
 UCSC_genes <- xRDataLoader('UCSC_knownGene',
@@ -80,5 +78,5 @@ gr
 }
 }
 \seealso{
-\code{\link{xLiftOver}}
+\code{\link{xRDataLoader}}
 }

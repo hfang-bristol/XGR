@@ -25,10 +25,6 @@ an object of S3 class \code{iSubg}
 \code{iSubg} has 2 components: g, ls_subg.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 iSubg(g, ls_subg)

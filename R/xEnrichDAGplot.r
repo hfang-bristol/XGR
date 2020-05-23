@@ -109,7 +109,7 @@ xEnrichDAGplot <- function(eTerm, top_num=10, ig=NULL, displayBy=c("fc","adjp","
         return(NULL)
     }
     
-    if(class(eTerm)[1]=="eTerm"){
+    if(is(eTerm,"eTerm")){
 	
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
@@ -127,7 +127,7 @@ xEnrichDAGplot <- function(eTerm, top_num=10, ig=NULL, displayBy=c("fc","adjp","
 		
 		##########################################################
 		# restrict those nodes provided in 'ig'
-		if(class(ig)=="igraph"){
+		if(is(ig,"igraph")){
 			nodes_query_tmp <- intersect(nodes_query, V(ig)$name)
 			if(length(nodes_query_tmp)>0){
 				nodes_query <- nodes_query_tmp

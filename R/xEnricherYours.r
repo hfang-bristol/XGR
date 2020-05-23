@@ -119,7 +119,7 @@ xEnricherYours <- function(data.file, annotation.file, background.file=NULL, siz
     }else if(!is.null(data.file) & any(!is.na(data.file))){
     	if(length(data.file)==1){
     	
-        	if(class(suppressWarnings(try(data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F), T)))=="try-error"){
+        	if(is(suppressWarnings(try(data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F), TRUE)),"try-error")){
         		data <- data.file
         	}else{
         		data <- unique(data[,1])

@@ -47,9 +47,10 @@
 #' \item{"Notes": the order of the number of significant terms is: "none" > "lea" > "elim" > "pc".}
 #' }
 #' @export
-#' @seealso \code{\link{xDAGanno}}, \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}
+#' @seealso \code{\link{xDAGanno}}
 #' @include xEnricher.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 #' # 1a) ig.EF (an object of class "igraph" storing as a directed graph)
@@ -88,7 +89,7 @@
 #' xEnrichDAGplot(eTerm, top_num=10, displayBy="zscore", node.info=c("full_term_name"))
 #' }
 
-xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=TRUE, verbose=T)
+xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=TRUE, verbose=TRUE)
 {
 
     ####################################################################################
@@ -108,11 +109,11 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         return(NULL)
     }
     
-    if(class(annotation)=="GS"){
+    if(is(annotation,"GS")){
         originAnnos <- annotation$gs
-    }else if(class(annotation)=="list"){
+    }else if(is(annotation,"list")){
         originAnnos <- annotation
-    }else if(class(annotation)=="dgCMatrix"){
+    }else if(is(annotation,"dgCMatrix")){
 		D <- annotation
 		originAnnos <- sapply(1:ncol(D), function(j){
 			names(which(D[,j]!=0))
@@ -125,14 +126,14 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     annotation <- originAnnos
 
     ig <- g
-    if (class(ig) != "igraph"){
+    if (!is(ig,"igraph")){
         warnings("The function must apply to the 'igraph' object.\n")
         return(NULL)
     }else{
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("First, generate a subgraph induced (via '%s' mode) by the annotation data (%s) ...", path.mode, as.character(now)), appendLF=T)
+			message(sprintf("First, generate a subgraph induced (via '%s' mode) by the annotation data (%s) ...", path.mode, as.character(now)), appendLF=TRUE)
 		}
     	
     	# obtain the induced subgraph according to the input annotation data based on shortest paths (i.e. the most concise subgraph induced)
@@ -251,17 +252,17 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     		p.value <- 1
     	}else{
     		if(p.tail=='one-tail'){
-    			p.value <- stats::phyper(x,m,n,k, lower.tail=F, log.p=F)
+    			p.value <- stats::phyper(x,m,n,k, lower.tail=FALSE, log.p=FALSE)
     		}else{
     			if(X>=K*M/N){
-    				p.value <- stats::phyper(x,m,n,k, lower.tail=F, log.p=F)
+    				p.value <- stats::phyper(x,m,n,k, lower.tail=FALSE, log.p=FALSE)
     			}else{
-    				p.value <- stats::phyper(x,m,n,k, lower.tail=T, log.p=F)
+    				p.value <- stats::phyper(x,m,n,k, lower.tail=TRUE, log.p=FALSE)
     			}
     		}
     	}
     	#########################
-        #p.value <- ifelse(m==0 || k==0, 1, stats::phyper(x,m,n,k, lower.tail=lower.tail, log.p=F))
+        #p.value <- ifelse(m==0 || k==0, 1, stats::phyper(x,m,n,k, lower.tail=lower.tail, log.p=FALSE))
         
         
         return(p.value)
@@ -285,17 +286,17 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     		p.value <- 1
     	}else{
     		if(p.tail=='one-tail'){
-    			p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    			p.value <- stats::pbinom(X,K,M/N, lower.tail=FALSE, log.p=FALSE)
     		}else{
     			if(X>=K*M/N){
-    				p.value <- stats::pbinom(X,K,M/N, lower.tail=F, log.p=F)
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=FALSE, log.p=FALSE)
     			}else{
-    				p.value <- stats::pbinom(X,K,M/N, lower.tail=T, log.p=F)
+    				p.value <- stats::pbinom(X,K,M/N, lower.tail=TRUE, log.p=FALSE)
     			}
     		}
     	}
     	#########################
-        #p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=F, log.p=F))
+        #p.value <- ifelse(K==0 || M==0 || N==0, 1, stats::pbinom(X,K,M/N, lower.tail=FALSE, log.p=FALSE))
         
         return(p.value)
     }
@@ -408,18 +409,18 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 
     if(verbose){
     	now <- Sys.time()
-        message(sprintf("Next, prepare enrichment analysis (%s) ...", as.character(now)), appendLF=T)
+        message(sprintf("Next, prepare enrichment analysis (%s) ...", as.character(now)), appendLF=TRUE)
     }
     
     #############################
     if(ontology.algorithm!="none"){
-    	background.annotatable.only <- T
+    	background.annotatable.only <- TRUE
     }else{
     	if(is.null(background.annotatable.only)){
     		if(length(background)==0){
-    			background.annotatable.only <- T
+    			background.annotatable.only <- TRUE
     		}else{
-    			background.annotatable.only <- F
+    			background.annotatable.only <- FALSE
     		}
     	}
     }
@@ -441,23 +442,23 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     }else{
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("\tThere are %d genes/SNPs of interest tested against %d genes/SNPs as the background (annotatable only? %s) (%s)", length(genes.group), length(genes.universe), background.annotatable.only, as.character(now)), appendLF=T)
+			message(sprintf("\tThere are %d genes/SNPs of interest tested against %d genes/SNPs as the background (annotatable only? %s) (%s)", length(genes.group), length(genes.universe), background.annotatable.only, as.character(now)), appendLF=TRUE)
 		}
     }
 
     ## generate a subgraph of a direct acyclic graph (DAG) induced by terms
     subg <- dnet::dDAGinduce(g=subg, nodes_query=terms, path.mode=path.mode)
-	set_info <- data.frame(id=V(subg)$term_id, name=V(subg)$term_name, distance=V(subg)$term_distance, namespace=V(subg)$term_namespace, row.names=V(subg)$name, stringsAsFactors=F)
+	set_info <- data.frame(id=V(subg)$term_id, name=V(subg)$term_name, distance=V(subg)$term_distance, namespace=V(subg)$term_namespace, row.names=V(subg)$name, stringsAsFactors=FALSE)
     
     if(ontology.algorithm=="none"){
     
         if(verbose){
             now <- Sys.time()
-            message(sprintf("Third, perform enrichment analysis using '%s' test (%s) ...", test, as.character(now)), appendLF=T)
+            message(sprintf("Third, perform enrichment analysis using '%s' test (%s) ...", test, as.character(now)), appendLF=TRUE)
             if(is.null(which.distance)){
-                message(sprintf("\tThere are %d terms being used, each restricted within [%s] annotations", length(terms), paste(size.range,collapse=",")), appendLF=T)
+                message(sprintf("\tThere are %d terms being used, each restricted within [%s] annotations", length(terms), paste(size.range,collapse=",")), appendLF=TRUE)
             }else{
-                message(sprintf("\tThere are %d terms being used, each restricted within [%s] annotations and [%s] distance", length(terms), paste(size.range,collapse=","), paste(which.distance,collapse=",")), appendLF=T)
+                message(sprintf("\tThere are %d terms being used, each restricted within [%s] annotations and [%s] distance", length(terms), paste(size.range,collapse=","), paste(which.distance,collapse=",")), appendLF=TRUE)
             }
         }
     
@@ -493,13 +494,13 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
 
         if(verbose){
             now <- Sys.time()
-            message(sprintf("Third, perform enrichment analysis based on '%s' test, and also using '%s' algorithm to respect ontology structure (%s) ...", test, ontology.algorithm, as.character(now)), appendLF=T)
+            message(sprintf("Third, perform enrichment analysis based on '%s' test, and also using '%s' algorithm to respect ontology structure (%s) ...", test, ontology.algorithm, as.character(now)), appendLF=TRUE)
         }
         
         #########
         
         if(verbose){
-            message(sprintf("\tThere are %d terms being used", length(V(subg))), appendLF=T)
+            message(sprintf("\tThere are %d terms being used", length(V(subg))), appendLF=TRUE)
         }
         
         level2node <- dnet::dDAGlevel(subg, level.mode="longest_path", return.mode="level2node")
@@ -512,18 +513,18 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         
         ## create a new (empty) hash environment
         ## node2pval.Hash: key (node), value (pvalue)
-        node2pval.Hash <- new.env(hash=T, parent=emptyenv())        
+        node2pval.Hash <- new.env(hash=TRUE, parent=emptyenv())        
         ## node2zscore.Hash: key (node), value (zscore)
-        node2zscore.Hash <- new.env(hash=T, parent=emptyenv())   
+        node2zscore.Hash <- new.env(hash=TRUE, parent=emptyenv())   
         ## node2fc.Hash: key (node), value (fc)
-        node2fc.Hash <- new.env(hash=T, parent=emptyenv())    
+        node2fc.Hash <- new.env(hash=TRUE, parent=emptyenv())    
         
         ## node2or.Hash: key (node), value (or)
-        node2or.Hash <- new.env(hash=T, parent=emptyenv())
+        node2or.Hash <- new.env(hash=TRUE, parent=emptyenv())
         ## node2CIl.Hash: key (node), value (CIl)
-        node2CIl.Hash <- new.env(hash=T, parent=emptyenv())
+        node2CIl.Hash <- new.env(hash=TRUE, parent=emptyenv())
         ## node2CIu.Hash: key (node), value (CIu)
-        node2CIu.Hash <- new.env(hash=T, parent=emptyenv())
+        node2CIu.Hash <- new.env(hash=TRUE, parent=emptyenv())
                         
         if(ontology.algorithm=="pc"){
         
@@ -603,7 +604,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                 }
                 
                 if(verbose){
-                    message(sprintf("\tAt level %d, there are %d nodes/terms", i, length(currNodes), appendLF=T))
+                    message(sprintf("\tAt level %d, there are %d nodes/terms", i, length(currNodes), appendLF=TRUE))
                 }
             }
             
@@ -615,9 +616,9 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
         }else if(ontology.algorithm=="elim"){
         
             ## sigNode2pval.Hash: key (node called significant), value (pvalue)
-            sigNode2pval.Hash <- new.env(hash=T, parent=emptyenv())
+            sigNode2pval.Hash <- new.env(hash=TRUE, parent=emptyenv())
             ## ancNode2gene.Hash: key (node at ancestor), value (genes to be eliminated)
-            ancNode2gene.Hash <- new.env(hash=T, parent=emptyenv())
+            ancNode2gene.Hash <- new.env(hash=TRUE, parent=emptyenv())
             
             if(is.null(elim.pvalue) || is.na(elim.pvalue) || elim.pvalue>1 || elim.pvalue<0){
                 elim.pvalue <- 1e-2
@@ -638,7 +639,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     if(exists(currNode, envir=ancNode2gene.Hash, mode="numeric")){
                         genes.elim <- get(currNode, envir=ancNode2gene.Hash, mode="numeric")
                         genes.term <- setdiff(genes.term, genes.elim)
-                        #message(sprintf("\t\t%d %d", length(genes.elim), length(genes.term)), appendLF=T)
+                        #message(sprintf("\t\t%d %d", length(genes.elim), length(genes.term)), appendLF=TRUE)
                     }
         
                     ## do test
@@ -706,14 +707,14 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                     num.signodes <- length(ls(sigNode2pval.Hash))
                     num.ancnodes <- length(ls(ancNode2gene.Hash))
                     num.elimgenes <- length(unique(unlist(as.list(ancNode2gene.Hash))))
-                    message(sprintf("\tAt level %d, there are %d nodes/terms: up to %d significant nodes, %d ancestral nodes changed (%d genes/SNPs eliminated)", i, length(currNodes), num.signodes, num.ancnodes, num.elimgenes), appendLF=T)
+                    message(sprintf("\tAt level %d, there are %d nodes/terms: up to %d significant nodes, %d ancestral nodes changed (%d genes/SNPs eliminated)", i, length(currNodes), num.signodes, num.ancnodes, num.elimgenes), appendLF=TRUE)
                 }
             }
             
         }else if(ontology.algorithm=="lea"){
         
             ## node2pvalo.Hash: key (node called significant), value (original pvalue)
-            node2pvalo.Hash <- new.env(hash=T, parent=emptyenv())
+            node2pvalo.Hash <- new.env(hash=TRUE, parent=emptyenv())
         
             if(is.null(lea.depth) || is.na(lea.depth) || lea.depth<0){
                 lea.depth <- 2
@@ -847,7 +848,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
                 }
     
                 if(verbose){
-                    message(sprintf("\tAt level %d, there are %d nodes/terms and %d being recalculated", i, length(currNodes), num.recalculate), appendLF=T)
+                    message(sprintf("\tAt level %d, there are %d nodes/terms and %d being recalculated", i, length(currNodes), num.recalculate), appendLF=TRUE)
                 }
             
             }
@@ -873,7 +874,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     })
     names(overlaps) <- names(gs)
     ## for those with "min.overlap" overlaps will be processed and reported
-    flag_filter <- sapply(overlaps, function(x) ifelse(length(x)>=min.overlap,T,F))
+    flag_filter <- sapply(overlaps, function(x) ifelse(length(x)>=min.overlap,TRUE,FALSE))
     
     if(sum(flag_filter)==0){
         #stop("It seems there are no terms meeting the specified 'size.range' and 'min.overlap'.\n")
@@ -927,7 +928,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("Last, adjust the p-values for %d terms (with %d minimum overlaps) using the %s method (%s) ...", length(pvals), min.overlap, p.adjust.method, as.character(now)), appendLF=T)
+        message(sprintf("Last, adjust the p-values for %d terms (with %d minimum overlaps) using the %s method (%s) ...", length(pvals), min.overlap, p.adjust.method, as.character(now)), appendLF=TRUE)
     }
     
     ## Adjust P-values for multiple comparisons
@@ -948,7 +949,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     # scientific notations
     pvals  <- sapply(pvals, function(x){
     	if(x < 0.1 & x!=0){
-    		as.numeric(format(x,scientific=T))
+    		as.numeric(format(x,scientific=TRUE))
     	}else{
     		x
     	}
@@ -956,7 +957,7 @@ xEnricher <- function(data, annotation, g, background=NULL, size.range=c(10,2000
     
     adjpvals <- sapply(adjpvals, function(x){
     	if(x < 0.1 & x!=0){
-    		as.numeric(format(x,scientific=T))
+    		as.numeric(format(x,scientific=TRUE))
     	}else{
     		x
     	}

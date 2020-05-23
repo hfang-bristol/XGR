@@ -72,7 +72,7 @@ xGraphML2AA <- function(data=NULL, org=c("human","mouse"), query="AA:hsa04672", 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     curation <- match.arg(curation)
     
-    if(any(class(data) %in% c('tbl_df', 'tbl'))){
+    if(is(data,'tbl')){
     	data <- as.data.frame(data)
     }
     

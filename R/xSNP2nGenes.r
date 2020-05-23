@@ -24,13 +24,11 @@
 #' }
 #' @note For details on the decay kernels, please refer to \code{\link{xVisKernels}}
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xVisKernels}}
+#' @seealso \code{\link{xSNPlocations}}, \code{\link{xRDataLoader}}, \code{\link{xGR}}, \code{\link{xSymbol2GeneID}}
 #' @include xSNP2nGenes.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
@@ -46,16 +44,16 @@
 #' df_nGenes <- xSNP2nGenes(data=data, distance.max=200000, decay.kernel="slow", decay.exponent=2, include.TAD='GM12878', RData.location=RData.location)
 #' }
 
-xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.TAD=c("none","GM12878","IMR90","MSC","TRO","H1","MES","NPC"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     decay.kernel <- match.arg(decay.kernel)
     include.TAD <- match.arg(include.TAD)
 	
 	## replace '_' with ':'
-	data <- gsub("_", ":", data, perl=T)
+	data <- gsub("_", ":", data, perl=TRUE)
 	## replace 'imm:' with 'chr'
-	data <- gsub("imm:", "chr", data, perl=T)
+	data <- gsub("imm:", "chr", data, perl=TRUE)
 	
 	data <- unique(data)
 	
@@ -69,16 +67,16 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
   	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=TRUE)
 	}
-	if(class(GR.Gene) == "GRanges"){
+	if(is(GR.Gene,"GRanges")){
 			gr_Gene <- GR.Gene
 	}else{
 		gr_Gene <- xRDataLoader(GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(gr_Gene)){
 			GR.Gene <- "UCSC_knownGene"
 			if(verbose){
-				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=TRUE)
 			}
 			gr_Gene <- xRDataLoader(GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
@@ -86,7 +84,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=TRUE)
 	}
     
 	# genes: get all UCSC genes within defined distance window away from variants
@@ -95,20 +93,20 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	minoverlap <- 0L
 	subject <- gr_Gene
 	query <- gr_SNP
-	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))
+	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=TRUE))))
 	
 	if(length(q2r) > 0){
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Calculate distance (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Calculate distance (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 	
 		if(1){
 			### very quick
 			x <- subject[q2r[,2],]
 			y <- query[q2r[,1],]
-			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
+			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=TRUE)
 			
 			###
 			df_y <- GenomicRanges::as.data.frame(y, row.names=NULL)
@@ -148,7 +146,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 			vec_interval <- paste0(df_interval$seqnames, ':', as.character(df_interval$start), '-', as.character(df_interval$end))
 			###
 			
-			df_nGenes <- data.frame(Gene=names(x), SNP=names(y), Dist=dists, Gap=vec_interval, stringsAsFactors=F)
+			df_nGenes <- data.frame(Gene=names(x), SNP=names(y), Dist=dists, Gap=vec_interval, stringsAsFactors=FALSE)
 		}
 	
 		## weights according to distance away from SNPs
@@ -170,7 +168,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(df_nGenes$Gene)), distance.max, decay.kernel, as.character(now)), appendLF=T)
+			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(df_nGenes$Gene)), distance.max, decay.kernel, as.character(now)), appendLF=TRUE)
 		}
 		
 		df_nGenes <- df_nGenes[,c('Gene','SNP','Dist','Weight','Gap')]
@@ -181,7 +179,7 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("No nearby genes are defined"), appendLF=T)
+			message(sprintf("No nearby genes are defined"), appendLF=TRUE)
 		}
 	}
 	
@@ -193,13 +191,13 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 	if(length(include.TAD) > 0){
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Inclusion of TAD boundary regions is based on '%s'", include.TAD), appendLF=T)
+			message(sprintf("Inclusion of TAD boundary regions is based on '%s'", include.TAD), appendLF=TRUE)
 		}
 		df_nGenes$TAD <- rep('Excluded', nrow(df_nGenes))
 		
 		TAD <- xRDataLoader(paste0('TAD.',include.TAD), RData.location=RData.location, guid=guid, verbose=verbose)
 		iGR <- xGR(data=df_nGenes$Gap, format="chr:start-end", RData.location=RData.location, guid=guid)
-		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=iGR, subject=TAD, type="within", select="all", ignore.strand=T))))
+		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=iGR, subject=TAD, type="within", select="all", ignore.strand=TRUE))))
 		q2r <- q2r[!duplicated(q2r[,1]), ]
 		df_nGenes$TAD[q2r[,1]] <- GenomicRanges::mcols(TAD)[q2r[,2],]
 		
@@ -211,8 +209,8 @@ xSNP2nGenes <- function(data, distance.max=200000, decay.kernel=c("rapid","slow"
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("\t%d out of %d SNP-nGene pairs are within the same TAD boundary regions", sum(df_nGenes$TAD!='Excluded'), length(iGR)), appendLF=T)
-			message(sprintf("\t%d out of %d genes are defined as nearby genes after considering TAD boundary regions", length(unique(df_nGenes[df_nGenes$TAD!='Excluded','Gene'])), length(unique(df_nGenes$Gene))), appendLF=T)
+			message(sprintf("\t%d out of %d SNP-nGene pairs are within the same TAD boundary regions", sum(df_nGenes$TAD!='Excluded'), length(iGR)), appendLF=TRUE)
+			message(sprintf("\t%d out of %d genes are defined as nearby genes after considering TAD boundary regions", length(unique(df_nGenes[df_nGenes$TAD!='Excluded','Gene'])), length(unique(df_nGenes$Gene))), appendLF=TRUE)
 		}
 		
 	}

@@ -8,10 +8,10 @@ xDefineHIC(
 data = NULL,
 entity = c("SNP", "chr:start-end", "data.frame", "bed", "GRanges"),
 include.HiC = c(NA, "Monocytes", "Macrophages_M0", "Macrophages_M1",
-"Macrophages_M2",
-"Neutrophils", "Megakaryocytes", "Endothelial_precursors",
-"Erythroblasts",
-"Fetal_thymus", "Naive_CD4_T_cells", "Total_CD4_T_cells",
+"Macrophages_M2", "Neutrophils", "Megakaryocytes",
+"Endothelial_precursors",
+"Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
+"Total_CD4_T_cells",
 "Activated_total_CD4_T_cells", "Nonactivated_total_CD4_T_cells",
 "Naive_CD8_T_cells",
 "Total_CD8_T_cells", "Naive_B_cells", "Total_B_cells", "PE.Monocytes",
@@ -162,11 +162,6 @@ score for the number of significant cell types plus scaled average.}
 }
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # a) provide the SNPs with the significance info
@@ -187,5 +182,5 @@ xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xRDataLoader}}, \code{\link{xAggregate}}
 }

@@ -19,7 +19,8 @@ font.family = "sans",
 signature = FALSE,
 drop = F,
 sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "none")
+"nOverlap",
+"none")
 )
 }
 \arguments{

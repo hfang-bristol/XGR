@@ -13,7 +13,7 @@ GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
 "NPC"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -105,10 +105,8 @@ For details on the decay kernels, please refer to
 \code{\link{xVisKernels}}
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
@@ -129,5 +127,6 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xVisKernels}}
+\code{\link{xSNPlocations}}, \code{\link{xRDataLoader}},
+\code{\link{xGR}}, \code{\link{xSymbol2GeneID}}
 }

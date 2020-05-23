@@ -60,7 +60,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
         return(NULL)
     }
     
-    if(any(class(eTerm) %in% 'eTerm')){
+    if(is(eTerm,'eTerm')){
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
 		
@@ -83,13 +83,13 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
-	}else if(any(class(eTerm) %in% 'ls_eTerm') | any(class(eTerm) %in% c('data.frame','tbl_df','tbl'))){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame') | is(eTerm,'tbl')){
 	
-		if(any(class(eTerm) %in% 'ls_eTerm')){
+		if(is(eTerm,'ls_eTerm')){
 			## when 'auto', will keep the significant terms
 			df <- eTerm$df
 			
-		}else if(any(class(eTerm) %in% c('data.frame','tbl_df','tbl'))){
+		}else if(is(eTerm,'data.frame') | is(eTerm,'tbl')){
 			eTerm <- as.data.frame(eTerm)
 			
 			if(all(c('group','ontology','name','adjp','or','CIl','CIu') %in% colnames(eTerm))){
@@ -171,7 +171,7 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 	df$fdr[df$fdr>=zlim[2]] <- zlim[2]
 	
 	## order by 'or', 'adjp'
-	if(class(eTerm)=='eTerm' & sortBy!='or'){
+	if(is(eTerm,'eTerm') & sortBy!='or'){
 		df <- df[rev(1:nrow(df)),]
 	}else{
 		df <- df[with(df,order(group, ontology, or, -fdr)),]

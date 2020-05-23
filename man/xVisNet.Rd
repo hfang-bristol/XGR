@@ -12,7 +12,6 @@ ncolors = 40,
 zlim = NULL,
 colorbar = TRUE,
 newpage = TRUE,
-signature = TRUE,
 glayout = layout_with_kk,
 vertex.frame.color = NA,
 vertex.size = NULL,
@@ -64,9 +63,6 @@ pattern is null, it always sets to false}
 
 \item{newpage}{logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page}
-
-\item{signature}{logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets FALSE}
 
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this
@@ -134,6 +130,7 @@ input pattern.
 none
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # 1) generate a ring graph
 g <- make_ring(10, directed=TRUE)
@@ -167,5 +164,5 @@ dev.off()
 }
 }
 \seealso{
-\code{\link{xSubneterGenes}}, \code{\link{xSubneterSNPs}}
+\code{\link{xVisNet}}
 }

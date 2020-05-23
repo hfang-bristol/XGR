@@ -10,16 +10,18 @@ ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF",
 "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
 "MsigdbC2CGP",
 "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
-"MsigdbC2BIOCARTA",
-"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p",
-"GTExV7",
-"CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
-"CreedsDrugUP",
-"CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG",
-"KEGGmetabolism", "KEGGgenetic", "KEGGenvironmental", "KEGGcellular",
-"KEGGorganismal", "KEGGdisease", "REACTOME", "REACTOME_ImmuneSystem",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM",
+"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7",
+"DGIdb", "GTExV4",
+"GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP",
+"CreedsDiseaseDN",
+"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
+"CreedsGeneUP",
+"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
+"KEGGenvironmental",
+"KEGGcellular", "KEGGorganismal", "KEGGdisease", "REACTOME",
+"REACTOME_ImmuneSystem",
 "REACTOME_SignalTransduction", "CGL", "SIFTS2GOBP", "SIFTS2GOMF",
 "SIFTS2GOCC",
 "EnrichrARCHS4Cells", "EnrichrARCHS4Tissues", "EnrichrHumanGeneAtlas",
@@ -36,7 +38,7 @@ ontology = c(NA, "GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF",
 "EnrichrTFpert"),
 ontology.customised = NULL,
 anno.identity = c("GeneID", "Symbol"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -115,8 +117,6 @@ annotations. It returns an object of class "aOnto".
 none
 }
 \examples{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 \dontrun{
@@ -135,5 +135,5 @@ res <- xDefineOntology(ontology.customised=GS)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xRDataLoader}}, \code{\link{xGeneID2Symbol}}
 }

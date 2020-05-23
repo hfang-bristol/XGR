@@ -13,9 +13,6 @@
 #' @include xMakeGenes.r
 #' @examples
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' 
 #' EG <- xMakeGenes(gene_info.file="GeneInfo.9606", output.prefix="org.Hs.eg")
 #' }
 

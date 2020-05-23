@@ -80,11 +80,6 @@ of HiC interaction scores.
 none
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # a) provide the SNPs with the significance info
@@ -97,5 +92,5 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xDefineHIC}}, \code{\link{xSymbol2GeneID}}
 }

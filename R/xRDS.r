@@ -8,89 +8,64 @@
 #' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid provided and the query matched, it has priority over the one specified via placeholder
 #' @return 
 #' the loaded RDS. If the data cannot be loaded, it returns NULL.
-#' @note To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
+#' @note To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=TRUE)}.
 #' @export
+#' @importFrom osfr osf_retrieve_node osf_retrieve_node osf_download
 #' @seealso \code{\link{xRDS}}
 #' @include xRDS.r
 #' @examples
+#' guid <- 'gskpn'
 #' \dontrun{
-#' org.Hs.eg <- xRDS('org.Hs.eg')
-#' ig.HPPA <- xRDS('ig.HPPA')
-#' org.Hs.egHPPA <- xRDS('org.Hs.egHPPA')
-#' 
 #' # from OSF
 #' ig.HPPA <- xRDS('ig.HPPA', guid='gskpn')
-#' org.Mm.egKEGG <- xRDS('org.Mm.egKEGG', guid='gskpn')
-#' org.Mm.string_high <- xRDS('org.Mm.string_high', guid='gskpn')
 #' }
 
-xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
+xRDS <- function(RDS=NULL, verbose=TRUE, placeholder=NULL, guid=NULL)
 {
 	
     startT <- Sys.time()
     if(verbose){
-    	message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
-    	message("", appendLF=TRUE)
+    	message(sprintf("Starting ... (at %s)\n", as.character(startT)), appendLF=TRUE)
     }
 	
     if(is.null(RDS)){
 		stop("Please provide the RDS file.\n")
 	}
-	RDS <- gsub('.RDS$', "", RDS, ignore.case=T, perl=T)
-	RDS <- gsub(".rds$", "", RDS, ignore.case=T, perl=T)
+	RDS <- gsub('.RDS$', "", RDS, ignore.case=TRUE, perl=TRUE)
+	RDS <- gsub(".rds$", "", RDS, ignore.case=TRUE, perl=TRUE)
+	
+	out <- NULL
 	
 	######################################################################################
 	# obtain from Open Science Frame (OSF)
 	######################################################################################
-	flag_osf <- F
+	flag_osf <- FALSE
 	# check in order: 
 	# 1) whether 5-digit guid (global unique identifier, eg 'gskpn') is provided
-	# 2) wether the package 'osfr' is installed
-	# 3) whether provided guid (for a project on OSF) can be retrieved (via osfr::osf_retrieve_node)
-	# 4) whether to-be-queried RDS file is there (via osfr::osf_ls_files)
+	# 2) whether provided guid (for a project on OSF) can be retrieved (via osfr::osf_retrieve_node)
+	# 3) whether to-be-queried RDS file is there (via osfr::osf_ls_files)
 	if(!is.null(guid) && nchar(guid)==5){
-		pkgs <- c("osfr")
-    	if(all(pkgs %in% rownames(utils::installed.packages()))){
-        	tmp <- sapply(pkgs, function(pkg) {
-            	requireNamespace(pkg, quietly=T)
-        	})
-        	if(all(tmp)){
-        		
-        		######################################
-				## temporarily mask the package "osfr"
-				prj <- fls <- res <- NULL
-				
-				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
-				#if(all(class(suppressWarnings(try(eval(parse(text=paste0('prj<-osfr::osf_retrieve_node(guid)'))), T))) != "try-error")){
-					target <- paste0(RDS,".RDS")
-					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
-					#eval(parse(text=noquote(paste0('fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)'))))
-					if(nrow(fls)>0){
-						ind <- match(fls$name, target)
-						ind <- ind[!is.na(ind)]
-						if(length(ind)==1){
-							fl <- fls[ind,]
-						
-							## specify the temporary file
-							res <- fl %>% osfr::osf_download(path=tempdir(), conflicts="overwrite")
-							#destfile <- file.path(tempdir(), fl$name)
-							#eval(parse(text=paste0('res <- fl %>% osfr::osf_download(overwrite=T, path=destfile)')))
-							#res %>% osf_open()
-							# verify the file downloaded locally
-							if(file.exists(res$local_path)){
-								out <- readRDS(res$local_path)
-								load_RDS <- sprintf("'%s' at %s", prj$name, paste0('https://osf.io/',prj$id))
-								RDS <- target
-								flag_osf <- T
-							}
-						
-						}
+		prj <- fls <- res <- NULL
+		if(!is(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), TRUE)),"try-error")){
+			target <- paste0(RDS,".RDS")
+			fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
+			if(nrow(fls)>0){
+				ind <- match(fls$name, target)
+				ind <- ind[!is.na(ind)]
+				if(length(ind)==1){
+					fl <- fls[ind,]
+					res <- fl %>% osfr::osf_download(path=tempdir(), conflicts="overwrite")
+					#res %>% osf_open()
+					# verify the file downloaded locally
+					if(file.exists(res$local_path)){
+						out <- readRDS(res$local_path)
+						load_RDS <- sprintf("'%s' at %s", prj$name, paste0('https://osf.io/',prj$id))
+						RDS <- target
+						flag_osf <- TRUE
 					}
 				}
-				######################################
-
 			}
-        }
+		}
 	}
 	
 	######################################################################################	
@@ -98,14 +73,13 @@ xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
 	######################################################################################
 	if(!flag_osf & !is.null(placeholder)){
 		
-		out <- NULL
 		###############################
 		## make sure there is no "/" at the end
 		placeholder <- gsub("/$", "", placeholder)
 		
 		if(grepl("^https?://", placeholder)){
 			load_remote <- paste0(placeholder, "/", RDS, ".RDS")
-			if(class(suppressWarnings(try(out <- readRDS(gzcon(url(load_remote))), T)))=="try-error"){
+			if(is(suppressWarnings(try(out <- readRDS(gzcon(url(load_remote))), TRUE)),"try-error")){
 				out <- NULL
 			}else{
 				load_RDS <- load_remote
@@ -123,9 +97,9 @@ xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
 	
     if(verbose){
         if(!is.null(out)){
-			message(sprintf("'%s' (from %s) has been loaded into the working environment (at %s)", RDS, load_RDS, as.character(Sys.time())), appendLF=T)
+			message(sprintf("'%s' (from %s) successfully loaded (at %s)", RDS, load_RDS, as.character(Sys.time())), appendLF=TRUE)
 		}else{
-			message(sprintf("'%s' CANNOT be loaded (at %s)", RDS, as.character(Sys.time())), appendLF=T)
+			message(sprintf("'%s' CANNOT be loaded (at %s)", RDS, as.character(Sys.time())), appendLF=TRUE)
 		}
     }
     
@@ -134,8 +108,8 @@ xRDS <- function(RDS=NULL, verbose=T, placeholder=NULL, guid=NULL)
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     
     if(verbose){
-    	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
-    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    	message(sprintf("\nEnded (at %s)", as.character(endT)), appendLF=TRUE)
+    	message(sprintf("Runtime in total: %d secs\n", runTime), appendLF=TRUE)
     }
     
     invisible(out)

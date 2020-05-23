@@ -5,7 +5,7 @@
 \title{Function to score genomic regions based on the given significance level}
 \usage{
 xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
-= T)
+= TRUE)
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -46,10 +46,8 @@ together with the significance level.
 None
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
@@ -70,5 +68,5 @@ df_GR <- xGRscores(data=data, significance.threshold=5e-5)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xGRscores}}
 }

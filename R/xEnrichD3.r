@@ -43,7 +43,7 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
         return(NULL)
     }
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
 		
@@ -57,13 +57,13 @@ xEnrichD3 <- function(eTerm, top_num=10, FDR.cutoff=0.05, type=c("sankey","force
 		df$group <- 'group'
 		df$ontology <- 'ontology'
 		
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame')){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(is(eTerm,'ls_eTerm')){
 			## when 'auto', will keep the significant terms
 			df <- eTerm$df
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(is(eTerm,'data.frame')){
 			if(all(c('group','ontology','name','adjp','zscore') %in% colnames(eTerm))){
 				df <- eTerm[,c('group','ontology','name','adjp','zscore')]
 			

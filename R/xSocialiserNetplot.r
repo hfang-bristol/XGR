@@ -61,7 +61,7 @@ xSocialiserNetplot <- function(g, query, displayBy=c("IC","none"), path.mode=c("
         stop("There is no similarity in the 'igraph' object.\n")
     }
     
-    if (class(g) != "igraph"){
+    if (!is(g,"igraph")){
         stop("The function must apply to the 'igraph' object.\n")
     }
     

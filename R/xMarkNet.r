@@ -32,7 +32,7 @@
 xMarkNet <- function(ig1, ig2, verbose=TRUE)
 {
 
-   	if(!(any(class(ig1) %in% "igraph")) & !(any(class(ig2) %in% "igraph"))){
+   	if(!is(ig1,"igraph") & !is(ig2,"igraph")){
 		return(NULL)
 	}
 	

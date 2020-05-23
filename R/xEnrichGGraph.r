@@ -68,7 +68,7 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
     }
     
     if(0){
-	if(class(ig)!="igraph"){
+	if(!is(ig,"igraph")){
 		warnings("The 'ig' object must be provided.\n")
 		return(NULL)
 	}else{
@@ -79,15 +79,15 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 	}
 	}
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		df_enrichment_group <- xEnrichViewer(eTerm, top_num="all")
 		df_enrichment_group$group <- 'group'
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame')){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(is(eTerm,'ls_eTerm')){
 			df_enrichment_group <- eTerm$df[, c('group','name','adjp','or','zscore')]
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(is(eTerm,'data.frame')){
 			if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore')]
 			}else if(all(c('name','adjp','or','zscore') %in% colnames(eTerm))){
@@ -97,7 +97,7 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 		}
 	}
 	
-	if(class(df_enrichment_group$group)=='factor'){
+	if(is(df_enrichment_group$group,'factor')){
 		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
 			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
 		}
@@ -105,8 +105,8 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 
 	##########################################################
 	# restrict those nodes provided in 'ig'
-	if(class(ig)!="igraph"){
-		if(class(eTerm)=='eTerm'){
+	if(!is(ig,"igraph")){
+		if(is(eTerm,'eTerm')){
 			ig <- eTerm$g
 			V(ig)$name <- V(ig)$term_name
 		}else{
@@ -117,7 +117,7 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 	if(!fixed){
 		ind <- match(V(ig)$name, df_enrichment_group$name)
 		nodes_query <- V(ig)$name[!is.na(ind)]
-		if(class(suppressWarnings(try(ig <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), T)))=="try-error"){
+		if(is(suppressWarnings(try(ig <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), TRUE)),"try-error")){
 			ig <- NULL
 		}
 	}
@@ -125,7 +125,7 @@ xEnrichGGraph <- function(eTerm, ig=NULL, fixed=T, node.color=c("zscore","adjp",
 
 	gp <- NULL
 	
-	if(class(ig)=="igraph"){
+	if(is(ig,"igraph")){
 		
 		#########################
 		## replace those infinite

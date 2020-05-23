@@ -84,7 +84,7 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     
     ################################################
     ## support enrichment analysis for modular genes from the cModule object
-    if(class(list_vec)=='cModule'){
+    if(is(list_vec,'cModule')){
     	list_vec <- split(x=list_vec$mem$nodes, f=list_vec$mem$modules)
     }
     ################################################
@@ -94,9 +94,9 @@ xEnricherGenesAdv <- function(list_vec, background=NULL, check.symbol.identity=F
     	return(NULL)
     }
     ############
-    if(is.vector(list_vec) & class(list_vec)!="list"){
+    if(is.vector(list_vec) & !is(list_vec,"list")){
     	list_vec <- list(list_vec)
-	}else if(class(list_vec)=="list"){
+	}else if(is(list_vec,"list")){
 		## Remove null elements in a list
 		list_vec <- base::Filter(base::Negate(is.null), list_vec)
 		if(length(list_vec)==0){

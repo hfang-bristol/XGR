@@ -20,7 +20,7 @@ list of SNPs.
 xSNPlocations(
 data,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -92,11 +92,6 @@ storing SNP location in the format of 'chrN:xxx', where N is either
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-
-## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
 ## Not run: 

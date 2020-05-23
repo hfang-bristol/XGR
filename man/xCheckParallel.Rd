@@ -4,7 +4,7 @@
 \alias{xCheckParallel}
 \title{Function to check whether parallel computing should be used and how}
 \usage{
-xCheckParallel(multicores = NULL, verbose = T)
+xCheckParallel(multicores = NULL, verbose = TRUE)
 }
 \arguments{
 \item{multicores}{an integer to specify how many cores will be
@@ -27,12 +27,11 @@ system-specific. Also, it will depend on whether these two packages
 "foreach" and "doParallel" have been installed.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 xCheckParallel()
 }
 }
 \seealso{
-\code{\link{xDAGsim}}, \code{\link{xSocialiser}},
-\code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}},
-\code{\link{xGRviaGenomicAnnoAdv}}
+\code{\link{xCheckParallel}}
 }

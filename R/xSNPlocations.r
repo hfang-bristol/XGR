@@ -14,10 +14,6 @@
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xSNPlocations.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #'
 #' \dontrun{
@@ -32,13 +28,13 @@
 #' snp_gr <- xSNPlocations(data=data, RData.location=RData.location)
 #' }
 
-xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
 	## replace '_' with ':'
-	data <- gsub("_", ":", data, perl=T)
+	data <- gsub("_", ":", data, perl=TRUE)
 	## replace 'imm:' with 'chr'
-	data <- gsub("imm:", "chr", data, perl=T)
+	data <- gsub("imm:", "chr", data, perl=TRUE)
 	
 	data <- unique(data)
 	
@@ -49,16 +45,16 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Sing
   	## load positional information
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Load positional information for SNPs (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Load positional information for SNPs (%s) ...", as.character(now)), appendLF=TRUE)
 	}
-	if(class(GR.SNP) == "GRanges"){
+	if(is(GR.SNP,"GRanges")){
 		pos_SNP <- GR.SNP
 	}else{
 		pos_SNP <- xRDataLoader(GR.SNP[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(pos_SNP)){
 			GR.SNP <- "dbSNP_GWAS"
 			if(verbose){
-				message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
+				message(sprintf("Instead, %s will be used", GR.SNP), appendLF=TRUE)
 			}
 			pos_SNP <- xRDataLoader(GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
@@ -76,7 +72,7 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Sing
   	
   	#######################################################
   	### deal with data_rest having the format as: chr\w+:\d+
-  	ind <- grep("^chr\\w+:\\d+", data_rest, perl=T)
+  	ind <- grep("^chr\\w+:\\d+", data_rest, perl=TRUE)
   	if(length(ind)>0){
 		data_rest <- data_rest[ind]
 		res_ls <- strsplit(data_rest, ":")
@@ -101,12 +97,12 @@ xSNPlocations <- function(data, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Sing
 	}
   	if(verbose){
 		now <- Sys.time()
-		message(sprintf("\tOut of %d input SNPs, %d SNPs have positional info", length(data), length(gr_SNP)), appendLF=T)
+		message(sprintf("\tOut of %d input SNPs, %d SNPs have positional info", length(data), length(gr_SNP)), appendLF=TRUE)
   	}
 	
 	if(!is.null(gr_SNP)){
 		tmp_df <- GenomicRanges::as.data.frame(gr_SNP, row.names=NULL)
-		mcols_df <- data.frame(variant_id=paste(tmp_df[,1],':',tmp_df[,3],sep=''), stringsAsFactors=F)
+		mcols_df <- data.frame(variant_id=paste(tmp_df[,1],':',tmp_df[,3],sep=''), stringsAsFactors=FALSE)
 		GenomicRanges::mcols(gr_SNP) <- mcols_df
 	}
 	

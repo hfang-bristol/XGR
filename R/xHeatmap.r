@@ -33,9 +33,8 @@
 #' @seealso \code{\link{xHeatmap}}
 #' @include xHeatmap.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' data(mtcars)
 #' gp <- xHeatmap(mtcars, reorder="none", colormap='jet.top', x.rotate=45, shape=19, size=3, x.text.size=8,y.text.size=8, legend.title='mtcars')
 #' gp + theme(legend.position="bottom",legend.direction="horizontal") + guides(color=guide_colorbar(title="mtcars",title.position="top",barwidth=5,barheight=0.3))
@@ -66,13 +65,13 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	########
 	
 	flag_factor <- FALSE
-	if(class(unlist(mat_val))=='factor'){
+	if(is(unlist(mat_val),'factor')){
 		lvl <- levels(unlist(mat_val))
 		indx <- sapply(mat_val, is.factor)
 		mat_val[indx] <- sapply(mat_val[,indx], function(x) as.numeric(x))
 		
 		################
-		flag_factor <- F
+		flag_factor <- FALSE
 		################
 	}
 	
@@ -110,14 +109,14 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 	}
 	################
 		
-	if(class(mat_val)=='matrix'){
+	if(is(mat_val,'matrix')){
 		mat_val <- as.data.frame(mat_val)
 	}
 	
-	if(class(mat_val)=='data.frame'){
+	if(is(mat_val,'data.frame')){
 		
 		if(is.null(zlim)){
-			zlim <- c(floor(min(mat_val,na.rm=T)*10)/10, ceiling(max(mat_val,na.rm=T)*10)/10)
+			zlim <- c(floor(min(mat_val,na.rm=TRUE)*10)/10, ceiling(max(mat_val,na.rm=TRUE)*10)/10)
 			
 			if(zlim[1]==zlim[2]){
 				zlim[1] <- zlim[2]/2
@@ -161,7 +160,7 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 		
 		#######################
 		if(!is.null(data.label)){
-			mat_label <- as.data.frame(data.label[ind_row, ind_col], stringsAsFactors=F)
+			mat_label <- as.data.frame(data.label[ind_row, ind_col], stringsAsFactors=FALSE)
 			gene <- sample <- val <- NULL
 			df_label <- suppressWarnings(mat_label %>% dplyr::mutate(gene=rownames(mat_label)) %>% tidyr::gather(sample, val, -gene))
 			df_label$gene <- factor(df_label$gene, levels=rev(rownames(mat_label)))

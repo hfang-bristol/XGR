@@ -38,15 +38,15 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
         return(NULL)
     }
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		df_enrichment_group <- xEnrichViewer(eTerm, top_num="all", sortBy="adjp")
 		df_enrichment_group$group <- 'group'
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame')){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(is(eTerm,'ls_eTerm')){
 			df_enrichment_group <- eTerm$df
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(is(eTerm,'data.frame')){
 			if(all(c('group','name','adjp','nOverlap','zscore') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('group','name','adjp','nOverlap','zscore')]
 			}else if(all(c('name','adjp','nOverlap','zscore') %in% colnames(eTerm))){
@@ -56,7 +56,7 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 		}
 	}	
 	
-	if(class(df_enrichment_group$group)=='factor'){
+	if(is(df_enrichment_group$group,'factor')){
 		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
 			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
 		}

@@ -17,7 +17,7 @@ scoring.scheme = c("max", "sum", "sequential"),
 nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
 nearby.decay.exponent = 2,
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -124,8 +124,8 @@ This function uses \code{\link{xGRscores}} and \code{\link{xGR2xGenes}}
 to define and score seed genes from input genomic regions.
 }
 \examples{
-\dontrun{
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase
@@ -144,5 +144,5 @@ RData.location=RData.location)
 }
 \seealso{
 \code{\link{xGRscores}}, \code{\link{xGR2xGenes}},
-\code{\link{xSparseMatrix}}
+\code{\link{xGRsort}}
 }

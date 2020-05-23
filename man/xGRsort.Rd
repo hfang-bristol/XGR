@@ -19,10 +19,8 @@ index
 end coordinates of the intervals.
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # a) provide the genomic regions
 ## load ImmunoBase
@@ -38,5 +36,5 @@ data <- cse[ind]
 }
 }
 \seealso{
-\code{\link{xGRsort}}
+\code{\link{xGR}}
 }

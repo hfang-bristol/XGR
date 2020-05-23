@@ -27,7 +27,7 @@ GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
 "NPC"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -161,17 +161,16 @@ location (in the form of 'chr:start-end')
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>, <code>xVisKernels</code>
+<p><code>xSNPlocations</code>, <code>xRDataLoader</code>,
+<code>xGR</code>, <code>xSymbol2GeneID</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase

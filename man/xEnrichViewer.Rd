@@ -8,9 +8,10 @@ xEnrichViewer(
 eTerm,
 top_num = 10,
 sortBy = c("adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "or", "none"),
+"nOverlap", "or",
+"none"),
 decreasing = NULL,
-details = F
+details = FALSE
 )
 }
 \arguments{
@@ -66,10 +67,11 @@ analysis.
 none
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 xEnrichViewer(eTerm)
 }
 }
 \seealso{
-\code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}
+\code{\link{xEnrichViewer}}
 }

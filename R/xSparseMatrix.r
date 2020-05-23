@@ -24,12 +24,12 @@
 #' res <- xSparseMatrix(input.file, columns=c('C1','C2','C3'))
 #' res
 
-xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=T)
+xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=TRUE)
 {
     
     if(is.matrix(input.file) | is.data.frame(input.file)){
         if(verbose){
-            message(sprintf("Load the input data matrix of %d X %d ...", dim(input.file)[1], dim(input.file)[2]), appendLF=T)
+            message(sprintf("Load the input data matrix of %d X %d ...", dim(input.file)[1], dim(input.file)[2]), appendLF=TRUE)
         }
         
         if(ncol(input.file)==2){
@@ -43,9 +43,9 @@ xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=T)
         }
     }else if(is.character(input.file) & sum(input.file!='')){
         if(verbose){
-            message(sprintf("Read the input file '%s' ...", input.file), appendLF=T)
+            message(sprintf("Read the input file '%s' ...", input.file), appendLF=TRUE)
         }
-        input <- utils::read.delim(input.file, header=T, sep="\t", colClasses="character")
+        input <- utils::read.delim(input.file, header=TRUE, sep="\t", colClasses="character")
         if(ncol(input)==2){
             input <- cbind(input, rep(1,nrow(input)))
         }
@@ -80,7 +80,7 @@ xSparseMatrix <- function(input.file, rows=NULL, columns=NULL, verbose=T)
         colnames(x.sparse) <- x_col
         
         if(verbose){
-            message(sprintf("There are %d entries, converted into a sparse matrix of %d X %d.", nrow(x), dim(x.sparse)[1], dim(x.sparse)[2]), appendLF=T)
+            message(sprintf("There are %d entries, converted into a sparse matrix of %d X %d.", nrow(x), dim(x.sparse)[1], dim(x.sparse)[2]), appendLF=TRUE)
         }
     }else{
         return(NULL)

@@ -12,12 +12,11 @@
 #' @return a vector containing entrez geneid with 'NA' for the unmatched if (details set to false); otherwise, a data frame is returned
 #' @note If a symbol mapped many times, the one assiged as the "protein-coding" type of gene is preferred.
 #' @export
-#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
+#' @seealso \code{\link{xRDataLoader}}
 #' @include xSymbol2GeneID.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
 #' 
 #' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 #' ## load human genes
@@ -36,7 +35,7 @@
 #' df <- xSymbol2GeneID(Symbol, org=org.Hs.eg, details=TRUE)
 #' }
 
-xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F, details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=FALSE, details=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     
     if (!is.vector(data)){
@@ -45,10 +44,10 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
     Symbol <- as.character(data)
     
     ## load Enterz Gene information
-	if(class(org) == "EG"){
+	if(is(org,"EG")){
 		df_eg <- org$gene_info
 		if(verbose){
-			message(sprintf("Customised organism (%s)", as.character(Sys.time())), appendLF=T)
+			message(sprintf("Customised organism (%s)", as.character(Sys.time())), appendLF=TRUE)
 		}
 	}else{
 		org <- org[1]
@@ -58,7 +57,7 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
 			df_eg <- xRDataLoader('org.Mm.eg', RData.location=RData.location, guid=guid, verbose=verbose)$gene_info
 		}
 		if(verbose){
-			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=T)
+			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=TRUE)
 		}
 	}
     
@@ -75,11 +74,11 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
     if(0){
         ## for those starting with 'Mar' in a excel-input date format
         a <- Symbol
-        flag <- grep("-Mar$", a, ignore.case=T, perl=T, value=F)
+        flag <- grep("-Mar$", a, ignore.case=TRUE, perl=TRUE, value=FALSE)
         if(length(flag)>=1){
         	b <- a[flag]
-        	c <- sub("-Mar$", "", b, ignore.case=T, perl=T)
-        	d <- sub("^0", "", c, ignore.case=T, perl=T)
+        	c <- sub("-Mar$", "", b, ignore.case=TRUE, perl=TRUE)
+        	d <- sub("^0", "", c, ignore.case=TRUE, perl=TRUE)
         	e <- sapply(d, function(x) paste(c("March",x), collapse=""))
         	a[flag] <- e
         	Symbol <- a
@@ -87,11 +86,11 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
 
         ## for those starting with 'Sep' in a excel-input date format
         a <- Symbol
-        flag <- grep("-Sep$", a, ignore.case=T, perl=T, value=F)
+        flag <- grep("-Sep$", a, ignore.case=TRUE, perl=TRUE, value=FALSE)
         if(length(flag)>=1){
         	b <- a[flag]
-            c <- sub("-Sep$", "", b, ignore.case=T, perl=T)
-            d <- sub("^0", "", c, ignore.case=T, perl=T)
+            c <- sub("-Sep$", "", b, ignore.case=TRUE, perl=TRUE)
+            d <- sub("^0", "", c, ignore.case=TRUE, perl=TRUE)
             e <- sapply(d, function(x) paste(c("Sept",x), collapse=""))
             a[flag] <- e
             Symbol <- a
@@ -121,20 +120,20 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
             tmp_pattern2 <- paste("\\|",a[x],"\\|", sep="")
             tmp_pattern3 <- paste("\\|",a[x],"$", sep="")
             tmp_pattern <- paste(tmp_pattern1,"|",tmp_pattern2,"|",tmp_pattern3, sep="")
-            tmp_result <- grep(tmp_pattern, tmp_Synonyms, ignore.case=T, perl=T, value=F)
+            tmp_result <- grep(tmp_pattern, tmp_Synonyms, ignore.case=TRUE, perl=TRUE, value=FALSE)
             ifelse(length(tmp_result)==1, Orig.index[tmp_result[1]], NA)
         })
         match_flag[na_flag] <- b
         
         if(verbose){
         	now <- Sys.time()
-            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols, %d mappable via gene alias but %d left unmappable", length(Symbol), (length(Symbol)-length(a)), sum(!is.na(b)), sum(is.na(b))), appendLF=T)
+            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols, %d mappable via gene alias but %d left unmappable", length(Symbol), (length(Symbol)-length(a)), sum(!is.na(b)), sum(is.na(b))), appendLF=TRUE)
         }
     
     }else{
     	if(verbose){
         	now <- Sys.time()
-            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols but %d left unmappable", length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))), appendLF=T)
+            message(sprintf("Among %d symbols of input data, there are %d mappable via official gene symbols but %d left unmappable", length(Symbol), (sum(!is.na(match_flag))), (sum(is.na(match_flag)))), appendLF=TRUE)
         }
     }
     
@@ -142,7 +141,7 @@ xSymbol2GeneID <- function(data, org=c("human","mouse"), check.symbol.identity=F
 	df_res <- df_eg[match_flag, ]
 	
 	if(details){
-		df_res <- data.frame(Input=Symbol, df_res, stringsAsFactors=F)
+		df_res <- data.frame(Input=Symbol, df_res, stringsAsFactors=FALSE)
 		return(df_res)
 	}else{
 		return(df_res$GeneID)

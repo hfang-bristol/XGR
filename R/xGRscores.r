@@ -15,13 +15,11 @@
 #' }
 #' @note None
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xGRscores}}
 #' @include xGRscores.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #'
 #' # a) provide the seed SNPs with the significance info
 #' ## load ImmunoBase
@@ -40,14 +38,14 @@
 #' df_GR <- xGRscores(data=data, significance.threshold=5e-5)
 #' }
 
-xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T)
+xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=TRUE)
 {
 
     if(is.null(data)){
         stop("The input data must be not NULL.\n")
     }else{
     	
-    	if(class(data)=='DataFrame'){
+    	if(is(data,'DataFrame')){
     		#data <- S4Vectors::as.matrix(data)
     	}
 
@@ -59,7 +57,7 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
 				}
 			}else{
 				# assume a file
-				data <- utils::read.delim(file=data, header=F, row.names=NULL, stringsAsFactors=F)
+				data <- utils::read.delim(file=data, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 			}
 		}
 		
@@ -88,7 +86,7 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
 
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d GR are input", length(pval)), appendLF=T)
+		message(sprintf("A total of %d GR are input", length(pval)), appendLF=TRUE)
 	}
 	
 	# transformed into scores according to log-likelihood ratio between the true positives and the false positivies
@@ -113,12 +111,12 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d GR are scored positively", sum(seeds.snps>0)), appendLF=T)
+		message(sprintf("A total of %d GR are scored positively", sum(seeds.snps>0)), appendLF=TRUE)
 	}
     
     #########
     
-    df_GR <- data.frame(GR=names(pval), Score=seeds.snps, Pval=pval, row.names=NULL, stringsAsFactors=F)
+    df_GR <- data.frame(GR=names(pval), Score=seeds.snps, Pval=pval, row.names=NULL, stringsAsFactors=FALSE)
     
     
     ##############################
@@ -130,7 +128,7 @@ xGRscores <- function(data, significance.threshold=5e-2, score.cap=10, verbose=T
     		
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("GR score capped to the maximum score %d.", score.cap), appendLF=T)
+				message(sprintf("GR score capped to the maximum score %d.", score.cap), appendLF=TRUE)
 			}
     	}
     }

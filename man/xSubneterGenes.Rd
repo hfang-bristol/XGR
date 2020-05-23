@@ -14,23 +14,23 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic",
-"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal",
 "KEGG_disease", "REACTOME"),
 STRING.only = c(NA, "neighborhood_score", "fusion_score",
 "cooccurence_score",
 "coexpression_score", "experimental_score", "database_score",
 "textmining_score")[1],
 network.customised = NULL,
-seed.genes = T,
+seed.genes = TRUE,
 subnet.significance = 0.01,
 subnet.size = NULL,
-test.permutation = F,
+test.permutation = FALSE,
 num.permutation = 100,
 respect = c("none", "degree"),
 aggregateBy = c("Ztransform", "fishers", "logistic", "orderStatistic"),
-verbose = T,
-silent = F,
+verbose = TRUE,
+silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -187,10 +187,8 @@ thresholds. This explicit control over the node size may be necessary
 for guiding follow-up experiments.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # a) provide the input nodes/genes with the significance info
 ## load human genes
@@ -268,5 +266,5 @@ as.table=TRUE)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xDefineNet}}
+\code{\link{xDefineNet}}
 }

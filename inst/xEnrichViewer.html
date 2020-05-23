@@ -21,9 +21,10 @@ xEnrichViewer(
 eTerm,
 top_num = 10,
 sortBy = c("adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "or", "none"),
+"nOverlap", "or",
+"none"),
 decreasing = NULL,
-details = F
+details = FALSE
 )
 </pre>
 
@@ -128,13 +129,14 @@ annotations; optional, it is only appended when &quot;details&quot; is true
 
 <h3>See Also</h3>
 
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>
+<p><code>xEnrichViewer</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 xEnrichViewer(eTerm)
 

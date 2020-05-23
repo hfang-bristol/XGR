@@ -12,14 +12,9 @@
 #' an object of class "igraph"
 #' @note The input graph will treat as an unweighted graph if there is no 'weight' edge attribute associated with
 #' @export
-#' @seealso \code{\link{xCombineNet}}
+#' @seealso \code{\link{xRDataLoader}}
 #' @include xDefineNet.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
-#'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # STRING (high quality)

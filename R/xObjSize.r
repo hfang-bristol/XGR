@@ -33,7 +33,7 @@ xObjSize <- function(obj, type=c("auto","variable","file"), units="auto", verbos
     }
     
     if(type=='variable'){
-		if(class(suppressWarnings(try(x <- base::get(obj), T))) %in% "try-error"){
+		if(is(suppressWarnings(try(x <- base::get(obj), TRUE)),"try-error")){
     		warnings(sprintf("The R variable '%s' NOT found!", obj))
         	return(NULL)
 		}else{

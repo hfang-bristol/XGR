@@ -50,12 +50,12 @@ xLayout <- function(g, layout=c("layout_nicely","layout_randomly","layout_in_cir
     
     layout <- layout[1]
     
-    if(class(g)=="graphNEL"){
+    if(is(g,"graphNEL")){
         ig <- igraph.from.graphNEL(g)
     }else{
         ig <- g
     }
-    if(class(ig) != "igraph"){
+    if(!is(ig,"igraph")){
         stop("The function must apply to either 'igraph' or 'graphNEL' object.\n")
     }
 	

@@ -14,13 +14,9 @@
 #' @return
 #' a ggplot object.
 #' @export
-#' @seealso \code{\link{xPieplot}}
+#' @seealso \code{\link{xColormap}}
 #' @include xPieplot.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' gp <- xPieplot(df, columns=c('dGene','pGene','fGene','nGene','eGene','cGene'), legend.title='Seeds')
@@ -29,7 +25,7 @@
 xPieplot <- function(df, columns, colormap="ggplot2", pie.radius=NULL, pie.color='transparent', pie.color.alpha=1, pie.thick=0.1, legend.title='', gp=NULL)
 {
 	
-	if(class(df) != "data.frame" ){
+	if(!is(df,"data.frame")){
 		stop("The function must apply to a data frame.\n")
 	}
 	
@@ -74,7 +70,7 @@ xPieplot <- function(df, columns, colormap="ggplot2", pie.radius=NULL, pie.color
 	
 	x <- y <- NULL
 	
-	if(all(class(gp) %in% c("gg","ggplot"))){
+	if(is(gp,"ggplot")){
 		gp <- gp
 	}else{
 		gp <- ggplot()	

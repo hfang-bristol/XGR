@@ -210,7 +210,7 @@
 xOBOcode <- function(g, node.level='term_distance', node.level.value=2, node.label.size=2, node.label.color='darkblue', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0.01, node.label.force=0, node.shape=19, node.xcoord=NULL, node.ycoord=NULL, node.color=NULL, node.color.title=NULL, colormap='grey-grey', ncolors=64, zlim=NULL, node.size.range=4, title='', edge.size=0.5, edge.color="black", edge.color.alpha=0.4, edge.curve=0.1, edge.arrow=2, edge.arrow.gap=0.02, node.table='term_name', node.table.wrap=50, table.base.size=7, table.row.space=2, table.nrow=55, table.ncol=NULL, root.code='RT')
 {
     
-   	if(any(class(g) %in% c("igraph"))){
+   	if(is(g,"igraph")){
 		ig <- g
 	}else{
 		stop("The function must apply to a 'igraph' object.\n")

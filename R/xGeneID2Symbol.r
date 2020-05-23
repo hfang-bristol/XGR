@@ -11,13 +11,11 @@
 #' @return a vector containing symbol with 'NA' for the unmatched if (details set to false); otherwise, a data frame is returned
 #' @note none.
 #' @export
-#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
+#' @seealso \code{\link{xRDataLoader}}
 #' @include xGeneID2Symbol.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' 
 #' # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 #' ## load human genes
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
@@ -35,7 +33,7 @@
 #' df <- xGeneID2Symbol(GeneID, org=org.Hs.eg, details=TRUE)
 #' }
 
-xGeneID2Symbol <- function(data, org=c("human","mouse"), details=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xGeneID2Symbol <- function(data, org=c("human","mouse"), details=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     
     if (!is.vector(data)){
@@ -44,14 +42,14 @@ xGeneID2Symbol <- function(data, org=c("human","mouse"), details=F, verbose=T, R
     GeneID <- as.numeric(data)
     
     if(verbose){
-        message(sprintf("%d GeneID of input data (%s)", length(data), as.character(Sys.time())), appendLF=T)
+        message(sprintf("%d GeneID of input data (%s)", length(data), as.character(Sys.time())), appendLF=TRUE)
     }
     
     ## load Enterz Gene information
-	if(class(org) == "EG"){
+	if(is(org,"EG")){
 		df_eg <- org$gene_info
 		if(verbose){
-			message(sprintf("Customised organism (%s)", as.character(Sys.time())), appendLF=T)
+			message(sprintf("Customised organism (%s)", as.character(Sys.time())), appendLF=TRUE)
 		}
 	}else{
 		org <- org[1]
@@ -61,7 +59,7 @@ xGeneID2Symbol <- function(data, org=c("human","mouse"), details=F, verbose=T, R
 			df_eg <- xRDataLoader(RData.customised='org.Mm.eg', RData.location=RData.location, guid=guid, verbose=verbose)$gene_info
 		}
 		if(verbose){
-			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=T)
+			message(sprintf("%s organism (%s)", org, as.character(Sys.time())), appendLF=TRUE)
 		}
 	}
 	
@@ -69,11 +67,11 @@ xGeneID2Symbol <- function(data, org=c("human","mouse"), details=F, verbose=T, R
 	df_res <- df_eg[ind, ]
     
     if(verbose){
-        message(sprintf("%d mappable but %d left unmappable (%s)", sum(!is.na(ind)), sum(is.na(ind)), as.character(Sys.time())), appendLF=T)
+        message(sprintf("%d mappable but %d left unmappable (%s)", sum(!is.na(ind)), sum(is.na(ind)), as.character(Sys.time())), appendLF=TRUE)
     }
 	
 	if(details){
-		df_res <- data.frame(Input=GeneID, df_res, stringsAsFactors=F)
+		df_res <- data.frame(Input=GeneID, df_res, stringsAsFactors=FALSE)
 		return(df_res)
 	}else{
 		return(df_res$Symbol)

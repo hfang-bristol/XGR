@@ -11,7 +11,7 @@ LD.customised = NULL,
 LD.r2 = 0.8,
 significance.threshold = 5e-05,
 score.cap = 10,
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -86,10 +86,6 @@ threshold of the significant level.
 None
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 \dontrun{

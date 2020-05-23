@@ -25,10 +25,6 @@ an object of S3 class \code{GS}
 \code{GS} has 2 components: set_info, gs.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 GS(set_info, gs)

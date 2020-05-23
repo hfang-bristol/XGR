@@ -8,10 +8,10 @@ xGR(
 data,
 format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-add.name = T,
-remove.mcol = F,
-include.strand = F,
-verbose = T,
+add.name = TRUE,
+remove.mcol = FALSE,
+include.strand = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -64,11 +64,8 @@ a GenomicRanges object
 genomic regions.
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-
+\dontrun{
 # a) provide the genomic regions
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
@@ -87,5 +84,5 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xLiftOver}}
 }

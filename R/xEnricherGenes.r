@@ -51,14 +51,11 @@
 #' \item{"Notes": the order of the number of significant terms is: "none" > "lea" > "elim" > "pc".}
 #' }
 #' @export
-#' @seealso \code{\link{xDefineOntology}}, \code{\link{xEnricher}}
+#' @seealso \code{\link{xDefineOntology}}, \code{\link{xSymbol2GeneID}}, \code{\link{xEnricher}}, \code{\link{xSymbol2GeneID}}, \code{\link{xRDataLoader}}
 #' @include xEnricherGenes.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
-#' 
 #' # Gene-based enrichment analysis using REACTOME pathways
 #' # a) provide the input Genes of interest (eg 500 randomly chosen human genes)
 #' ## load human genes
@@ -100,7 +97,7 @@
 #' xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp", node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 #' }
 
-xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontology=NA, ontology.customised=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xEnricherGenes <- function(data, background=NULL, check.symbol.identity=FALSE, ontology=NA, ontology.customised=NULL, size.range=c(10,2000), min.overlap=5, which.distance=NULL, test=c("fisher","hypergeo","binomial"), background.annotatable.only=NULL, p.tail=c("one-tail","two-tails"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=FALSE, verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
     startT <- Sys.time()
     if(!silent){
@@ -150,7 +147,7 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 		## convert gene symbol to entrz gene for both input data of interest and the input background (if given)
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Do gene mapping from Symbols to EntrezIDs (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 		data <- xSymbol2GeneID(data, check.symbol.identity=check.symbol.identity, verbose=verbose, RData.location=RData.location, guid=guid)
 		data <- data[!is.na(data)]
@@ -164,14 +161,14 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xEnricher' is being called (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xEnricher' is being called (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     eTerm <- xEnricher(data=data, annotation=anno, g=g, background=background, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, background.annotatable.only=background.annotatable.only, p.tail=p.tail, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose)
 	
 	# replace EntrezGenes with gene symbols	
-	if(is.null(ontology.customised) & class(eTerm)=="eTerm"){
+	if(is.null(ontology.customised) & is(eTerm,"eTerm")){
 		## load Enterz Gene information
 		EG <- xRDataLoader(RData.customised=paste('org.Hs.eg', sep=''), RData.location=RData.location, guid=guid, verbose=verbose)
 		allGeneID <- EG$gene_info$GeneID
@@ -200,9 +197,9 @@ xEnricherGenes <- function(data, background=NULL, check.symbol.identity=F, ontol
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xEnricher' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xEnricher' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################

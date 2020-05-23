@@ -4,7 +4,7 @@
 \alias{xSparseMatrix}
 \title{Function to create a sparse matrix for an input file with three columns}
 \usage{
-xSparseMatrix(input.file, rows = NULL, columns = NULL, verbose = T)
+xSparseMatrix(input.file, rows = NULL, columns = NULL, verbose = TRUE)
 }
 \arguments{
 \item{input.file}{an input file containing three columns: 1st column

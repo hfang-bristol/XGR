@@ -47,13 +47,13 @@ xEnrichHeatmap <- function(list_eTerm, fdr.cutoff=0.05, displayBy=c("zscore","fd
         return(NULL)
     }
     
-    if(class(list_eTerm)=='ls_eTerm' | class(list_eTerm)=='data.frame'){
+    if(is(list_eTerm,'ls_eTerm') | is(list_eTerm,'data.frame')){
 	
-		if(class(list_eTerm)=='ls_eTerm'){
+		if(is(list_eTerm,'ls_eTerm')){
 			## when 'auto', will keep the significant terms
 			df <- list_eTerm$df
 			
-		}else if(class(list_eTerm)=='data.frame'){
+		}else if(is(list_eTerm,'data.frame')){
 			## when displayBy='fdr', always append the column 'fdr' if not provided
 			if(displayBy=='fdr'){
 				if(is.null(list_eTerm$fdr)){

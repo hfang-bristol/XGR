@@ -34,11 +34,11 @@
 #'  \item{\code{Context}: the context}
 #' }
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xGR}}
+#' @seealso \code{\link{xGR}}, \code{\link{xRDataLoader}}, \code{\link{xSymbol2GeneID}}, \code{\link{xGR2nGenes}}
 #' @include xGR2xGenes.r
 #' @examples
-#' \dontrun{
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #'
 #' # 1) provide the genomic regions
 #' ## load ImmunoBase
@@ -62,16 +62,16 @@
 #' # 3a) provide crosslink.customised
 #' ## illustration purpose only (see the content of 'crosslink.customised')
 #' df <- xGR2nGenes(dGR, format="GRanges", RData.location=RData.location)
-#' crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=F)
-#' #crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=F)
+#' crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=FALSE)
+#' #crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=FALSE)
 #' # 3b) define crosslinking genes
 #' # without gene scoring
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, RData.location=RData.location)
 #' # with gene scoring
-#' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=T, scoring.scheme="max", RData.location=RData.location)
+#' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=TRUE, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_PMID27863249_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=T, silent=F, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_PMID27863249_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=FALSE, scoring.scheme=c("max","sum","sequential"), scoring.rescale=FALSE, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     startT <- Sys.time()
@@ -91,7 +91,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     scoring.scheme <- match.arg(scoring.scheme)
     nearby.decay.kernel <- match.arg(nearby.decay.kernel)
 	
-	if(class(data)=='GRanges'){
+	if(is(data,'GRanges')){
 		names(data) <- NULL
 	}
 	
@@ -108,7 +108,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Load the customised crosslink (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Load the customised crosslink (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 
 		###########################	
@@ -170,12 +170,12 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		if(crosslink!='nearby'){
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Load the built-in crosslink '%s' (%s) ...", crosslink, as.character(now)), appendLF=T)
+				message(sprintf("Load the built-in crosslink '%s' (%s) ...", crosslink, as.character(now)), appendLF=TRUE)
 			}
 		
 			if(crosslink=="genehancer"){
 				if(0){
-					ig <- xRDataLoader('ig.genehancer', verbose=F, RData.location=RData.location, guid=guid)
+					ig <- xRDataLoader('ig.genehancer', verbose=FALSE, RData.location=RData.location, guid=guid)
 					V(ig)$name <- V(ig)$id
 					df_edges <- get.data.frame(ig, what="edges")
 					df_nodes <- get.data.frame(ig, what="vertices")
@@ -183,7 +183,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					ind <- match(df_edges$from, df_nodes$id)
 					df_edges$GR_score <- as.numeric(df_nodes$score[ind])
 					## final score: Snode * Slink
-					crosslink.customised <- data.frame(GR=df_edges$from, Gene=df_edges$to, Score=df_edges$score * df_edges$GR_score, Context=rep('genehancer',nrow(df_edges)), stringsAsFactors=F)
+					crosslink.customised <- data.frame(GR=df_edges$from, Gene=df_edges$to, Score=df_edges$score * df_edges$GR_score, Context=rep('genehancer',nrow(df_edges)), stringsAsFactors=FALSE)
 					df_SGS_customised <- crosslink.customised
 				}else{
 					df_SGS_customised <- xRDataLoader('crosslink.customised.genehancer', verbose=verbose, RData.location=RData.location, guid=guid)
@@ -232,7 +232,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Define crosslinked genes from an input list of %d genomic regions (%s) ...", length(dGR), as.character(now)), appendLF=T)
+			message(sprintf("Define crosslinked genes from an input list of %d genomic regions (%s) ...", length(dGR), as.character(now)), appendLF=TRUE)
 		}
 		
 		Gene <- Weight <- Score <- NULL
@@ -313,7 +313,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					## keep maximum weight per gene if there are many overlaps
 					#################################
 					df <- as.data.frame(df %>% dplyr::group_by(Gene) %>% dplyr::summarize(Score=max(Weight)))
-					data.frame(GR=rep(names(ls_dgr)[i],nrow(df)), df, stringsAsFactors=F)
+					data.frame(GR=rep(names(ls_dgr)[i],nrow(df)), df, stringsAsFactors=FALSE)
 				})
 				df_xGenes <- do.call(rbind, ls_df)
 
@@ -322,12 +322,12 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			
 			########################################
 			# check gene (make sure official symbol)
-			ind <- !is.na(XGR::xSymbol2GeneID(df_xGenes$Gene, details=TRUE, verbose=FALSE, RData.location=RData.location, guid=guid)$Symbol)
+			ind <- !is.na(xSymbol2GeneID(df_xGenes$Gene, details=TRUE, verbose=FALSE, RData.location=RData.location, guid=guid)$Symbol)
 			df_xGenes <- df_xGenes[ind,]
 			########################################
 	
 			if(verbose){
-				message(sprintf("\t%d xGenes (%d genomic regions) are defined based on built-in '%s' (%s)", length(unique(df_xGenes$Gene)), length(unique(df_xGenes$GR)), names(ls_df_SGS)[j], as.character(Sys.time())), appendLF=T)
+				message(sprintf("\t%d xGenes (%d genomic regions) are defined based on built-in '%s' (%s)", length(unique(df_xGenes$Gene)), length(unique(df_xGenes$GR)), names(ls_df_SGS)[j], as.character(Sys.time())), appendLF=TRUE)
 			}
 		
 			############################################
@@ -351,13 +351,13 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 
 				if(verbose){
 					now <- Sys.time()
-					message(sprintf("\t%d xGenes are scored using '%s' scoring scheme (%s)", length(unique(df_xGenes$Gene)), scoring.scheme, as.character(now)), appendLF=T)
+					message(sprintf("\t%d xGenes are scored using '%s' scoring scheme (%s)", length(unique(df_xGenes$Gene)), scoring.scheme, as.character(now)), appendLF=TRUE)
 				}
 
 				if(scoring.rescale){
 					if(verbose){
 						now <- Sys.time()
-						message(sprintf("\talso rescale score into the [0,1] range (%s)", as.character(now)), appendLF=T)
+						message(sprintf("\talso rescale score into the [0,1] range (%s)", as.character(now)), appendLF=TRUE)
 					}
 					# rescale to [0 1]
 					rescaleFun <- function(x){
@@ -387,7 +387,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 			}
 	
-			data.frame(df_xGenes, Context=rep(names(ls_df_SGS)[j],nrow(df_xGenes)), stringsAsFactors=F)
+			data.frame(df_xGenes, Context=rep(names(ls_df_SGS)[j],nrow(df_xGenes)), stringsAsFactors=FALSE)
 		})
 		res_df <- do.call(rbind, ls_res_df)
 	
@@ -395,20 +395,20 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 		## only for the option 'nearby'
 		if(crosslink=='nearby'){
-			df <- xGR2nGenes(data=dGR, format="GRanges", distance.max=nearby.distance.max, decay.kernel=nearby.decay.kernel, decay.exponent=nearby.decay.exponent, GR.Gene="UCSC_knownGene", scoring=scoring, scoring.scheme=scoring.scheme, scoring.rescale=scoring.rescale, verbose=F, RData.location=RData.location, guid=guid)
+			df <- xGR2nGenes(data=dGR, format="GRanges", distance.max=nearby.distance.max, decay.kernel=nearby.decay.kernel, decay.exponent=nearby.decay.exponent, GR.Gene="UCSC_knownGene", scoring=scoring, scoring.scheme=scoring.scheme, scoring.rescale=scoring.rescale, verbose=FALSE, RData.location=RData.location, guid=guid)
 			
 			context <- paste0('nearby_',nearby.distance.max,'_',nearby.decay.kernel)
 			if(scoring){
-				res_df <- data.frame(df, Context=rep(context,nrow(df)), stringsAsFactors=F)
+				res_df <- data.frame(df, Context=rep(context,nrow(df)), stringsAsFactors=FALSE)
 			}else{
-				res_df <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, Context=rep(context,nrow(df)), stringsAsFactors=F)
+				res_df <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, Context=rep(context,nrow(df)), stringsAsFactors=FALSE)
 			}
 			
 			if(verbose){
 				if(scoring){
-					message(sprintf("\t%d xGenes (out of %d genomic regions) are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=T)
+					message(sprintf("\t%d xGenes (out of %d genomic regions) are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=TRUE)
 				}else{
-					message(sprintf("\t%d xGenes from an input list of %d (out of %d) genomic regions are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(unique(res_df$GR)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=T)
+					message(sprintf("\t%d xGenes from an input list of %d (out of %d) genomic regions are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(res_df$Gene)), length(unique(res_df$GR)), length(dGR), nearby.distance.max, nearby.decay.kernel, as.character(Sys.time())), appendLF=TRUE)
 				}
 			}
 			
@@ -455,8 +455,8 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			relations <- df[,1:3]
 			
 			## nodes
-			df_gr <- data.frame(df[,c("GR","GR")], type=rep('GR',nrow(df)), stringsAsFactors=F)
-			df_gene <- data.frame(df[,c("Gene","Gene_gr")], type=rep('Gene',nrow(df)), stringsAsFactors=F)
+			df_gr <- data.frame(df[,c("GR","GR")], type=rep('GR',nrow(df)), stringsAsFactors=FALSE)
+			df_gene <- data.frame(df[,c("Gene","Gene_gr")], type=rep('Gene',nrow(df)), stringsAsFactors=FALSE)
 			nodes <- base::as.data.frame(rbind(as.matrix(df_gr), as.matrix(df_gene)), stringsAsFactors=FALSE)
 			nodes <- nodes[!duplicated(nodes),]
 			colnames(nodes) <- c("name","id","type")
@@ -469,7 +469,7 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				GR.Gene <- xGR(data=V(ig)$id[V(ig)$type=='Gene'], format="chr:start-end", verbose=FALSE, RData.location=RData.location)
 				names(GR.Gene) <- V(ig)$name[V(ig)$type=='Gene']
 				#library(RCircos)
-				xCircos(g=ig, entity="Both", top_num=10, GR.SNP=GR.SNP, GR.Gene=GR.Gene, colormap=c("orange-darkred"), ideogram=F, chr.exclude="auto", entity.label.cex=0.6, entity.label.side="out", RData.location=RData.location)
+				xCircos(g=ig, entity="Both", top_num=10, GR.SNP=GR.SNP, GR.Gene=GR.Gene, colormap=c("orange-darkred"), ideogram=FALSE, chr.exclude="auto", entity.label.cex=0.6, entity.label.side="out", RData.location=RData.location)
 			}
 	
 			return(ig)

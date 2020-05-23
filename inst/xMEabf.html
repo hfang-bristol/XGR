@@ -91,10 +91,11 @@ for both traits).
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 res &lt;- xMEabf(eqtl.summary, gwas.summary)
-utils::write.table(res$results, file="df_abf.txt", row.names=F,
-col.names=T, quote=F, sep="\t")
+utils::write.table(res$results, file="df_abf.txt", row.names=FALSE,
+col.names=TRUE, quote=FALSE, sep="\t")
 
 ## End(Not run)
 </pre>

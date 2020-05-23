@@ -13,14 +13,14 @@
 #' \item{For "rapid decay" kernel, \eqn{h_{ds}(t)={{1-d_{gs}/D}^\lambda}*(d_{gs} \le D)}}
 #' }
 #' @export
-#' @seealso \code{\link{xSNP2nGenes}}
+#' @seealso \code{\link{xVisKernels}}
 #' @include xVisKernels.r
 #' @examples
 #' # visualise distance kernels
 #' xVisKernels(exponent=2)
 #' xVisKernels(exponent=3)
 
-xVisKernels <-function(exponent=2, newpage=T) 
+xVisKernels <-function(exponent=2, newpage=TRUE) 
 {
 
     if (newpage){

@@ -57,7 +57,7 @@ xConverter <- function(obj, from=c("igraph","dgCMatrix","dtree","lol","json"), t
     from <- match.arg(from)
     to <- match.arg(to)
     
-    #if (class(obj) != from){
+    #if (!is(obj,from)){
         #stop(sprintf("The class of your input object '%s' is '%s', mismatched as you intended (from='%s').\n", deparse(substitute(obj)), class(obj), from))
     #}
     

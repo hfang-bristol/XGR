@@ -190,14 +190,9 @@
 #'  \item{\code{Osteoblast_eQTL}: cis-eQTLs in Osteoblast.}
 #' }
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xSNPlocations}}, \code{\link{xGR}}, \code{\link{xRDataLoader}}
 #' @include xDefineEQTL.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
-#'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # a) provide the SNPs with the significance info

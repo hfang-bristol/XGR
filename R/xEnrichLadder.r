@@ -95,7 +95,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","f
     
     gp_heatmap <- NULL
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
 		
@@ -118,7 +118,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","f
 		}
 		df_enrichment <- xEnrichViewer(eTerm, top_num=top_num, sortBy=sortBy, details=T)
 	
-	}else if(class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'data.frame')){
 		df_enrichment <- eTerm
 	}
 	

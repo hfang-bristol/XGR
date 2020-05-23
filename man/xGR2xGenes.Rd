@@ -13,14 +13,14 @@ crosslink = c("genehancer", "PCHiC_PMID27863249_combined",
 "nearby"),
 crosslink.customised = NULL,
 cdf.function = c("original", "empirical"),
-scoring = F,
+scoring = FALSE,
 scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F,
+scoring.rescale = FALSE,
 nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
 nearby.decay.exponent = 2,
-verbose = T,
-silent = F,
+verbose = TRUE,
+silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -142,8 +142,8 @@ genes and nearby genes (purely), though the user can customise it via
 'crosslink.customised'; if so, it has priority over the built-in data.
 }
 \examples{
-\dontrun{
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # 1) provide the genomic regions
 ## load ImmunoBase
@@ -174,8 +174,8 @@ RData.location=RData.location)
 ## illustration purpose only (see the content of 'crosslink.customised')
 df <- xGR2nGenes(dGR, format="GRanges", RData.location=RData.location)
 crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene,
-Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=F)
-#crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=F)
+Score=df$Weight, Context=rep('C',nrow(df)), stringsAsFactors=FALSE)
+#crosslink.customised <- data.frame(GR=df$GR, Gene=df$Gene, Score=df$Weight, stringsAsFactors=FALSE)
 # 3b) define crosslinking genes
 # without gene scoring
 df_xGenes <- xGR2xGenes(dGR, format="GRanges",
@@ -183,10 +183,11 @@ crosslink.customised=crosslink.customised,
 RData.location=RData.location)
 # with gene scoring
 df_xGenes <- xGR2xGenes(dGR, format="GRanges",
-crosslink.customised=crosslink.customised, scoring=T,
+crosslink.customised=crosslink.customised, scoring=TRUE,
 scoring.scheme="max", RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xGR}}
+\code{\link{xGR}}, \code{\link{xRDataLoader}},
+\code{\link{xSymbol2GeneID}}, \code{\link{xGR2nGenes}}
 }

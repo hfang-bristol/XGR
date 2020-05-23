@@ -18,7 +18,7 @@ together with the significance level.
 
 <pre>
 xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
-= T)
+= TRUE)
 </pre>
 
 
@@ -84,17 +84,15 @@ taking into account the given threshold of the significant level
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>
+<p><code>xGRscores</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase

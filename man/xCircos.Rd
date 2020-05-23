@@ -10,9 +10,9 @@ entity = c("SNP", "Gene", "Both"),
 top_num = 50,
 colormap = c("yr", "bwr", "jet", "gbr", "wyr", "br", "rainbow", "wb",
 "lightyellow-orange"),
-rescale = T,
+rescale = TRUE,
 nodes.query = NULL,
-ideogram = T,
+ideogram = TRUE,
 chr.exclude = "auto",
 entity.label.cex = 0.7,
 entity.label.side = c("in", "out"),
@@ -20,7 +20,7 @@ entity.label.track = 1,
 entity.label.query = NULL,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -122,11 +122,8 @@ involving an input SNP (or gene).
 none
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
-
 library(RCircos)
 
 # provide genes and SNPs reported in GWAS studies
@@ -179,5 +176,5 @@ entity.label.side="out", RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
+\code{\link{xRDataLoader}}
 }

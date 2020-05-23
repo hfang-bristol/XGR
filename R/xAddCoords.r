@@ -24,7 +24,7 @@
 #' set.seed(825); cs <- igraph::cluster_spinglass(g)
 #' V(g)$community <- cs$membership
 #' ig <- xAddCoords(g, node.attr="community", edge.color.alternative=c("grey50","grey95"))
-#' if(class(V(ig)$community)=='character') V(ig)$community <- as.factor(V(ig)$community)
+#' if(is(V(ig)$community,'character')) V(ig)$community <- as.factor(V(ig)$community)
 #' gp <- xGGnetwork(ig, node.label='name', node.label.size=2, node.label.color='black', node.label.alpha=0.8, node.label.padding=0, node.label.arrow=0, node.label.force=0.002, node.xcoord='xcoord', node.ycoord='ycoord', node.color='community', node.color.title='Community', colormap='jet.both', ncolors=64, zlim=NULL, edge.color="color",edge.color.alpha=0.5,edge.curve=0,edge.arrow.gap=0)
 #' 
 #' ## make it discrete for the colorbar
@@ -41,12 +41,12 @@
 xAddCoords <- function(g, node.attr=NULL, glayout=layout_with_kk, edge.color.alternative=c("grey70","grey95"), seed=825, verbose=TRUE)
 {
     
-    if(class(g)=="graphNEL"){
+    if(is(g,"graphNEL")){
         ig <- igraph.from.graphNEL(g)
     }else{
         ig <- g
     }
-    if (class(ig) != "igraph"){
+    if (!is(ig,"igraph")){
         stop("The function must apply to either 'igraph' or 'graphNEL' object.\n")
     }
 	

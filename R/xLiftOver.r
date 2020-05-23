@@ -12,13 +12,11 @@
 #' @return 
 #' an GR oject storing converted genomic intervals.
 #' @export
-#' @seealso \code{\link{xLiftOver}}
+#' @seealso \code{\link{xRDataLoader}}
 #' @include xLiftOver.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
 #' # Provide UCSC known genes (hg19)
 #' UCSC_genes <- xRDataLoader('UCSC_knownGene', RData.location=RData.location)
@@ -29,12 +27,12 @@
 #' gr
 #' }
 
-xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=T, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-end", "GRanges"), build.conversion=c(NA, "hg38.to.hg19","hg19.to.hg38","hg19.to.hg18","hg18.to.hg38","hg18.to.hg19"), merged=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     startT <- Sys.time()
-    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-    message("", appendLF=T)
+    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+    message("", appendLF=TRUE)
     ####################################################################################
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -44,20 +42,20 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     ###################
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("First, import the files formatted as '%s' (%s) ...", format.file, as.character(now)), appendLF=T)
+		message(sprintf("First, import the files formatted as '%s' (%s) ...", format.file, as.character(now)), appendLF=TRUE)
 	}
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("\timport the data file (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("\timport the data file (%s) ...", as.character(now)), appendLF=TRUE)
 	}
     ## import data file
-    if(is.matrix(data.file) | is.data.frame(data.file) | class(data.file)=="GRanges"){
+    if(is.matrix(data.file) | is.data.frame(data.file) | is(data.file,"GRanges")){
         data <- data.file
     }else if(!is.null(data.file) & any(!is.na(data.file))){
     	if(length(data.file)==1){
     		if(file.exists(data.file)){
-    			data <- utils::read.delim(file=data.file, header=F, row.names=NULL, stringsAsFactors=F)
+    			data <- utils::read.delim(file=data.file, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
     			data <- unique(data[,1])
     		}else{
 				data <- data.file
@@ -74,7 +72,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     ###################
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Second, construct GenomicRanges object (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Second, construct GenomicRanges object (%s) ...", as.character(now)), appendLF=TRUE)
 	}
     
 	if(format.file=="data.frame"){
@@ -135,7 +133,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Third, lift intervals between genome builds '%s' (%s) ...", build.conversion, as.character(now)), appendLF=T)
+		message(sprintf("Third, lift intervals between genome builds '%s' (%s) ...", build.conversion, as.character(now)), appendLF=TRUE)
 	}
     
     chains <- xRDataLoader(RData.customised='chain', RData.location=RData.location, guid=guid, verbose=verbose)
@@ -153,7 +151,7 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Finally, keep the first range if multiple found (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Finally, keep the first range if multiple found (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 	
 		## keep only the first range (if multiple)
@@ -184,10 +182,10 @@ xLiftOver <- function(data.file, format.file=c("data.frame", "bed", "chr:start-e
 	
 ####################################################################################
     endT <- Sys.time()
-    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
+    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
 	
 	invisible(res_GR)
 }

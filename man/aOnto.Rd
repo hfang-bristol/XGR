@@ -25,10 +25,6 @@ an object of S3 class \code{aOnto}
 \code{aOnto} has 2 components: g, anno.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 aOnto(g, anno)

@@ -61,7 +61,7 @@ xEnrichNetplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
         stop("There is no enrichment in the 'eTerm' object.\n")
     }
     
-    if(class(eTerm)[1]=="eTerm"){
+    if(is(eTerm,"eTerm")){
 	
 		## when 'auto', will keep the significant terms
 		df <- xEnrichViewer(eTerm, top_num="all")
@@ -95,7 +95,7 @@ xEnrichNetplot <- function(eTerm, top_num=10, displayBy=c("fc","adjp","fdr","zsc
 		data <- data[ind]
 		names(data) <- V(subg)$name
 
-	}else if(any(class(eTerm) %in% c("gg","ggplot"))){
+	}else if(is(eTerm,"ggplot")){
 		bp <- eTerm
 		if(!is.null(bp$g)){
 			bp_ig <- bp$g

@@ -21,10 +21,10 @@ xGR(
 data,
 format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
-add.name = T,
-remove.mcol = F,
-include.strand = F,
-verbose = T,
+add.name = TRUE,
+remove.mcol = FALSE,
+include.strand = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -102,18 +102,15 @@ project. See <code>xRDataLoader</code> for details</p>
 
 <h3>See Also</h3>
 
-<p><code>xRDataLoader</code>
+<p><code>xLiftOver</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
-
+## Not run: 
 # a) provide the genomic regions
 ## load ImmunoBase
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',

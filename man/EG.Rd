@@ -23,10 +23,6 @@ an object of S3 class \code{EG}
 \code{EG} has 1 component: gene_info.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 EG(gene_info)

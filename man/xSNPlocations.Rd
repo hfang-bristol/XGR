@@ -7,7 +7,7 @@
 xSNPlocations(
 data,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -52,10 +52,6 @@ list of SNPs.
 none
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 
 \dontrun{

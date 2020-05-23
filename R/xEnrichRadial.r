@@ -60,15 +60,15 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
         return(NULL)
     }
     
-    if(class(eTerm)=='eTerm'){
+    if(is(eTerm,'eTerm')){
 		df_enrichment_group <- xEnrichViewer(eTerm, top_num="all", sortBy="or")
 		df_enrichment_group$group <- 'group'
-	}else if(class(eTerm)=='ls_eTerm' | class(eTerm)=='data.frame'){
+	}else if(is(eTerm,'ls_eTerm') | is(eTerm,'data.frame')){
 	
-		if(class(eTerm)=='ls_eTerm'){
+		if(is(eTerm,'ls_eTerm')){
 			df_enrichment_group <- eTerm$df
 			
-		}else if(class(eTerm)=='data.frame'){
+		}else if(is(eTerm,'data.frame')){
 			if(all(c('group','name','adjp','or','zscore') %in% colnames(eTerm))){
 				df_enrichment_group <- eTerm[,c('group','name','adjp','or','zscore')]
 			}else if(all(c('name','adjp','or','zscore') %in% colnames(eTerm))){
@@ -78,7 +78,7 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 		}
 	}
 	
-	if(class(df_enrichment_group$group)=='factor'){
+	if(is(df_enrichment_group$group,'factor')){
 		if(length(unique(df_enrichment_group$group)) != length(levels(df_enrichment_group$group))){
 			df_enrichment_group$group <- factor(df_enrichment_group$group, levels=sort(unique(df_enrichment_group$group)))
 		}
@@ -86,8 +86,8 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 	
 	##########################################################
 	# restrict those nodes provided in 'ig'
-	if(class(ig)!="igraph"){
-		if(class(eTerm)=='eTerm'){
+	if(!is(ig,"igraph")){
+		if(is(eTerm,'eTerm')){
 			ig <- eTerm$g
 		}else{
 			return(NULL)
@@ -97,7 +97,7 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 	if(!fixed){
 		ind <- match(V(ig)$term_name, df_enrichment_group$name)
 		nodes_query <- V(ig)$name[!is.na(ind)]
-		if(class(suppressWarnings(try(subg <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), T)))=="try-error"){
+		if(is(suppressWarnings(try(subg <- dnet::dDAGinduce(ig, nodes_query, path.mode="all_paths"), TRUE)),"try-error")){
 			subg <- NULL
 		}
 	}else{
@@ -105,7 +105,7 @@ xEnrichRadial <- function(eTerm, ig=NULL, fixed=T, node.color=c("or","adjp","zsc
 	}
 	##########################################################
 	
-	if(class(subg)=="igraph"){
+	if(is(subg,"igraph")){
 		gp_code_table <- xOBOcode(g=subg, node.level='term_distance', node.level.value=2, node.label.color='black', node.shape=21, node.size.range=4, edge.color.alpha=0.2, table.base.size=7, table.row.space=2, table.nrow=min(vcount(subg),55), ...)
 		gp_code <- gp_code_table$code
 		gp_table <- gp_code_table$table

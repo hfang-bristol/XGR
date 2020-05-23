@@ -24,7 +24,7 @@ xEnrichConciser <- function(eTerm, cutoff=c(0.9,0.5), verbose=T)
         return(NULL)
     }
     
-    if(class(eTerm) == "eTerm" ){
+    if(is(eTerm,"eTerm")){
 		
 		cross <- eTerm$cross
 		

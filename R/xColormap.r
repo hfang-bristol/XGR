@@ -23,6 +23,7 @@
 #' \item{Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkblue-lightblue-lightyellow-darkorange", "darkgreen-white-darkviolet", "darkgreen-lightgreen-lightpink-darkred". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}}
 #' }
 #' @export
+#' @seealso \code{\link{xColormap}}
 #' @include xColormap.r
 #' @examples
 #' # 1) define "blue-white-red" colormap
@@ -48,7 +49,7 @@ xColormap <- function(colormap=c("bwr","jet","gbr","wyr","br","yr","rainbow","wb
 
 	interpolate <- match.arg(interpolate)
 	
-	if(class(colormap)=='function'){
+	if(is(colormap,'function')){
 		palette.name <- colormap
 		
 	}else{

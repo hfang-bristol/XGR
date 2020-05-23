@@ -56,10 +56,6 @@ an object of S3 class \code{eTerm}
 data, background, overlap, fc, zscore, pvalue, adjp, cross.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 eTerm(term_info, annotation, g, data, background, overlap, fc, zscore,

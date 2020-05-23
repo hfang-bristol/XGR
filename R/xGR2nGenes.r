@@ -30,13 +30,11 @@
 #' }
 #' @note For details on the decay kernels, please refer to \code{\link{xVisKernels}}
 #' @export
-#' @seealso \code{\link{xRDataLoader}}, \code{\link{xGR}}
+#' @seealso \code{\link{xGR}}, \code{\link{xRDataLoader}}, \code{\link{xSparseMatrix}}
 #' @include xGR2nGenes.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #'
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
@@ -53,16 +51,16 @@
 #' # without gene scoring
 #' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="slow", decay.exponent=2, RData.location=RData.location)
 #' # with their scores
-#' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T, scoring.scheme="max", RData.location=RData.location)
+#' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=TRUE, scoring.scheme="max", RData.location=RData.location)
 #'
 #' # c) define nearby genes without taking into acount distance weight
 #' # without gene scoring
 #' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="constant", RData.location=RData.location)
 #' # with their scores
-#' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="constant", scoring=T, scoring.scheme="max", RData.location=RData.location)
+#' df_nGenes <- xGR2nGenes(data=data, format="chr:start-end", distance.max=10000, decay.kernel="constant", scoring=TRUE, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=F, scoring.scheme=c("max","sum","sequential"), scoring.rescale=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), distance.max=50000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), scoring=FALSE, scoring.scheme=c("max","sum","sequential"), scoring.rescale=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -76,16 +74,16 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
   	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=TRUE)
 	}
-	if(class(GR.Gene) == "GRanges"){
+	if(is(GR.Gene,"GRanges")){
 		gr_Gene <- xGR(GR.Gene, format="GRanges", build.conversion=build.conversion, verbose=verbose, RData.location=RData.location, guid=guid)
 	}else{
 		gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 		if(is.null(gr_Gene)){
 			GR.Gene <- "UCSC_knownGene"
 			if(verbose){
-				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+				message(sprintf("Instead, %s will be used", GR.Gene), appendLF=TRUE)
 			}
 			gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 		}
@@ -93,7 +91,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Define nearby genes (%s) ...", as.character(now)), appendLF=TRUE)
 	}
 	# genes: get all UCSC genes within defined distance window away from variants
 	#maxgap <- distance.max
@@ -102,21 +100,21 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	minoverlap <- 0L
 	subject <- gr_Gene
 	query <- dGR
-	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=T))))
+	q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=query, subject=subject, maxgap=maxgap, minoverlap=minoverlap, type="any", select="all", ignore.strand=TRUE))))
 	
 	if(length(q2r) > 0){
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Calculate distance (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Calculate distance (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 		
 		if(1){
 			### very quick
 			x <- subject[q2r[,2],]
 			y <- query[q2r[,1],]
-			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-			df_nGenes <- data.frame(Gene=names(x), GR=names(y), Dist=dists, stringsAsFactors=F)
+			dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=TRUE)
+			df_nGenes <- data.frame(Gene=names(x), GR=names(y), Dist=dists, stringsAsFactors=FALSE)
 		}else{
 			### very slow
 			list_gene <- split(x=q2r[,1], f=q2r[,2])
@@ -124,8 +122,8 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 			res_list <- lapply(1:length(ind_gene), function(i){
 				x <- subject[ind_gene[i],]
 				y <- query[list_gene[[i]],]
-				dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=T)
-				res <- data.frame(Gene=rep(names(x),length(dists)), GR=names(y), Dist=dists, stringsAsFactors=F)
+				dists <- GenomicRanges::distance(x, y, select="all", ignore.strand=TRUE)
+				res <- data.frame(Gene=rep(names(x),length(dists)), GR=names(y), Dist=dists, stringsAsFactors=FALSE)
 			})
 			df_nGenes <- do.call(rbind, res_list)
 		}
@@ -149,7 +147,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(df_nGenes$Gene)), distance.max, decay.kernel, as.character(now)), appendLF=T)
+			message(sprintf("%d Genes are defined as nearby genes within %d(bp) genomic distance window using '%s' decay kernel (%s)", length(unique(df_nGenes$Gene)), distance.max, decay.kernel, as.character(now)), appendLF=TRUE)
 		}
 		
 		df_nGenes <- df_nGenes[order(df_nGenes$Gene,df_nGenes$Dist,decreasing=FALSE),]
@@ -201,33 +199,33 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 				
 			}else if(scoring.scheme=='sequential'){
 				seeds.genes <- sapply(ls_gene, function(x){
-					#base::sum(base::sort(x, decreasing=T) / (1:length(x)))
+					#base::sum(base::sort(x, decreasing=TRUE) / (1:length(x)))
 					base::sum(x / base::rank(-x,ties.method="min"))
 				})
 				
 				if(0){
 				seeds.genes <- apply(G2S_score, 1, function(x) {
-					base::sum(base::sort(x, decreasing=T) / (1:length(x)))
+					base::sum(base::sort(x, decreasing=TRUE) / (1:length(x)))
 				})
 				}
 			}
 
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme (%s)", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=T)
+				message(sprintf("In summary, %d Genes are defined as seeds and scored using '%s' scoring scheme (%s)", length(seeds.genes), scoring.scheme, as.character(now)), appendLF=TRUE)
 			}
 
 			if(scoring.rescale){
 				if(verbose){
 					now <- Sys.time()
-					message(sprintf("Also rescale score into the [0,1] range (%s)", as.character(now)), appendLF=T)
+					message(sprintf("Also rescale score into the [0,1] range (%s)", as.character(now)), appendLF=TRUE)
 				}
 				# rescale to [0 1]
 				seeds.genes <- (seeds.genes - min(seeds.genes))/(max(seeds.genes) - min(seeds.genes))
 			}
 
 			## for output
-			df_Gene <- data.frame(Gene=names(seeds.genes), Score=seeds.genes, stringsAsFactors=F)
+			df_Gene <- data.frame(Gene=names(seeds.genes), Score=seeds.genes, stringsAsFactors=FALSE)
 			rownames(df_Gene) <- NULL
 			df_Gene <- df_Gene[order(df_Gene$Score,decreasing=TRUE),]
 			
@@ -242,7 +240,7 @@ xGR2nGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("No nearby genes are defined"), appendLF=T)
+			message(sprintf("No nearby genes are defined"), appendLF=TRUE)
 		}
 		
 		invisible(df_nGenes)

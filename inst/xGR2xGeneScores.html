@@ -34,7 +34,7 @@ scoring.scheme = c("max", "sum", "sequential"),
 nearby.distance.max = 50000,
 nearby.decay.kernel = c("rapid", "slow", "linear", "constant"),
 nearby.decay.exponent = 2,
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -183,15 +183,15 @@ to define and score seed genes from input genomic regions.
 <h3>See Also</h3>
 
 <p><code>xGRscores</code>, <code>xGR2xGenes</code>,
-<code>xSparseMatrix</code>
+<code>xGRsort</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
 
 # a) provide the seed SNPs with the significance info
 ## load ImmunoBase

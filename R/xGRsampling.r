@@ -40,16 +40,16 @@ xGRsampling <- function(GR.data, GR.background, num.samples=100, gap.max=50000, 
 	}
 	
   	## Check input GR.data and GR.background
-  	if (class(GR.data) != "GRanges") {
+  	if (!is(GR.data,"GRanges")) {
     	stop("The function must apply to a 'GRanges' object for input data.\n")
   	}
   	
-  	if(class(GR.background) == "GRangesList"){
+  	if(is(GR.background,"GRangesList")){
   		GR.background <- BiocGenerics::unlist(GR.background)
-  	}else if(class(GR.background) == "list"){
+  	}else if(is(GR.background,"list")){
   		GR.background <- BiocGenerics::unlist(GenomicRanges::GRangesList(GR.background))
   	}
-  	if (class(GR.background) != "GRanges") {
+  	if (!is(GR.background,"GRanges")) {
     	stop("The function must apply to a 'GRanges' object for input background.\n")
   	}
   	

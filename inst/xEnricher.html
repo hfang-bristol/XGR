@@ -38,7 +38,7 @@ elim.pvalue = 0.01,
 lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 true.path.rule = TRUE,
-verbose = T
+verbose = TRUE
 )
 </pre>
 
@@ -288,14 +288,14 @@ the maximum of both p-values in these two calculations.
 
 <h3>See Also</h3>
 
-<p><code>xDAGanno</code>, <code>xEnricherGenes</code>,
-<code>xEnricherSNPs</code>
+<p><code>xDAGanno</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # 1) SNP-based enrichment analysis using GWAS Catalog traits (mapped to EF)
 # 1a) ig.EF (an object of class "igraph" storing as a directed graph)

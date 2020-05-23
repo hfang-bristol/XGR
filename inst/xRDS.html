@@ -16,7 +16,7 @@
 <h3>Usage</h3>
 
 <pre>
-xRDS(RDS = NULL, verbose = T, placeholder = NULL, guid = NULL)
+xRDS(RDS = NULL, verbose = TRUE, placeholder = NULL, guid = NULL)
 </pre>
 
 
@@ -56,7 +56,7 @@ via placeholder</p>
 <h3>Note</h3>
 
 <p>To enable 'guid', please also install a package &quot;osfr&quot; via
-<code>BiocManager::install("osfr",dependencies=T)</code>.
+<code>BiocManager::install("osfr",dependencies=TRUE)</code>.
 </p>
 
 
@@ -69,15 +69,10 @@ via placeholder</p>
 <h3>Examples</h3>
 
 <pre>
+guid &lt;- 'gskpn'
 ## Not run: 
-org.Hs.eg &lt;- xRDS('org.Hs.eg')
-ig.HPPA &lt;- xRDS('ig.HPPA')
-org.Hs.egHPPA &lt;- xRDS('org.Hs.egHPPA')
-
 # from OSF
 ig.HPPA &lt;- xRDS('ig.HPPA', guid='gskpn')
-org.Mm.egKEGG &lt;- xRDS('org.Mm.egKEGG', guid='gskpn')
-org.Mm.string_high &lt;- xRDS('org.Mm.string_high', guid='gskpn')
 
 ## End(Not run)
 </pre>

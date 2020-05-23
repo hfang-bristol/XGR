@@ -53,7 +53,7 @@ xSubneterGenesAdv <- function(data, network=c("STRING_highest","STRING_high","ST
     }
     
 	########################################################################
-    if(!is.null(network.customised) && class(network.customised)=="igraph"){
+    if(!is.null(network.customised) && is(network.customised,"igraph")){
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("Load the customised network (%s) ...", as.character(now)), appendLF=T)

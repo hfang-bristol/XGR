@@ -89,7 +89,7 @@ xHeatmapAdv <- function(data.main, data.meta, reorder=c("none","row","col","both
 		colnames(data.meta) <- paste('C', 1:ncol(data.meta), sep=' ')
 	}
 	
-	if(class(data.meta)=='matrix'){
+	if(is(data.meta,'matrix')){
 		data.meta <- as.data.frame(data.meta)
 	}
 	

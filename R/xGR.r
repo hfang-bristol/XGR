@@ -13,14 +13,11 @@
 #' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return a GenomicRanges object 
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xLiftOver}}
 #' @include xGR.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-#'
+#' \dontrun{
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
@@ -36,7 +33,7 @@
 #' GR <- xGR(data=data, format="chr:start-end", RData.location=RData.location)
 #' }
 
-xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=T, remove.mcol=F, include.strand=F, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), add.name=TRUE, remove.mcol=FALSE, include.strand=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -50,12 +47,12 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 	###################
 		
     ## import data
-    if(is.matrix(data) | is.data.frame(data) | class(data)=="GRanges"){
+    if(is.matrix(data) | is.data.frame(data) | is(data,"GRanges")){
         data <- data
     }else if(!is.null(data) & any(!is.na(data))){
     	if(length(data)==1){
     		if(file.exists(data)){
-    			data <- utils::read.delim(file=data, header=F, row.names=NULL, stringsAsFactors=F)
+    			data <- utils::read.delim(file=data, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
     			data <- unique(data[,1])
     		}else{
 				data <- data
@@ -83,7 +80,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		###################
 		if(include.strand){
 			if(ncol(data)<=3){
-				include.strand <- F
+				include.strand <- FALSE
 			}
 		}
 		###################
@@ -134,7 +131,7 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 		###################
 		if(include.strand){
 			if(ncol(data)<=3){
-				include.strand <- F
+				include.strand <- FALSE
 			}
 		}
 		###################
@@ -176,9 +173,9 @@ xGR <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), bu
 	# lift over
 	if(!is.na(build.conversion)){
 		if(verbose){
-			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=T)
+			message(sprintf("\tdata genomic regions: lifted over via genome build conversion `%s`", build.conversion), appendLF=TRUE)
 		}
-		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=F, verbose=verbose, RData.location=RData.location, guid=guid)
+		dGR <- xLiftOver(data.file=dGR, format.file="GRanges", build.conversion=build.conversion, merged=FALSE, verbose=verbose, RData.location=RData.location, guid=guid)
 	}
   	#######################################################
   	

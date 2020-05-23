@@ -20,7 +20,8 @@ binned into the predefined number of discrete bins.
 <h3>Usage</h3>
 
 <pre>
-xAggregate(data, bin = F, nbin = 10, scale.log = T, verbose = T)
+xAggregate(data, bin = FALSE, nbin = 10, scale.log = TRUE, verbose =
+TRUE)
 </pre>
 
 
@@ -78,11 +79,8 @@ displayed in the screen. By default, it sets to true for display</p>
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
-# Load the library
-library(XGR)
-
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+## Not run: 
 # HiC-gene pairs per cell types/states
 g &lt;- xRDataLoader(RData.customised='ig.PCHiC',
 RData.location=RData.location)

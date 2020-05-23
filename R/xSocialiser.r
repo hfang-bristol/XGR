@@ -67,11 +67,11 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     path.mode <- match.arg(path.mode)
     
     
-    if(class(annotation)=="GS"){
+    if(is(annotation,"GS")){
         originAnnos <- annotation$gs
-    }else if(class(annotation)=="list"){
+    }else if(is(annotation,"list")){
         originAnnos <- annotation
-    }else if(class(annotation)=="dgCMatrix"){
+    }else if(is(annotation,"dgCMatrix")){
 		D <- annotation
 		originAnnos <- sapply(1:ncol(D), function(j){
 			names(which(D[,j]!=0))
@@ -83,7 +83,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     annotation <- originAnnos
 
     ig <- g
-    if (class(ig) != "igraph"){
+    if(!is(ig,"igraph")){
         stop("The function must apply to the 'igraph' object.\n")
     }else{
 		
@@ -178,7 +178,7 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
     ## pre-compute semantic similarity between terms in subject
     sim.term <- suppressMessages(xDAGsim(ig, terms=terms, method.term=method.term, fast=fast, parallel=parallel, multicores=multicores, verbose=T))
     
-    if (class(sim.term) == "igraph"){
+    if(is(sim.term,"igraph")){
     	sim.term <- xConverter(sim.term, from='igraph', to='dgCMatrix', verbose=F)
     }
     
@@ -453,10 +453,10 @@ xSocialiser <- function(data, annotation, g, measure=c("BM.average","BM.max","BM
 	
     ####################################################################################
     
-    if (class(sim) == "dgCMatrix" | class(sim) == "dsCMatrix"){
+    if(is(sim,"dgCMatrix") | is(sim,"dsCMatrix")){
     	res <- xConverter(sim, from="dgCMatrix", to="igraph", verbose=F)
     	
-    	if(class(res) == "igraph"){
+    	if(is(res,"igraph")){
     		if(!is.null(E(res)$weight)){
     			E(res)$weight <- as.numeric(E(res)$weight)
     		}

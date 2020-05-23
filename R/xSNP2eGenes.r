@@ -20,14 +20,9 @@
 #' }
 #' @note none
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xDefineEQTL}}, \code{\link{xSymbol2GeneID}}
 #' @include xSNP2eGenes.r
 #' @examples
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
-#'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # a) provide the SNPs with the significance info

@@ -100,7 +100,7 @@ xEnrichDAGplotAdv <- function(ggplot, displayBy=c("nSig","none"), path.mode=c("a
     layout.orientation <- match.arg(layout.orientation)
     node.info<- match.arg(node.info)
     
-   	if(any(class(ggplot) %in% c("gg","ggplot"))){
+   	if(is(ggplot,"ggplot")){
 		bp <- ggplot
 		if(!is.null(bp$g)){
 			bp_ig <- bp$g

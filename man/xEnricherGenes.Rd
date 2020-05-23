@@ -7,7 +7,7 @@
 xEnricherGenes(
 data,
 background = NULL,
-check.symbol.identity = F,
+check.symbol.identity = FALSE,
 ontology = NA,
 ontology.customised = NULL,
 size.range = c(10, 2000),
@@ -22,9 +22,9 @@ ontology.algorithm = c("none", "pc", "elim", "lea"),
 elim.pvalue = 0.01,
 lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F,
-verbose = T,
-silent = F,
+true.path.rule = FALSE,
+verbose = TRUE,
+silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -202,11 +202,8 @@ maximum of both p-values in these two calculations.}
 }
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the library
-library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
-
 # Gene-based enrichment analysis using REACTOME pathways
 # a) provide the input Genes of interest (eg 500 randomly chosen human genes)
 ## load human genes
@@ -258,5 +255,7 @@ node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 }
 }
 \seealso{
-\code{\link{xDefineOntology}}, \code{\link{xEnricher}}
+\code{\link{xDefineOntology}}, \code{\link{xSymbol2GeneID}},
+\code{\link{xEnricher}}, \code{\link{xSymbol2GeneID}},
+\code{\link{xRDataLoader}}
 }

@@ -12,10 +12,10 @@ distance.max = 50000,
 decay.kernel = c("rapid", "slow", "linear", "constant"),
 decay.exponent = 2,
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-scoring = F,
+scoring = FALSE,
 scoring.scheme = c("max", "sum", "sequential"),
-scoring.rescale = F,
-verbose = T,
+scoring.rescale = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -114,10 +114,8 @@ For details on the decay kernels, please refer to
 \code{\link{xVisKernels}}
 }
 \examples{
-\dontrun{
-# Load the XGR package and specify the location of built-in data
-library(XGR)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 
 # a) provide the genomic regions
 ## load ImmunoBase
@@ -138,8 +136,8 @@ distance.max=10000, decay.kernel="slow", decay.exponent=2,
 RData.location=RData.location)
 # with their scores
 df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
-distance.max=10000, decay.kernel="slow", decay.exponent=2, scoring=T,
-scoring.scheme="max", RData.location=RData.location)
+distance.max=10000, decay.kernel="slow", decay.exponent=2,
+scoring=TRUE, scoring.scheme="max", RData.location=RData.location)
 
 # c) define nearby genes without taking into acount distance weight
 # without gene scoring
@@ -148,10 +146,11 @@ distance.max=10000, decay.kernel="constant",
 RData.location=RData.location)
 # with their scores
 df_nGenes <- xGR2nGenes(data=data, format="chr:start-end",
-distance.max=10000, decay.kernel="constant", scoring=T,
+distance.max=10000, decay.kernel="constant", scoring=TRUE,
 scoring.scheme="max", RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}, \code{\link{xGR}}
+\code{\link{xGR}}, \code{\link{xRDataLoader}},
+\code{\link{xSparseMatrix}}
 }

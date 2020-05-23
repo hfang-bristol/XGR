@@ -39,7 +39,7 @@ xSubneterGenesMST <- function(isubg, metric=c("hybrid","max","jaccard"), verbose
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     metric <- match.arg(metric)
     
-   	if(class(isubg)=="iSubg"){
+   	if(is(isubg,"iSubg")){
    		ls_subg <- isubg$ls_subg
    		g <- isubg$g
 		## Remove null elements in a list

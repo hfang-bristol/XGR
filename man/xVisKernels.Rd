@@ -4,7 +4,7 @@
 \alias{xVisKernels}
 \title{Function to visualise distance kernel functions}
 \usage{
-xVisKernels(exponent = 2, newpage = T)
+xVisKernels(exponent = 2, newpage = TRUE)
 }
 \arguments{
 \item{exponent}{an integer specifying decay exponent. By default, it
@@ -39,5 +39,5 @@ xVisKernels(exponent=2)
 xVisKernels(exponent=3)
 }
 \seealso{
-\code{\link{xSNP2nGenes}}
+\code{\link{xVisKernels}}
 }

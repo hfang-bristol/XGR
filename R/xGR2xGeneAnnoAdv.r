@@ -88,9 +88,9 @@ xGR2xGeneAnnoAdv <- function(list_vec, background=NULL, build.conversion=c(NA,"h
     	return(NULL)
     }
     ############
-    if(is.vector(list_vec) & class(list_vec)!="list"){
+    if(is.vector(list_vec) & !is(list_vec,"list")){
     	list_vec <- list(list_vec)
-	}else if(class(list_vec)=="list"){
+	}else if(is(list_vec,"list")){
 		## Remove null elements in a list
 		list_vec <- base::Filter(base::Negate(is.null), list_vec)
 		if(length(list_vec)==0){

@@ -27,10 +27,6 @@ an object of S3 class \code{ls_eTerm}
 \code{ls_eTerm} has 3 components: df, mat and gp.
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 ls_eTerm(df, mat, gp)

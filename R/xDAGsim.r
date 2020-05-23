@@ -58,7 +58,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
     method.term <- match.arg(method.term)
     
     ig <- g
-    if (class(ig) != "igraph"){
+    if (!is(ig,"igraph")){
         stop("The function must apply to the 'igraph' object.\n")
     }
     
@@ -416,7 +416,7 @@ xDAGsim <- function (g, terms=NULL, method.term=c("Resnik","Lin","Schlicker","Ji
 
     ####################################################################################
     
-    if (class(sim) == "dgCMatrix"){
+    if (is(sim,"dgCMatrix")){
     	res <- xConverter(sim, from="dgCMatrix", to="igraph", verbose=verbose)
     }
     

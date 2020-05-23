@@ -23,15 +23,11 @@
 #' a circos plot with edge weights between input snps/genes represented by the colour of the links
 #' @note none
 #' @export
-#' @import RCircos
-#' @seealso \code{\link{xSocialiserGenes}}, \code{\link{xSocialiserSNPs}}
+#' @seealso \code{\link{xRDataLoader}}
 #' @include xCircos.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
-#' 
 #' library(RCircos)
 #'
 #' # provide genes and SNPs reported in GWAS studies
@@ -74,22 +70,22 @@
 #' #dev.off()
 #' }
 
-xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=T, nodes.query=NULL, ideogram=T, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("in","out"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr","bwr","jet","gbr","wyr","br","rainbow","wb","lightyellow-orange"), rescale=TRUE, nodes.query=NULL, ideogram=TRUE, chr.exclude="auto", entity.label.cex=0.7, entity.label.side=c("in","out"), entity.label.track=1, entity.label.query=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common","dbSNP_Single"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
 	entity <- match.arg(entity)
 	entity.label.side <- match.arg(entity.label.side)
 	
-	flag_package <- F
+	flag_package <- FALSE
     pkgs <- c("RCircos")
     if(all(pkgs %in% rownames(utils::installed.packages()))){
         tmp <- sapply(pkgs, function(pkg) {
-            #suppressPackageStartupMessages(require(pkg, character.only=T))
-            requireNamespace(pkg, quietly=T)
+            #suppressPackageStartupMessages(require(pkg, character.only=TRUE))
+            requireNamespace(pkg, quietly=TRUE)
         })
         if(all(tmp)){
-        	flag_package <- T
+        	flag_package <- TRUE
         }
     }
 	if(!flag_package){
@@ -97,7 +93,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 	}
 	
   	## Check input g
-  	if (class(g) != "igraph") {
+  	if (!is(g,"igraph")) {
     	stop("The function must apply to a 'igraph' object.\n")
   	}
 
@@ -105,10 +101,11 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	df <- igraph::get.data.frame(g, what="edges")
 	
 	## check the weight and sort the weight
+	weight <- NULL
 	if(is.null(df$weight)){
 		df$weight <- rep(1, nrow(df))
 		## force NOT to rescale weight
-		rescale <- F
+		rescale <- FALSE
 	}else{
 		df$weight <- as.numeric(df$weight)
 	}
@@ -126,7 +123,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 				ind <- match(nodes.query, union(df[,1], df[,2]))
 				nodes.query <- nodes.query[!is.na(ind)]
 				now <- Sys.time()
-				message(sprintf("Circos plot restricted to nodes '%s' (%s) ...", paste(nodes.query,collapse=','), as.character(now)), appendLF=T)
+				message(sprintf("Circos plot restricted to nodes '%s' (%s) ...", paste(nodes.query,collapse=','), as.character(now)), appendLF=TRUE)
 			}
 		}
 	}
@@ -144,18 +141,18 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	## load positional information
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Loading positional information for %s (%s) ...", entity, as.character(now)), appendLF=T)
+		message(sprintf("Loading positional information for %s (%s) ...", entity, as.character(now)), appendLF=TRUE)
 	}
 
   	if(entity=="SNP" | entity=="Both"){
-		if(class(GR.SNP) == "GRanges"){
+		if(is(GR.SNP,"GRanges")){
 			pos_snp <- GR.SNP
 		}else{
 			pos_snp <- xRDataLoader(RData.customised=GR.SNP[1], verbose=verbose, RData.location=RData.location, guid=guid)
 			if(is.null(pos_snp)){
 				GR.SNP <- "dbSNP_GWAS"
 				if(verbose){
-					message(sprintf("Instead, %s will be used", GR.SNP), appendLF=T)
+					message(sprintf("Instead, %s will be used", GR.SNP), appendLF=TRUE)
 				}
 				pos_snp <- xRDataLoader(RData.customised=GR.SNP, verbose=verbose, RData.location=RData.location, guid=guid)
 			}		
@@ -163,14 +160,14 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	}
   	
   	if(entity == "Gene" | entity=="Both"){
-		if(class(GR.Gene) == "GRanges"){
+		if(is(GR.Gene,"GRanges")){
 			pos_gene <- GR.Gene
 		}else{
 			pos_gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location, guid=guid)
 			if(is.null(pos_gene)){
 				GR.Gene <- "UCSC_knownGene"
 				if(verbose){
-					message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+					message(sprintf("Instead, %s will be used", GR.Gene), appendLF=TRUE)
 				}
 				pos_gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location, guid=guid)
 			}
@@ -222,7 +219,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	## Load human chromosome ideogram
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Loading human chromosome banding information (hg19) (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Loading human chromosome banding information (hg19) (%s) ...", as.character(now)), appendLF=TRUE)
 	}
 	
 	#data(UCSC.HG19.Human.CytoBandIdeogram, package="RCircos")
@@ -230,14 +227,14 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 	
   	cyto.info <- ""
   	eval(parse(text=paste("cyto.info <- UCSC.HG19.Human.CytoBandIdeogram", sep="")))
-  	if(ideogram==F) {
+  	if(ideogram==FALSE) {
     	cyto.info$Stain <- rep("gpos100", nrow(cyto.info))
   	}
   	
   	## Set RCircos core components
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Initialising RCircos Core Components (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Initialising RCircos Core Components (%s) ...", as.character(now)), appendLF=TRUE)
 	}
   	num.inside <- 1
   	num.outside <- 1
@@ -262,7 +259,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	## Initialise graphic device, plot chromosome ideogram
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Plotting chromosome ideogram (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Plotting chromosome ideogram (%s) ...", as.character(now)), appendLF=TRUE)
 	}
   	RCircos.Set.Plot.Area()
   	RCircos.Chromosome.Ideogram.Plot()
@@ -270,7 +267,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
   	## Plot link data coloured according to the similarity output
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Plotting link data (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Plotting link data (%s) ...", as.character(now)), appendLF=TRUE)
 	}
 	
 	## Also rescale similarity into the [0,1] range
@@ -278,7 +275,7 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 		sim <- input.data$similarity
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Also rescale similarity into the [0,1] range (%s)", as.character(now)), appendLF=T)
+			message(sprintf("Also rescale similarity into the [0,1] range (%s)", as.character(now)), appendLF=TRUE)
 		}
 		# rescale to [0 1]
 		input.data$similarity <- (sim - min(sim))/(max(sim) - min(sim))
@@ -291,13 +288,13 @@ xCircos <- function(g, entity=c("SNP","Gene","Both"), top_num=50, colormap=c("yr
 	#cut_index[is.na(cut_index)] <- max(input.data$similarity)
 	cut_index[is.na(cut_index)] <- 1
   	input.data$PlotColor <- palette.name(20)[cut_index]
-  	input.data <- input.data[order(input.data$similarity, decreasing=F), ]
+  	input.data <- input.data[order(input.data$similarity, decreasing=FALSE), ]
   	RCircos.Link.Plot(input.data, track.num=1, FALSE)
 
   	## Label SNPs/genes in outside track
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Adding SNP and/or gene names (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Adding SNP and/or gene names (%s) ...", as.character(now)), appendLF=TRUE)
 	}
   	name.col <- "Name"
   	side <- entity.label.side

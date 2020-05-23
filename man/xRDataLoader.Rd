@@ -6,10 +6,11 @@
 \usage{
 xRDataLoader(
 RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
-"IlluminaOmniExpress", "ig.DO",
-"ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA",
-"ig.HPMI", "ig.HPPA",
-"ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP",
+"IlluminaOmniExpress",
+"ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM",
+"ig.HPMA", "ig.HPMI",
+"ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO",
+"org.Hs.egGOBP",
 "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA",
 "org.Hs.egHPMI",
 "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1",
@@ -25,7 +26,7 @@ RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
 "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN",
 "org.Hs.PCommons_UN"),
 RData.customised = NULL,
-verbose = T,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -89,9 +90,10 @@ cannot be loaded, it returns NULL.
 If there are no use-specified variable that is given on the right side
 of the assigement sign '<-', then no RData will be loaded onto the
 working environment. To enable 'guid', please also install a package
-"osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
+"osfr" via \code{BiocManager::install("osfr",dependencies=TRUE)}.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')

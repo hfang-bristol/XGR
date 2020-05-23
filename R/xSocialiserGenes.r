@@ -154,7 +154,7 @@ xSocialiserGenes <- function(data, check.symbol.identity=F, ontology=c("GOBP","G
 		colnames(relations) <- c("from","to","weight")
 		res <- igraph::graph.data.frame(d=relations, directed=F)
     	
-    	if(class(res) == "igraph"){
+    	if(is(res,"igraph")){
     		if(!is.null(E(res)$weight)){
     			E(res)$weight <- as.numeric(E(res)$weight)
     		}

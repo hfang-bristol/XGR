@@ -7,8 +7,8 @@
 xGeneID2Symbol(
 data,
 org = c("human", "mouse"),
-details = F,
-verbose = T,
+details = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -43,10 +43,8 @@ geneid.
 none.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the library
-library(XGR)
-
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
@@ -65,5 +63,5 @@ df <- xGeneID2Symbol(GeneID, org=org.Hs.eg, details=TRUE)
 }
 }
 \seealso{
-\code{\link{xEnricherGenes}}, \code{\link{xSocialiserGenes}}
+\code{\link{xRDataLoader}}
 }

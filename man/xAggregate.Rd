@@ -4,7 +4,8 @@
 \alias{xAggregate}
 \title{Function to aggregate data respecting number of features}
 \usage{
-xAggregate(data, bin = F, nbin = 10, scale.log = T, verbose = T)
+xAggregate(data, bin = FALSE, nbin = 10, scale.log = TRUE, verbose =
+TRUE)
 }
 \arguments{
 \item{data}{a data frame. The aggregation is done across columns per
@@ -38,11 +39,8 @@ binned into the predefined number of discrete bins.
 None
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+\dontrun{
 # HiC-gene pairs per cell types/states
 g <- xRDataLoader(RData.customised='ig.PCHiC',
 RData.location=RData.location)

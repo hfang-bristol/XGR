@@ -13,10 +13,9 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsDN_PID",
 "PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
 "PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
-"KEGG_genetic",
-"KEGG_environmental", "KEGG_cellular", "KEGG_organismal",
-"KEGG_disease", "REACTOME",
-"TRRUST"),
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal",
+"KEGG_disease", "REACTOME", "TRRUST"),
 STRING.only = c(NA, "neighborhood_score", "fusion_score",
 "cooccurence_score",
 "coexpression_score", "experimental_score", "database_score",
@@ -103,11 +102,6 @@ The input graph will treat as an unweighted graph if there is no
 'weight' edge attribute associated with
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # STRING (high quality)
@@ -132,5 +126,5 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xCombineNet}}
+\code{\link{xRDataLoader}}
 }

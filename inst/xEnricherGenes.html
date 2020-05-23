@@ -24,7 +24,7 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 xEnricherGenes(
 data,
 background = NULL,
-check.symbol.identity = F,
+check.symbol.identity = FALSE,
 ontology = NA,
 ontology.customised = NULL,
 size.range = c(10, 2000),
@@ -39,9 +39,9 @@ ontology.algorithm = c("none", "pc", "elim", "lea"),
 elim.pvalue = 0.01,
 lea.depth = 2,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-true.path.rule = F,
-verbose = T,
-silent = F,
+true.path.rule = FALSE,
+verbose = TRUE,
+silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -309,18 +309,17 @@ maximum of both p-values in these two calculations.
 
 <h3>See Also</h3>
 
-<p><code>xDefineOntology</code>, <code>xEnricher</code>
+<p><code>xDefineOntology</code>, <code>xSymbol2GeneID</code>,
+<code>xEnricher</code>, <code>xSymbol2GeneID</code>,
+<code>xRDataLoader</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
-
 # Gene-based enrichment analysis using REACTOME pathways
 # a) provide the input Genes of interest (eg 500 randomly chosen human genes)
 ## load human genes

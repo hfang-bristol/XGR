@@ -9,7 +9,7 @@
 #' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid provided and the query matched, it has priority over the one specified via RData.location
 #' @return 
 #' any use-specified variable that is given on the right side of the assigement sign '<-', which contains the loaded RData. If the data cannot be loaded, it returns NULL.
-#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment. To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=T)}.
+#' @note If there are no use-specified variable that is given on the right side of the assigement sign '<-', then no RData will be loaded onto the working environment. To enable 'guid', please also install a package "osfr" via \code{BiocManager::install("osfr",dependencies=TRUE)}.
 #' @export
 #' @import dnet
 #' @import igraph
@@ -30,9 +30,11 @@
 #' @importFrom Matrix Diagonal colSums Matrix t
 #' @importFrom MASS fitdistr
 #' @importFrom osfr osf_retrieve_node osf_ls_files osf_download
+#' @importFrom methods is
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xRDataLoader.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
@@ -46,7 +48,7 @@
 #' org.Mm.string_high <- xRDataLoader(RData='org.Mm.string_high', guid='gskpn')
 #' }
 
-xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=T, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "IlluminaOmniExpress", "ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA", "ig.HPMI", "ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP", "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA", "org.Hs.egHPMI", "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1", "org.Hs.egMsigdbC2BIOCARTA", "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall", "org.Hs.egMsigdbC2CP", "org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR", "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM", "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF", "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH", "org.Hs.egPS", "org.Hs.egSF", "org.Hs.egPfam", "org.Hs.string", "org.Hs.PCommons_DN", "org.Hs.PCommons_UN"), RData.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     startT <- Sys.time()
@@ -61,13 +63,13 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 	}else if(is.na(RData) & is.null(RData.customised)){
 		stop("There is no input! Please input one of two parameters ('RData' or 'RData.customised').\n")
 	}
-	RData <- gsub('.RData$', "", RData, ignore.case=T, perl=T)
-	RData <- gsub(".RDa$", "", RData, ignore.case=T, perl=T)
+	RData <- gsub('.RData$', "", RData, ignore.case=TRUE, perl=TRUE)
+	RData <- gsub(".RDa$", "", RData, ignore.case=TRUE, perl=TRUE)
 	
 	######################################################################################
 	# obtain from Open Science Frame (OSF)
 	######################################################################################
-	flag_osf <- F
+	flag_osf <- FALSE
 	# check in order: 
 	# 1) whether 5-digit guid (global unique identifier, eg 'gskpn') is provided
 	# 2) wether the package 'osfr' is installed
@@ -77,14 +79,14 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 		pkgs <- c("osfr")
     	if(all(pkgs %in% rownames(utils::installed.packages()))){
         	tmp <- sapply(pkgs, function(pkg) {
-            	requireNamespace(pkg, quietly=T)
+            	requireNamespace(pkg, quietly=TRUE)
         	})
         	if(all(tmp)){
         		
         		######################################
 				## temporarily mask the package "osfr"
 				prj <- fls <- res <- NULL
-				if(all(class(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), T))) != "try-error")){
+				if(!is(suppressWarnings(try(prj<-osfr::osf_retrieve_node(guid), TRUE)), "try-error")){
 					target <- paste0(RData,".RData")
 					fls <- osfr::osf_ls_files(prj, type="file", pattern=target, n_max=Inf)
 					if(nrow(fls)>0){
@@ -100,7 +102,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 								out <- get(load(res$local_path))
 								load_RData <- sprintf("'%s' at %s", prj$name, paste0('https://osf.io/',prj$id))
 								RData <- target
-								flag_osf <- T
+								flag_osf <- TRUE
 							}
 						
 						}
@@ -115,7 +117,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 	######################################################################################
 	# define function: my_https_downloader
 	######################################################################################
-	my_https_downloader <- function (url, method=c("auto","internal","wininet","libcurl","wget","curl"), quiet=T, mode=c("w","wb","a","ab"), cacheOK=T, extra=getOption("download.file.extra")){
+	my_https_downloader <- function (url, method=c("auto","internal","wininet","libcurl","wget","curl"), quiet=TRUE, mode=c("w","wb","a","ab"), cacheOK=TRUE, extra=getOption("download.file.extra")){
 	
 		## https://stat.ethz.ch/R-manual/R-devel/library/utils/html/download.file.html
 		method <- match.arg(method)
@@ -125,7 +127,7 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 		tdir <- tempdir()
 		destfile <- file.path(tdir, "temp.RData")
 		## remove the existing temporary RData file
-		unlink(destfile, recursive=T, force=T)
+		unlink(destfile, recursive=TRUE, force=TRUE)
 	
 		if(base::grepl("^https?://", url)){
 			isR32 <- base::getRversion() >= "3.2"
@@ -163,24 +165,24 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 			#suppressWarnings(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra))
 		}
 		
-		if(class(suppressWarnings(try(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra), T)))=="try-error"){
+		if(is(suppressWarnings(try(utils::download.file(url, destfile=destfile, method=method, quiet=quiet, mode=mode, cacheOK=cacheOK, extra=extra), TRUE)),"try-error")){
 			res_RData <- NULL
-			res_flag <- F
+			res_flag <- FALSE
 		}
 		
 		if(file.exists(destfile) & file.info(destfile)$size!=0){
 		
-			if(class(suppressWarnings(try(load(destfile), T)))=="try-error"){
+			if(is(suppressWarnings(try(load(destfile), TRUE)),"try-error")){
 				res_RData <- NULL
-				res_flag <- F				
+				res_flag <- FALSE				
 			}else{
 				res_RData <- get(load(destfile))
-				res_flag <- T	
+				res_flag <- TRUE
 			}
 			
 		}else{
 			res_RData <- NULL
-			res_flag <- F
+			res_flag <- FALSE
 		}
 		
 		res <- list(RData = res_RData,
@@ -223,28 +225,24 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 			## otherwise, load remote R files
 			if(sum(load_flag)==0){
 			
-				flag_failed <- F
-				if(length(grep('^https',load_remote,perl=T))){
-					if(length(grep('github',load_remote,perl=T))){
+				flag_failed <- FALSE
+				if(length(grep('^https',load_remote,perl=TRUE))){
+					if(length(grep('github',load_remote,perl=TRUE))){
 						load_remote <- paste(load_remote, "?raw=true", sep="")
 					}
 					res <- my_https_downloader(load_remote, mode="wb")
-					if(res$flag==F){
-						flag_failed <- T
+					if(res$flag==FALSE){
+						flag_failed <- TRUE
 					}else{
 						eval(parse(text=paste(RData, " <- res$RData", sep="")))
 					}
 				}else{
 					res <- my_https_downloader(load_remote, mode="wb")
-					if(res$flag==F){
-						flag_failed <- T
+					if(res$flag==FALSE){
+						flag_failed <- TRUE
 					}else{
 						eval(parse(text=paste(RData, " <- res$RData", sep="")))
 					}
-			
-					#if(class(suppressWarnings(try(load(url(load_remote)), T)))=="try-error"){
-					#	flag_failed <- T
-					#}
 				}
 			
 				if(flag_failed){
@@ -259,15 +257,15 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
 						load_remote <- load_remotes[i]
 						if(verbose){
 							now <- Sys.time()
-							message(sprintf("Attempt to download from %s (at %s)", load_remote, as.character(now)), appendLF=T)
+							message(sprintf("Attempt to download from %s (at %s)", load_remote, as.character(now)), appendLF=TRUE)
 						}
 						res <- my_https_downloader(load_remote, mode="wb")
-						if(res$flag==T){
+						if(res$flag==TRUE){
 							break
 						}
 					}
 				
-					if(res$flag==F){
+					if(res$flag==FALSE){
 						warnings("Built-in Rdata files cannot be loaded. Please check your internet connection or their location in your local machine.\n")
 						eval(parse(text=paste(RData, " <- res$RData", sep="")))
 					}else{
@@ -294,9 +292,9 @@ xRDataLoader <- function(RData=c(NA,"GWAS2EF", "GWAS_LD", "IlluminaHumanHT", "Il
     if(verbose){
         now <- Sys.time()
         if(!is.null(out)){
-			message(sprintf("'%s' (from %s) has been loaded into the working environment (at %s)", RData, load_RData, as.character(now)), appendLF=T)
+			message(sprintf("'%s' (from %s) has been loaded into the working environment (at %s)", RData, load_RData, as.character(now)), appendLF=TRUE)
 		}else{
-			message(sprintf("'%s' CANNOT be loaded (at %s)", RData, as.character(now)), appendLF=T)
+			message(sprintf("'%s' CANNOT be loaded (at %s)", RData, as.character(now)), appendLF=TRUE)
 		}
     }
     

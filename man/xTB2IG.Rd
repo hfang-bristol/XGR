@@ -4,7 +4,7 @@
 \alias{xTB2IG}
 \title{Function to convert an igraph from one or two tibbles}
 \usage{
-xTB2IG(edges, nodes = NULL, directed = F, intersected = NULL)
+xTB2IG(edges, nodes = NULL, directed = FALSE, intersected = NULL)
 }
 \arguments{
 \item{edges}{a tibble or data frame for edge attributes}
@@ -32,20 +32,18 @@ an igraph object
 none
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-\dontrun{
-ig <- xDefineNet(network="KEGG", RData.location=RData.location)
+set.seed(825)
+ig <- sample_pa(20)
+V(ig)$name <- seq(1,vcount(ig))
 ig \%>\% xIG2TB('edges') -> edges
 ig \%>\% xIG2TB('nodes') -> nodes
 
-xTB2IG(edges, nodes) -> ig
-}
+xTB2IG(edges, nodes) -> g
+
+# nodes do not cointain all vertices in the edges
+nodes[1:10,] -> nodes2
+xTB2IG(edges, nodes2) -> g2
 }
 \seealso{
-\code{\link{xIG2TB}}
+\code{\link{xTB2IG}}
 }

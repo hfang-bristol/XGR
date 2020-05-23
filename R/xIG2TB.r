@@ -8,26 +8,20 @@
 #' a tibble object
 #' @note none
 #' @export
-#' @seealso \code{\link{xTB2IG}}
+#' @seealso \code{\link{xIG2TB}}
 #' @include xIG2TB.r
-#' @examples	
-#' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' }
-#'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-#' \dontrun{
-#' ig <- xDefineNet(network="KEGG", RData.location=RData.location)
+#' @examples
+#' set.seed(825)
+#' ig <- sample_pa(20)
+#' V(ig)$name <- seq(1,vcount(ig))
 #' ig %>% xIG2TB('edges')
 #' ig %>% xIG2TB('nodes')
-#' }
 
 xIG2TB <- function(ig, what=c('edges','nodes'))
 {
     what <- match.arg(what)
     
-   	if(any(class(ig) %in% c("igraph"))){
+   	if(is(ig,"igraph")){
    		
    		if(what=='edges'){
    			edges <- igraph::as_data_frame(ig, what="edges") %>% tibble::as_tibble()

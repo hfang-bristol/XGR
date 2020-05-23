@@ -20,8 +20,8 @@ geneid.
 xGeneID2Symbol(
 data,
 org = c("human", "mouse"),
-details = F,
-verbose = T,
+details = FALSE,
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
@@ -78,17 +78,15 @@ to false); otherwise, a data frame is returned
 
 <h3>See Also</h3>
 
-<p><code>xEnricherGenes</code>, <code>xSocialiserGenes</code>
+<p><code>xRDataLoader</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-# Load the library
-library(XGR)
-
 # a) provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
 org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')

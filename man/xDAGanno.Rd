@@ -63,6 +63,7 @@ nodes in query, while the mode "all_paths" results in the complete
 subgraph.
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # 1) SNP-based ontology
 # 1a) ig.EF (an object of class "igraph" storing as a directed graph)
@@ -131,5 +132,5 @@ dnet::visDAG(g=dag, data=data, node.info="both")
 }
 }
 \seealso{
-\code{\link{xRDataLoader}}
+\code{\link{xDAGanno}}
 }

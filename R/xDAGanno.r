@@ -13,9 +13,10 @@
 #' }
 #' @note For the mode "shortest_paths", the induced subgraph is the most concise, and thus informative for visualisation when there are many nodes in query, while the mode "all_paths" results in the complete subgraph.
 #' @export
-#' @seealso \code{\link{xRDataLoader}}
+#' @seealso \code{\link{xDAGanno}}
 #' @include xDAGanno.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # 1) SNP-based ontology
 #' # 1a) ig.EF (an object of class "igraph" storing as a directed graph)
@@ -86,15 +87,15 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
     path.mode <- match.arg(path.mode)
     
     ig <- g
-    if (class(ig) != "igraph"){
+    if (!is(ig,"igraph")){
         stop("The function must apply to the 'igraph' object.\n")
     }
     
-    if(class(annotation)=="GS"){
+    if(is(annotation,"GS")){
         originAnnos <- annotation$gs
-    }else if(class(annotation)=="list"){
+    }else if(is(annotation,"list")){
         originAnnos <- annotation
-    }else if(class(annotation)=="dgCMatrix"){
+    }else if(is(annotation,"dgCMatrix")){
 		D <- annotation
 		originAnnos <- sapply(1:ncol(D), function(j){
 			names(which(D[,j]!=0))
@@ -121,11 +122,11 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
     
 	## create a new (empty) hash environment
 	## node2domain.HoH: 1st key (node/term), 2nd key (domain), value (origin/inherit)
-	node2domain.HoH <- new.env(hash=T, parent=emptyenv())
+	node2domain.HoH <- new.env(hash=TRUE, parent=emptyenv())
 	
 	## assigin original annotations to "node2domain.HoH"
 	lapply(allNodes, function(node){
-		e <- new.env(hash=T, parent=emptyenv())
+		e <- new.env(hash=TRUE, parent=emptyenv())
 		if(node %in% originNodes){
 			sapply(originAnnos[[node]], function(x){
 				assign(as.character(x), "o", envir=e)
@@ -167,7 +168,7 @@ xDAGanno <- function (g, annotation, path.mode=c("all_paths","shortest_paths","a
 			})
 		
 			if(verbose){
-				message(sprintf("\tAt level %d, there are %d nodes, and %d incoming neighbors.", i, length(currNodes), length(unique(unlist(adjNodesList)))), appendLF=T)
+				message(sprintf("\tAt level %d, there are %d nodes, and %d incoming neighbors.", i, length(currNodes), length(unique(unlist(adjNodesList)))), appendLF=TRUE)
 			}
 		
 		}

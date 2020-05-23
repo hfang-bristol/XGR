@@ -5,13 +5,11 @@
 #' @param data input genomic regions (GR). GR should be provided as a vector in the format of 'chrN:start-end', where N is either 1-22 or X, start (or end) is genomic positional number; for example, 'chr1:13-20'
 #' @return index
 #' @export
-#' @seealso \code{\link{xGRsort}}
+#' @seealso \code{\link{xGR}}
 #' @include xGRsort.r
 #' @examples
-#' \dontrun{
-#' # Load the XGR package and specify the location of built-in data
-#' library(XGR)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+#' \dontrun{
 #'
 #' # a) provide the genomic regions
 #' ## load ImmunoBase
@@ -50,7 +48,7 @@ xGRsort <- function(data)
 	
 	############################
 	## very important (because of non-redundant)
-	df <- data.frame(sid=1:length(gr), gr=names(gr), stringsAsFactors=F)
+	df <- data.frame(sid=1:length(gr), gr=names(gr), stringsAsFactors=FALSE)
 	ind <- match(data, df$gr)
 	df <- df[ind, ]
 	df$oid <- 1:length(data)
