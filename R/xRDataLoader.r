@@ -14,6 +14,7 @@
 #' @import dnet
 #' @import igraph
 #' @import ggplot2
+#' @import RCircos
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame GRangesList GRanges split start end
 #' @importFrom IRanges IRanges width pintersect reduce
 #' @importFrom grDevices colorRampPalette dev.cur rgb dev.new rainbow hcl extendrange dev.off pdf col2rgb jpeg

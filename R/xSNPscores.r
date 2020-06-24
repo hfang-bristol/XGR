@@ -210,7 +210,7 @@ xSNPscores <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signi
 		LD_Sig <- data.frame(SNP=names(vec), Sig=vec, row.names=NULL, stringsAsFactors=FALSE)
 
 		## merge Lead and LD
-		df <- rbind(Lead_Sig, as.matrix(LD_Sig))
+		df <- base::rbind(Lead_Sig, LD_Sig)
 		res_list <- split(x=df$Sig, f=df$SNP)
 		vec <- unlist(lapply(res_list, min))
 		SNP_Sig <- data.frame(SNP=names(vec), FDR=vec, row.names=NULL, stringsAsFactors=FALSE)

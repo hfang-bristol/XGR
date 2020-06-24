@@ -16,9 +16,9 @@ edges are marked}
 displayed in the screen. By default, it sets to true for display}
 }
 \value{
-an object of class "igraph" appended with a node attribute 'mark' (0
-for the background, 1 for the marked) and an edge attribute 'mark' (0
-for the background, 1 for the marked)
+an object of class "igraph" appended with a node attribute 'highlight'
+(0 for the background, 1 for the highlighted) and an edge attribute
+'mark' (0 for the background, 1 for the marked)
 }
 \description{
 \code{xMarkNet} is supposed to mark a network within another network.
@@ -44,8 +44,9 @@ E(ig)$color <- ifelse(E(ig)$mark==0, 'lightblue1', 'darkgreen')
 E(ig)$color.alpha <- ifelse(E(ig)$mark==0, 0.3, 0.7)
 ig <- ig \%>\% xLayout("gplot.layout.fruchtermanreingold")
 gp <- xGGnetwork(ig, node.xcoord='xcoord', node.ycoord='ycoord',
-node.color="mark", colormap="orange-darkgreen", node.color.alpha=0.7,
-edge.color="color", edge.color.alpha="color.alpha", edge.arrow.gap=0) +
+node.color="highlight", colormap="orange-darkgreen",
+node.color.alpha=0.7, edge.color="color",
+edge.color.alpha="color.alpha", edge.arrow.gap=0) +
 theme(legend.position='none')
 }
 }

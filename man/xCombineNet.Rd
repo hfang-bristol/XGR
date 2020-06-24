@@ -40,11 +40,6 @@ igraph objects.
 none
 }
 \examples{
-\dontrun{
-# Load the library
-library(XGR)
-}
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 g1 <- xDefineNet(network="KEGG_environmental",

@@ -13,19 +13,16 @@
 #' @param barheight the height of the colorbar. Default value is 'legend.key.height' or 'legend.key.size' in 'theme' or theme
 #' @param wrap.width a positive integer specifying wrap width of name
 #' @param font.family the font family for texts
-#' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @param drop logical to indicate whether all factor levels not used in the data will automatically be dropped. If FALSE (by default), all factor levels will be shown, regardless of whether or not they appear in the data
 #' @param sortBy which statistics will be used for sorting and viewing gene sets (terms). It can be "adjp" or "fdr" for adjusted p value (FDR), "pvalue" for p value, "zscore" for enrichment z-score, "fc" for enrichment fold change, "nAnno" for the number of sets (terms), "nOverlap" for the number in overlaps, "or" for the odds ratio, and "none" for ordering according to ID of terms. It only works when the input is an eTerm object
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
-#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}}, \code{\link{xEnrichViewer}}
+#' @seealso \code{\link{xEnricherGenes}}, \code{\link{xEnrichViewer}}
 #' @include xEnrichForest.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
-#' # Load the library
-#' library(XGR)
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
 #' # provide the input Genes of interest (eg 100 randomly chosen human genes)
 #' ## load human genes
@@ -50,7 +47,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", signature=FALSE, drop=F, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=TRUE, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", drop=FALSE, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
 {
     
     sortBy <- match.arg(sortBy)
@@ -185,12 +182,6 @@ xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colormap
 	bp <- bp + theme_bw() + theme(legend.position="right",axis.title.y=element_blank(), axis.text.y=element_text(size=8,color="black"), axis.title.x=element_text(size=10,color="black"))
 	bp <- bp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=expression(-log[10]("FDR")),title.position="top",barwidth=barwidth,barheight=barheight,draw.ulim=FALSE,draw.llim=FALSE))
-	
-	## caption
-    if(signature){
-    	caption <- paste("Created by xEnrichForest from XGR version", utils ::packageVersion("XGR"))
-    	bp <- bp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
-    }
 	
 	## change font family to 'Arial'
 	bp <- bp + theme(text=element_text(family=font.family))

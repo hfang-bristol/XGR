@@ -8,7 +8,7 @@ xEnrichForest(
 eTerm,
 top_num = 10,
 FDR.cutoff = 0.05,
-CI.one = T,
+CI.one = TRUE,
 colormap = "ggplot2.top",
 ncolors = 64,
 zlim = NULL,
@@ -16,8 +16,7 @@ barwidth = 0.5,
 barheight = NULL,
 wrap.width = NULL,
 font.family = "sans",
-signature = FALSE,
-drop = F,
+drop = FALSE,
 sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
 "nOverlap",
 "none")
@@ -64,10 +63,6 @@ plotted, defaulting to the range of the -log10(FDR)}
 
 \item{font.family}{the font family for texts}
 
-\item{signature}{logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets TRUE showing which function is
-used to draw this graph}
-
 \item{drop}{logical to indicate whether all factor levels not used in
 the data will automatically be dropped. If FALSE (by default), all
 factor levels will be shown, regardless of whether or not they appear
@@ -95,10 +90,8 @@ the wider the CI, the less reliable). It returns an object of class
 none
 }
 \examples{
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
-# Load the library
-library(XGR)
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes
@@ -127,6 +120,5 @@ gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 }
 }
 \seealso{
-\code{\link{xEnricherGenes}}, \code{\link{xEnricherSNPs}},
-\code{\link{xEnrichViewer}}
+\code{\link{xEnricherGenes}}, \code{\link{xEnrichViewer}}
 }

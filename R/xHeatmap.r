@@ -42,7 +42,7 @@
 #' gp + geom_text(aes(x, y, label=val),size=1.8,color='black',fontface='bold',na.rm=TRUE,angle=45)
 #' }
 
-xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=90, x.text.size=6, x.text.hjust=0, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', data.label=NULL, label.size=1, label.color="black", ...)
+xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spectral", ncolors=64, zlim=NULL, barwidth=0.3, barheight=NULL, nbin=64, legend.title='', x.rotate=45, x.text.size=6, x.text.hjust=0, y.text.size=6, legend.text.size=4, legend.title.size=6, shape=19, size=2, plot.margin=unit(c(5.5,5.5,5.5,5.5),"pt"), font.family="sans", na.color='transparent', data.label=NULL, label.size=1, label.color="black", ...)
 {
 
     reorder <- match.arg(reorder)
@@ -139,19 +139,38 @@ xHeatmap <- function(data, reorder=c("none","row","col","both"), colormap="spect
 			df$val <- factor(df$val, levels=unique(df$val))
 		}
 		
-		gp <- ggplot(df, aes(x=sample, y=gene, color=val))
-		#gp <- ggplot(df, aes(x=x, y=y, color=val))
-		gp <- gp + geom_point(size=size, shape=shape)
-		
-		if(!flag_factor){
-			gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=legend.title,title.position="top",barwidth=barwidth,barheight=barheight,nbin=nbin,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
-		}else{
-			gp <- gp + scale_colour_manual(legend.title, values=xColormap(colormap)(length(lvl)), labels=lvl)
-			if(is.null(barheight)){
-				barheight <- barwidth
+		if(shape=='tile'){
+			gp <- ggplot(df, aes(x=sample, y=gene, fill=val))
+			gp <- gp + geom_tile()
+			
+			if(!flag_factor){
+				gp <- gp + scale_fill_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=legend.title,title.position="top",barwidth=barwidth,barheight=barheight,nbin=nbin,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
+			}else{
+				gp <- gp + scale_fill_manual(legend.title, values=xColormap(colormap)(length(lvl)), labels=lvl)
+				if(is.null(barheight)){
+					barheight <- barwidth
+				}
+				gp <- gp + theme(legend.key.width=unit(barwidth,'pt'), legend.key.height=unit(barheight,'pt')) + guides(col=guide_legend(ncol=1))
 			}
-			gp <- gp + theme(legend.key.width=unit(barwidth,'pt'), legend.key.height=unit(barheight,'pt')) + guides(col=guide_legend(ncol=1))
+
+			
+		}else{
+			gp <- ggplot(df, aes(x=sample, y=gene, color=val))
+			#gp <- ggplot(df, aes(x=x, y=y, color=val))
+			gp <- gp + geom_point(size=size, shape=shape)
+			
+			if(!flag_factor){
+				gp <- gp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=legend.title,title.position="top",barwidth=barwidth,barheight=barheight,nbin=nbin,draw.ulim=FALSE,draw.llim=FALSE), na.value=na.color)
+			}else{
+				gp <- gp + scale_colour_manual(legend.title, values=xColormap(colormap)(length(lvl)), labels=lvl)
+				if(is.null(barheight)){
+					barheight <- barwidth
+				}
+				gp <- gp + theme(legend.key.width=unit(barwidth,'pt'), legend.key.height=unit(barheight,'pt')) + guides(col=guide_legend(ncol=1))
+			}
+
 		}
+		
 		
 		gp <- gp + theme_bw() + theme(legend.position="right", axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x=element_text(face="bold",color="black",size=x.text.size,angle=x.rotate,hjust=x.text.hjust), axis.text.y=element_text(face="bold",color="black",size=y.text.size,angle=0), panel.background=element_rect(fill="transparent")) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + theme(plot.margin=plot.margin) + theme(legend.title=element_text(face="bold",color="black",size=legend.title.size),legend.text=element_text(face="bold",color="black",size=legend.text.size),legend.title.align=0.5) + theme(legend.background=element_rect(fill="transparent"))
 		gp <- gp + theme(axis.ticks=element_line(size=0.25),axis.ticks.length=unit(0.1,"cm"))

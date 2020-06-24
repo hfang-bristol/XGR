@@ -24,7 +24,7 @@ xEnrichForest(
 eTerm,
 top_num = 10,
 FDR.cutoff = 0.05,
-CI.one = T,
+CI.one = TRUE,
 colormap = "ggplot2.top",
 ncolors = 64,
 zlim = NULL,
@@ -32,8 +32,7 @@ barwidth = 0.5,
 barheight = NULL,
 wrap.width = NULL,
 font.family = "sans",
-signature = FALSE,
-drop = F,
+drop = FALSE,
 sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
 "nOverlap",
 "none")
@@ -106,12 +105,6 @@ plotted, defaulting to the range of the -log10(FDR)</p>
 <td>
 <p>the font family for texts</p>
 </td></tr>
-<tr valign="top"><td><code>signature</code></td>
-<td>
-<p>logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets TRUE showing which function is
-used to draw this graph</p>
-</td></tr>
 <tr valign="top"><td><code>drop</code></td>
 <td>
 <p>logical to indicate whether all factor levels not used in
@@ -146,18 +139,15 @@ input is an eTerm object</p>
 
 <h3>See Also</h3>
 
-<p><code>xEnricherGenes</code>, <code>xEnricherSNPs</code>,
-<code>xEnrichViewer</code>
+<p><code>xEnricherGenes</code>, <code>xEnrichViewer</code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
-# Load the library
-library(XGR)
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
 # provide the input Genes of interest (eg 100 randomly chosen human genes)
 ## load human genes

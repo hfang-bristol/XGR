@@ -6,7 +6,7 @@
 #' @param ig2 a "igraph" object to be marked. Only overlapped nodes and edges are marked
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return
-#' an object of class "igraph" appended with a node attribute 'mark' (0 for the background, 1 for the marked) and an edge attribute 'mark' (0 for the background, 1 for the marked)
+#' an object of class "igraph" appended with a node attribute 'highlight' (0 for the background, 1 for the highlighted) and an edge attribute 'mark' (0 for the background, 1 for the marked)
 #' @note none
 #' @export
 #' @seealso \code{\link{xMarkNet}}
@@ -26,7 +26,7 @@
 #' E(ig)$color <- ifelse(E(ig)$mark==0, 'lightblue1', 'darkgreen')
 #' E(ig)$color.alpha <- ifelse(E(ig)$mark==0, 0.3, 0.7)
 #' ig <- ig %>% xLayout("gplot.layout.fruchtermanreingold")
-#' gp <- xGGnetwork(ig, node.xcoord='xcoord', node.ycoord='ycoord', node.color="mark", colormap="orange-darkgreen", node.color.alpha=0.7, edge.color="color", edge.color.alpha="color.alpha", edge.arrow.gap=0) + theme(legend.position='none')
+#' gp <- xGGnetwork(ig, node.xcoord='xcoord', node.ycoord='ycoord', node.color="highlight", colormap="orange-darkgreen", node.color.alpha=0.7, edge.color="color", edge.color.alpha="color.alpha", edge.arrow.gap=0) + theme(legend.position='none')
 #' }
 
 xMarkNet <- function(ig1, ig2, verbose=TRUE)
@@ -63,6 +63,9 @@ xMarkNet <- function(ig1, ig2, verbose=TRUE)
 	if(verbose){
 		message(sprintf("The '%s' network (%d nodes and %d edges) has %d nodes and %d edges marked", flag_direct, vcount(ig), ecount(ig), sum(V(ig)$mark), sum(E(ig)$mark), appendLF=TRUE))
 	}
-
+	
+	V(ig)$highlight <- V(ig)$mark
+	igraph::delete_vertex_attr(ig, "mark") -> ig
+	
     invisible(ig)
 }
