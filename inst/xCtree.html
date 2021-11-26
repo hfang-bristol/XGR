@@ -142,7 +142,7 @@ leave.label.wrap=30)
 
 # obtain 'xcoord' and 'ycoord'
 gp &lt;- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
-data &lt;- gp$data %&gt;% dplyr::arrange(ggraph.orig_index)
+data &lt;- gp$data %&gt;% dplyr::arrange(.ggraph.orig_index)
 V(ig)$xcoord &lt;- data[,'x']
 V(ig)$ycoord &lt;- data[,'y']
 

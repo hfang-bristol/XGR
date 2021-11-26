@@ -47,7 +47,7 @@
 #' gp <- xEnrichForest(ls_eTerm, FDR.cutoff=0.1)
 #' }
 
-xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=TRUE, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", drop=FALSE, sortBy=c("or","adjp","fdr","pvalue","zscore","fc","nAnno","nOverlap","none"))
+xEnrichForest <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=TRUE, colormap="ggplot2.top", ncolors=64, zlim=NULL, barwidth=0.5, barheight=NULL, wrap.width=NULL, font.family="sans", drop=FALSE, sortBy=c("or","adjp","fdr","none"))
 {
     
     sortBy <- match.arg(sortBy)

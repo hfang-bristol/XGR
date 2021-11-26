@@ -87,7 +87,7 @@
 #' eTerm <- xEnricherYours(data.file=data, annotation.file=annotation.file, background.file=background, size.range=c(10,20000))
 #' }
 
-xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=5, FDR.cutoff=0.05, CI.one=T, colormap="lightgrey-grey-black", x.rotate=90, x.text.size=6, y.text.size=6, shape=22, size=2, label=c('concise','full'), verbose=T, ...)
+xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","fc","nAnno","nOverlap","none"), top_num=5, FDR.cutoff=0.05, CI.one=T, colormap="lightgrey-grey-black", x.rotate=90, x.text.size=6, y.text.size=6, shape=22, size=2, label=c('full','concise'), verbose=T, ...)
 {
 
     sortBy <- match.arg(sortBy)
@@ -126,7 +126,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","f
 			
 			if(label=='concise'){
 				#df_enrichment$label <- paste0(df_enrichment$name, " [OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "]")
-				df_enrichment$label <- paste0(df_enrichment$name, " [OR=", df_enrichment$or, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
+				df_enrichment$label <- paste0(df_enrichment$name, " [n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
 			}else{
 				df_enrichment$label <- paste0(df_enrichment$name, "\n[OR=", df_enrichment$or, ", P=", df_enrichment$pvalue, ", FDR=", df_enrichment$adjp, ", n=", df_enrichment$nOverlap, "/", df_enrichment$nAnno, "]")
 			}
@@ -135,7 +135,7 @@ xEnrichLadder <- function(eTerm, sortBy=c("fdr","or","adjp","pvalue","zscore","f
 			## remove those rows with equal name
 			df_enrichment <- df_enrichment[!duplicated(df_enrichment$name),]
 			###############
-						
+					
 			## list of individual paths
 			ls_path <- lapply(1:nrow(df_enrichment), function(j){
 				x <- df_enrichment$members_Overlap[j]

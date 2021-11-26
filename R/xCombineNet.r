@@ -109,7 +109,7 @@ xCombineNet <- function(list_ig, combineBy=c('union','intersect'), attrBy=c("int
 	}
 	
 	if(verbose){
-		message(sprintf("%d network(s) are combined (via '%s') into a '%s' network (%d nodes and %d edges) with %d node attributes (via '%s')", length(ls_ig), combineBy, flag_direct, vcount(combined_ig), ecount(combined_ig), length(node_attr), attrBy, appendLF=TRUE))
+		message(sprintf("%d network(s) are combined (via '%s') into a '%s' network (%d nodes and %d edges) with %d node attributes (via '%s')", length(ls_ig), combineBy, flag_direct, vcount(combined_ig), ecount(combined_ig), length(node_attr), attrBy), appendLF=TRUE)
 	}
 
     invisible(combined_ig)

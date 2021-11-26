@@ -38,7 +38,7 @@
 #' 
 #' # obtain 'xcoord' and 'ycoord'
 #' gp <- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
-#' data <- gp$data %>% dplyr::arrange(ggraph.orig_index)
+#' data <- gp$data %>% dplyr::arrange(.ggraph.orig_index)
 #' V(ig)$xcoord <- data[,'x']
 #' V(ig)$ycoord <- data[,'y']
 #' }
@@ -129,9 +129,9 @@ xCtree <- function(ig, leave.label.orientation=c('outwards','inwards'), leave.la
 	}
 
 	if(1){
-		ggraph.orig_index <- NULL
+		.ggraph.orig_index <- NULL
 		# append 'xcoord' and 'ycoord'
-		data <- gp$data %>% dplyr::arrange(ggraph.orig_index)
+		data <- gp$data %>% dplyr::arrange(.ggraph.orig_index)
 		V(ig)$xcoord <- data[,'x']
 		V(ig)$ycoord <- data[,'y']
 	}

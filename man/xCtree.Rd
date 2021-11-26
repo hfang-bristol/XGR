@@ -88,7 +88,7 @@ leave.label.wrap=30)
 
 # obtain 'xcoord' and 'ycoord'
 gp <- ggraph::ggraph(ig, layout='dendrogram', circular=TRUE)
-data <- gp$data \%>\% dplyr::arrange(ggraph.orig_index)
+data <- gp$data \%>\% dplyr::arrange(.ggraph.orig_index)
 V(ig)$xcoord <- data[,'x']
 V(ig)$ycoord <- data[,'y']
 }

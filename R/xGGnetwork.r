@@ -492,7 +492,7 @@ xGGnetwork <- function(g, node.label=NULL, label.wrap.width=NULL, label.wrap.lin
 				params = list(parse = parse, na.rm = na.rm, box.padding = box.padding, 
 					point.padding = point.padding, 
 					segment.size = segment.size, arrow = arrow, force = force, 
-					max.iter = max.iter, nudge_x = nudge_x, nudge_y = nudge_y, 
+					max.iter = max.iter, nudge_x = nudge_x, nudge_y = nudge_y, max.overlaps = Inf,
 					...)
 			)
 		}

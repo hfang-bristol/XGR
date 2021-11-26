@@ -62,7 +62,7 @@ xSM2DF <- function(data, verbose=TRUE)
 		}
 
 	}else if(is(data,'dgCMatrix') | is(data,'dsCMatrix')){
-		ijx <- summary(data)
+		ijx <- Matrix::summary(data)
 		if(nrow(ijx)>0){
 			res_df <- data.frame(rownames=names_row[ijx[,1]], colnames=names_col[ijx[,2]], values=ijx[,3], stringsAsFactors=FALSE)
 		

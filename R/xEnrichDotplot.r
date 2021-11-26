@@ -90,7 +90,8 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 		df <- subset(df_enrichment_group, adjp<FDR.cutoff)
 	}else{
 		label.top <- as.integer(label.top)
-		df <- as.data.frame(df_enrichment_group %>% dplyr::group_by(group) %>% dplyr::group_by(rank=rank(adjp),add=TRUE) %>% dplyr::filter(rank<=label.top & adjp<FDR.cutoff))
+		#df <- as.data.frame(df_enrichment_group %>% dplyr::group_by(group) %>% dplyr::group_by(rank=rank(adjp),add=TRUE) %>% dplyr::filter(rank<=label.top & adjp<FDR.cutoff))
+		df <- df_enrichment_group %>% dplyr::group_by(group) %>% dplyr::top_n(-adjp, n=label.top) %>% dplyr::filter(adjp<FDR.cutoff)
 	}
 	if(ngroup==1 & label.direction.y!='none'){
 		offset <- (range(df_enrichment_group$zscore)[2]-range(df_enrichment_group$zscore)[1])*0.1
@@ -105,7 +106,7 @@ xEnrichDotplot <- function(eTerm, FDR.cutoff=0.05, colors=c("pink","red"), y.sca
 		}
 		
 	}else{
-		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), size=label.size, show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), ...)
+		gp <- gp + ggrepel::geom_text_repel(data=df, aes(x=zscore,y=-log10(adjp),label=name), size=label.size, show.legend=F, segment.alpha=0.5, segment.color="grey50", segment.size=0.2, arrow=arrow(length=unit(0.01,'npc')), max.overlaps=Inf, ...)
 	}
 	
 	# line

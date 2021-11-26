@@ -17,9 +17,7 @@ barheight = NULL,
 wrap.width = NULL,
 font.family = "sans",
 drop = FALSE,
-sortBy = c("or", "adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap",
-"none")
+sortBy = c("or", "adjp", "fdr", "none")
 )
 }
 \arguments{

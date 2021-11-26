@@ -165,6 +165,9 @@ xDefineNet <- function(network=c("STRING_highest","STRING_high","STRING_medium",
 			g <- ls_ig[['Genetic Information Processing']]
 		}else if(network=='KEGG_environmental'){
 			g <- ls_ig[['Environmental Information Processing']]
+			if(is.null(g)){
+				g <- ls_ig[['Environmental Process']]
+			}
 		}else if(network=='KEGG_cellular'){
 			g <- ls_ig[['Cellular Processes']]
 		}else if(network=='KEGG_organismal'){

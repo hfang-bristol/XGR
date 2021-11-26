@@ -71,7 +71,7 @@
 #' df_xGenes <- xGR2xGenes(dGR, format="GRanges", crosslink.customised=crosslink.customised, scoring=TRUE, scoring.scheme="max", RData.location=RData.location)
 #' }
 
-xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_PMID27863249_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=FALSE, scoring.scheme=c("max","sum","sequential"), scoring.rescale=FALSE, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
+xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRanges"), build.conversion=c(NA,"hg38.to.hg19","hg18.to.hg19"), crosslink=c("genehancer","PCHiC_PMID27863249_combined","GTEx_V6p_combined","nearby"), crosslink.customised=NULL, cdf.function=c("original","empirical"), scoring=FALSE, scoring.scheme=c("max","sum","harmonic"), scoring.rescale=FALSE, nearby.distance.max=50000, nearby.decay.kernel=c("rapid","slow","linear","constant"), nearby.decay.exponent=2, verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 	
     startT <- Sys.time()
@@ -341,9 +341,9 @@ xGR2xGenes <- function(data, format=c("chr:start-end","data.frame","bed","GRange
 					summaryFun <- max
 				}else if(scoring.scheme=="sum"){
 					summaryFun <- sum
-				}else if(scoring.scheme=="sequential"){
+				}else if(scoring.scheme=="harmonic"){
 					summaryFun <- function(x){
-						base::sum(x / base::rank(-x,ties.method="min"))
+						base::sum(x / base::rank(-x,ties.method="min")^2)
 					}
 				}
 				
