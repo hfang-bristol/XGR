@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to score lead or LD SNPs based on the given...</title>
+<!DOCTYPE html><html><head><title>R: Function to score lead or LD SNPs based on the given...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSNPscores"><tr><td>xSNPscores</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSNPscores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to score lead or LD SNPs based on the given significance level</h2>
 
@@ -17,8 +28,7 @@ threshold of the significant level.
 
 <h3>Usage</h3>
 
-<pre>
-xSNPscores(
+<pre><code class='language-R'>xSNPscores(
 data,
 include.LD = NA,
 LD.customised = NULL,
@@ -29,13 +39,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the significance level for
 nodes (dbSNP). For this named vector, the element names are dbSNP
@@ -45,7 +55,7 @@ values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
 column for dbSNP, 2nd column for the significance level.</p>
 </td></tr>
-<tr valign="top"><td><code>include.LD</code></td>
+<tr style="vertical-align: top;"><td><code>include.LD</code></td>
 <td>
 <p>additional SNPs in LD with Lead SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD
@@ -58,7 +68,7 @@ population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, 
 &quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
 <a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
 </td></tr>
-<tr valign="top"><td><code>LD.customised</code></td>
+<tr style="vertical-align: top;"><td><code>LD.customised</code></td>
 <td>
 <p>a user-input matrix or data frame with 3 columns:
 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2
@@ -66,13 +76,13 @@ value. It is designed to allow the user analysing their precalcuated LD
 info. This customisation (if provided) has the high priority over
 built-in LD SNPs</p>
 </td></tr>
-<tr valign="top"><td><code>LD.r2</code></td>
+<tr style="vertical-align: top;"><td><code>LD.r2</code></td>
 <td>
 <p>the LD r2 value. By default, it is 0.8, meaning that SNPs
 in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
 be any value from 0.8 to 1</p>
 </td></tr>
-<tr valign="top"><td><code>significance.threshold</code></td>
+<tr style="vertical-align: top;"><td><code>significance.threshold</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -81,22 +91,22 @@ into scores. If given, those SNPs below this are considered significant
 and thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
 </td></tr>
-<tr valign="top"><td><code>score.cap</code></td>
+<tr style="vertical-align: top;"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
 to 10. If NULL, no capping is applied</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -142,8 +152,7 @@ Lead SNPs or LD SNPs
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
 ## Not run: 
 # a) provide the seed SNPs with the significance info
@@ -163,7 +172,8 @@ df_SNP &lt;- xSNPscores(data=data, significance.threshold=5e-5,
 include.LD="EUR", RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

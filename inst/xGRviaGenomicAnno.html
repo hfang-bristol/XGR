@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct region-based enrichment analysis using...</title>
+<!DOCTYPE html><html><head><title>R: Function to conduct region-based enrichment analysis using...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGRviaGenomicAnno"><tr><td>xGRviaGenomicAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGRviaGenomicAnno</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to conduct region-based enrichment analysis using genomic annotations via binomial test</h2>
 
@@ -22,8 +33,7 @@ used.
 
 <h3>Usage</h3>
 
-<pre>
-xGRviaGenomicAnno(
+<pre><code class='language-R'>xGRviaGenomicAnno(
 data.file,
 annotation.file = NULL,
 background.file = NULL,
@@ -39,13 +49,13 @@ verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data.file</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data.file</code></td>
 <td>
 <p>an input data file, containing a list of genomic
 regions to test. If the input file is formatted as a 'data.frame'
@@ -64,7 +74,7 @@ the input file can be the content itself assuming that input file has
 been read. Note: the file should use the tab delimiter as the field
 separator between columns.</p>
 </td></tr>
-<tr valign="top"><td><code>annotation.file</code></td>
+<tr style="vertical-align: top;"><td><code>annotation.file</code></td>
 <td>
 <p>an input annotation file containing genomic
 annotations for genomic regions. If the input file is formatted as a
@@ -82,7 +92,7 @@ Alternatively, the input file can be the content itself assuming that
 input file has been read. Note: the file should use the tab delimiter
 as the field separator between columns.</p>
 </td></tr>
-<tr valign="top"><td><code>background.file</code></td>
+<tr style="vertical-align: top;"><td><code>background.file</code></td>
 <td>
 <p>an input background file containing a list of
 genomic regions as the test background. The file format is the same as
@@ -92,18 +102,18 @@ background. However, if only one annotation (eg only a transcription
 factor) is provided in 'annotation.file', the background must be
 provided.</p>
 </td></tr>
-<tr valign="top"><td><code>format.file</code></td>
+<tr style="vertical-align: top;"><td><code>format.file</code></td>
 <td>
 <p>the format for input files. It can be one of
 &quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot; and &quot;GRanges&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>build.conversion</code></td>
+<tr style="vertical-align: top;"><td><code>build.conversion</code></td>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>resolution</code></td>
+<tr style="vertical-align: top;"><td><code>resolution</code></td>
 <td>
 <p>the resolution of overlaps being tested. It can be
 one of &quot;bases&quot; at the base resolution (by default), &quot;regions&quot; at the
@@ -113,7 +123,7 @@ the base resolution). If regions being analysed are SNPs themselves,
 then the results are the same even when choosing this parameter as
 either 'bases' or 'hybrid' or 'regions'</p>
 </td></tr>
-<tr valign="top"><td><code>background.annotatable.only</code></td>
+<tr style="vertical-align: top;"><td><code>background.annotatable.only</code></td>
 <td>
 <p>logical to indicate whether the
 background is further restricted to annotatable bases (covered by
@@ -122,14 +132,14 @@ background bases are those after being overlapped with annotatable
 bases. Notably, if only one annotation (eg only a transcription factor)
 is provided in 'annotation.file', it should be false</p>
 </td></tr>
-<tr valign="top"><td><code>p.tail</code></td>
+<tr style="vertical-align: top;"><td><code>p.tail</code></td>
 <td>
 <p>the tail used to calculate p-values. It can be either
 &quot;two-tails&quot; for the significance based on two-tails (ie both over- and
 under-overrepresentation) or &quot;one-tail&quot; (by default) for the
 significance based on one tail (ie only over-representation)</p>
 </td></tr>
-<tr valign="top"><td><code>p.adjust.method</code></td>
+<tr style="vertical-align: top;"><td><code>p.adjust.method</code></td>
 <td>
 <p>the method used to adjust p-values. It can be
 one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
@@ -140,7 +150,7 @@ amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
 the family-wise error rate (FWER). Notes: FDR is a less stringent
 condition than FWER</p>
 </td></tr>
-<tr valign="top"><td><code>GR.annotation</code></td>
+<tr style="vertical-align: top;"><td><code>GR.annotation</code></td>
 <td>
 <p>the genomic regions of annotation data. By
 default, it is 'NA' to disable this option. Pre-built genomic
@@ -148,17 +158,17 @@ annotation data are detailed in the section 'Note'. Alternatively, the
 user can also directly provide a customised GR object (or a list of GR
 objects)</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -235,8 +245,7 @@ between input regions and annotation regions
 
 <h3>Examples</h3>
 
-<pre>
-# Load the XGR package and specify the location of built-in data
+<pre><code class='language-R'># Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
@@ -313,7 +322,8 @@ reorder="both")
 
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

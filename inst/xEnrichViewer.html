@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to view enrichment results</title>
+<!DOCTYPE html><html><head><title>R: Function to view enrichment results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichViewer"><tr><td>xEnrichViewer</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichViewer</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to view enrichment results</h2>
 
@@ -16,32 +27,30 @@ analysis.
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichViewer(
+<pre><code class='language-R'>xEnrichViewer(
 eTerm,
 top_num = 10,
 sortBy = c("adjp", "fdr", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap", "or",
-"none"),
+"nOverlap", "or", "none"),
 decreasing = NULL,
 details = FALSE
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to
 'sortBy' below) will be viewed</p>
 </td></tr>
-<tr valign="top"><td><code>sortBy</code></td>
+<tr style="vertical-align: top;"><td><code>sortBy</code></td>
 <td>
 <p>which statistics will be used for sorting and viewing
 gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
@@ -50,13 +59,13 @@ enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
 &quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
 &quot;none&quot; for ordering according to ID of terms</p>
 </td></tr>
-<tr valign="top"><td><code>decreasing</code></td>
+<tr style="vertical-align: top;"><td><code>decreasing</code></td>
 <td>
 <p>logical to indicate whether to sort in a decreasing
 order. If it is null, it would be true for &quot;zscore&quot;, &quot;nAnno&quot; or
 &quot;nOverlap&quot;; otherwise it would be false</p>
 </td></tr>
-<tr valign="top"><td><code>details</code></td>
+<tr style="vertical-align: top;"><td><code>details</code></td>
 <td>
 <p>logical to indicate whether the detailed information of
 gene sets (terms) is also viewed. By default, it sets to false for no
@@ -135,13 +144,13 @@ annotations; optional, it is only appended when &quot;details&quot; is true
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 xEnrichViewer(eTerm)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

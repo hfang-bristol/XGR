@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to conduct enrichment analysis given a list of genes...</title>
+<!DOCTYPE html><html><head><title>R: Function to conduct enrichment analysis given a list of genes...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnricherGenes"><tr><td>xEnricherGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnricherGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to conduct enrichment analysis given a list of genes and the ontology in query</h2>
 
@@ -20,8 +31,7 @@ ontologies such as Gene Ontology and Phenotype Ontologies.
 
 <h3>Usage</h3>
 
-<pre>
-xEnricherGenes(
+<pre><code class='language-R'>xEnricherGenes(
 data,
 background = NULL,
 check.symbol.identity = FALSE,
@@ -45,58 +55,58 @@ silent = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>an input vector containing gene symbols</p>
 </td></tr>
-<tr valign="top"><td><code>background</code></td>
+<tr style="vertical-align: top;"><td><code>background</code></td>
 <td>
 <p>a background vector containing gene symbols as the
 test background. If NULL, by default all annotatable are used as
 background</p>
 </td></tr>
-<tr valign="top"><td><code>check.symbol.identity</code></td>
+<tr style="vertical-align: top;"><td><code>check.symbol.identity</code></td>
 <td>
 <p>logical to indicate whether to match the
 input data/background via Synonyms for those unmatchable by official
 gene symbols. By default, it sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>ontology</code></td>
+<tr style="vertical-align: top;"><td><code>ontology</code></td>
 <td>
 <p>the ontology supported currently. By default, it is
 'NA' to disable this option. Pre-built ontology and annotation data are
 detailed in <code>xDefineOntology</code>.</p>
 </td></tr>
-<tr valign="top"><td><code>ontology.customised</code></td>
+<tr style="vertical-align: top;"><td><code>ontology.customised</code></td>
 <td>
 <p>an object 'GS'. Higher priority over
 'ontology' above. Required, otherwise it will return NULL</p>
 </td></tr>
-<tr valign="top"><td><code>size.range</code></td>
+<tr style="vertical-align: top;"><td><code>size.range</code></td>
 <td>
 <p>the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
 than 2000</p>
 </td></tr>
-<tr valign="top"><td><code>min.overlap</code></td>
+<tr style="vertical-align: top;"><td><code>min.overlap</code></td>
 <td>
 <p>the minimum number of overlaps. Only those terms
 with members that overlap with input data at least min.overlap (3 by
 default) will be processed</p>
 </td></tr>
-<tr valign="top"><td><code>which.distance</code></td>
+<tr style="vertical-align: top;"><td><code>which.distance</code></td>
 <td>
 <p>which terms with the distance away from the
 ontology root (if any) is used to restrict terms in consideration. By
 default, it sets to 'NULL' to consider all distances</p>
 </td></tr>
-<tr valign="top"><td><code>test</code></td>
+<tr style="vertical-align: top;"><td><code>test</code></td>
 <td>
 <p>the test statistic used. It can be &quot;fisher&quot; for using
 fisher's exact test, &quot;hypergeo&quot; for using hypergeometric test, or
@@ -114,7 +124,7 @@ fisher's exact test &gt; binomial test. In other words, in terms of the
 calculated p-value, hypergeometric test &lt; fisher's exact test &lt;
 binomial test</p>
 </td></tr>
-<tr valign="top"><td><code>background.annotatable.only</code></td>
+<tr style="vertical-align: top;"><td><code>background.annotatable.only</code></td>
 <td>
 <p>logical to indicate whether the
 background is further restricted to the annotatable. By default, it is
@@ -122,14 +132,14 @@ NULL: if ontology.algorithm is not 'none', it is always TRUE;
 otherwise, it depends on the background (if not provided, it will be
 TRUE; otherwise FALSE). Surely, it can be explicitly stated</p>
 </td></tr>
-<tr valign="top"><td><code>p.tail</code></td>
+<tr style="vertical-align: top;"><td><code>p.tail</code></td>
 <td>
 <p>the tail used to calculate p-values. It can be either
 &quot;two-tails&quot; for the significance based on two-tails (ie both over- and
 under-overrepresentation) or &quot;one-tail&quot; (by default) for the
 significance based on one tail (ie only over-representation)</p>
 </td></tr>
-<tr valign="top"><td><code>p.adjust.method</code></td>
+<tr style="vertical-align: top;"><td><code>p.adjust.method</code></td>
 <td>
 <p>the method used to adjust p-values. It can be
 one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
@@ -140,20 +150,20 @@ amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
 the family-wise error rate (FWER). Notes: FDR is a less stringent
 condition than FWER</p>
 </td></tr>
-<tr valign="top"><td><code>ontology.algorithm</code></td>
+<tr style="vertical-align: top;"><td><code>ontology.algorithm</code></td>
 <td>
 <p>the algorithm used to account for the
 hierarchy of the ontology. It can be one of &quot;none&quot;, &quot;pc&quot;, &quot;elim&quot; and
 &quot;lea&quot;. For details, please see 'Note' below</p>
 </td></tr>
-<tr valign="top"><td><code>elim.pvalue</code></td>
+<tr style="vertical-align: top;"><td><code>elim.pvalue</code></td>
 <td>
 <p>the parameter only used when &quot;ontology.algorithm&quot; is
 &quot;elim&quot;. It is used to control how to declare a signficantly enriched
 term (and subsequently all genes in this term are eliminated from all
 its ancestors)</p>
 </td></tr>
-<tr valign="top"><td><code>lea.depth</code></td>
+<tr style="vertical-align: top;"><td><code>lea.depth</code></td>
 <td>
 <p>the parameter only used when &quot;ontology.algorithm&quot; is
 &quot;lea&quot;. It is used to control how many maximum depth is used to consider
@@ -161,7 +171,7 @@ the children of a term (and subsequently all genes in these children
 term are eliminated from the use for the recalculation of the
 signifance at this term)</p>
 </td></tr>
-<tr valign="top"><td><code>path.mode</code></td>
+<tr style="vertical-align: top;"><td><code>path.mode</code></td>
 <td>
 <p>the mode of paths induced by vertices/nodes with input
 annotation data. It can be &quot;all_paths&quot; for all possible paths to the
@@ -169,29 +179,29 @@ root, &quot;shortest_paths&quot; for only one path to the root (for each node in
 query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
 for each node, find all shortest paths with the equal lengths)</p>
 </td></tr>
-<tr valign="top"><td><code>true.path.rule</code></td>
+<tr style="vertical-align: top;"><td><code>true.path.rule</code></td>
 <td>
 <p>logical to indicate whether the true-path rule
 should be applied to propagate annotations. By default, it sets to
 false</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
-<tr valign="top"><td><code>silent</code></td>
+<tr style="vertical-align: top;"><td><code>silent</code></td>
 <td>
 <p>logical to indicate whether the messages will be silent
 completely. By default, it sets to false. If true, verbose will be
 forced to be false</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -317,8 +327,7 @@ maximum of both p-values in these two calculations.
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # Gene-based enrichment analysis using REACTOME pathways
 # a) provide the input Genes of interest (eg 500 randomly chosen human genes)
@@ -370,7 +379,8 @@ xEnrichDAGplot(eTerm, top_num="auto", ig=ig, displayBy="adjp",
 node.info=c("full_term_name"), graph.node.attrs=list(fontsize=25))
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

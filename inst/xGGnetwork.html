@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise an igraph object using ggnetwork</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise an igraph object using ggnetwork</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGGnetwork"><tr><td>xGGnetwork</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGGnetwork</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise an igraph object using ggnetwork</h2>
 
@@ -16,8 +27,7 @@ ggnetwork.
 
 <h3>Usage</h3>
 
-<pre>
-xGGnetwork(
+<pre><code class='language-R'>xGGnetwork(
 g,
 node.label = NULL,
 label.wrap.width = NULL,
@@ -53,100 +63,100 @@ edge.arrow = 2,
 edge.arrow.gap = 0.02,
 ncolumns = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. For an advanced use, it can be a
 list of igraph objects; in this case, multiple panels will be shown
 (particularly useful when visualising the same network but color-coded
 differently)</p>
 </td></tr>
-<tr valign="top"><td><code>node.label</code></td>
+<tr style="vertical-align: top;"><td><code>node.label</code></td>
 <td>
 <p>either a vector labelling nodes or a character
 specifying which node attribute used for the labelling. If NULL (by
 default), no node labelling</p>
 </td></tr>
-<tr valign="top"><td><code>label.wrap.width</code></td>
+<tr style="vertical-align: top;"><td><code>label.wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of
 node labelling</p>
 </td></tr>
-<tr valign="top"><td><code>label.wrap.lineheight</code></td>
+<tr style="vertical-align: top;"><td><code>label.wrap.lineheight</code></td>
 <td>
 <p>line height spacing for text in ggplot. By
 default it is 0.8</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.size</code></td>
 <td>
 <p>a character specifying which node attribute used
 for node label size</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.fontface</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.fontface</code></td>
 <td>
 <p>a character specifying which node attribute
 used for node label fontface ('plain', 'bold', 'italic',
 'bold.italic')</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.color</code></td>
 <td>
 <p>a character specifying which node attribute
 used for the node label color</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.alpha</code></td>
 <td>
 <p>the 0-1 value specifying transparency of node
 labelling</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.padding</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.padding</code></td>
 <td>
 <p>the padding around the labeled node</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.arrow</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.arrow</code></td>
 <td>
 <p>the arrow pointing to the labeled node</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.force</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.force</code></td>
 <td>
 <p>the repelling force between overlapping labels</p>
 </td></tr>
-<tr valign="top"><td><code>node.shape</code></td>
+<tr style="vertical-align: top;"><td><code>node.shape</code></td>
 <td>
 <p>an integer specifying node shape or a character
 specifying which node attribute used for the node shape (no matter
 whether it is numeric or character)</p>
 </td></tr>
-<tr valign="top"><td><code>node.shape.title</code></td>
+<tr style="vertical-align: top;"><td><code>node.shape.title</code></td>
 <td>
 <p>a character specifying the title for node
 shaping</p>
 </td></tr>
-<tr valign="top"><td><code>node.xcoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.xcoord</code></td>
 <td>
 <p>a vector specifying x coordinates. If NULL, it will
 be created using igraph::layout_as_tree</p>
 </td></tr>
-<tr valign="top"><td><code>node.ycoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.ycoord</code></td>
 <td>
 <p>a vector specifying y coordinates. If NULL, it will
 be created using igraph::layout_as_tree</p>
 </td></tr>
-<tr valign="top"><td><code>node.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.color</code></td>
 <td>
 <p>a character specifying which node attribute used for
 node coloring</p>
 </td></tr>
-<tr valign="top"><td><code>node.color.title</code></td>
+<tr style="vertical-align: top;"><td><code>node.color.title</code></td>
 <td>
 <p>a character specifying the title for node
 coloring</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -160,82 +170,82 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum values for which colors should be
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>na.color</code></td>
+<tr style="vertical-align: top;"><td><code>na.color</code></td>
 <td>
 <p>the color for NAs. By default, it is 'grey80'</p>
 </td></tr>
-<tr valign="top"><td><code>node.color.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>node.color.alpha</code></td>
 <td>
 <p>the 0-1 value specifying transparency of node
 colors</p>
 </td></tr>
-<tr valign="top"><td><code>node.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.size</code></td>
 <td>
 <p>either a vector specifying node size or a character
 specifying which node attribute used for the node size</p>
 </td></tr>
-<tr valign="top"><td><code>node.size.title</code></td>
+<tr style="vertical-align: top;"><td><code>node.size.title</code></td>
 <td>
 <p>a character specifying the title for node
 sizing</p>
 </td></tr>
-<tr valign="top"><td><code>node.size.range</code></td>
+<tr style="vertical-align: top;"><td><code>node.size.range</code></td>
 <td>
 <p>the range of actual node size. Can be two values
 (range) or a value (fixed size)</p>
 </td></tr>
-<tr valign="top"><td><code>slim</code></td>
+<tr style="vertical-align: top;"><td><code>slim</code></td>
 <td>
 <p>the minimum and maximum values for which sizes should be
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>title</code></td>
+<tr style="vertical-align: top;"><td><code>title</code></td>
 <td>
 <p>a character specifying the title for the plot</p>
 </td></tr>
-<tr valign="top"><td><code>edge.size</code></td>
+<tr style="vertical-align: top;"><td><code>edge.size</code></td>
 <td>
 <p>a numeric value specifying the edge size. By default,
 it is 0.5. It can be a character specifying which edge attribute
 defining the edge size (though without the legend)</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color</code></td>
 <td>
 <p>a character specifying the edge color. By default, it
 is &quot;black&quot;. It can be a character specifying which edge attribute
 defining the edge color (though</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color.alpha</code></td>
 <td>
 <p>the 0-1 value specifying transparency of edge
 color. By default, it is 0.5. It can be a character specifying which
 edge attribute defining the transparency of edge color (though without
 the legend)</p>
 </td></tr>
-<tr valign="top"><td><code>edge.curve</code></td>
+<tr style="vertical-align: top;"><td><code>edge.curve</code></td>
 <td>
 <p>a numeric value specifying the edge curve. 0 for the
 straight line</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow</code></td>
 <td>
 <p>a numeric value specifying the edge arrow. By
 default, it is 2</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow.gap</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow.gap</code></td>
 <td>
 <p>a gap between the arrow and the node</p>
 </td></tr>
-<tr valign="top"><td><code>ncolumns</code></td>
+<tr style="vertical-align: top;"><td><code>ncolumns</code></td>
 <td>
 <p>an integer specifying the number of columns for
 facet_wrap. By defaul, it is NULL (decided on according to the number
@@ -264,8 +274,7 @@ of groups that will be visualised)</p>
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 ###########################
 # load REACTOME
@@ -374,7 +383,8 @@ e.size &lt;- subset(gp$data, !is.na(na.y))$e.size
 gp + ggnetwork::geom_edges(size=e.size, show.legend=FALSE)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

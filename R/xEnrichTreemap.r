@@ -2,7 +2,7 @@
 #'
 #' \code{xEnrichTreemap} is supposed to visualise enrichment results using a treemap. The area is proportional to odds ratio, colored by the significance level. It returns an object of class "ggplot".
 #'
-#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having all these columns (named as 'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')
+#' @param eTerm an object of class "eTerm" or "ls_eTerm". Alterntively, it can be a data frame having these columns (named as 'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap') in which 'name','zscore','adjp','or','CIl','CIu' are required
 #' @param top_num the number of the top terms (sorted according to OR). If it is 'auto', only the significant terms (see below FDR.cutoff) will be displayed
 #' @param FDR.cutoff FDR cutoff used to declare the significant terms. By default, it is set to 0.05
 #' @param CI.one logical to indicate whether to allow the inclusion of one in CI. By default, it is TURE (allowed)
@@ -143,15 +143,15 @@ xEnrichTreemap <- function(eTerm, top_num=10, FDR.cutoff=0.05, CI.one=T, colorma
 		}
 		############
 		
-		or <- group <- ontology <- rank <- NULL
+		or <- group <- ontology <- rank <- adjp <- NULL
 		df <- df %>% dplyr::arrange(-or)
 		if(top_num=='auto'){
-			df <- subset(df, df$adjp<FDR.cutoff)
+			#df <- subset(df, df$adjp<FDR.cutoff)
+			df <- df %>% dplyr::filter(adjp<FDR.cutoff)
 		}else{
 			top_num <- as.integer(top_num)
-			df_tmp <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=rank(-or,decreasing=T),add=TRUE) %>% dplyr::filter(rank<=top_num))
-			df <- subset(df, df$name %in% df_tmp$name)
-			df <- subset(df, df$adjp<FDR.cutoff)
+			#df <- as.data.frame(df %>% dplyr::group_by(group,ontology) %>% dplyr::group_by(rank=rank(-or),add=TRUE) %>% dplyr::filter(rank<=top_num & adjp<FDR.cutoff))
+			df <- df %>% dplyr::group_by(group,ontology) %>% dplyr::top_n(top_num,or) %>% dplyr::filter(adjp<FDR.cutoff) %>% as.data.frame()
 		}
 		
 	}

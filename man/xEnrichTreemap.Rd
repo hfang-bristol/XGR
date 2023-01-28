@@ -31,8 +31,9 @@ area.fill = c("or", "adjp", "zscore")
 }
 \arguments{
 \item{eTerm}{an object of class "eTerm" or "ls_eTerm". Alterntively, it
-can be a data frame having all these columns (named as
-'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')}
+can be a data frame having these columns (named as
+'group','ontology','name','zscore','adjp','or','CIl','CIu','nOverlap','members_Overlap')
+in which 'name','zscore','adjp','or','CIl','CIu' are required}
 
 \item{top_num}{the number of the top terms (sorted according to OR). If
 it is 'auto', only the significant terms (see below FDR.cutoff) will be

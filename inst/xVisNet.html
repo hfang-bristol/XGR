@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a graph object of class &quot;igraph&quot;</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise a graph object of class &quot;igraph&quot;</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xVisNet"><tr><td>xVisNet</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xVisNet</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise a graph object of class &quot;igraph&quot;</h2>
 
@@ -17,8 +28,7 @@ input pattern.
 
 <h3>Usage</h3>
 
-<pre>
-xVisNet(
+<pre><code class='language-R'>xVisNet(
 g,
 pattern = NULL,
 colormap = c("yr", "jet", "gbr", "wyr", "br", "bwr", "rainbow", "wb"),
@@ -39,17 +49,17 @@ vertex.label.family = "sans",
 edge.arrow.size = 0.3,
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>pattern</code></td>
+<tr style="vertical-align: top;"><td><code>pattern</code></td>
 <td>
 <p>a numeric vector used to color-code vertices/nodes.
 Notably, if the input vector contains names, then these names should
@@ -60,7 +70,7 @@ this input pattern will be ignored. The way of how to color-code is to
 map values in the pattern onto the whole colormap (see the next
 arguments: colormap, ncolors, zlim and colorbar)</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -74,11 +84,11 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -86,17 +96,17 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>colorbar</code></td>
+<tr style="vertical-align: top;"><td><code>colorbar</code></td>
 <td>
 <p>logical to indicate whether to append a colorbar. If
 pattern is null, it always sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>newpage</code></td>
+<tr style="vertical-align: top;"><td><code>newpage</code></td>
 <td>
 <p>logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page</p>
 </td></tr>
-<tr valign="top"><td><code>glayout</code></td>
+<tr style="vertical-align: top;"><td><code>glayout</code></td>
 <td>
 <p>either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this
@@ -116,23 +126,23 @@ determine the actual coordinates. This function can be one of
 &quot;layout_as_bipartite&quot;. A full explanation of these layouts can be found
 in <a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/layout_nicely.html</a></p>
 </td></tr>
-<tr valign="top"><td><code>vertex.frame.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.frame.color</code></td>
 <td>
 <p>the color of the frame of the vertices. If it
 is NA, then there is no frame</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.size</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.size</code></td>
 <td>
 <p>the size of each vertex. If it is a vector, each
 vertex may differ in size</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.color</code></td>
 <td>
 <p>the fill color of the vertices. If it is NA, then
 there is no fill color. If the pattern is given, this setup will be
 ignored</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.shape</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.shape</code></td>
 <td>
 <p>the shape of each vertex. It can be one of
 &quot;circle&quot;, &quot;square&quot;, &quot;csquare&quot;, &quot;rectangle&quot;, &quot;crectangle&quot;, &quot;vrectangle&quot;,
@@ -140,36 +150,36 @@ ignored</p>
 and &quot;none&quot;. If it sets to NULL, these vertices with negative will be
 &quot;csquare&quot; and the rest &quot;circle&quot;.</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label</code></td>
 <td>
 <p>the label of the vertices. If it is NA, then there
 is no label. The default vertex labels are the name attribute of the
 nodes</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.cex</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.cex</code></td>
 <td>
 <p>the font size of vertex labels.</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.dist</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.dist</code></td>
 <td>
 <p>the distance of the label from the center of
 the vertex. If it is 0 then the label is centered on the vertex. If it
 is 1 then the label is displayed beside the vertex</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.color</code></td>
 <td>
 <p>the color of vertex labels</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.family</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.family</code></td>
 <td>
 <p>the font family of vertex labels</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow.size</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow.size</code></td>
 <td>
 <p>the size of the arrows for the directed edge.
 The default value is 1.</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters. See
 <a href="http://igraph.org/r/doc/plot.common.html">http://igraph.org/r/doc/plot.common.html</a> for the complete list.</p>
@@ -197,8 +207,7 @@ The default value is 1.</p>
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # 1) generate a ring graph
 g &lt;- make_ring(10, directed=TRUE)
@@ -231,7 +240,8 @@ signature=F)
 dev.off()
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

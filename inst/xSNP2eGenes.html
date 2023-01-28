@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define eQTL genes given a list of SNPs or a...</title>
+<!DOCTYPE html><html><head><title>R: Function to define eQTL genes given a list of SNPs or a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSNP2eGenes"><tr><td>xSNP2eGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSNP2eGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to define eQTL genes given a list of SNPs or a customised eQTL mapping data</h2>
 
@@ -18,8 +29,7 @@ eQTL-reported signficance level.
 
 <h3>Usage</h3>
 
-<pre>
-xSNP2eGenes(
+<pre><code class='language-R'>xSNP2eGenes(
 data,
 include.eQTL = NA,
 eQTL.customised = NULL,
@@ -29,26 +39,26 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>an input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
 format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for
 example, 'chr16:28525386'</p>
 </td></tr>
-<tr valign="top"><td><code>include.eQTL</code></td>
+<tr style="vertical-align: top;"><td><code>include.eQTL</code></td>
 <td>
 <p>the eQTL supported currently. By default, it is
 'NA' to disable this option. Pre-built eQTL datasets are detailed in
 <code>xDefineEQTL</code></p>
 </td></tr>
-<tr valign="top"><td><code>eQTL.customised</code></td>
+<tr style="vertical-align: top;"><td><code>eQTL.customised</code></td>
 <td>
 <p>a user-input matrix or data frame with 4
 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL
@@ -58,29 +68,29 @@ be a file containing these 4 columns. It is designed to allow the user
 analysing their eQTL data. This customisation (if provided) will
 populate built-in eQTL data</p>
 </td></tr>
-<tr valign="top"><td><code>cdf.function</code></td>
+<tr style="vertical-align: top;"><td><code>cdf.function</code></td>
 <td>
 <p>a character specifying a Cumulative Distribution
 Function (cdf). It can be one of 'exponential' based on exponential
 cdf, 'empirical' for empirical cdf</p>
 </td></tr>
-<tr valign="top"><td><code>plot</code></td>
+<tr style="vertical-align: top;"><td><code>plot</code></td>
 <td>
 <p>logical to indicate whether the histogram plot (plus
 density or CDF plot) should be drawn. By default, it sets to false for
 no plotting</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -124,8 +134,7 @@ best/minimum)
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # a) provide the SNPs with the significance info
 data(ImmunoBase)
@@ -137,7 +146,8 @@ df_eGenes &lt;- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A",
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

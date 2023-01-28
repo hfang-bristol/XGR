@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define nearby genes given a list of SNPs</title>
+<!DOCTYPE html><html><head><title>R: Function to define nearby genes given a list of SNPs</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSNP2nGenes"><tr><td>xSNP2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSNP2nGenes</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to define nearby genes given a list of SNPs</h2>
 
@@ -17,8 +28,7 @@ as a decaying function of the gene-to-SNP distance.
 
 <h3>Usage</h3>
 
-<pre>
-xSNP2nGenes(
+<pre><code class='language-R'>xSNP2nGenes(
 data,
 distance.max = 2e+05,
 decay.kernel = c("rapid", "slow", "linear", "constant"),
@@ -31,39 +41,39 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>an input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
 format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
 positional number; for example, 'chr16:28525386'</p>
 </td></tr>
-<tr valign="top"><td><code>distance.max</code></td>
+<tr style="vertical-align: top;"><td><code>distance.max</code></td>
 <td>
 <p>the maximum distance between genes and SNPs. Only
 those genes no far way from this distance will be considered as seed
 genes. This parameter will influence the distance-component weights
 calculated for nearby SNPs per gene</p>
 </td></tr>
-<tr valign="top"><td><code>decay.kernel</code></td>
+<tr style="vertical-align: top;"><td><code>decay.kernel</code></td>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
 'rapid' for rapid decay. If no distance weight is used, please select
 'constant'</p>
 </td></tr>
-<tr valign="top"><td><code>decay.exponent</code></td>
+<tr style="vertical-align: top;"><td><code>decay.exponent</code></td>
 <td>
 <p>a numeric specifying a decay exponent. By
 default, it sets to 2</p>
 </td></tr>
-<tr valign="top"><td><code>GR.SNP</code></td>
+<tr style="vertical-align: top;"><td><code>GR.SNP</code></td>
 <td>
 <p>the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
@@ -77,7 +87,7 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr style="vertical-align: top;"><td><code>GR.Gene</code></td>
 <td>
 <p>the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -92,7 +102,7 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>include.TAD</code></td>
+<tr style="vertical-align: top;"><td><code>include.TAD</code></td>
 <td>
 <p>TAD boundary regions are also included. By default,
 it is 'none' to disable this option. Otherwise, inclusion of a TAD
@@ -103,17 +113,17 @@ region will be kept). TAD datasets can be one of &quot;GM12878&quot;
 (mesendoderm) and &quot;NPC&quot; (neural progenitor cell). Explanations can be
 found at <a href="http://dx.doi.org/10.1016/j.celrep.2016.10.061">http://dx.doi.org/10.1016/j.celrep.2016.10.061</a></p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -168,8 +178,7 @@ location (in the form of 'chr:start-end')
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 
 # a) provide the seed SNPs with the significance info
@@ -190,7 +199,8 @@ decay.kernel="slow", decay.exponent=2, include.TAD='GM12878',
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

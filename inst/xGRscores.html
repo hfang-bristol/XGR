@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to score genomic regions based on the given...</title>
+<!DOCTYPE html><html><head><title>R: Function to score genomic regions based on the given...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGRscores"><tr><td>xGRscores</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGRscores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to score genomic regions based on the given significance level</h2>
 
@@ -16,16 +27,15 @@ together with the significance level.
 
 <h3>Usage</h3>
 
-<pre>
-xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
+<pre><code class='language-R'>xGRscores(data, significance.threshold = 0.05, score.cap = 10, verbose
 = TRUE)
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the sinificance level for
 genomic regions (GR). For this named vector, the element names are GR,
@@ -35,7 +45,7 @@ element values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
 column for GR, 2nd column for the significance level.</p>
 </td></tr>
-<tr valign="top"><td><code>significance.threshold</code></td>
+<tr style="vertical-align: top;"><td><code>significance.threshold</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -44,12 +54,12 @@ scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
 </td></tr>
-<tr valign="top"><td><code>score.cap</code></td>
+<tr style="vertical-align: top;"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
 to 10. If NULL, no capping is applied</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -90,8 +100,7 @@ taking into account the given threshold of the significant level
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 
 # a) provide the seed SNPs with the significance info
@@ -112,7 +121,8 @@ data &lt;- cbind(GR=GR, Sig=sig)
 df_GR &lt;- xGRscores(data=data, significance.threshold=5e-5)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define graph node coordinates according to...</title>
+<!DOCTYPE html><html><head><title>R: Function to define graph node coordinates according to...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xLayout"><tr><td>xLayout</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xLayout</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to define graph node coordinates according to igraph- or sna-style layout</h2>
 
@@ -16,39 +27,40 @@ to igraph- or sna-style layout.
 
 <h3>Usage</h3>
 
-<pre>
-xLayout(
+<pre><code class='language-R'>xLayout(
 g,
 layout = c("layout_nicely", "layout_randomly", "layout_in_circle",
-"layout_on_sphere", "layout_with_fr", "layout_with_kk",
-"layout_as_tree",
-"layout_with_lgl", "layout_with_graphopt", "layout_with_sugiyama",
-"layout_with_dh",
-"layout_with_drl", "layout_with_gem", "layout_with_mds",
-"layout_as_bipartite",
-"gplot.layout.adj", "gplot.layout.circle", "gplot.layout.circrand",
-"gplot.layout.eigen", "gplot.layout.fruchtermanreingold",
-"gplot.layout.geodist",
-"gplot.layout.hall", "gplot.layout.kamadakawai", "gplot.layout.mds",
-"gplot.layout.princoord", "gplot.layout.random", "gplot.layout.rmds",
-"gplot.layout.segeo", "gplot.layout.seham", "gplot.layout.spring",
-"gplot.layout.springrepulse", "gplot.layout.target",
-"graphlayouts.layout_with_stress", "graphlayouts.layout_as_backbone",
-"gephi.forceatlas2"),
+"layout_on_sphere",
+"layout_with_fr", "layout_with_kk", "layout_as_tree",
+"layout_with_lgl",
+"layout_with_graphopt", "layout_with_sugiyama", "layout_with_dh",
+"layout_with_drl",
+"layout_with_gem", "layout_with_mds", "layout_as_bipartite",
+"gplot.layout.adj",
+"gplot.layout.circle", "gplot.layout.circrand", "gplot.layout.eigen",
+"gplot.layout.fruchtermanreingold", "gplot.layout.geodist",
+"gplot.layout.hall",
+"gplot.layout.kamadakawai", "gplot.layout.mds",
+"gplot.layout.princoord",
+"gplot.layout.random", "gplot.layout.rmds", "gplot.layout.segeo",
+"gplot.layout.seham", "gplot.layout.spring",
+"gplot.layout.springrepulse",
+"gplot.layout.target", "graphlayouts.layout_with_stress",
+"graphlayouts.layout_as_backbone", "gephi.forceatlas2"),
 seed = 825,
 flip = F
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph</p>
 </td></tr>
-<tr valign="top"><td><code>layout</code></td>
+<tr style="vertical-align: top;"><td><code>layout</code></td>
 <td>
 <p>a character specifying graph layout function. This
 character can be used to indicate igraph-style layout
@@ -59,11 +71,11 @@ or graphlayouts-style layout
 (&quot;graphlayouts.layout_with_stress&quot;,&quot;graphlayouts.layout_as_backbone&quot;),
 or ForeceAtlas2 layout used in Dephi (&quot;gephi.forceatlas2&quot;)</p>
 </td></tr>
-<tr valign="top"><td><code>seed</code></td>
+<tr style="vertical-align: top;"><td><code>seed</code></td>
 <td>
 <p>an integer specifying the seed</p>
 </td></tr>
-<tr valign="top"><td><code>flip</code></td>
+<tr style="vertical-align: top;"><td><code>flip</code></td>
 <td>
 <p>logical to indicate whether x- and y-coordiates flip. By
 default, it sets to false</p>
@@ -86,8 +98,7 @@ default, it sets to false</p>
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the library
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -125,7 +136,8 @@ gp &lt;- xGGnetwork(ls_ig, node.xcoord='xcoord', node.ycoord='ycoord',
 ncolumns=5)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

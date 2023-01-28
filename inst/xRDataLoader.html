@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to load the package built-in RData</title>
+<!DOCTYPE html><html><head><title>R: Function to load the package built-in RData</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xRDataLoader"><tr><td>xRDataLoader</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xRDataLoader</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to load the package built-in RData</h2>
 
@@ -15,22 +26,20 @@
 
 <h3>Usage</h3>
 
-<pre>
-xRDataLoader(
+<pre><code class='language-R'>xRDataLoader(
 RData = c(NA, "GWAS2EF", "GWAS_LD", "IlluminaHumanHT",
-"IlluminaOmniExpress",
-"ig.DO", "ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM",
-"ig.HPMA", "ig.HPMI",
-"ig.HPPA", "ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO",
-"org.Hs.egGOBP",
+"IlluminaOmniExpress", "ig.DO",
+"ig.EF", "ig.GOBP", "ig.GOCC", "ig.GOMF", "ig.HPCM", "ig.HPMA",
+"ig.HPMI", "ig.HPPA",
+"ig.MP", "org.Hs.eg", "org.Hs.egDGIdb", "org.Hs.egDO", "org.Hs.egGOBP",
 "org.Hs.egGOCC", "org.Hs.egGOMF", "org.Hs.egHPCM", "org.Hs.egHPMA",
 "org.Hs.egHPMI",
 "org.Hs.egHPPA", "org.Hs.egMP", "org.Hs.egMsigdbC1",
 "org.Hs.egMsigdbC2BIOCARTA",
 "org.Hs.egMsigdbC2CGP", "org.Hs.egMsigdbC2CPall",
 "org.Hs.egMsigdbC2CP",
-"org.Hs.egMsigdbC2KEGG", "org.Hs.egMsigdbC2REACTOME",
-"org.Hs.egMsigdbC3MIR",
+"org.Hs.egMsigdbC2KEGG",
+"org.Hs.egMsigdbC2REACTOME", "org.Hs.egMsigdbC3MIR",
 "org.Hs.egMsigdbC3TFT", "org.Hs.egMsigdbC4CGN", "org.Hs.egMsigdbC4CM",
 "org.Hs.egMsigdbC5BP", "org.Hs.egMsigdbC5CC", "org.Hs.egMsigdbC5MF",
 "org.Hs.egMsigdbC6", "org.Hs.egMsigdbC7", "org.Hs.egMsigdbH",
@@ -42,13 +51,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>RData</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>RData</code></td>
 <td>
 <p>which built-in RData to load. It can be one of &quot;GWAS2EF&quot;,
 &quot;GWAS_LD&quot;, &quot;IlluminaHumanHT&quot;, &quot;IlluminaOmniExpress&quot;, &quot;ig.DO&quot;, &quot;ig.EF&quot;,
@@ -67,7 +76,7 @@ guid = NULL
 &quot;org.Hs.PCommons_DN&quot;, &quot;org.Hs.PCommons_UN&quot;, &quot;org.Hs.egGTExV4&quot;,
 &quot;org.Hs.egGTExV6&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>RData.customised</code></td>
+<tr style="vertical-align: top;"><td><code>RData.customised</code></td>
 <td>
 <p>a file name for RData-formatted file. By
 default, it is NULL. It is designed when the user wants to import
@@ -75,12 +84,12 @@ customised RData that are not listed in the above argument 'RData'.
 However, this argument can be always used even for those RData that are
 listed in the argument 'RData'</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. By default, it remotely locates at
@@ -93,11 +102,11 @@ is no need to ask the function to remotely download every time (also it
 will unnecessarily increase the runtime). For examples, these files (as
 a whole or part of them) can be first downloaded into your current
 working directory, and then set this option as:
-<i>RData.location="."</i>. Surely, the location can be anywhere as long
+<code class="reqn">RData.location="."</code>. Surely, the location can be anywhere as long
 as the user provides the correct path pointing to (otherwise, the
 script will have to remotely download each time)</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. For example, 'gskpn' (see 'https://osf.io/gskpn'). If a valid
@@ -132,8 +141,7 @@ working environment. To enable 'guid', please also install a package
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
 org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg')
@@ -148,7 +156,8 @@ org.Mm.string_high &lt;- xRDataLoader(RData='org.Mm.string_high',
 guid='gskpn')
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

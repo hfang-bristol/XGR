@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using ladder-like...</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise enrichment results using ladder-like...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichLadder"><tr><td>xEnrichLadder</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichLadder</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using ladder-like plot</h2>
 
@@ -18,12 +29,10 @@ It returns an object of class &quot;ggplot&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichLadder(
+<pre><code class='language-R'>xEnrichLadder(
 eTerm,
 sortBy = c("fdr", "or", "adjp", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap",
-"none"),
+"nOverlap", "none"),
 top_num = 5,
 FDR.cutoff = 0.05,
 CI.one = T,
@@ -37,17 +46,17 @@ label = c("full", "concise"),
 verbose = T,
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>sortBy</code></td>
+<tr style="vertical-align: top;"><td><code>sortBy</code></td>
 <td>
 <p>which statistics will be used for sorting and viewing
 gene sets (terms). It can be &quot;adjp&quot; or &quot;fdr&quot; for adjusted p value
@@ -56,23 +65,23 @@ enrichment fold change, &quot;nAnno&quot; for the number of sets (terms),
 &quot;nOverlap&quot; for the number in overlaps, &quot;or&quot; for the odds ratio, and
 &quot;none&quot; for ordering according to ID of terms</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (see
 below FDR.cutoff) will be displayed</p>
 </td></tr>
-<tr valign="top"><td><code>FDR.cutoff</code></td>
+<tr style="vertical-align: top;"><td><code>FDR.cutoff</code></td>
 <td>
 <p>FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05</p>
 </td></tr>
-<tr valign="top"><td><code>CI.one</code></td>
+<tr style="vertical-align: top;"><td><code>CI.one</code></td>
 <td>
 <p>logical to indicate whether to allow the inclusion of one
 in CI. By default, it is TURE (allowed)</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -85,40 +94,40 @@ hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>x.rotate</code></td>
+<tr style="vertical-align: top;"><td><code>x.rotate</code></td>
 <td>
 <p>the angle to rotate the x tick labelings. By default,
 it is 60</p>
 </td></tr>
-<tr valign="top"><td><code>x.text.size</code></td>
+<tr style="vertical-align: top;"><td><code>x.text.size</code></td>
 <td>
 <p>the text size of the x tick labelings. By default,
 it is 6</p>
 </td></tr>
-<tr valign="top"><td><code>y.text.size</code></td>
+<tr style="vertical-align: top;"><td><code>y.text.size</code></td>
 <td>
 <p>the text size of the y tick labelings. By default,
 it is 6</p>
 </td></tr>
-<tr valign="top"><td><code>shape</code></td>
+<tr style="vertical-align: top;"><td><code>shape</code></td>
 <td>
 <p>the number specifying the shape. By default, it is 19</p>
 </td></tr>
-<tr valign="top"><td><code>size</code></td>
+<tr style="vertical-align: top;"><td><code>size</code></td>
 <td>
 <p>the number specifying the shape size. By default, it is 2</p>
 </td></tr>
-<tr valign="top"><td><code>label</code></td>
+<tr style="vertical-align: top;"><td><code>label</code></td>
 <td>
 <p>how to label gene sets (terms). It can be &quot;concise&quot; or
 &quot;full&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters for xHeatmap</p>
 </td></tr>
@@ -145,8 +154,7 @@ displayed in the screen</p>
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -230,7 +238,8 @@ annotation.file=annotation.file, background.file=background,
 size.range=c(10,20000))
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

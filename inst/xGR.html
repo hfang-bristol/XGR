@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a GRanges object given a list of genomic...</title>
+<!DOCTYPE html><html><head><title>R: Function to create a GRanges object given a list of genomic...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGR"><tr><td>xGR</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGR</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to create a GRanges object given a list of genomic regions</h2>
 
@@ -16,8 +27,7 @@ genomic regions.
 
 <h3>Usage</h3>
 
-<pre>
-xGR(
+<pre><code class='language-R'>xGR(
 data,
 format = c("chr:start-end", "data.frame", "bed", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg18.to.hg19"),
@@ -28,13 +38,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>input genomic regions (GR). If formatted as &quot;chr:start-end&quot;
 (see the next parameter 'format' below), GR should be provided as a
@@ -50,43 +60,43 @@ single position, the ending chromosome position (3rd column) is allowed
 not to be provided. The data could also be an object of 'GRanges' (in
 this case, formatted as 'GRanges')</p>
 </td></tr>
-<tr valign="top"><td><code>format</code></td>
+<tr style="vertical-align: top;"><td><code>format</code></td>
 <td>
 <p>the format of the input data. It can be one of
 &quot;chr:start-end&quot;, &quot;data.frame&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>build.conversion</code></td>
+<tr style="vertical-align: top;"><td><code>build.conversion</code></td>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>add.name</code></td>
+<tr style="vertical-align: top;"><td><code>add.name</code></td>
 <td>
 <p>logical to add names. By default, it sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>remove.mcol</code></td>
+<tr style="vertical-align: top;"><td><code>remove.mcol</code></td>
 <td>
 <p>logical to remove meta-columns. By default, it sets
 to false</p>
 </td></tr>
-<tr valign="top"><td><code>include.strand</code></td>
+<tr style="vertical-align: top;"><td><code>include.strand</code></td>
 <td>
 <p>logical to include strand. By default, it sets to
 false. It only works when the format is &quot;data.frame&quot; or &quot;bed&quot; and the
 input data has 4 columns</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -108,8 +118,7 @@ project. See <code>xRDataLoader</code> for details</p>
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # a) provide the genomic regions
 ## load ImmunoBase
@@ -128,7 +137,8 @@ GR &lt;- xGR(data=data, format="chr:start-end",
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

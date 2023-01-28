@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to lift genomic intervals from one genome build to...</title>
+<!DOCTYPE html><html><head><title>R: Function to lift genomic intervals from one genome build to...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xLiftOver"><tr><td>xLiftOver</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xLiftOver</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to lift genomic intervals from one genome build to another.</h2>
 
@@ -17,8 +28,7 @@ build to another. Supported are the conversions between genome builds
 
 <h3>Usage</h3>
 
-<pre>
-xLiftOver(
+<pre><code class='language-R'>xLiftOver(
 data.file,
 format.file = c("data.frame", "bed", "chr:start-end", "GRanges"),
 build.conversion = c(NA, "hg38.to.hg19", "hg19.to.hg38",
@@ -29,13 +39,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data.file</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data.file</code></td>
 <td>
 <p>an input data file, containing a list of genomic
 regions to test. If the input file is formatted as a 'data.frame'
@@ -54,34 +64,34 @@ the input file can be the content itself assuming that input file has
 been read. Note: the file should use the tab delimiter as the field
 separator between columns</p>
 </td></tr>
-<tr valign="top"><td><code>format.file</code></td>
+<tr style="vertical-align: top;"><td><code>format.file</code></td>
 <td>
 <p>the format for input files. It can be one of
 &quot;data.frame&quot;, &quot;chr:start-end&quot;, &quot;bed&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>build.conversion</code></td>
+<tr style="vertical-align: top;"><td><code>build.conversion</code></td>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot;, &quot;hg19.to.hg38&quot;,
 &quot;hg19.to.hg18&quot;, &quot;hg18.to.hg38&quot; and &quot;hg18.to.hg19&quot;. By default it is NA,
 forcing the user to specify the corrent one.</p>
 </td></tr>
-<tr valign="top"><td><code>merged</code></td>
+<tr style="vertical-align: top;"><td><code>merged</code></td>
 <td>
 <p>logical to indicate whether multiple ranges should be
 merged into the one per a range in query. By default, it sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -103,8 +113,7 @@ project. See <code>xRDataLoader</code> for details</p>
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 
 # Provide UCSC known genes (hg19)
@@ -118,7 +127,8 @@ build.conversion="hg19.to.hg38", RData.location=RData.location)
 gr
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to add coordinates into a graph according to a node...</title>
+<!DOCTYPE html><html><head><title>R: Function to add coordinates into a graph according to a node...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xAddCoords"><tr><td>xAddCoords</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xAddCoords</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to add coordinates into a graph according to a node attribute</h2>
 
@@ -16,8 +27,7 @@ to a node attribute such as community or comp.
 
 <h3>Usage</h3>
 
-<pre>
-xAddCoords(
+<pre><code class='language-R'>xAddCoords(
 g,
 node.attr = NULL,
 glayout = layout_with_kk,
@@ -25,23 +35,23 @@ edge.color.alternative = c("grey70", "grey95"),
 seed = 825,
 verbose = TRUE
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot; (or &quot;graphNEL&quot;) for a graph with
 such as a 'community' node attribute</p>
 </td></tr>
-<tr valign="top"><td><code>node.attr</code></td>
+<tr style="vertical-align: top;"><td><code>node.attr</code></td>
 <td>
 <p>a charatter specifying a node attribute. If NULL or no
 match, it returns NULL</p>
 </td></tr>
-<tr valign="top"><td><code>glayout</code></td>
+<tr style="vertical-align: top;"><td><code>glayout</code></td>
 <td>
 <p>a graph layout function. This function can be one of
 &quot;layout_nicely&quot; (previously &quot;layout.auto&quot;), &quot;layout_randomly&quot;
@@ -58,17 +68,17 @@ match, it returns NULL</p>
 these layouts can be found in
 <a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/layout_nicely.html</a></p>
 </td></tr>
-<tr valign="top"><td><code>edge.color.alternative</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color.alternative</code></td>
 <td>
 <p>two alternative colors for edges within
 the community (grey70 by default) and edges between communities (grey95
 by default)</p>
 </td></tr>
-<tr valign="top"><td><code>seed</code></td>
+<tr style="vertical-align: top;"><td><code>seed</code></td>
 <td>
 <p>an integer specifying the seed</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -93,8 +103,7 @@ within-community edges ('grey70').
 
 <h3>Examples</h3>
 
-<pre>
-# 1) generate a random bipartite graph
+<pre><code class='language-R'># 1) generate a random bipartite graph
 set.seed(825)
 g &lt;- sample_bipartite(100, 50, p=0.1)
 V(g)$name &lt;- V(g)
@@ -133,7 +142,8 @@ scale_fill_gradientn(colors=xColormap('jet.both')(64)) +
 guides(fill="none")
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

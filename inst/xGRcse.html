@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create a vector storing genomic regions</title>
+<!DOCTYPE html><html><head><title>R: Function to create a vector storing genomic regions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGRcse"><tr><td>xGRcse</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGRcse</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to create a vector storing genomic regions</h2>
 
@@ -16,15 +27,14 @@
 
 <h3>Usage</h3>
 
-<pre>
-xGRcse(data, format = c("GRanges", "data.frame", "bed"))
-</pre>
+<pre><code class='language-R'>xGRcse(data, format = c("GRanges", "data.frame", "bed"))
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>input genomic regions (GR). If formatted as a 'data.frame',
 the first three columns correspond to the chromosome (1st column), the
@@ -37,7 +47,7 @@ chromosome position (3rd column) is allowed not to be provided. The
 data could also be an object of 'GRanges' (in this case, formatted as
 'GRanges')</p>
 </td></tr>
-<tr valign="top"><td><code>format</code></td>
+<tr style="vertical-align: top;"><td><code>format</code></td>
 <td>
 <p>the format of the input data. It can be one of
 &quot;data.frame&quot;, &quot;bed&quot; or &quot;GRanges&quot;</p>
@@ -59,8 +69,7 @@ data could also be an object of 'GRanges' (in this case, formatted as
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
@@ -76,7 +85,8 @@ gr &lt;- ImmunoBase$AS$variant
 cse &lt;- xGRcse(gr)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

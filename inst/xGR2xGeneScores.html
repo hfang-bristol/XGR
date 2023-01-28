@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes from an...</title>
+<!DOCTYPE html><html><head><title>R: Function to identify likely modulated seed genes from an...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGR2xGeneScores"><tr><td>xGR2xGeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGR2xGeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to identify likely modulated seed genes from an input list of genomic regions together with the significance level given the crosslink info</h2>
 
@@ -20,8 +31,7 @@ quantifying the link of a GR to a gene. It returns an object of class
 
 <h3>Usage</h3>
 
-<pre>
-xGR2xGeneScores(
+<pre><code class='language-R'>xGR2xGeneScores(
 data,
 significance.threshold = NULL,
 score.cap = NULL,
@@ -38,13 +48,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the sinificance level for
 genomic regions (GR). For this named vector, the element names are GR,
@@ -54,7 +64,7 @@ element values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
 column for GR, 2nd column for the significance level.</p>
 </td></tr>
-<tr valign="top"><td><code>significance.threshold</code></td>
+<tr style="vertical-align: top;"><td><code>significance.threshold</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -63,23 +73,23 @@ scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insignificant and thus receive no score</p>
 </td></tr>
-<tr valign="top"><td><code>score.cap</code></td>
+<tr style="vertical-align: top;"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
 to NULL, meaning that no capping is applied</p>
 </td></tr>
-<tr valign="top"><td><code>build.conversion</code></td>
+<tr style="vertical-align: top;"><td><code>build.conversion</code></td>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>crosslink</code></td>
+<tr style="vertical-align: top;"><td><code>crosslink</code></td>
 <td>
 <p>the built-in crosslink info with a score quantifying
 the link of a GR to a gene. See <code>xGR2xGenes</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>crosslink.customised</code></td>
+<tr style="vertical-align: top;"><td><code>crosslink.customised</code></td>
 <td>
 <p>the crosslink info with a score quantifying
 the link of a GR to a gene. A user-input matrix or data frame with 4
@@ -90,52 +100,52 @@ level), and 4th for contexts (optional; if nor provided, it will be
 added as 'C'). Alternatively, it can be a file containing these 4
 columns. Required, otherwise it will return NULL</p>
 </td></tr>
-<tr valign="top"><td><code>cdf.function</code></td>
+<tr style="vertical-align: top;"><td><code>cdf.function</code></td>
 <td>
 <p>a character specifying how to transform the input
 crosslink score. It can be one of 'original' (no such transformation),
 and 'empirical' for looking at empirical Cumulative Distribution
 Function (cdf; as such it is converted into pvalue-like values [0,1])</p>
 </td></tr>
-<tr valign="top"><td><code>scoring.scheme</code></td>
+<tr style="vertical-align: top;"><td><code>scoring.scheme</code></td>
 <td>
 <p>the method used to calculate seed gene scores
 under a set of GR (also over Contexts if many). It can be one of &quot;sum&quot;
 for adding up, &quot;max&quot; for the maximum, and &quot;sequential&quot; for the
 sequential weighting. The sequential weighting is done via:
-<i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where <i>R_{i}</i> is the
-<i>i^{th}</i> rank (in a descreasing order)</p>
+<code class="reqn">\sum_{i=1}{\frac{R_{i}}{i}}</code>, where <code class="reqn">R_{i}</code> is the
+<code class="reqn">i^{th}</code> rank (in a descreasing order)</p>
 </td></tr>
-<tr valign="top"><td><code>nearby.distance.max</code></td>
+<tr style="vertical-align: top;"><td><code>nearby.distance.max</code></td>
 <td>
 <p>the maximum distance between genes and GR.
 Only those genes no far way from this distance will be considered as
 seed genes. This parameter will influence the distance-component
 weights calculated for nearby GR per gene</p>
 </td></tr>
-<tr valign="top"><td><code>nearby.decay.kernel</code></td>
+<tr style="vertical-align: top;"><td><code>nearby.decay.kernel</code></td>
 <td>
 <p>a character specifying a decay kernel
 function. It can be one of 'slow' for slow decay, 'linear' for linear
 decay, and 'rapid' for rapid decay. If no distance weight is used,
 please select 'constant'</p>
 </td></tr>
-<tr valign="top"><td><code>nearby.decay.exponent</code></td>
+<tr style="vertical-align: top;"><td><code>nearby.decay.exponent</code></td>
 <td>
 <p>a numeric specifying a decay exponent. By
 default, it sets to 2</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -189,8 +199,7 @@ to define and score seed genes from input genomic regions.
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 
 # a) provide the seed SNPs with the significance info
@@ -208,7 +217,8 @@ mSeed &lt;- xGR2xGeneScores(data=data, crosslink="genehancer",
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

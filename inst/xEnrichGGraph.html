@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a ggraph-like...</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise enrichment results using a ggraph-like...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichGGraph"><tr><td>xEnrichGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using a ggraph-like lauout</h2>
 
@@ -16,8 +27,7 @@ a ggraph-like lauout.
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichGGraph(
+<pre><code class='language-R'>xEnrichGGraph(
 eTerm,
 ig = NULL,
 fixed = T,
@@ -32,19 +42,19 @@ leave = T,
 ncolumns = NULL,
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns
 ('name','adjp','or','zscore'; 'group' optionally)</p>
 </td></tr>
-<tr valign="top"><td><code>ig</code></td>
+<tr style="vertical-align: top;"><td><code>ig</code></td>
 <td>
 <p>an object of class &quot;igraph&quot; with node attribute 'name'. Note:
 the node labels would be the node attribute 'name' unless the node
@@ -52,19 +62,19 @@ attribute 'label' is explicitely provided. If provided, only those
 terms within it will be visualised. By default, it is NULL meaning no
 surch restriction</p>
 </td></tr>
-<tr valign="top"><td><code>fixed</code></td>
+<tr style="vertical-align: top;"><td><code>fixed</code></td>
 <td>
 <p>logical to indicate whether all terms in ig will be
 visualised. By default, it is TURE; otherwise only overlapped terms
 from eTerm will be visualised</p>
 </td></tr>
-<tr valign="top"><td><code>node.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.color</code></td>
 <td>
 <p>which statistics will be used for node coloring. It
 can be &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and
 &quot;zscore&quot; for enrichment z-score</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -78,44 +88,44 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum values for which colors should be
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>node.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.size</code></td>
 <td>
 <p>which statistics will be used for node size. It can be
 &quot;or&quot; for the odds ratio, &quot;adjp&quot; for adjusted p value (FDR) and &quot;zscore&quot;
 for enrichment z-score</p>
 </td></tr>
-<tr valign="top"><td><code>slim</code></td>
+<tr style="vertical-align: top;"><td><code>slim</code></td>
 <td>
 <p>the minimum and maximum values for which sizes should be
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>node.size.range</code></td>
+<tr style="vertical-align: top;"><td><code>node.size.range</code></td>
 <td>
 <p>the range of actual node size</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.size</code></td>
 <td>
 <p>the text size of the node labelings. By default,
 it is 2. If 0, all labellings will be disabled</p>
 </td></tr>
-<tr valign="top"><td><code>leave</code></td>
+<tr style="vertical-align: top;"><td><code>leave</code></td>
 <td>
 <p>the logic specifying whether or not only leaves
 (nodes/labellings) shown. This can be disenabled if the layout does not
 support tips</p>
 </td></tr>
-<tr valign="top"><td><code>ncolumns</code></td>
+<tr style="vertical-align: top;"><td><code>ncolumns</code></td>
 <td>
 <p>an integer specifying the number of columns for
 facet_wrap. By defaul, it is NULL (decided on according to the number
 of groups that will be visualised)</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters used in xGGraph</p>
 </td></tr>
@@ -146,8 +156,7 @@ labelling for the colored plots).
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
@@ -186,7 +195,8 @@ gp
 gp$gp_template
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

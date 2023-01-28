@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to create codes annotating nodes in an igraph object</title>
+<!DOCTYPE html><html><head><title>R: Function to create codes annotating nodes in an igraph object</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xOBOcode"><tr><td>xOBOcode</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xOBOcode</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to create codes annotating nodes in an igraph object</h2>
 
@@ -18,8 +29,7 @@ meaning in a table
 
 <h3>Usage</h3>
 
-<pre>
-xOBOcode(
+<pre><code class='language-R'>xOBOcode(
 g,
 node.level = "term_distance",
 node.level.value = 2,
@@ -53,78 +63,78 @@ table.nrow = 55,
 table.ncol = NULL,
 root.code = "RT"
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>node.level</code></td>
+<tr style="vertical-align: top;"><td><code>node.level</code></td>
 <td>
 <p>a character specifying which node attribute defining
 the node level. By default, it is 'term_distance'</p>
 </td></tr>
-<tr valign="top"><td><code>node.level.value</code></td>
+<tr style="vertical-align: top;"><td><code>node.level.value</code></td>
 <td>
 <p>a positive integer specifying the level value
 as major branches. By default, it is 2</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.size</code></td>
 <td>
 <p>a character specifying which node attribute used
 for node label size</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.color</code></td>
 <td>
 <p>a character specifying which node attribute
 used for the node label color</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.alpha</code></td>
 <td>
 <p>the 0-1 value specifying transparency of node
 labelling</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.padding</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.padding</code></td>
 <td>
 <p>the padding around the labeled node</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.arrow</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.arrow</code></td>
 <td>
 <p>the arrow pointing to the labeled node</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.force</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.force</code></td>
 <td>
 <p>the repelling force between overlapping labels</p>
 </td></tr>
-<tr valign="top"><td><code>node.shape</code></td>
+<tr style="vertical-align: top;"><td><code>node.shape</code></td>
 <td>
 <p>an integer specifying node shape</p>
 </td></tr>
-<tr valign="top"><td><code>node.xcoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.xcoord</code></td>
 <td>
 <p>a vector specifying x coordinates. If NULL, it will
 be created using igraph::layout_with_kk</p>
 </td></tr>
-<tr valign="top"><td><code>node.ycoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.ycoord</code></td>
 <td>
 <p>a vector specifying y coordinates. If NULL, it will
 be created using igraph::layout_with_kk</p>
 </td></tr>
-<tr valign="top"><td><code>node.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.color</code></td>
 <td>
 <p>a character specifying which node attribute used for
 node coloring</p>
 </td></tr>
-<tr valign="top"><td><code>node.color.title</code></td>
+<tr style="vertical-align: top;"><td><code>node.color.title</code></td>
 <td>
 <p>a character specifying the title for node
 coloring</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -138,83 +148,83 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum values for which colors should be
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>node.size.range</code></td>
+<tr style="vertical-align: top;"><td><code>node.size.range</code></td>
 <td>
 <p>the range of actual node size</p>
 </td></tr>
-<tr valign="top"><td><code>title</code></td>
+<tr style="vertical-align: top;"><td><code>title</code></td>
 <td>
 <p>a character specifying the title for the plot</p>
 </td></tr>
-<tr valign="top"><td><code>edge.size</code></td>
+<tr style="vertical-align: top;"><td><code>edge.size</code></td>
 <td>
 <p>a numeric value specifying the edge size. By default,
 it is 0.5</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color</code></td>
 <td>
 <p>a character specifying which edge attribute defining
 the the edge colors</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color.alpha</code></td>
 <td>
 <p>the 0-1 value specifying transparency of edge
 colors</p>
 </td></tr>
-<tr valign="top"><td><code>edge.curve</code></td>
+<tr style="vertical-align: top;"><td><code>edge.curve</code></td>
 <td>
 <p>a numeric value specifying the edge curve. 0 for the
 straight line</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow</code></td>
 <td>
 <p>a numeric value specifying the edge arrow. By
 default, it is 2</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow.gap</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow.gap</code></td>
 <td>
 <p>a gap between the arrow and the node</p>
 </td></tr>
-<tr valign="top"><td><code>node.table</code></td>
+<tr style="vertical-align: top;"><td><code>node.table</code></td>
 <td>
 <p>a character specifying which node attribute for
 coding. By default, it is 'term_name'</p>
 </td></tr>
-<tr valign="top"><td><code>node.table.wrap</code></td>
+<tr style="vertical-align: top;"><td><code>node.table.wrap</code></td>
 <td>
 <p>a positive integer specifying wrap width of
 coded node labelling</p>
 </td></tr>
-<tr valign="top"><td><code>table.base.size</code></td>
+<tr style="vertical-align: top;"><td><code>table.base.size</code></td>
 <td>
 <p>a positive integer specifying font size in the
 table</p>
 </td></tr>
-<tr valign="top"><td><code>table.row.space</code></td>
+<tr style="vertical-align: top;"><td><code>table.row.space</code></td>
 <td>
 <p>a positive numeric value specifying amplying
 horizental space for a row with wrapped text</p>
 </td></tr>
-<tr valign="top"><td><code>table.nrow</code></td>
+<tr style="vertical-align: top;"><td><code>table.nrow</code></td>
 <td>
 <p>a positive integer specifying the number of rows in
 the table</p>
 </td></tr>
-<tr valign="top"><td><code>table.ncol</code></td>
+<tr style="vertical-align: top;"><td><code>table.ncol</code></td>
 <td>
 <p>NULL or a positive integer specifying the number of
 columns per page. If NULL, it will be 3 or less</p>
 </td></tr>
-<tr valign="top"><td><code>root.code</code></td>
+<tr style="vertical-align: top;"><td><code>root.code</code></td>
 <td>
 <p>a character specifying the root code. By default, it
 is 'RT'</p>
@@ -244,8 +254,7 @@ igraph object (ig appended with node attributes 'node.code' and
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the library
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -454,7 +463,8 @@ print(ls_gp$table)
 dev.off()
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

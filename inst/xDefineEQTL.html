@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract eQTL-gene pairs given a list of SNPs or a...</title>
+<!DOCTYPE html><html><head><title>R: Function to extract eQTL-gene pairs given a list of SNPs or a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xDefineEQTL"><tr><td>xDefineEQTL</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xDefineEQTL</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to extract eQTL-gene pairs given a list of SNPs or a customised eQTL mapping data</h2>
 
@@ -16,8 +27,7 @@ of SNPs or a customised eQTL mapping data.
 
 <h3>Usage</h3>
 
-<pre>
-xDefineEQTL(
+<pre><code class='language-R'>xDefineEQTL(
 data = NULL,
 include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
 "JKscience_LPS24",
@@ -30,6 +40,7 @@ include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
 "JKpg_CD4",
 "JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8", "JKpg_CD8_cis",
 "JKpg_CD8_trans",
+
 "JKnc_neutro", "JKnc_neutro_cis", "JKnc_neutro_trans",
 "WESTRAng_blood",
 "WESTRAng_blood_cis", "WESTRAng_blood_trans", "JK_nk", "JK_nk_cis",
@@ -43,6 +54,7 @@ include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
 "GTEx_V4_Stomach",
 "GTEx_V4_Thyroid", "GTEx_V4_Whole_Blood",
 "GTEx_V6p_Adipose_Subcutaneous",
+
 "GTEx_V6p_Adipose_Visceral_Omentum", "GTEx_V6p_Adrenal_Gland",
 "GTEx_V6p_Artery_Aorta", "GTEx_V6p_Artery_Coronary",
 "GTEx_V6p_Artery_Tibial",
@@ -64,6 +76,7 @@ include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
 "GTEx_V6p_Liver",
 "GTEx_V6p_Lung", "GTEx_V6p_Muscle_Skeletal", "GTEx_V6p_Nerve_Tibial",
 "GTEx_V6p_Ovary", "GTEx_V6p_Pancreas", "GTEx_V6p_Pituitary",
+
 "GTEx_V6p_Prostate", "GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic",
 "GTEx_V6p_Skin_Sun_Exposed_Lower_leg",
 "GTEx_V6p_Small_Intestine_Terminal_Ileum",
@@ -75,7 +88,8 @@ include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
 "scRNAseq_eQTL_CD4",
 "scRNAseq_eQTL_CD8", "scRNAseq_eQTL_cMono", "scRNAseq_eQTL_DC",
 "scRNAseq_eQTL_Mono",
-"scRNAseq_eQTL_ncMono", "scRNAseq_eQTL_NK", "scRNAseq_eQTL_PBMC",
+"scRNAseq_eQTL_ncMono", "scRNAseq_eQTL_NK",
+"scRNAseq_eQTL_PBMC",
 "jpRNAseq_eQTL_Bcell", "jpRNAseq_eQTL_CD4", "jpRNAseq_eQTL_CD8",
 "jpRNAseq_eQTL_Mono", "jpRNAseq_eQTL_NK", "jpRNAseq_eQTL_PBMC",
 "Pi_eQTL_Bcell",
@@ -91,13 +105,13 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>NULL or an input vector containing SNPs. If NULL, all SNPs
 will be considered. If a input vector containing SNPs, SNPs should be
@@ -105,14 +119,14 @@ provided as dbSNP ID (ie starting with rs). Alternatively, they can be
 in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is
 number; for example, 'chr16:28525386'</p>
 </td></tr>
-<tr valign="top"><td><code>include.eQTL</code></td>
+<tr style="vertical-align: top;"><td><code>include.eQTL</code></td>
 <td>
 <p>genes modulated by eQTL (also Lead SNPs or in LD
 with Lead SNPs) are also included. By default, it is 'NA' to disable
 this option. Otherwise, those genes modulated by eQTL will be included.
 Pre-built eQTL datasets are detailed in the section 'Note'</p>
 </td></tr>
-<tr valign="top"><td><code>eQTL.customised</code></td>
+<tr style="vertical-align: top;"><td><code>eQTL.customised</code></td>
 <td>
 <p>a user-input matrix or data frame with 4
 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL
@@ -125,17 +139,17 @@ rs_id_dbSNP147_GRCh37p13,gene_name,pval_nominal,Tissue FROM
 GTEx_V7_pair WHERE rs_id_dbSNP147_GRCh37p13!='.';&quot; &gt;
 /var/www/bigdata/eQTL.customised.txt</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -707,8 +721,7 @@ state induced by 24-hour interferon-gamma (based on 228 individuals).
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 # a) provide the SNPs with the significance info
 data(ImmunoBase)
@@ -720,7 +733,8 @@ df_SGS &lt;- xDefineEQTL(data, include.eQTL="JKscience_TS2A",
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

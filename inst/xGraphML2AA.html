@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a pathway upon query</title>
+<!DOCTYPE html><html><head><title>R: Function to generate a graphml file from a pathway upon query</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGraphML2AA"><tr><td>xGraphML2AA</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGraphML2AA</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to generate a graphml file from a pathway upon query</h2>
 
@@ -17,8 +28,7 @@ color-coded.
 
 <h3>Usage</h3>
 
-<pre>
-xGraphML2AA(
+<pre><code class='language-R'>xGraphML2AA(
 data = NULL,
 org = c("human", "mouse"),
 query = "AA:hsa04672",
@@ -47,22 +57,22 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a data frame</p>
 </td></tr>
-<tr valign="top"><td><code>org</code></td>
+<tr style="vertical-align: top;"><td><code>org</code></td>
 <td>
 <p>a character specifying an organism. Currently supported
 organisms are 'human' and 'mouse'</p>
 </td></tr>
-<tr valign="top"><td><code>query</code></td>
+<tr style="vertical-align: top;"><td><code>query</code></td>
 <td>
 <p>the identity of a pathway in query. The full list of
 pathways can be found at
@@ -73,24 +83,24 @@ for mouse. For example, 'AA:hsa04672' for 'NOD-like receptor signaling
 pathway', where the prefix 'AA:' can be ignored. Alternatively, it can
 be key words describing the pathway</p>
 </td></tr>
-<tr valign="top"><td><code>curation</code></td>
+<tr style="vertical-align: top;"><td><code>curation</code></td>
 <td>
 <p>the type of curation. It can be one of &quot;manual&quot; (the
 manual one 'AA' followed by the semi-manual one 'AT'), &quot;automatic&quot;
 (only the automatic one) or &quot;any&quot; (first the manual one then the
 automatic one)</p>
 </td></tr>
-<tr valign="top"><td><code>node.label</code></td>
+<tr style="vertical-align: top;"><td><code>node.label</code></td>
 <td>
 <p>a character specifying which column used for node
 labelling. By default, it is 'label'</p>
 </td></tr>
-<tr valign="top"><td><code>node.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.color</code></td>
 <td>
 <p>a character specifying which column used for node
 coloring. By default, it is 'lfc'</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -104,16 +114,16 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>nlegend</code></td>
+<tr style="vertical-align: top;"><td><code>nlegend</code></td>
 <td>
 <p>the number of colors specified in the legend. By
 default, it is 11</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -121,88 +131,88 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>legend.title</code></td>
+<tr style="vertical-align: top;"><td><code>legend.title</code></td>
 <td>
 <p>the legend title. By default, it is &rdquo;</p>
 </td></tr>
-<tr valign="top"><td><code>title.thispath</code></td>
+<tr style="vertical-align: top;"><td><code>title.thispath</code></td>
 <td>
 <p>the appended title for this pathway. By default,
 it is NULL</p>
 </td></tr>
-<tr valign="top"><td><code>node.tooltip</code></td>
+<tr style="vertical-align: top;"><td><code>node.tooltip</code></td>
 <td>
 <p>a character specifying which column used for node
 tooltip. By default, it is 'tooltip'. If not found, it will be
 'Symbol-Name-Color'</p>
 </td></tr>
-<tr valign="top"><td><code>node.highlight</code></td>
+<tr style="vertical-align: top;"><td><code>node.highlight</code></td>
 <td>
 <p>a character specifying which column used for node
 highlighting. By default, it is 'fdr'. If so, those highlighted will
 have bold and larger labels</p>
 </td></tr>
-<tr valign="top"><td><code>node.highlight.cutoff</code></td>
+<tr style="vertical-align: top;"><td><code>node.highlight.cutoff</code></td>
 <td>
 <p>a numeric specifying the cutoff for node
 highlighting. By default, it is 0.05 meaninght those less than this
 cutoff will be highlighted</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color</code></td>
 <td>
 <p>a character specifying the edge colors. By default,
 it is '#00000033'</p>
 </td></tr>
-<tr valign="top"><td><code>edge.width</code></td>
+<tr style="vertical-align: top;"><td><code>edge.width</code></td>
 <td>
 <p>the edge width. By default, it is 1</p>
 </td></tr>
-<tr valign="top"><td><code>color.gene</code></td>
+<tr style="vertical-align: top;"><td><code>color.gene</code></td>
 <td>
 <p>a character specifying the gene node colors. By
 default, it is '#dddddd'</p>
 </td></tr>
-<tr valign="top"><td><code>color.thispath</code></td>
+<tr style="vertical-align: top;"><td><code>color.thispath</code></td>
 <td>
 <p>a character specifying the color for this pathway
 node. By default, it is '#dddddd'</p>
 </td></tr>
-<tr valign="top"><td><code>color.otherpath</code></td>
+<tr style="vertical-align: top;"><td><code>color.otherpath</code></td>
 <td>
 <p>a character specifying the color for other
 pathway nodes. By default, it is '#eeeeee'</p>
 </td></tr>
-<tr valign="top"><td><code>size.gene</code></td>
+<tr style="vertical-align: top;"><td><code>size.gene</code></td>
 <td>
 <p>an integer character specifying the gene label
 fontsize. By default, it is 10</p>
 </td></tr>
-<tr valign="top"><td><code>size.gene.found</code></td>
+<tr style="vertical-align: top;"><td><code>size.gene.found</code></td>
 <td>
 <p>an integer character specifying the label
 fontsize for genes found/matched. By default, it is 11</p>
 </td></tr>
-<tr valign="top"><td><code>size.gene.highlight</code></td>
+<tr style="vertical-align: top;"><td><code>size.gene.highlight</code></td>
 <td>
 <p>an integer character specifying the label
 fontsize for genes highlighted. By default, it is 12</p>
 </td></tr>
-<tr valign="top"><td><code>filename</code></td>
+<tr style="vertical-align: top;"><td><code>filename</code></td>
 <td>
 <p>the without-extension part of the name of the output
 file. By default, it is 'xGraphML2AA'</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -231,8 +241,7 @@ is not NULL, a graphml-formatted file is also output.
 
 <h3>Examples</h3>
 
-<pre>
-# Load the XGR package and specify the location of built-in data
+<pre><code class='language-R'># Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
@@ -272,7 +281,8 @@ filename='xGraphML2AA', RData.location=RData.location,
 legend.title='log2(Odds ratio)', zlim=c(-1,1))
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

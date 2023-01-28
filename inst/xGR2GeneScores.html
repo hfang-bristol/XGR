@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify likely modulated seed genes given a list...</title>
+<!DOCTYPE html><html><head><title>R: Function to identify likely modulated seed genes given a list...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGR2GeneScores"><tr><td>xGR2GeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGR2GeneScores</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to identify likely modulated seed genes given a list of genomic regions together with the significance level</h2>
 
@@ -19,8 +30,7 @@ the significance of input SNPs. It returns an object of class &quot;mSeed&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xGR2GeneScores(
+<pre><code class='language-R'>xGR2GeneScores(
 data,
 significance.threshold = 5e-05,
 score.cap = 10,
@@ -34,13 +44,13 @@ verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the sinificance level for
 genomic regions (GR). For this named vector, the element names are GR,
@@ -50,7 +60,7 @@ element values for the significance level (measured as p-value or fdr).
 Alternatively, it can be a matrix or data frame with two columns: 1st
 column for GR, 2nd column for the significance level.</p>
 </td></tr>
-<tr valign="top"><td><code>significance.threshold</code></td>
+<tr style="vertical-align: top;"><td><code>significance.threshold</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -59,37 +69,37 @@ scores. If given, those GR below this are considered significant and
 thus scored positively. Instead, those above this are considered
 insignificant and thus receive no score</p>
 </td></tr>
-<tr valign="top"><td><code>score.cap</code></td>
+<tr style="vertical-align: top;"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
 to 10. If NULL, no capping is applied</p>
 </td></tr>
-<tr valign="top"><td><code>build.conversion</code></td>
+<tr style="vertical-align: top;"><td><code>build.conversion</code></td>
 <td>
 <p>the conversion from one genome build to
 another. The conversions supported are &quot;hg38.to.hg19&quot; and
 &quot;hg18.to.hg19&quot;. By default it is NA (no need to do so)</p>
 </td></tr>
-<tr valign="top"><td><code>distance.max</code></td>
+<tr style="vertical-align: top;"><td><code>distance.max</code></td>
 <td>
 <p>the maximum distance between genes and GR. Only
 those genes no far way from this distance will be considered as seed
 genes. This parameter will influence the distance-component weights
 calculated for nearby GR per gene</p>
 </td></tr>
-<tr valign="top"><td><code>decay.kernel</code></td>
+<tr style="vertical-align: top;"><td><code>decay.kernel</code></td>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
 'rapid' for rapid decay. If no distance weight is used, please select
 'constant'</p>
 </td></tr>
-<tr valign="top"><td><code>decay.exponent</code></td>
+<tr style="vertical-align: top;"><td><code>decay.exponent</code></td>
 <td>
 <p>a numeric specifying a decay exponent. By
 default, it sets to 2</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr style="vertical-align: top;"><td><code>GR.Gene</code></td>
 <td>
 <p>the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -104,25 +114,25 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>scoring.scheme</code></td>
+<tr style="vertical-align: top;"><td><code>scoring.scheme</code></td>
 <td>
 <p>the method used to calculate seed gene scores
 under a set of GR. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for the
 maximum, and &quot;sequential&quot; for the sequential weighting. The sequential
-weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>, where
-<i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+weighting is done via: <code class="reqn">\sum_{i=1}{\frac{R_{i}}{i}}</code>, where
+<code class="reqn">R_{i}</code> is the <code class="reqn">i^{th}</code> rank (in a descreasing order)</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -172,8 +182,7 @@ window of input genomic regions.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
@@ -196,7 +205,8 @@ data &lt;- cbind(GR=GR, Sig=sig)
 mSeed &lt;- xGR2GeneScores(data=data, RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

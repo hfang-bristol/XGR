@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using different...</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise enrichment results using different...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichNetplot"><tr><td>xEnrichNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichNetplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using different network layouts</h2>
 
@@ -20,8 +31,7 @@ how many times being called significant. It returns an object of class
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichNetplot(
+<pre><code class='language-R'>xEnrichNetplot(
 eTerm,
 top_num = 10,
 displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
@@ -46,31 +56,31 @@ vertex.label.color = "blue",
 edge.arrow.size = 0.3,
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot; or an object &quot;ggplot&quot;
 (resulting from <code>xEnrichCompare</code>)</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (FDR &lt;
 0.05) will be displayed</p>
 </td></tr>
-<tr valign="top"><td><code>displayBy</code></td>
+<tr style="vertical-align: top;"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
 be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
 adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
 enrichment z-score</p>
 </td></tr>
-<tr valign="top"><td><code>path.mode</code></td>
+<tr style="vertical-align: top;"><td><code>path.mode</code></td>
 <td>
 <p>the mode of paths induced by nodes in query. It can be
 &quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
@@ -78,7 +88,7 @@ only one path to the root (for each node in query),
 &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
 node, find all shortest paths with the equal lengths)</p>
 </td></tr>
-<tr valign="top"><td><code>node.info</code></td>
+<tr style="vertical-align: top;"><td><code>node.info</code></td>
 <td>
 <p>tells the ontology term information used to label
 nodes. It can be one of &quot;none&quot; for no node labeling, &quot;term_id&quot; for
@@ -86,12 +96,12 @@ using Term ID, &quot;term_name&quot; for using Term Name, &quot;both&quot; for u
 of Term ID and Name (the first 15 characters), and &quot;full_term_name&quot; for
 using the full Term Name</p>
 </td></tr>
-<tr valign="top"><td><code>wrap.width</code></td>
+<tr style="vertical-align: top;"><td><code>wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of Term
 Name. By default, first 15 characters</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -104,11 +114,11 @@ hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -116,17 +126,17 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>colorbar</code></td>
+<tr style="vertical-align: top;"><td><code>colorbar</code></td>
 <td>
 <p>logical to indicate whether to append a colorbar. If
 pattern is null, it always sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>newpage</code></td>
+<tr style="vertical-align: top;"><td><code>newpage</code></td>
 <td>
 <p>logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page</p>
 </td></tr>
-<tr valign="top"><td><code>glayout</code></td>
+<tr style="vertical-align: top;"><td><code>glayout</code></td>
 <td>
 <p>either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this
@@ -146,23 +156,23 @@ determine the actual coordinates. This function can be one of
 these layouts can be found in
 <a href="http://igraph.org/r/doc/layout_nicely.html">http://igraph.org/r/doc/layout_nicely.html</a></p>
 </td></tr>
-<tr valign="top"><td><code>vertex.frame.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.frame.color</code></td>
 <td>
 <p>the color of the frame of the vertices. If it
 is NA, then there is no frame</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.size</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.size</code></td>
 <td>
 <p>the size of each vertex. If it is a vector, each
 vertex may differ in size</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.color</code></td>
 <td>
 <p>the fill color of the vertices. If it is NA, then
 there is no fill color. If the pattern is given, this setup will be
 ignored</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.shape</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.shape</code></td>
 <td>
 <p>the shape of each vertex. It can be one of
 &quot;circle&quot;, &quot;square&quot;, &quot;csquare&quot;, &quot;rectangle&quot;, &quot;crectangle&quot;, &quot;vrectangle&quot;,
@@ -170,32 +180,32 @@ ignored</p>
 and &quot;none&quot;. If it sets to NULL, these vertices with negative will be
 &quot;csquare&quot; and the rest &quot;circle&quot;.</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label</code></td>
 <td>
 <p>the label of the vertices. If it is NA, then there
 is no label. The default vertex labels are the name attribute of the
 nodes</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.cex</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.cex</code></td>
 <td>
 <p>the font size of vertex labels.</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.dist</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.dist</code></td>
 <td>
 <p>the distance of the label from the center of
 the vertex. If it is 0 then the label is centered on the vertex. If it
 is 1 then the label is displayed beside the vertex.</p>
 </td></tr>
-<tr valign="top"><td><code>vertex.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>vertex.label.color</code></td>
 <td>
 <p>the color of vertex labels.</p>
 </td></tr>
-<tr valign="top"><td><code>edge.arrow.size</code></td>
+<tr style="vertical-align: top;"><td><code>edge.arrow.size</code></td>
 <td>
 <p>the size of the arrows for the directed edge.
 The default value is 1.</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters. See
 <a href="http://igraph.org/r/doc/plot.common.html">http://igraph.org/r/doc/plot.common.html</a> for the complete list.</p>
@@ -225,8 +235,7 @@ called 'enrichment'
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -248,7 +257,8 @@ subg &lt;- xEnrichNetplot(eTerm, top_num="auto", displayBy="fc",
 node.info=c("none"), vertex.label=NA, wrap.width=30)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to convert an igraph into a tibble for nodes or...</title>
+<!DOCTYPE html><html><head><title>R: Function to convert an igraph into a tibble for nodes or...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xIG2TB"><tr><td>xIG2TB</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xIG2TB</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to convert an igraph into a tibble for nodes or edges</h2>
 
@@ -16,19 +27,18 @@ or edges.
 
 <h3>Usage</h3>
 
-<pre>
-xIG2TB(ig, what = c("edges", "nodes"))
-</pre>
+<pre><code class='language-R'>xIG2TB(ig, what = c("edges", "nodes"))
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>ig</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>ig</code></td>
 <td>
 <p>an &quot;igraph&quot; object</p>
 </td></tr>
-<tr valign="top"><td><code>what</code></td>
+<tr style="vertical-align: top;"><td><code>what</code></td>
 <td>
 <p>what to extract. It can be &quot;edges&quot; for edges and &quot;nodes&quot;
 for nodes</p>
@@ -56,13 +66,13 @@ for nodes</p>
 
 <h3>Examples</h3>
 
-<pre>
-set.seed(825)
+<pre><code class='language-R'>set.seed(825)
 ig &lt;- sample_pa(20)
 V(ig)$name &lt;- seq(1,vcount(ig))
 ig %&gt;% xIG2TB('edges')
 ig %&gt;% xIG2TB('nodes')
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

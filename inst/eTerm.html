@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Definition for S3 class 'eTerm'</title>
+<!DOCTYPE html><html><head><title>R: Definition for S3 class 'eTerm'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for eTerm"><tr><td>eTerm</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>eTerm</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Definition for S3 class <code>eTerm</code></h2>
 
@@ -16,8 +27,7 @@ data, background, overlap, fc, zscore, pvalue, adjp, cross.
 
 <h3>Usage</h3>
 
-<pre>
-eTerm(
+<pre><code class='language-R'>eTerm(
 term_info,
 annotation,
 g,
@@ -33,61 +43,61 @@ cross
 
 ## S3 method for class 'eTerm'
 print(x, ...)
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>term_info</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>term_info</code></td>
 <td>
 <p>a data frame</p>
 </td></tr>
-<tr valign="top"><td><code>annotation</code></td>
+<tr style="vertical-align: top;"><td><code>annotation</code></td>
 <td>
 <p>a list</p>
 </td></tr>
-<tr valign="top"><td><code>g</code></td>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an 'igraph' object</p>
 </td></tr>
-<tr valign="top"><td><code>data</code></td>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>background</code></td>
+<tr style="vertical-align: top;"><td><code>background</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>overlap</code></td>
+<tr style="vertical-align: top;"><td><code>overlap</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>fc</code></td>
+<tr style="vertical-align: top;"><td><code>fc</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>zscore</code></td>
+<tr style="vertical-align: top;"><td><code>zscore</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>pvalue</code></td>
+<tr style="vertical-align: top;"><td><code>pvalue</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>adjp</code></td>
+<tr style="vertical-align: top;"><td><code>adjp</code></td>
 <td>
 <p>a vector</p>
 </td></tr>
-<tr valign="top"><td><code>cross</code></td>
+<tr style="vertical-align: top;"><td><code>cross</code></td>
 <td>
 <p>a matrix</p>
 </td></tr>
-<tr valign="top"><td><code>x</code></td>
+<tr style="vertical-align: top;"><td><code>x</code></td>
 <td>
 <p>an object of class <code>eTerm</code></p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>other parameters</p>
 </td></tr>
@@ -102,14 +112,14 @@ print(x, ...)
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 eTerm(term_info, annotation, g, data, background, overlap, fc, zscore,
 pvalue, adjp, cross)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

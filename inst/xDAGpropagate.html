@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a subgraph of a direct acyclic graph...</title>
+<!DOCTYPE html><html><head><title>R: Function to generate a subgraph of a direct acyclic graph...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xDAGpropagate"><tr><td>xDAGpropagate</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xDAGpropagate</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to generate a subgraph of a direct acyclic graph (DAG) propagaged by the input annotation data</h2>
 
@@ -24,25 +35,24 @@ annotated to a term should also be annotated by its all ancestor terms.
 
 <h3>Usage</h3>
 
-<pre>
-xDAGpropagate(
+<pre><code class='language-R'>xDAGpropagate(
 g,
 annotation,
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 propagation = c("all", "min", "max"),
 verbose = TRUE
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot; to represent DAG</p>
 </td></tr>
-<tr valign="top"><td><code>annotation</code></td>
+<tr style="vertical-align: top;"><td><code>annotation</code></td>
 <td>
 <p>the vertices/nodes for which annotation data are
 provided. It can be a sparse Matrix of class &quot;dgCMatrix&quot; (with
@@ -52,7 +62,7 @@ three columns: 1st column for variants/genes, 2nd column for terms, and
 storing a named vactor (that is, value for the content and
 variants/genes as names)</p>
 </td></tr>
-<tr valign="top"><td><code>path.mode</code></td>
+<tr style="vertical-align: top;"><td><code>path.mode</code></td>
 <td>
 <p>the mode of paths induced by vertices/nodes with input
 annotation data. It can be &quot;all_paths&quot; for all possible paths to the
@@ -60,14 +70,14 @@ root, &quot;shortest_paths&quot; for only one path to the root (for each node in
 query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
 for each node, find all shortest paths with the equal lengths)</p>
 </td></tr>
-<tr valign="top"><td><code>propagation</code></td>
+<tr style="vertical-align: top;"><td><code>propagation</code></td>
 <td>
 <p>how to propagate the score. It can be &quot;max&quot; for
 retaining the maximum value from its children, &quot;min&quot; for retaining the
 minimum value from its children, and 'all' for retaining all from its
 children (by default)</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -107,8 +117,7 @@ subgraph.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the library
 library(XGR)
 
@@ -189,7 +198,8 @@ ls_xyz &lt;- data.frame(x=glayout[,1], y=glayout[,2], z=log10(pattern))
 xVisInterp(ls_xyz, nD="3D", contour=TRUE)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

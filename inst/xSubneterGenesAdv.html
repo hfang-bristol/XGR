@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to iteratively identify subnetworks from an input...</title>
+<!DOCTYPE html><html><head><title>R: Function to iteratively identify subnetworks from an input...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSubneterGenesAdv"><tr><td>xSubneterGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSubneterGenesAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to iteratively identify subnetworks from an input network and the signficance level imposed on its nodes</h2>
 
@@ -18,8 +29,7 @@ its nodes. It is an advanced version of the function
 
 <h3>Usage</h3>
 
-<pre>
-xSubneterGenesAdv(
+<pre><code class='language-R'>xSubneterGenesAdv(
 data,
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "STRING_low",
@@ -49,13 +59,13 @@ silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the significance level for
 nodes (gene symbols). For this named vector, the element names are gene
@@ -64,7 +74,7 @@ p-value or fdr). Alternatively, it can be a matrix or data frame with
 two columns: 1st column for gene symbols, 2nd column for the
 significance level</p>
 </td></tr>
-<tr valign="top"><td><code>network</code></td>
+<tr style="vertical-align: top;"><td><code>network</code></td>
 <td>
 <p>the built-in network. Currently two sources of network
 information are supported: the STRING database (version 10) and the
@@ -106,7 +116,7 @@ pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 for 'Human Diseases' pathways. 'REACTOME' for protein-protein
 interactions derived from Reactome pathways</p>
 </td></tr>
-<tr valign="top"><td><code>STRING.only</code></td>
+<tr style="vertical-align: top;"><td><code>STRING.only</code></td>
 <td>
 <p>the further restriction of STRING by interaction
 type. If NA, no such restriction. Otherwide, it can be one or more of
@@ -116,7 +126,7 @@ experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
 and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
 and Reactome) are used</p>
 </td></tr>
-<tr valign="top"><td><code>network.customised</code></td>
+<tr style="vertical-align: top;"><td><code>network.customised</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. By default, it
 is NULL. It is designed to allow the user analysing their customised
@@ -124,13 +134,13 @@ network data that are not listed in the above argument 'network'. This
 customisation (if provided) has the high priority over built-in
 network</p>
 </td></tr>
-<tr valign="top"><td><code>seed.genes</code></td>
+<tr style="vertical-align: top;"><td><code>seed.genes</code></td>
 <td>
 <p>logical to indicate whether the identified network is
 restricted to seed genes (ie input genes with the signficant level). By
 default, it sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>subnet.size</code></td>
+<tr style="vertical-align: top;"><td><code>subnet.size</code></td>
 <td>
 <p>the desired number of nodes constrained to the
 resulting subnet. It is not nulll, a wide range of significance
@@ -139,23 +149,23 @@ leading to the desired number of nodes in the resulting subnet.
 Notably, the given significance threshold will be overwritten by this
 option</p>
 </td></tr>
-<tr valign="top"><td><code>test.permutation</code></td>
+<tr style="vertical-align: top;"><td><code>test.permutation</code></td>
 <td>
 <p>logical to indicate whether the permutation
 test is perform to estimate the significance of identified network with
 the same number of nodes. By default, it sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>num.permutation</code></td>
+<tr style="vertical-align: top;"><td><code>num.permutation</code></td>
 <td>
 <p>the number of permutations generating the null
 distribution of the identified network</p>
 </td></tr>
-<tr valign="top"><td><code>respect</code></td>
+<tr style="vertical-align: top;"><td><code>respect</code></td>
 <td>
 <p>how to respect nodes to be sampled. It can be one of
 'none' (randomly sampling) and 'degree' (degree-preserving sampling)</p>
 </td></tr>
-<tr valign="top"><td><code>aggregateBy</code></td>
+<tr style="vertical-align: top;"><td><code>aggregateBy</code></td>
 <td>
 <p>the aggregate method used to aggregate edge
 confidence p-values. It can be either &quot;orderStatistic&quot; for the method
@@ -170,29 +180,29 @@ when the evidence is at least moderately strong; the logistic method
 provides a compromise between these two. Notably, the aggregate methods
 'Ztransform' and 'logistic' are preferred here</p>
 </td></tr>
-<tr valign="top"><td><code>num.subnets</code></td>
+<tr style="vertical-align: top;"><td><code>num.subnets</code></td>
 <td>
 <p>the number of subnets to be iteratively identified.
 If NULL, all subnets will be identified until subnet.significance is no
 less than 0.05</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>silent</code></td>
+<tr style="vertical-align: top;"><td><code>silent</code></td>
 <td>
 <p>logical to indicate whether the messages will be silent
 completely. By default, it sets to false. If true, verbose will be
 forced to be false</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -230,8 +240,7 @@ subnet.significance is no less than 0.05
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -248,7 +257,8 @@ isubg &lt;- xSubneterGenesAdv(data=data, network="STRING_high",
 subnet.size=50, RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

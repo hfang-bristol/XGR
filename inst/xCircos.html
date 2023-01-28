@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise a network as a circos plot</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise a network as a circos plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xCircos"><tr><td>xCircos</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xCircos</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise a network as a circos plot</h2>
 
@@ -19,8 +30,7 @@ involving an input SNP (or gene).
 
 <h3>Usage</h3>
 
-<pre>
-xCircos(
+<pre><code class='language-R'>xCircos(
 g,
 entity = c("SNP", "Gene", "Both"),
 top_num = 50,
@@ -40,28 +50,28 @@ verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. For example, it stores semantic
 similarity results with nodes for genes/SNPs and edges for pair-wise
 semantic similarity between them</p>
 </td></tr>
-<tr valign="top"><td><code>entity</code></td>
+<tr style="vertical-align: top;"><td><code>entity</code></td>
 <td>
 <p>the entity of similarity analysis for which results are
 being plotted. It can be either &quot;SNP&quot; or &quot;Gene&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the top number of similarity edges to be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -74,50 +84,50 @@ default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
 &quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
 found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>rescale</code></td>
+<tr style="vertical-align: top;"><td><code>rescale</code></td>
 <td>
 <p>logical to indicate whether the edge values are rescaled
 to the range [0,1]. By default, it sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>nodes.query</code></td>
+<tr style="vertical-align: top;"><td><code>nodes.query</code></td>
 <td>
 <p>nodes in query for which edges attached to them will
 be displayed. By default, it sets to NULL meaning no such restriction</p>
 </td></tr>
-<tr valign="top"><td><code>ideogram</code></td>
+<tr style="vertical-align: top;"><td><code>ideogram</code></td>
 <td>
 <p>logical to indicate whether chromosome banding is
 plotted</p>
 </td></tr>
-<tr valign="top"><td><code>chr.exclude</code></td>
+<tr style="vertical-align: top;"><td><code>chr.exclude</code></td>
 <td>
 <p>a character vector of chromosomes to exclude from
 the plot, e.g. c(&quot;chrX&quot;, &quot;chrY&quot;). By defautl, it is 'auto' meaning
 those chromosomes without data will be excluded. If NULL, no chromosome
 is excluded</p>
 </td></tr>
-<tr valign="top"><td><code>entity.label.cex</code></td>
+<tr style="vertical-align: top;"><td><code>entity.label.cex</code></td>
 <td>
 <p>the font size of genes/SNPs labels. Default is
 0.8</p>
 </td></tr>
-<tr valign="top"><td><code>entity.label.side</code></td>
+<tr style="vertical-align: top;"><td><code>entity.label.side</code></td>
 <td>
 <p>the position of genes/SNPs labels relative to
 chromosome ideogram. It can be &quot;out&quot; (by default) or &quot;in&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>entity.label.track</code></td>
+<tr style="vertical-align: top;"><td><code>entity.label.track</code></td>
 <td>
 <p>an integer specifying the plot track for
 genes/SNPs labels. Default is 1</p>
 </td></tr>
-<tr valign="top"><td><code>entity.label.query</code></td>
+<tr style="vertical-align: top;"><td><code>entity.label.query</code></td>
 <td>
 <p>which genes/SNPs in query will be labelled.
 By default, it sets to NULL meaning all will be displayed. If labels in
 query can not be found, then all will be displayed</p>
 </td></tr>
-<tr valign="top"><td><code>GR.SNP</code></td>
+<tr style="vertical-align: top;"><td><code>GR.SNP</code></td>
 <td>
 <p>the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
@@ -131,7 +141,7 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr style="vertical-align: top;"><td><code>GR.Gene</code></td>
 <td>
 <p>the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -146,17 +156,17 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -185,8 +195,7 @@ the colour of the links
 
 <h3>Examples</h3>
 
-<pre>
-RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
+<pre><code class='language-R'>RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 library(RCircos)
 
@@ -239,7 +248,8 @@ entity.label.side="out", RData.location=RData.location)
 #dev.off()
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity given a...</title>
+<!DOCTYPE html><html><head><title>R: Function to calculate pair-wise semantic similarity given a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSocialiserSNPs"><tr><td>xSocialiserSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSocialiserSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to calculate pair-wise semantic similarity given a list of SNPs and the ontology in query</h2>
 
@@ -23,8 +34,7 @@ semantic similarity. Parallel computing is also supported.
 
 <h3>Usage</h3>
 
-<pre>
-xSocialiserSNPs(
+<pre><code class='language-R'>xSocialiserSNPs(
 data,
 ontology = c("EF", "EF_disease", "EF_phenotype", "EF_bp"),
 include.LD = NA,
@@ -42,17 +52,17 @@ verbose = T,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>an input vector. It contains a list of SNPs of interest</p>
 </td></tr>
-<tr valign="top"><td><code>ontology</code></td>
+<tr style="vertical-align: top;"><td><code>ontology</code></td>
 <td>
 <p>the ontology supported currently. Now it is only &quot;EF&quot;
 for Experimental Factor Ontology (used to annotate GWAS Catalog SNPs).
@@ -62,7 +72,7 @@ However, there are several subparts of this ontology to choose:
 (EFO:0000651), 'EF_bp' for the subpart under the term 'biological
 process' (GO:0008150)</p>
 </td></tr>
-<tr valign="top"><td><code>include.LD</code></td>
+<tr style="vertical-align: top;"><td><code>include.LD</code></td>
 <td>
 <p>additional SNPs in LD with input SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD
@@ -75,13 +85,13 @@ population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, 
 &quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
 <a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
 </td></tr>
-<tr valign="top"><td><code>LD.r2</code></td>
+<tr style="vertical-align: top;"><td><code>LD.r2</code></td>
 <td>
 <p>the LD r2 value. By default, it is 0.8, meaning that SNPs
 in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
 be any value from 0.8 to 1</p>
 </td></tr>
-<tr valign="top"><td><code>measure</code></td>
+<tr style="vertical-align: top;"><td><code>measure</code></td>
 <td>
 <p>the measure used to derive semantic similarity between
 genes/SNPs from semantic similarity between terms. Take the semantic
@@ -102,7 +112,7 @@ similarity between SNPs, &quot;BM.average&quot; and &quot;BM.max&quot; are sensi
 number of terms involved; instead, &quot;BM.complete&quot; is much robust in this
 aspect. By default, it uses &quot;BM.average&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>method.term</code></td>
+<tr style="vertical-align: top;"><td><code>method.term</code></td>
 <td>
 <p>the method used to measure semantic similarity
 between terms. It can be &quot;Resnik&quot; for information content (IC) of most
@@ -118,12 +128,12 @@ graph information content similarity related to Tanimoto-Jacard index
 information content of all ancestors of term1 and term2 (see
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>))</p>
 </td></tr>
-<tr valign="top"><td><code>rescale</code></td>
+<tr style="vertical-align: top;"><td><code>rescale</code></td>
 <td>
 <p>logical to indicate whether the resulting values are
 rescaled to the range [0,1]. By default, it sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>force</code></td>
+<tr style="vertical-align: top;"><td><code>force</code></td>
 <td>
 <p>logical to indicate whether the only most specific terms
 (for each SNP) will be used. By default, it sets to true. It is always
@@ -131,28 +141,28 @@ advisable to use this since it is computationally fast but without
 compromising accuracy (considering the fact that true-path-rule has
 been applied when running <code>xDAGanno</code>)</p>
 </td></tr>
-<tr valign="top"><td><code>fast</code></td>
+<tr style="vertical-align: top;"><td><code>fast</code></td>
 <td>
 <p>logical to indicate whether a vectorised fast computation
 is used. By default, it sets to true. It is always advisable to use
 this vectorised fast computation; since the conventional computation is
 just used for understanding scripts</p>
 </td></tr>
-<tr valign="top"><td><code>parallel</code></td>
+<tr style="vertical-align: top;"><td><code>parallel</code></td>
 <td>
 <p>logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
 does so. It will depend on whether these two packages &quot;foreach&quot; and
 &quot;doParallel&quot; have been installed</p>
 </td></tr>
-<tr valign="top"><td><code>multicores</code></td>
+<tr style="vertical-align: top;"><td><code>multicores</code></td>
 <td>
 <p>an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.
 If NULL, it will use a half of cores available in a user's computer.
 This option only works when parallel computation is enabled</p>
 </td></tr>
-<tr valign="top"><td><code>path.mode</code></td>
+<tr style="vertical-align: top;"><td><code>path.mode</code></td>
 <td>
 <p>the mode of paths induced by vertices/nodes with input
 annotation data. It can be &quot;all_paths&quot; for all possible paths to the
@@ -160,23 +170,23 @@ root, &quot;shortest_paths&quot; for only one path to the root (for each node in
 query), &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e.
 for each node, find all shortest paths with the equal lengths)</p>
 </td></tr>
-<tr valign="top"><td><code>true.path.rule</code></td>
+<tr style="vertical-align: top;"><td><code>true.path.rule</code></td>
 <td>
 <p>logical to indicate whether the true-path rule
 should be applied to propagate annotations. By default, it sets to
 true</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -210,8 +220,7 @@ subgraph.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -245,7 +254,8 @@ xVisNet(g=sim, vertex.shape="sphere", edge.width=edge.width,
 edge.label=x, edge.label.cex=0.7)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

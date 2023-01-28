@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to define a colormap</title>
+<!DOCTYPE html><html><head><title>R: Function to define a colormap</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xColormap"><tr><td>xColormap</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xColormap</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to define a colormap</h2>
 
@@ -17,8 +28,7 @@ colors interpolate the given colormap.
 
 <h3>Usage</h3>
 
-<pre>
-xColormap(
+<pre><code class='language-R'>xColormap(
 colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr", "rainbow", "wb",
 "heat",
 "terrain", "topo", "cm", "ggplot2", "jet.top", "jet.bottom",
@@ -31,8 +41,8 @@ colormap = c("bwr", "jet", "gbr", "wyr", "br", "yr", "rainbow", "wb",
 "brewer.BuGn",
 "brewer.BuPu", "brewer.GnBu", "brewer.Greens", "brewer.Greys",
 "brewer.Oranges",
-"brewer.OrRd", "brewer.PuBu", "brewer.PuBuGn", "brewer.PuRd",
-"brewer.Purples",
+"brewer.OrRd", "brewer.PuBu", "brewer.PuBuGn",
+"brewer.PuRd", "brewer.Purples",
 "brewer.RdPu", "brewer.Reds", "brewer.YlGn", "brewer.YlGnBu",
 "brewer.YlOrBr",
 "brewer.YlOrRd", "rainbow_hcl", "heat_hcl", "terrain_hcl",
@@ -44,13 +54,13 @@ interpolate = c("spline", "linear"),
 data = NULL,
 zlim = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>colormap</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -69,15 +79,15 @@ defaults (&quot;rainbow_hcl&quot;,&quot;heat_hcl&quot;,&quot;terrain_hcl&quot;,&
 other useful ones
 (&quot;hcl_br&quot;,&quot;hcl_bp&quot;,&quot;hcl_bb&quot;,&quot;hcl_gp&quot;,&quot;hcl_go&quot;,&quot;hcl_cp&quot;,&quot;hcl_cy&quot;,&quot;hcl_co&quot;)</p>
 </td></tr>
-<tr valign="top"><td><code>interpolate</code></td>
+<tr style="vertical-align: top;"><td><code>interpolate</code></td>
 <td>
 <p>use spline or linear interpolation</p>
 </td></tr>
-<tr valign="top"><td><code>data</code></td>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>NULL or a numeric vector</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -152,8 +162,7 @@ A list of standard color names can be found in
 
 <h3>Examples</h3>
 
-<pre>
-# 1) define "blue-white-red" colormap
+<pre><code class='language-R'># 1) define "blue-white-red" colormap
 palette.name &lt;- xColormap(colormap="bwr")
 # use the return function "palette.name" to generate 10 colors spanning "bwr"
 palette.name(10)
@@ -170,7 +179,8 @@ palette.name(3)
 
 # 4) return mapped colors
 xColormap(colormap="RdYlBu", data=runif(5))
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

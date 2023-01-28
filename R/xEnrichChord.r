@@ -106,8 +106,18 @@ xEnrichChord <- function(eTerm, top_num=5, FDR.cutoff=0.05, colormap.group="ggpl
 
 	## define order in Chord graph (the left half for group, the right half for ontology)
 	name <- n <- ontology <- zscore <- group <- NULL
-	df <- as.data.frame(df %>% dplyr::group_by(name) %>% dplyr::group_by(n=n(),add=T) %>% dplyr::arrange(ontology, n,zscore))
-	order <- c(sort(unique(df$group)), unique(df$name))
+	df <- as.data.frame(df %>% dplyr::group_by(name) %>% dplyr::group_by(n=n(),add=T) %>% dplyr::arrange(ontology, n, zscore))
+	
+	if(1){
+		order <- c(sort(unique(df$group)), unique(df$name))
+	}else{
+		df1 <- df %>% dplyr::count(group) %>% dplyr::arrange(-n)
+		df2 <- df %>% dplyr::count(ontology,name) %>% dplyr::arrange(ontology,-n)
+		order <- c(df1$group, df2$name)
+		
+		df$group <- factor(df$group, levels=df1$group)
+		df$name <- factor(df$name, levels=df2$name)
+	}
 
 	#######################################
 	# how to deal with colormap.ontology when NULL

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a minimum spanning tree for subnetworks</title>
+<!DOCTYPE html><html><head><title>R: Function to identify a minimum spanning tree for subnetworks</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSubneterGenesMST"><tr><td>xSubneterGenesMST</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSubneterGenesMST</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to identify a minimum spanning tree for subnetworks</h2>
 
@@ -16,21 +27,20 @@ tree for subnetworks. It returns an object of class &quot;igraph&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xSubneterGenesMST(isubg, metric = c("hybrid", "max", "jaccard"),
+<pre><code class='language-R'>xSubneterGenesMST(isubg, metric = c("hybrid", "max", "jaccard"),
 verbose = T)
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>isubg</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>isubg</code></td>
 <td>
 <p>an &quot;iSubg&quot; object resulting from
 <code>xSubneterGenesAdv</code></p>
 </td></tr>
-<tr valign="top"><td><code>metric</code></td>
+<tr style="vertical-align: top;"><td><code>metric</code></td>
 <td>
 <p>the distance metric for subnetworks. It can be either
 &quot;max&quot; for the maximum distance between any two nodes (one from a
@@ -39,7 +49,7 @@ network, or &quot;jaccard&quot; for jaccard distance between two subnetworks
 (nodes overlapped), or &quot;hybrid&quot; (that is, &quot;max&quot; multiplied by
 &quot;jaccard&quot;)</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -64,8 +74,7 @@ attributes ('summary', 'detail' and 'matrix'), and node attributes
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -92,7 +101,8 @@ edge.size='weight_scaled', node.size='num_edges', node.size.title="Num
 of \nedges", node.size.range=c(1,4))
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

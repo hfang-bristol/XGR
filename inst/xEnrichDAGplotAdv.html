@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise comparative enrichment results using a...</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise comparative enrichment results using a...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichDAGplotAdv"><tr><td>xEnrichDAGplotAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichDAGplotAdv</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise comparative enrichment results using a direct acyclic graph (DAG)</h2>
 
@@ -23,8 +34,7 @@ takes input an 'ggplot' object (with two componets alreadly appended
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichDAGplotAdv(
+<pre><code class='language-R'>xEnrichDAGplotAdv(
 ggplot,
 displayBy = c("nSig", "none"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
@@ -32,8 +42,8 @@ height = 7,
 width = 7,
 margin = rep(0.1, 4),
 colormap = c("white-lightcyan-cyan", "yr", "bwr", "jet", "gbr", "wyr",
-"br",
-"rainbow", "wb", "lightyellow-orange"),
+"br", "rainbow",
+"wb", "lightyellow-orange"),
 ncolors = 40,
 zlim = NULL,
 colorbar = T,
@@ -47,24 +57,24 @@ graph.node.attrs = NULL,
 graph.edge.attrs = NULL,
 node.attrs = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>ggplot</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>ggplot</code></td>
 <td>
 <p>an object &quot;ggplot&quot; (resulting from
 <code>xEnrichCompare</code>)</p>
 </td></tr>
-<tr valign="top"><td><code>displayBy</code></td>
+<tr style="vertical-align: top;"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
 be &quot;nSig&quot; for how many times being called significant (by default),
 &quot;none&quot; for no color-coding on nodes/terms</p>
 </td></tr>
-<tr valign="top"><td><code>path.mode</code></td>
+<tr style="vertical-align: top;"><td><code>path.mode</code></td>
 <td>
 <p>the mode of paths induced by nodes in query. It can be
 &quot;all_paths&quot; for all possible paths to the root, &quot;shortest_paths&quot; for
@@ -72,19 +82,19 @@ only one path to the root (for each node in query),
 &quot;all_shortest_paths&quot; for all shortest paths to the root (i.e. for each
 node, find all shortest paths with the equal lengths)</p>
 </td></tr>
-<tr valign="top"><td><code>height</code></td>
+<tr style="vertical-align: top;"><td><code>height</code></td>
 <td>
 <p>a numeric value specifying the height of device</p>
 </td></tr>
-<tr valign="top"><td><code>width</code></td>
+<tr style="vertical-align: top;"><td><code>width</code></td>
 <td>
 <p>a numeric value specifying the width of device</p>
 </td></tr>
-<tr valign="top"><td><code>margin</code></td>
+<tr style="vertical-align: top;"><td><code>margin</code></td>
 <td>
 <p>margins as units of length 4 or 1</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -97,11 +107,11 @@ default), &quot;blue-black-yellow&quot;, &quot;royalblue-white-sandybrown&quot;,
 &quot;darkgreen-white-darkviolet&quot;. A list of standard color names can be
 found in <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/data values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -109,52 +119,52 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>colorbar</code></td>
+<tr style="vertical-align: top;"><td><code>colorbar</code></td>
 <td>
 <p>logical to indicate whether to append a colorbar. If
 data is null, it always sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>colorbar.fraction</code></td>
+<tr style="vertical-align: top;"><td><code>colorbar.fraction</code></td>
 <td>
 <p>the relative fraction of colorbar block
 against the device size</p>
 </td></tr>
-<tr valign="top"><td><code>newpage</code></td>
+<tr style="vertical-align: top;"><td><code>newpage</code></td>
 <td>
 <p>logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page</p>
 </td></tr>
-<tr valign="top"><td><code>layout.orientation</code></td>
+<tr style="vertical-align: top;"><td><code>layout.orientation</code></td>
 <td>
 <p>the orientation of the DAG layout. It can be
 one of &quot;left_right&quot; for the left-right layout (viewed from the DAG root
 point), &quot;top_bottom&quot; for the top-bottom layout, &quot;bottom_top&quot; for the
 bottom-top layout, and &quot;right_left&quot; for the right-left layout</p>
 </td></tr>
-<tr valign="top"><td><code>node.info</code></td>
+<tr style="vertical-align: top;"><td><code>node.info</code></td>
 <td>
 <p>tells the ontology term information used to label
 nodes. It can be &quot;term_id&quot; for using Term ID, &quot;term_name&quot; for using
 Term Name, 'none' for no labellings</p>
 </td></tr>
-<tr valign="top"><td><code>wrap.width</code></td>
+<tr style="vertical-align: top;"><td><code>wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of Term
 Name</p>
 </td></tr>
-<tr valign="top"><td><code>graph.node.attrs</code></td>
+<tr style="vertical-align: top;"><td><code>graph.node.attrs</code></td>
 <td>
 <p>a list of global node attributes. These node
 attributes will be changed globally. See 'Note' below for details on
 the attributes</p>
 </td></tr>
-<tr valign="top"><td><code>graph.edge.attrs</code></td>
+<tr style="vertical-align: top;"><td><code>graph.edge.attrs</code></td>
 <td>
 <p>a list of global edge attributes. These edge
 attributes will be changed globally. See 'Note' below for details on
 the attributes</p>
 </td></tr>
-<tr valign="top"><td><code>node.attrs</code></td>
+<tr style="vertical-align: top;"><td><code>node.attrs</code></td>
 <td>
 <p>a list of local edge attributes. These node
 attributes will be changed locally; as such, for each attribute, the
@@ -279,8 +289,7 @@ node: 0.75 by default
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -324,7 +333,8 @@ print(bp)
 xEnrichDAGplotAdv(bp, graph.node.attrs=list(fontsize=100))
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to generate a graphml file from a graph object of...</title>
+<!DOCTYPE html><html><head><title>R: Function to generate a graphml file from a graph object of...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGraphML"><tr><td>xGraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGraphML</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to generate a graphml file from a graph object of class &quot;igraph&quot;</h2>
 
@@ -16,8 +27,7 @@ object of class &quot;igraph&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xGraphML(
+<pre><code class='language-R'>xGraphML(
 g,
 node.label = NULL,
 label.wrap.width = NULL,
@@ -42,68 +52,68 @@ edge.width = 1,
 filename = "xGraphML",
 verbose = T
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>node.label</code></td>
+<tr style="vertical-align: top;"><td><code>node.label</code></td>
 <td>
 <p>either a vector labelling nodes or a character
 specifying which node attribute used for the labelling. If NULL (by
 default), no node labelling. If provided as a vector, a node with 'NA'
 will be not labelled</p>
 </td></tr>
-<tr valign="top"><td><code>label.wrap.width</code></td>
+<tr style="vertical-align: top;"><td><code>label.wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of
 name</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.size</code></td>
 <td>
 <p>the node label size</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.color</code></td>
 <td>
 <p>the node label color</p>
 </td></tr>
-<tr valign="top"><td><code>node.tooltip</code></td>
+<tr style="vertical-align: top;"><td><code>node.tooltip</code></td>
 <td>
 <p>either a vector used for node tooltips or a
 character specifying which node attribute used for the tooltips. If
 NULL (by default), node attribute 'name' will be used node lab</p>
 </td></tr>
-<tr valign="top"><td><code>node.link</code></td>
+<tr style="vertical-align: top;"><td><code>node.link</code></td>
 <td>
 <p>either a vector used for node link or a character
 specifying which node attribute used for the link</p>
 </td></tr>
-<tr valign="top"><td><code>node.xcoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.xcoord</code></td>
 <td>
 <p>a vector specifying x coordinates. If NULL, it will
 be created using igraph::layout_with_kk</p>
 </td></tr>
-<tr valign="top"><td><code>node.ycoord</code></td>
+<tr style="vertical-align: top;"><td><code>node.ycoord</code></td>
 <td>
 <p>a vector specifying y coordinates. If NULL, it will
 be created using igraph::layout_with_kk</p>
 </td></tr>
-<tr valign="top"><td><code>node.color.na</code></td>
+<tr style="vertical-align: top;"><td><code>node.color.na</code></td>
 <td>
 <p>the color for nodes with NA. By default, it is
 '#dddddd'</p>
 </td></tr>
-<tr valign="top"><td><code>node.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.color</code></td>
 <td>
 <p>a character specifying which node attribute used for
 node coloring. If NULL (by default), it is '#BFFFBF'</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
 (jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
@@ -117,25 +127,25 @@ names, e.g. &quot;lightyellow-orange&quot; (by default), &quot;blue-black-yellow
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
 </td></tr>
-<tr valign="top"><td><code>ncolors</code></td>
+<tr style="vertical-align: top;"><td><code>ncolors</code></td>
 <td>
 <p>the number of colors specified over the colormap</p>
 </td></tr>
-<tr valign="top"><td><code>nlegend</code></td>
+<tr style="vertical-align: top;"><td><code>nlegend</code></td>
 <td>
 <p>the number of colors specified in the legend. By
 default, it is 11</p>
 </td></tr>
-<tr valign="top"><td><code>legend.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>legend.label.size</code></td>
 <td>
 <p>the legend label size. By default, it is 10</p>
 </td></tr>
-<tr valign="top"><td><code>legend.interval</code></td>
+<tr style="vertical-align: top;"><td><code>legend.interval</code></td>
 <td>
 <p>the interval between legends. By default, it is
 0.05</p>
 </td></tr>
-<tr valign="top"><td><code>zlim</code></td>
+<tr style="vertical-align: top;"><td><code>zlim</code></td>
 <td>
 <p>the minimum and maximum z/patttern values for which colors
 should be plotted, defaulting to the range of the finite values of z.
@@ -143,32 +153,32 @@ Each of the given colors will be used to color an equispaced interval
 of this range. The midpoints of the intervals cover the range, so that
 values just outside the range will be plotted</p>
 </td></tr>
-<tr valign="top"><td><code>node.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.size</code></td>
 <td>
 <p>either a vector specifying node size or a character
 specifying which node attribute used for the node size. If NULL (by
 default), it will be 30</p>
 </td></tr>
-<tr valign="top"><td><code>node.coord.scale</code></td>
+<tr style="vertical-align: top;"><td><code>node.coord.scale</code></td>
 <td>
 <p>the node coord (-1,1) subjected to be rescaled.
 By default, it is 300</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color</code></td>
 <td>
 <p>a character specifying the edge colors. By default,
 it is #00000033</p>
 </td></tr>
-<tr valign="top"><td><code>edge.width</code></td>
+<tr style="vertical-align: top;"><td><code>edge.width</code></td>
 <td>
 <p>the edge width. By default, it is 1</p>
 </td></tr>
-<tr valign="top"><td><code>filename</code></td>
+<tr style="vertical-align: top;"><td><code>filename</code></td>
 <td>
 <p>the without-extension part of the name of the output
 file. By default, it is 'xGraphML'</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -197,8 +207,7 @@ is not NULL, a graphml-formatted file is also output.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the library
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -242,7 +251,8 @@ colormap="grey-orange-darkred", node.link="node.link", nlegend=11,
 node.size=30, node.coord.scale=300)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

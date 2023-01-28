@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to identify a gene network from an input network...</title>
+<!DOCTYPE html><html><head><title>R: Function to identify a gene network from an input network...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xSubneterSNPs"><tr><td>xSubneterSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xSubneterSNPs</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to identify a gene network from an input network given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)</h2>
 
@@ -19,8 +30,7 @@ significance of input SNPs. It returns an object of class &quot;igraph&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xSubneterSNPs(
+<pre><code class='language-R'>xSubneterSNPs(
 data,
 include.LD = NA,
 LD.customised = NULL,
@@ -62,13 +72,13 @@ silent = F,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata",
 guid = NULL
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>data</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
 <td>
 <p>a named input vector containing the sinificance level for
 nodes (dbSNP). For this named vector, the element names are dbSNP ID
@@ -77,7 +87,7 @@ significance level (measured as p-value or fdr). Alternatively, it can
 be a matrix or data frame with two columns: 1st column for dbSNP, 2nd
 column for the significance level</p>
 </td></tr>
-<tr valign="top"><td><code>include.LD</code></td>
+<tr style="vertical-align: top;"><td><code>include.LD</code></td>
 <td>
 <p>additional SNPs in LD with Lead SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD
@@ -90,7 +100,7 @@ population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, 
 &quot;TSI&quot;, &quot;YRI&quot;). Explanations for population code can be found at
 <a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study">http://www.1000genomes.org/faq/which-populations-are-part-your-study</a></p>
 </td></tr>
-<tr valign="top"><td><code>LD.customised</code></td>
+<tr style="vertical-align: top;"><td><code>LD.customised</code></td>
 <td>
 <p>a user-input matrix or data frame with 3 columns:
 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2
@@ -98,13 +108,13 @@ value. It is designed to allow the user analysing their precalcuated LD
 info. This customisation (if provided) has the high priority over
 built-in LD SNPs</p>
 </td></tr>
-<tr valign="top"><td><code>LD.r2</code></td>
+<tr style="vertical-align: top;"><td><code>LD.r2</code></td>
 <td>
 <p>the LD r2 value. By default, it is 0.8, meaning that SNPs
 in LD (r2&gt;=0.8) with input SNPs will be considered as LD SNPs. It can
 be any value from 0.8 to 1</p>
 </td></tr>
-<tr valign="top"><td><code>significance.threshold</code></td>
+<tr style="vertical-align: top;"><td><code>significance.threshold</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on the
@@ -113,31 +123,31 @@ into scores. If given, those SNPs below this are considered significant
 and thus scored positively. Instead, those above this are considered
 insigificant and thus receive no score</p>
 </td></tr>
-<tr valign="top"><td><code>score.cap</code></td>
+<tr style="vertical-align: top;"><td><code>score.cap</code></td>
 <td>
 <p>the maximum score being capped. By default, it is set
 to 10. If NULL, no capping is applied</p>
 </td></tr>
-<tr valign="top"><td><code>distance.max</code></td>
+<tr style="vertical-align: top;"><td><code>distance.max</code></td>
 <td>
 <p>the maximum distance between genes and SNPs. Only
 those genes no far way from this distance will be considered as seed
 genes. This parameter will influence the distance-component weights
 calculated for nearby SNPs per gene</p>
 </td></tr>
-<tr valign="top"><td><code>decay.kernel</code></td>
+<tr style="vertical-align: top;"><td><code>decay.kernel</code></td>
 <td>
 <p>a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
 'rapid' for rapid decay. If no distance weight is used, please select
 'constant'</p>
 </td></tr>
-<tr valign="top"><td><code>decay.exponent</code></td>
+<tr style="vertical-align: top;"><td><code>decay.exponent</code></td>
 <td>
 <p>an integer specifying a decay exponent. By
 default, it sets to 2</p>
 </td></tr>
-<tr valign="top"><td><code>GR.SNP</code></td>
+<tr style="vertical-align: top;"><td><code>GR.SNP</code></td>
 <td>
 <p>the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS
@@ -151,7 +161,7 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>GR.Gene</code></td>
+<tr style="vertical-align: top;"><td><code>GR.Gene</code></td>
 <td>
 <p>the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -166,15 +176,15 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
-<tr valign="top"><td><code>scoring.scheme</code></td>
+<tr style="vertical-align: top;"><td><code>scoring.scheme</code></td>
 <td>
 <p>the method used to calculate seed gene scores
 under a set of SNPs. It can be one of &quot;sum&quot; for adding up, &quot;max&quot; for
 the maximum, and &quot;sequential&quot; for the sequential weighting. The
-sequential weighting is done via: <i>&sum;_{i=1}{\frac{R_{i}}{i}}</i>,
-where <i>R_{i}</i> is the <i>i^{th}</i> rank (in a descreasing order)</p>
+sequential weighting is done via: <code class="reqn">\sum_{i=1}{\frac{R_{i}}{i}}</code>,
+where <code class="reqn">R_{i}</code> is the <code class="reqn">i^{th}</code> rank (in a descreasing order)</p>
 </td></tr>
-<tr valign="top"><td><code>network</code></td>
+<tr style="vertical-align: top;"><td><code>network</code></td>
 <td>
 <p>the built-in network. Currently two sources of network
 information are supported: the STRING database (version 10) and the
@@ -216,7 +226,7 @@ pathways, 'KEGG_cellular' for 'Cellular Processes' pathways,
 for 'Human Diseases' pathways. 'REACTOME' for protein-protein
 interactions derived from Reactome pathways</p>
 </td></tr>
-<tr valign="top"><td><code>STRING.only</code></td>
+<tr style="vertical-align: top;"><td><code>STRING.only</code></td>
 <td>
 <p>the further restriction of STRING by interaction
 type. If NA, no such restriction. Otherwide, it can be one or more of
@@ -226,7 +236,7 @@ experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT,
 and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG,
 and Reactome) are used</p>
 </td></tr>
-<tr valign="top"><td><code>network.customised</code></td>
+<tr style="vertical-align: top;"><td><code>network.customised</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. By default, it
 is NULL. It is designed to allow the user analysing their customised
@@ -234,14 +244,14 @@ network data that are not listed in the above argument 'network'. This
 customisation (if provided) has the high priority over built-in
 network</p>
 </td></tr>
-<tr valign="top"><td><code>seed.genes</code></td>
+<tr style="vertical-align: top;"><td><code>seed.genes</code></td>
 <td>
 <p>logical to indicate whether the identified network is
 restricted to seed genes (ie nearby genes that are located within
 defined distance window centred on lead or LD SNPs). By default, it
 sets to true</p>
 </td></tr>
-<tr valign="top"><td><code>subnet.significance</code></td>
+<tr style="vertical-align: top;"><td><code>subnet.significance</code></td>
 <td>
 <p>the given significance threshold. By
 default, it is set to NULL, meaning there is no constraint on
@@ -250,7 +260,7 @@ considered significant and thus scored positively. Instead, those
 p-values above this given significance threshold are considered
 insigificant and thus scored negatively</p>
 </td></tr>
-<tr valign="top"><td><code>subnet.size</code></td>
+<tr style="vertical-align: top;"><td><code>subnet.size</code></td>
 <td>
 <p>the desired number of nodes constrained to the
 resulting subnet. It is not nulll, a wide range of significance
@@ -259,23 +269,23 @@ leading to the desired number of nodes in the resulting subnet.
 Notably, the given significance threshold will be overwritten by this
 option</p>
 </td></tr>
-<tr valign="top"><td><code>test.permutation</code></td>
+<tr style="vertical-align: top;"><td><code>test.permutation</code></td>
 <td>
 <p>logical to indicate whether the permutation
 test is perform to estimate the significance of identified network with
 the same number of nodes. By default, it sets to false</p>
 </td></tr>
-<tr valign="top"><td><code>num.permutation</code></td>
+<tr style="vertical-align: top;"><td><code>num.permutation</code></td>
 <td>
 <p>the number of permutations generating the null
 distribution of the identified network</p>
 </td></tr>
-<tr valign="top"><td><code>respect</code></td>
+<tr style="vertical-align: top;"><td><code>respect</code></td>
 <td>
 <p>how to respect nodes to be sampled. It can be one of
 'none' (randomly sampling) and 'degree' (degree-preserving sampling)</p>
 </td></tr>
-<tr valign="top"><td><code>aggregateBy</code></td>
+<tr style="vertical-align: top;"><td><code>aggregateBy</code></td>
 <td>
 <p>the aggregate method used to aggregate edge
 confidence p-values. It can be either &quot;orderStatistic&quot; for the method
@@ -290,29 +300,29 @@ when the evidence is at least moderately strong; the logistic method
 provides a compromise between these two. Notably, the aggregate methods
 'Ztransform' and 'logistic' are preferred here</p>
 </td></tr>
-<tr valign="top"><td><code>num.subnets</code></td>
+<tr style="vertical-align: top;"><td><code>num.subnets</code></td>
 <td>
 <p>the number of subnets to be iteratively identified.
 If NA, this functionality is disabled. If NULL, all subnets will be
 identified until subnet.significance is no less than 0.05</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
-<tr valign="top"><td><code>silent</code></td>
+<tr style="vertical-align: top;"><td><code>silent</code></td>
 <td>
 <p>logical to indicate whether the messages will be silent
 completely. By default, it sets to false. If true, verbose will be
 forced to be false</p>
 </td></tr>
-<tr valign="top"><td><code>RData.location</code></td>
+<tr style="vertical-align: top;"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>guid</code></td>
+<tr style="vertical-align: top;"><td><code>guid</code></td>
 <td>
 <p>a valid (5-character) Global Unique IDentifier for an OSF
 project. See <code>xRDataLoader</code> for details</p>
@@ -352,8 +362,7 @@ using <code>xSubneterGenesAdv</code> when num.subnets is not NA.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -396,7 +405,8 @@ xCircos(g=subnet, entity="Gene", colormap="white-gray",
 RData.location=RData.location)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

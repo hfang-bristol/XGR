@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a D3 plot</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise enrichment results using a D3 plot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichD3"><tr><td>xEnrichD3</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichD3</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using a D3 plot</h2>
 
@@ -16,8 +27,7 @@ plot. It returns an object of class &quot;htmlwidget&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichD3(
+<pre><code class='language-R'>xEnrichD3(
 eTerm,
 top_num = 10,
 FDR.cutoff = 0.05,
@@ -26,45 +36,45 @@ colormap = "ggplot2",
 filename = "xEnrichD3",
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot; or &quot;ls_eTerm&quot;. Alterntively, it
 can be a data frame having all these columns (named as
 'group','ontology','name','adjp','zscore')</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to adjp).
 For the eTerm object, if it is 'auto' (for eTerm), only the significant
 terms (see below FDR.cutoff) will be displayed</p>
 </td></tr>
-<tr valign="top"><td><code>FDR.cutoff</code></td>
+<tr style="vertical-align: top;"><td><code>FDR.cutoff</code></td>
 <td>
 <p>FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05</p>
 </td></tr>
-<tr valign="top"><td><code>type</code></td>
+<tr style="vertical-align: top;"><td><code>type</code></td>
 <td>
 <p>the D3 type of the plot. It can be &quot;sankey&quot; for sankey
 network, &quot;force&quot; for force directed network graph, &quot;radial&quot; for radial
 network and &quot;diagonal&quot; for diagonal network</p>
 </td></tr>
-<tr valign="top"><td><code>colormap</code></td>
+<tr style="vertical-align: top;"><td><code>colormap</code></td>
 <td>
 <p>short name for the group/ontology colormap</p>
 </td></tr>
-<tr valign="top"><td><code>filename</code></td>
+<tr style="vertical-align: top;"><td><code>filename</code></td>
 <td>
 <p>the without-extension part of the name of the output
 html file. By default, it is 'xEnrichD3'</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters used in
 networkD3::sankeyNetwork, networkD3::forceNetwork,
@@ -94,8 +104,7 @@ networkD3::radialNetwork and networkD3::diagonalNetwork</p>
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the library
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -113,7 +122,8 @@ ig &lt;- xConverter(res$ig, from='igraph', to='igraph_tree')
 # r2d3::save_d3_png(res, file='xEnrichD3.png', zoom=2)
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

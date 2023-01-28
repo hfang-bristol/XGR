@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise enrichment results using a barplot</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise enrichment results using a barplot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xEnrichBarplot"><tr><td>xEnrichBarplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xEnrichBarplot</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise enrichment results using a barplot</h2>
 
@@ -16,8 +27,7 @@ a barplot. It returns an object of class &quot;ggplot&quot;.
 
 <h3>Usage</h3>
 
-<pre>
-xEnrichBarplot(
+<pre><code class='language-R'>xEnrichBarplot(
 eTerm,
 top_num = 10,
 displayBy = c("fc", "adjp", "fdr", "zscore", "pvalue"),
@@ -30,64 +40,64 @@ wrap.width = NULL,
 font.family = "sans",
 signature = TRUE
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>eTerm</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>eTerm</code></td>
 <td>
 <p>an object of class &quot;eTerm&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>top_num</code></td>
+<tr style="vertical-align: top;"><td><code>top_num</code></td>
 <td>
 <p>the number of the top terms (sorted according to FDR or
 adjusted p-values). If it is 'auto', only the significant terms (see
 below FDR.cutoff) will be displayed</p>
 </td></tr>
-<tr valign="top"><td><code>displayBy</code></td>
+<tr style="vertical-align: top;"><td><code>displayBy</code></td>
 <td>
 <p>which statistics will be used for displaying. It can
 be &quot;fc&quot; for enrichment fold change (by default), &quot;adjp&quot; or &quot;fdr&quot; for
 adjusted p value (or FDR), &quot;pvalue&quot; for p value, &quot;zscore&quot; for
 enrichment z-score</p>
 </td></tr>
-<tr valign="top"><td><code>FDR.cutoff</code></td>
+<tr style="vertical-align: top;"><td><code>FDR.cutoff</code></td>
 <td>
 <p>FDR cutoff used to declare the significant terms. By
 default, it is set to 0.05. This option only works when setting top_num
 (see above) is 'auto'</p>
 </td></tr>
-<tr valign="top"><td><code>bar.label</code></td>
+<tr style="vertical-align: top;"><td><code>bar.label</code></td>
 <td>
 <p>logical to indicate whether to label each bar with
 FDR. By default, it sets to true for bar labelling</p>
 </td></tr>
-<tr valign="top"><td><code>bar.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>bar.label.size</code></td>
 <td>
 <p>an integer specifying the bar labelling text
 size. By default, it sets to 3</p>
 </td></tr>
-<tr valign="top"><td><code>bar.color</code></td>
+<tr style="vertical-align: top;"><td><code>bar.color</code></td>
 <td>
 <p>either NULL or fill color names ('lightyellow-orange'
 by default)</p>
 </td></tr>
-<tr valign="top"><td><code>bar.width</code></td>
+<tr style="vertical-align: top;"><td><code>bar.width</code></td>
 <td>
 <p>bar width. By default, 80
 data</p>
 </td></tr>
-<tr valign="top"><td><code>wrap.width</code></td>
+<tr style="vertical-align: top;"><td><code>wrap.width</code></td>
 <td>
 <p>a positive integer specifying wrap width of name</p>
 </td></tr>
-<tr valign="top"><td><code>font.family</code></td>
+<tr style="vertical-align: top;"><td><code>font.family</code></td>
 <td>
 <p>the font family for texts</p>
 </td></tr>
-<tr valign="top"><td><code>signature</code></td>
+<tr style="vertical-align: top;"><td><code>signature</code></td>
 <td>
 <p>logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is
@@ -117,8 +127,7 @@ used to draw this graph</p>
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # Load the XGR package and specify the location of built-in data
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
@@ -160,7 +169,8 @@ print(bp)
 dev.off()
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

@@ -7,8 +7,7 @@
 xEnrichLadder(
 eTerm,
 sortBy = c("fdr", "or", "adjp", "pvalue", "zscore", "fc", "nAnno",
-"nOverlap",
-"none"),
+"nOverlap", "none"),
 top_num = 5,
 FDR.cutoff = 0.05,
 CI.one = T,

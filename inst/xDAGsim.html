@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to calculate pair-wise semantic similarity between...</title>
+<!DOCTYPE html><html><head><title>R: Function to calculate pair-wise semantic similarity between...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xDAGsim"><tr><td>xDAGsim</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xDAGsim</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to calculate pair-wise semantic similarity between input terms based on a direct acyclic graph (DAG) with annotated data</h2>
 
@@ -19,8 +30,7 @@ Linux or Mac operating systems.
 
 <h3>Usage</h3>
 
-<pre>
-xDAGsim(
+<pre><code class='language-R'>xDAGsim(
 g,
 terms = NULL,
 method.term = c("Resnik", "Lin", "Schlicker", "Jiang", "Pesquita"),
@@ -29,25 +39,25 @@ parallel = TRUE,
 multicores = NULL,
 verbose = T
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>g</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. It must contain a vertex
 attribute called 'anno' for storing annotation data (see example for
 howto)</p>
 </td></tr>
-<tr valign="top"><td><code>terms</code></td>
+<tr style="vertical-align: top;"><td><code>terms</code></td>
 <td>
 <p>the terms/nodes between which pair-wise semantic
 similarity is calculated. If NULL, all terms in the input DAG will be
 used for calcluation, which is very prohibitively expensive!</p>
 </td></tr>
-<tr valign="top"><td><code>method.term</code></td>
+<tr style="vertical-align: top;"><td><code>method.term</code></td>
 <td>
 <p>the method used to measure semantic similarity
 between input terms. It can be &quot;Resnik&quot; for information content (IC) of
@@ -64,28 +74,28 @@ information content of all ancestors of term1 and term2 (see
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/18460186">http://www.ncbi.nlm.nih.gov/pubmed/18460186</a>)). By default, it
 uses &quot;Schlicker&quot; method</p>
 </td></tr>
-<tr valign="top"><td><code>fast</code></td>
+<tr style="vertical-align: top;"><td><code>fast</code></td>
 <td>
 <p>logical to indicate whether a vectorised fast computation
 is used. By default, it sets to true. It is always advisable to use
 this vectorised fast computation; since the conventional computation is
 just used for understanding scripts</p>
 </td></tr>
-<tr valign="top"><td><code>parallel</code></td>
+<tr style="vertical-align: top;"><td><code>parallel</code></td>
 <td>
 <p>logical to indicate whether parallel computation with
 multicores is used. By default, it sets to true, but not necessarily
 does so. It will depend on whether these two packages &quot;foreach&quot; and
 &quot;doParallel&quot; have been installed</p>
 </td></tr>
-<tr valign="top"><td><code>multicores</code></td>
+<tr style="vertical-align: top;"><td><code>multicores</code></td>
 <td>
 <p>an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.
 If NULL, it will use a half of cores available in a user's computer.
 This option only works when parallel computation is enabled</p>
 </td></tr>
-<tr valign="top"><td><code>verbose</code></td>
+<tr style="vertical-align: top;"><td><code>verbose</code></td>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
@@ -114,8 +124,7 @@ edges for pair-wise semantic similarity between terms.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 # 1) SNP-based ontology
 # 1a) ig.EF (an object of class "igraph" storing as a directed graph)
 g &lt;- xRDataLoader('ig.EF')
@@ -154,7 +163,8 @@ parallel=FALSE)
 sim
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>

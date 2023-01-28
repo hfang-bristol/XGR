@@ -1,9 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise an igraph object using ggraph</title>
+<!DOCTYPE html><html><head><title>R: Function to visualise an igraph object using ggraph</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
 <link rel="stylesheet" type="text/css" href="R.css" />
-</head><body>
+</head><body><div class="container">
 
-<table width="100%" summary="page for xGGraph"><tr><td>xGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table style="width: 100%;"><tr><td>xGGraph</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>Function to visualise an igraph object using ggraph</h2>
 
@@ -16,8 +27,7 @@ with nodes/tips labelled (aligned to left-right or top-bottom edges).
 
 <h3>Usage</h3>
 
-<pre>
-xGGraph(
+<pre><code class='language-R'>xGGraph(
 ig,
 layout = "partition",
 circular = T,
@@ -36,95 +46,95 @@ edge.alpha = 0.5,
 edge.width = 0.5,
 ...
 )
-</pre>
+</code></pre>
 
 
 <h3>Arguments</h3>
 
-<table summary="R argblock">
-<tr valign="top"><td><code>ig</code></td>
+<table>
+<tr style="vertical-align: top;"><td><code>ig</code></td>
 <td>
 <p>an object of class &quot;igraph&quot; with node attribute 'name'. It
 could be a 'phylo' object converted to. Note: the node/leave labels
 would be the node attribute 'name' unless the node attribute 'label' is
 explicitely provided</p>
 </td></tr>
-<tr valign="top"><td><code>layout</code></td>
+<tr style="vertical-align: top;"><td><code>layout</code></td>
 <td>
 <p>the layout supported in ggraph::create_layout. This can
 be ggraph layouts 'partition' (by default), 'dendrogram', 'circlepack',
 'treemap' (-1,1). This can be also igraph-supported layout
 ('nicely','fr','kk','sugiyama','randomly','star','circle','gem','dh','graphopt','grid','mds','drl','lgl','sphere')</p>
 </td></tr>
-<tr valign="top"><td><code>circular</code></td>
+<tr style="vertical-align: top;"><td><code>circular</code></td>
 <td>
 <p>the logic specifying whether or not circular
 representations. This will be disabled implicitly if the layout does
 not support circularity</p>
 </td></tr>
-<tr valign="top"><td><code>leave</code></td>
+<tr style="vertical-align: top;"><td><code>leave</code></td>
 <td>
 <p>the logic specifying whether or not only leaves
 (nodes/labellings) shown. This can be disenabled if the layout does not
 support tips</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.size</code></td>
 <td>
 <p>the text size of the leave labelings. By
 default, it is 2. If 0, all labellings will be disabled</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.direction</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.direction</code></td>
 <td>
 <p>the leave label direction. It can be
 &quot;none&quot;, &quot;leftright&quot; (aligned to the left- and right-most edge) and
 &quot;topbottom&quot; (aligned to the top- and bottom-most edge)</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.color</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.color</code></td>
 <td>
 <p>the color of the leave labelings</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.alpha</code></td>
 <td>
 <p>the alpha of the leave labelings</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.wrap</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.wrap</code></td>
 <td>
 <p>the wrap width of the leave labelings</p>
 </td></tr>
-<tr valign="top"><td><code>node.label.offset</code></td>
+<tr style="vertical-align: top;"><td><code>node.label.offset</code></td>
 <td>
 <p>the offset of the leave labelings aligned to
 the edge. It is defined as relative to the range of limits (x-limit for
 left-right, and y-limit for top-bottom)</p>
 </td></tr>
-<tr valign="top"><td><code>node.size</code></td>
+<tr style="vertical-align: top;"><td><code>node.size</code></td>
 <td>
 <p>the size of the leave nodes. By default, it is 0</p>
 </td></tr>
-<tr valign="top"><td><code>limit.expansion</code></td>
+<tr style="vertical-align: top;"><td><code>limit.expansion</code></td>
 <td>
 <p>the x- and y-limit expansion. By default, it is
 NULL, decided by &quot;node.label.offset&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>edge</code></td>
+<tr style="vertical-align: top;"><td><code>edge</code></td>
 <td>
 <p>the edge type. It can be &quot;diagonal&quot; (default) , &quot;link&quot;
 (straight lines), &quot;arc&quot;, &quot;fan&quot; (curves of different curvature),
 &quot;elbow&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>edge.color</code></td>
+<tr style="vertical-align: top;"><td><code>edge.color</code></td>
 <td>
 <p>the color of edges</p>
 </td></tr>
-<tr valign="top"><td><code>edge.alpha</code></td>
+<tr style="vertical-align: top;"><td><code>edge.alpha</code></td>
 <td>
 <p>the alpha of edges</p>
 </td></tr>
-<tr valign="top"><td><code>edge.width</code></td>
+<tr style="vertical-align: top;"><td><code>edge.width</code></td>
 <td>
 <p>the width of edges</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
+<tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
 <p>additional graphic parameters (such as size, color) used in
 ggrepel::geom_text_repel to control labels</p>
@@ -155,8 +165,7 @@ number of step to the root) for tree-like graph with certain layouts.
 
 <h3>Examples</h3>
 
-<pre>
-## Not run: 
+<pre><code class='language-R'>## Not run: 
 library(XGR)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 
@@ -189,7 +198,8 @@ gp &lt;- xGGraph(ig, layout='fr', node.label.direction="leftright")
 gp &lt;- xGGraph(ig, layout='gem')
 
 ## End(Not run)
-</pre>
+</code></pre>
 
 
+</div>
 </body></html>
